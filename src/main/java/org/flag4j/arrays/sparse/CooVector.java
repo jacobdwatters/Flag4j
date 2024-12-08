@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,21 +32,20 @@ import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
-import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
-import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOps;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOperations;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -54,7 +53,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BinaryOperator;
+import java.util.function.BiFunction;
 
 
 /**
@@ -130,11 +129,11 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param indices The indices of the non-zero values.
      */
     public CooVector(Shape shape, List<Double> data, List<Integer> indices) {
-        super(shape, ArrayConversions.fromDoubleList(data));
+        super(shape, ArrayUtils.fromDoubleList(data));
         ValidateParameters.ensureRank(shape, 1);
         ValidateParameters.ensureArrayLengthsEq(this.data.length, indices.size());
         this.size = shape.get(0);
-        this.indices = ArrayConversions.fromIntegerList(indices);
+        this.indices = ArrayUtils.fromIntegerList(indices);
         this.nnz = this.data.length;
     }
 
@@ -163,9 +162,9 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, List<Double> entries, List<Integer> indices) {
-        super(new Shape(size), ArrayConversions.fromDoubleList(entries));
+        super(new Shape(size), ArrayUtils.fromDoubleList(entries));
         ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
-        this.indices = ArrayConversions.fromIntegerList(indices);
+        this.indices = ArrayUtils.fromIntegerList(indices);
         this.size = size;
         this.nnz = this.data.length;
     }
@@ -190,7 +189,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, int[] entries, int[] indices) {
-        super(new Shape(size), ArrayConversions.asDouble(entries, null));
+        super(new Shape(size), ArrayUtils.asDouble(entries, null));
         ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         this.indices = indices;
         this.size = size;
@@ -230,8 +229,8 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
         return new CooVector(
                 src.size,
-                ArrayConversions.fromDoubleList(nonZeroEntries),
-                ArrayConversions.fromIntegerList(indices)
+                ArrayUtils.fromDoubleList(nonZeroEntries),
+                ArrayUtils.fromIntegerList(indices)
         );
     }
 
@@ -379,7 +378,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public Double inner(CooVector b) {
-        return RealCooVectorOps.inner(this, b);
+        return RealCooVectorOperations.inner(this, b);
     }
 
 
@@ -674,7 +673,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     @Override
     public CooVector reshape(Shape newShape) {
         ValidateParameters.ensureRank(newShape, 1);
-        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
+        ValidateParameters.ensureBroadcastable(shape, newShape);
         return copy();
     }
 
@@ -766,7 +765,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooVector add(CooVector b) {
-        return RealCooVectorOps.add(this, b);
+        return RealCooVectorOperations.add(this, b);
     }
 
 
@@ -780,7 +779,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCVector add(CooCVector b) {
-        return RealComplexSparseVectorOps.add(b, this);
+        return RealComplexSparseVectorOperations.add(b, this);
     }
 
 
@@ -795,7 +794,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooVector sub(CooVector b) {
-        return RealCooVectorOps.sub(this, b);
+        return RealCooVectorOperations.sub(this, b);
     }
 
 
@@ -810,7 +809,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooVector elemMult(CooVector b) {
-        return RealCooVectorOps.elemMult(this, b);
+        return RealCooVectorOperations.elemMult(this, b);
     }
 
 
@@ -828,7 +827,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * {@code this.getRank() - 2} with the same shape as this tensor but with {@code axis1} and {@code axis2} removed.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -1071,7 +1070,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooMatrix repeat(int n, int axis) {
-        return RealCooVectorOps.repeat(this, n, axis);
+        return RealCooVectorOperations.repeat(this, n, axis);
     }
 
 
@@ -1087,7 +1086,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooMatrix stack(CooVector b) {
-        return RealCooVectorOps.stack(this, b);
+        return RealCooVectorOperations.stack(this, b);
     }
 
 
@@ -1134,7 +1133,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public Matrix outer(CooVector b) {
-        return RealCooVectorOps.outerProduct(this, b);
+        return RealCooVectorOperations.outerProduct(this, b);
     }
 
 
@@ -1181,7 +1180,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @throws org.flag4j.util.exceptions.TensorShapeException If the two vectors are not the same size.
      */
     public CooVector elemMult(Vector b) {
-        return RealDenseSparseVectorOps.elemMult(b, this);
+        return RealDenseSparseVectorOperations.elemMult(b, this);
     }
 
 
@@ -1216,7 +1215,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CooVector div(Vector b) {
-        return RealDenseSparseVectorOps.elemDiv(this, b);
+        return RealDenseSparseVectorOperations.elemDiv(this, b);
     }
 
 
@@ -1226,7 +1225,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CooCVector div(CVector b) {
-        return RealComplexDenseSparseVectorOps.elemDiv(this, b);
+        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);
     }
 
 
@@ -1243,9 +1242,9 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     /**
      * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
-     * @see #coalesce(BinaryOperator)
+     * @see #coalesce(BiFunction)
      */
     public CooVector coalesce() {
         SparseVectorData<Double> vec = SparseUtils.coalesce(Double::sum, shape, data, indices);
@@ -1260,7 +1259,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
      * @see #coalesce()
      */
-    public CooVector coalesce(BinaryOperator<Double> aggregator) {
+    public CooVector coalesce(BiFunction<Double, Double, Double> aggregator) {
         SparseVectorData<Double> vec = SparseUtils.coalesce(aggregator, shape, data, indices);
         return new CooVector(vec.shape(), vec.data(), vec.indices());
     }
@@ -1284,44 +1283,37 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("nnz: ").append(nnz).append("\n");
         result.append("Non-zero data: [");
 
-        int maxCols = PrintOptions.getMaxColumns();
-        int padding = PrintOptions.getPadding();
-        boolean centering = PrintOptions.useCentering();
-        int precision = PrintOptions.getPrecision();
-
         if(size > 0) {
-            int stopIndex = Math.min(maxCols -1, size-1);
+            int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
             int width;
             String value;
 
             // Get data up until the stopping point.
-            for(int i = 0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(data[i], precision);
-                width = padding + value.length();
-                value = centering ? StringUtils.center(value, width) : value;
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             if(stopIndex < size-1) {
-                width = padding + 3;
+                width = PrintOptions.getPadding() + 3;
                 value = "...";
-                value = centering ? StringUtils.center(value, width) : value;
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(data[size-1], precision);
-            width = padding + value.length();
-            value = centering ? StringUtils.center(value, width) : value;
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         result.append("]\n");
-        result.append("Indices: ")
-                .append(PrettyPrint.abbreviatedArray(indices, maxCols, padding, centering));
+        result.append("Indices: ").append(Arrays.toString(indices));
 
         return result.toString();
     }

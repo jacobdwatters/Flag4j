@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,17 @@
 package org.flag4j.linalg.ops.sparse;
 
 import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.*;
-import org.flag4j.arrays.backend.semiring_arrays.AbstractCsrSemiringMatrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
+import java.util.function.BiFunction;
 
 /**
  * <p>Contains common utility functions for working with sparse matrices.
@@ -49,6 +48,7 @@ public final class SparseUtils {
 
     public SparseUtils() {
         // Utility class cannot be instanced.
+        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -96,7 +96,7 @@ public final class SparseUtils {
      * @return The non-zero indices corresponding to the reshaped tensor.
      */
     public static int[][] cooReshape(Shape oldShape, Shape newShape, int[][] indices) {
-        ValidateParameters.ensureTotalEntriesEqual(oldShape, newShape);
+        ValidateParameters.ensureBroadcastable(oldShape, newShape);
 
         int rank = indices[0].length;
         int newRank = newShape.getRank();
@@ -286,7 +286,7 @@ public final class SparseUtils {
 
 
     /**
-     * <p>Checks if two {@link CsrFieldMatrix CSR Field matrices} are equal considering the fact that one may explicitly store zeros at
+     * <p>Checks if two {@link CsrFieldMatrix CSR MMField matrices} are equal considering the fact that one may explicitly store zeros at
      * some position that the other does not store.
      *
      * <p>
@@ -300,15 +300,52 @@ public final class SparseUtils {
      * @param src2 Second CSR matrix in the equality comparison.
      * @return True if all non-zero values stored in the two matrices are equal and occur at the same indices.
      */
-    public static <T extends Semiring<T>> boolean CSREquals(
-            AbstractCsrSemiringMatrix<?, ?, ?, T> src1,
-            AbstractCsrSemiringMatrix<?, ?, ?, T> src2) {
-        if(src1 == src2) return true;
+    public static <T extends Field<T>> boolean CSREquals(
+            AbstractCsrFieldMatrix<?, ?, ?, T> src1,
+            AbstractCsrFieldMatrix<?, ?, ?, T> src2) {
         if(!src1.shape.equals(src2.shape)) return false;
+        final Complex128 ZERO = Complex128.ZERO;
 
-        return CooSemiringEquals.cooMatrixEquals(
-                src1.toCoo(),
-                src2.toCoo());
+        // Compare row by row
+        for (int i=0; i<src1.numRows; i++) {
+            int src1RowStart = src1.rowPointers[i];
+            int src1RowEnd = src1.rowPointers[i + 1];
+            int src2RowStart = src2.rowPointers[i];
+            int src2RowEnd = src2.rowPointers[i + 1];
+
+            int src1Index = src1RowStart;
+            int src2Index = src2RowStart;
+
+            while (src1Index < src1RowEnd || src2Index < src2RowEnd) {
+                // Skip explicit zeros in both matrices
+                while (src1Index < src1RowEnd && src1.data[src1Index].equals(ZERO))
+                    src1Index++;
+
+                while (src2Index < src2RowEnd && src2.data[src2Index].equals(ZERO))
+                    src2Index++;
+
+                if (src1Index < src1RowEnd && src2Index < src2RowEnd) {
+                    int src1Col = src1.colIndices[src1Index];
+                    int src2Col = src2.colIndices[src2Index];
+
+                    if(src1Col != src2Col || !src1.data[src1Index].equals(src2.data[src2Index]))
+                        return false;
+
+                    src1Index++;
+                    src2Index++;
+                } else if (src1Index < src1RowEnd) {
+                    // Remaining data in src1 row
+                    if (!src1.data[src1Index].equals(ZERO)) return false;
+                    src1Index++;
+                } else if (src2Index < src2RowEnd) {
+                    // Remaining data in src2 row
+                    if (!src2.data[src2Index].equals(ZERO)) return false;
+                    src2Index++;
+                }
+            }
+        }
+
+        return true;
     }
 
 
@@ -356,12 +393,12 @@ public final class SparseUtils {
      * @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from the coalesce operation.
      */
     public static <T> SparseMatrixData<T> coalesce(
-            BinaryOperator<T> aggregator, Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
-        HashMap<Pair<Integer, Integer>, T> coalescedValues = new LinkedHashMap<>();
+            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
+        HashMap<Pair<Integer, Integer>, T> coalescedValues = new HashMap<>();
         List<Integer> destRowIndices = new ArrayList<>(data.length);
         List<Integer> destColIndices = new ArrayList<>(data.length);
 
-        for(int i = 0; i<data.length; i++) {
+        for(int i = 0; i< data.length; i++) {
             Pair<Integer, Integer> idx = new Pair<>(rowIndices[i], colIndices[i]);
             T value = data[i];
 
@@ -393,7 +430,7 @@ public final class SparseUtils {
      * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from the coalesce operation.
      */
     public static <T> SparseTensorData<T> coalesce(
-            BinaryOperator<T> aggregator, Shape shape, T[] data, int[][] indices) {
+            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[][] indices) {
         HashMap<IntTuple, T> coalescedValues = new HashMap<>();
         List<int[]> destIndices = new ArrayList<>(data.length);
 
@@ -428,7 +465,7 @@ public final class SparseUtils {
      * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from the coalesce operation.
      */
     public static <T> SparseVectorData<T> coalesce(
-            BinaryOperator<T> aggregator, Shape shape, T[] data, int[] indices) {
+            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[] indices) {
         HashMap<Integer, T> coalescedValues = new HashMap<>();
         List<Integer> destIndices = new ArrayList<>(data.length);
 
@@ -531,7 +568,7 @@ public final class SparseUtils {
      * @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from the coalesce operation.
      */
     public static SparseMatrixData<Double> coalesce(
-            BinaryOperator<Double> aggregator, Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
+            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
         HashMap<Pair<Integer, Integer>, Double> coalescedValues = new HashMap<>();
         List<Integer> destRowIndices = new ArrayList<>(data.length);
         List<Integer> destColIndices = new ArrayList<>(data.length);
@@ -568,7 +605,7 @@ public final class SparseUtils {
      * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from the coalesce operation.
      */
     public static SparseTensorData<Double> coalesce(
-            BinaryOperator<Double> aggregator, Shape shape, double[] data, int[][] indices) {
+            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[][] indices) {
         HashMap<IntTuple, Double> coalescedValues = new HashMap<>();
         List<int[]> destIndices = new ArrayList<>(data.length);
 
@@ -649,7 +686,7 @@ public final class SparseUtils {
      * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from the coalesce operation.
      */
     public static SparseVectorData<Double> coalesce(
-            BinaryOperator<Double> aggregator, Shape shape, double[] data, int[] indices) {
+            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[] indices) {
         HashMap<Integer, Double> coalescedValues = new HashMap<>();
         List<Integer> destIndices = new ArrayList<>(data.length);
 
@@ -657,11 +694,12 @@ public final class SparseUtils {
             int idx = indices[i];
             double value = data[i];
 
-            if(coalescedValues.containsKey(idx)) // The index is already present.
+            if(coalescedValues.containsKey(idx)) {
+                // The index is already present.
                 value = aggregator.apply(coalescedValues.get(idx),  value);
-            else
+            } else {
                 destIndices.add(idx);
-
+            }
 
             coalescedValues.put(idx, value);
         }
@@ -691,144 +729,5 @@ public final class SparseUtils {
         }
 
         return new SparseVectorData<>(shape, destValues, destIndices);
-    }
-
-
-    /**
-     * Drops all explicit zeros within a sparse CSR matrix.
-     * @param src Matrix to drop zeros from.
-     * @return A copy of the {@code src} matrix with all zeros dropped.
-     */
-    public static CsrMatrix dropZerosCsr(CsrMatrix src) {
-        List<Double> destData = new ArrayList<>(src.data.length);
-        List<Integer> destRowIndices = new ArrayList<>(src.data.length);
-        List<Integer> destColIndices = new ArrayList<>(src.data.length);
-
-        // Construct as COO matrix then convert to CSR to simplify implementation.
-        for(int i=0, rows=src.numRows; i<rows; i++) {
-            for(int j=src.rowPointers[i], stop=src.rowPointers[i + 1]; i<stop; i++) {
-                if(src.data[j] != 0.0) {
-                    destData.add(src.data[j]);
-                    destRowIndices.add(i);
-                    destColIndices.add(src.colIndices[i]);
-                }
-            }
-        }
-
-        return new CooMatrix(src.shape, destData, destRowIndices, destColIndices).toCsr();
-    }
-
-
-    /**
-     * Drops all explicit zeros within a sparse CSR matrix.
-     * @param shape Shape of the CSR matrix.
-     * @param data Non-zero entries of the CSR matrix.
-     * @param rowPointers Non-zero row indices of the CSR matrix.
-     * @param colIndices Non-zero column indices of the CSR matrix.
-     * @return A {@link SparseMatrixData} containing the data of the CSR matrix resulting from dropping all zeros from the specified
-     * CSR matrix. Note, the returned data will be in COO format and <i>not</i> CSR.
-     */
-    public static <T extends Semiring<T>> SparseMatrixData<T> dropZerosCsr(
-            Shape shape, T[] data, int[] rowPointers, int[] colIndices) {
-        List<T> destData = new ArrayList<>(data.length);
-        List<Integer> destRowIndices = new ArrayList<>(data.length);
-        List<Integer> destColIndices = new ArrayList<>(data.length);
-
-        // Construct as COO matrix then convert to CSR to simplify implementation.
-        for(int i=0, rows=rowPointers.length-1; i<rows; i++) {
-            for(int j=rowPointers[i], stop=rowPointers[i + 1]; i<stop; i++) {
-                if(data[j].isZero()) {
-                    destData.add(data[j]);
-                    destRowIndices.add(i);
-                    destColIndices.add(colIndices[i]);
-                }
-            }
-        }
-
-        return new SparseMatrixData<>(shape, destData, destRowIndices, destColIndices);
-    }
-
-
-    /**
-     * Validates that the specified slice is a valid slice of a matrix with the specified {@code shape}.
-     * @param shape Shape of the matrix.
-     * @param rowStart Starting row index of the slice (inclusive).
-     * @param rowEnd Ending row index of the slice (exclusive).
-     * @param colStart Starting column index of the slice (inclusive).
-     * @param colEnd Ending column index of the slice (exclusive).
-     * @throws IllegalArgumentException If <i>any</i> of the following are {@code true}:
-     * <ul>
-     *     <li>{@code rowStart >= rowEnd}</li>
-     *     <li>{@code colStart >= colEnd}</li>
-     *     <li>{@code rowStart < 0 || rowEnd > shape.get(0)}</li>
-     *     <li>{@code colStart < 0 || colEnd > shape.get(1)}</li>
-     * </ul>
-     */
-    public static void validateSlice(Shape shape, int rowStart, int rowEnd, int colStart, int colEnd) {
-        if(rowStart >= rowEnd) {
-            throw new IllegalArgumentException("rowStart must be greater than rowEnd but got: rowStart="
-                    + rowStart + " and rowEnd=" + rowEnd + ".");
-        }
-        if(colStart >= colEnd) {
-            throw new IllegalArgumentException("colStart must be greater than colEnd but got: colStart="
-                    + colStart + " and colEnd=" + colEnd + ".");
-        }
-        if(rowStart < 0 || rowEnd > shape.get(0)) {
-            throw new IllegalArgumentException("Invalid range specified for row indices: [" + rowStart + ", " + rowEnd + ").\n" +
-                    "Out of bounds for matrix with shape: " + shape);
-        }
-        if(colStart < 0 || colEnd > shape.get(1)) {
-            throw new IllegalArgumentException("Invalid range specified for column indices: [" + colStart + ", " + colEnd + ").\n" +
-                    "Out of bounds for matrix with shape: " + shape);
-        }
-    }
-
-
-    /**
-     * Validates that the provided arguments specify a valid CSR matrix.
-     * @param shape Shape of the CSR matrix.
-     * @param nnz The number of non-zero entries of the CSR matrix.
-     * @param rowPointers The non-zero row pointers of the CSR matrix.
-     * @param colIndices The non-zero column indices of the CSR matrix.
-     *
-     * @throws IllegalArgumentException If <i>any</i> of the following are {@code true}:
-     * <ul>
-     *     <li>{@code shape.getRank() != 2}</li>
-     *     <li>{@code rowPointers.length != shape.get(0) + 1}</li>
-     *     <li>{@code nnz != colIndices.length}</li>
-     * </ul>
-     */
-    public static void validateCsrMatrix(Shape shape, int nnz, int[] rowPointers, int[] colIndices) {
-        if (shape.getRank() != 2) {
-            throw new IllegalArgumentException("Invalid CSR definition: shape must be of rank 2 but got: " + shape);
-        }
-        if (rowPointers.length != shape.get(0) + 1) {
-            throw new IllegalArgumentException("Invalid CSR definition: the number of row pointers must be " +
-                    "equal to the number of rows plus 1 but got row pointer length " +
-                    rowPointers.length + " for shape " + shape + ".");
-        }
-
-        if (nnz != colIndices.length) {
-            throw new IllegalArgumentException("Illegal CSR definition: the number of column indices must be equal" +
-                    "to the number of non-zero entries but got " + colIndices.length + " for nnz=" + nnz + ".");
-        }
-    }
-
-
-    // TODO: TEMP
-    public static void main(String[] args) {
-        Complex128[] bNnz = new Complex128[]{new Complex128(234.5, -0.2), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO,
-                new Complex128(345.1, 2.5),
-                new Complex128(9.4, -1),
-                Complex128.ZERO, new Complex128(235.1, 94.2), new Complex128(3.12, 4),
-                new Complex128(0, 1), new Complex128(2,9733)};
-        int[][] bIndices = new int[][]{
-                {0, 0, 0, 0, 0, 1, 5, 5, 12, 67, 67},
-                {0, 1, 2, 3, 5, 14, 45, 5002, 142, 15, 60001}};
-        Shape bShape = new Shape(900, 450000);
-
-        CooCMatrix b = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]);
-
-        b.coalesce();
     }
 }

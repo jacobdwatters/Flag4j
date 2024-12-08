@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,10 +35,9 @@ import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorDot;
-import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorOps;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorOperations;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooTensorOps;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooTensorOperations;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -50,7 +49,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BinaryOperator;
+import java.util.function.BiFunction;
 
 
 /**
@@ -135,7 +134,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * @param indices
      */
     public CooTensor(Shape shape, List<Double> entries, List<int[]> indices) {
-        super(shape, ArrayConversions.fromDoubleList(entries));
+        super(shape, ArrayUtils.fromDoubleList(entries));
         ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
         if(indices.size() != 0)ValidateParameters.ensureArrayLengthsEq(getRank(), indices.get(0).length);
         ValidateParameters.ensureTrue(shape.totalEntries().compareTo(BigInteger.valueOf(entries.size())) >= 0,
@@ -163,7 +162,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * @param indices Indices of the non-zero data in the sparse COO matrix.
      */
     public CooTensor(Shape shape, int[] entries, int[][] indices) {
-        super(shape, ArrayConversions.asDouble(entries, null));
+        super(shape, ArrayUtils.asDouble(entries, null));
         ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         if(indices.length != 0) ValidateParameters.ensureArrayLengthsEq(getRank(), indices[0].length);
         ValidateParameters.ensureTrue(shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
@@ -180,7 +179,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     public CooTensor(CooTensor b) {
         super(b.shape, b.data.clone());
-        this.indices = ArrayUtils.deepCopy2D(b.indices, null);
+        this.indices = ArrayUtils.deepCopy(b.indices, null);
         this.nnz = b.nnz;
     }
 
@@ -197,7 +196,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor makeLikeTensor(Shape shape, double[] entries) {
-        return new CooTensor(shape, entries, ArrayUtils.deepCopy2D(indices, null));
+        return new CooTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -268,8 +267,8 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     public CooCTensor toComplex() {
         return new CooCTensor(shape,
-                ArrayConversions.toComplex128(data, null),
-                ArrayUtils.deepCopy2D(indices, null));
+                ArrayUtils.wrapAsComplex128(data, null),
+                ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -335,13 +334,13 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
 
         if(idx > -1) {
             // Copy data and set new value.
-            dest = new CooTensor(shape, data.clone(), ArrayUtils.deepCopy2D(indices, null));
+            dest = new CooTensor(shape, data.clone(), ArrayUtils.deepCopy(indices, null));
             dest.data[idx] = value;
             dest.indices[idx] = index;
         } else {
             // Copy old indices and insert new one.
             int[][] newIndices = new int[indices.length + 1][getRank()];
-            ArrayUtils.deepCopy2D(indices, newIndices);
+            ArrayUtils.deepCopy(indices, newIndices);
             newIndices[indices.length] = index;
 
             // Copy old data and insert new one.
@@ -384,7 +383,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor flatten(int axis) {
-        ValidateParameters.validateArrayIndices(indices[0].length, axis);
+        ValidateParameters.ensureIndicesInBounds(indices[0].length, axis);
         int[][] destIndices = new int[indices.length][indices[0].length];
 
         // Compute new shape.
@@ -410,7 +409,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor reshape(Shape newShape) {
-        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
+        ValidateParameters.ensureBroadcastable(shape, newShape);
 
         int rank = indices[0].length;
         int newRank = newShape.getRank();
@@ -499,7 +498,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor add(CooTensor b) {
-        return RealCooTensorOps.add(this, b);
+        return RealCooTensorOperations.add(this, b);
     }
 
 
@@ -513,7 +512,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCTensor add(CooCTensor b) {
-        return RealComplexCooTensorOps.add(b, this);
+        return RealComplexCooTensorOperations.add(b, this);
     }
 
 
@@ -528,7 +527,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor sub(CooTensor b) {
-        return RealCooTensorOps.sub(this, b);
+        return RealCooTensorOperations.sub(this, b);
     }
 
 
@@ -591,7 +590,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor elemMult(CooTensor b) {
-        return RealCooTensorOps.elemMult(this, b);
+        return RealCooTensorOperations.elemMult(this, b);
     }
 
 
@@ -630,15 +629,15 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * {@code this.getRank() - 2} with the same shape as this tensor but with {@code axis1} and {@code axis2} removed.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public CooTensor tensorTr(int axis1, int axis2) {
         // Validate parameters.
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.validateArrayIndices(getRank(), axis1, axis2);
-        ValidateParameters.ensureAllEqual(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureValidArrayIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int rank = getRank();
         int[] dims = shape.getDims();
@@ -737,7 +736,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
     @Override
     public CooTensor T(int axis1, int axis2) {
         int rank = getRank();
-        ValidateParameters.validateArrayIndices(rank, axis1, axis2);
+        ValidateParameters.ensureIndicesInBounds(rank, axis1, axis2);
 
         if(axis1 == axis2) return copy(); // Simply return a copy.
 
@@ -775,7 +774,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
     @Override
     public CooTensor T(int... axes) {
         int rank = getRank();
-        ValidateParameters.ensureAllEqual(rank, axes.length);
+        ValidateParameters.ensureEquals(rank, axes.length);
         ValidateParameters.ensurePermutation(axes);
 
         int[][] transposeIndices = new int[nnz][rank];
@@ -826,7 +825,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor copy() {
-        return new CooTensor(shape, data.clone(), ArrayUtils.deepCopy2D(indices, null));
+        return new CooTensor(shape, data.clone(), ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -884,9 +883,9 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
     /**
      * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
-     * @see #coalesce(BinaryOperator)
+     * @see #coalesce(BiFunction)
      */
     public CooTensor coalesce() {
         SparseTensorData<Double> tensor = SparseUtils.coalesce(Double::sum, shape, data, indices);
@@ -901,7 +900,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
      * @see #coalesce()
      */
-    public CooTensor coalesce(BinaryOperator<Double> aggregator) {
+    public CooTensor coalesce(BiFunction<Double, Double,Double> aggregator) {
         SparseTensorData<Double> tensor = SparseUtils.coalesce(aggregator, shape, data, indices);
         return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
     }
@@ -961,16 +960,14 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
         int maxCols = PrintOptions.getMaxColumns();
         int padding = PrintOptions.getPadding();
         int precision = PrintOptions.getPrecision();
-        boolean centering = PrintOptions.useCentering();
+        boolean centring = PrintOptions.useCentering();
 
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("nnz: ").append(nnz).append("\n");
-        sb.append("Non-zero Entries: " +
-                PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering) + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centring) + "\n");
         sb.append("Non-zero Indices: " +
-                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centering));
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
 
         return sb.toString();
     }
