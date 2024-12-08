@@ -28,6 +28,7 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.*;
@@ -107,6 +108,50 @@ import java.util.List;
  *
  * @see Tensor
  * @see Vector
+ */
+
+/**
+ * <p>Instances of this class represents a complex dense matrix backed by a {@link Complex128} array. The {@code CMatrix} class
+ * provides functionality for complex matrix operations, supporting mutable data with a fixed shape.
+ * This class extends {@link AbstractDenseFieldMatrix} and offers additional methods optimized for complex
+ * arithmetic and matrix computations.
+ *
+ * <p>A {@code CMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
+ * and may offer improved performance for certain operations compared to general tensors.
+ *
+ * <p><b>Key Features:</b>
+ * <ul>
+ *   <li>Construction from various data types such as arrays of {@link Complex128}, {@code double}, and {@link String}.</li>
+ *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
+ *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
+ *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
+ * </ul>
+ *
+ * <p><b>Example Usage:</b>
+ * <pre>{@code
+ * // Constructing a complex matrix from a 2D array of complex numbers
+ * Complex128[][] complexData = {
+ *     { new Complex128(1, 2), new Complex128(3, 4) },
+ *     { new Complex128(5, 6), new Complex128(7, 8) }
+ * };
+ * CMatrix matrix = new CMatrix(complexData);
+ *
+ * // Performing matrix multiplication.
+ * CMatrix result = matrix.mult(matrix);
+ *
+ * // Performing matrix transpose.
+ * CMatrix transpose = matrix.T();
+ *
+ * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
+ * CMatrix conjugateTranspose = matrix.H();
+ *
+ * // Checking if the matrix is unitary.
+ * boolean isUnitary = matrix.isUnitary();
+ * }</pre>
+ *
+ * @see Complex128
+ * @see CVector
+ * @see AbstractDenseFieldMatrix
  */
 public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {

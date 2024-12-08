@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,9 @@ package org.flag4j.linalg.ops.dense.semiring_ops;
 
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
+
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
 /**
  * This class provides low level methods for computing ops on dense semiring tensors.
@@ -35,7 +36,8 @@ import org.flag4j.util.ValidateParameters;
 public final class DenseSemiringOps {
 
     private DenseSemiringOps() {
-        // Hide constructor for utility class.
+        // Hide constructor
+        
     }
 
 
@@ -53,7 +55,7 @@ public final class DenseSemiringOps {
                                                   T[] src2, Shape shape2,
                                                   T[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        dest = ArrayBuilder.getOrCreateArray(dest, () -> (T[]) new Semiring[src1.length]);
+        dest = makeNewIfNull(dest, src1.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = src1[i].add(src2[i]);
@@ -77,7 +79,7 @@ public final class DenseSemiringOps {
                                                        T[] src2, Shape shape2,
                                                        T[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        dest = ArrayBuilder.getOrCreateArray(dest, () -> (T[]) new Semiring[src1.length]);
+        dest = makeNewIfNull(dest, src1.length);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = src1[i].add(src2[i]);
@@ -104,7 +106,7 @@ public final class DenseSemiringOps {
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      * @throws IllegalArgumentException If {@code dest.length == destShape.totalEntriesIntValueExact()}.
      */
@@ -113,8 +115,8 @@ public final class DenseSemiringOps {
                                                          Shape destShape, T[] dest) {
         ValidateParameters.ensureArrayLengthsEq(destShape.totalEntriesIntValueExact(), dest.length);
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.validateArrayIndices(shape.getRank(), axis1, axis2);
-        ValidateParameters.ensureAllEqual(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureValidArrayIndices(shape.getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int[] strides = shape.getStrides();
         int rank = strides.length;

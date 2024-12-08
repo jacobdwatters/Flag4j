@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2025. Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +25,9 @@
 package org.flag4j.linalg.ops.dense.real;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
+
+import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
 /**
  * This class provides low level methods for computing ops on real dense tensors.
@@ -34,7 +35,8 @@ import org.flag4j.util.ValidateParameters;
 public final class RealDenseOps {
 
     private RealDenseOps() {
-        // Hide constructor for utility class.
+        // Hide constructor
+
     }
 
 
@@ -52,7 +54,7 @@ public final class RealDenseOps {
     public static double[] add(double[] src1, double[] src2, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         int length = src1.length;
-        dest = ArrayBuilder.getOrCreateArray(dest, length);
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src1[i] + src2[i];
@@ -74,7 +76,7 @@ public final class RealDenseOps {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
 
         int length = src1.length;
-        dest = ArrayBuilder.getOrCreateArray(dest, length);
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src1[i] - src2[i];
@@ -93,7 +95,7 @@ public final class RealDenseOps {
      */
     public static double[] sub(double[] src, double b, double[] dest) {
         int length = src.length;
-        dest = ArrayBuilder.getOrCreateArray(dest, length);
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src[i] - b;
@@ -213,7 +215,7 @@ public final class RealDenseOps {
      */
     public static double[] add(double[] src, double b, double[] dest) {
         int length = src.length;
-        dest = ArrayBuilder.getOrCreateArray(dest, length);
+        dest = makeNewIfNull(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src[i] + b;
@@ -233,14 +235,14 @@ public final class RealDenseOps {
      * @param src Entries of the tensor to compute the trace of.
      * @param axis1 First axis for 2D sub-array.
      * @param axis2 Second axis for 2D sub-array.
-     * @param destShape The resulting shape of the tensor trace.
+     * @param destShape The resulting shape of the tensor trace. Use {@link #getTrShape(Shape, int, int)} to compute this.
      * @param dest Array to store the result of the generalized tensor trace of. Must satisfy
      * {@code dest.length == destShape.totalEntriesIntValueExact()}.
      *
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      * @throws IllegalArgumentException If {@code dest.length == destShape.totalEntriesIntValueExact()}.
      */
@@ -249,8 +251,8 @@ public final class RealDenseOps {
                                 Shape destShape, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(destShape.totalEntriesIntValueExact(), dest.length);
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.validateArrayIndices(shape.getRank(), axis1, axis2);
-        ValidateParameters.ensureAllEqual(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureValidArrayIndices(shape.getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int[] strides = shape.getStrides();
         int rank = strides.length;
@@ -282,64 +284,6 @@ public final class RealDenseOps {
             }
 
             dest[i] = sum;
-        }
-    }
-
-
-    /**
-     * <p>Swaps two rows, over a specified range of columns, within a matrix. Specifically, all elements in the matrix within rows
-     * {@code rowIdx1}
-     * and {@code rowIdx2} and between columns {@code start} (inclusive) and {@code stop} (exclusive). This operation is done in place.
-     * <p>No bounds checking is done within this method to ensure that the indices provided are valid.
-     *
-     * @param shape Shape of the matrix.
-     * @param data Data of the matrix (modified).
-     * @param rowIdx1 Index of the first row to swap.
-     * @param rowIdx2 Index of the second row to swap.
-     * @param start Index of the column specifying the start of the range for the row swap (inclusive).
-     * @param stop Index of the column specifying the end of the range for the row swap (exclusive).
-     */
-    public static void swapRowsUnsafe(Shape shape,  double[] data, int rowIdx1, int rowIdx2, int start, int stop) {
-        if(rowIdx1 == rowIdx2) return;
-
-        final int cols = shape.get(1);
-        final int rowOffset1 = rowIdx1*cols;
-        final int rowOffset2 = rowIdx2*cols;
-        double temp;
-
-        for(int j=start; j<stop; j++) {
-            temp = data[rowOffset1 + j];
-            data[rowOffset1 + j] = data[rowOffset2 + j];
-            data[rowOffset2 + j] = temp;
-        }
-    }
-
-
-    /**
-     * <p>Swaps two columns, over a specified range of rows, within a matrix. Specifically, all elements in the matrix within columns
-     * {@code colIdx1} and {@code colIdx2} and between rows {@code start} (inclusive) and {@code stop} (exclusive). This operation
-     * is done in place.
-     * <p>No bounds checking is done within this method to ensure that the indices provided are valid.
-     *
-     * @param shape Shape of the matrix.
-     * @param data Data of the matrix (modified).
-     * @param colIdx1 Index of the first column to swap.
-     * @param colIdx2 Index of the second column to swap.
-     * @param start Index of the row specifying the start of the range for the row swap (inclusive).
-     * @param stop Index of the row specifying the end of the range for the row swap (exclusive).
-     */
-    public static void swapColsUnsafe(Shape shape,  double[] data, int colIdx1, int colIdx2, int start, int stop) {
-        if(colIdx1 == colIdx2) return;
-        
-        final int cols = shape.get(1);
-        int rowOffset = start*cols;
-        double temp;
-
-        for(int i=start; i<stop; i++) {
-            temp = data[rowOffset + colIdx1];
-            data[rowOffset + colIdx1] = data[rowOffset + colIdx2];
-            data[rowOffset + colIdx2] = temp;
-            rowOffset += cols;
         }
     }
 }

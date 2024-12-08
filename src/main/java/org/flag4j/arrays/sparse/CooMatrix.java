@@ -37,7 +37,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
@@ -583,7 +583,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix add(CooMatrix b) {
-        return RealSparseMatrixOperations.add(this, b);
+        return RealSparseMatrixOps.add(this, b);
     }
 
 
@@ -598,7 +598,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix sub(CooMatrix b) {
-        return RealSparseMatrixOperations.sub(this, b);
+        return RealSparseMatrixOps.sub(this, b);
     }
 
 
@@ -680,7 +680,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix elemMult(CooMatrix b) {
-        return RealSparseMatrixOperations.elemMult(this, b);
+        return RealSparseMatrixOps.elemMult(this, b);
     }
 
 
@@ -1674,7 +1674,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CooMatrix elemMult(Matrix b) {
-        return RealDenseSparseMatrixOperations.elemMult(b, this);
+        return RealDenseSparseMatrixOps.elemMult(b, this);
     }
 
 
