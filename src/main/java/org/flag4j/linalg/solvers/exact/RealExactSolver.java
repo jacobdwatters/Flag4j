@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,17 @@
 
 package org.flag4j.linalg.solvers.exact;
 
+
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 
-
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link org.flag4j.linalg.decompositions.lu.LU LU decomposition.}
+ * {@link LU LU decomposition.}
  */
 public class RealExactSolver extends ExactSolver<Matrix, Vector> {
 
@@ -41,10 +42,7 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
     public RealExactSolver() {
-        super(new RealLU(),
-                new RealForwardSolver(true),
-                new RealBackSolver()
-        );
+        super(new RealLU(), new RealForwardSolver(true), new RealBackSolver());
     }
 
 

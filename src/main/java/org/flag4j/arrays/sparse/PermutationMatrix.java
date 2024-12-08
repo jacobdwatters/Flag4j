@@ -24,14 +24,14 @@
 
 package org.flag4j.arrays.sparse;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.io.Serializable;
@@ -52,6 +52,8 @@ import java.util.Arrays;
  * the other matrix.
  */
 public class PermutationMatrix implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Tracks row/column swaps within the permutation matrix. For an {@code n-by-n} permutation matrix, this array will
@@ -81,7 +83,7 @@ public class PermutationMatrix implements Serializable {
      * @throws LinearAlgebraException If {@code shape} is not square.
      */
     public PermutationMatrix(Shape shape) {
-        ParameterChecks.assertSquareMatrix(shape);
+        ValidateParameters.ensureSquareMatrix(shape);
         this.size = shape.get(0);
         swapPointers = ArrayUtils.intRange(0, size);
     }
@@ -117,10 +119,10 @@ public class PermutationMatrix implements Serializable {
      * Creates a permutation matrix with the specified column swaps.
      * @param colSwaps Array specifying column swaps. The entry {@code x} at index {@code i} indicates that column
      * {@code i} has been swapped with column {@code x}. Must be a
-     * {@link ParameterChecks#assertPermutation(int...) permutation array}.
+     * {@link ValidateParameters#ensurePermutation(int...) permutation array}.
      * @return A permutation matrix with the specified column swaps.
      * @throws IllegalArgumentException If {@code colSwaps} is not a
-     * {@link ParameterChecks#assertPermutation(int...) permutation array}.
+     * {@link ValidateParameters#ensurePermutation(int...) permutation array}.
      */
     public static PermutationMatrix fromColSwaps(int[] colSwaps) {
         int[] rowPerm = new int[colSwaps.length];
@@ -180,14 +182,13 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public Matrix leftMult(Matrix src) {
-        ParameterChecks.assertEquals(size, src.numRows);
-        double[] destEntries = new double[src.entries.length];
-
+        ValidateParameters.ensureEquals(size, src.numRows);
+        double[] destEntries = new double[src.data.length];
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
-            System.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
+            System.arraycopy(src.data, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
         return new Matrix(src.shape, destEntries);
@@ -204,12 +205,11 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public Vector leftMult(Vector src) {
-        ParameterChecks.assertEquals(size, src.size);
-        double[] destEntries = new double[src.entries.length];
+        ValidateParameters.ensureEquals(size, src.size);
+        double[] destEntries = new double[src.data.length];
 
-        for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            destEntries[rowIdx] = src.entries[swapPointers[rowIdx]];
-        }
+        for(int rowIdx=0; rowIdx<size; rowIdx++)
+            destEntries[rowIdx] = src.data[swapPointers[rowIdx]];
 
         return new Vector(destEntries);
     }
@@ -225,14 +225,13 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public CMatrix leftMult(CMatrix src) {
-        ParameterChecks.assertEquals(size, src.numRows);
-        CNumber[] destEntries = new CNumber[src.entries.length];
-
+        ValidateParameters.ensureEquals(size, src.numRows);
+        Complex128[] destEntries = new Complex128[src.data.length];
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
-            System.arraycopy(src.entries, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
+            System.arraycopy(src.data, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
         return new CMatrix(src.shape, destEntries);
@@ -249,12 +248,11 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public CVector leftMult(CVector src) {
-        ParameterChecks.assertEquals(size, src.size);
-        CNumber[] destEntries = new CNumber[src.entries.length];
+        ValidateParameters.ensureEquals(size, src.size);
+        Complex128[] destEntries = new Complex128[src.data.length];
 
-        for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            destEntries[rowIdx] = src.entries[swapPointers[rowIdx]];
-        }
+        for(int rowIdx=0; rowIdx<size; rowIdx++)
+            destEntries[rowIdx] = src.data[swapPointers[rowIdx]];
 
         return new CVector(destEntries);
     }
@@ -270,17 +268,18 @@ public class PermutationMatrix implements Serializable {
      * @see #leftMult(Matrix)
      */
     public Matrix rightMult(Matrix src) {
-        ParameterChecks.assertEquals(size, src.numCols);
-        double[] destEntries = new double[src.entries.length];
+        ValidateParameters.ensureEquals(size, src.numCols);
+        double[] destEntries = new double[src.data.length];
 
         int colIdx;
         int rowOffset;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
             colIdx = swapPointers[rowIdx];
+
             for(int j=0; j<src.numRows; j++) {
                 rowOffset = j*src.numCols;
-                destEntries[rowOffset + colIdx] = src.entries[rowOffset + rowIdx];
+                destEntries[rowOffset + colIdx] = src.data[rowOffset + rowIdx];
             }
         }
 
@@ -314,17 +313,16 @@ public class PermutationMatrix implements Serializable {
      * @see #leftMult(Matrix)
      */
     public CMatrix rightMult(CMatrix src) {
-        ParameterChecks.assertEquals(size, src.numCols);
-        CNumber[] destEntries = new CNumber[src.entries.length];
-
-        int colIdx;
-        int rowOffset;
+        ValidateParameters.ensureEquals(size, src.numCols);
+        Complex128[] destEntries = new Complex128[src.data.length];
+        final int rows = src.numRows;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            colIdx = swapPointers[rowIdx];
+            int colIdx = swapPointers[rowIdx];
+
             for(int j=0; j<src.numRows; j++) {
-                rowOffset = j*src.numCols;
-                destEntries[rowOffset + colIdx] = src.entries[rowOffset + rowIdx];
+                int rowOffset = j*src.numCols;
+                destEntries[rowOffset + colIdx] = src.data[rowOffset + rowIdx];
             }
         }
 
@@ -368,8 +366,8 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public void swapCols(int col1, int col2) {
-        ParameterChecks.assertValidIndices(size, col1, col2);
-        // Find locations of entries with the given columns.
+        ValidateParameters.ensureValidArrayIndices(size, col1, col2);
+        // Find locations of data with the given columns.
         int idx1 = ArrayUtils.indexOf(swapPointers, col1);
         int idx2 = ArrayUtils.indexOf(swapPointers, col2);
         ArrayUtils.swap(swapPointers, idx1, idx2); // Swap values.
@@ -380,14 +378,14 @@ public class PermutationMatrix implements Serializable {
      * Permutes rows of this permutation matrix.
      * @param swaps Defines row swaps of this permutation matrix. The entry {@code x} at index {@code i}
      *              represents row {@code i} has been swapped with row {@code x}. This must be a
-     *              {@link ParameterChecks#assertPermutation(int...)  permutation} array.
+     *              {@link ValidateParameters#ensurePermutation(int...)  permutation} array.
      * @throws IllegalArgumentException If {@code swaps} is not the same length as the number of rows/columns in this
      * permutation matrix. Or, if {@code swaps} is not a
-     * {@link ParameterChecks#assertPermutation(int...)  permutation} array.
+     * {@link ValidateParameters#ensurePermutation(int...)  permutation} array.
      */
     public void permuteRows(int[] swaps) {
-        ParameterChecks.assertPermutation(swaps);
-        ParameterChecks.assertArrayLengthsEq(swaps.length, swapPointers.length);
+        ValidateParameters.ensurePermutation(swaps);
+        ValidateParameters.ensureArrayLengthsEq(swaps.length, swapPointers.length);
         System.arraycopy(swaps, 0, swapPointers, 0, swaps.length);
     }
 
@@ -408,9 +406,8 @@ public class PermutationMatrix implements Serializable {
     public PermutationMatrix T() {
         int[] transpose = new int[size];
 
-        for(int i=0; i<size; i++) {
+        for(int i=0; i<size; i++)
             transpose[swapPointers[i]] = i;
-        }
 
         return new PermutationMatrix(transpose);
     }
@@ -432,11 +429,8 @@ public class PermutationMatrix implements Serializable {
     public int tr() {
         int trace = 0;
 
-        for(int i=0; i<size; i++) {
-            if(swapPointers[i]==i) {
-                trace += 1;
-            }
-        }
+        for(int i=0; i<size; i++)
+            if(swapPointers[i]==i) trace += 1;
 
         return trace;
     }
@@ -453,14 +447,17 @@ public class PermutationMatrix implements Serializable {
         for (int i = 0; i < swapPointers.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
-                if (swapPointers[i] != i) { // Adjusted for 0-based indexing
+
+                if (swapPointers[i] != i) {
                     int cycleSize = 1;
                     int next = swapPointers[i];
+
                     while (next != i) {
                         visited[next] = true;
                         next = swapPointers[next];
                         cycleSize++;
                     }
+
                     totalSwaps += cycleSize - 1;
                 }
             }

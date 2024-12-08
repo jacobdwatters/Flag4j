@@ -91,7 +91,7 @@ class CsrMatrixGetSetTests {
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, 0, 801.4, 15}};
         exp = new Matrix(expEntries).toCsr();
-        assertEquals(exp, A.set(-2, 0, 0));
+        assertEquals(exp, A.set(-2.0, 0, 0));
 
         // -------------------------- Sub-case 3 --------------------------
         expEntries = new double[][]{
@@ -100,7 +100,7 @@ class CsrMatrixGetSetTests {
                 {0, 1.5, 0, 0, 0, 0, 0},
                 {0, 0, 0, 4, 0, 801.4, 15}};
         exp = new Matrix(expEntries).toCsr();
-        assertEquals(exp, A.set(5, 0, 6));
+        assertEquals(exp, A.set(5.0, 0, 6));
 
         // -------------------------- Sub-case 4 --------------------------
         expEntries = new double[][]{

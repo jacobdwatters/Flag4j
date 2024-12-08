@@ -1,7 +1,7 @@
 package org.flag4j.tensor;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +40,7 @@ class TensorTransposeTests {
         expShape = new Shape(2, 2, 1, 3);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.transpose());
+        assertEquals(exp, A.T());
 
         // -------------------- Sub-case 2 --------------------
         aAxes = new int[]{0, 2, 3, 1};
@@ -51,7 +51,7 @@ class TensorTransposeTests {
         expShape = new Shape(3, 1, 2, 2);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.transpose(aAxes));
+        assertEquals(exp, A.T(aAxes));
 
         // -------------------- Sub-case 3 --------------------
         aAxes = new int[]{3, 2, 1, 0};
@@ -62,7 +62,7 @@ class TensorTransposeTests {
         expShape = new Shape(2, 1, 2, 3);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.transpose(aAxes));
+        assertEquals(exp, A.T(aAxes));
 
         // -------------------- Sub-case 4 --------------------
         expEntries = new double[]{
@@ -72,24 +72,24 @@ class TensorTransposeTests {
         expShape = new Shape(3, 2, 1, 2);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.transpose(3, 1));
+        assertEquals(exp, A.T(3, 1));
 
         // -------------------- Sub-case 5 --------------------
         aAxes = new int[]{3, 2, 1, 2};
-        assertThrows(IllegalArgumentException.class, ()->A.transpose(aAxes));
+        assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
         // -------------------- Sub-case 6 --------------------
         aAxes = new int[]{3, 2, 1};
-        assertThrows(IllegalArgumentException.class, ()->A.transpose(aAxes));
+        assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
         // -------------------- Sub-case 7 --------------------
         aAxes = new int[]{0, 1, 3, 2, 4};
-        assertThrows(IllegalArgumentException.class, ()->A.transpose(aAxes));
+        assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
         // -------------------- Sub-case 8 --------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.transpose(-1, 0));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.T(-1, 0));
 
         // -------------------- Sub-case 9 --------------------
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.transpose(1, 6));
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.T(1, 6));
     }
 }

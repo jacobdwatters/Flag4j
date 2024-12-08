@@ -1,8 +1,8 @@
 package org.flag4j.tensor;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,22 +30,22 @@ class TensorGetSetTests {
         // -------------------- Sub-case 1 --------------------
         A.set(-99.245, 0, 1, 0, 0, 1);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expEntries[shape.entriesIndex(0, 1, 0, 0, 1)] = -99.245;
+        expEntries[shape.getFlatIndex(0, 1, 0, 0, 1)] = -99.245;
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------------- Sub-case 2 --------------------
         A.set(156.4, 0, 2, 1, 0, 0);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
-        expEntries[shape.entriesIndex(0, 2, 1, 0, 0)] = 156.4;
+        expEntries[shape.getFlatIndex(0, 2, 1, 0, 0)] = 156.4;
 
-        assertArrayEquals(expEntries, A.entries);
+        assertArrayEquals(expEntries, A.data);
 
         // -------------------- Sub-case 3 --------------------
-        assertThrows(IllegalArgumentException.class, ()->A.set(156.4, 0, 2, 1));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.set(156.4, 0, 2, 1));
 
         // -------------------- Sub-case 4 --------------------
-        assertThrows(IllegalArgumentException.class, ()->A.set(156.4, 0, 1, 0, 0, 1, 0));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.set(156.4, 0, 1, 0, 0, 1, 0));
 
         // -------------------- Sub-case 5 --------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(-99.245, 0, 0, 0, 0, 2));
@@ -74,9 +74,9 @@ class TensorGetSetTests {
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, -1, 0, 0, 1));
 
         // ------------------- Sub-case 5 -------------------
-        assertThrows(IllegalArgumentException.class, ()->A.get(0, 2, 1, 0));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, 2, 1, 0));
 
         // ------------------- Sub-case 6 -------------------
-        assertThrows(IllegalArgumentException.class, ()->A.get(0, 2, 1, 0, 1, 0));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, 2, 1, 0, 1, 0));
     }
 }

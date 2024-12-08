@@ -32,7 +32,7 @@ class VectorToStringTest {
     void toStringTestCase() {
         PrintOptions.resetAll();
         // ---------------------- Sub-case 1 ----------------------
-        exp = "Full Size: 12\n" +
+        exp = "shape: (12)\n" +
                 "[ 1  -1.4133  113.4  0.4  11.3  445  133.445  9.8  13384  ...  12 ]";
         assertEquals(exp, A.toString());
 
@@ -40,7 +40,8 @@ class VectorToStringTest {
         PrintOptions.setMaxColumns(15);
         PrintOptions.setPrecision(2);
         PrintOptions.setCentering(false);
-        exp = "[1  -1.41  113.4  0.4  11.3  445  133.45  9.8  13384  -993.44  11  12  ]";
+        exp = "shape: (12)\n" +
+                "[1  -1.41  113.4  0.4  11.3  445  133.45  9.8  13384  -993.44  11  12  ]";
         assertEquals(exp, A.toString());
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,20 @@
 
 package org.flag4j.linalg.decompositions.svd;
 
-
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.core.Shape;
+import org.flag4j.linalg.DirectSum;
 import org.flag4j.linalg.Eigen;
-import org.flag4j.linalg.ops.DirectSum;
 
 
 /**
- * Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
- * That is, decompose a rectangular matrix {@code M} as {@code M=USV<sup>H</sup>} where {@code U} and {@code V} are
- * unitary matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
- * diagonal matrix containing the singular values of {@code M}.
+ * <p>Instances of this class can be used to compute the singular value decomposition (SVD) of a
+ * {@link CMatrix complex dense matrix}.
+ *
+ *
+ * <p>That is, decompose a rectangular matrix M as M=USV<sup>H</sup> where U and V are
+ * unitary matrices whose columns are the left and right singular vectors of M and S is a real rectangular
+ * diagonal matrix containing the singular values of M.
  */
 public class ComplexSVD extends SVD<CMatrix> {
 
@@ -52,10 +54,10 @@ public class ComplexSVD extends SVD<CMatrix> {
     /**
      * Creates a decomposer to compute the Schur decomposition.
      *
-     * @param computeUV A flag which indicates if the unitary matrices {@code Q} and {@code V} should be computed
+     * @param computeUV A flag which indicates if the unitary matrices Q and V should be computed
      *                  (i.e. the singular vectors). By default, this is true.<br>
-     *                  - If true, the {@code Q} and {@code V} matrices will be computed.<br>
-     *                  - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If it is not needed, this may
+     *                  - If true, the Q and V matrices will be computed.<br>
+     *                  - If false, the Q and V matrices  will <b>not</b> be computed. If it is not needed, this may
      *                  provide a performance improvement.
      */
     public ComplexSVD(boolean computeUV) {
@@ -65,10 +67,10 @@ public class ComplexSVD extends SVD<CMatrix> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix.
-     * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
+     * @param computeUV A flag which indicates if the orthogonal matrices Q and V should be computed
      *                  (i.e. the singular vectors). By default, this is true.<br>
-     *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
-     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
+     *                 - If true, the Q and V matrices will be computed.<br>
+     *                 - If false, the Q and V matrices  will <b>not</b> be computed. If they are not
      *                 needed, this may provide a performance improvement.
      * @param reduced Flag which indicates if the reduced (or full) SVD should be computed. This is false by default.<br>
      *                 - If true, reduced SVD is computed.
@@ -105,7 +107,7 @@ public class ComplexSVD extends SVD<CMatrix> {
     protected CMatrix makeEigenPairs(CMatrix B, double[] eigVals) {
         CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-        double[] vals = pairs[0].toReal().entries;
+        double[] vals = pairs[0].toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
         return pairs[1];
@@ -121,16 +123,16 @@ public class ComplexSVD extends SVD<CMatrix> {
      */
     @Override
     protected void makeEigenVals(CMatrix B, double[] eigVals) {
-        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        double[] vals = Eigen.getEigenValues(B).toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
 
 
     /**
-     * Initializes the unitary {@code U} and {@code V} matrices for the SVD.
+     * Initializes the unitary U and V matrices for the SVD.
      *
      * @param src  Shape of the source matrix being decomposed.
-     * @param cols The number of columns for {@code U} and {@code V}.
+     * @param cols The number of columns for U and V.
      */
     @Override
     protected void initUV(Shape src, int cols) {
@@ -140,11 +142,11 @@ public class ComplexSVD extends SVD<CMatrix> {
 
 
     /**
-     * Extracts the singular vectors, normalizes them and sets the columns of {@code U}
-     * and {@code V} to be the left/right singular vectors.
+     * Extracts the singular vectors, normalizes them and sets the columns of U
+     * and V to be the left/right singular vectors.
      *
      * @param singularVecs Computed left and right singular vectors.
-     * @param j            Index of the column of {@code U} and {@code V} to set.
+     * @param j            Index of the column of U and V to set.
      */
     @Override
     protected void extractNormalizedCols(CMatrix singularVecs, int j) {

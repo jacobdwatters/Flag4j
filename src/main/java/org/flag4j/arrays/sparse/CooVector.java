@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,1353 +24,168 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
-import org.flag4j.core.VectorMixin;
-import org.flag4j.core.sparse_base.RealSparseTensorBase;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.operations.common.complex.ComplexOperations;
-import org.flag4j.operations.common.real.RealOperations;
-import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.SparseDataWrapper;
-import org.flag4j.operations.sparse.coo.real.RealSparseEquals;
-import org.flag4j.operations.sparse.coo.real.RealSparseVectorOperations;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
 import org.flag4j.util.StringUtils;
+import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
- * Real sparse vector stored in coordinate (COO) format.
+ * <p>A real sparse vector stored in coordinate list (COO) format. The {@link #data} of this COO vector are
+ * primitive doubles.
+ *
+ * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
+ * and total number of non-zero data is fixed.
+ *
+ * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.
+ *
+ * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
+ * vector).
+ *
+ * <p>A sparse COO vector is stored as:
+ * <ul>
+ *     <li>The full {@link #shape}/{@link #size} of the vector.</li>
+ *     <li>The non-zero {@link #data} of the vector. All other data in the vector are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
+ *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
+ * </ul>
+ *
+ * <p>Some ops on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Complex128)} will not
+ * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
+ * element-wise ops only act on the non-zero data of the sparse tensor as to not affect the sparsity.
+ *
+ * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
+ * verified. Every operation implemented in this class will preserve the lexicographical sorting.
+ *
+ * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  */
-public class CooVector
-        extends RealSparseTensorBase<CooVector, Vector, CooCVector, CVector>
-        implements VectorMixin<CooVector, Vector, CooVector, CooCVector, Double, CooMatrix, Matrix, CooCMatrix> {
+public class CooVector extends AbstractDoubleTensor<CooVector>
+        implements VectorMixin<CooVector, CooMatrix, Matrix, Double> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
-     * The size of this vector. That is, the number of entries in this vector.
+     * The indices of the non-zero data in this sparse COO vector.
+     */
+    public final int[] indices;
+    /**
+     * The full size of this sparse COO vector (including the zeros.).
      */
     public final int size;
     /**
-     * Indices of non-zero entries in this sparse vector.
+     * The number of non-zero values in this sparse COO vector.
      */
-    public final int[] indices;
+    public final int nnz;
 
 
     /**
-     * Creates a sparse vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
+     *
+     * @param size The size of this vector.
+     * @param entries The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
      */
-    public CooVector(int size) {
-        super(new Shape(size), 0, new double[0], new int[0][0]);
-        this.size = size;
-        this.indices = new int[0];
+    public CooVector(Shape shape, double[] entries, int[] indices) {
+        super(shape, entries);
+        ValidateParameters.ensureRank(shape, 1);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
+        this.size = shape.get(0);
+        this.indices = indices;
+        this.nnz = entries.length;
     }
 
 
     /**
-     * Creates a sparse vector of specified size filled with zeros.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector.
-     * @param indices Indices of the nonZero entries. Indices are assumed to be sorted in lexicographical order but this
-     *                is <b>not</b> enforced. However, many algorithms assume the indices to be sorted. If they are not,
-     *                use
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
+     *
+     * @param size The size of this vector.
+     * @param entries The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
      */
-    public CooVector(int size, int[] nonZeroEntries, int[] indices) {
-        super(new Shape(size), nonZeroEntries.length,
-                ArrayUtils.asDouble(nonZeroEntries, null),
-                RealDenseTranspose.standardIntMatrix(new int[][]{indices})
-        );
+    public CooVector(int size, double[] entries, int[] indices) {
+        super(new Shape(size), entries);
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         this.size = size;
         this.indices = indices;
+        this.nnz = entries.length;
     }
 
 
     /**
-     * Creates a sparse vector of specified size along with non-zero entries and their indices.
-     * @param size The size of the sparse vector. i.e. the total number of entries in the sparse vector.
-     * @param nonZeroEntries The nonZero entries of this sparse vector. Entries assumed to be sorted by indices
-     *                       (not enforced).
-     * @param indices Indices of the nonZero entries. Assumed to be sorted (not enforced).
-     * @throws IllegalArgumentException If the lengths of nonZeroEntries and indices arrays are not equal or if
-     * the length of the nonZeroEntries array is greater than the size.
-     */
-    public CooVector(int size, double[] nonZeroEntries, int[] indices) {
-        super(new Shape(size),
-                nonZeroEntries.length,
-                nonZeroEntries,
-                RealDenseTranspose.standardIntMatrix(new int[][]{indices})
-        );
-
-        this.size = size;
-        this.indices = indices;
-    }
-
-
-    /**
-     * Constructs a sparse vector whose non-zero values, indices, and size are specified by another sparse vector.
-     * @param a Sparse vector to copy
-     */
-    public CooVector(CooVector a) {
-        super(a.shape,
-                a.nonZeroEntries(),
-                a.entries.clone(),
-                new int[a.indices.length][1]
-        );
-        this.indices = a.indices.clone();
-        this.size = a.size;
-    }
-
-
-    /**
-     * Creates a sparse vector of specified size, non-zero entries, and non-zero indices.
-     * @param size Full size, including zeros, of the sparse vector.
-     * @param entries Non-zero entries of the sparse vector.
-     * @param indices Non-zero indices of the sparse vector.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
+     *
+     * @param size The size of this vector.
+     * @param entries The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, List<Double> entries, List<Integer> indices) {
-        super(new Shape(size),
-                entries.size(),
-                ArrayUtils.fromDoubleList(entries),
-                new int[indices.size()][1]
-        );
-
+        super(new Shape(size), ArrayUtils.fromDoubleList(entries));
+        ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
         this.indices = ArrayUtils.fromIntegerList(indices);
+        this.size = size;
+        this.nnz = this.data.length;
+    }
+
+
+    /**
+     * Creates a zero vector of the specified {@code size}.
+     */
+    public CooVector(int size) {
+        super(new Shape(size), new double[0]);
+        indices = new int[0];
+        nnz = 0;
         this.size = size;
     }
 
 
     /**
-     * Checks if an object is equal to this sparse COO vector.
-     * @param object Object to compare this sparse COO vector to.
-     * @return True if the object is a {@link CooVector}, has the same shape as this vector, and is element-wise equal to this
-     * vector.
-     */
-    @Override
-    public boolean equals(Object object) {
-        if(this == object) return true;
-        if(object == null || object.getClass() != getClass()) return false;
-
-        CooVector src2 = (CooVector) object;
-        return RealSparseEquals.vectorEquals(this, src2);
-    }
-
-
-    /**
-     * Sets an index of a copy of this vector to a specified value.
-     * Creates a copy of this vector and sets an index to the specified value. Note, unlike the dense version of this
-     * method, this <b>does not</b> affect this vector.
-     *
-     * @param value   Value to set.
-     * @param indices The index of for which to set the value.
-     * @return A copy of this vector with the specified index set to the specified value.
-     * @throws IllegalArgumentException If the number of indices provided is greater than 1.
-     * @throws IllegalArgumentException If the index is negative or larger than the total vector size.
-     */
-    @Override
-    public CooVector set(double value, int... indices) {
-        ParameterChecks.assertEquals(indices.length, 1);
-        ParameterChecks.assertInRange(indices[0], 0, size, "index");
-
-        int idx = Arrays.binarySearch(this.indices, indices[0]);
-        double[] destEntries;
-        int[] destIndices;
-
-        if(idx >= 0) {
-            // Then the index was found in the sparse vector.
-            destIndices = this.indices.clone();
-            destEntries = entries.clone();
-            destEntries[idx] = value;
-
-        } else{
-            // Then the index was not found in the sparse vector.
-            destIndices = new int[this.indices.length+1];
-            destEntries = new double[entries.length+1];
-            idx = -(idx+1);
-
-            System.arraycopy(this.indices, 0, destIndices, 0, idx);
-            destIndices[idx] = indices[0];
-            System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);
-
-            System.arraycopy(entries, 0, destEntries, 0, idx);
-            destEntries[idx] = value;
-            System.arraycopy(entries, idx, destEntries, idx+1, entries.length-idx);
-        }
-
-        return new CooVector(size, destEntries, destIndices);
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param shape Shape of the new tensor.
-     *
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     *
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public CooVector reshape(Shape shape) {
-        // TODO: This should return a tensor. This would allow for a matrix or vector to be reshaped to any rank.
-        ParameterChecks.assertRank(1, shape);
-        ParameterChecks.assertBroadcastable(this.shape, shape);
-        return copy();
-    }
-
-
-    /**
-     * Flattens tensor to single dimension. To flatten tensor along a single axis.
-     *
-     * @return The flattened tensor.
-     */
-    @Override
-    public CooVector flatten() {
-        return copy();
-    }
-
-
-    /**
-     * Joins specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public Vector join(Vector b) {
-        double[] newEntries = new double[this.size + b.entries.length];
-
-        // Copy over sparse values.
-        for(int i=0; i<this.entries.length; i++) {
-            newEntries[indices[i]] = entries[i];
-        }
-
-        // Copy over dense values.
-        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
-
-        return new Vector(newEntries);
-    }
-
-
-    /**
-     * Joins specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public CVector join(CVector b) {
-        CNumber[] newEntries = new CNumber[this.size + b.entries.length];
-        Arrays.fill(newEntries, CNumber.ZERO);
-
-        // Copy over sparse values.
-        for(int i=0; i<this.entries.length; i++) {
-            newEntries[indices[i]] = new CNumber(entries[i]);
-        }
-
-        // Copy over dense values.
-        System.arraycopy(b.entries, 0, newEntries, this.size, b.entries.length);
-
-        return new CVector(newEntries);
-    }
-
-
-    /**
-     * Joins specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public CooVector join(CooVector b) {
-        double[] newEntries = new double[this.entries.length + b.entries.length];
-        int[] newIndices = new int[this.indices.length + b.indices.length];
-
-        // Copy values from this vector.
-        System.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
-        // Copy values from vector b.
-        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
-
-        // Copy indices from this vector.
-        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
-
-        // Copy the indices from vector b with a shift.
-        for(int i=0; i<b.indices.length; i++) {
-            newIndices[this.indices.length+i] = b.indices[i] + this.size;
-        }
-
-        return new CooVector(this.size + b.size, newEntries, newIndices);
-    }
-
-
-    /**
-     * Joins specified vector with this vector.
-     *
-     * @param b Vector to join with this vector.
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public CooCVector join(CooCVector b) {
-        CNumber[] newEntries = new CNumber[this.entries.length + b.entries.length];
-        int[] newIndices = new int[this.indices.length + b.indices.length];
-
-        // Copy values from this vector.
-        ArrayUtils.arraycopy(this.entries, 0, newEntries, 0, this.entries.length);
-        // Copy values from vector b.
-        System.arraycopy(b.entries, 0, newEntries, this.entries.length, b.entries.length);
-
-        // Copy indices from this vector.
-        System.arraycopy(this.indices, 0, newIndices, 0, this.entries.length);
-
-        // Copy the indices from vector b with a shift.
-        for(int i=0; i<b.indices.length; i++) {
-            newIndices[this.indices.length+i] = b.indices[i] + this.size;
-        }
-
-        return new CooCVector(this.size + b.size, newEntries, newIndices);
-    }
-
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public CooMatrix stack(Vector b) {
-        ParameterChecks.assertEqualShape(this.shape, b.shape);
-
-        double[] destEntries = new double[nnz + b.length()];
-        int[][] indices = new int[2][nnz + b.length()];
-
-        // Copy sparse values and column indices (row indices will be implicitly zero)
-        System.arraycopy(entries, 0, destEntries,0,  entries.length);
-        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
-
-        // Copy dense values. Set column indices as range and set row indices to 1.
-        int[] rowIndices = new int[b.size];
-        Arrays.fill(rowIndices, 1);
-        System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
-        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
-
-        return new CooMatrix(2, b.size, destEntries, indices[0], indices[1]);
-    }
-
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public CooMatrix stack(CooVector b) {
-        ParameterChecks.assertEqualShape(this.shape, b.shape);
-
-        double[] entries = new double[this.entries.length + b.entries.length];
-        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
-
-        // Copy values from this vector.
-        System.arraycopy(this.entries, 0, entries, 0, this.entries.length);
-        // Copy values from vector b.
-        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
-
-        // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
-        Arrays.fill(indices[0], this.indices.length, entries.length, 1);
-
-        // Copy indices from this vector to the column indices.
-        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);
-        // Copy indices from b vector to the column indices.
-        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
-
-        return new CooMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
-    }
-
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public CooCMatrix stack(CVector b) {
-        ParameterChecks.assertEqualShape(this.shape, b.shape);
-
-        CNumber[] destEntries = new CNumber[nnz + b.length()];
-        int[][] indices = new int[2][nnz + b.length()];
-
-        // Copy sparse values and column indices (row indices will be implicitly zero)
-        ArrayUtils.arraycopy(entries, 0, destEntries,0,  entries.length);
-        System.arraycopy(this.indices, 0, indices[1], 0, this.indices.length);
-
-        // Copy dense values. Set column indices as range and set row indices to 1.
-        int[] rowIndices = new int[b.size];
-        Arrays.fill(rowIndices, 1);
-        System.arraycopy(b.entries, 0, destEntries, entries.length,  b.size);
-        System.arraycopy(rowIndices, 0, indices[0], entries.length,  b.size);
-        System.arraycopy(ArrayUtils.intRange(0, b.size), 0, indices[1], entries.length,  b.size);
-
-        return new CooCMatrix(2, b.size, destEntries, indices[0], indices[1]);
-    }
-
-
-    /**
-     * Stacks two vectors along columns as if they were row vectors.
-     *
-     * @param b Vector to stack to the bottom of this vector.
-     * @return The result of stacking this vector and vector {@code b}.
-     * @throws IllegalArgumentException <br>
-     *                                  - If the number of entries in this vector is different from the number of entries in
-     *                                  the vector {@code b}.
-     */
-    @Override
-    public CooCMatrix stack(CooCVector b) {
-        ParameterChecks.assertEqualShape(this.shape, b.shape);
-
-        CNumber[] entries = new CNumber[this.entries.length + b.entries.length];
-        int[][] indices = new int[2][this.indices.length + b.indices.length]; // Row and column indices.
-
-        // Copy values from this vector.
-        ArrayUtils.arraycopy(this.entries, 0, entries, 0, this.entries.length);
-        // Copy values from vector b.
-        System.arraycopy(b.entries, 0, entries, this.entries.length, b.entries.length);
-
-        // Set row indices to 1 for b values (this vectors row indices are 0 which was implicitly set already).
-        Arrays.fill(indices[0], this.indices.length, entries.length, 1);
-
-        // Copy indices from this vector to the column indices.
-        System.arraycopy(this.indices, 0, indices[1], 0, this.entries.length);
-        // Copy indices from b vector to the column indices.
-        System.arraycopy(b.indices, 0, indices[1], this.entries.length, b.entries.length);
-
-        return new CooCMatrix(new Shape(2, this.size), entries, indices[0], indices[1]);
-    }
-
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public CooMatrix stack(Vector b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
-        return axis==0 ? stack(b) : stack(b).T();
-    }
-
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public CooMatrix stack(CooVector b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
-        return axis==0 ? stack(b) : stack(b).T();
-    }
-
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public CooCMatrix stack(CVector b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
-        return axis==0 ? stack(b) : stack(b).T();
-    }
-
-
-    /**
-     * <p>
-     * Stacks two vectors along specified axis.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
-     *
-     * <p>
-     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
-     *
-     * @param b    Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     * @return The result of stacking this vector and the vector {@code b}.
-     * @throws IllegalArgumentException If the number of entries in this vector is different from the number of
-     *                                  entries in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public CooCMatrix stack(CooCVector b, int axis) {
-        ParameterChecks.assertAxis2D(axis);
-        return axis==0 ? stack(b) : stack(b).T();
-    }
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public Vector add(Vector B) {
-        return RealDenseSparseVectorOperations.add(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CooVector add(CooVector B) {
-        return RealSparseVectorOperations.add(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CVector add(CVector B) {
-        return RealComplexDenseSparseVectorOperations.add(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise addition between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CooCVector add(CooCVector B) {
-        return RealComplexSparseVectorOperations.add(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector.
-     *
-     * @param B Vector to add to this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public Vector sub(Vector B) {
-        return RealDenseSparseVectorOperations.sub(this, B);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public Vector add(double a) {
-        return RealSparseVectorOperations.add(this, a);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     * If zeros are introduced, they will be explicitly stored.
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CVector add(CNumber a) {
-        return RealComplexSparseVectorOperations.add(this, a);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Vector to subtract from this vector.
-     * @return The result of the element-wise vector subtraction.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CooVector sub(CooVector B) {
-        return RealSparseVectorOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector.
-     *
-     * @param B Vector to subtract from this vector.
-     * @return The result of the element-wise vector subtraction.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CVector sub(CVector B) {
-        return RealComplexDenseSparseVectorOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between this vector and the specified vector.
-     *
-     * @param B Vector to subtract from this vector.
-     * @return The result of the element-wise vector addition.
-     * @throws IllegalArgumentException If this vector and the specified vector have different lengths.
-     */
-    @Override
-    public CooCVector sub(CooCVector B) {
-        return RealComplexSparseVectorOperations.sub(this, B);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public Vector sub(double a) {
-        return RealSparseVectorOperations.sub(this, a);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    @Override
-    public CVector sub(CNumber a) {
-        return RealComplexSparseVectorOperations.sub(this, a);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public CooVector elemMult(Vector B) {
-        return RealDenseSparseVectorOperations.elemMult(B, this);
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
-     *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
-     */
-    @Override
-    public CooVector div(double divisor) {
-        return new CooVector(size, RealOperations.scalDiv(entries, divisor), indices.clone());
-    }
-
-
-    /**
-     * Computes the scalar division of a tensor.
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
-     * @param divisor The scalar value to divide tensor by.
-     * @return The result of dividing this tensor by the specified scalar.
-     * @throws ArithmeticException If divisor is zero.
+     * @param size The size of this vector.
+     * @param entries The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
      */
-    @Override
-    public CooCVector div(CNumber divisor) {
-        return new CooCVector(size, ComplexOperations.scalDiv(entries, divisor), indices.clone());
+    public CooVector(int size, int[] entries, int[] indices) {
+        super(new Shape(size), ArrayUtils.asDouble(entries, null));
+        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
+        this.indices = indices;
+        this.size = size;
+        nnz = entries.length;
     }
 
 
     /**
-     * Computes the transpose of a tensor. Same as {@link #transpose()}. Since a vector is a rank 1 tensor, this just
-     *      * copies the vector.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CooVector T() {
-        return this.copy();
-    }
-
-
-    /**
-     * Gets the element in this tensor at the specified indices. This sparse vectors indices are assumed to
-     * be sorted lexicographically. If this is not the case call
-     * {@link #sortIndices() this.sparseSort()} before calling this method.
-     *
-     * @param indices Indices of element.
-     * @return The element at the specified indices.
-     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
-     */
-    @Override
-    public Double get(int... indices) {
-        ParameterChecks.assertEquals(indices.length, 1);
-        ParameterChecks.assertInRange(indices[0], 0, size, "index");
-
-        int idx = Arrays.binarySearch(this.indices, indices[0]);
-        return idx>=0 ? entries[idx] : 0;
-    }
-
-
-    /**
-     * Creates a copy of this tensor.
-     *
-     * @return A copy of this tensor.
-     */
-    @Override
-    public CooVector copy() {
-        return new CooVector(this.size, this.entries.clone(), this.indices.clone());
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
-     */
-    @Override
-    public CooVector elemMult(CooVector B) {
-        return RealSparseVectorOperations.elemMult(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public CooCVector elemMult(CVector B) {
-        return RealComplexDenseSparseVectorOperations.elemMult(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param B Vector to element-wise multiply to this vector.
-     * @return The vector resulting from the element-wise multiplication.
-     * @throws IllegalArgumentException If this vector and {@code B} do not have the same size.
-     */
-    @Override
-    public CooCVector elemMult(CooCVector B) {
-        return RealComplexSparseVectorOperations.elemMult(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param b Vector to element-wise divide this vector by.
-     * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code b} do not have the same size.
-     */
-    @Override
-    public CooVector elemDiv(Vector b) {
-        return RealDenseSparseVectorOperations.elemDiv(this, b);
-    }
-
-
-    /**
-     * Computes the element-wise division (Hadamard multiplication) between this vector and a specified vector.
-     *
-     * @param b Vector to element-wise divide this vector by.
-     * @return The vector resulting from the element-wise division.
-     * @throws IllegalArgumentException If this vector and {@code b} do not have the same size.
-     */
-    @Override
-    public CooCVector elemDiv(CVector b) {
-        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);
-    }
-
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public Double inner(Vector b) {
-        ParameterChecks.assertEqualShape(shape, b.shape);
-        return RealDenseSparseVectorOperations.inner(b.entries, this.entries, this.indices, this.size);
-    }
-
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public Double inner(CooVector b) {
-        return RealSparseVectorOperations.inner(this, b);
-    }
-
-
-    /**
-     * Computes a unit vector in the same direction as this vector.
-     *
-     * @return A unit vector with the same direction as this vector.
-     */
-    @Override
-    public CooVector normalize() {
-        double norm = VectorNorms.norm(this);
-        return norm==0 ? new CooVector(size) : this.div(norm);
-    }
-
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public CNumber inner(CVector b) {
-        return RealComplexDenseSparseVectorOperations.inner(this.entries, this.indices, this.size, b.entries);
-    }
-
-
-    /**
-     * Computes the inner product between two vectors.
-     *
-     * @param b Second vector in the inner product.
-     * @return The inner product between this vector and the vector b.
-     * @throws IllegalArgumentException If this vector and vector b do not have the same number of entries.
-     */
-    @Override
-    public CNumber inner(CooCVector b) {
-        return RealComplexSparseVectorOperations.inner(this, b);
-    }
-
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public Matrix outer(Vector b) {
-        return new Matrix(
-                this.size,
-                b.size,
-                RealDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)
-        );
-    }
-
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public Matrix outer(CooVector b) {
-        return RealSparseVectorOperations.outerProduct(this, b);
-    }
-
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public CMatrix outer(CVector b) {
-        return new CMatrix(
-                this.size,
-                b.size,
-                RealComplexDenseSparseVectorOperations.outerProduct(this.entries, this.indices, this.size, b.entries)
-        );
-    }
-
-
-    /**
-     * Computes the outer product of two vectors.
-     *
-     * @param b Second vector in the outer product.
-     * @return The result of the vector outer product between this vector and b.
-     * @throws IllegalArgumentException If the two vectors do not have the same number of entries.
-     */
-    @Override
-    public CMatrix outer(CooCVector b) {
-        return RealComplexSparseVectorOperations.outerProduct(this, b);
-    }
-
-
-    /**
-     * Checks if a vector is parallel to this vector. This sparse vectors indices are assumed to be sorted lexicographically.
-     * If this is not the case call {@link #sortIndices() this.sparseSort()} before calling this method.
-     *
-     * @param b Vector to compare to this vector.
-     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
-     */
-    @Override
-    public boolean isParallel(Vector b) {
-        final double tol = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
-        boolean result;
-
-        if(this.size!=b.size) {
-            result = false;
-        } else if(this.size<=1) {
-            result = true;
-        } else if(this.isZeros() || b.isZeros()) {
-            result = true; // Any vector is parallel to zero vector.
-        } else {
-            result = true;
-            int sparseIndex = 0;
-            double scale = 0;
-
-            // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
-            for(int i=0; i<b.size; i++) {
-                if(b.entries[i]!=0) {
-                    scale = this.entries[i]/b.entries[this.indices[i]];
-                    break;
-                }
-            }
-
-            for(int i=0; i<b.size; i++) {
-                if(sparseIndex >= this.entries.length || i!=this.indices[sparseIndex]) {
-                    // Then this index is not in the sparse vector.
-                    if(b.entries[i] != 0) {
-                        result = false;
-                        break;
-                    }
-
-                } else {
-                    // Ensure the scaled entry is approximately equal to the entry in this vector.
-                    if(Math.abs(b.entries[i]*scale - this.entries[sparseIndex]) > tol) {
-                        result = false;
-                        break;
-                    }
-
-                    sparseIndex++;
-                }
-            }
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Checks if a vector is perpendicular to this vector.
-     *
-     * @param b Vector to compare to this vector.
-     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
-     */
-    @Override
-    public boolean isPerp(Vector b) {
-        final double tol = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
-        boolean result;
-
-        if(this.size!=b.size) {
-            result = false;
-        } else {
-            result = Math.abs(this.inner(b)) < tol;
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Converts this vector to an equivalent matrix as if it were a column vector.
-     *
-     * @return A matrix equivalent to this vector as if the vector is a column vector.
-     * @see #toMatrix(boolean)
-     */
-    @Override
-    public CooMatrix toMatrix() {
-        int[] rowIndices = indices.clone();
-        int[] colIndices = new int[entries.length];
-
-        return new CooMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
-    }
-
-
-    /**
-     * Converts a vector to an equivalent matrix representing either a row or column vector.
-     *
-     * @param columVector Flag for choosing whether to convert this vector to a matrix representing a row or column vector.
-     *                    <p>If true, the vector will be converted to a matrix representing a column vector.</p>
-     *                    <p>If false, The vector will be converted to a matrix representing a row vector.</p>
-     * @return A matrix equivalent to this vector.
-     * @see #toMatrix()
-     */
-    @Override
-    public CooMatrix toMatrix(boolean columVector) {
-        if(columVector) {
-            // Convert to column vector
-            int[] rowIndices = indices.clone();
-            int[] colIndices = new int[entries.length];
-
-            return new CooMatrix(this.size, 1, entries.clone(), rowIndices, colIndices);
-        } else {
-            // Convert to row vector.
-            int[] rowIndices = new int[entries.length];
-            int[] colIndices = indices.clone();
-
-            return new CooMatrix(1, this.size, entries.clone(), rowIndices, colIndices);
-        }
-    }
-
-
-    /**
-     * Converts this vector to an equivalent tensor.
-     * @return A tensor which is equivalent to this vector.
-     */
-    public CooTensor toTensor() {
-        return new CooTensor(
-                this.shape,
-                this.entries.clone(),
-                RealDenseTranspose.standardIntMatrix(new int[][]{this.indices.clone()})
-        );
-    }
-
-
-    /**
-     * Extends a vector a specified number of times to a matrix.
-     *
-     * @param n    The number of times to extend this vector. Must be a positive value.
-     * @param axis Axis along which to extend. If {@code axis=0}, then the vector will be treated as a row vector. If
-     *    {@code axis=1} then the vector will be treated as a column vector.
-     * @return A matrix which is the result of extending a vector {@code n} times.
-     */
-    @Override
-    public CooMatrix extend(int n, int axis) {
-        ParameterChecks.assertGreaterEq(1, n, "n");
-        ParameterChecks.assertAxis2D(axis);
-
-        int[][] matIndices = new int[2][n*nnz];
-        double[] matEntries = new double[n*nnz];
-        Shape matShape;
-
-        if(axis==0) {
-            matShape = new Shape(n, this.size);
-            int[] rowIndices = new int[indices.length];
-
-            for(int i=0; i<n; i++) {
-                Arrays.fill(rowIndices, i);
-                System.arraycopy(entries, 0, matEntries, (n-1)*i, nnz);
-                System.arraycopy(rowIndices, 0, matIndices[0], (n-1)*i, nnz);
-                System.arraycopy(indices, 0, matIndices[1], (n-1)*i, nnz);
-            }
-
-        } else {
-            matShape = new Shape(this.size, n);
-            int[] rowIndices = new int[n];
-            int[] colIndices = ArrayUtils.intRange(0, n);
-
-            for(int i=0; i<entries.length; i++) {
-                Arrays.fill(rowIndices, indices[i]);
-
-                Arrays.fill(matEntries, (entries.length+1)*i, (entries.length+1)*i + n, entries[i]);
-                System.arraycopy(rowIndices, 0, matIndices[0], (entries.length+1)*i, n);
-                System.arraycopy(colIndices, 0, matIndices[1], (entries.length+1)*i, n);
-            }
-        }
-
-        return new CooMatrix(matShape, matEntries, matIndices[0], matIndices[1]);
-    }
-
-
-    /**
-     * Gets the length of a vector.
-     *
-     * @return The length, i.e. the number of entries, in this vector.
-     */
-    @Override
-    public int length() {
-        return this.size;
-    }
-
-
-    /**
-     * A factory for creating a real sparse tensor.
-     *
-     * @param shape   Shape of the sparse tensor to make.
-     * @param entries Non-zero entries of the sparse tensor to make.
-     * @param indices Non-zero indices of the sparse tensor to make.
-     * @return A tensor created from the specified parameters.
-     */
-    @Override
-    protected CooVector makeTensor(Shape shape, double[] entries, int[][] indices) {
-        return new CooVector(size, entries, RealDenseTranspose.standardIntMatrix(indices)[0]);
-    }
-
-
-    /**
-     * A factory for creating a real dense tensor.
-     *
-     * @param shape   Shape of the tensor to make.
-     * @param entries Entries of the dense tensor to make.
-     * @return A tensor created from the specified parameters.
-     */
-    @Override
-    protected Vector makeDenseTensor(Shape shape, double[] entries) {
-        return new Vector(entries);
-    }
-
-
-    /**
-     * A factory for creating a complex sparse tensor.
-     *
-     * @param shape   Shape of the tensor to make.
-     * @param entries Non-zero entries of the sparse tensor to make.
-     * @param indices Non-zero indices of the sparse tensor to make.
-     * @return A tensor created from the specified parameters.
-     */
-    @Override
-    protected CooCVector makeComplexTensor(Shape shape, CNumber[] entries, int[][] indices) {
-        return new CooCVector(size, entries, RealDenseTranspose.standardIntMatrix(indices)[0]);
-    }
-
-
-    /**
-     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
-     */
-    @Override
-    public void sortIndices() {
-        SparseDataWrapper.wrap(entries, indices).sparseSort().unwrap(entries, indices);
-    }
-
-
-    /**
-     * Converts this tensor to an equivalent complex tensor. That is, the entries of the resultant tensor will be exactly
-     * the same value but will have type {@link CNumber CNumber} rather than {@link Double}.
-     *
-     * @return A complex matrix which is equivalent to this matrix.
-     */
-    @Override
-    public CooCVector toComplex() {
-        CNumber[] destEntries = new CNumber[entries.length];
-        ArrayUtils.copy2CNumber(entries, destEntries);
-
-        return new CooCVector(
-                this.size,
-                destEntries,
-                indices.clone()
-        );
-    }
-
-
-    /**
-     * Flattens a tensor along the specified axis. This simply copies the vector since it is rank 1.
-     *
-     * @param axis Axis along which to flatten tensor. Must be 0.
-     * @throws IllegalArgumentException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
-     */
-    @Override
-    public CooVector flatten(int axis) {
-        assert(axis==0) : "Axis must be zero but got " + axis;
-        return this.copy();
-    }
-
-
-    /**
-     * gets the size of this vector.
-     *
-     * @return The number of total entries (including zeros) of this vector.
+     * Constructs a copy of the specified sparse COO vector.
+     * @param b The vector to construct a copy of.
      */
-    @Override
-    public int size() {
-        return this.size;
-    }
-
-
-    /**
-     * Repeats a vector {@code n} times along a certain axis to create a matrix.
-     *
-     * @param n Number of times to repeat vector.
-     * @param axis Axis along which to repeat vector. If {@code axis=0} then each row of the resulting matrix will be equivalent to
-     * this vector. If {@code axis=1} then each column of the resulting matrix will be equivalent to this vector.
-     *
-     * @return A matrix whose rows/columns are this vector repeated.
-     */
-    @Override
-    public CooMatrix repeat(int n, int axis) {
-        ParameterChecks.assertInRange(axis, 0, 1, "axis");
-        ParameterChecks.assertGreaterEq(0, n, "n");
-
-        Shape tiledShape;
-        double[] tiledEntries = new double[n*entries.length];
-        int[] tiledRows = new int[tiledEntries.length];
-        int[] tiledCols = new int[tiledEntries.length];
-        int nnz = entries.length;
-
-        if(axis==0) {
-            tiledShape = new Shape(n, size);
-
-            for(int i=0; i<n; i++) { // Copy values into row and set col indices as vector indices.
-                System.arraycopy(entries, 0, tiledEntries, i*nnz, nnz);
-                System.arraycopy(indices, 0, tiledCols, i*nnz, indices.length);
-                Arrays.fill(tiledRows, i*nnz, (i+1)*nnz, i);
-            }
-        } else {
-            int[] colIndices = ArrayUtils.intRange(0, n);
-            tiledShape = new Shape(size, n);
-
-            for(int i=0; i<entries.length; i++) {
-                Arrays.fill(tiledEntries, i*n, (i+1)*n, entries[i]);
-                Arrays.fill(tiledRows, i*n, (i+1)*n, indices[i]);
-                System.arraycopy(colIndices, 0, tiledCols, i*n, n);
-            }
-        }
-
-        return new CooMatrix(tiledShape, tiledEntries, tiledRows, tiledCols);
-    }
-
-
-    /**
-     * Simply returns a reference of this tensor.
-     *
-     * @return A reference to this tensor.
-     */
-    @Override
-    protected CooVector getSelf() {
-        return this;
-    }
-
-
-    @Override
-    public boolean allClose(CooVector tensor, double relTol, double absTol) {
-        return RealSparseEquals.allCloseVector(this, tensor, relTol, absTol);
-    }
-
-
-    /**
-     * Converts this sparse tensor to an equivalent dense tensor.
-     *
-     * @return A dense tensor which is equivalent to this sparse tensor.
-     */
-    @Override
-    public Vector toDense() {
-        double[] entries = new double[size];
-
-        for(int i = 0; i< nnz; i++) {
-            entries[indices[i]] = this.entries[i];
-        }
-
-        return new Vector(entries);
+    public CooVector(CooVector b) {
+        super(b.shape, b.data.clone());
+        indices = b.indices.clone();
+        nnz = b.nnz;
+        size = b.size;
     }
 
 
@@ -1381,13 +196,13 @@ public class CooVector
      * @return A sparse tensor which is equivalent to the {@code src} dense tensor.
      */
     public static CooVector fromDense(Vector src) {
-        List<Double> nonZeroEntries = new ArrayList<>((int) (src.entries.length*0.8));
-        List<Integer> indices = new ArrayList<>((int) (src.entries.length*0.8));
+        List<Double> nonZeroEntries = new ArrayList<>((int) (src.data.length*0.8));
+        List<Integer> indices = new ArrayList<>((int) (src.data.length*0.8));
 
-        // Fill entries with non-zero values.
-        for(int i=0; i<src.entries.length; i++) {
-            if(src.entries[i] != 0d) {
-                nonZeroEntries.add(src.entries[i]);
+        // Fill data with non-zero values.
+        for(int i = 0; i<src.data.length; i++) {
+            if(src.data[i] != 0d) {
+                nonZeroEntries.add(src.data[i]);
                 indices.add(i);
             }
         }
@@ -1401,39 +216,1045 @@ public class CooVector
 
 
     /**
+     * Constructs a tensor of the same type as this tensor with the given the shape and data.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
+     *
+     * @return A tensor of the same type as this tensor with the given the shape and data.
+     */
+    @Override
+    public CooVector makeLikeTensor(Shape shape, double[] entries) {
+        return new CooVector(shape, entries, indices.clone());
+    }
+
+
+    /**
+     * Constructs a vector of the same type as this tensor with the given the shape and data.
+     *
+     * @param shape Shape of the vector to construct.
+     * @param entries Non-zero data of the vector to construct.
+     * @param indices Indices of the non-zero values in this vector.
+     *
+     * @return A vector of the same type as this tensor with the given the shape and data.
+     */
+    public CooVector makeLikeTensor(int size, double[] entries, int[] indices) {
+        return new CooVector(size, entries, indices);
+    }
+
+
+    /**
+     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
+     * computes the sum of products between the two tensors along the specified set of axes.
+     *
+     * @param src2 Tensor to contract with this tensor.
+     * @param aAxes Axes along which to compute products for this tensor.
+     * @param bAxes Axes along which to compute products for {@code src2} tensor.
+     *
+     * @return The tensor dot product over the specified axes.
+     *
+     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
+     *                                  {@code aAxes} and {@code bAxes}.
+     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
+     *                                  are out of bounds for the corresponding tensor.
+     */
+    @Override
+    public Vector tensorDot(CooVector src2, int[] aAxes, int[] bAxes) {
+        if(aAxes.length != 1 || bAxes.length != 1) {
+            throw new LinearAlgebraException("Vector dot product requires exactly one dimension for each vector but got "
+                    + aAxes.length + " and " + bAxes.length + ".");
+        }
+        if(aAxes[0] != 0 || bAxes[0] != 0) {
+            throw new LinearAlgebraException("Both axes must be 0 for vector dot product but got "
+                    + aAxes[0] + " and " + bAxes[0] + ".");
+        }
+
+        return new Vector(dot(src2));
+    }
+
+
+    /**
+     * Computes the transpose of a tensor by exchanging {@code axis1} and {@code axis2}.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     *
+     * @return The transpose of this tensor according to the specified axes.
+     *
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #T()
+     * @see #T(int...)
+     */
+    @Override
+    public CooVector T(int axis1, int axis2) {
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
+        return copy();
+    }
+
+
+    /**
+     * Computes the transpose of this tensor. That is, permutes the axes of this tensor so that it matches
+     * the permutation specified by {@code axes}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     *
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     *
+     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
+     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     * @see #T(int, int)
+     * @see #T()
+     */
+    @Override
+    public CooVector T(int... axes) {
+        ValidateParameters.ensurePermutation(axes);
+        return copy();
+    }
+
+
+    /**
+     * Joints specified vector with this vector. That is, creates a vector of length {@code this.length() + b.length()} containing
+     * first the elements of this vector followed by the elements of {@code b}.
+     *
+     * @param b Vector to join with this vector.
+     *
+     * @return A vector resulting from joining the specified vector with this vector.
+     */
+    @Override
+    public CooVector join(CooVector b) {
+        double[] newEntries = new double[this.data.length + b.data.length];
+        Arrays.fill(newEntries, 0.0);
+        int[] newIndices = new int[this.indices.length + b.indices.length];
+
+        // Copy values from this vector.
+        System.arraycopy(this.data, 0, newEntries, 0, this.data.length);
+        // Copy values from vector b.
+        System.arraycopy(b.data, 0, newEntries, this.data.length, b.data.length);
+
+        // Copy indices from this vector.
+        System.arraycopy(this.indices, 0, newIndices, 0, this.data.length);
+
+        // Copy the indices from vector b with a shift.
+        for(int i=0; i<b.indices.length; i++)
+            newIndices[this.indices.length+i] = b.indices[i] + size;
+
+        return makeLikeTensor(size + b.size, newEntries, newIndices);
+    }
+
+
+    /**
+     * <p>Computes the inner product between two vectors.
+     *
+     * <p>Note: this method is distinct from {@link #dot(CooVector)}. The inner product is equivalent to the dot product
+     * of this tensor with the conjugation of {@code b}.
+     *
+     * @param b Second vector in the inner product.
+     *
+     * @return The inner product between this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
+     * @see #dot(CooVector)
+     */
+    @Override
+    public Double inner(CooVector b) {
+        return RealCooVectorOperations.inner(this, b);
+    }
+
+
+    /**
+     * <p>Computes the dot product between two vectors.
+     *
+     * <p>Note: this method is distinct from {@link #inner(CooVector)}. The inner product is equivalent to the dot product
+     * of this tensor with the conjugation of {@code b}.
+     *
+     * @param b Second vector in the dot product.
+     *
+     * @return The dot product between this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
+     * @see #inner(CooVector) 
+     */
+    @Override
+    public Double dot(CooVector b) {
+        return inner(b);
+    }
+
+
+    /**
+     * Computes the Euclidean norm of this vector.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    public double norm() {
+        return VectorNorms.norm(data);
+    }
+
+
+    /**
+     * Computes the p-norm of this vector.
+     *
+     * @param p {@code p} value in the p-norm.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    public double norm(int p) {
+        return VectorNorms.norm(data, p);
+    }
+
+
+    /**
+     * Computes a unit vector in the same direction as this vector.
+     *
+     * @return A unit vector with the same direction as this vector. If this vector is zeros, then an equivalently sized
+     * zero vector will be returned.
+     */
+    public CooVector normalize() {
+        double norm = VectorNorms.norm(data);
+        return norm==0 ? new CooVector(size) : this.div(norm);
+    }
+
+
+    /**
+     * Computes the magnitude of this vector.
+     *
+     * @return The magnitude of this vector.
+     */
+    @Override
+    public Double mag() {
+        return VectorNorms.norm(data);
+    }
+
+
+    /**
+     * Gets the element of this vector at the specified index.
+     *
+     * @param target Index of the element to get within this vector.
+     *
+     * @return The element of this vector at index {@code target}.
+     */
+    @Override
+    public Double get(int target) {
+        ValidateParameters.validateTensorIndex(shape, target);
+        int idx = Arrays.binarySearch(indices, target);
+        return idx>=0 ? data[idx] : 0;
+    }
+
+
+    /**
+     * Checks if a vector is parallel to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     *
+     * @return {@code true} if the vector {@code b} is parallel to this vector and the same size; {@code false} otherwise.
+     * @implNote This method uses a tolerance of {@code tol = 1.0e-12} to verify if the two vectors are parallel. Specifically, the
+     * scaled
+     * difference between the two vectors is computed using their first non-zero data as
+     * {@code scale = this.data[i]/b.data[this.indices[i]]} for some {@code i} such that
+     * {@code b.data[this.indices[i]] != 0.0}. Then if all data satisfy
+     * {@code Math.abs(b.data[i]*scale - data[j]) < tol} where
+     * {@code this.indices[i] == b.indices[j]}, the two vectors will be considered parallel.
+     * @see #isPerp(CooVector)
+     */
+    public boolean isParallel(CooVector b) {
+        final double tol = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
+        boolean result;
+
+        if(this.size!=b.size) {
+            return false;
+        } else if(this.size<=1) {
+            return true;
+        } else if(this.isZeros() || b.isZeros()) {
+            return true; // Any vector is parallel to a zero vector.
+        } else {
+            result = true;
+            int sparseIndex = 0;
+            double scale = 0;
+
+            // Find first non-zero entry in b and compute the scaling factor (we know there is at least one from else-if).
+            for(int i=0; i<b.size; i++) {
+                if(b.data[i]!=0) {
+                    scale = this.data[i]/b.data[this.indices[i]];
+                    break;
+                }
+            }
+
+            for(int i=0; i<b.size; i++) {
+                if(sparseIndex >= this.data.length || i!=this.indices[sparseIndex]) {
+                    // Then this index is not in the sparse vector.
+                    if(b.data[i] != 0) return false;
+
+                } else {
+                    // Ensure the scaled entry is approximately equal to the entry in this vector.
+                    if(Math.abs(b.data[i]*scale - data[sparseIndex]) > tol) return false;
+                    sparseIndex++;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Checks if a vector is perpendicular to this vector.
+     *
+     * @param b Vector to compare to this vector.
+     *
+     * @return {@code true} if the vector {@code b} is perpendicular to this vector and the same size; {@code false} otherwise.
+     *
+     * @see #isParallel(CooVector)
+     * @implNote This method checks if the vector is perpendicular by checking if the inner product is essentially zero:
+     * {@code Math.abs(this.inner(b)) < TOL} where {@code TOL} is a small non-negative value.
+     */
+    public boolean isPerp(CooVector b) {
+        final double TOL = 1.0e-12; // Tolerance to accommodate floating point arithmetic error in scaling.
+        return size!=b.size ? false : Math.abs(inner(b)) < TOL;
+    }
+
+
+    /**
+     * Gets the length of a vector.
+     *
+     * @return The length, i.e. the number of data, in this vector.
+     */
+    @Override
+    public int length() {
+        return size;
+    }
+
+
+    /**
+     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
+     *
+     * @return The density of this sparse tensor.
+     */
+    public double sparsity() {
+        return 1.0 - ((double) nnz / (double) size);
+    }
+
+
+    /**
+     * Converts this sparse tensor to an equivalent dense tensor.
+     *
+     * @return A dense tensor equivalent to this sparse tensor.
+     */
+    public Vector toDense() {
+        double[] entries = new double[size];
+        for(int i = 0; i<nnz; i++)
+            entries[indices[i]] = this.data[i];
+
+        return new Vector(entries);
+    }
+
+
+    /**
+     * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
+     */
+    public void sortIndices() {
+        CooDataSorter.wrap(data, indices).sparseSort().unwrap(data, indices);
+    }
+
+
+    /**
+     * Gets the element of this tensor at the specified target index.
+     *
+     * @param target Index of the element to get.
+     *
+     * @return The element of this tensor at the specified target index.
+     * @throws IllegalArgumentException If {@code target.length != 1}.
+     */
+    @Override
+    public Double get(int... target) {
+        ValidateParameters.ensureArrayLengthsEq(target.length, 1);
+        return get(target[0]);
+    }
+
+
+    /**
+     * Sets the element of this tensor at the specified indices.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param indices Indices of the element to set.
+     *
+     * @return A copy of this tensor with the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code indices} is not within the bounds of this tensor.
+     */
+    @Override
+    public CooVector set(Double value, int... indices) {
+        ValidateParameters.validateTensorIndex(shape, indices);
+        int idx = Arrays.binarySearch(this.indices, indices[0]);
+        double[] destEntries;
+        int[] destIndices;
+
+        if(idx >= 0) {
+            // Then the index was found in the sparse vector.
+            destIndices = this.indices.clone();
+            destEntries = data.clone();
+            destEntries[idx] = value;
+
+        } else{
+            // Then the index was not found in the sparse vector.
+            destIndices = new int[this.indices.length+1];
+            destEntries = new double[data.length+1];
+            idx = -(idx+1);
+
+            System.arraycopy(this.indices, 0, destIndices, 0, idx);
+            destIndices[idx] = indices[0];
+            System.arraycopy(this.indices, idx, destIndices, idx+1, this.indices.length-idx);
+
+            System.arraycopy(data, 0, destEntries, 0, idx);
+            destEntries[idx] = value;
+            System.arraycopy(data, idx, destEntries, idx+1, data.length-idx);
+        }
+
+        return new CooVector(size, destEntries, destIndices);
+    }
+
+
+    /**
+     * Flattens tensor to single dimension while preserving order of data.
+     *
+     * @return The flattened tensor.
+     *
+     * @see #flatten(int)
+     */
+    @Override
+    public CooVector flatten() {
+        return copy();
+    }
+
+
+    /**
+     * Flattens a tensor along the specified axis.
+     *
+     * @param axis Axis along which to flatten tensor.
+     *
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than {@code this.{@link #getRank()}-1}.
+     * @see #flatten()
+     */
+    @Override
+    public CooVector flatten(int axis) {
+        ValidateParameters.ensureValidAxes(shape, axis);
+        return copy();
+    }
+
+
+    /**
+     * Copies and reshapes this tensor.
+     *
+     * @param newShape New shape for the tensor.
+     *
+     * @return A copy of this tensor with the new shape.
+     *
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code newShape} is not broadcastable to {@link #shape this.shape}.
+     */
+    @Override
+    public CooVector reshape(Shape newShape) {
+        ValidateParameters.ensureRank(newShape, 1);
+        ValidateParameters.ensureBroadcastable(shape, newShape);
+        return copy();
+    }
+
+
+    /**
+     * Subtracts a scalar value from each non-zero entry of this tensor.
+     *
+     * @param b Scalar value in difference.
+     *
+     * @return The difference of this tensor's non-zero values and the scalar {@code b}.
+     */
+    @Override
+    public CooVector sub(Double b) {
+        return super.sub(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
+    }
+
+
+    /**
+     * Subtracts a scalar value from each non-zero entry of this tensor.
+     *
+     * @param b Scalar value in difference.
+     *
+     * @return The difference of this tensor's non-zero values and the scalar {@code b}.
+     */
+    public CooCVector sub(Complex128 b) {
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.sub(data, b, dest);
+        return new CooCVector(shape, dest, indices.clone());
+    }
+
+
+    /**
+     * Subtracts a scalar value from each non-zero entry of this tensor and stores the result in this tensor.
+     *
+     * @param b Scalar value in difference.
+     */
+    @Override
+    public void subEq(Double b) {
+        super.subEq(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
+    }
+
+
+    /**
+     * Adds a scalar field value to each entry of this tensor.
+     *
+     * @param b Scalar field value in sum.
+     *
+     * @return The sum of this tensor with the scalar {@code b}.
+     */
+    @Override
+    public CooVector add(Double b) {
+        return super.add(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
+    }
+
+
+    /**
+     * Adds a scalar field value to each non-zero entry of this tensor.
+     *
+     * @param b Scalar field value in sum.
+     *
+     * @return The sparse COO vector resulting from adding {@code b} to each non-zero entry of this vector.
+     */
+    public CooCVector add(Complex128 b) {
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.add(data, b, dest);
+        return new CooCVector(shape, dest, indices.clone());
+    }
+
+
+    /**
+     * Adds a scalar value to each entry of this tensor and stores the result in this tensor.
+     *
+     * @param b Scalar field value in sum.
+     */
+    @Override
+    public void addEq(Double b) {
+        super.addEq(b); // Overrides method from super class to emphasize it operates on the non-zero values only.
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CooVector add(CooVector b) {
+        return RealCooVectorOperations.add(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise sum between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise sum.
+     *
+     * @return The sum of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    public CooCVector add(CooCVector b) {
+        return RealComplexSparseVectorOperations.add(b, this);
+    }
+
+
+    /**
+     * Computes the element-wise difference between two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise difference.
+     *
+     * @return The difference of this tensor with {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CooVector sub(CooVector b) {
+        return RealCooVectorOperations.sub(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise multiplication of two tensors of the same shape.
+     *
+     * @param b Second tensor in the element-wise product.
+     *
+     * @return The element-wise product between this tensor and {@code b}.
+     *
+     * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
+     */
+    @Override
+    public CooVector elemMult(CooVector b) {
+        return RealCooVectorOperations.elemMult(this, b);
+    }
+
+
+    /**
+     * <p>Computes the generalized trace of this tensor along the specified axes.
+     *
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
+     * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
+     * {@code axis1} and {@code axis2} removed.
+     *
+     * @param axis1 First axis for 2D sub-array.
+     * @param axis2 Second axis for 2D sub-array.
+     *
+     * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}. This will be a tensor of rank
+     * {@code this.getRank() - 2} with the same shape as this tensor but with {@code axis1} and {@code axis2} removed.
+     *
+     * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
+     */
+    @Override
+    public CooVector tensorTr(int axis1, int axis2) {
+        throw new LinearAlgebraException("Tensor trace cannot be computed for a rank 1 tensor " +
+                "(must be rank 2 or " + "greater).");
+    }
+
+
+    /**
+     * Computes the product of all non-zero values in this tensor.
+     *
+     * @return The product of all non-zero values in this tensor.
+     */
+    @Override
+    public Double prod() {
+        return super.prod(); // Overrides method from super class to emphasize that this method works on the non-zero values only.
+    }
+
+
+    /**
+     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.
+     *
+     * @return The transpose of this tensor.
+     *
+     * @see #T(int, int)
+     * @see #T(int...)
+     */
+    @Override
+    public CooVector T() {
+        return copy();
+    }
+
+
+    /**
+     * Computes the conjugate transpose of a tensor by exchanging the first and last axes of this tensor and conjugating the
+     * exchanged values.
+     *
+     * @return The conjugate transpose of this tensor.
+     *
+     * @see #H(int, int)
+     * @see #H(int...)
+     */
+    @Override
+    public CooVector H() {
+        return copy();
+    }
+
+
+    /**
+     * Computes the conjugate transpose of a tensor by conjugating and exchanging {@code axis1} and {@code axis2}.
+     *
+     * @param axis1 First axis to exchange and conjugate.
+     * @param axis2 Second axis to exchange and conjugate.
+     *
+     * @return The conjugate transpose of this tensor according to the specified axes.
+     *
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #H()
+     * @see #H(int...)
+     */
+    @Override
+    public CooVector H(int axis1, int axis2) {
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
+        return copy();
+    }
+
+
+    /**
+     * Computes the conjugate transpose of this tensor. That is, conjugates and permutes the axes of this tensor so that it matches
+     * the permutation specified by {@code axes}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     *
+     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
+     *
+     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
+     * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     * @see #H(int, int)
+     * @see #H()
+     */
+    @Override
+    public CooVector H(int... axes) {
+        ValidateParameters.ensurePermutation(axes);
+        return copy();
+    }
+
+
+    /**
+     * Finds the indices of the minimum value in this tensor.
+     *
+     * @return The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmin() {
+        return new int[]{indices[RealProperties.argmin(data)]};
+    }
+
+
+    /**
+     * Finds the indices of the maximum value in this tensor.
+     *
+     * @return The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmax() {
+        return new int[]{indices[RealProperties.argmax(data)]};
+    }
+
+
+    /**
+     * Finds the indices of the minimum absolute value in this tensor.
+     *
+     * @return The indices of the minimum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argminAbs() {
+        return new int[]{indices[RealProperties.argminAbs(data)]};
+    }
+
+
+    /**
+     * Finds the indices of the maximum absolute value in this tensor.
+     *
+     * @return The indices of the maximum absolute value in this tensor. If this value occurs multiple times, the indices of the first
+     * entry (in row-major ordering) are returned.
+     */
+    @Override
+    public int[] argmaxAbs() {
+        return new int[]{indices[RealProperties.argmaxAbs(data)]};
+    }
+
+
+    /**
+     * Computes the element-wise reciprocals of the non-zero values of this tensor.
+     *
+     * @return A tensor containing the reciprocal elements of the non-zero values of this tensor.
+     */
+    @Override
+    public CooVector recip() {
+        // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        return super.recip();
+    }
+
+
+    /**
+     * Adds a scalar value to each non-zero element of this tensor.
+     *
+     * @param b Value to add to each non-zero entry of this tensor.
+     *
+     * @return The result of adding the specified scalar value to each entry of this tensor.
+     */
+    @Override
+    public CooVector add(double b) {
+        // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        return super.add(b);
+    }
+
+
+    /**
+     * Subtracts a scalar value non-zero from each element of this tensor.
+     *
+     * @param b Value to subtract from each non-zero entry of this tensor.
+     *
+     * @return The result of subtracting the specified scalar value from each entry of this tensor.
+     */
+    @Override
+    public CooVector sub(double b) {
+        // Overrides method from super class to emphasize that this method works on the non-zero values only.
+        return super.sub(b);
+    }
+
+
+    /**
+     * <p>Computes the element-wise quotient between two tensors.
+     *
+     * <p><b>WARNING</b>: This method is not supported for sparse vectors. If called on a sparse vector,
+     * an {@link UnsupportedOperationException} will be thrown. Element-wise division is undefined for sparse vectors as it
+     * would almost certainly result in a division by zero.
+     *
+     * @param b Second tensor in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this tensor with {@code b}.
+     */
+    @Override
+    public CooVector div(CooVector b) {
+        throw new UnsupportedOperationException("Cannot compute element-wise division of two sparse vectors.");
+    }
+
+
+    /**
+     * Checks if an object is equal to this vector object.
+     * @param object Object to check equality with this vector.
+     * @return True if the two vectors have the same shape, are numerically equivalent, and are of type {@link CooVector}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CooVector src2 = (CooVector) object;
+
+        return RealSparseEquals.cooVectorEquals(this, src2);
+    }
+
+
+    @Override
+    public int hashCode() {
+        // Ignores explicit zeros to maintain contract with equals method.
+        int result = 17;
+        result = 31*result + shape.hashCode();
+
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] != 0.0) {
+                result = 31*result + Double.hashCode(data[i]);
+                result = 31*result + Integer.hashCode(indices[i]);
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Repeats a vector {@code n} times along a certain axis to create a matrix.
+     *
+     * @param n Number of times to repeat vector.
+     * @param axis Axis along which to repeat vector:
+     * <ul>
+     *     <li>If {@code axis=0}, then the vector will be treated as a row vector and stacked vertically {@code n} times.</li>
+     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontally {@code n} times.</li>
+     * </ul>
+     *
+     * @return A matrix whose rows/columns are this vector repeated.
+     */
+    @Override
+    public CooMatrix repeat(int n, int axis) {
+        return RealCooVectorOperations.repeat(this, n, axis);
+    }
+
+
+    /**
+     * Stacks two vectors vertically as if they were row vectors to form a matrix with two rows.
+     *
+     * @param b Vector to stack below this vector.
+     *
+     * @return The result of stacking this vector and vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of data in
+     *                                  the vector {@code b}.
+     */
+    @Override
+    public CooMatrix stack(CooVector b) {
+        return RealCooVectorOperations.stack(this, b);
+    }
+
+
+    /**
+     * <p>
+     * Stacks two vectors along specified axis.
+     * 
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
+     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * 
+     *
+     * <p>
+     * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
+     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * 
+     *
+     * @param b Vector to stack with this vector.
+     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
+     * vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
+     *
+     * @return The result of stacking this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If the number of data in this vector is different from the number of
+     *                                  data in the vector {@code b}.
+     * @throws IllegalArgumentException If axis is not either 0 or 1.
+     */
+    @Override
+    public CooMatrix stack(CooVector b, int axis) {
+        ValidateParameters.ensureAxis2D(axis);
+        return axis==0 ? stack(b) : stack(b).T();
+    }
+
+
+    /**
+     * Computes the outer product of two vectors.
+     *
+     * @param b Second vector in the outer product.
+     *
+     * @return The result of the vector outer product between this vector and {@code b}.
+     *
+     * @throws IllegalArgumentException If the two vectors do not have the same number of data.
+     */
+    @Override
+    public Matrix outer(CooVector b) {
+        return RealCooVectorOperations.outerProduct(this, b);
+    }
+
+
+    /**
+     * Converts a vector to an equivalent matrix representing either a row or column vector.
+     *
+     * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
+     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.
+     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.
+     *
+     * @return A matrix equivalent to this vector.
+     */
+    @Override
+    public CooMatrix toMatrix(boolean columVector) {
+        if(columVector) {
+            // Convert to column vector
+            int[] rowIndices = indices.clone();
+            int[] colIndices = new int[data.length];
+
+            return new CooMatrix(this.size, 1, data.clone(), rowIndices, colIndices);
+        } else {
+            // Convert to row vector.
+            int[] rowIndices = new int[data.length];
+            int[] colIndices = indices.clone();
+
+            return new CooMatrix(1, this.size, data.clone(), rowIndices, colIndices);
+        }
+    }
+
+
+    /**
+     * Converts this vector to an equivalent sparse vector.
+     * @return A complex COO vector equivalent to this vector.
+     */
+    public CooCVector toComplex() {
+        return new CooCVector(size, data, indices.clone());
+    }
+
+
+    /**
+     * Computes the element-wise multiplication between this vector and a real dense vector.
+     * @param b The real dense vector in the element-wise product.
+     * @return The element-wise product of this vector and {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If the two vectors are not the same size.
+     */
+    public CooVector elemMult(Vector b) {
+        return RealDenseSparseVectorOperations.elemMult(b, this);
+    }
+
+
+    /**
+     * Multiplies this vector by a complex scalar value.
+     * @param factor Scalar value to multiply this vector by.
+     * @return The result of multiplying this vector by the scalar {@code factor}.
+     */
+    public CooCVector mult(Complex128 factor) {
+        Complex128[] dest = new Complex128[data.length];
+        FieldOps.mult(data, factor, dest);
+        return new CooCVector(shape, dest, indices.clone());
+    }
+
+
+    /**
+     * Converts this sparse vector to an equivalent tensor.
+     * @return A tensor equivalent to this vector.
+     */
+    public CooTensor toTensor() {
+        return new CooTensor(
+                this.shape,
+                this.data.clone(),
+                RealDenseTranspose.standardIntMatrix(new int[][]{this.indices})
+        );
+    }
+
+
+    /**
+     * Computes the element-wise division of two vectors.
+     * @param b The second vector in the element-wise quotient (denominator).
+     * @return The element-wise quotient of this vector and {@code b}.
+     */
+    public CooVector div(Vector b) {
+        return RealDenseSparseVectorOperations.elemDiv(this, b);
+    }
+
+
+    /**
+     * Computes the element-wise division of two vectors.
+     * @param b The second vector in the element-wise quotient (denominator).
+     * @return The element-wise quotient of this vector and {@code b}.
+     */
+    public CooCVector div(CVector b) {
+        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);
+    }
+
+
+    /**
+     * Divides each element of this sparse COO vector by a complex-valued scalar.
+     * @param divisor Scalar in the vector-scalar quotient.
+     * @return The vector-scalar quotient of this vector and {@code divisor}.
+     */
+    public CooCVector div(Complex128 divisor) {
+        return new CooCVector(size, Complex128Ops.scalDiv(data, divisor), indices.clone());
+    }
+
+
+    /**
      * Formats this tensor as a human-readable string. Specifically, a string containing the
-     * shape and flatten entries of this tensor.
+     * shape and flatten data of this tensor.
      * @return A human-readable string representing this tensor.
      */
     public String toString() {
         int size = nnz;
-        StringBuilder result = new StringBuilder(String.format("Full Shape: %s\n", shape));
-        result.append("Non-zero entries: [");
+        StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("Non-zero data: [");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
-        int width;
-        String value;
+        if(size > 0) {
+            int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+            int width;
+            String value;
 
-        // Get entries up until the stopping point.
-        for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(entries[i], PrintOptions.getPrecision());
+            // Get data up until the stopping point.
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = PrintOptions.getPadding() + 3;
+                value = "...";
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
             width = PrintOptions.getPadding() + value.length();
             value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
-
-        if(stopIndex < size-1) {
-            width = PrintOptions.getPadding() + 3;
-            value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        // Get last entry now
-        value = StringUtils.ValueOfRound(entries[size-1], PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-        result.append(String.format("%-" + width + "s", value));
 
         result.append("]\n");
         result.append("Indices: ").append(Arrays.toString(indices));
@@ -1441,5 +1262,3 @@ public class CooVector
         return result.toString();
     }
 }
-
-

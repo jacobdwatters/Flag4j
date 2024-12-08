@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,27 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
-import org.flag4j.core.MatrixMixin;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayUtils;
 
+
 /**
- * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.</p>
+ * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.
+ *
  * <p>The {@code LU} decomposition, decomposes a matrix {@code A} into a unit lower triangular matrix {@code L}
- * and an upper triangular matrix {@code U} such that {@code A=LU}.</p>
+ * and an upper triangular matrix {@code U} such that {@code A=LU}.
+ *
  * <p>If partial pivoting is used, the decomposition will also yield a permutation matrix {@code P} such that
- * {@code PA=LU}.</p>
+ * {@code PA=LU}.
+ *
  * <p>If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
- *  {@code PAQ=LU}.</p>
+ *  {@code PAQ=LU}.
+ *
+ * @param <T> Type of the matrix to decompose.
  */
-public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implements Decomposition<T> {
+public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
 
     /**
      * Flag indicating what pivoting to use.
@@ -51,7 +57,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
     /**
      * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
      */
-    final double zeroPivotTol;
+    protected final double zeroPivotTol;
     /**
      * Storage for L and U matrices. Stored in a single matrix
      */
@@ -76,8 +82,8 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-    public LU(int pivoting) {
-        pivotFlag = Pivoting.get(pivoting);
+    protected LU(Pivoting pivoting) {
+        pivotFlag = pivoting;
         zeroPivotTol = DEFAULT_ZERO_PIVOT_TOLERANCE;
     }
 
@@ -89,8 +95,8 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
      * @param zeroPivotTol Tolerance for considering a pivot to be zero. If a pivot is less than the tolerance in absolute value,
      *                     then it will be considered zero.
      */
-    public LU(int pivoting, double zeroPivotTol) {
-        pivotFlag = Pivoting.get(pivoting);
+    protected LU(Pivoting pivoting, double zeroPivotTol) {
+        pivotFlag = pivoting;
         this.zeroPivotTol = zeroPivotTol;
     }
 
@@ -102,15 +108,15 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
      * @return A reference to this decomposer.
      */
     @Override
-    public org.flag4j.linalg.decompositions.lu.LU<T> decompose(T src) {
+    public LU<T> decompose(T src) {
         initLU(src);
         numRowSwaps = 0; // Set the number of row swaps to zero.
         numColSwaps = 0; // Set the number of row swaps to zero.
 
-        if(pivotFlag==Pivoting.NONE) {
+        if(pivotFlag == Pivoting.NONE) {
             rowSwaps = colSwaps = null;
             noPivot(); // Compute with no pivoting.
-        } else if(pivotFlag==Pivoting.PARTIAL) {
+        } else if(pivotFlag == Pivoting.PARTIAL) {
             rowSwaps = ArrayUtils.intRange(0, LU.numRows());
             partialPivot();
         } else {
@@ -178,11 +184,8 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
      * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
      */
     public PermutationMatrix getP() {
-        if(rowSwaps != null) {
-            P = new PermutationMatrix(rowSwaps.clone());
-        } else {
-            P = null;
-        }
+        if(rowSwaps != null) P = new PermutationMatrix(rowSwaps);
+        else P = null;
 
         return P;
     }
@@ -193,11 +196,9 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
      * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
      */
     public PermutationMatrix getQ() {
-        if(colSwaps != null) {
-            Q = new PermutationMatrix(colSwaps.clone()).inv(); // Invert to ensure matrix represents column swaps.
-        } else {
-            Q = null;
-        }
+        // Invert to ensure matrix represents column swaps.
+        if(colSwaps != null) Q = new PermutationMatrix(colSwaps).inv();
+        else Q = null;
 
         return Q;
     }
@@ -251,7 +252,6 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
     }
 
 
-
     /**
      * Simple enum containing pivoting options for pivoting in LU decomposition.
      */
@@ -265,9 +265,9 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?, ?, ?, ?, ?>> implemen
          * {@link #PARTIAL} is returned.
          */
         private static Pivoting get(int ordinal) {
-            if(ordinal==Pivoting.FULL.ordinal()) {
+            if(ordinal == Pivoting.FULL.ordinal()) {
                 return Pivoting.FULL;
-            } else if(ordinal==Pivoting.NONE.ordinal()) {
+            } else if(ordinal == Pivoting.NONE.ordinal()) {
                 return Pivoting.NONE;
             } else {
                 return Pivoting.PARTIAL;

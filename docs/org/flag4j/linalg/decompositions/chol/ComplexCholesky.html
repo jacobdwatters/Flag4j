@@ -84,19 +84,19 @@ loadScripts(document, 'script');</script>
 <h1 title="Class ComplexCholesky" class="title">Class ComplexCholesky</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="Cholesky.html" title="class in org.flag4j.linalg.decompositions.chol">org.flag4j.linalg.decompositions.chol.Cholesky</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;
-<div class="inheritance">org.flag4j.linalg.decompositions.chol.ComplexCholesky</div>
+<div class="inheritance"><a href="Cholesky.html" title="class in org.flag4j.linalg.decompositions.chol">org.flag4j.linalg.decompositions.chol.CholeskyOld</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;
+<div class="inheritance">org.flag4j.linalg.decompositions.chol.ComplexCholeskyOld</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ComplexCholesky</span>
-<span class="extends-implements">extends <a href="Cholesky.html" title="class in org.flag4j.linalg.decompositions.chol">Cholesky</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="Cholesky.html" title="class in org.flag4j.linalg.decompositions.chol">Cholesky</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</span></div>
 <div class="block"><p>This abstract class specifies methods for computing the Cholesky decomposition of a hermitian
  positive-definite matrix.</p>
 
@@ -147,7 +147,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ComplexCholesky.html" title="class in org.flag4j.linalg.decompositions.chol">ComplexCholesky</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decompose(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">decompose</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decompose(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">decompose</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Decompose a matrix into <code>A=LL</code><sup>H</sup> where <code>L</code> is a lower triangular matrix and <code>L</code><sup>H</sup> is
  the conjugate transpose of <code>L</code>.</div>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="decompose(org.flag4j.arrays.dense.CMatrix)">
 <h3>decompose</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ComplexCholesky.html" title="class in org.flag4j.linalg.decompositions.chol">ComplexCholesky</a></span>&nbsp;<span class="element-name">decompose</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ComplexCholesky.html" title="class in org.flag4j.linalg.decompositions.chol">ComplexCholesky</a></span>&nbsp;<span class="element-name">decompose</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</span></div>
 <div class="block">Decompose a matrix into <code>A=LL</code><sup>H</sup> where <code>L</code> is a lower triangular matrix and <code>L</code><sup>H</sup> is
  the conjugate transpose of <code>L</code>.</div>
 <dl class="notes">

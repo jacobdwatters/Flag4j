@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +25,19 @@
 package org.flag4j.linalg.decompositions.svd;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.core.Shape;
+import org.flag4j.linalg.DirectSum;
 import org.flag4j.linalg.Eigen;
-import org.flag4j.linalg.ops.DirectSum;
-
-import java.util.Arrays;
-
 
 /**
- * Instances of this class can be used to compute the singular value decomposition (SVD) of a real dense matrix.
- * That is, decompose a rectangular matrix {@code M} as {@code M=USV<sup>T</sup>} where {@code U} and {@code V} are
- * orthogonal matrices whose columns are the left and right singular vectors of {@code M} and {@code S} is a rectangular
- * diagonal matrix containing the singular values of {@code M}.
+ * <p>Instances of this class can be used to compute the singular value decomposition (SVD) of a
+ * {@link Matrix real dense matrix}.
+ *
+ * <p>That is, decompose a rectangular matrix M as M=USV<sup>T</sup> where U and V are
+ * orthogonal matrices whose columns are the left and right singular vectors of M and S is a rectangular
+ * diagonal matrix containing the singular values of M.
  */
 public class RealSVD extends SVD<Matrix> {
 
@@ -106,8 +105,7 @@ public class RealSVD extends SVD<Matrix> {
     protected Matrix makeEigenPairs(Matrix B, double[] eigVals) {
         CMatrix[] pairs = Eigen.getEigenPairs(B);
 
-        double[] vals = pairs[0].toReal().entries;
-        System.out.println("vals: " + Arrays.toString(vals));
+        double[] vals = pairs[0].toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
         return pairs[1].toReal();
@@ -123,7 +121,7 @@ public class RealSVD extends SVD<Matrix> {
      */
     @Override
     protected void makeEigenVals(Matrix B, double[] eigVals) {
-        double[] vals = Eigen.getEigenValues(B).toReal().entries;
+        double[] vals = Eigen.getEigenValues(B).toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
 

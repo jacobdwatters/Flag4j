@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class RealComplexDenseMatrixMultiplication" class="title">Class RealComplexDenseMatrixMultiplication</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplication</div>
+<div class="inheritance">org.flag4j.operations.dense.real_complex.RealComplexDenseMatrixMultiplicationOld</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
@@ -126,209 +126,209 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#blocked(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">blocked</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#blocked(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">blocked</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#blockedReordered(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">blockedReordered</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm with the j-k loops
  swapped.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#blockedReordered(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">blockedReordered</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm with the j-k loops
  swapped.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#blockedVector(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">blockedVector</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a blocked algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#blockedVector(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">blockedVector</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a blocked algorithm.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentBlocked(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentBlocked</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentBlocked(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentBlocked</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentBlockedReordered(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentBlockedReordered</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm with the j-k loops swapped.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentBlockedReordered(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentBlockedReordered</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm with the j-k loops swapped.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentBlockedVector(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentBlockedVector</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of a blocked
  algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentBlockedVector(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentBlockedVector</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of a blocked
  algorithm.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentReordered(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentReordered</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm with j-k loops swapped.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentReordered(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentReordered</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm with j-k loops swapped.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentStandard(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentStandard</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentStandard(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentStandard</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentStandardVector(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentStandardVector</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#concurrentStandardVector(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">concurrentStandardVector</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reordered(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">reordered</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm with j-k loops
  swapped.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reordered(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">reordered</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm with j-k loops
  swapped.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#standard(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">standard</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#standard(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">standard</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#standardVector(double%5B%5D,org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape)" class="member-name-link">standardVector</a><wbr>(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using the standard algorithm.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#standardVector(org.flag4j.complex_numbers.CNumber%5B%5D,org.flag4j.core.Shape,double%5B%5D,org.flag4j.core.Shape)" class="member-name-link">standardVector</a><wbr>(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</code></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using the standard algorithm.</div>
 </div>
@@ -370,9 +370,9 @@ loadScripts(document, 'script');</script>
 <h3>standard</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">standard</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -391,9 +391,9 @@ loadScripts(document, 'script');</script>
 <h3>reordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">reordered</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm with j-k loops
  swapped.</div>
 <dl class="notes">
@@ -413,9 +413,9 @@ loadScripts(document, 'script');</script>
 <h3>blocked</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">blocked</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -434,9 +434,9 @@ loadScripts(document, 'script');</script>
 <h3>blockedReordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">blockedReordered</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm with the j-k loops
  swapped.</div>
 <dl class="notes">
@@ -456,9 +456,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentStandard</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentStandard</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 <dl class="notes">
@@ -478,9 +478,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentReordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentReordered</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm with j-k loops swapped.</div>
 <dl class="notes">
@@ -500,9 +500,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentBlocked</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentBlocked</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm.</div>
 <dl class="notes">
@@ -522,9 +522,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentBlockedReordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentBlockedReordered</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm with the j-k loops swapped.</div>
 <dl class="notes">
@@ -544,9 +544,9 @@ loadScripts(document, 'script');</script>
 <h3>standardVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">standardVector</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using the standard algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -565,9 +565,9 @@ loadScripts(document, 'script');</script>
 <h3>blockedVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">blockedVector</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a blocked algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -586,9 +586,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentStandardVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentStandardVector</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 <dl class="notes">
@@ -608,9 +608,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentBlockedVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentBlockedVector</span><wbr><span class="parameters">(double[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  <a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of a blocked
  algorithm.</div>
 <dl class="notes">
@@ -630,9 +630,9 @@ loadScripts(document, 'script');</script>
 <h3>standard</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">standard</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -651,9 +651,9 @@ loadScripts(document, 'script');</script>
 <h3>reordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">reordered</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication between a real dense matrix with a complex dense matrix using the standard algorithm with j-k loops
  swapped.</div>
 <dl class="notes">
@@ -673,9 +673,9 @@ loadScripts(document, 'script');</script>
 <h3>blocked</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">blocked</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -694,9 +694,9 @@ loadScripts(document, 'script');</script>
 <h3>blockedReordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">blockedReordered</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a blocked algorithm with the j-k loops
  swapped.</div>
 <dl class="notes">
@@ -716,9 +716,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentStandard</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentStandard</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 <dl class="notes">
@@ -738,9 +738,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentReordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentReordered</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of the standard
  matrix multiplication algorithm with j-k loops swapped.</div>
 <dl class="notes">
@@ -760,9 +760,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentBlocked</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentBlocked</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm.</div>
 <dl class="notes">
@@ -782,9 +782,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentBlockedReordered</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentBlockedReordered</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the matrix multiplication of a real dense matrix with a complex dense matrix using a concurrent implementation of a blocked
  algorithm with the j-k loops swapped.</div>
 <dl class="notes">
@@ -804,9 +804,9 @@ loadScripts(document, 'script');</script>
 <h3>standardVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">standardVector</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using the standard algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -825,9 +825,9 @@ loadScripts(document, 'script');</script>
 <h3>blockedVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">blockedVector</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a blocked algorithm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -846,9 +846,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentStandardVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentStandardVector</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of the standard
  matrix multiplication algorithm.</div>
 <dl class="notes">
@@ -868,9 +868,9 @@ loadScripts(document, 'script');</script>
 <h3>concurrentBlockedVector</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]</span>&nbsp;<span class="element-name">concurrentBlockedVector</span><wbr><span class="parameters">(<a href="../../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;src1,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape1,
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape1,
  double[]&nbsp;src2,
- <a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape2)</span></div>
+ <a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape2)</span></div>
 <div class="block">Computes the multiplication of a real dense matrix with a complex dense vector using a concurrent implementation of a blocked
  algorithm.</div>
 <dl class="notes">

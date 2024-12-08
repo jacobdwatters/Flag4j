@@ -1,10 +1,10 @@
 package org.flag4j.vector;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,13 +59,13 @@ class VectorShapeTests {
 
     @Test
     void complexDenseTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CVector B;
 
         // ------------------ Sub-case 1 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
-        bEntries = new CNumber[]{new CNumber(34, -0.34), new CNumber(0.445, 15.5), new CNumber(0.455), new CNumber(0, -8.435)};
+        bEntries = new Complex128[]{new Complex128(34, -0.34), new Complex128(0.445, 15.5), new Complex128(0.455), new Complex128(0, -8.435)};
         B = new CVector(bEntries);
 
         assertTrue(A.sameShape(B));
@@ -74,7 +74,7 @@ class VectorShapeTests {
         // ------------------ Sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
-        bEntries = new CNumber[]{new CNumber(0.455), new CNumber(0, -8.435)};
+        bEntries = new Complex128[]{new Complex128(0.455), new Complex128(0, -8.435)};
         B = new CVector(bEntries);
 
         assertFalse(A.sameShape(B));
@@ -113,13 +113,13 @@ class VectorShapeTests {
 
     @Test
     void complexSparseTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CooCVector B;
 
         // ------------------ Sub-case 1 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
-        bEntries = new CNumber[]{new CNumber(34.5, -9.632)};
+        bEntries = new Complex128[]{new Complex128(34.5, -9.632)};
         indices = new int[]{2};
         size = 4;
         B = new CooCVector(size, bEntries, indices);
@@ -130,7 +130,7 @@ class VectorShapeTests {
         // ------------------ Sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
-        bEntries = new CNumber[]{new CNumber(34, -0.34), new CNumber(0.445, 15.5), new CNumber(0.455), new CNumber(0, -8.435)};
+        bEntries = new Complex128[]{new Complex128(34, -0.34), new Complex128(0.445, 15.5), new Complex128(0.455), new Complex128(0, -8.435)};
         indices = new int[]{1, 100, 502, 3405};
         size = 4096;
         B = new CooCVector(size, bEntries, indices);

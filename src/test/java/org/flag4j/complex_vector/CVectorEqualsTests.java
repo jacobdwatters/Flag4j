@@ -24,184 +24,53 @@
 
 package org.flag4j.complex_vector;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Vector;
-import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class CVectorEqualsTests {
 
-    CNumber[] aEntries;
+    Complex128[] aEntries;
     CVector a;
     int sparseSize;
     int[] sparseIndices;
 
-    @Test
-    void realDenseTestCase() {
-        double[] bEntries;
-        Vector b;
-
-        // ----------------- Sub-case 1 -----------------
-        aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), CNumber.ZERO};
-        a = new CVector(aEntries);
-        bEntries = new double[]{1, 0, 1.3, 0};
-        b = new Vector(bEntries);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 2 -----------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(0),
-                new CNumber(1.3), new CNumber(-19345.612)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{1, 0, 1.3, -19345.612};
-        b = new Vector(bEntries);
-        assertTrue(a.tensorEquals(b));
-
-        // ----------------- Sub-case 3 -----------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(0),
-                new CNumber(1.3), new CNumber(0)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{1, 0, 1.3};
-        b = new Vector(bEntries);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 4 -----------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(0),
-                new CNumber(1.3), new CNumber(0, 1.2)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{1, 0, 1.3, 0};
-        b = new Vector(bEntries);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 5 -----------------
-        aEntries = new CNumber[]{new CNumber(1.334), new CNumber(0.645),
-                new CNumber(1.3), new CNumber(-7234.5)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{1, 0, 1.3, -72};
-        b = new Vector(bEntries);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 6 -----------------
-        a = new CVector(2495, 1.45);
-        b = new Vector(2495, 1.45);
-        assertTrue(a.tensorEquals(b));
-    }
-
-
-    @Test
-    void realSparseTestCase() {
-        double[] bEntries;
-        CooVector b;
-
-        // ----------------- Sub-case 1 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                new CNumber(1.3), CNumber.ZERO};
-        a = new CVector(aEntries);
-        bEntries = new double[]{8.245, 1.3};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 2};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertTrue(a.tensorEquals(b));
-
-        // ----------------- Sub-case 2 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                CNumber.ZERO, new CNumber(-99.1331)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{8.245, -99.1331};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 3};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertTrue(a.tensorEquals(b));
-
-
-        // ----------------- Sub-case 3 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                CNumber.ZERO, new CNumber(-99.1331)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{8.245, -99.1331};
-        sparseSize = 612345;
-        sparseIndices = new int[]{1, 3};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 4 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245),
-                CNumber.ZERO, new CNumber(-99.1331, 1.23)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{8.245, -99.1331};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 3};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 5 -----------------
-        aEntries = new CNumber[]{new CNumber(0.1), new CNumber(8.245),
-                CNumber.ZERO, new CNumber(-99.1331)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{8.245, -99.1331};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 3};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 6 -----------------
-        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(8.245),
-                CNumber.ZERO, new CNumber(-99.1331)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{8.245, -99.1331};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 2};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 7 -----------------
-        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(8.245),
-                CNumber.ZERO, new CNumber(-3.7)};
-        a = new CVector(aEntries);
-        bEntries = new double[]{8.245, -99.1331};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 3};
-        b = new CooVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-    }
-
 
     @Test
     void complexDenseTestCase(){
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CVector b;
 
         // ----------------- Sub-case 1 -----------------
-        aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), CNumber.ZERO};
+        aEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
+                new Complex128(1.3), Complex128.ZERO};
         a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), CNumber.ZERO};
+        bEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
+                new Complex128(1.3), Complex128.ZERO};
         b = new CVector(bEntries);
         assertEquals(a, b);
 
         // ----------------- Sub-case 2 -----------------
-        aEntries = new CNumber[]{new CNumber(8.124, 9.4), new CNumber(1.55),
-                new CNumber(0, -85.215), new CNumber(0.000013, 14.5),
-                new CNumber(1.335676, -89345)};
+        aEntries = new Complex128[]{new Complex128(8.124, 9.4), new Complex128(1.55),
+                new Complex128(0, -85.215), new Complex128(0.000013, 14.5),
+                new Complex128(1.335676, -89345)};
         a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(8.124, 9.4), new CNumber(1.55),
-                new CNumber(0, -85.215), new CNumber(0.000013, 14.5),
-                new CNumber(1.335676, -89345)};
+        bEntries = new Complex128[]{new Complex128(8.124, 9.4), new Complex128(1.55),
+                new Complex128(0, -85.215), new Complex128(0.000013, 14.5),
+                new Complex128(1.335676, -89345)};
         b = new CVector(bEntries);
         assertEquals(a, b);
 
         // ----------------- Sub-case 3 -----------------
-        aEntries = new CNumber[]{new CNumber(8.124, 9.4), new CNumber(1.55),
-                new CNumber(0, -85.215), new CNumber(0.000013, 14.5),
-                new CNumber(1.335676, -89345)};
+        aEntries = new Complex128[]{new Complex128(8.124, 9.4), new Complex128(1.55),
+                new Complex128(0, -85.215), new Complex128(0.000013, 14.5),
+                new Complex128(1.335676, -89345)};
         a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(8.124, 9.4), new CNumber(1.55),
-                new CNumber(0, -85.215), new CNumber(0.000013, 14.5)};
+        bEntries = new Complex128[]{new Complex128(8.124, 9.4), new Complex128(1.55),
+                new Complex128(0, -85.215), new Complex128(0.000013, 14.5)};
         b = new CVector(bEntries);
         assertNotEquals(a, b);
 
@@ -216,114 +85,57 @@ class CVectorEqualsTests {
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 6 -----------------
-        a = new CVector(45, new CNumber("92.1465+879234.9999324i"));
-        b = new CVector(45, new CNumber("92.1465+879234.9999324i"));
+        a = new CVector(45, new Complex128("92.1465+879234.9999324i"));
+        b = new CVector(45, new Complex128("92.1465+879234.9999324i"));
         assertEquals(a, b);
 
         // ----------------- Sub-case 7 -----------------
-        a = new CVector(45, new CNumber("92.1465+879234.9999324i"));
-        b = new CVector(41, new CNumber("92.1465+879234.9999324i"));
+        a = new CVector(45, new Complex128("92.1465+879234.9999324i"));
+        b = new CVector(41, new Complex128("92.1465+879234.9999324i"));
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 8 -----------------
-        aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), CNumber.ZERO};
+        aEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
+                new Complex128(1.3), Complex128.ZERO};
         a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(1, -9.2341), new CNumber(0, 8.245),
-                new CNumber(1.3), CNumber.ZERO};
+        bEntries = new Complex128[]{new Complex128(1, -9.2341), new Complex128(0, 8.245),
+                new Complex128(1.3), Complex128.ZERO};
         b = new CVector(bEntries);
         assertNotEquals(a, b);
 
         // ----------------- Sub-case 9 -----------------
-        aEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), CNumber.ZERO};
+        aEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
+                new Complex128(1.3), Complex128.ZERO};
         a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(1, -9.234), new CNumber(0, 8.245),
-                new CNumber(1.3), new CNumber(1.2)};
+        bEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
+                new Complex128(1.3), new Complex128(1.2)};
         b = new CVector(bEntries);
         assertNotEquals(a, b);
-    }
-
-
-    @Test
-    void complexSparseTestCase() {
-        CNumber[] bEntries;
-        CooCVector b;
-
-        // ----------------- Sub-case 1 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
-        a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(1.3, -0.000023465)};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 2};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertTrue(a.tensorEquals(b));
-
-        // ----------------- Sub-case 2 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
-        a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(1.3, -0.000023465)};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 3};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 3 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
-        a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(8.245, 13.65), new CNumber(1.3, -0.000023465)};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 2};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 4 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
-        a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(12.3, -0.000023465)};
-        sparseSize = aEntries.length;
-        sparseIndices = new int[]{1, 2};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
-
-        // ----------------- Sub-case 5 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
-        a = new CVector(aEntries);
-        bEntries = new CNumber[]{new CNumber(8.245, 9.2165), new CNumber(12.3, -0.000023465)};
-        sparseSize = 100234;
-        sparseIndices = new int[]{1, 2};
-        b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        assertFalse(a.tensorEquals(b));
     }
 
 
     @Test
     void objectTestCase() {
         // ----------------- Sub-case 1 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
+        aEntries = new Complex128[]{new Complex128(0), new Complex128(8.245, 9.2165),
+                new Complex128(1.3, -0.000023465), Complex128.ZERO};
         a = new CVector(aEntries);
         String bString = "Hello World!";
         assertNotEquals(a, bString);
 
         // ----------------- Sub-case 2 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
+        aEntries = new Complex128[]{new Complex128(0), new Complex128(8.245, 9.2165),
+                new Complex128(1.3, -0.000023465), Complex128.ZERO};
         a = new CVector(aEntries);
         Double num = 123.4;
         assertNotEquals(a, num);
 
         // ----------------- Sub-case 3 -----------------
-        aEntries = new CNumber[]{new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
+        aEntries = new Complex128[]{new Complex128(0), new Complex128(8.245, 9.2165),
+                new Complex128(1.3, -0.000023465), Complex128.ZERO};
         a = new CVector(aEntries);
-        CNumber[] arr = {new CNumber(0), new CNumber(8.245, 9.2165),
-                new CNumber(1.3, -0.000023465), CNumber.ZERO};
+        Complex128[] arr = {new Complex128(0), new Complex128(8.245, 9.2165),
+                new Complex128(1.3, -0.000023465), Complex128.ZERO};
         assertNotEquals(a, num);
     }
 }

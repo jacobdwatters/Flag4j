@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,17 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.decompositions.schur.ComplexSchur;
 import org.flag4j.linalg.decompositions.schur.RealSchur;
-import org.flag4j.linalg.decompositions.schur.Schur;
+import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-import org.flag4j.operations.common.real.AggregateReal;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
@@ -44,7 +43,14 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
 /**
  * This class provides several methods useful for computing eigenvalues and eigenvectors.
  */
-public class Eigen {
+public final class Eigen {
+
+
+    private Eigen() {
+        // Hide default constructor for utility class.
+        
+    }
+
 
     /**
      * Computes the eigenvalues of a 2x2 matrix explicitly.
@@ -52,8 +58,8 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(Matrix src) {
-        ParameterChecks.assertEquals(2, src.numRows, src.numCols);
-        return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
+        ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
+        return new CVector(get2x2EigenValues(src.data[0], src.data[1], src.data[2], src.data[3]));
     }
 
 
@@ -65,14 +71,14 @@ public class Eigen {
      * @param a22 Fourth entry in matrix (at index (1, 1)).
      * @return A complex array containing the eigenvalues of the 2x2 {@code src} matrix.
      */
-    public static CNumber[] get2x2EigenValues(double a11, double a12, double a21, double a22) {
+    public static Complex128[] get2x2EigenValues(double a11, double a12, double a21, double a22) {
         // This method computes eigenvalues in a stable way which is more resilient to overflow errors than
         // standard methods.
-        CNumber[] lambda = new CNumber[2];
-        double maxAbs = AggregateReal.maxAbs(a11, a12, a21, a22);
+        Complex128[] lambda = new Complex128[2];
+        double maxAbs = RealProperties.maxAbs(a11, a12, a21, a22);
 
         if(maxAbs == 0) {
-            Arrays.fill(lambda, CNumber.ZERO);
+            Arrays.fill(lambda, Complex128.ZERO);
             return lambda;
         } else {
             a11 /= maxAbs;
@@ -119,13 +125,13 @@ public class Eigen {
                 a11 = b11 - cs*(b12 + b21);
                 a22 = b11 + cs*(b12 + b21);
 
-                lambda[0] = new CNumber(a11*maxAbs);
-                lambda[1] = new CNumber(a22*maxAbs);
+                lambda[0] = new Complex128(a11*maxAbs);
+                lambda[1] = new Complex128(a22*maxAbs);
             } else {
                 double im = Math.sqrt(-b21*b12);
 
-                lambda[0] = new CNumber(b11*maxAbs, im*maxAbs);
-                lambda[1] = new CNumber(b11*maxAbs, -im*maxAbs);
+                lambda[0] = new Complex128(b11*maxAbs, im*maxAbs);
+                lambda[1] = new Complex128(b11*maxAbs, -im*maxAbs);
             }
         }
 
@@ -139,47 +145,56 @@ public class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(CMatrix src) {
-        ParameterChecks.assertEquals(2, src.numRows, src.numCols);
-        return new CVector(get2x2EigenValues(src.entries[0], src.entries[1], src.entries[2], src.entries[3]));
+        ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
+        return new CVector(get2x2EigenValues(src.data[0], src.data[1], src.data[2], src.data[3]));
     }
 
 
-    public static CNumber[] get2x2EigenValues(CNumber a11, CNumber a12, CNumber a21, CNumber a22) {
-        // Initialize eigenvalues array
-        CNumber[] lambda = new CNumber[2];
+    /**
+     * Computes the eigenvalues of a 2-by-2 complex matrix (assumed to be row major).
+     * @param a11 The first entry in the 2-by-2 complex matrix
+     * @param a12 The second entry in the 2-by-2 complex matrix
+     * @param a21 The third entry in the 2-by-2 complex matrix
+     * @param a22 The fourth entry in the 2-by-2 complex matrix
+     * @return An array containing the eigenvalues of the specified 2-by-2 complex matrix. Eigenvalues will be repeated per their
+     * multiplicity.
+     */
+    public static Complex128[] get2x2EigenValues(Complex128 a11, Complex128 a12,
+                                                 Complex128 a21, Complex128 a22) {
+        Complex128[] lambda = new Complex128[2];
 
-        // Compute maximum magnitude for scaling
+        // Compute maximum magnitude for scaling.
         double maxAbs = Math.max(Math.max(a11.mag(), a12.mag()), Math.max(a21.mag(), a22.mag()));
 
         if(maxAbs == 0) {
-            lambda[0] = CNumber.ZERO;
-            lambda[1] = CNumber.ZERO;
+            lambda[0] = Complex128.ZERO;
+            lambda[1] = Complex128.ZERO;
             return lambda;
         }
 
-        // Scale the matrix to avoid overflow/underflow
+        // Scale the matrix to avoid over/underflow.
         a11 = a11.div(maxAbs);
         a12 = a12.div(maxAbs);
         a21 = a21.div(maxAbs);
         a22 = a22.div(maxAbs);
 
-        // Trace and determinant for the 2x2 matrix
-        CNumber trace = a11.add(a22);
-        CNumber det = a11.mult(a22).sub(a12.mult(a21));
+        // Trace and determinant for the 2x2 matrix.
+        Complex128 trace = a11.add((Complex128) a22);
+        Complex128 det = a11.mult((Complex128) a22).sub(a12.mult((Complex128) a21));
 
-        // Compute the middle term of the quadratic equation
-        CNumber middleTerm = trace.mult(trace).div(4).sub(det);
+        // Compute the middle term of the quadratic equation.
+        Complex128 middleTerm = trace.mult(trace).div(4).sub(det);
 
-        // Compute the square root of the middle term
-        CNumber sqrtMiddle = CNumber.sqrt(middleTerm);
+        // Compute the square root of the middle term.
+        Complex128 sqrtMiddle = middleTerm.sqrt();
 
-        // Compute eigenvalues
+        // Compute eigenvalues.
         lambda[0] = trace.div(2).add(sqrtMiddle);
         lambda[1] = trace.div(2).sub(sqrtMiddle);
 
-        // Scale back the eigenvalues
-        lambda[0] = lambda[0].mult(new CNumber(maxAbs));
-        lambda[1] = lambda[1].mult(new CNumber(maxAbs));
+        // Scale back the eigenvalues.
+        lambda[0] = lambda[0].mult(new Complex128(maxAbs));
+        lambda[1] = lambda[1].mult(new Complex128(maxAbs));
 
         return lambda;
     }
@@ -248,20 +263,20 @@ public class Eigen {
         // Extract eigenvalues of T.
         for(int m=0; m<numRows; m++) {
             if(m == numRows-1) {
-                lambdas.entries[m] = new CNumber(T.entries[m*numRows + m]);
+                lambdas.data[m] = new Complex128(T.data[m*numRows + m]);
             } else {
-                double a11 = T.entries[m*numRows + m];
-                double a12 = T.entries[m*numRows + m + 1];
-                double a21 = T.entries[(m+1)*numRows + m];
-                double a22 = T.entries[(m+1)*numRows + m + 1];
+                double a11 = T.data[m*numRows + m];
+                double a12 = T.data[m*numRows + m + 1];
+                double a21 = T.data[(m+1)*numRows + m];
+                double a22 = T.data[(m+1)*numRows + m + 1];
 
                 if(Math.abs(a21) > EPS_F64*(Math.abs(a11) + Math.abs(a22))) {
                     // Non-converged 2x2 block found.
-                    CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                    lambdas.entries[m] = mu[0];
-                    lambdas.entries[++m] = mu[1];
+                    Complex128[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                    lambdas.data[m] = mu[0];
+                    lambdas.data[++m] = mu[1];
                 } else {
-                    lambdas.entries[m] = new CNumber(a11);
+                    lambdas.data[m] = new Complex128(a11);
                 }
             }
         }
@@ -326,20 +341,20 @@ public class Eigen {
         // Extract eigenvalues of T.
         for(int m=0; m<numRows; m++) {
             if(m == numRows-1) {
-                lambdas.entries[m] = T.entries[m*numRows + m];
+                lambdas.data[m] = T.data[m*numRows + m];
             } else {
-                CNumber a11 = T.entries[m*numRows + m];
-                CNumber a12 = T.entries[m*numRows + m + 1];
-                CNumber a21 = T.entries[(m+1)*numRows + m];
-                CNumber a22 = T.entries[(m+1)*numRows + m  +1];
+                Complex128 a11 = (Complex128) T.data[m*numRows + m];
+                Complex128 a12 = (Complex128) T.data[m*numRows + m + 1];
+                Complex128 a21 = (Complex128) T.data[(m+1)*numRows + m];
+                Complex128 a22 = (Complex128) T.data[(m+1)*numRows + m  +1];
 
                 if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                     // Non-converged 2x2 block found.
-                    CNumber[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
-                    lambdas.entries[m] = mu[0];
-                    lambdas.entries[++m] = mu[1];
+                    Complex128[] mu = Eigen.get2x2EigenValues(a11, a12, a21, a22);
+                    lambdas.data[m] = mu[0];
+                    lambdas.data[++m] = mu[1];
                 } else {
-                    lambdas.entries[m] = a11;
+                    lambdas.data[m] = a11;
                 }
             }
         }
@@ -527,7 +542,7 @@ public class Eigen {
             r = new Vector(j);
             makeSystem(T, j, S_hat, r);
 
-            if(S_hat.entries.length > 0) {
+            if(S_hat.data.length > 0) {
                 v = backSolver.solve(S_hat, r);
                 v = v.join(new Vector(1.0));
             } else {
@@ -560,14 +575,16 @@ public class Eigen {
             r = CVector.getEmpty(j);
             makeSystem(T, j, S_hat, r);
 
-            if(S_hat.entries.length > 0) {
+            if(S_hat.data.length > 0) {
                 v = backSolver.solve(S_hat, r);
-                v = v.join(new CVector(1.0));
+                // TODO: Should have an append(Complex128...) method for appending scalars to a vector to avoid having to wrap them
+                //  in a vector first.
+                v = v.join(new CVector(Complex128.ONE));
             } else {
-                v = new CVector(1.0);
+                v = new CVector(Complex128.ONE);
             }
 
-            v = v.normalize().join(new Vector(T.numRows-v.size));
+            v = v.normalize().join(new CVector(T.numRows - v.size));
             Q.setCol(v, j);
         }
 
@@ -576,99 +593,238 @@ public class Eigen {
 
 
     /**
-     * Constructs the matrix {@code (T - lambda*I)[0:j][0:j]} for use in computing the eigenvalue of the upper triangular matrix
-     * {@code T} associated with the j<sup>th</sup> eigenvalue {@code lambda}.
+     * Constructs the matrix (T - &lambda;*I)[0:j][0:j] for use in computing the eigenvalue of the upper triangular matrix
+     * {@code T} associated with the j<sup>th</sup> eigenvalue &lambda;.
      * @param T The upper triangular matrix (Assumed to be square).
-     * @param j The diagonal index of {@code T} where the eigenvalue {@code lambda} appears.
+     * @param j The diagonal index of {@code T} where the eigenvalue &lambda; appears.
      */
     private static void makeSystem(CMatrix T, int j, CMatrix S_hat, CVector r) {
-        CNumber lam = T.entries[j*T.numCols + j];
+        Complex128 lam = (Complex128) T.data[j*T.numCols + j];
 
         // Copy values from T and subtract eigenvalue from diagonal.
         for(int i=0; i<j; i++) {
-            int tRow = i*T.numRows;
-            int diffRow = i*j;
-            System.arraycopy(T.entries, tRow, S_hat.entries, diffRow, j);
-            S_hat.entries[diffRow + i] = S_hat.entries[diffRow + i].sub(lam);
-            r.entries[i] = T.entries[tRow + j].mult(-1);
+            int tRow = i*T.numCols;
+            int diffRow = i*S_hat.numCols;
+            System.arraycopy(T.data, tRow, S_hat.data, diffRow, j);
+            S_hat.data[diffRow + i] = S_hat.data[diffRow + i].sub(lam);
+            r.data[i] = T.data[tRow + j].mult(-1);
         }
     }
 
 
     /**
-     * Constructs the matrix {@code (T - lambda*I)[0:j][0:j]} for use in computing the eigenvalue of the upper triangular matrix
-     * {@code T} associated with the j<sup>th</sup> eigenvalue {@code lambda}.
+     * Constructs the matrix (T - &lambda;*I)[0:j][0:j] for use in computing the eigenvalue of the upper triangular matrix
+     * {@code T} associated with the j<sup>th</sup> eigenvalue &lambda;.
      * @param T The upper triangular matrix (Assumed to be square).
-     * @param j The diagonal index of {@code T} where the eigenvalue {@code lambda} appears.
+     * @param j The diagonal index of {@code T} where the eigenvalue &lambda; appears.
      */
     private static void makeSystem(Matrix T, int j, Matrix S_hat, Vector r) {
-        double lam = T.entries[j*T.numCols + j];
+        double lam = T.data[j*T.numCols + j];
 
         // Copy values from T and subtract eigenvalue from diagonal.
         for(int i=0; i<j; i++) {
             int tRow = i*T.numRows;
             int diffRow = i*j;
-            System.arraycopy(T.entries, tRow, S_hat.entries, diffRow, j);
-            S_hat.entries[diffRow + i] -= (lam);
-            r.entries[i] = -T.entries[tRow + j];
+            System.arraycopy(T.data, tRow, S_hat.data, diffRow, j);
+            S_hat.data[diffRow + i] -= (lam);
+            r.data[i] = -T.data[tRow + j];
         }
     }
 
 
     /**
-     * Computes the eigenvalues and eigenvectors of a square real matrix.
-     * @param src The matrix to compute the eigenvalues and vectors of.
-     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
-     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
-     * eigenvectors of the {@code src} matrix as its columns.
+     * <p>Computes the eigenvalues and eigenvectors of a square complex matrix.
+     *
+     * <p>This method calculates the eigenvalues and eigenvectors of the given complex matrix {@code src}.
+     * The eigenvalues are returned as a single-row matrix, while the eigenvectors are returned as a
+     * matrix where each column corresponds to an eigenvector of the input matrix.
+     *
+     * <p>Random number generation is used internally during the computation to apply random shifts,
+     * which enhance numerical stability and improve convergence. Because of this, repeated calls
+     * to this method with the same matrix may produce slightly different results.
+     *
+     * <p>If reproducible results are required (e.g., for testing purposes), use the overloaded method
+     * {@link #getEigenPairs(CMatrix, long)} that accepts a seed for the random number generator.
+     *
+     * @param src The input matrix for which to compute the eigenvalues and eigenvectors.
+     *            This matrix must be square ({@code src.numRows == src.numCols}).
+     *
+     * @return An array containing two matrices:
+     *         <ol>
+     *             <li>The first matrix is a 1-by-{@code src.numCols} matrix containing the eigenvalues of {@code src}.</li>
+     *             <li>The second matrix is an {@code src.numRows}-by-{@code src.numCols} matrix, where each column is an
+     *                 eigenvector corresponding to an eigenvalue in the first matrix.</li>
+     *         </ol>
+     *
+     * @throws IllegalArgumentException if the input matrix {@code src} is not square (e.g. {@code src.numRows != src.numCols}).
+     *
+     * @see #getEigenPairs(Matrix, long)
      */
     public static CMatrix[] getEigenPairs(Matrix src) {
-        int numRows = src.numRows;
+        return getEigenPairs(src, new RealSchur(true));
+    }
+
+
+    /**
+     * <p>Computes the eigenvalues and eigenvectors of a square real matrix.
+     *
+     * <p>This method calculates the eigenvalues and eigenvectors of the given real matrix {@code src}.
+     * The eigenvalues are collected and returned as a single-row matrix, while the eigenvectors are collected as the columns of
+     * matrix.
+     *
+     * <p>The computation uses a random shift algorithm to enhance numerical stability and improve convergence.
+     * By providing a {@code seed}, the random shifts can be made deterministic, ensuring reproducible results
+     * for the same input matrix. For most applications, specifying a seed is optional and generally not required.
+     *
+     * @param src The input matrix for which to compute the eigenvalues and eigenvectors.
+     *            This matrix must be square ({@code src.numRows == src.numCols}).
+     * @param seed A seed value for random shifts used in the algorithm. Providing a seed ensures that
+     *             the results are reproducible when the same matrix is used as input.
+     *             If reproducibility is not a concern, this value can be omitted or set to any arbitrary number.
+     *
+     * @return An array containing two matrices:
+     *         <ol>
+     *             <li>The first matrix is a 1-by-{@code src.numCols} matrix containing the eigenvalues of {@code src}.</li>
+     *             <li>The second matrix is an {@code src.numRows}-by-{@code src.numCols} matrix, where each column is an
+     *                 eigenvector corresponding to an eigenvalue in the first matrix.</li>
+     *         </ol>
+     *
+     * @throws IllegalArgumentException if the input matrix {@code src} is not square (e.g. {@code src.numRows != src.numCols}).
+     *
+     * @see #getEigenPairs(Matrix)
+     */
+    public static CMatrix[] getEigenPairs(Matrix src, long seed) {
+        return getEigenPairs(src, new RealSchur(true, seed));
+    }
+
+
+    /**
+     * <p>Computes the eigenvalues and eigenvectors of a square real matrix.
+     *
+     * <p>This method calculates the eigenvalues and eigenvectors of the given real matrix {@code src}.
+     * The eigenvalues are returned as a single-row matrix, while the eigenvectors are returned as a
+     * matrix where each column corresponds to an eigenvector of the input matrix.
+     *
+     * <p>Random number generation is used internally during the computation to apply random shifts,
+     * which enhance numerical stability and improve convergence. Because of this, repeated calls
+     * to this method with the same matrix may produce slightly different results.
+     *
+     * <p>If reproducible results are required (e.g., for testing purposes), use the overloaded method
+     * {@link #getEigenPairs(CMatrix, long)} that accepts a seed for the random number generator.
+     *
+     * @param src The input matrix for which to compute the eigenvalues and eigenvectors.
+     *            This matrix must be square ({@code src.numRows == src.numCols}).
+     *
+     * @return An array containing two matrices:
+     *         <ol>
+     *             <li>The first matrix is a 1-by-{@code src.numCols} matrix containing the eigenvalues of {@code src}.</li>
+     *             <li>The second matrix is an {@code src.numRows}-by-{@code src.numCols} matrix, where each column is an
+     *                 eigenvector corresponding to an eigenvalue in the first matrix.</li>
+     *         </ol>
+     *
+     * @throws IllegalArgumentException if the input matrix {@code src} is not square (e.g. {@code src.numRows != src.numCols}).
+     *
+     * @see #getEigenPairs(CMatrix, long)
+     */
+    public static CMatrix[] getEigenPairs(CMatrix src) {
+        return getEigenPairs(src, new ComplexSchur(true));
+    }
+
+
+    /**
+     * <p>Computes the eigenvalues and eigenvectors of a square complex matrix.
+     *
+     * <p>This method calculates the eigenvalues and eigenvectors of the given complex matrix {@code src}.
+     * The eigenvalues are collected and returned as a single-row matrix, while the eigenvectors are collected as the columns of
+     * matrix.
+     *
+     * <p>The computation uses a random shift algorithm to enhance numerical stability and improve convergence.
+     * By providing a {@code seed}, the random shifts can be made deterministic, ensuring reproducible results
+     * for the same input matrix. For most applications, specifying a seed is optional and generally not required.
+     *
+     * @param src The input matrix for which to compute the eigenvalues and eigenvectors.
+     *            This matrix must be square ({@code src.numRows == src.numCols}).
+     * @param seed A seed value for random shifts used in the algorithm. Providing a seed ensures that
+     *             the results are reproducible when the same matrix is used as input.
+     *             If reproducibility is not a concern, this value can be omitted or set to any arbitrary number.
+     *
+     * @return An array containing two matrices:
+     *         <ol>
+     *             <li>The first matrix is a 1-by-{@code src.numCols} matrix containing the eigenvalues of {@code src}.</li>
+     *             <li>The second matrix is an {@code src.numRows}-by-{@code src.numCols} matrix, where each column is an
+     *                 eigenvector corresponding to an eigenvalue in the first matrix.</li>
+     *         </ol>
+     *
+     * @throws IllegalArgumentException if the input matrix {@code src} is not square (e.g. {@code src.numRows != src.numCols}).
+     *
+     * @see #getEigenPairs(CMatrix)
+     */
+    public static CMatrix[] getEigenPairs(CMatrix src, long seed) {
+        return getEigenPairs(src, new ComplexSchur(true, seed));
+    }
+
+
+    /**
+     * Helper method to compute the eigenvalues and eigenvectors of a square complex matrix.
+     * @param src The matrix to compute the eigenvalues and eigenvectors of.
+     * @param schur The Schur decomposer to use in computing the eigenvalues and eigenvectors
+     * @return An array containing two matrices. The first matrix has shape 1-by-{@code src.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRows}-by-{@code src.numCols} and contains the
+     * eigenvectors of the {@code src} matrix as its columns.
+     */
+    private static CMatrix[] getEigenPairs(CMatrix src, ComplexSchur schur) {
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        RealSchur schur = new RealSchur(true).decompose(src);
-        CMatrix[] complexTU = schur.real2ComplexSchur();
-        CMatrix T = complexTU[0];
-        CMatrix U = complexTU[1];
+        schur.decompose(src);
+        int numRows = src.numRows;
+        CMatrix T;
+        CMatrix U;
+
+        if(src.numRows == 2) {
+            CMatrix[] complexTU = schur.real2ComplexSchur();
+            T = complexTU[0];
+            U = complexTU[1];
+        } else {
+            T = schur.getT();
+            U = schur.getU();
+        }
 
         // Extract eigenvalues of T.
-        for(int i=0; i<numRows; i++) {
-            lambdas.entries[i] = T.entries[i*numRows + i];
-        }
+        for(int i=0; i<numRows; i++)
+            lambdas.data[i] = T.data[i*numRows + i];
 
-        // If the source matrix is symmetric, then U will contain its eigenvectors.
-        if(!src.isSymmetric()) {
+        // If the src matrix is hermitian, then U will contain the eigenvectors.
+        if(!src.isHermitian())
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
-        }
 
         return new CMatrix[]{lambdas, U};
     }
 
 
     /**
-     * Computes the eigenvalues and eigenvectors of a square real matrix.
-     * @param src The matrix to compute the eigenvalues and vectors of.
-     * @return An array containing two matrices. The first matrix has shape {@code 1xsrc.numCols} and contains the eigenvalues
-     * of the {@code src} matrix. The second matrix has shape {@code src.numRowsxsrc.numCols} and contains the
+     * Helper method to compute the eigenvalues and eigenvectors of a square real matrix.
+     * @param src The matrix to compute the eigenvalues and eigenvectors of.
+     * @param schur The Schur decomposer to use in computing the eigenvalues and eigenvectors
+     * @return An array containing two matrices. The first matrix has shape 1-by-{@code src.numCols} and contains the eigenvalues
+     * of the {@code src} matrix. The second matrix has shape {@code src.numRows}-by-{@code src.numCols} and contains the
      * eigenvectors of the {@code src} matrix as its columns.
      */
-    public static CMatrix[] getEigenPairs(CMatrix src) {
+    private static CMatrix[] getEigenPairs(Matrix src, RealSchur schur) {
+        int numRows = src.numRows;
         CMatrix lambdas = new CMatrix(1, src.numRows);
 
-        Schur<CMatrix, CNumber[]> schur = new ComplexSchur(true).decompose(src);
-        CMatrix T = schur.getT();
-        CMatrix U = schur.getU();
-        int numRows = src.numRows;
+        schur.decompose(src);
+        CMatrix[] complexTU = schur.real2ComplexSchur();
+        CMatrix T = complexTU[0];
+        CMatrix U = complexTU[1];
 
         // Extract eigenvalues of T.
-        for(int i=0; i<numRows; i++) {
-            lambdas.entries[i] = T.entries[i*numRows + i];
-        }
+        for(int i=0; i<numRows; i++)
+            lambdas.data[i] = T.data[i*numRows + i];
 
-        // If the src matrix is hermitian, then U will contain the eigenvectors.
-        if(!src.isHermitian()) {
+        // If the source matrix is symmetric, then U will contain its eigenvectors.
+        if(!src.isSymmetric())
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
-        }
 
         return new CMatrix[]{lambdas, U};
     }

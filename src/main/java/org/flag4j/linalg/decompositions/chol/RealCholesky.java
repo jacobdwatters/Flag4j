@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,21 @@
 
 package org.flag4j.linalg.decompositions.chol;
 
+
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.Flag4jConstants;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
-
 
 /**
  * <p>An instance of this class allows for the computation of a Cholesky decomposition for a
- * real dense {@link Matrix matrix}.</p>
+ * real dense {@link Matrix matrix}.
  *
- * <p>Given a symmetric positive-definite matrix {@code A}, the Cholesky decomposition will decompose it into
- * {@code A=LL<sup>T</sup>} where {@code L} is a lower triangular matrix and {@code L<sup>T</sup>} is the
- * transpose of {@code L}.</p>
+ * <p>Given a symmetric positive-definite matrix A, the Cholesky decomposition will decompose the matrix into
+ * A=LL<sup>T</sup> where L is a lower triangular matrix and L<sup>T</sup> is the
+ * transpose of L.
  */
-public final class RealCholesky extends Cholesky<Matrix> {
-
+public class RealCholesky extends Cholesky<Matrix> {
 
     /**
      * Constructs a Cholesky decomposer. If you would like to enforce a check for symmetry at the time
@@ -63,11 +62,11 @@ public final class RealCholesky extends Cholesky<Matrix> {
 
 
     /**
-     * Decompose a matrix into {@code A=LL}<sup>T</sup> where {@code L} is a lower triangular matrix and {@code L}<sup>T</sup> is the
-     * transpose of {@code L}.
+     * Decompose a matrix into A=LL<sup>T</sup> where L is a lower triangular matrix and L<sup>T</sup> is the
+     * transpose of L.
      *
      * @param src The source matrix to decompose. Must be symmetric positive-definite. Note, symmetry will only be checked explicitly
-     *            if {@link #RealCholesky(boolean) enforceSymmetric} was set to true when this decomposer was
+     *            if {@link #RealCholesky(boolean) enforceSymmetric} was set to {@code true} when this decomposer was
      *            instantiated.
      * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #RealCholesky(boolean)
@@ -77,9 +76,9 @@ public final class RealCholesky extends Cholesky<Matrix> {
     @Override
     public RealCholesky decompose(Matrix src) {
         if(enforceHermitian && src.isSymmetric()) {
-            throw new LinearAlgebraException("Matrix must be symmetric positive-definite.");
+            throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
         } else {
-            ParameterChecks.assertSquareMatrix(src.shape);
+            ValidateParameters.ensureSquareMatrix(src.shape);
         }
 
         L = new Matrix(src.numRows);
@@ -99,20 +98,20 @@ public final class RealCholesky extends Cholesky<Matrix> {
                 lIndex3 = lIndex1 + j;
 
                 for(int k=0; k<j; k++) {
-                    sum += L.entries[lIndex1 + k]*L.entries[lIndex2 + k];
+                    sum += L.data[lIndex1 + k]*L.data[lIndex2 + k];
                 }
 
                 if(i==j) {
-                    double diag = src.entries[lIndex3]-sum;
+                    double diag = src.data[lIndex3]-sum;
                     if(diag <= posDefTolerance) {
-                        // Diagonal entries of L must be positive (non-zero) for original matrix to be positive-definite.
+                        // Diagonal data of L must be positive (non-zero) for original matrix to be positive-definite.
                         throw new LinearAlgebraException("Matrix is not symmetric positive-definite.");
                     }
 
-                    L.entries[lIndex3] = Math.sqrt(diag);
+                    L.data[lIndex3] = Math.sqrt(diag);
                 } else {
-                    if(L.entries[j*(L.numCols + 1)] != 0) {
-                        L.entries[lIndex3] = (src.entries[lIndex3]-sum)/L.entries[lIndex2 + j];
+                    if(L.data[j*(L.numCols + 1)] != 0) {
+                        L.data[lIndex3] = (src.data[lIndex3]-sum)/L.data[lIndex2 + j];
                     }
                 }
             }

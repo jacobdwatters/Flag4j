@@ -1,11 +1,14 @@
 package org.flag4j.sparse_vector;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.operations.common.complex.AggregateComplex;
+import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -67,7 +70,7 @@ class CooVectorInnerProdTests {
 
         exp = 55.15 + 5.6*-41.13 + 215.0*6.133;
 
-        assertEquals(exp, a.inner(b));
+        assertEquals(exp, RealDenseSparseVectorOperations.inner(b.data, a.data, a.indices, a.size));
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new double[]{
@@ -76,77 +79,77 @@ class CooVectorInnerProdTests {
                 0.0245, -0.0, 14.45};
         b = new Vector(bEntries);
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
+        assertThrows(IllegalArgumentException.class,
+                ()->RealDenseSparseVectorOperations.inner(finalB.data, a.data, a.indices, a.size));
     }
 
 
     @Test
     void sparseComplexInnerProdTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CooCVector b;
-        CNumber exp;
+        Complex128 exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        bEntries = new CNumber[]{new CNumber(1.334, 9.4), new CNumber(-67,14), new CNumber(24,-56.134)};
+        bEntries = new Complex128[]{new Complex128(1.334, 9.4), new Complex128(-67,14), new Complex128(24,-56.134)};
         bIndices = new int[]{0, 2, 8};
         b = new CooCVector(sparseSize, bEntries, bIndices);
 
-        exp = AggregateComplex.sum(new CNumber[]{
-                new CNumber(-67,14).conj().mult(5.6), new CNumber(24,-56.134).conj().mult(-9.355)
+        exp = AggregateSemiring.sum(new Complex128[]{
+                new Complex128(-67,14).conj().mult(5.6), new Complex128(24,-56.134).conj().mult(-9.355)
         });
 
-        assertEquals(exp, a.inner(b));
-
+        assertEquals(exp, RealComplexSparseVectorOperations.inner(a, b));
 
         // ----------------------- Sub-case 2 -----------------------
-        bEntries = new CNumber[]{new CNumber(1.334, 9.4), new CNumber(-67,14), new CNumber(24,-56.134)};
+        bEntries = new Complex128[]{new Complex128(1.334, 9.4), new Complex128(-67,14), new Complex128(24,-56.134)};
         bIndices = new int[]{0, 2, 8};
         b = new CooCVector(sparseSize-1, bEntries, bIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.inner(finalB));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOperations.inner(a, finalB));
     }
 
 
     @Test
     void denseComplexInnerProdTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CVector b;
-        CNumber exp;
+        Complex128 exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(24.1, 54.1), new CNumber(-9.245, 3.4), new CNumber(14.5),
-                new CNumber(0, 94.14), CNumber.ZERO, new CNumber(113, 55.62),
-                new CNumber(54.13, 5.1), new CNumber(0.0013), new CNumber(-0.924, -994.15),
-                new CNumber(24.5516, -0.415), new CNumber(0, 13.46), CNumber.ZERO,
-                new CNumber(5.2, 0.924), new CNumber(0.15, .135), new CNumber(25591, 13.5),
+        bEntries = new Complex128[]{
+                new Complex128(24.1, 54.1), new Complex128(-9.245, 3.4), new Complex128(14.5),
+                new Complex128(0, 94.14), Complex128.ZERO, new Complex128(113, 55.62),
+                new Complex128(54.13, 5.1), new Complex128(0.0013), new Complex128(-0.924, -994.15),
+                new Complex128(24.5516, -0.415), new Complex128(0, 13.46), Complex128.ZERO,
+                new Complex128(5.2, 0.924), new Complex128(0.15, .135), new Complex128(25591, 13.5),
                 };
         b = new CVector(bEntries);
 
-        exp = AggregateComplex.sum(new CNumber[]{
-                new CNumber(-9.245, 3.4).conj().mult(1.0),
-                new CNumber(14.5).conj().mult(5.6),
-                new CNumber(-0.924, -994.15).conj().mult(-9.355),
-                new CNumber(0.15, .135).conj().mult(215.0)
+        exp = AggregateSemiring.sum(new Complex128[]{
+                new Complex128(-9.245, 3.4).conj().mult(1.0),
+                new Complex128(14.5).conj().mult(5.6),
+                new Complex128(-0.924, -994.15).conj().mult(-9.355),
+                new Complex128(0.15, .135).conj().mult(215.0)
         });
 
-        assertEquals(exp, a.inner(b));
-
+        assertEquals(exp, RealFieldDenseCooVectorOps.inner(a.data, a.indices, a.size, b.data));
 
         // ----------------------- Sub-case 2 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(24.1, 54.1), new CNumber(-9.245, 3.4), new CNumber(14.5),
-                new CNumber(0, 94.14), CNumber.ZERO, new CNumber(113, 55.62),
-                new CNumber(54.13, 5.1), new CNumber(0.0013), new CNumber(-0.924, -994.15),
-                new CNumber(24.5516, -0.415), new CNumber(0, 13.46), CNumber.ZERO,
-                new CNumber(5.2, 0.924), new CNumber(0.15, .135), new CNumber(25591, 13.5),
-                new CNumber(1.15, 4.55), new CNumber(91)
+        bEntries = new Complex128[]{
+                new Complex128(24.1, 54.1), new Complex128(-9.245, 3.4), new Complex128(14.5),
+                new Complex128(0, 94.14), Complex128.ZERO, new Complex128(113, 55.62),
+                new Complex128(54.13, 5.1), new Complex128(0.0013), new Complex128(-0.924, -994.15),
+                new Complex128(24.5516, -0.415), new Complex128(0, 13.46), Complex128.ZERO,
+                new Complex128(5.2, 0.924), new Complex128(0.15, .135), new Complex128(25591, 13.5),
+                new Complex128(1.15, 4.55), new Complex128(91)
         };
         b = new CVector(bEntries);
 
         CVector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->a.inner(finalB));
+        assertThrows(IllegalArgumentException.class,
+                ()-> RealFieldDenseCooVectorOps.inner(a.data, a.indices, a.size, finalB.data));
     }
 
 

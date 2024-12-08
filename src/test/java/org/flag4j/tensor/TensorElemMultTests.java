@@ -1,16 +1,15 @@
 package org.flag4j.tensor;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -88,19 +87,19 @@ class TensorElemMultTests {
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
-        bShape = new Shape(true, 2, 3, 2);
+        bShape = new Shape( 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}, {1, 2, 1}
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new double[aEntries.length];
-        expShape = new Shape(true,2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.entriesIndex(sparseIndices[0])];
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = bEntries[1]*aEntries[expShape.entriesIndex(sparseIndices[1])];
-        expEntries[expShape.entriesIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.entriesIndex(sparseIndices[2])];
+        expShape = new Shape(2, 3, 2);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.getFlatIndex(sparseIndices[0])];
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = bEntries[1]*aEntries[expShape.getFlatIndex(sparseIndices[1])];
+        expEntries[expShape.getFlatIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.getFlatIndex(sparseIndices[2])];
         exp = new Tensor(expShape, expEntries);
 
-        assertTrue(exp.tensorEquals(A.elemMult(B)));
+        assertEquals(exp.toCoo(), A.elemMult(B));
 
         // ------------------------- Sub-case 2 -------------------------
         bEntries = new double[]{
@@ -119,19 +118,19 @@ class TensorElemMultTests {
 
     @Test
     void complexDenseTestCase() {
-        CNumber[] bEntries, expEntries;
+        Complex128[] bEntries, expEntries;
         CTensor B, exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(-0.00234, 2.452), new CNumber(15.6), new CNumber(99.2442, 9.1),
-                new CNumber(100.252, 1235), new CNumber(-78.2556, -99.1441), new CNumber(0.111134, -772.4),
-                new CNumber(671.455, 15.56), new CNumber(-0.00024), new CNumber(515.667, 895.52),
-                new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
+        bEntries = new Complex128[]{
+                new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
+                new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),
+                new Complex128(671.455, 15.56), new Complex128(-0.00024), new Complex128(515.667, 895.52),
+                new Complex128(14.515), new Complex128(100.135), new Complex128(0, 1)
         };
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
-        expEntries = new CNumber[]{
+        expEntries = new Complex128[]{
                 bEntries[0].mult(aEntries[0]), bEntries[1].mult(aEntries[1]), bEntries[2].mult(aEntries[2]),
                 bEntries[3].mult(aEntries[3]), bEntries[4].mult(aEntries[4]), bEntries[5].mult(aEntries[5]),
                 bEntries[6].mult(aEntries[6]), bEntries[7].mult(aEntries[7]), bEntries[8].mult(aEntries[8]),
@@ -143,11 +142,11 @@ class TensorElemMultTests {
         assertEquals(exp, A.elemMult(B));
 
         // ----------------------- Sub-case 2 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(-0.00234, 2.452), new CNumber(15.6), new CNumber(99.2442, 9.1),
-                new CNumber(100.252, 1235), new CNumber(-78.2556, -99.1441), new CNumber(0.111134, -772.4),
-                new CNumber(671.455, 15.56), new CNumber(-0.00024), new CNumber(515.667, 895.52),
-                new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
+        bEntries = new Complex128[]{
+                new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
+                new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),
+                new Complex128(671.455, 15.56), new Complex128(-0.00024), new Complex128(515.667, 895.52),
+                new Complex128(14.515), new Complex128(100.135), new Complex128(0, 1)
         };
         bShape = new Shape(12);
         B = new CTensor(bShape, bEntries);
@@ -159,38 +158,37 @@ class TensorElemMultTests {
 
     @Test
     void complexSparseTestCase() {
-        CNumber[] bEntries, expEntries;
+        Complex128[] bEntries, expEntries;
         CooCTensor B;
-        CTensor exp;
+        CooCTensor exp;
 
         // ------------------------- Sub-case 1 -------------------------
-        bEntries = new CNumber[]{
-                new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
+        bEntries = new Complex128[]{
+                new Complex128(1, -0.2045), new Complex128(-800.145, 3204.5)
         };
-        bShape = new Shape(true, 2, 3, 2);
+        bShape = new Shape( 2, 3, 2);
         sparseIndices = new int[][]{
                 {0, 2, 1}, {1, 1, 0}
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
-        expEntries = new CNumber[]{
-                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO,
-                CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO, CNumber.ZERO
+        expEntries = new Complex128[]{
+                Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO,
+                Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO
         };
-        expShape = new Shape(true, 2, 3, 2);
-        expEntries[expShape.entriesIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.entriesIndex(sparseIndices[0])]);
-        expEntries[expShape.entriesIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.entriesIndex(sparseIndices[1])]);
-        exp = new CTensor(expShape, expEntries);
+        expShape = new Shape( 2, 3, 2);
+        expEntries[expShape.getFlatIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.getFlatIndex(sparseIndices[0])]);
+        expEntries[expShape.getFlatIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.getFlatIndex(sparseIndices[1])]);
+        exp = new CTensor(expShape, expEntries).toCoo();
 
-        assertTrue(exp.tensorEquals(A.elemMult(B)));
+        assertEquals(exp, A.elemMult(B));
 
         // ------------------------- Sub-case 2 -------------------------
-        bEntries = new CNumber[]{
-                new CNumber(1, -0.2045), new CNumber(-800.145, 3204.5)
+        bEntries = new Complex128[]{
+                new Complex128(1, -0.2045), new Complex128(-800.145, 3204.5)
         };
         bShape = new Shape(13, 89, 14576);
         sparseIndices = new int[][]{
-                {0, 2, 1}, {1, 1, 0}
-        };
+                {0, 2, 1}, {1, 1, 0}};
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         CooCTensor finalB = B;

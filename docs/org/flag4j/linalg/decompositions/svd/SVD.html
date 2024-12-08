@@ -81,7 +81,7 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.linalg.decompositions.svd</a></div>
-<h1 title="Class SVD" class="title">Class SVD&lt;T extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core">MatrixMixin</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</h1>
+<h1 title="Class SVD" class="title">Class SVD&lt;T extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core_old">MatrixMixin</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance">org.flag4j.linalg.decompositions.svd.SVD&lt;T&gt;</div>
@@ -101,7 +101,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ComplexSVD.html" title="class in org.flag4j.linalg.decompositions.svd">ComplexSVD</a></code>, <code><a href="RealSVD.html" title="class in org.flag4j.linalg.decompositions.svd">RealSVD</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">SVD&lt;T extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core">MatrixMixin</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">SVD&lt;T extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core_old">MatrixMixin</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;T&gt;</span></div>
 <div class="block">This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.
@@ -136,7 +136,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <div class="col-last even-row-color">
 <div class="block">Flag which indicates if the reduced (or full) SVD should be computed.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected <a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color"><code>protected <a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#S" class="member-name-link">S</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">The rectangular diagonal <code>S</code> corresponding to <code>M=USV</code><sup>H</sup> in the SVD.</div>
@@ -207,7 +207,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the rank of the last matrix decomposed.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getS()" class="member-name-link">getS</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the diagonal matrix <code>S</code> corresponding to <code>M=USV</code><sup>H</sup> in the SVD.</div>
@@ -223,7 +223,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <div class="block">Gets the unitary matrix <code>V</code> corresponding to <code>M=USV</code><sup>H</sup> in the SVD.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#initUV(org.flag4j.core.Shape,int)" class="member-name-link">initUV</a><wbr>(<a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;src,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#initUV(org.flag4j.core.Shape,int)" class="member-name-link">initUV</a><wbr>(<a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;src,
  int&nbsp;cols)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Initializes the unitary <code>U</code> and <code>V</code> matrices for the SVD.</div>
@@ -286,7 +286,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <section class="detail" id="U">
 <h3>U</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SVD.html" title="type parameter in SVD">T</a> extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core">MatrixMixin</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;</span>&nbsp;<span class="element-name">U</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SVD.html" title="type parameter in SVD">T</a> extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core_old">MatrixMixin</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;</span>&nbsp;<span class="element-name">U</span></div>
 <div class="block">The unitary matrix <code>U</code> corresponding to <code>M=USV</code><sup>H</sup> in the SVD.</div>
 </div>
 </section>
@@ -295,7 +295,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <section class="detail" id="S">
 <h3>S</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">S</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">S</span></div>
 <div class="block">The rectangular diagonal <code>S</code> corresponding to <code>M=USV</code><sup>H</sup> in the SVD.</div>
 </div>
 </section>
@@ -304,7 +304,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <section class="detail" id="V">
 <h3>V</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SVD.html" title="type parameter in SVD">T</a> extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core">MatrixMixin</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;</span>&nbsp;<span class="element-name">V</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="SVD.html" title="type parameter in SVD">T</a> extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core_old">MatrixMixin</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;</span>&nbsp;<span class="element-name">V</span></div>
 <div class="block">The unitary matrix <code>V</code> corresponding to <code>M=USV</code><sup>H</sup> in the SVD.</div>
 </div>
 </section>
@@ -372,7 +372,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <section class="detail" id="getS()">
 <h3>getS</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getS</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getS</span>()</div>
 <div class="block">Gets the diagonal matrix <code>S</code> corresponding to <code>M=USV</code><sup>H</sup> in the SVD.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -416,7 +416,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <div class="block">Applies decomposition to the source matrix.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../Decomposition.html#decompose(T)">decompose</a></code>&nbsp;in interface&nbsp;<code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a> extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core">MatrixMixin</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
+<dd><code><a href="../Decomposition.html#decompose(T)">decompose</a></code>&nbsp;in interface&nbsp;<code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a> extends <a href="../../../core/MatrixMixin.html" title="interface in org.flag4j.core_old">MatrixMixin</a>&lt;<a href="SVD.html" title="type parameter in SVD">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>src</code> - The source matrix to decompose.</dd>
 <dt>Returns:</dt>
@@ -496,7 +496,7 @@ implements <a href="../Decomposition.html" title="interface in org.flag4j.linalg
 <section class="detail" id="initUV(org.flag4j.core.Shape,int)">
 <h3>initUV</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initUV</span><wbr><span class="parameters">(<a href="../../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initUV</span><wbr><span class="parameters">(<a href="../../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;src,
  int&nbsp;cols)</span></div>
 <div class="block">Initializes the unitary <code>U</code> and <code>V</code> matrices for the SVD.</div>
 <dl class="notes">

@@ -84,19 +84,19 @@ loadScripts(document, 'script');</script>
 <h1 title="Class RealExactSolver" class="title">Class RealExactSolver</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">org.flag4j.linalg.solvers.exact.ExactSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&gt;
-<div class="inheritance">org.flag4j.linalg.solvers.exact.RealExactSolver</div>
+<div class="inheritance"><a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">org.flag4j.linalg.solvers.exact.ExactSolverOld</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&gt;
+<div class="inheritance">org.flag4j.linalg.solvers.exact.RealExactSolverOld</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../LinearSolver.html" title="interface in org.flag4j.linalg.solvers">LinearSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&gt;</code></dd>
+<dd><code><a href="../LinearSolver.html" title="interface in org.flag4j.linalg.solvers">LinearSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RealExactSolver</span>
-<span class="extends-implements">extends <a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">ExactSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">ExactSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&gt;</span></div>
 <div class="block">Solver for solving a well determined system of linear equations in an exact sense using the
  <a href="../../decompositions/lu/LU.html" title="class in org.flag4j.linalg.decompositions.lu"><code>LU decomposition.</code></a></div>
 </div>
@@ -138,13 +138,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permuteRows(org.flag4j.arrays.dense.Matrix)" class="member-name-link">permuteRows</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;B)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permuteRows(org.flag4j.arrays.dense.Matrix)" class="member-name-link">permuteRows</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Permute the rows of a matrix using the row permutation matrix from the LU decomposition.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permuteRows(org.flag4j.arrays.dense.Vector)" class="member-name-link">permuteRows</a><wbr>(<a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;b)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permuteRows(org.flag4j.arrays.dense.Vector)" class="member-name-link">permuteRows</a><wbr>(<a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;b)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Permute the rows of a vector using the row permutation matrix from the LU decomposition.</div>
 </div>
@@ -189,11 +189,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="permuteRows(org.flag4j.arrays.dense.Vector)">
 <h3>permuteRows</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a></span>&nbsp;<span class="element-name">permuteRows</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a></span>&nbsp;<span class="element-name">permuteRows</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&nbsp;b)</span></div>
 <div class="block">Permute the rows of a vector using the row permutation matrix from the LU decomposition.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="ExactSolver.html#permuteRows(U)">permuteRows</a></code>&nbsp;in class&nbsp;<code><a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">ExactSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&gt;</code></dd>
+<dd><code><a href="ExactSolver.html#permuteRows(U)">permuteRows</a></code>&nbsp;in class&nbsp;<code><a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">ExactSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>b</code> - Vector to permute the rows of.</dd>
 <dt>Returns:</dt>
@@ -207,11 +207,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="permuteRows(org.flag4j.arrays.dense.Matrix)">
 <h3>permuteRows</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">permuteRows</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">permuteRows</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;B)</span></div>
 <div class="block">Permute the rows of a matrix using the row permutation matrix from the LU decomposition.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="ExactSolver.html#permuteRows(T)">permuteRows</a></code>&nbsp;in class&nbsp;<code><a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">ExactSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays.dense">Vector</a>&gt;</code></dd>
+<dd><code><a href="ExactSolver.html#permuteRows(T)">permuteRows</a></code>&nbsp;in class&nbsp;<code><a href="ExactSolver.html" title="class in org.flag4j.linalg.solvers.exact">ExactSolver</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr><a href="../../../arrays/dense/Vector.html" title="class in org.flag4j.arrays_old.dense">Vector</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - matrix to permute the rows of.</dd>
 <dt>Returns:</dt>

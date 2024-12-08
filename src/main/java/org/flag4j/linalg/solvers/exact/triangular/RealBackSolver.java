@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,9 +30,10 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 
 
 /**
- * This solver solves linear systems of equations where the coefficient matrix in an {@link Matrix#isTriU() upper triangular} real dense matrix
- * and the constant vector is a real dense vector or matrix. That is, solves a linear system of equations {@code U*x=b} or
- * {@code U*X=B} where {@code U} is an upper triangular matrix.
+ * <p>This solver solves linear systems of equations where the coefficient matrix in an {@link Matrix#isTriU() upper triangular}
+ * real dense matrix and the constant vector is a real dense vector or matrix.
+ *
+ * <p>That is, solves a linear system of equations U*x=b or U*X=B where U is an upper triangular matrix.
  */
 public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
@@ -69,13 +70,13 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves the linear system of equations given by {@code U*x=b} where the coefficient matrix {@code U}
+     * Solves the linear system of equations given by U*x=b where the coefficient matrix U
      * is an {@link Matrix#isTriU() upper triangular} matrix.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
      *          this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
      * @param b Vector of constants in the linear system.
-     * @return The solution to {@code x} in the linear system {@code A*x=b}.
+     * @return The solution to x in the linear system A*x=b.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -86,22 +87,22 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         int uIndex;
         int n = b.size;
         x = new Vector(U.numRows);
-        det = U.entries[n*n-1];
+        det = U.data[n*n-1];
 
-        x.entries[n-1] = b.entries[n-1]/det;
+        x.data[n-1] = b.data[n-1]/det;
 
         for(int i=n-2; i>=0; i--) {
             sum = 0;
             uIndex = i*U.numCols;
 
-            diag = U.entries[i*(n+1)];
+            diag = U.data[i*(n+1)];
             det*=diag;
 
             for(int j=i+1; j<n; j++) {
-                sum += U.entries[uIndex + j]*x.entries[j];
+                sum += U.data[uIndex + j]*x.data[j];
             }
 
-            x.entries[i] = (b.entries[i]-sum)/diag;
+            x.data[i] = (b.data[i]-sum)/diag;
         }
 
         checkSingular(Math.abs(det), U.numRows, U.numCols); // Ensure the matrix is not singular.
@@ -111,13 +112,13 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves the linear system of equations given by {@code U*X=B} where the coefficient matrix {@code U}
+     * Solves the linear system of equations given by U*X=B where the coefficient matrix U
      * is an {@link Matrix#isTriU() upper triangular} matrix.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
      *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
      * @param B Matrix of constants in the linear system.
-     * @return The solution to {@code X} in the linear system {@code U*X=B}.
+     * @return The solution to X in the linear system U*X=B.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -127,36 +128,36 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         double sum, diag;
         int uIndex, xIndex;
         int n = B.numRows;
-        double uValue = U.entries[n*n-1];
+        double uValue = U.data[n*n-1];
         int rowOffset = (n-1)*B.numCols;
         X = new Matrix(B.shape);
-        det = U.entries[n*n-1];
+        det = U.data[n*n-1];
 
         xCol = new double[n];
 
         for(int j=0; j<B.numCols; j++) {
-            X.entries[rowOffset + j] = B.entries[rowOffset + j]/uValue;
+            X.data[rowOffset + j] = B.data[rowOffset + j]/uValue;
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=n-2; i>=0; i--) {
                 sum = 0;
                 uIndex = i*U.numCols;
                 xIndex = i*X.numCols + j;
-                diag = U.entries[i*(n+1)];
+                diag = U.data[i*(n+1)];
 
                 if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
-                    sum += U.entries[uIndex + k]*xCol[k];
+                    sum += U.data[uIndex + k]*xCol[k];
                 }
 
-                double value = (B.entries[xIndex] - sum) / diag;
+                double value = (B.data[xIndex] - sum) / diag;
 
-                X.entries[xIndex] = value;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }
@@ -168,13 +169,13 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves the linear system of equations given by {@code U*X=I} where the coefficient matrix {@code U}
-     * is an {@link Matrix#isTriU() upper triangular} matrix and {@code I} is the {@link Matrix#isI() identity}
-     * matrix of appropriate size. This essentially inverts the upper triangular matrix since {@code U*U}<sup>-1</sup>{@code =I}.
+     * Solves the linear system of equations given by U*X=I where the coefficient matrix U
+     * is an {@link Matrix#isTriU() upper triangular} matrix and I is the {@link Matrix#isI() identity}
+     * matrix of appropriate size. This essentially inverts the upper triangular matrix since U*U<sup>-1</sup>=I.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
      *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
-     * @return The solution to {@code X} in the linear system {@code U*X=B}.
+     * @return The solution to X in the linear system U*X=B.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     public Matrix solveIdentity(Matrix U) {
@@ -184,15 +185,15 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         int uIndex, xIndex;
         int n = U.numRows;
         X = new Matrix(U.shape);
-        det = U.entries[n*n-1];
+        det = U.data[n*n-1];
 
         xCol = new double[n];
-        X.entries[X.entries.length-1] = 1.0/det;
+        X.data[X.data.length-1] = 1.0/det;
 
         for(int j=0; j<n; j++) {
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=n-2; i>=0; i--) {
@@ -200,16 +201,16 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
                 uIndex = i*n;
                 xIndex = uIndex + j;
                 uIndex += i+1;
-                diag = U.entries[i*(n+1)];
+                diag = U.data[i*(n+1)];
 
                 if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
-                    sum -= U.entries[uIndex++]*xCol[k];
+                    sum -= U.data[uIndex++]*xCol[k];
                 }
 
                 double value = sum / diag;
-                X.entries[xIndex] = value;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }
@@ -221,15 +222,15 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a special case of the linear system {@code U*X=L} for {@code X} where the coefficient matrix {@code U}
-     * is an {@link Matrix#isTriU() upper triangular} matrix and the constant matrix {@code L} is
+     * Solves a special case of the linear system U*X=L for X where the coefficient matrix U
+     * is an {@link Matrix#isTriU() upper triangular} matrix and the constant matrix L is
      * {@link Matrix#isTriL() lower triangular}.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
      *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
      * @param L Lower triangular constant matrix. This is not explicit checked. If {@code L} is not lower triangular, values above
      *          the principle diagonal will be ignored and the result will still be correctly computed.
-     * @return The result of solving the linear system {@code U*X=L} for the matrix {@code X}.
+     * @return The result of solving the linear system U*X=L for the matrix X.
      */
     public Matrix solveLower(Matrix U, Matrix L) {
         checkParams(U, L.numRows);
@@ -237,7 +238,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         double sum, diag;
         int uIndex, xIndex;
         int n = L.numRows;
-        double uValue = U.entries[U.entries.length-1];
+        double uValue = U.data[U.data.length-1];
         int rowOffset = (n-1)*n;
         X = new Matrix(L.shape);
         det = uValue;
@@ -245,27 +246,27 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
         xCol = new double[n];
 
         for(int j=0; j<n; j++) {
-            X.entries[rowOffset] = L.entries[rowOffset++]/uValue;
+            X.data[rowOffset] = L.data[rowOffset++]/uValue;
 
             // Store column to improve cache performance on innermost loop.
             for(int k=0; k<n; k++) {
-                xCol[k] = X.entries[k*X.numCols + j];
+                xCol[k] = X.data[k*X.numCols + j];
             }
 
             for(int i=L.numCols-2; i>=0; i--) {
                 sum = 0;
                 uIndex = i*U.numCols;
                 xIndex = uIndex + j;
-                diag = U.entries[i*(n+1)];
+                diag = U.data[i*(n+1)];
 
                 if(j==0) det *= diag;
 
                 for(int k=i+1; k<n; k++) {
-                    sum += U.entries[uIndex + k]*xCol[k];
+                    sum += U.data[uIndex + k]*xCol[k];
                 }
 
-                double value = (L.entries[xIndex] - sum) / diag;
-                X.entries[xIndex] = value;
+                double value = (L.data[xIndex] - sum) / diag;
+                X.data[xIndex] = value;
                 xCol[i] = value;
             }
         }

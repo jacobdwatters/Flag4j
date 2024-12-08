@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,37 +25,39 @@
 package org.flag4j.linalg.solvers.exact;
 
 
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
-import org.flag4j.linalg.solvers.LinearSolver;
-import org.flag4j.linalg.solvers.lstsq.LstsqSolver;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.linalg.decompositions.lu.LU;
+import org.flag4j.linalg.solvers.LinearMatrixSolver;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
+import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
+
 /**
- * <p>Solves a well determined system of equations {@code Ax=b} in an exact sense by using a {@code LU} decomposition.</p>
+ * <p>Solves a well determined system of equations Ax=b in an exact sense by using a LU decomposition.
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
- * {@link LstsqSolver least-squares solver}.</p>
+ * {@link LstsqSolver least-squares solver}.
  */
-public abstract class ExactSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>>
-        implements LinearSolver<T, U> {
+public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
+        U extends VectorMixin<U, T, ?, ?>>
+        implements LinearMatrixSolver<T, U> {
+
 
     /**
      * Forward Solver for solving system with lower triangular coefficient matrix.
      */
-    protected final LinearSolver<T, U> forwardSolver;
+    protected final LinearMatrixSolver<T, U> forwardSolver;
     /**
      * Backwards solver for solving system with upper triangular coefficient matrix.
      */
-    protected final LinearSolver<T, U> backSolver;
+    protected final LinearMatrixSolver<T, U> backSolver;
 
     /**
      * Decomposer to compute {@code LU} decomposition.
      */
-    protected final org.flag4j.linalg.decompositions.lu.LU<T> lu;
+    protected final LU<T> lu;
     /**
      * The unit-lower and upper triangular matrices from the {@code LU} decomposition stored in a single matrix.
      */
@@ -70,8 +72,8 @@ public abstract class ExactSolver<
      * @param lu {@code LU} decomposer to employ in solving the linear system.
      * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
      */
-    protected ExactSolver(org.flag4j.linalg.decompositions.lu.LU<T> lu, LinearSolver<T, U> forwardSolver, LinearSolver<T, U> backSolver) {
-        if(lu.pivotFlag!= org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL) {
+    protected ExactSolver(LU<T> lu, LinearMatrixSolver<T, U> forwardSolver, LinearMatrixSolver<T, U> backSolver) {
+        if(lu.pivotFlag!= PARTIAL) {
             throw new IllegalArgumentException("LU solver must use partial pivoting but got " +
                     lu.pivotFlag.name() + ".");
         }
@@ -83,7 +85,7 @@ public abstract class ExactSolver<
 
 
     /**
-     * Decomposes A using an {@link org.flag4j.linalg.decompositions.lu.LU LU decomposition}.
+     * Decomposes A using an {@link LU LU decomposition}.
      * @param A Matrix to decompose.
      */
     protected void decompose(T A) {
@@ -101,15 +103,15 @@ public abstract class ExactSolver<
      *          (i.e. all rows, or equivalently columns, must be linearly independent).
      * @param b Vector of constants in the linear system.
      * @return The solution to {@code x} in the linear system {@code A*x=b}.
-     * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of entries in
+     * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of data in
      * {@code b}.
      * @throws IllegalArgumentException If {@code A} is not square.
      * @throws SingularMatrixException If {@code A} is singular.
      */
     @Override
     public U solve(T A, U b) {
-        ParameterChecks.assertSquareMatrix(A.shape()); // Ensure A is square.
-        ParameterChecks.assertEquals(A.numCols(), b.size()); // b must have the same number of entries as columns in A.
+        ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
+        ValidateParameters.ensureEquals(A.numCols(), b.length()); // b must have the same number of data as columns in A.
 
         decompose(A); // Compute LU decomposition.
 
@@ -131,8 +133,8 @@ public abstract class ExactSolver<
      */
     @Override
     public T solve(T A, T B) {
-        ParameterChecks.assertSquareMatrix(A.shape()); // Ensure A is square.
-        ParameterChecks.assertEquals(A.numCols(), B.numRows()); // b must have the same number of entries as columns in A.
+        ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
+        ValidateParameters.ensureEquals(A.numCols(), B.numRows()); // b must have the same number of data as columns in A.
 
         decompose(A); // Compute LU decomposition.
 

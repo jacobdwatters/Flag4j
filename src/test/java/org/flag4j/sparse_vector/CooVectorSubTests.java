@@ -1,10 +1,13 @@
 package org.flag4j.sparse_vector;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -54,27 +57,27 @@ class CooVectorSubTests {
         int size = 304;
         a = new CooVector(size, aValues, aIndices);
 
-        CNumber[] bValues = {new CNumber(1, -0.024),
-                new CNumber(99.24, 1.5), new CNumber(0, 1.4)};
+        Complex128[] bValues = {new Complex128(1, -0.024),
+                new Complex128(99.24, 1.5), new Complex128(0, 1.4)};
         int[] bIndices = {1, 5, 6};
         b = new CooCVector(size, bValues, bIndices);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {new CNumber(1.34), new CNumber(-1, 0.024),
-                new CNumber(51.6-99.24, -1.5), new CNumber(0, -1.4), new CNumber(-0.00245)};
+        Complex128[] expValues = {new Complex128(1.34), new Complex128(-1, 0.024),
+                new Complex128(51.6-99.24, -1.5), new Complex128(0, -1.4), new Complex128(-0.00245)};
         int[] expIndices = {0, 1, 5, 6, 103};
         exp = new CooCVector(size, expValues, expIndices);
 
-        assertEquals(exp, a.sub(b));
+        assertEquals(exp, RealComplexSparseVectorOperations.sub(a, b));
 
         // --------------------- Sub-case 2 ---------------------
-        bValues = new CNumber[]{new CNumber(1, -0.024),
-                new CNumber(99.24, 1.5), new CNumber(0, 1.4)};
+        bValues = new Complex128[]{new Complex128(1, -0.024),
+                new Complex128(99.24, 1.5), new Complex128(0, 1.4)};
         bIndices = new int[]{1, 5, 6};
         b = new CooCVector(size+13, bValues, bIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOperations.sub(a, finalB));
     }
 
 
@@ -94,14 +97,14 @@ class CooVectorSubTests {
         double[] expValues = {-1+1.34, -5, 0.0024+51.6, -1, -2001.256, -61-0.00245, 99.24, -1.5};
         exp = new Vector(expValues);
 
-        assertEquals(exp, a.sub(b));
+        assertEquals(exp, RealDenseSparseVectorOperations.sub(a, b));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new double[]{1, 5, -0.0024, 1, 2001.256, 61};
         b = new Vector(bValues);
 
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
+        assertThrows(LinearAlgebraException.class, ()->RealDenseSparseVectorOperations.sub(a, finalB));
     }
 
 
@@ -114,32 +117,32 @@ class CooVectorSubTests {
         int size = 5;
         a = new CooVector(size, aValues, aIndices);
 
-        CNumber[] bValues = {new CNumber(1.445, -9.24), new CNumber(1.45),
-                new CNumber(0, -99.145), new CNumber(4.51, 8.456), new CNumber(11.34, -0.00245)};
+        Complex128[] bValues = {new Complex128(1.445, -9.24), new Complex128(1.45),
+                new Complex128(0, -99.145), new Complex128(4.51, 8.456), new Complex128(11.34, -0.00245)};
         b = new CVector(bValues);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {new CNumber(-1.445+1.34, 9.24), new CNumber(-1.45),
-                new CNumber(51.6, 99.145), new CNumber(-4.51, -8.456), new CNumber(-11.34, 0.00245)};
+        Complex128[] expValues = {new Complex128(-1.445+1.34, 9.24), new Complex128(-1.45),
+                new Complex128(51.6, 99.145), new Complex128(-4.51, -8.456), new Complex128(-11.34, 0.00245)};
         exp = new CVector(expValues);
 
-        assertEquals(exp, a.sub(b));
+        assertEquals(exp, RealFieldDenseCooVectorOps.sub(a, b));
 
         // --------------------- Sub-case 2 ---------------------
-        bValues = new CNumber[]{new CNumber(1.445, -9.24), new CNumber(1.45),
-                new CNumber(0, -99.145), new CNumber(4.51, 8.456),
-                new CNumber(11.34, -0.00245), new CNumber(34.5, 0.0014)};
+        bValues = new Complex128[]{new Complex128(1.445, -9.24), new Complex128(1.45),
+                new Complex128(0, -99.145), new Complex128(4.51, 8.456),
+                new Complex128(11.34, -0.00245), new Complex128(34.5, 0.0014)};
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
+        assertThrows(LinearAlgebraException.class, ()-> RealFieldDenseCooVectorOps.sub(a, finalB));
     }
 
 
     @Test
     void scalarTestCase() {
         double b;
-        Vector exp;
+        CooVector exp;
 
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 5};
@@ -149,8 +152,8 @@ class CooVectorSubTests {
         b = 2.345;
 
         // --------------------- Sub-case 1 ---------------------
-        double[] expValues = {1.34-2.345, -2.345, 51.6-2.345, -2.345, -2.345, -0.00245-2.345, -2.345, -2.345};
-        exp = new Vector(expValues);
+        double[] expValues = {1.34-2.345, 51.6-2.345, -0.00245-2.345};
+        exp = new CooVector(8, expValues, aIndices.clone());
 
         assertEquals(exp, a.sub(b));
     }
@@ -158,21 +161,21 @@ class CooVectorSubTests {
 
     @Test
     void complexScalarTestCase() {
-        CNumber b;
-        CVector exp;
+        Complex128 b;
+        CooCVector exp;
 
         double[] aValues = {1.34, 51.6, -0.00245};
         int[] aIndices = {0, 2, 3};
         int size = 5;
         a = new CooVector(size, aValues, aIndices);
 
-        b = new CNumber(13.455, -1459.4521);
+        b = new Complex128(13.455, -1459.4521);
 
         // --------------------- Sub-case 1 ---------------------
-        CNumber[] expValues = {new CNumber(-13.455+1.34, 1459.4521), new CNumber(-13.455, 1459.4521),
-                new CNumber(-13.455+51.6, 1459.4521), new CNumber(-13.455-0.00245, 1459.4521),
-                new CNumber(-13.455, 1459.4521)};
-        exp = new CVector(expValues);
+        Complex128[] expValues = {new Complex128(-13.455+1.34, 1459.4521), Complex128.ZERO,
+                new Complex128(-13.455+51.6, 1459.4521), new Complex128(-13.455-0.00245, 1459.4521),
+                Complex128.ZERO};
+        exp = new CVector(expValues).toCoo();
 
         assertEquals(exp, a.sub(b));
     }

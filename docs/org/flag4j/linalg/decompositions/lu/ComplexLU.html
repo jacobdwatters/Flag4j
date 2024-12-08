@@ -84,19 +84,19 @@ loadScripts(document, 'script');</script>
 <h1 title="Class ComplexLU" class="title">Class ComplexLU</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">org.flag4j.linalg.decompositions.lu.LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;
-<div class="inheritance">org.flag4j.linalg.decompositions.lu.ComplexLU</div>
+<div class="inheritance"><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">org.flag4j.linalg.decompositions.lu.LUOld</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;
+<div class="inheritance">org.flag4j.linalg.decompositions.lu.ComplexLUOld</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ComplexLU</span>
-<span class="extends-implements">extends <a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</span></div>
 <div class="block"><p>This class provides methods for computing the LU decomposition of a complex dense matrix.</p>
  <p>The following decompositions are provided: <code>A=LU</code>, <code>PA=LU</code>, and <code>PAQ=LU</code>.</p></div>
 </div>
@@ -177,18 +177,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the LU decomposition using full/rook pivoting (i.e.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getL()" class="member-name-link">getL</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the unit lower triangular matrix of the decomposition.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getU()" class="member-name-link">getU</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the upper triangular matrix of the decomposition.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initLU(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">initLU</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initLU(org.flag4j.arrays.dense.CMatrix)" class="member-name-link">initLU</a><wbr>(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Initializes the <code>LU</code> matrix by copying the source matrix to decompose.</div>
 </div>
@@ -302,11 +302,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="initLU(org.flag4j.arrays.dense.CMatrix)">
 <h3>initLU</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initLU</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">initLU</span><wbr><span class="parameters">(<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&nbsp;src)</span></div>
 <div class="block">Initializes the <code>LU</code> matrix by copying the source matrix to decompose.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="LU.html#initLU(T)">initLU</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="LU.html#initLU(T)">initLU</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>src</code> - Source matrix to decompose.</dd>
 </dl>
@@ -321,7 +321,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Computes the LU decomposition using no pivoting (i.e. rows and columns are not swapped).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="LU.html#noPivot()">noPivot</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="LU.html#noPivot()">noPivot</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 </dl>
 </div>
 </section>
@@ -334,7 +334,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Computes the LU decomposition using partial pivoting (i.e. row swapping).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="LU.html#partialPivot()">partialPivot</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="LU.html#partialPivot()">partialPivot</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 </dl>
 </div>
 </section>
@@ -347,7 +347,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Computes the LU decomposition using full/rook pivoting (i.e. row and column swapping).</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="LU.html#fullPivot()">fullPivot</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="LU.html#fullPivot()">fullPivot</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 </dl>
 </div>
 </section>
@@ -399,11 +399,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getL()">
 <h3>getL</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">getL</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">getL</span>()</div>
 <div class="block">Gets the unit lower triangular matrix of the decomposition.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="LU.html#getL()">getL</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="LU.html#getL()">getL</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The lower triangular matrix of the decomposition.</dd>
 </dl>
@@ -414,11 +414,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getU()">
 <h3>getU</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">getU</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">getU</span>()</div>
 <div class="block">Gets the upper triangular matrix of the decomposition.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="LU.html#getU()">getU</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a>&gt;</code></dd>
+<dd><code><a href="LU.html#getU()">getU</a></code>&nbsp;in class&nbsp;<code><a href="LU.html" title="class in org.flag4j.linalg.decompositions.lu">LU</a>&lt;<a href="../../../arrays/dense/CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The lower triangular matrix of the decomposition.</dd>
 </dl>

@@ -24,8 +24,8 @@
 
 package org.flag4j.complex_vector;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CVectorZeroOneTests {
 
-    CNumber[] aEntries;
+    Complex128[] aEntries;
     CVector a;
 
     @Test
@@ -47,22 +47,22 @@ class CVectorZeroOneTests {
         assertTrue(a.isZeros());
 
         // ------------------ Sub-case 3 ------------------
-        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, CNumber.ZERO};
+        aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, Complex128.ZERO};
         a = new CVector(aEntries);
         assertTrue(a.isZeros());
 
         // ------------------ Sub-case 4 ------------------
-        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(1), CNumber.ZERO};
+        aEntries = new Complex128[]{Complex128.ZERO, new Complex128(1), Complex128.ZERO};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
 
         // ------------------ Sub-case 5 ------------------
-        aEntries = new CNumber[]{CNumber.ZERO, new CNumber(9.4, -6.233), CNumber.ZERO};
+        aEntries = new Complex128[]{Complex128.ZERO, new Complex128(9.4, -6.233), Complex128.ZERO};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
 
         // ------------------ Sub-case 6 ------------------
-        aEntries = new CNumber[]{CNumber.ZERO, CNumber.ZERO, new CNumber(0, -8.234)};
+        aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, new Complex128(0, -8.234)};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
     }
@@ -79,22 +79,22 @@ class CVectorZeroOneTests {
         assertTrue(a.isOnes());
 
         // ------------------ Sub-case 3 ------------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(1), new CNumber(1)};
+        aEntries = new Complex128[]{new Complex128(1), new Complex128(1), new Complex128(1)};
         a = new CVector(aEntries);
         assertTrue(a.isOnes());
 
         // ------------------ Sub-case 4 ------------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(1.2), new CNumber(1)};
+        aEntries = new Complex128[]{new Complex128(1), new Complex128(1.2), new Complex128(1)};
         a = new CVector(aEntries);
         assertFalse(a.isOnes());
 
         // ------------------ Sub-case 5 ------------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(5.3, 91.3), new CNumber(1)};
+        aEntries = new Complex128[]{new Complex128(1), new Complex128(5.3, 91.3), new Complex128(1)};
         a = new CVector(aEntries);
         assertFalse(a.isOnes());
 
         // ------------------ Sub-case 6 ------------------
-        aEntries = new CNumber[]{new CNumber(1), new CNumber(1), new CNumber(1, -1)};
+        aEntries = new Complex128[]{new Complex128(1), new Complex128(1), new Complex128(1, -1)};
         a = new CVector(aEntries);
         assertFalse(a.isOnes());
     }

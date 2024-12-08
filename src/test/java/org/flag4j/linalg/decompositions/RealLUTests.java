@@ -1,6 +1,7 @@
 package org.flag4j.linalg.decompositions;
 
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ class RealLUTests {
 
     @Test
     void noPivotTestCase() {
-        RealLU LU = new RealLU(org.flag4j.linalg.decompositions.lu.LU.Pivoting.NONE.ordinal());
+        RealLU lu = new RealLU(LU.Pivoting.NONE);
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]
@@ -33,9 +34,9 @@ class RealLUTests {
                 {0.0, 0.0, 79.3583022931406}};
         expU = new Matrix(expUEntries);
 
-        LU.decompose(A);
-        L = LU.getL();
-        U = LU.getU();
+        lu.decompose(A);
+        L = lu.getL();
+        U = lu.getU();
 
         assertEquals(expL, L);
         assertEquals(expU, U);
@@ -59,9 +60,9 @@ class RealLUTests {
                 {0.0, 0.0, 79.3583022931406}};
         expU = new Matrix(expUEntries);
 
-        LU.decompose(A);
-        L = LU.getL();
-        U = LU.getU();
+        lu.decompose(A);
+        L = lu.getL();
+        U = lu.getU();
 
         assertEquals(expL, L);
         assertEquals(expU, U);
@@ -80,9 +81,9 @@ class RealLUTests {
                 {0.0, -3634.6815000000006, 5928.494928571429}};
         expU = new Matrix(expUEntries);
 
-        LU.decompose(A);
-        L = LU.getL();
-        U = LU.getU();
+        lu.decompose(A);
+        L = lu.getL();
+        U = lu.getU();
 
         assertEquals(expL, L);
         assertEquals(expU, U);
@@ -91,7 +92,7 @@ class RealLUTests {
 
     @Test
     void partialPivotTestCase() {
-        RealLU LU = new RealLU(org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL.ordinal());
+        RealLU lu = new RealLU(LU.Pivoting.PARTIAL);
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]
@@ -115,10 +116,10 @@ class RealLUTests {
                 {0.0, 0.0, 79.3583022931406}};
         expU = new Matrix(expUEntries);
 
-        LU.decompose(A);
-        L = LU.getL();
-        U = LU.getU();
-        P = LU.getP().toDense();
+        lu.decompose(A);
+        L = lu.getL();
+        U = lu.getU();
+        P = lu.getP().toDense();
 
         assertEquals(expP, P.T());
         assertEquals(expL, L);
@@ -149,10 +150,10 @@ class RealLUTests {
                 {0.0, 0.0, 71.57799801630503}};
         expU = new Matrix(expUEntries);
 
-        LU.decompose(A);
-        P = LU.getP().toDense();
-        L = LU.getL();
-        U = LU.getU();
+        lu.decompose(A);
+        P = lu.getP().toDense();
+        L = lu.getL();
+        U = lu.getU();
 
         assertEquals(expP, P.T());
         assertEquals(expL, L);
@@ -176,10 +177,10 @@ class RealLUTests {
                 {0.0, 5.658790409572634, -9.23}};
         expU = new Matrix(expUEntries);
 
-        LU.decompose(A);
-        P = LU.getP().toDense();
-        L = LU.getL();
-        U = LU.getU();
+        lu.decompose(A);
+        P = lu.getP().toDense();
+        L = lu.getL();
+        U = lu.getU();
 
         assertEquals(expP, P.T());
         assertEquals(expL, L);
@@ -189,7 +190,7 @@ class RealLUTests {
 
     @Test
     void completePivotTestCase() {
-        RealLU LU = new RealLU(org.flag4j.linalg.decompositions.lu.LU.Pivoting.FULL.ordinal());
+        RealLU lu = new RealLU(LU.Pivoting.FULL);
 
         // -------------------------- Sub-case 1 --------------------------
         aEntries = new double[][]
@@ -218,11 +219,11 @@ class RealLUTests {
                 {0, 0, 3.4999999999999996}};
         expU = new Matrix(expUEntries);
 
-        LU.decompose(A);
-        L = LU.getL();
-        U = LU.getU();
-        P = LU.getP().toDense();
-        Q = LU.getQ().toDense();
+        lu.decompose(A);
+        L = lu.getL();
+        U = lu.getU();
+        P = lu.getP().toDense();
+        Q = lu.getQ().toDense();
 
         assertEquals(expP, P);
         assertEquals(expQ, Q);

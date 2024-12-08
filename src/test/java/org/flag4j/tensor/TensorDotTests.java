@@ -1,7 +1,7 @@
 package org.flag4j.tensor;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +95,7 @@ class TensorDotTests {
         aAxes = new int[]{0, 1, 2, 3};
         bAxes = new int[]{1, 0, 3, 2};
 
-        assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B, aAxes, bAxes));
+        assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
     }
 
 

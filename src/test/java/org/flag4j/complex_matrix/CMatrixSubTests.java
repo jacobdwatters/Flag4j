@@ -1,11 +1,11 @@
 package org.flag4j.complex_matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CMatrixSubTests {
 
-    CNumber[][] aEntries, expEntries;
+    Complex128[][] aEntries, expEntries;
     Shape sparseShape;
     int[] rowIndices, colIndices;
     CMatrix A, exp;
@@ -26,29 +26,29 @@ class CMatrixSubTests {
         Matrix B;
 
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
                 {123.235235, -0.4334},
                 {0, 234.5},
                 {345, 6.8883}};
         B = new Matrix(bEntries);
-        expEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4).sub(B.entries[1])},
-                {new CNumber(67.1, 0.0003443993).sub(B.entries[2]), new CNumber(8.4554, -98.2).sub(B.entries[3])},
-                {new CNumber(-723.234, 4).sub(B.entries[4]), new CNumber(-9.431).sub(B.entries[5])}};
+        expEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23).sub(B.data[0]), new Complex128(4).sub(B.data[1])},
+                {new Complex128(67.1, 0.0003443993).sub(B.data[2]), new Complex128(8.4554, -98.2).sub(B.data[3])},
+                {new Complex128(-723.234, 4).sub(B.data[4]), new Complex128(-9.431).sub(B.data[5])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(B));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
                 {123.235235, -0.4334},
@@ -60,10 +60,10 @@ class CMatrixSubTests {
 
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23)},
-                {new CNumber(67.1, 0.0003443993)},
-                {new CNumber(-723.234, 4)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23)},
+                {new Complex128(67.1, 0.0003443993)},
+                {new Complex128(-723.234, 4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[][]{
                 {123.235235, 234.5},
@@ -78,52 +78,52 @@ class CMatrixSubTests {
 
     @Test
     void complexTestCase() {
-        CNumber[][] bEntries;
+        Complex128[][] bEntries;
         CMatrix B;
 
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
-        bEntries = new CNumber[][]{
-                {new CNumber(234.344, -0.3223), new CNumber(0)},
-                {new CNumber(0, 213.57), new CNumber(-4941.3234)},
-                {new CNumber(994.33134, Double.POSITIVE_INFINITY), new CNumber(445, 6)}};
+        bEntries = new Complex128[][]{
+                {new Complex128(234.344, -0.3223), new Complex128(0)},
+                {new Complex128(0, 213.57), new Complex128(-4941.3234)},
+                {new Complex128(994.33134, Double.POSITIVE_INFINITY), new Complex128(445, 6)}};
         B = new CMatrix(bEntries);
-        expEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4).sub(B.entries[1])},
-                {new CNumber(67.1, 0.0003443993).sub(B.entries[2]), new CNumber(8.4554, -98.2).sub(B.entries[3])},
-                {new CNumber(-723.234, 4).sub(B.entries[4]), new CNumber(-9.431).sub(B.entries[5])}};
+        expEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23).sub((Complex128) B.data[0]), new Complex128(4).sub((Complex128) B.data[1])},
+                {new Complex128(67.1, 0.0003443993).sub((Complex128) B.data[2]), new Complex128(8.4554, -98.2).sub((Complex128) B.data[3])},
+                {new Complex128(-723.234, 4).sub((Complex128) B.data[4]), new Complex128(-9.431).sub((Complex128) B.data[5])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(B));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
-        bEntries = new CNumber[][]{
-                {new CNumber(234.344, -0.3223), new CNumber(0)},
-                {new CNumber(0, 213.57), new CNumber(-4941.3234)}};
+        bEntries = new Complex128[][]{
+                {new Complex128(234.344, -0.3223), new Complex128(0)},
+                {new Complex128(0, 213.57), new Complex128(-4941.3234)}};
         B = new CMatrix(bEntries);
 
         CMatrix finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23)},
-                {new CNumber(67.1, 0.0003443993)},
-                {new CNumber(-723.234, 4)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23)},
+                {new Complex128(67.1, 0.0003443993)},
+                {new Complex128(-723.234, 4)}};
         A = new CMatrix(aEntries);
-        bEntries = new CNumber[][]{
-                {new CNumber(234.344, -0.3223), new CNumber(0)},
-                {new CNumber(0, 213.57), new CNumber(-4941.3234)},
-                {new CNumber(994.33134, Double.POSITIVE_INFINITY), new CNumber(445, 6)}};
+        bEntries = new Complex128[][]{
+                {new Complex128(234.344, -0.3223), new Complex128(0)},
+                {new Complex128(0, 213.57), new Complex128(-4941.3234)},
+                {new Complex128(994.33134, Double.POSITIVE_INFINITY), new Complex128(445, 6)}};
         B = new CMatrix(bEntries);
 
         CMatrix finalB1 = B;
@@ -137,29 +137,29 @@ class CMatrixSubTests {
         CooMatrix B;
 
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{23.45, -234.57};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
         B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
-        expEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431).sub(B.entries[1])}};
+        expEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23).sub(B.data[0]), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431).sub(B.data[1])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(B));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{23.45, -234.57};
         rowIndices = new int[]{0, 2};
@@ -171,10 +171,10 @@ class CMatrixSubTests {
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23)},
-                {new CNumber(67.1, 0.0003443993)},
-                {new CNumber(-723.234, 4)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23)},
+                {new Complex128(67.1, 0.0003443993)},
+                {new Complex128(-723.234, 4)}};
         A = new CMatrix(aEntries);
         bEntries = new double[]{23.45, -234.57};
         rowIndices = new int[]{0, 2};
@@ -189,36 +189,36 @@ class CMatrixSubTests {
 
     @Test
     void complexSparseTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CooCMatrix B;
 
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
-        bEntries = new CNumber[]{new CNumber(234, -0.345), new CNumber(0, 45.6)};
+        bEntries = new Complex128[]{new Complex128(234, -0.345), new Complex128(0, 45.6)};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols);
         B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
-        expEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23).sub(B.entries[0]), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431).sub(B.entries[1])}};
+        expEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23).sub((Complex128) B.data[0]), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431).sub((Complex128) B.data[1])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(B));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
-        bEntries = new CNumber[]{new CNumber(234, -0.345), new CNumber(0, 45.6)};
+        bEntries = new Complex128[]{new Complex128(234, -0.345), new Complex128(0, 45.6)};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows+345, A.numCols+234);
@@ -228,12 +228,12 @@ class CMatrixSubTests {
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23)},
-                {new CNumber(67.1, 0.0003443993)},
-                {new CNumber(-723.234, 4)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23)},
+                {new Complex128(67.1, 0.0003443993)},
+                {new Complex128(-723.234, 4)}};
         A = new CMatrix(aEntries);
-        bEntries = new CNumber[]{new CNumber(234, -0.345), new CNumber(0, 45.6)};
+        bEntries = new Complex128[]{new Complex128(234, -0.345), new Complex128(0, 45.6)};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{0, 1};
         sparseShape = new Shape(A.numRows, A.numCols+1000);
@@ -249,16 +249,16 @@ class CMatrixSubTests {
         double b;
 
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
         b = -0.234;
-        expEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23).sub(b), new CNumber(4).sub(b)},
-                {new CNumber(67.1, 0.0003443993).sub(b), new CNumber(8.4554, -98.2).sub(b)},
-                {new CNumber(-723.234, 4).sub(b), new CNumber(-9.431).sub(b)}};
+        expEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23).sub(b), new Complex128(4).sub(b)},
+                {new Complex128(67.1, 0.0003443993).sub(b), new Complex128(8.4554, -98.2).sub(b)},
+                {new Complex128(-723.234, 4).sub(b), new Complex128(-9.431).sub(b)}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(b));
@@ -267,19 +267,19 @@ class CMatrixSubTests {
 
     @Test
     void complexNumberTestCase() {
-        CNumber b;
+        Complex128 b;
 
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23), new CNumber(4)},
-                {new CNumber(67.1, 0.0003443993), new CNumber(8.4554, -98.2)},
-                {new CNumber(-723.234, 4), new CNumber(-9.431)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23), new Complex128(4)},
+                {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
+                {new Complex128(-723.234, 4), new Complex128(-9.431)}};
         A = new CMatrix(aEntries);
-        b = new CNumber(-0.34534, 12.56);
-        expEntries = new CNumber[][]{
-                {new CNumber(234.56, -0.23).sub(b), new CNumber(4).sub(b)},
-                {new CNumber(67.1, 0.0003443993).sub(b), new CNumber(8.4554, -98.2).sub(b)},
-                {new CNumber(-723.234, 4).sub(b), new CNumber(-9.431).sub(b)}};
+        b = new Complex128(-0.34534, 12.56);
+        expEntries = new Complex128[][]{
+                {new Complex128(234.56, -0.23).sub(b), new Complex128(4).sub(b)},
+                {new Complex128(67.1, 0.0003443993).sub(b), new Complex128(8.4554, -98.2).sub(b)},
+                {new Complex128(-723.234, 4).sub(b), new Complex128(-9.431).sub(b)}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(b));

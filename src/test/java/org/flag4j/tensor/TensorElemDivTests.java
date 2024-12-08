@@ -1,9 +1,9 @@
 package org.flag4j.tensor;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class TensorElemDivTests {
         expShape = new Shape(2, 3, 2);
         exp = new Tensor(expShape, expEntries);
 
-        assertEquals(exp, A.elemDiv(B));
+        assertEquals(exp, A.div(B));
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new double[]{
@@ -59,7 +59,7 @@ class TensorElemDivTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.div(finalB));
 
         // ----------------------- Sub-case 3 -----------------------
         bEntries = new double[]{
@@ -70,45 +70,50 @@ class TensorElemDivTests {
         B = new Tensor(bShape, bEntries);
 
         Tensor finalB1 = B;
-        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB1));
+        assertThrows(LinearAlgebraException.class, ()->A.div(finalB1));
     }
 
 
     @Test
     void complexDenseTestCase() {
-        CNumber[] bEntries, expEntries;
+        Complex128[] bEntries, expEntries;
         CTensor B, exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(-0.00234, 2.452), new CNumber(15.6), new CNumber(99.2442, 9.1),
-                new CNumber(100.252, 1235), new CNumber(-78.2556, -99.1441), new CNumber(0.111134, -772.4),
-                new CNumber(671.455, 15.56), new CNumber(-0.00024), new CNumber(515.667, 895.52),
-                new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
+        bEntries = new Complex128[]{
+                new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
+                new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),
+                new Complex128(671.455, 15.56), new Complex128(-0.00024), new Complex128(515.667, 895.52),
+                new Complex128(14.515), new Complex128(100.135), new Complex128(0, 1)
         };
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
-        expEntries = new CNumber[]{
-                new CNumber(aEntries[0]).div(bEntries[(0)]), new CNumber(aEntries[1]).div(bEntries[(1)]), new CNumber(aEntries[2]).div(bEntries[(2)]),
-                new CNumber(aEntries[3]).div(bEntries[(3)]), new CNumber(aEntries[4]).div(bEntries[(4)]), new CNumber(aEntries[5]).div(bEntries[(5)]),
-                new CNumber(aEntries[6]).div(bEntries[(6)]), new CNumber(-11154.166666666668), new CNumber(aEntries[8]).div(bEntries[(8)]),
-                new CNumber(aEntries[9]).div(bEntries[(9)]), new CNumber(aEntries[10]).div(bEntries[(10)]), new CNumber(aEntries[11]).div(bEntries[(11)])
+        expEntries = new Complex128[]{
+                new Complex128(-4.7871787233852756E-4, -0.5016308645188331), new Complex128(0.16384615384615386, 0.0),
+                new Complex128(-1.21404568186213, 0.1113195099053182),
+                new Complex128(0.0010193178730469059, -0.012556932262826965),
+                new Complex128(-0.06940905320103984, 0.087936174682313),
+                new Complex128(-1.8485193391306292E-5, -0.12847520448688052),
+                new Complex128(2.0020375218720557E-6, -4.639432849607075E-8),
+                new Complex128(-11154.166666666668, -0.0), new Complex128(0.003930754845372011, -0.006826245579274111),
+                new Complex128(-1.3365483982087493E-5, -0.0), new Complex128(0.00998651820042942, 0.0),
+                new Complex128(0.0, -234.0)
         };
         expShape = new Shape(2, 3, 2);
         exp = new CTensor(expShape, expEntries);
-        assertEquals(exp, A.elemDiv(B));
+        assertEquals(exp, A.div(B));
 
         // ----------------------- Sub-case 2 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(-0.00234, 2.452), new CNumber(15.6), new CNumber(99.2442, 9.1),
-                new CNumber(100.252, 1235), new CNumber(-78.2556, -99.1441), new CNumber(0.111134, -772.4),
-                new CNumber(671.455, 15.56), new CNumber(-0.00024), new CNumber(515.667, 895.52),
-                new CNumber(14.515), new CNumber(100.135), new CNumber(0, 1)
+        bEntries = new Complex128[]{
+                new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
+                new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),
+                new Complex128(671.455, 15.56), new Complex128(-0.00024), new Complex128(515.667, 895.52),
+                new Complex128(14.515), new Complex128(100.135), new Complex128(0, 1)
         };
         bShape = new Shape(12);
         B = new CTensor(bShape, bEntries);
 
         CTensor finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()->A.div(finalB));
     }
 }

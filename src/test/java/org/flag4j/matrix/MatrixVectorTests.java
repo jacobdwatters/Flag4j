@@ -1,11 +1,11 @@
 package org.flag4j.matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ class MatrixVectorTests {
 
     double[][] aEntries;
     double[] expEntries;
-    CNumber[] expCEntries;
+    Complex128[] expCEntries;
 
     Matrix A;
     Vector exp;
@@ -61,7 +61,7 @@ class MatrixVectorTests {
 
     @Test
     void matVecMultComplexTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CVector B;
 
         // ---------------------- Sub-case 1 ----------------------
@@ -70,14 +70,14 @@ class MatrixVectorTests {
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
         A = new Matrix(aEntries);
-        bEntries = new CNumber[]{new CNumber("1.666+1.0i"),
-                new CNumber("-0.0-0.9345341i"),
-                new CNumber("0.0")};
+        bEntries = new Complex128[]{new Complex128("1.666+1.0i"),
+                new Complex128("-0.0-0.9345341i"),
+                new Complex128("0.0")};
         B = new CVector(bEntries);
-        expCEntries = new CNumber[]{new CNumber("1.8715844-91.6141568794i"),
-                new CNumber("-1553.4617-1447.705376035i"),
-                new CNumber("205.65936999999997+123.444878510567i"),
-                new CNumber("130.337844+66.8009098206i")};
+        expCEntries = new Complex128[]{new Complex128("1.8715844-91.6141568794i"),
+                new Complex128("-1553.4617-1447.705376035i"),
+                new Complex128("205.65936999999997+123.444878510567i"),
+                new Complex128("130.337844+66.8009098206i")};
         expC = new CVector(expCEntries);
 
         assertEquals(expC, A.mult(B));
@@ -89,8 +89,8 @@ class MatrixVectorTests {
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
         A = new Matrix(aEntries);
-        bEntries = new CNumber[]{new CNumber("1.666+1.0i"),
-                new CNumber("-0.0-0.9345341i")};
+        bEntries = new Complex128[]{new Complex128("1.666+1.0i"),
+                new Complex128("-0.0-0.9345341i")};
         B = new CVector(bEntries);
 
         CVector finalB = B;
@@ -139,7 +139,7 @@ class MatrixVectorTests {
 
     @Test
     void matVecMultSparseComplexTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         int[] indices;
         CooCVector B;
 
@@ -149,14 +149,14 @@ class MatrixVectorTests {
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
         A = new Matrix(aEntries);
-        bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
+        bEntries = new Complex128[]{new Complex128("-0.9345341+9.35i")};
         indices = new int[]{2};
         B = new CooCVector(3, bEntries, indices);
-        expCEntries = new CNumber[]{
-                new CNumber("-0.00011494769430000002+0.0011500500000000001i"),
-                new CNumber("0.8629674786220001-8.633977i"),
-                new CNumber("0.0"),
-                new CNumber("9273.596817143-92782.20049999999i")};
+        expCEntries = new Complex128[]{
+                new Complex128("-0.00011494769430000002+0.0011500500000000001i"),
+                new Complex128("0.8629674786220001-8.633977i"),
+                new Complex128("0.0"),
+                new Complex128("9273.596817143-92782.20049999999i")};
         expC = new CVector(expCEntries);
 
         assertEquals(expC, A.mult(B));
@@ -168,7 +168,7 @@ class MatrixVectorTests {
                 {123.445, 0.00013, 0.0},
                 {78.234, 12.234, -9923.23}};
         A = new Matrix(aEntries);
-        bEntries = new CNumber[]{new CNumber("-0.9345341+9.35i")};
+        bEntries = new Complex128[]{new Complex128("-0.9345341+9.35i")};
         indices = new int[]{2};
         B = new CooCVector(9, bEntries, indices);
 

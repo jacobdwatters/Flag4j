@@ -24,15 +24,20 @@
 
 package org.flag4j.concurrency;
 
-import org.flag4j.util.ErrorMessages;
+// TODO: This should be moved outside of the concurrency package as it also deals with non-concurrent configurations such as block
+//  size.
+
+// TODO: Configurations should be stored in a configs.properties file (or similar) and the java.util.Properties class should be used
+//  to read the file to set the properties. This would allow users to hand tweak performance configurations be editing the configs
+//  file.
+
+// TODO: The class MUST be thread safe. If a config is programmatically set it may effect correctness of concurrent operations running
+//  on another thread.
 
 /**
- * Configurations for standard and concurrent operations.
+ * Configurations for standard and concurrent ops.
  */
 public final class Configurations {
-    private Configurations() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
-    }
 
     /**
      * The default number of threads to use for concurrent algorithms.
@@ -52,13 +57,18 @@ public final class Configurations {
     private static int blockSize = DEFAULT_BLOCK_SIZE;
 
 
+    private Configurations() {
+        
+    }
+
+
     /**
-     * Sets the number of threads for use in concurrent operations as the number of processors available to the Java
+     * Sets the number of threads for use in concurrent ops as the number of processors available to the Java
      * virtual machine. Note that this value may change during runtime. This method will include logical cores so the value
      * returned may be higher than the number of physical cores on the machine if hyper-threading is enabled.
      * <br><br>
      * @implNote This is implemented as:
-     * <code>numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};</code>
+     * {@code numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};}
      * @return The new value of numThreads, i.e. the number of available processors.
      */
     public static int setNumThreadsAsAvailableProcessors() {

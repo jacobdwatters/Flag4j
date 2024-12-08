@@ -1,7 +1,7 @@
 package org.flag4j.sparse_tensor;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,10 +53,10 @@ class CooTensorGetSetTests {
         assertEquals(exp, A.set(0.001, 0, 0, 0, 0));
 
         // --------------- Sub-case 4 ---------------
-        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5, -1, 0, 0, 0));
-        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5, 0, 0, 0));
-        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5, 0, 0, 0, 0, 0));
-        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5, 1, 2, 5, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5d, -1, 0, 0, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5d, 0, 0, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5d, 0, 0, 0, 0, 0));
+        assertThrows(IndexOutOfBoundsException.class, () -> A.set(5d, 1, 2, 5, 0));
     }
 
 

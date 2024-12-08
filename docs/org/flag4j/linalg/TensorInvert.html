@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class TensorInvert" class="title">Class TensorInvert</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.flag4j.linalg.TensorInvert</div>
+<div class="inheritance">org.flag4j.linalg.TensorInvertOld</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
@@ -122,8 +122,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="../core/Shape.html" title="class in org.flag4j.core">Shape</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getInvShape(org.flag4j.core.Shape,int)" class="member-name-link">getInvShape</a><wbr>(<a href="../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;originalShape,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static <a href="../core/Shape.html" title="class in org.flag4j.core_old">Shape</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getInvShape(org.flag4j.core.Shape,int)" class="member-name-link">getInvShape</a><wbr>(<a href="../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;originalShape,
  int&nbsp;numIndices)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the shape of the 'inverse' tensor given the original shape and the number of indices.</div>
@@ -135,14 +135,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Computes the total number of entries in the last <code>numIndices</code> dimensions of a tensor with dimensions specified by
  <code>dims</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#inv(org.flag4j.arrays.dense.CTensor,int)" class="member-name-link">inv</a><wbr>(<a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;src,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#inv(org.flag4j.arrays.dense.CTensor,int)" class="member-name-link">inv</a><wbr>(<a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;src,
  int&nbsp;numIndices)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the 'inverse' of this tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#inv(org.flag4j.arrays.dense.Tensor,int)" class="member-name-link">inv</a><wbr>(<a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;src,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#inv(org.flag4j.arrays.dense.Tensor,int)" class="member-name-link">inv</a><wbr>(<a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;src,
  int&nbsp;numIndices)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Computes the 'inverse' of this tensor.</div>
@@ -184,7 +184,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="inv(org.flag4j.arrays.dense.Tensor,int)">
 <h3>inv</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a></span>&nbsp;<span class="element-name">inv</span><wbr><span class="parameters">(<a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a></span>&nbsp;<span class="element-name">inv</span><wbr><span class="parameters">(<a href="../arrays/dense/Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;src,
  int&nbsp;numIndices)</span></div>
 <div class="block"><p>Computes the 'inverse' of this tensor. That is, computes the tensor <code>X=this.tensorInv()</code> such that
  <a href="../core/TensorExclusiveMixin.html#tensorDot(T,int)"><code>src.tensorDot(X, numIndices)</code></a> is the 'identity' tensor for the tensor
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="inv(org.flag4j.arrays.dense.CTensor,int)">
 <h3>inv</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">inv</span><wbr><span class="parameters">(<a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">inv</span><wbr><span class="parameters">(<a href="../arrays/dense/CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;src,
  int&nbsp;numIndices)</span></div>
 <div class="block"><p>Computes the 'inverse' of this tensor. That is, computes the tensor <code>X=this.tensorInv()</code> such that
  <a href="../core/TensorExclusiveMixin.html#tensorDot(T,int)"><code>src.tensorDot(X, numIndices)</code></a> is the 'identity' tensor for the tensor
@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getInvShape(org.flag4j.core.Shape,int)">
 <h3>getInvShape</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="../core/Shape.html" title="class in org.flag4j.core">Shape</a></span>&nbsp;<span class="element-name">getInvShape</span><wbr><span class="parameters">(<a href="../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;originalShape,
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type"><a href="../core/Shape.html" title="class in org.flag4j.core_old">Shape</a></span>&nbsp;<span class="element-name">getInvShape</span><wbr><span class="parameters">(<a href="../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;originalShape,
  int&nbsp;numIndices)</span></div>
 <div class="block">Computes the shape of the 'inverse' tensor given the original shape and the number of indices.</div>
 <dl class="notes">

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,11 +29,11 @@ import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 
 
 /**
- * <p>Instances of this class compute the {@code QR} decomposition of a complex dense matrix.</p>
+ * <p>Instances of this class compute the {@code QR} decomposition of a {@link CMatrix complex dense matrix}.
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
- * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
+ * and an upper triangular matrix {@code R} such that {@code A=QR}.
  *
- * <p>Much of this code has been adapted from the EJML library.</p>
+ * <p>Much of this code has been adapted from the EJML library.
  */
 public class ComplexQR extends ComplexUnitaryDecomposition {
 
@@ -41,6 +41,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      * Flag indicating if the reduced (true) or full (false) {@code QR} decomposition should be computed.
      */
     protected final boolean reduced;
+
 
     /**
      * Creates a {@code QR} decomposer. This decomposer will compute the reduced {@code QR} decomposition.
@@ -70,7 +71,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      */
     @Override
     public ComplexQR decompose(CMatrix src) {
-        decomposeBase(src);
+        decomposeUnitary(src);
         return this;
     }
 

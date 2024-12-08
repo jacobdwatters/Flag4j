@@ -43,7 +43,7 @@ class VectorCopyTransposeTests {
 
 
         // ------------------ Sub-case 3 ------------------
-        act = a.transpose();
+        act = a.T();
 
         for(int i=0; i<exp.size; i++) {
             if(Double.isNaN(exp.get(i))) {

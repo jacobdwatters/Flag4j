@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,34 +24,39 @@
 
 package org.flag4j.linalg.decompositions.hess;
 
+
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
-
 
 /**
  * <p>Computes the Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
- * {@code A}, computes the decomposition {@code A=QHQ}<sup>T</sup> where {@code Q} is an orthogonal matrix and
- * {@code H} is a matrix in upper Hessenburg form which is similar to {@code A} (i.e. has the same eigenvalues).</p>
+ * A, computes the decomposition A=QHQ<sup>T</sup> where Q is an orthogonal matrix and
+ * H is a matrix in upper Hessenburg form which is similar to A (i.e. has the same eigenvalues).
  *
- * <p>A matrix {@code H} is in upper Hessenburg form if it is nearly upper triangular. Specifically, if {@code H} has
- * all zeros below the first sub-diagonal.</p>
+ * <p>A matrix H is in upper Hessenburg form if it is nearly upper triangular. Specifically, if H has
+ * all zeros below the first sub-diagonal.
  *
- * <p>For example, the following matrix is in upper Hessenburg form where each {@code x} may hold a different value:
+ * <p>For example, the following matrix is in upper Hessenburg form where each 'x' may hold a different value:
  * <pre>
  *     [[ x x x x x ]
  *      [ x x x x x ]
  *      [ 0 x x x x ]
  *      [ 0 0 x x x ]
  *      [ 0 0 0 x x ]]</pre>
- * </p>
+ * 
  */
 public class RealHess extends RealUnitaryDecomposition {
 
     /**
-     * Creates a real unitary decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros below
-     * the specified sub-diagonal.
+     * <p>Creates a real Hessenburg decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros
+     * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.
+     *
+     * <p>By default, the orthogonal matrix <i>will</i> be computed. To specify if the orthogonal matrix should be computed, use
+     * {@link #RealHess(boolean)}.
+     *
+     * @see #RealHess(boolean)
      */
     public RealHess() {
         super(1);
@@ -59,8 +64,12 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * Creates a real unitary decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros below
-     * the specified sub-diagonal.
+     * <p>Creates a real Hessenburg decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros
+     * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.
+     *
+     * @param computeQ Flag indicating if the orthogonal matrix in the Hessenburg decomposition should be computed. If it is not
+     * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.
+     * @see #RealHess()
      */
     public RealHess(boolean computeQ) {
         super(1, computeQ);
@@ -68,7 +77,7 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * Applies decomposition to the source matrix. Note, the computation of the unitary matrix {@code Q} in the decomposition is
+     * Applies decomposition to the source matrix. Note, the computation of the orthogonal matrix {@code Q} in the decomposition is
      * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when {@code Q} is not needed.
      *
      * @param src The source matrix to decompose.
@@ -77,8 +86,8 @@ public class RealHess extends RealUnitaryDecomposition {
      */
     @Override
     public RealHess decompose(Matrix src) {
-        ParameterChecks.assertSquare(src.shape);
-        decomposeBase(src);
+        ValidateParameters.ensureSquare(src.shape);
+        decomposeUnitary(src); // Compute the decomposition.
         return this;
     }
 

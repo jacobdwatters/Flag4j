@@ -1,8 +1,8 @@
 package org.flag4j.linalg.decompositions;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ComplexLUTests {
 
-    static CNumber[][] aEntries;
+    static Complex128[][] aEntries;
     static CMatrix A;
 
     CMatrix L;
@@ -30,14 +30,14 @@ public class ComplexLUTests {
 
     @Test
 
-    void testnoPivotTestCase() {
-        lu = new ComplexLU(0);
+    void noPivotTestCase() {
+        lu = new ComplexLU(LU.Pivoting.NONE);
 
         // --------------------- Sub-case 1 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i"), new CNumber("9.5-8.6i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i"), new CNumber("0.0+34.5i")},
-                {new CNumber("1.05-47.1i"), new CNumber("66.2+3.5i"), new CNumber("45.33-0.009i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")},
+                {new Complex128("1.05-47.1i"), new Complex128("66.2+3.5i"), new Complex128("45.33-0.009i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -45,13 +45,13 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = L.mult(U);
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
         // --------------------- Sub-case 2 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i")},
-                {new CNumber("1.05-47.1i"), new CNumber("66.2+3.5i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i")},
+                {new Complex128("1.05-47.1i"), new Complex128("66.2+3.5i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -59,12 +59,12 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = L.mult(U);
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
         // --------------------- Sub-case 3 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i"), new CNumber("9.5-8.6i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i"), new CNumber("0.0+34.5i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -72,20 +72,20 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = L.mult(U);
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
     }
 
 
     @Test
 
-    void testpartialPivotTestCase() {
+    void partialPivotTestCase() {
         lu = new ComplexLU();
 
         // --------------------- Sub-case 1 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i"), new CNumber("9.5-8.6i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i"), new CNumber("0.0+34.5i")},
-                {new CNumber("1.05-47.1i"), new CNumber("66.2+3.5i"), new CNumber("45.33-0.009i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")},
+                {new Complex128("1.05-47.1i"), new Complex128("66.2+3.5i"), new Complex128("45.33-0.009i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -94,13 +94,13 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
         // --------------------- Sub-case 2 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i")},
-                {new CNumber("1.05-47.1i"), new CNumber("66.2+3.5i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i")},
+                {new Complex128("1.05-47.1i"), new Complex128("66.2+3.5i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -109,12 +109,12 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
         // --------------------- Sub-case 3 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i"), new CNumber("9.5-8.6i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i"), new CNumber("0.0+34.5i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -123,19 +123,19 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U);
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
     }
 
 
     @Test
     void partialFullTestCase() {
-        lu = new ComplexLU(LU.Pivoting.FULL.ordinal());
+        lu = new ComplexLU(LU.Pivoting.FULL);
 
         // --------------------- Sub-case 1 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i"), new CNumber("9.5-8.6i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i"), new CNumber("0.0+34.5i")},
-                {new CNumber("1.05-47.1i"), new CNumber("66.2+3.5i"), new CNumber("45.33-0.009i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")},
+                {new Complex128("1.05-47.1i"), new Complex128("66.2+3.5i"), new Complex128("45.33-0.009i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -145,13 +145,13 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
         // --------------------- Sub-case 2 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i")},
-                {new CNumber("1.05-47.1i"), new CNumber("66.2+3.5i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i")},
+                {new Complex128("1.05-47.1i"), new Complex128("66.2+3.5i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -161,12 +161,12 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
         // --------------------- Sub-case 3 ---------------------
-        aEntries = new CNumber[][]{
-                {new CNumber("1.255+45.1i"), new CNumber("-99.24+0.024i"), new CNumber("9.5-8.6i")},
-                {new CNumber("6.466"), new CNumber("8.4-2.45i"), new CNumber("0.0+34.5i")}};
+        aEntries = new Complex128[][]{
+                {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
+                {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")}};
         setMatrices();
 
         lu.decompose(A);
@@ -176,6 +176,6 @@ public class ComplexLUTests {
         U = lu.getU();
         A_hat = P.T().mult(L).mult(U).mult(Q.T());
 
-        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero());
+        assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
     }
 }

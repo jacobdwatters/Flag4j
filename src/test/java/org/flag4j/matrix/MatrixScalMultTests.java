@@ -1,18 +1,18 @@
 package org.flag4j.matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MatrixScalMultTests {
     double[][] aEntries, expEntries;
-    CNumber[][] expCEntries;
+    Complex128[][] expCEntries;
     Matrix A, exp;
     CMatrix expC;
-    CNumber aC;
+    Complex128 aC;
     double a;
 
 
@@ -45,10 +45,10 @@ class MatrixScalMultTests {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);
-        aC = new CNumber(-9.123, 19.23);
-        expCEntries = new CNumber[][]{
-                {new CNumber(1).mult(aC), new CNumber(2).mult(aC), new CNumber(3.3434).mult(aC)},
-                {new CNumber(-0.221).mult(aC), new CNumber(81.346).mult(aC), new CNumber(90.234).mult(aC)}};
+        aC = new Complex128(-9.123, 19.23);
+        expCEntries = new Complex128[][]{
+                {new Complex128(1).mult(aC), new Complex128(2).mult(aC), new Complex128(3.3434).mult(aC)},
+                {new Complex128(-0.221).mult(aC), new Complex128(81.346).mult(aC), new Complex128(90.234).mult(aC)}};
         expC = new CMatrix(expCEntries);
 
         assertEquals(expC, A.mult(aC));
@@ -56,10 +56,10 @@ class MatrixScalMultTests {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);
-        aC = new CNumber(0);
-        expCEntries = new CNumber[][]{
-                {new CNumber(1).mult(aC), new CNumber(2).mult(aC), new CNumber(3.3434).mult(aC)},
-                {new CNumber(-0.221).mult(aC), new CNumber(81.346).mult(aC), new CNumber(90.234).mult(aC)}};
+        aC = new Complex128(0);
+        expCEntries = new Complex128[][]{
+                {new Complex128(1).mult(aC), new Complex128(2).mult(aC), new Complex128(3.3434).mult(aC)},
+                {new Complex128(-0.221).mult(aC), new Complex128(81.346).mult(aC), new Complex128(90.234).mult(aC)}};
         expC = new CMatrix(expCEntries);
 
         assertEquals(expC, A.mult(aC));

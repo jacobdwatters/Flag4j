@@ -1,9 +1,9 @@
 package org.flag4j.matrix;
 
 import org.flag4j.CustomAssertions;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -25,15 +25,16 @@ class MatrixElemOppTests {
 
     @Test
     void sqrtComplexTestCase() {
-        CNumber[][] expEntries;
+        Complex128[][] expEntries;
         CMatrix exp;
 
         // --------------------- Sub-case 1 ---------------------
-        expEntries = new CNumber[][]{
-                {CNumber.sqrt(1.123), CNumber.sqrt(2), CNumber.sqrt(-0.01), CNumber.sqrt(0.0), CNumber.sqrt(-0.0), CNumber.sqrt(15)},
-                {CNumber.sqrt(104.51), CNumber.sqrt(-64), CNumber.sqrt(54), CNumber.sqrt(100.455), CNumber.sqrt(0.00024), CNumber.sqrt(1024)},
-                {CNumber.sqrt(-9.2245), CNumber.sqrt(Double.POSITIVE_INFINITY), CNumber.sqrt(Double.NEGATIVE_INFINITY), CNumber.sqrt(Double.NaN), CNumber.sqrt(10.4), CNumber.sqrt(-158.14)}
+        expEntries = new Complex128[][]{
+                {Complex128.sqrt(1.123), Complex128.sqrt(2), Complex128.sqrt(-0.01), Complex128.sqrt(0.0), Complex128.sqrt(-0.0), Complex128.sqrt(15)},
+                {Complex128.sqrt(104.51), Complex128.sqrt(-64), Complex128.sqrt(54), Complex128.sqrt(100.455), Complex128.sqrt(0.00024), Complex128.sqrt(1024)},
+                {Complex128.sqrt(-9.2245), Complex128.sqrt(Double.POSITIVE_INFINITY), Complex128.sqrt(Double.NEGATIVE_INFINITY), Complex128.sqrt(Double.NaN), Complex128.sqrt(10.4), Complex128.sqrt(-158.14)}
         };
+
         exp = new CMatrix(expEntries);
         CustomAssertions.assertEqualsNaN(exp, A.sqrtComplex());
     }

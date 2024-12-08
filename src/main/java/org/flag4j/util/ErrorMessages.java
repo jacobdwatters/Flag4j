@@ -25,7 +25,7 @@
 package org.flag4j.util;
 
 
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -33,13 +33,13 @@ import java.util.Arrays;
 /**
  * Contains error messages for common errors which may occur.
  */
-public abstract class ErrorMessages {
+public final class ErrorMessages {
 
     /**
      * Hide default constructor.
      */
     private ErrorMessages() {
-        throw new IllegalStateException(UTILITY_CLASS_ERR);
+        throw new UnsupportedOperationException(UTILITY_CLASS_ERR);
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class ErrorMessages {
      * Error message for matrices which do not have valid dimensions for matrix multiplication.
      */
     private static final String MAT_MULT_DIM_MISMATCH_ERR = "Expecting the number of columns in the first matrix to" +
-            " match the number rows in the second matrix but got shapes %s and %s.";
+            " match the number rows/length in the second matrix/vector but got shapes %s and %s.";
     /**
      * Error message for vector which was expected to be row vector.
      */
@@ -66,19 +66,23 @@ public abstract class ErrorMessages {
     /**
      * Error message for attempted instantiation of a utility class.
      */
-    private static final String UTILITY_CLASS_ERR = "Utility class cannot be instantiated";
+    private static final String UTILITY_CLASS_ERR = "Utility class cannot be instantiated.";
+    /**
+     * Error message for attempted instantiation of a utility class.
+     */
+    private static final String NAMED_UTILITY_CLASS_ERR = "Class %s is a Utility class and cannot be instantiated.";
     /**
      * Error message for a negative value when a non-negative was expected.
      */
-    private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s";
+    private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s.";
     /**
      * Error message for a non-positive value when a positive non-zero value is expected.
      */
-    private static final String NON_POS_ERR = "Expecting value to be positive but got %s";
+    private static final String NON_POS_ERR = "Expecting value to be positive but got %s.";
     /**
      * Error message for disallowed axis.
      */
-    private static final String AXIS_ERR_RANGE = "Got an axis of %s but was expecting one of %s";
+    private static final String AXIS_ERR_RANGE = "Got an axis of %s but was expecting one of %s.";
     /**
      * Error message for disallowed axis.
      */
@@ -86,11 +90,11 @@ public abstract class ErrorMessages {
     /**
      * Error message wrong shape.
      */
-    private static final String SHAPE_RANK_ERR = "Got a shape of rank %d but was expecting a shape of rank %d";
+    private static final String SHAPE_RANK_ERR = "Got a shape of rank %d but was expecting a shape of rank %d.";
     /**
-     * Error message for a shape size which cannot contain a specified number of entries.
+     * Error message for a shape size which cannot contain a specified number of data.
      */
-    private static final String SHAPE_ENTRIES_ERR = "The shape %s cannot hold %d entries.";
+    private static final String SHAPE_ENTRIES_ERR = "The shape %s cannot hold %d data.";
     /**
      * Error message for arrays which were expected to be the same length.
      */
@@ -104,11 +108,11 @@ public abstract class ErrorMessages {
      * Error message for shapes which cannot be broadcast.
      */
     private static final String SHAPE_BROADCAST_ERR = "Shapes %s and %s can not be broadcast because they specify " +
-            "a different number of total entries.";
+            "a different number of total data.";
     /**
-     * Error message for arrays which do not have the same total number of entries.
+     * Error message for arrays which do not have the same total number of data.
      */
-    private static final String TOTAL_ENTRIES_ERR = "Arrays do not have the same total number of entries.";
+    private static final String TOTAL_ENTRIES_ERR = "Arrays do not have the same total number of data.";
     /**
      * Error message for parameters which are expected to be greater than or equal to some threshold.
      */
@@ -137,6 +141,14 @@ public abstract class ErrorMessages {
      * Error message for a parameter which is not within the expected range.
      */
     private static final String RANGE_ERR = "Expecting parameter %s to be in the range [%f, %f] but got %f";
+    /**
+     * Error message for when an array does not have the expected length.
+     */
+    private static final String ARRAY_HAS_LENGTH_ERR = "Expecting array to have length %d but got array with length %d.";
+    /**
+     * Error message for when a named array does not have the expected length.
+     */
+    private static final String ARRAY_HAS_LENGTH_NAMED_ERR = "Expecting array \"%s\" to have length %d but got array with length %d.";
 
 
     /**
@@ -194,9 +206,19 @@ public abstract class ErrorMessages {
 
     /**
      * Gets an error message for an attempted instantiation of a utility class.
-     * @return An error message for the attempted instantiation of a utility class;
+     * @return An error message for the attempted instantiation of a utility class.
      */
     public static String getUtilityClassErrMsg() {return UTILITY_CLASS_ERR;}
+
+
+    /**
+     * Gets an error message for an attempted instantiation of a utility class.
+     * @param cls Class which was attempted to be instantiated.
+     * @return An error message for the attempted instantiation of a utility class.
+     */
+    public static String getUtilityClassErrMsg(Class cls) {
+        return String.format(UTILITY_CLASS_ERR, cls);
+    }
 
 
     /**
@@ -253,10 +275,10 @@ public abstract class ErrorMessages {
 
 
     /**
-     * Gets an error message for a shape which cannot hold a specified number of entries.
+     * Gets an error message for a shape which cannot hold a specified number of data.
      * @param shape Shape.
-     * @param numEntries Number of entries to hold.
-     * @return An error message for a shape which cannot hold a specified number of entries.
+     * @param numEntries Number of data to hold.
+     * @return An error message for a shape which cannot hold a specified number of data.
      */
     public static String shapeEntriesError(Shape shape, int numEntries) {
         return String.format(SHAPE_ENTRIES_ERR, shape.toString(), numEntries);
@@ -296,8 +318,8 @@ public abstract class ErrorMessages {
 
 
     /**
-     * Gets an error message for arrays which do not have the same total number of entries.
-     * @return An error message for arrays which do not have the same total number of entries.
+     * Gets an error message for arrays which do not have the same total number of data.
+     * @return An error message for arrays which do not have the same total number of data.
      */
     public static String getTotalEntriesErr() {
         return TOTAL_ENTRIES_ERR;
@@ -385,5 +407,19 @@ public abstract class ErrorMessages {
         return String.format(RANGE_ERR, paramName, lowerBound, upperBound, value);
     }
 
+
+    /**
+     * Gets an error message for when an array does not have the expected length.
+     * @param expLength Expected length of the array.
+     * @param actLength Actual length of the array.
+     * @param arrayName Name of the array parameter. May be {@code null} if no name is desired.
+     * @return An error message for when an array does not have the expected length.
+     */
+    public static String getArrayHasLengthErr(int expLength, int actLength, String arrayName) {
+        if(arrayName == null)
+            return String.format(ARRAY_HAS_LENGTH_NAMED_ERR, expLength, actLength, arrayName);
+        else
+            return String.format(ARRAY_HAS_LENGTH_ERR, expLength, actLength);
+    }
 }
 

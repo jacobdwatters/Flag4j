@@ -1,12 +1,12 @@
 package org.flag4j.tensor;
 
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -100,10 +100,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -113,10 +113,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -126,10 +126,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
         bShape = new Shape(21, 31, 2, 10005);
         sparseIndices = new int[][]{
-                bShape.getIndices(0),
-                bShape.getIndices(5),
-                bShape.getIndices(7),
-                bShape.getIndices(9)
+                bShape.getNdIndices(0),
+                bShape.getNdIndices(5),
+                bShape.getNdIndices(7),
+                bShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -139,10 +139,10 @@ class TensorEqualsTests {
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
         bShape = new Shape(21, 3, 24);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooTensor(bShape, bEntries, sparseIndices);
 
@@ -154,15 +154,15 @@ class TensorEqualsTests {
     void complexDenseEqualsTestCase() {
         denseSetup();
 
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CTensor B;
 
         // ----------------------- Sub-case 1 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5),
-                new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
-                new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14),
-                new CNumber(-0.000194), new CNumber(1), new CNumber(234)
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
+                new Complex128(15.61), new Complex128(14.15), new Complex128(-99.23425),
+                new Complex128(0.001345), new Complex128(2.677), new Complex128(8.14),
+                new Complex128(-0.000194), new Complex128(1), new Complex128(234)
         };
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
@@ -170,11 +170,11 @@ class TensorEqualsTests {
         assertEquals(A.toComplex(), B);
 
         // ----------------------- Sub-case 2 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5),
-                new CNumber(15.61, 1.4), new CNumber(14.15), new CNumber(-99.23425),
-                new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14),
-                new CNumber(-0.000194), new CNumber(1), new CNumber(234)
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
+                new Complex128(15.61, 1.4), new Complex128(14.15), new Complex128(-99.23425),
+                new Complex128(0.001345), new Complex128(2.677), new Complex128(8.14),
+                new Complex128(-0.000194), new Complex128(1), new Complex128(234)
         };
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
@@ -182,11 +182,11 @@ class TensorEqualsTests {
         assertNotEquals(A.toComplex(), B);
 
         // ----------------------- Sub-case 3 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5),
-                new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
-                new CNumber(0.001345), new CNumber(2.677), new CNumber(8.14),
-                new CNumber(-0.000194), new CNumber(1), new CNumber(234)
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
+                new Complex128(15.61), new Complex128(14.15), new Complex128(-99.23425),
+                new Complex128(0.001345), new Complex128(2.677), new Complex128(8.14),
+                new Complex128(-0.000194), new Complex128(1), new Complex128(234)
         };
         bShape = new Shape(4, 3);
         B = new CTensor(bShape, bEntries);
@@ -194,11 +194,11 @@ class TensorEqualsTests {
         assertNotEquals(A.toComplex(), B);
 
         // ----------------------- Sub-case 4 -----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(2.556), new CNumber(-121.5),
-                new CNumber(15.61), new CNumber(14.15), new CNumber(-99.23425),
-                new CNumber(9.245), new CNumber(2.677), new CNumber(8.14),
-                new CNumber(-0.000194), new CNumber(1), new CNumber(234)
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
+                new Complex128(15.61), new Complex128(14.15), new Complex128(-99.23425),
+                new Complex128(9.245), new Complex128(2.677), new Complex128(8.14),
+                new Complex128(-0.000194), new Complex128(1), new Complex128(234)
         };
         bShape = new Shape(2, 3, 2);
         B = new CTensor(bShape, bEntries);
@@ -211,64 +211,64 @@ class TensorEqualsTests {
     void complexSparseEqualsTestCase() {
         sparseSetup();
 
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CooCTensor B;
 
         // ---------------------- Sub-case 1 ----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(-99.23425),
-                new CNumber(2.677), new CNumber(-0.000194)};
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(-99.23425),
+                new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         assertEquals(A.toCoo().toComplex(), B);
 
         // ---------------------- Sub-case 2 ----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(-99.23425, 1.34235),
-                new CNumber(2.677), new CNumber(-0.000194)};
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(-99.23425, 1.34235),
+                new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
         // ---------------------- Sub-case 3 ----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(-99.23425),
-                new CNumber(2.677), new CNumber(-0.000194)};
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(-99.23425),
+                new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(21, 31, 2, 10005);
         sparseIndices = new int[][]{
-                bShape.getIndices(0),
-                bShape.getIndices(5),
-                bShape.getIndices(7),
-                bShape.getIndices(9)
+                bShape.getNdIndices(0),
+                bShape.getNdIndices(5),
+                bShape.getNdIndices(7),
+                bShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
         // ---------------------- Sub-case 4 ----------------------
-        bEntries = new CNumber[]{
-                new CNumber(1.23), new CNumber(-99.23425),
-                new CNumber(2.677), new CNumber(-0.000194)};
+        bEntries = new Complex128[]{
+                new Complex128(1.23), new Complex128(-99.23425),
+                new Complex128(2.677), new Complex128(-0.000194)};
         bShape = new Shape(21, 3, 24);
         sparseIndices = new int[][]{
-                aShape.getIndices(0),
-                aShape.getIndices(5),
-                aShape.getIndices(7),
-                aShape.getIndices(9)
+                aShape.getNdIndices(0),
+                aShape.getNdIndices(5),
+                aShape.getNdIndices(7),
+                aShape.getNdIndices(9)
         };
         B = new CooCTensor(bShape, bEntries, sparseIndices);
 

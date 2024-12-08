@@ -1,6 +1,6 @@
 package org.flag4j.util;
 
-import org.flag4j.core.Shape;
+import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -38,9 +38,8 @@ class ErrorMessagesTests {
         // --------- sub-case 1 ---------
         s1 = new Shape(10, 5);
         s2 = new Shape(14, 4);
-        expMsg = String.format("Expecting the number of columns in the first matrix to" +
-                        " match the number rows in the second matrix but got shapes %s and %s.",
-                "(10, 5)", "(14, 4)");
+        expMsg = String.format("Expecting the number of columns in the first matrix to match the number " +
+                "rows/length in the second matrix/vector but got shapes (10, 5) and (14, 4).");
 
         assertEquals(expMsg, ErrorMessages.matMultShapeErrMsg(s1, s2));
     }
@@ -78,7 +77,7 @@ class ErrorMessagesTests {
 
     @Test
     void utilityClassErrMsgTestCase() {
-        expMsg = "Utility class cannot be instantiated";
+        expMsg = "Utility class cannot be instantiated.";
 
         assertEquals(expMsg, ErrorMessages.getUtilityClassErrMsg());
     }

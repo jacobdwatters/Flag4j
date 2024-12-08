@@ -24,9 +24,9 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.decompositions.chol.Cholesky;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
@@ -36,12 +36,12 @@ import org.flag4j.linalg.decompositions.lu.RealLU;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
+import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
-import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
@@ -50,18 +50,18 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
  * This class provides methods for computing the inverse of a matrix. Specialized methods are provided for inverting triangular,
  * diagonal, and symmetric positive definite matrices.
  */
-public class Invert {
+public final class Invert {
 
     private Invert() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        
     }
 
 
     /**
      * Computes the inverse of this matrix. This is done by computing the {@link LU LU decomposition} of
-     * this matrix, inverting {@code L} using a back-solve algorithm, then solving {@code U*inv(src)=inv(L)}
-     * for {@code inv(src)}.
+     * this matrix, inverting  L using a back-solve algorithm, then solving  U*inv(src)=inv(L)
+     * for  inv(src).
      *
      * @param src Matrix to compute inverse of.
      * @return The inverse of this matrix.
@@ -69,7 +69,7 @@ public class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
     public static Matrix inv(Matrix src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
         LU<Matrix> lu = new RealLU().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
@@ -86,8 +86,8 @@ public class Invert {
 
     /**
      * Computes the inverse of this matrix. This is done by computing the {@link LU LU decomposition} of
-     * this matrix, inverting {@code L} using a back-solve algorithm, then solving {@code U*inv(src)=inv(L)}
-     * for {@code inv(src)}.
+     * this matrix, inverting  L using a back-solve algorithm, then solving  U*inv(src)=inv(L)
+     * for  inv(src).
      *
      * @param src Matrix to compute inverse of.
      * @return The inverse of this matrix.
@@ -95,7 +95,7 @@ public class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
     public static CMatrix inv(CMatrix src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
         LU<CMatrix> lu = new ComplexLU().decompose(src);
 
         // Solve U*inv(A) = inv(L) for inv(A)
@@ -145,17 +145,17 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static Matrix invDiag(Matrix src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
         Matrix inverse = new Matrix(src.shape);
 
         double value;
         int step = src.numCols+1;
         double det = 1;
 
-        for(int i=0; i<src.entries.length; i+=step) {
-            value = src.entries[i];
+        for(int i = 0; i<src.data.length; i+=step) {
+            value = src.data[i];
             det *= value;
-            inverse.entries[i] = 1.0/value;
+            inverse.data[i] = 1.0/value;
         }
 
         if(Math.abs(det) <= EPS_F64*Math.max(src.numRows, src.numCols)) {
@@ -201,23 +201,22 @@ public class Invert {
      * @throws IllegalArgumentException If the matrix is not square.
      */
     public static CMatrix invDiag(CMatrix src) {
-        ParameterChecks.assertSquareMatrix(src.shape);
+        ValidateParameters.ensureSquareMatrix(src.shape);
 
         CMatrix inverse = new CMatrix(src.shape);
 
-        CNumber value;
+        Complex128 value;
         int step = src.numCols+1;
-        CNumber det = CNumber.ONE;
+        Complex128 det = Complex128.ONE;
 
-        for(int i=0; i<src.entries.length; i+=step) {
-            value = src.entries[i];
+        for(int i = 0; i<src.data.length; i+=step) {
+            value = (Complex128) src.data[i];
             det = det.mult(value);
-            inverse.entries[i] = value.multInv();
+            inverse.data[i] = value.multInv();
         }
 
-        if(det.mag() <= EPS_F64*Math.max(src.numRows, src.numCols)) {
+        if(det.mag() <= EPS_F64*Math.max(src.numRows, src.numCols))
             throw new SingularMatrixException("Could not invert.");
-        }
 
         return inverse;
     }
@@ -296,13 +295,13 @@ public class Invert {
     // ------------------------------------------- Pseudo-inverses below -------------------------------------------
 
     /**
-     * Computes the pseudo-inverse of this matrix. That is, for a matrix {@code A}, computes the Moore–Penrose
-     * {@code A}<sup>+</sup> such that the following hold:
+     * Computes the pseudo-inverse of this matrix. That is, for a matrix A, computes the Moore–Penrose
+     * A<sup>+</sup> such that the following hold:
      * <ol>
-     *   <li>{@code AA}<sup>+</sup>{@code A=A}.</li>
-     *   <li>{@code A}<sup>+</sup>{@code AA}<sup>+</sup>{@code =A}<sup>+</sup>.</li>
-     *   <li>{@code AA}<sup>+</sup> is Hermitian.</li>
-     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermitian.</li>
+     *   <li>AA<sup>+</sup>A=A.</li>
+     *   <li>A<sup>+</sup>AA<sup>+</sup>=A<sup>+</sup>.</li>
+     *   <li>AA<sup>+</sup> is Hermitian.</li>
+     *   <li>A<sup>+</sup>A is also Hermitian.</li>
      * </ol>
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
@@ -316,13 +315,13 @@ public class Invert {
 
 
     /**
-     * Computes the pseudo-inverse of this matrix. That is, for a matrix {@code A}, computes the Moore–Penrose
-     * {@code A}<sup>+</sup> such that the following hold:
+     * Computes the pseudo-inverse of this matrix. That is, for a matrix A, computes the Moore–Penrose
+     * A<sup>+</sup> such that the following hold:
      * <ol>
-     *   <li>{@code AA}<sup>+</sup>{@code A=A}.</li>
-     *   <li>{@code A}<sup>+</sup>{@code AA}<sup>+</sup>{@code =A}<sup>+</sup>.</li>
-     *   <li>{@code AA}<sup>+</sup> is Hermitian.</li>
-     *   <li>{@code A}<sup>+</sup>{@code A} is also Hermitian.</li>
+     *   <li>AA<sup>+</sup> A=A.</li>
+     *   <li> A<sup>+</sup> AA<sup>+</sup> =A<sup>+</sup>.</li>
+     *   <li> AA<sup>+</sup> is Hermitian.</li>
+     *   <li> A<sup>+</sup> A is also Hermitian.</li>
      * </ol>
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
@@ -342,7 +341,7 @@ public class Invert {
      *
      * @param src1 First matrix.
      * @param src2 Second matrix.
-     * @return True if matrix src2 is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
+     * @return {@code true} if matrix src2 is an inverse of this matrix; {@code false} otherwise. Otherwise, returns false.
      */
     public static boolean isInv(Matrix src1, Matrix src2) {
         boolean result;
@@ -362,7 +361,7 @@ public class Invert {
      *
      * @param src1 First matrix.
      * @param src2 Second matrix.
-     * @return True if matrix src2 is an inverse (approximately) of this matrix. Otherwise, returns false. Otherwise, returns false.
+     * @return {@code true} if matrix src2 is an inverse (approximately) of this matrix; {@code false} otherwise. Otherwise, returns false.
      */
     public static boolean isInv(CMatrix src1, CMatrix src2) {
         boolean result;
@@ -370,7 +369,9 @@ public class Invert {
         if(!src1.isSquare() || !src2.isSquare() || !src1.shape.equals(src2.shape)) {
             result = false;
         } else {
-            result = src1.mult(src2).isCloseToI();
+            CMatrix prod = src1.mult(src2);
+            CMatrix I = CMatrix.I(src1.shape);
+            result = RingProperties.allClose(prod.data, I.data);
         }
 
         return result;

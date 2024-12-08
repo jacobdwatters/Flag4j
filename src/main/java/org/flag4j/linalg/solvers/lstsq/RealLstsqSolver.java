@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg.solvers.lstsq;
 
-
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.qr.RealQR;
@@ -32,18 +31,19 @@ import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 
 
 /**
- * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
- * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations
- * {@code A}<sup>T</sup>{@code Ax=A}<sup>T</sup>{@code b}.
- * This is done efficiently using a {@link RealQR QR decomposition}.
+ * <p>This class solves a linear system of equations Ax=b in a least-squares sense. That is,
+ * minimizes ||Ax-b||<sub>2</sub> which is equivalent to solving the normal equations
+ * A<sup>T</sup>Ax=A<sup>T</sup>b.
+ *
+ * <p>This is done efficiently using a {@link RealQR QR decomposition}.
  */
 public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
 
-
     /**
-     * Constructs a least-squares solver to solve a system {@code Ax=b} in a least square sense. That is,
-     * minimizes {@code ||Ax-b||<sub>2</sub>} which is equivalent to solving the normal equations
-     * {@code A<sup>T</sup>Ax=A<sup>T</sup>b}.
+     * <p>Constructs a least-squares solver to solve a system Ax=b in a least square sense.
+     *
+     * <p>That is, minimizes ||Ax-b||<sub>2</sub> which is equivalent to solving the normal equations
+     * A<sup>T</sup>Ax=A<sup>T</sup>b.
      */
     public RealLstsqSolver() {
         super(new RealQR(), new RealBackSolver());

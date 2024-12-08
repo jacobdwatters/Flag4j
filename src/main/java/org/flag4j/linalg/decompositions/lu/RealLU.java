@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,17 +27,19 @@ package org.flag4j.linalg.decompositions.lu;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
-/**
- * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
- * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU}.</p>
- */
-public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix> {
 
+/**
+ * <p>This class provides methods for computing the LU decomposition of a real dense matrix.
+ * <p>The following decompositions are provided: A=LU, PA=LU, and PAQ=LU.
+ */
+public class RealLU extends LU<Matrix> {
+    
+    
     /**
      * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
      */
     public RealLU() {
-        super(Pivoting.PARTIAL.ordinal());
+        super(Pivoting.PARTIAL);
     }
 
 
@@ -47,7 +49,7 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
-    public RealLU(int pivoting) {
+    public RealLU(Pivoting pivoting) {
         super(pivoting);
     }
 
@@ -61,7 +63,7 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
      *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
      *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public RealLU(int pivoting, double zeroPivotTol) {
+    public RealLU(Pivoting pivoting, double zeroPivotTol) {
         super(pivoting, zeroPivotTol);
     }
 
@@ -85,7 +87,7 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
 
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<colStop; j++) {
-            if(j<LU.numRows && Math.abs(LU.entries[j*LU.numCols + j]) < zeroPivotTol) {
+            if(j<LU.numRows && Math.abs(LU.data[j*LU.numCols + j]) < zeroPivotTol) {
                 throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
                         " Consider using LU decomposition with partial pivoting.");
             }
@@ -108,9 +110,7 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
-            if(j!=maxIndex && maxIndex>=0) {
-                swapRows(j, maxIndex);
-            }
+            if(j!=maxIndex && maxIndex>=0) swapRows(j, maxIndex);
 
             computeRows(j);
         }
@@ -153,18 +153,18 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
 
         for(int i=j+1; i<LU.numRows; i++) {
             iRow = i*LU.numCols;
-            m = LU.entries[iRow + j];
-            m = LU.entries[pivotRow + j] == 0 ? m : m/LU.entries[pivotRow + j];
+            m = LU.data[iRow + j];
+            m = LU.data[pivotRow + j] == 0 ? m : m/LU.data[pivotRow + j];
 
             if(m!=0) {
                 // Compute and set U values.
                 for (int k = j; k < LU.numCols; k++) {
-                    LU.entries[iRow + k] -= m * LU.entries[pivotRow + k];
+                    LU.data[iRow + k] -= m * LU.data[pivotRow + k];
                 }
             }
 
             // Compute and set L value.
-            LU.entries[iRow + j] = m;
+            LU.data[iRow + j] = m;
         }
     }
 
@@ -180,7 +180,7 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
         double value;
 
         for(int i=j; i<LU.numRows; i++) {
-            value = Math.abs(LU.entries[i*LU.numCols + j]);
+            value = Math.abs(LU.data[i*LU.numCols + j]);
             if(value > currentMax) {
                 currentMax = value;
                 maxIndex = i;
@@ -202,12 +202,11 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
         int rowIdx;
         int[] index = {-1, -1};
 
-
         for(int i=startIndex; i<LU.numRows; i++) {
             rowIdx = i*LU.numCols;
 
             for(int j=startIndex; j<LU.numCols; j++) {
-                value = Math.abs(LU.entries[rowIdx+j]);
+                value = Math.abs(LU.data[rowIdx+j]);
 
                 if(value > currentMax) {
                     currentMax = value;
@@ -232,10 +231,8 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
-            if(i<LU.numCols) {
-                L.entries[i*L.numCols+i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
-            }
-            System.arraycopy(LU.entries, i*LU.numCols, L.entries, i*L.numCols, i);
+            if(i<LU.numCols) L.data[i*L.numCols + i] = 1; // Set principle diagonal to be 1, so it is unit lower-triangular.
+            System.arraycopy(LU.data, i*LU.numCols, L.data, i*L.numCols, i);
         }
 
         return L;
@@ -255,8 +252,8 @@ public final class RealLU extends org.flag4j.linalg.decompositions.lu.LU<Matrix>
 
         // Copy U values from LU matrix.
         for(int i=0; i<stopIdx; i++) {
-            System.arraycopy(LU.entries, i*(LU.numCols+1),
-                    U.entries, i*(LU.numCols+1), LU.numCols-i);
+            System.arraycopy(LU.data, i*(LU.numCols+1),
+                    U.data, i*(LU.numCols+1), LU.numCols-i);
         }
 
         return U;

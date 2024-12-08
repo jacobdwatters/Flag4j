@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,15 @@
 
 package org.flag4j.linalg.decompositions.unitary;
 
+
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.linalg.decompositions.hess.RealHess;
-import org.flag4j.linalg.decompositions.qr.RealQR;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.Flag4jConstants;
 
 /**
  * This class is the base class for real matrix decompositions which proceed by using unitary/orthogonal transformations
- * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the
- * {@link RealQR QR} and {@link RealHess Hessenburg} decompositions.
+ * (specifically HouseholderOld reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the
+ * QR and Hessenburg decompositions.
  */
 public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matrix, double[]> {
 
@@ -42,11 +41,11 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      */
     protected double norm;
     /**
-     * Scalar factor of the currently computed Householder reflector.
+     * Scalar factor of the currently computed HouseholderOld reflector.
      */
     protected double currentFactor;
     /**
-     * Stores the shifted value of the first entry in a Householder vector.
+     * Stores the shifted value of the first entry in a HouseholderOld vector.
      */
     protected double shift;
 
@@ -54,7 +53,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
     /**
      * Creates a real unitary decomposer which will reduce the matrix to an upper triangular/Hessenburg matrix which is has zeros below
      * the specified sub-diagonal.
-     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
+     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all data
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
      *                    upper triangular. If one, it will be upper Hessenburg.
      */
@@ -68,16 +67,16 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      * the specified sub-diagonal (must be 0 or 1).
      *
      * <p>Allows for specification if the reflectors used to bring matrix to upper triangular/Hessenburg form are to be stored or
-     * not.</p>
+     * not.
      *
      * <p>If the {@code Q} matrix is need, then {@code storeReflectors} must be true. If {@code Q} is <b>NOT</b> needed, then
-     * not storing the reflectors <i>may</i> improve performance slightly by avoiding unneeded copies.</p>
+     * not storing the reflectors <i>may</i> improve performance slightly by avoiding unneeded copies.
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy operations.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy ops.
      *
-     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all entries
+     * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all data
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
      *                    upper triangular. If one, it will be upper Hessenburg.
      * @param storeReflectors Flag indicating if the reflectors used to bring the matrix to upper triangular/Hessenburg form
@@ -89,10 +88,10 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
 
     /**
-     * <p>Gets the unitary {@code Q} matrix from the unitary decomposition.</p>
+     * <p>Gets the unitary {@code Q} matrix from the unitary decomposition.
      *
      * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
-     * null.</p>
+     * null.
      *
      * @return The {@code Q} matrix from the unitary decomposition. Note, if the reflectors for this decomposition were not saved,
      * then {@code Q} can not be computed and this method will return {@code null}.
@@ -129,7 +128,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;
-            System.arraycopy(transformData, rowOffset, H.entries, rowOffset, numCols);
+            System.arraycopy(transformData, rowOffset, H.data, rowOffset, numCols);
         }
 
         // Copy rest of the rows.
@@ -138,7 +137,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
             int length = numCols - (i-subDiagonal);
             System.arraycopy(transformData, rowOffset + i - subDiagonal,
-                    H.entries, rowOffset + i - subDiagonal, length);
+                    H.data, rowOffset + i - subDiagonal, length);
         }
 
         return H;
@@ -152,21 +151,21 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      */
     @Override
     protected void initWorkArrays(int maxAxisSize) {
-        transformData = transformMatrix.entries;
-        qFactors = new double[minAxisSize]; // Stores scaler factors for the Householder vectors.
+        transformData = transformMatrix.data;
+        qFactors = new double[minAxisSize]; // Stores scaler factors for the HouseholderOld vectors.
         householderVector = new double[maxAxisSize];
         workArray = new double[maxAxisSize];
     }
 
 
     /**
-     * Computes the Householder vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
+     * Computes the HouseholderOld vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
      *
-     * @param j Index of the upper left corner of the sub-matrix for which to compute the Householder vector for the first column.
-     *          That is, a Householder vector will be computed for the portion of column {@code j} below row {@code j}.
+     * @param j Index of the upper left corner of the sub-matrix for which to compute the HouseholderOld vector for the first column.
+     *          That is, a HouseholderOld vector will be computed for the portion of column {@code j} below row {@code j}.
      */
     protected void computeHouseholder(int j) {
-        // Initialize storage array for Householder vector and compute maximum absolute value in jth column at or below jth row.
+        // Initialize storage array for HouseholderOld vector and compute maximum absolute value in jth column at or below jth row.
         double maxAbs = findMaxAndInit(j);
         norm = 0; // Ensure norm is reset.
 
@@ -177,13 +176,13 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
         } else {
             computePhasedNorm(j, maxAbs);
 
-            householderVector[j] = 1.0; // Ensure first value in Householder vector is one.
+            householderVector[j] = 1.0; // Ensure first value in HouseholderOld vector is one.
             for(int i=j+1; i<numRows; i++) {
-                householderVector[i] /= shift; // Scale all but first entry of the Householder vector.
+                householderVector[i] /= shift; // Scale all but first entry of the HouseholderOld vector.
             }
         }
 
-        qFactors[j] = currentFactor; // Store the factor for the Householder vector.
+        qFactors[j] = currentFactor; // Store the factor for the HouseholderOld vector.
     }
 
 
@@ -196,13 +195,13 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
     protected void computePhasedNorm(int j, double maxAbs) {
         // Computes the 2-norm of the column.
         for(int i=j; i<numRows; i++) {
-            householderVector[i] /= maxAbs; // Scale entries of the householder vector to help reduce potential overflow.
+            householderVector[i] /= maxAbs; // Scale data of the householder vector to help reduce potential overflow.
             double scaledValue = householderVector[i];
             norm += scaledValue*scaledValue;
         }
         norm = Math.sqrt(norm); // Finish 2-norm computation for the column.
 
-        // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
+        // Change sign of norm depending on first entry in column for stability purposes in HouseholderOld vector.
         if(householderVector[j] < 0) norm = -norm;
 
         shift = householderVector[j] + norm;
@@ -213,7 +212,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
     /**
      * Finds the maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row. This method also initializes
-     * the first {@code numRows-j} entries of the storage array {@link #householderVector} to the entries of this column.
+     * the first {@code numRows-j} data of the storage array {@link #householderVector} to the data of this column.
      * @param j Index of column (and starting row) to compute max of.
      * @return The maximum value in {@link #transformMatrix} at column {@code j} at or below the {@code j}th row.
      */
@@ -232,8 +231,8 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
 
     /**
-     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
-     * @param j Index of sub-matrix for which the Householder reflector was computed for.
+     * Updates the {@link #transformMatrix} matrix using the computed HouseholderOld vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the HouseholderOld reflector was computed for.
      */
     @Override
     protected void updateData(int j) {

@@ -1,8 +1,10 @@
 package org.flag4j.sparse_complex_vector;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
+import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -11,16 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooCVectorReshapeTests {
     static int[] aIndices, expIndices;
-    static CNumber[] aEntries, expEntries;
+    static Complex128[] aEntries, expEntries;
     static int sparseSize;
     static CooCVector a, exp;
 
 
     @BeforeAll
     static void setup() {
-        aEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        aEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         aIndices = new int[]{4, 56, 9903, 14643};
         sparseSize = 24_023;
@@ -31,9 +33,9 @@ class CooCVectorReshapeTests {
     @Test
     void reshapeTestCase() {
         // ------------------ Sub-case 1 ------------------
-        expEntries = new CNumber[]{
-                new CNumber(2.455, -83.6), new CNumber(0, 24.56),
-                new CNumber(24.56), new CNumber(-9356.1, 35)
+        expEntries = new Complex128[]{
+                new Complex128(2.455, -83.6), new Complex128(0, 24.56),
+                new Complex128(24.56), new Complex128(-9356.1, 35)
         };
         expIndices = new int[]{4, 56, 9903, 14643};
         exp = new CooCVector(sparseSize, expEntries, expIndices);
@@ -44,9 +46,9 @@ class CooCVectorReshapeTests {
         assertEquals(exp, a.flatten(0));
 
         // ------------------ Sub-case 2 ------------------
-        assertThrows(IllegalArgumentException.class, ()->a.reshape(new Shape(sparseSize-2)));
-        assertThrows(IllegalArgumentException.class, ()->a.reshape(sparseSize+32));
-        assertThrows(IllegalArgumentException.class, ()->a.flatten(-35));
-        assertThrows(IllegalArgumentException.class, ()->a.flatten(1));
+        assertThrows(TensorShapeException.class, ()->a.reshape(new Shape(sparseSize-2)));
+        assertThrows(TensorShapeException.class, ()->a.reshape(sparseSize+32));
+        assertThrows(LinearAlgebraException.class, ()->a.flatten(-35));
+        assertThrows(LinearAlgebraException.class, ()->a.flatten(1));
     }
 }

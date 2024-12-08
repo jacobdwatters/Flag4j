@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg.decompositions;
 
-
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.Cholesky;
@@ -39,16 +38,15 @@ import org.flag4j.linalg.decompositions.qr.RealQR;
 import org.flag4j.linalg.decompositions.schur.RealSchur;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * A factory class for creating decomposers to perform various matrix decompositions.
  */
-public class DecompositionFactory {
+public final class DecompositionFactory {
 
     private DecompositionFactory() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        
     }
 
 

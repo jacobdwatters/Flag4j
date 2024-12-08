@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,35 +24,27 @@
 
 package org.flag4j.linalg.solvers;
 
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
 
 /**
- * This interface specifies methods which all linear system solvers should implement. Solvers
- * may solve in an exact sense or in a least squares sense.
- * @param <T> Type of the matrices in the linear system.
- * @param <U> Type of the vectors in the linear system.
+ * <p>Interface representing a linear system solver for tensor equations. Implementations of this interface
+ * provide methods to solve linear equations involving tensors, such as <i>AX=B</i>, where
+ * <i>A</i>, <i>B</i>, and <i>X</i> are tensors.
+ *
+ * <p>Solvers may compute exact solutions or approximate solutions in a least squares sense, depending on the
+ * properties of the tensor equation.
+ *
+ * @param <T> The type of tensor in the linear system.
  */
-public interface LinearSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>> {
-
+public interface LinearSolver<T> {
 
     /**
-     * Solves the linear system of equations given by {@code A*x=b} for the vector {@code x}.
-     * @param A Coefficient matrix in the linear system.
-     * @param b Vector of constants in the linear system.
-     * @return The solution to {@code x} in the linear system {@code A*x=b}.
+     * Solves the linear tensor equation <i>AX=B</i> for the tensor <i>X</i>. The multiplication <i>AX</i> is defined such that
+     * it performs a tensor dot product over all indices of <i>X</i> with the rightmost indices of <i>A</i>, equivalent to
+     * {@code A.tensorDot(X, X.getRank())}.
+     *
+     * @param A The coefficient tensor in the linear system.
+     * @param B The constant tensor in the linear system.
+     * @return The solution tensor <i>X</i> satisfying <i>AX=B</i>.
      */
-    U solve(T A, U b);
-
-
-    /**
-     * Solves the set of linear system of equations given by {@code A*X=B} for the matrix {@code X} where
-     * {@code A}, {@code B}, and {@code X} are matrices.
-     * @param A Coefficient matrix in the linear system.
-     * @param B Matrix of constants in the linear system.
-     * @return The solution to {@code X} in the linear system {@code A*X=B}.
-     */
-   T solve(T A, T B);
+    T solve(T A, T B);
 }

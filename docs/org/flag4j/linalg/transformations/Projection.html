@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class Projection" class="title">Class Projection</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">org.flag4j.linalg.transformations.Projection</div>
+<div class="inheritance">org.flag4j.linalg.transformations.ProjectionOld</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getOrthogonal(double,double,double,double)" class="member-name-link">getOrthogonal</a><wbr>(double&nbsp;xMax,
  double&nbsp;yMax,
  double&nbsp;nearClip,
@@ -131,7 +131,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <code>4x4</code> orthogonal projection matrix to project a 3D point in homogeneous coordinates
  onto the specified 2D coordinate grid (i.e.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getOrthogonal(double,double,double,double,double,double)" class="member-name-link">getOrthogonal</a><wbr>(double&nbsp;xMin,
  double&nbsp;xMax,
  double&nbsp;yMin,
@@ -142,13 +142,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <code>4x4</code> orthogonal projection matrix to project a 3D point in homogeneous coordinates
  onto the specified 2D coordinate grid (i.e.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getOrthogonal2D(double,double)" class="member-name-link">getOrthogonal2D</a><wbr>(double&nbsp;xMax,
  double&nbsp;yMax)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a <code>4x4</code> orthogonal projection matrix to project a 2D point in an orthographic viewing region.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getOrthogonal2D(double,double,double,double)" class="member-name-link">getOrthogonal2D</a><wbr>(double&nbsp;xMin,
  double&nbsp;xMax,
  double&nbsp;yMin,
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a <code>4x4</code> orthogonal projection matrix to project a 2D point in an orthographic viewing region.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getPerspective(double,double,double,double)" class="member-name-link">getPerspective</a><wbr>(double&nbsp;fov,
  double&nbsp;aspectRatio,
  double&nbsp;nearClip,
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Creates a <code>4x4</code> perspective projection matrix to transform a 3D point represented in homogeneous
  coordinates.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getPerspective(double,double,double,double,double)" class="member-name-link">getPerspective</a><wbr>(double&nbsp;fovX,
  double&nbsp;fovY,
  double&nbsp;aspectRatio,
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getPerspective(double,double,double,double)">
 <h3>getPerspective</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getPerspective</span><wbr><span class="parameters">(double&nbsp;fov,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getPerspective</span><wbr><span class="parameters">(double&nbsp;fov,
  double&nbsp;aspectRatio,
  double&nbsp;nearClip,
  double&nbsp;farClip)</span></div>
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getPerspective(double,double,double,double,double)">
 <h3>getPerspective</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getPerspective</span><wbr><span class="parameters">(double&nbsp;fovX,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getPerspective</span><wbr><span class="parameters">(double&nbsp;fovX,
  double&nbsp;fovY,
  double&nbsp;aspectRatio,
  double&nbsp;nearClip,
@@ -265,7 +265,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getOrthogonal(double,double,double,double,double,double)">
 <h3>getOrthogonal</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal</span><wbr><span class="parameters">(double&nbsp;xMin,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal</span><wbr><span class="parameters">(double&nbsp;xMin,
  double&nbsp;xMax,
  double&nbsp;yMin,
  double&nbsp;yMax,
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getOrthogonal(double,double,double,double)">
 <h3>getOrthogonal</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal</span><wbr><span class="parameters">(double&nbsp;xMax,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal</span><wbr><span class="parameters">(double&nbsp;xMax,
  double&nbsp;yMax,
  double&nbsp;nearClip,
  double&nbsp;farClip)</span></div>
@@ -316,7 +316,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getOrthogonal2D(double,double,double,double)">
 <h3>getOrthogonal2D</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal2D</span><wbr><span class="parameters">(double&nbsp;xMin,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal2D</span><wbr><span class="parameters">(double&nbsp;xMin,
  double&nbsp;xMax,
  double&nbsp;yMin,
  double&nbsp;yMax)</span></div>
@@ -339,7 +339,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getOrthogonal2D(double,double)">
 <h3>getOrthogonal2D</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal2D</span><wbr><span class="parameters">(double&nbsp;xMax,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getOrthogonal2D</span><wbr><span class="parameters">(double&nbsp;xMax,
  double&nbsp;yMax)</span></div>
 <div class="block">Creates a <code>4x4</code> orthogonal projection matrix to project a 2D point in an orthographic viewing region. the
  minimum <code>x</code> and <code>y</code> values are assumed to be zero. Equivalent to

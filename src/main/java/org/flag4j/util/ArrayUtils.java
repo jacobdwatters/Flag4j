@@ -24,7 +24,7 @@
 
 package org.flag4j.util;
 
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.algebraic_structures.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -36,9 +36,126 @@ import java.util.function.UnaryOperator;
  */
 public final class ArrayUtils {
 
+    // TODO: Class needs to be cleaned up a bit (a lot).
+
     private ArrayUtils() {
         // Hide Constructor
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static int[] makeNewIfNull(int[] arr, int size) {
+        return arr == null ? new int[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static double[] makeNewIfNull(double[] arr, int size) {
+        return arr == null ? new double[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Complex128[] makeNewIfNull(Complex128[] arr, int size) {
+        return arr == null ? new Complex128[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Complex64[] makeNewIfNull(Complex64[] arr, int size) {
+        return arr == null ? new Complex64[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Semiring<T>> T[] makeNewIfNull(T[] arr, int size) {
+        return arr == null ? (T[]) new Semiring[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Ring<T>> T[] makeNewIfNull(T[] arr, int size) {
+        return arr == null ? (T[]) new Ring[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Field<T>> T[] makeNewIfNull(T[] arr, int size) {
+        return arr == null ? (T[]) new Field[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Object[] makeNewIfNull(Object[] arr, int size) {
+        return arr == null ? new Object[size] : arr;
+    }
+
+
+    /**
+     * Computes the cumulative sum of the elements of  an array.
+     * @param src Source array to compute cumulative sum within.
+     * @param dest Array to store the result of the cumulative sum. May be the same array as {@code src} or {@code null}.
+     * @return If {@code dest != null} then a reference to {@code dest} is returned. If {@code dest == null} then a new array of
+     * appropriate size will be constructed and returned.
+     * @throws IllegalArgumentException If {@code dest != null && dest.length != src.length}.
+     */
+    public static int[] cumSum(int[] src, int[] dest) {
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+        dest = makeNewIfNull(dest, src.length);
+
+        for(int i=1, size=src.length; i<size; i++)
+            dest[i] = src[i] + src[i-1];
+
+        return dest;
     }
 
 
@@ -51,12 +168,12 @@ public final class ArrayUtils {
      * array will be initialized and returned.
      * @throws IllegalArgumentException If the two arrays are not the same shape.
      */
-    public static int[][] deepCopy(final int[][] src, int[][] dest) {
+    public static int[][] deepCopy(int[][] src, int[][] dest) {
         if(dest == null) dest = new int[src.length][src[0].length];
         if(src == dest) return dest;
-        else ParameterChecks.assertGreaterEq(src.length, dest.length);
+        else ValidateParameters.ensureGreaterEq(src.length, dest.length);
 
-        for(int i = 0; i < src.length; i++) {
+        for(int i = 0, size=src.length; i < size; i++) {
             dest[i] = new int[src[i].length];
             System.arraycopy(src[i], 0, dest[i], 0, src[i].length);
         }
@@ -66,106 +183,141 @@ public final class ArrayUtils {
 
 
     /**
-     * Converts array to an array of {@link CNumber complex numbers}.
+     * Converts array to an array of {@link Complex128 complex numbers}.
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
-    public static CNumber[] copy2CNumber(final int[] src, CNumber[] dest) {
-        if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+    public static Complex128[] wrapAsComplex128(int[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for (int i = 0; i < dest.length; i++)
-            dest[i] = new CNumber(src[i]);
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
 
         return dest;
     }
 
 
     /**
-     * Converts array to an array of {@link CNumber complex numbers}.
+     * Converts array to an array of {@link Complex128 complex numbers}.
      *
      * @param src  Array to convert.
-     * @param dest Destination array. If the destination array is null, a new array will be created.
+     * @param dest Destination array. If the destination array is {@code null}, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
-    public static CNumber[] copy2CNumber(final double[] src, CNumber[] dest) {
-        if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+    public static Complex128[] wrapAsComplex128(double[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for(int i=0; i<dest.length; i++)
-            dest[i] = new CNumber(src[i]);
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
 
         return dest;
     }
 
 
     /**
-     * Converts array to an array of {@link CNumber complex numbers}.
+     * Converts array to an array of {@link Complex128 complex numbers}.
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
-    public static CNumber[] copy2CNumber(final Integer[] src, CNumber[] dest) {
-        if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+    public static Complex128[] wrapAsComplex128(Integer[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for (int i=0; i<dest.length; i++)
-            dest[i] = new CNumber(src[i]);
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
 
         return dest;
     }
 
 
     /**
-     * Converts array to an array of {@link CNumber complex numbers}.
+     * Converts array to an array of {@link Complex128 complex numbers}.
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
-    public static CNumber[] copy2CNumber(final Double[] src, CNumber[] dest) {
-        if(dest == null) dest = new CNumber[src.length];
-        else ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+    public static Complex128[] wrapAsComplex128(Double[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for(int i=0; i<dest.length; i++)
-            dest[i] = new CNumber(src[i]);
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
 
         return dest;
     }
 
 
     /**
-     * Converts array to an array of {@link CNumber complex numbers}.
+     * Converts an array to an array of {@link Complex128 complex numbers}.
      *
      * @param src  Array to convert.
      * @param dest Destination array. If the destination array is null, a new array will be created.
      * @throws IllegalArgumentException If source and destination arrays do not have the same length.
      * @return A reference to the {@code dest} array.
      */
-    public static CNumber[] copy2CNumber(final String[] src, CNumber[] dest) {
+    public static Complex128[] wrapAsComplex128(Complex64[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts array to an array of {@link Complex128 complex numbers}.
+     *
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
+     */
+    public static Complex128[] wrapAsComplex128(String[] src, Complex128[] dest) {
         if(dest == null) {
-            dest = new CNumber[src.length];
+            dest = new Complex128[src.length];
         }
-        ParameterChecks.assertArrayLengthsEq(src.length, dest.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
 
-        for (int i = 0; i < dest.length; i++) {
-            dest[i] = new CNumber(src[i]);
-        }
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
 
         return dest;
     }
 
 
     /**
-     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but creates a deep copy
-     * of each element in the source array.
+     * Checks if two primitive 2D integer arrays are element-wise equal.
+     * @param src1 First array in comparison.
+     * @param src2 Second array in comparison.
+     * @return The
+     */
+    public static boolean deepEquals(int[][] src1, int[][] src2) {
+        if(src1 == src2) return true;
+        if(src1 == null || src2 == null) return false;
+        if(src1.length != src2.length) return false;
+
+        for(int i=0, size=src1.length; i<size; i++)
+            if(!Arrays.equals(src1[i], src2[i])) return false;
+
+        return true;
+    }
+
+
+    /**
+     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but wraps doubles as complex numbers.
      *
      * @param src     The source array.
      * @param srcPos  The starting position from which to copy elements of the source array.
@@ -175,11 +327,11 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
      *                                        source array length or the destination array length.
      */
-    public static void arraycopy(final double[] src, final int srcPos, final CNumber[] dest, final int destPos, final int length) {
-        for (int i = 0; i < length; i++) {
-            dest[i + destPos] = new CNumber(src[i + srcPos]);
-        }
+    public static void arraycopy(double[] src, int srcPos, Complex128[] dest, int destPos, int length) {
+        for(int i = 0; i < length; i++)
+            dest[i + destPos] = new Complex128(src[i + srcPos]);
     }
+
 
 
     /**
@@ -187,20 +339,20 @@ public final class ArrayUtils {
      *
      * @param dest Array to fill with zeros.
      */
-    public static void fillZeros(final CNumber[][] dest) {
-        for(CNumber[] row : dest)
-            Arrays.fill(row, CNumber.ZERO);
+    public static void fillZeros(Complex128[][] dest) {
+        for(Complex128[] row : dest)
+            Arrays.fill(row, Complex128.ZERO);
     }
 
 
     /**
      * <p>
      * Fills an array with zeros separated by the given stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Staring point in array to apply strided zero fill.
@@ -208,11 +360,11 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If stride is less than 1.
      * @throws IllegalArgumentException If start is less than 0.
      */
-    public static void stridedFillZeros(final double[] dest, final int start, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride);
-        ParameterChecks.assertGreaterEq(0, start);
+    public static void stridedFillZeros(double[] dest, int start, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride);
+        ValidateParameters.ensureGreaterEq(0, start);
 
-        for(int i = start; i < dest.length; i += stride)
+        for(int i = start, stop=dest.length; i < stop; i += stride)
             dest[i] = 0;
     }
 
@@ -220,11 +372,11 @@ public final class ArrayUtils {
     /**
      * <p>
      * Fills an array with zeros separated by the given stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Staring point in array to apply strided zero fill.
@@ -232,12 +384,12 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If stride is less than 1.
      * @throws IllegalArgumentException If start is less than 0.
      */
-    public static void stridedFillZeros(final CNumber[] dest, final int start, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride);
-        ParameterChecks.assertGreaterEq(0, start);
+    public static void stridedFillZeros(Complex128[] dest, int start, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride);
+        ValidateParameters.ensureGreaterEq(0, start);
 
         for(int i = start; i < dest.length; i += stride)
-            dest[i] = CNumber.ZERO;
+            dest[i] = Complex128.ZERO;
     }
 
 
@@ -246,12 +398,12 @@ public final class ArrayUtils {
      * Fills an array with a range of zeros, each separated by the given stride. Specifically, the destination array will
      * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be separated by
      * the stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
      * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Starting point to apply strided zero fill.
@@ -260,14 +412,14 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If stride or length is less than one.
      * @throws IllegalArgumentException If start is less than zero.
      */
-    public static void stridedFillZeros(final CNumber[] dest, final int start, final int length, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride, length);
-        ParameterChecks.assertGreaterEq(0, start);
+    public static void stridedFillZeros(Complex128[] dest, int start, int length, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride, length);
+        ValidateParameters.ensureGreaterEq(0, start);
+        int step = stride+length;
 
-        for (int i = start; i < dest.length; i += stride + length) {
-            for (int j = 0; j < length; j++) {
-                dest[i + j] = CNumber.ZERO;
-            }
+        for (int i = start; i < dest.length; i += step) {
+            for (int j=i, jStop=length+i; j<jStop; j++)
+                dest[i] = Complex128.ZERO;
         }
     }
 
@@ -277,12 +429,12 @@ public final class ArrayUtils {
      * Fills an array with a range of zeros, each separated by the given stride. Specifically, the destination array will
      * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be separated by
      * the stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
      * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Starting point to apply strided zero fill.
@@ -291,14 +443,14 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If stride or length is less than one.
      * @throws IllegalArgumentException If start is less than zero.
      */
-    public static void stridedFillZeros(final double[] dest, final int start, final int length, final int stride) {
-        ParameterChecks.assertGreaterEq(1, stride, length);
-        ParameterChecks.assertGreaterEq(0, start);
+    public static void stridedFillZeros(double[] dest, int start, int length, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride, length);
+        ValidateParameters.ensureGreaterEq(0, start);
+        int step = stride+length;
 
-        for (int i = start; i < dest.length; i += stride + length) {
-            for (int j = 0; j < length; j++) {
-                dest[i + j] = 0;
-            }
+        for(int i=start, stop=dest.length; i<stop; i += step) {
+            for(int j=i, jStop=length+i; j<jStop; j++)
+                dest[i] = 0;
         }
     }
 
@@ -307,10 +459,11 @@ public final class ArrayUtils {
      * Fills an array with specified value.
      *
      * @param dest      Array to fill.
-     * @param fillValue Value to fill array with.
+     * @param fillValue Value to fill array with. This will be converted to a member of the field as if by
+     * {@code dest[0].getZero().add(fillValue)}
      */
-    public static void fill(final CNumber[] dest, final double fillValue) {
-        CNumber fillValueComplex = new CNumber(fillValue);
+    public static void fill(Complex128[] dest, double fillValue) {
+        Complex128 fillValueComplex = new Complex128(fillValue);
         Arrays.fill(dest, fillValueComplex);
     }
 
@@ -321,8 +474,8 @@ public final class ArrayUtils {
      * @param dest      Array to fill.
      * @param fillValue Value to fill array with.
      */
-    public static void fill(final CNumber[][] dest, final CNumber fillValue) {
-        for(CNumber[] row : dest)
+    public static void fill(Complex128[][] dest, Complex128 fillValue) {
+        for(Complex128[] row : dest)
             Arrays.fill(row, fillValue);
     }
 
@@ -335,9 +488,9 @@ public final class ArrayUtils {
      * @param from      Staring index of range (inclusive).
      * @param to        Ending index of range (exclusive).
      */
-    public static void fill(final CNumber[] dest, final double fillValue, final int from, final int to) {
-        ParameterChecks.assertLessEq(to, from + 1);
-        CNumber complexFillValue = new CNumber(fillValue);
+    public static void fill(Complex128[] dest, double fillValue, int from, int to) {
+        ValidateParameters.ensureLessEq(to, from + 1);
+        Complex128 complexFillValue = new Complex128(fillValue);
         Arrays.fill(dest, from, to, complexFillValue);
     }
 
@@ -353,7 +506,7 @@ public final class ArrayUtils {
      *                  of this value.
      * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
      */
-    public static void fill(final CNumber[] dest, final int start, final int end, final CNumber fillValue) {
+    public static void fill(Complex128[] dest, int start, int end, Complex128 fillValue) {
         Arrays.fill(dest, start, end, fillValue);
     }
 
@@ -364,7 +517,7 @@ public final class ArrayUtils {
      * @param dest      Array to fill.
      * @param fillValue Value to fill array with.
      */
-    public static void fill(final double[][] dest, final double fillValue) {
+    public static void fill(double[][] dest, double fillValue) {
         for (double[] doubles : dest)
             Arrays.fill(doubles, fillValue);
     }
@@ -376,7 +529,7 @@ public final class ArrayUtils {
      * @param src Array to convert.
      * @return An equivalent array list.
      */
-    public static ArrayList<Double> toArrayList(final double[] src) {
+    public static ArrayList<Double> toArrayList(double[] src) {
         ArrayList<Double> list = new ArrayList<>(src.length);
 
         for(double value : src)
@@ -392,11 +545,9 @@ public final class ArrayUtils {
      * @param src Array to convert.
      * @return An equivalent array list.
      */
-    public static ArrayList<CNumber> toArrayList(final CNumber[] src) {
-        ArrayList<CNumber> list = new ArrayList<>(src.length);
-
+    public static ArrayList<Complex128> toArrayList(Complex128[] src) {
+        ArrayList<Complex128> list = new ArrayList<>(src.length);
         list.addAll(Arrays.asList(src));
-
         return list;
     }
 
@@ -407,11 +558,11 @@ public final class ArrayUtils {
      * @param src Array to convert.
      * @return An equivalent complex array list.
      */
-    public static ArrayList<CNumber> toComplexArrayList(final double[] src) {
-        ArrayList<CNumber> list = new ArrayList<>(src.length);
+    public static ArrayList<Complex128> toComplexArrayList(double[] src) {
+        ArrayList<Complex128> list = new ArrayList<>(src.length);
 
         for (double value : src)
-            list.add(new CNumber(value));
+            list.add(new Complex128(value));
 
         return list;
     }
@@ -423,7 +574,7 @@ public final class ArrayUtils {
      * @param src Array to convert.
      * @return An equivalent array list.
      */
-    public static ArrayList<Integer> toArrayList(final int[] src) {
+    public static ArrayList<Integer> toArrayList(int[] src) {
         ArrayList<Integer> list = new ArrayList<>(src.length);
 
         for (int value : src)
@@ -439,10 +590,10 @@ public final class ArrayUtils {
      * @param src Source list to convert.
      * @return An array containing the same values as the {@code src} list.
      */
-    public static double[] fromDoubleList(final List<Double> src) {
+    public static double[] fromDoubleList(List<Double> src) {
         double[] dest = new double[src.size()];
 
-        for (int i = 0; i < dest.length; i++)
+        for (int i=0, size=dest.length; i<size; i++)
             dest[i] = src.get(i);
 
         return dest;
@@ -455,10 +606,10 @@ public final class ArrayUtils {
      * @param src Source list to convert.
      * @return An array containing the same values as the {@code src} list.
      */
-    public static int[] fromIntegerList(final List<Integer> src) {
+    public static int[] fromIntegerList(List<Integer> src) {
         int[] dest = new int[src.size()];
 
-        for (int i = 0; i < dest.length; i++)
+        for (int i=0, size=dest.length; i<size; i++)
             dest[i] = src.get(i);
 
         return dest;
@@ -472,10 +623,10 @@ public final class ArrayUtils {
      * @param dest Destination array to store values from {@code src} in (modified). Must be at least as large as {@code src}.
      * @return A reference to the {@code dest} array.
      */
-    public static int[] fromIntegerList(final List<Integer> src, final int[] dest) {
-        ParameterChecks.assertGreaterEq(src.size(), dest.length);
+    public static int[] fromIntegerList(List<Integer> src, int[] dest) {
+        ValidateParameters.ensureGreaterEq(src.size(), dest.length);
 
-        for (int i = 0; i < dest.length; i++)
+        for (int i=0, size=dest.length; i<size; i++)
             dest[i] = src.get(i);
 
         return dest;
@@ -488,11 +639,11 @@ public final class ArrayUtils {
      * @param src  Source list to convert.
      * @param dest Destination array to store values from {@code src} in (modified). Must be at least as large as {@code src}.
      * @return A reference to the {@code dest} array.
-     * @throws IllegalArgumentException If the {@code dest} array is not large enough to store all entries of {@code src}
+     * @throws IllegalArgumentException If the {@code dest} array is not large enough to store all data of {@code src}
      *                                  list.
      */
-    public static <T> T[] fromList(final List<T> src, final T[] dest) {
-        ParameterChecks.assertGreaterEq(src.size(), dest.length);
+    public static <T> T[] fromList(List<T> src, T[] dest) {
+        ValidateParameters.ensureGreaterEq(src.size(), dest.length);
         return src.toArray(dest);
     }
 
@@ -505,7 +656,7 @@ public final class ArrayUtils {
      * @param j   Index of second value to swap.
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
-    public static void swap(final int[] arr, final int i, final int j) {
+    public static void swap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -520,8 +671,8 @@ public final class ArrayUtils {
      *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
-    public static void swap(final int[] src, final int[] indices) {
-        ParameterChecks.assertPermutation(indices);
+    public static void swap(int[] src, int[] indices) {
+        ValidateParameters.ensurePermutation(indices);
 
         int[] swapped = new int[src.length];
         int i = 0;
@@ -534,14 +685,14 @@ public final class ArrayUtils {
 
 
     /**
-     * Swaps elements in an array according to a specified permutation. This method should be used with extreem caution as unlike
-     * {@link #swap(int[], int[])}, this method does <b>not</b> verify that {@code indices} is a permutation.
+     * Swaps elements in an array according to a specified permutation. This method should be used with extreme caution as unlike
+     * {@link #swap(int[], int[])}, this method does <i>not</i> verify that {@code indices} is a permutation.
      *
      * @param src     Array to swap elements within.
      * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
      *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
-    public static void swapUnsafe(final int[] src, final int[] indices) {
+    public static void swapUnsafe(int[] src, int[] indices) {
         int[] swapped = new int[src.length];
         int i = 0;
 
@@ -560,7 +711,7 @@ public final class ArrayUtils {
      * @param j   Index of second value to swap.
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
-    public static void swap(final double[] arr, final int i, final int j) {
+    public static void swap(double[] arr, int i, int j) {
         double temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -575,7 +726,7 @@ public final class ArrayUtils {
      * @param j   Index of second value to swap.
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} are out of the bounds of {@code arr}.
      */
-    public static void swap(final Object[] arr, final int i, final int j) {
+    public static void swap(Object[] arr, int i, int j) {
         Object temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
@@ -588,8 +739,10 @@ public final class ArrayUtils {
      * @param start Staring value (inclusive).
      * @param end   Stopping value (exclusive).
      * @return An array containing the integer range {@code [start, end)}.
+     * @throws IllegalArgumentException If {@code end < start}.
      */
-    public static double[] range(final int start, final int end) {
+    public static double[] range(int start, int end) {
+        ValidateParameters.ensureGreaterEq(start, end);
         double[] rangeArr = new double[end - start];
 
         int rangeIdx = 0;
@@ -606,8 +759,10 @@ public final class ArrayUtils {
      * @param start Staring value (inclusive).
      * @param end   Stopping value (exclusive).
      * @return An array containing the integer range {@code [start, end)}.
+     * @throws IllegalArgumentException If {@code end < start}.
      */
-    public static int[] intRange(final int start, final int end) {
+    public static int[] intRange(int start, int end) {
+        ValidateParameters.ensureGreaterEq(start, end);
         int[] rangeArr = new int[end - start];
 
         int rangeIdx = 0;
@@ -630,8 +785,8 @@ public final class ArrayUtils {
      * @throws NegativeArraySizeException If {@code stride} is negative.
      * @throws IllegalArgumentException   If {@code start} is not in {@code [0, end)}
      */
-    public static int[] intRange(final int start, final int end, final int stride) {
-        ParameterChecks.assertInRange(start, 0, end, "start");
+    public static int[] intRange(int start, int end, int stride) {
+        ValidateParameters.ensureInRange(start, 0, end, "start");
         int[] rangeArr = new int[(end - start) * stride];
 
         int k = 0;
@@ -645,21 +800,21 @@ public final class ArrayUtils {
 
 
     /**
-     * Checks if a double array is numerically equal to a {@link CNumber complex number} array.
+     * Checks if a double array is numerically equal to a {@link Complex128 complex number} array.
      *
      * @param src1 Double array.
      * @param src2 Complex number array.
-     * @return True if all entries in {@code src2} have zero imaginary component and real component equal to the
-     * corresponding entry in {@code src1}. Otherwise, returns false.
+     * @return {@code true} if all data in {@code src2} have zero imaginary component and real component equal to the
+     * corresponding entry in {@code src1}; {@code false} otherwise.
      */
-    public static boolean equals(final double[] src1, final CNumber[] src2) {
+    public static <T extends Field<T>> boolean equals(double[] src1, T[] src2) {
         boolean equal = true;
 
         if (src1.length != src2.length) {
             equal = false;
         } else {
-            for (int i = 0; i < src1.length; i++) {
-                if (src1[i] != src2[i].re || src2[i].im != 0) {
+            for(int i=0, size = src1.length; i < size; i++) {
+                if (src1[i] != ((Complex128) src2[i]).re || ((Complex128) src2[i]).im != 0) {
                     equal = false;
                     break; // No need to continue.
                 }
@@ -678,7 +833,7 @@ public final class ArrayUtils {
      * @param key Values to check if they are in the source array.
      * @return A boolean describing if the specified key is in the array or not.
      */
-    public static boolean notContains(final int[] src, final int key) {
+    public static boolean notContains(int[] src, int key) {
         return !contains(src, key);
     }
 
@@ -692,10 +847,10 @@ public final class ArrayUtils {
      * @return A boolean array with the same length as {@code keys} describing if the associated keys are in the
      * array.
      */
-    public static boolean[] contains(final double[] src, final double... keys) {
+    public static boolean[] contains(double[] src, double... keys) {
         boolean[] result = new boolean[keys.length];
 
-        for (int i = 0; i < keys.length; i++) {
+        for (int i = 0, size= keys.length; i < size; i++) {
             result[i] = contains(src, keys[i]);
         }
 
@@ -712,10 +867,10 @@ public final class ArrayUtils {
      * @return A boolean array with the same length as {@code keys} describing if the associated keys are in the
      * array.
      */
-    public static boolean[] contains(final int[] src, final int... keys) {
+    public static boolean[] contains(int[] src, int... keys) {
         boolean[] result = new boolean[keys.length];
 
-        for (int i = 0; i < keys.length; i++) {
+        for (int i = 0, size=keys.length; i < size; i++) {
             result[i] = contains(src, keys[i]);
         }
 
@@ -732,7 +887,7 @@ public final class ArrayUtils {
      * @return True if the {@code key} value is found in the array. False otherwise.
      * @see Arrays#sort(int[])
      */
-    public static boolean contains(final int[] arr, final int key) {
+    public static boolean contains(int[] arr, int key) {
         return Arrays.binarySearch(arr, key) >= 0;
     }
 
@@ -746,7 +901,7 @@ public final class ArrayUtils {
      * @return True if the {@code key} value is found in the array. False otherwise.
      * @see Arrays#sort(int[])
      */
-    public static boolean contains(final double[] arr, final double key) {
+    public static boolean contains(double[] arr, double key) {
         return Arrays.binarySearch(arr, key) >= 0;
     }
 
@@ -757,7 +912,7 @@ public final class ArrayUtils {
      * @param src Array to flatten.
      * @return The flattened array.
      */
-    public static int[] flatten(final int[][] src) {
+    public static int[] flatten(int[][] src) {
         int[] flat = new int[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
@@ -776,7 +931,7 @@ public final class ArrayUtils {
      * @param src Array to flatten.
      * @return The flattened array.
      */
-    public static double[] flatten(final double[][] src) {
+    public static double[] flatten(double[][] src) {
         double[] flat = new double[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
@@ -795,7 +950,7 @@ public final class ArrayUtils {
      * @param src Array to flatten and unbox.
      * @return The flattened array.
      */
-    public static double[] unboxFlatten(final Double[][] src) {
+    public static double[] unboxFlatten(Double[][] src) {
         double[] flat = new double[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
@@ -814,16 +969,35 @@ public final class ArrayUtils {
      * @param src Array to flatten.
      * @return The flattened array.
      */
-    public static CNumber[] flatten(final CNumber[][] src) {
-        CNumber[] flat = new CNumber[src.length * src[0].length];
+    public static Complex128[] flatten(Complex128[][] src) {
+        Complex128[] flat = new Complex128[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
         int flatIdx = 0;
-        for (CNumber[] row : src)
-            for (CNumber value : row)
+        for (Complex128[] row : src)
+            for (Complex128 value : row)
                 flat[flatIdx++] = value;
 
         return flat;
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     *
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static <T extends Field<T>> T[] flatten(T[][] src) {
+        T[] flat = (T[]) new Field[src.length * src[0].length];
+
+        // Copy 2D array to 1D array.
+        int flatIdx = 0;
+        for (T[] row : src)
+            for (T value : row)
+                flat[flatIdx++] = value;
+
+        return (T[]) flat;
     }
 
 
@@ -835,7 +1009,7 @@ public final class ArrayUtils {
      * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
      * followed by the elements of {@code src2}.
      */
-    public static double[] join(final double[] src1, final double[] src2) {
+    public static double[] join(double[] src1, double[] src2) {
         double[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
         System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
 
@@ -851,7 +1025,7 @@ public final class ArrayUtils {
      * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
      * followed by the elements of {@code src2}.
      */
-    public static int[] join(final int[] src1, final int[] src2) {
+    public static int[] join(int[] src1, int[] src2) {
         int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
         System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
 
@@ -868,7 +1042,7 @@ public final class ArrayUtils {
      * @param dim     Dimension of space which contains the axes of interest.
      * @return An array containing the set subtraction {@code {0, 1, 2, ...., dim-1}} - srcAxes.
      */
-    public static int[] notInAxes(final int[] srcAxes, final int dim) {
+    public static int[] notInAxes(int[] srcAxes, int dim) {
         int[] notIn = new int[dim - srcAxes.length];
 
         // Copy and sort array.
@@ -897,7 +1071,7 @@ public final class ArrayUtils {
      * @return A reference to {@code indices}.
      * @see #shiftRange(int, int[], int, int)
      */
-    public static int[] shift(final int shift, final int[] indices) {
+    public static int[] shift(int shift, int[] indices) {
         return shiftRange(shift, indices, 0, indices.length);
     }
 
@@ -913,7 +1087,7 @@ public final class ArrayUtils {
      * @throws ArrayIndexOutOfBoundsException If start or stop is not within the bounds of the {@code indices} array.
      * @see #shift(int, int[])
      */
-    public static int[] shiftRange(final int shift, final int[] indices, final int start, final int stop) {
+    public static int[] shiftRange(int shift, int[] indices, int start, int stop) {
         for (int i = start; i < stop; i++)
             indices[i] += shift;
 
@@ -927,7 +1101,7 @@ public final class ArrayUtils {
      * @param src The array to get unique values from.
      * @return A sorted array containing all unique values in the {@code src} array.
      */
-    public static int[] uniqueSorted(final int[] src) {
+    public static int[] uniqueSorted(int[] src) {
         HashSet<Integer> hashSet = new HashSet<>();
 
         for(int j : src)
@@ -946,8 +1120,8 @@ public final class ArrayUtils {
      * @return Returns the first index of the value {@code key} within the {@code arr} array. If the {@code key} does
      * not occur in the array, {@code -1} will be returned.
      */
-    public static int indexOf(final int[] arr, final int key) {
-        for(int i = 0; i < arr.length; i++)
+    public static int indexOf(int[] arr, int key) {
+        for(int i = 0, size=arr.length; i < size; i++)
             if (arr[i] == key) return i;
 
         return -1;
@@ -957,27 +1131,29 @@ public final class ArrayUtils {
     /**
      * Converts an array of {@link Double} objects to a primitive array (i.e. unboxing).
      *
-     * @param arr Array to convert.
-     * @return A primitive array equivalent to {@code arr}.
+     * @param arr Array to unbox.
+     * @param dest Destination array for the unboxed values.
+     * @return If dest was not {@code null} then a reference to {@code dest} is returned. Otherwise, a new array with the unboxed
+     * values is returned.
      */
-    public static double[] unbox(final Double[] arr) {
-        int size = arr.length;
-        double[] prim = new double[size];
+    public static double[] unbox(Double[] arr, double[] dest) {
+        dest = makeNewIfNull(dest, arr.length);
 
-        for (int i = 0; i < size; i++)
-            prim[i] = arr[i];
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = arr[i];
 
-        return prim;
+        return dest;
     }
 
 
     /**
      * Converts an array of {@link Integer} objects to a primitive array (i.e. unboxing).
-     *
-     * @param arr Array to convert.
-     * @return A primitive array equivalent to {@code arr}.
+     * @param arr Array to unbox.
+     * @param dest Destination array for the unboxed values.
+     * @return If dest was not {@code null} then a reference to {@code dest} is returned. Otherwise, a new array with the unboxed
+     * values is returned.
      */
-    public static int[] unbox(final Integer[] arr) {
+    public static int[] unbox(Integer[] arr, int[] dest) {
         int size = arr.length;
         int[] prim = new int[size];
 
@@ -994,7 +1170,7 @@ public final class ArrayUtils {
      * @param src The source primitive array to box.
      * @return A boxed array equivalent to the {@code src} primitive array.
      */
-    public static Double[] boxed(final double[] src) {
+    public static Double[] boxed(double[] src) {
         int size = src.length;
         Double[] boxed = new Double[size];
 
@@ -1011,7 +1187,7 @@ public final class ArrayUtils {
      * @param src The source primitive array to box.
      * @return A boxed array equivalent to the {@code src} primitive array.
      */
-    public static Integer[] boxed(final int[] src) {
+    public static Integer[] boxed(int[] src) {
         int size = src.length;
         Integer[] boxed = new Integer[size];
 
@@ -1028,7 +1204,7 @@ public final class ArrayUtils {
      * @param arr Array to count unique elements in.
      * @return The number of unique elements in {@code arr}.
      */
-    public static int numUnique(final double[] arr) {
+    public static int numUnique(double[] arr) {
         // For very large arrays, HashMap is quite a bit faster than HashSet.
         Map<Double, Double> map = new HashMap<>(arr.length);
 
@@ -1045,7 +1221,7 @@ public final class ArrayUtils {
      * @param arr Array to count unique elements in.
      * @return The number of unique elements in {@code arr}.
      */
-    public static int numUnique(final int[] arr) {
+    public static int numUnique(int[] arr) {
         // For very large arrays, HashMap is quite a bit faster than HashSet.
         Map<Integer, Integer> map = new HashMap<>(arr.length);
 
@@ -1066,7 +1242,7 @@ public final class ArrayUtils {
      * {@link #numUnique(int[]) numUnique(arr) - 1}.
      */
     @SuppressWarnings("ConstantConditions")
-    public static HashMap<Integer, Integer> createUniqueMapping(final int[] arr) {
+    public static HashMap<Integer, Integer> createUniqueMapping(int[] arr) {
         if (arr.length == 0 || arr == null) return new HashMap<>();
 
         int[] arrSorted = Arrays.copyOf(arr, arr.length);
@@ -1098,7 +1274,7 @@ public final class ArrayUtils {
      * {@code (-insertion_point - 1)} where {@code insertion_point} is defined as the index the {@code key} would be
      * inserted into the sorted array.
      */
-    public static int[] findFirstLast(final int[] src, final int key) {
+    public static int[] findFirstLast(int[] src, int key) {
         int keyIdx = Arrays.binarySearch(src, key);
 
         if (keyIdx < 0) return new int[]{keyIdx, keyIdx}; // Row not found.
@@ -1127,10 +1303,10 @@ public final class ArrayUtils {
      * @param src      The source array to repeat.
      * @return The {@code src} array repeated {@code numTimes times}.
      */
-    public static int[] repeat(final int numTimes, final int[] src) {
+    public static int[] repeat(int numTimes, int[] src) {
         int[] repeated = new int[src.length * numTimes];
 
-        for(int i = 0; i < repeated.length; i += src.length)
+        for(int i = 0, size=repeated.length, step=src.length; i < size; i += step)
             System.arraycopy(src, 0, repeated, i, src.length);
 
         return repeated;
@@ -1145,7 +1321,7 @@ public final class ArrayUtils {
      * @return An array of specified {@code size} filled with the specified {@code value}.
      * @throws NegativeArraySizeException If {@code} is negative.
      */
-    public static int[] filledArray(final int size, final int value) {
+    public static int[] filledArray(int size, int value) {
         int[] dest = new int[size];
         Arrays.fill(dest, value);
 
@@ -1161,10 +1337,10 @@ public final class ArrayUtils {
      *             If null, a new double array with the same size as {@code src} will be created.
      * @return A reference to the {@code dest} array.
      */
-    public static double[] asDouble(final int[] src, double[] dest) {
-        if(dest == null) dest = new double[src.length];
+    public static double[] asDouble(int[] src, double[] dest) {
+        dest = makeNewIfNull(dest, src.length);
 
-        for (int i = 0; i < src.length; i++)
+        for (int i = 0, size=src.length; i < size; i++)
             dest[i] = src[i];
 
         return dest;
@@ -1179,10 +1355,10 @@ public final class ArrayUtils {
      *             If null, a new double array with the same size as {@code src} will be created.
      * @return A reference to the {@code dest} array.
      */
-    public static double[] asDouble(final Integer[] src, double[] dest) {
+    public static double[] asDouble(Integer[] src, double[] dest) {
         if (dest == null) dest = new double[src.length];
 
-        for(int i = 0; i < src.length; i++)
+        for(int i = 0, size=src.length; i < size; i++)
             dest[i] = src[i];
 
         return dest;
@@ -1197,9 +1373,9 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
-    public static CNumber[] splice(final CNumber[] arr1, final CNumber[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
-        CNumber[] spliced = new CNumber[arr1.length + arr2.length];
+    public static Complex128[] splice(Complex128[] arr1, Complex128[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
         System.arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
@@ -1217,9 +1393,9 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
-    public static CNumber[] splice(final CNumber[] arr1, final double[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
-        CNumber[] spliced = new CNumber[arr1.length + arr2.length];
+    public static Complex128[] splice(Complex128[] arr1, double[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
         arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
@@ -1237,9 +1413,9 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
-    public static CNumber[] splice(final double[] arr1, final CNumber[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
-        CNumber[] spliced = new CNumber[arr1.length + arr2.length];
+    public static Complex128[] splice(double[] arr1, Complex128[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[arr1.length + arr2.length];
 
         arraycopy(arr1, 0, spliced, 0, spliceIdx);
         System.arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
@@ -1257,8 +1433,8 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
-    public static double[] splice(final double[] arr1, final double[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
+    public static double[] splice(double[] arr1, double[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
         double[] spliced = new double[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
@@ -1277,8 +1453,8 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
      * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
      */
-    public static int[] splice(final int[] arr1, final int[] arr2, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(arr1.length + 1, spliceIdx);
+    public static int[] splice(int[] arr1, int[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
         int[] spliced = new int[arr1.length + arr2.length];
 
         System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
@@ -1297,8 +1473,8 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code list} to splice {@code arr} into.
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
-    public static double[] splice(final List<Double> list,final  double[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
+    public static double[] splice(List<Double> list, double[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
         double[] spliced = new double[list.size() + arr.length];
 
         for(int i = 0; i < spliceIdx; i++)
@@ -1321,17 +1497,17 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code list} to splice {@code arr} into.
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
-    public static CNumber[] spliceDouble(final List<CNumber> list, final double[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
-        CNumber[] spliced = new CNumber[list.size() + arr.length];
+    public static Complex128[] spliceDouble(List<Complex128> list, double[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[list.size() + arr.length];
 
         for (int i = 0; i < spliceIdx; i++)
-            spliced[i] = list.get(i);
+            spliced[i] = (Complex128) list.get(i);
 
         ArrayUtils.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
 
         for(int i = spliceIdx; i < list.size(); i++)
-            spliced[i + arr.length] = list.get(i);
+            spliced[i + arr.length] = (Complex128) list.get(i);
 
         return spliced;
     }
@@ -1345,17 +1521,17 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code list} to splice {@code arr} into.
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
-    public static CNumber[] splice(final List<CNumber> list, final CNumber[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
-        CNumber[] spliced = new CNumber[list.size() + arr.length];
+    public static Complex128[] splice(List<Complex128> list, Complex128[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[list.size() + arr.length];
 
         for (int i = 0; i < spliceIdx; i++)
-            spliced[i] = list.get(i);
+            spliced[i] = (Complex128) list.get(i);
 
         System.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
 
         for (int i = spliceIdx; i < list.size(); i++)
-            spliced[i + arr.length] = list.get(i);
+            spliced[i + arr.length] = (Complex128) list.get(i);
 
         return spliced;
     }
@@ -1369,8 +1545,8 @@ public final class ArrayUtils {
      * @param spliceIdx The index within {@code list} to splice {@code arr} into.
      * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
      */
-    public static int[] splice(final List<Integer> list, final int[] arr, final int spliceIdx) {
-        ParameterChecks.assertIndexInBounds(list.size() + 1, spliceIdx);
+    public static int[] splice(List<Integer> list, int[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
         int[] spliced = new int[list.size() + arr.length];
 
         for (int i = 0; i < spliceIdx; i++)
@@ -1391,8 +1567,8 @@ public final class ArrayUtils {
      * @param opp Operation to use to transform the array.
      * @return A reference to the {@code src} array.
      */
-    public static double[] applyTransform(final double[] src, final UnaryOperator<Double> opp) {
-        for(int i=0; i<src.length; i++)
+    public static double[] applyTransform(double[] src, UnaryOperator<Double> opp) {
+        for(int i=0, size=src.length; i<size; i++)
             src[i] = opp.apply(src[i]);
 
         return src;
@@ -1405,13 +1581,13 @@ public final class ArrayUtils {
      * @param opp Operation to use to transform the array.
      * @return A reference to the {@code src} array.
      */
-    public static <T> T[] applyTransform(final T[] src, final UnaryOperator<T> opp) {
-        for(int i=0; i<src.length; i++)
+    public static <T> T[] applyTransform(T[] src, UnaryOperator<T> opp) {
+        for(int i=0, size=src.length; i<size; i++)
             src[i] = opp.apply(src[i]);
 
         return src;
     }
-
+    
 
     /**
      * Applies a transform to an array. Note, unlike {@link #applyTransform(double[], UnaryOperator)} and
@@ -1424,11 +1600,11 @@ public final class ArrayUtils {
      * @see #applyTransform(Object[], UnaryOperator)
      * @see #applyTransform(double[], UnaryOperator)
      */
-    public static CNumber[] applyTransform(final double[] src, final Function<Double, CNumber> opp) {
-        CNumber[] dest = new CNumber[src.length];
+    public static Complex128[] applyTransform(double[] src, Function<Double, Complex128> opp) {
+        Complex128[] dest = new Complex128[src.length];
 
-        for(int i=0; i<src.length; i++)
-            dest[i] = opp.apply(src[i]);
+        for(int i=0, size=src.length; i<size; i++)
+            dest[i] = (Complex128) opp.apply(src[i]);
 
         return dest;
     }
@@ -1445,11 +1621,11 @@ public final class ArrayUtils {
      * @see #applyTransform(Object[], UnaryOperator)
      * @see #applyTransform(double[], UnaryOperator)
      */
-    public static double[] applyTransform(final CNumber[] src, final Function<CNumber, Double> opp) {
+    public static double[] applyTransform(Complex128[] src, Function<Complex128, Double> opp) {
         double[] dest = new double[src.length];
 
-        for(int i=0; i<src.length; i++)
-            dest[i] = opp.apply(src[i]);
+        for(int i=0, size=src.length; i<size; i++)
+            dest[i] = opp.apply((Complex128) src[i]);
 
         return dest;
     }

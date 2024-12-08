@@ -1,12 +1,15 @@
 package org.flag4j.vector;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,50 +61,60 @@ class VectorOuterProductTests {
                 {0.0, 91.53199999999998, 0.0},
                 {0.0, -152.907475, 0.0}};
         exp = new Matrix(expEntries);
+        Matrix act = new Matrix(a.size, b.size,
+                RealDenseSparseVectorOperations.outerProduct(a.data, b.data, b.indices, b.size));
 
-        assertEquals(exp, a.outer(b));
+        assertEquals(exp, act);
     }
 
     @Test
     void complexDenseOuterTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CVector b;
-        CNumber[][] expEntries;
+        Complex128[][] expEntries;
         CMatrix exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.0, 5.6, -9.355};
         a = new Vector(aEntries);
-        bEntries = new CNumber[]{new CNumber("0.0+45.0i"), new CNumber("-9.345+2.111105i"), new CNumber("71.5-8.0i")};
+        bEntries = new Complex128[]{new Complex128("0.0+45.0i"), new Complex128("-9.345+2.111105i"), new Complex128("71.5-8.0i")};
         b = new CVector(bEntries);
-        expEntries = new CNumber[][]{{new CNumber("0.0-45.0i"), new CNumber("-9.345-2.111105i"), new CNumber("71.5+8.0i")},
-                {new CNumber("0.0-251.99999999999997i"), new CNumber("-52.332-11.822187999999999i"), new CNumber("400.4+44.8i")},
-                {new CNumber("0.0+420.975i"), new CNumber("87.422475+19.749387275i"), new CNumber("-668.8825-74.84i")}};
+        expEntries = new Complex128[][]{{new Complex128("0.0-45.0i"), new Complex128("-9.345-2.111105i"), new Complex128("71.5+8.0i")},
+                {new Complex128("0.0-251.99999999999997i"), new Complex128("-52.332-11.822187999999999i"), new Complex128("400.4+44.8i")},
+                {new Complex128("0.0+420.975i"), new Complex128("87.422475+19.749387275i"), new Complex128("-668.8825-74.84i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, a.outer(b));
+        Complex128[] actData = new Complex128[a.size*b.size];
+        RealFieldDenseVectorOperations.outerProduct(a.data, b.data, actData);
+        CMatrix act = new CMatrix(a.size, b.size, actData);
+
+        assertEquals(exp, act);
     }
 
 
     @Test
     void complexSparseOuterTestCase() {
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CooCVector b;
-        CNumber[][] expEntries;
+        Complex128[][] expEntries;
         CMatrix exp;
 
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[]{1.0, 5.6, -9.355};
         a = new Vector(aEntries);
-        bEntries = new CNumber[]{new CNumber("71.5-8.0i")};
+        bEntries = new Complex128[]{new Complex128("71.5-8.0i")};
         sparseIndices = new int[]{2};
         sparseSize = 3;
         b = new CooCVector(sparseSize, bEntries, sparseIndices);
-        expEntries = new CNumber[][]{{new CNumber("0.0"), new CNumber("0.0"), new CNumber("71.5+8.0i")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("400.4+44.8i")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("-668.8825-74.84i")}};
+        expEntries = new Complex128[][]{{new Complex128("0.0"), new Complex128("0.0"), new Complex128("71.5+8.0i")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("400.4+44.8i")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("-668.8825-74.84i")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, a.outer(b));
+        Complex128[] actData = new Complex128[a.data.length*b.size];
+        RealFieldDenseCooVectorOps.outerProduct(a.data, b.data, b.indices, b.size, actData);
+        CMatrix act = new CMatrix(a.size, b.size, actData);
+
+        assertEquals(exp, act);
     }
 }

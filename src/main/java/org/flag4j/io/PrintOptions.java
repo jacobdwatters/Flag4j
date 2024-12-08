@@ -25,10 +25,10 @@
 package org.flag4j.io;
 
 import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 /**
- * Print options for matrices and vectors
+ * Printing and formating options for tensors, matrices, and vectors.
  */
 public final class PrintOptions {
 
@@ -53,12 +53,10 @@ public final class PrintOptions {
      */
     public static final boolean DEFAULT_CENTER = true;
 
-    /**
-     * Hide default constructor.
-     */
     private PrintOptions() {
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+        // Hide default constructor for utility class.
     }
+
 
     /**
      * <p>
@@ -66,15 +64,15 @@ public final class PrintOptions {
      * For instance, if {@code padding=4} then two spaces will be placed on either side of each element.
      * Further, since this is done per element, each element will have 4 spaces between them (in addition to any
      * additional padding from column alignment within a matrix).
-     * </p>
+     * 
      *
      * <p>
      * If negative, zero padding will be used.
-     * </p>
+     * 
      *
      * <p>
      * Default Value: {@link #DEFAULT_PADDING}
-     * </p>
+     * 
      */
     private static int padding = DEFAULT_PADDING;
 
@@ -86,11 +84,11 @@ public final class PrintOptions {
      * indices larger than this value, except for the last row,
      * will not be printed. If zero or negative all rows will be printed.
      * The last row is always printed
-     * </p>
+     * 
      *
      * <p>
      * Default Value: {@link #DEFAULT_MAX_ROWS}
-     * </p>
+     * 
      */
     private static int maxRows = DEFAULT_MAX_ROWS;
 
@@ -214,7 +212,7 @@ public final class PrintOptions {
      * @param maxCols The maximum number of columns to print.
      */
     public static void setMaxRowsCols(int maxRows, int maxCols) {
-        ParameterChecks.assertGreaterEq(1, maxRows, maxCols);
+        ValidateParameters.ensureGreaterEq(1, maxRows, maxCols);
 
         PrintOptions.maxRows = maxRows;
         PrintOptions.maxColumns = maxCols;
@@ -226,7 +224,7 @@ public final class PrintOptions {
      * @param maxRowCols The new maximum number of rows and columns to print.
      */
     public static void setMaxRowsCols(int maxRowCols) {
-        ParameterChecks.assertGreaterEq(1, maxRowCols);
+        ValidateParameters.ensureGreaterEq(1, maxRowCols);
 
         PrintOptions.maxRows = maxRowCols;
         PrintOptions.maxColumns = maxRowCols;

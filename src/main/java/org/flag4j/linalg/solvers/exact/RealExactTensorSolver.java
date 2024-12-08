@@ -25,20 +25,19 @@
 package org.flag4j.linalg.solvers.exact;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.core.Shape;
 
 /**
- * Solver for solving a real well determined linear tensor equation {@code A*X=B} in an exact sense.
+ * Solver for solving a real well determined linear tensor equation A*X=B in an exact sense.
  */
 public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vector> {
 
-
     /**
-     * Creates an exact tensor solver for solving a well determined linear tensor equation {@code A*X=B}
-     * for {@code X} in an exact sense.
+     * Creates an exact tensor solver for solving a well determined linear tensor equation A*X=B
+     * for X in an exact sense.
      */
     public RealExactTensorSolver() {
         super(new RealExactSolver());
@@ -50,11 +49,11 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      *
      * @param A    Tensor to convert to matrix.
      * @param prod Product of all axis lengths in {@code A}.
-     * @return A matrix with the same entries as tensor {@code A} with shape (prod, prod).
+     * @return A matrix with the same data as tensor {@code A} with shape (prod, prod).
      */
     @Override
     protected Matrix initMatrix(Tensor A, int prod) {
-        return new Matrix(prod, prod, A.entries);
+        return new Matrix(prod, prod, A.data);
     }
 
 
@@ -66,19 +65,19 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
      */
     @Override
     protected Vector initVector(Tensor B) {
-        return new Vector(B.entries);
+        return new Vector(B.data);
     }
 
 
     /**
      * Wraps solution as a tensor and reshapes to the proper shape.
      *
-     * @param x           Vector solution to matrix linear equation which is equivalent to the tensor equation {@code A*X=B}.
-     * @param outputShape Shape for the solution tensor {@code X}.
-     * @return The solution {@code X} to the linear tensor equation {@code A*X=B}.
+     * @param x           Vector solution to linear matrix equation which is equivalent to the tensor equation A*X=B.
+     * @param outputShape Shape for the solution tensor X.
+     * @return The solution X to the linear tensor equation A*X=B.
      */
     @Override
     protected Tensor wrap(Vector x, Shape outputShape) {
-        return new Tensor(outputShape, x.entries);
+        return new Tensor(outputShape, x.data);
     }
 }

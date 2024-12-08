@@ -1,8 +1,8 @@
 package org.flag4j.matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MatrixElementScalarTests {
     double[][] aEntries, expEntries;
-    CNumber[][] expEntriesC;
+    Complex128[][] expEntriesC;
     double scalar;
-    CNumber scalarC;
+    Complex128 scalarC;
     Matrix A;
     Matrix expResult;
     CMatrix expResultC;
@@ -28,22 +28,22 @@ class MatrixElementScalarTests {
                 {4.13/1.44, -35.33/1.44, 6/1.44}};
         expResult = new Matrix(expEntries);
 
-        assertArrayEquals(expResult.entries, A.div(scalar).entries);
+        assertArrayEquals(expResult.data, A.div(scalar).data);
         assertEquals(expResult.shape, A.div(scalar).shape);
 
         // -------------- Sub-case 2 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
-        scalarC = new CNumber(1.3245, -42.5);
-        expEntriesC = new CNumber[][]{{new CNumber(1.334).div(scalarC),
-                new CNumber(-2.3112).div(scalarC),
-                new CNumber(334.3).div(scalarC)},
-                {new CNumber(4.13).div(scalarC),
-                        new CNumber(-35.33).div(scalarC),
-                        new CNumber(6).div(scalarC)}};
+        scalarC = new Complex128(1.3245, -42.5);
+        expEntriesC = new Complex128[][]{{new Complex128(1.334).div(scalarC),
+                new Complex128(-2.3112).div(scalarC),
+                new Complex128(334.3).div(scalarC)},
+                {new Complex128(4.13).div(scalarC),
+                        new Complex128(-35.33).div(scalarC),
+                        new Complex128(6).div(scalarC)}};
         expResultC = new CMatrix(expEntriesC);
 
-        assertArrayEquals(expResultC.entries, A.div(scalarC).entries);
+        assertArrayEquals(expResultC.data, A.div(scalarC).data);
         assertEquals(expResultC.shape, A.div(scalarC).shape);
     }
 
@@ -58,7 +58,7 @@ class MatrixElementScalarTests {
                 {1.0/4.13, 1.0/-35.33, 1.0/6}};
         expResult = new Matrix(expEntries);
 
-        assertArrayEquals(expResult.entries, A.recip().entries);
+        assertArrayEquals(expResult.data, A.recip().data);
         assertEquals(expResult.shape, A.recip().shape);
     }
 }

@@ -1,8 +1,8 @@
 package org.flag4j.vector;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 2 ------------
         expSize = 0;
@@ -40,7 +40,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 3 ------------
         expSize = -1;
@@ -60,7 +60,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 2 ------------
         expSize = 0;
@@ -73,7 +73,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 3 ------------
         expSize = -1;
@@ -93,7 +93,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 2 ------------
         expEntries = new double[]{-0.234974};
@@ -104,7 +104,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
     }
 
 
@@ -123,7 +123,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 2 ------------
         entriesI = new int[]{-22};
@@ -138,7 +138,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
     }
 
 
@@ -158,7 +158,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 2 ------------
         entriesI = new int[]{-22};
@@ -174,7 +174,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 3 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
@@ -190,7 +190,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 4 ------------
         entriesI = new int[]{-22};
@@ -206,7 +206,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
     }
 
 
@@ -221,7 +221,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 2 ------------
         expSize = 0;
@@ -232,7 +232,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 3 ------------
         expShape = new Shape(1, 4);
@@ -252,7 +252,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 2 ------------
         expSize = 0;
@@ -265,7 +265,7 @@ class VectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ----------- Sub-case 3 ------------
         fillValue = -10.23423;

@@ -1,8 +1,8 @@
 package org.flag4j.sparse_complex_tensor;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ class CooCTensorToStringTests {
 
     static CooCTensor A;
     static Shape aShape;
-    static CNumber[] aEntries;
+    static Complex128[] aEntries;
     static int[][] aIndices;
 
     String exp;
@@ -27,7 +27,7 @@ class CooCTensorToStringTests {
     void cooCTensorToStringTests() {
         // ----------------------- Sub-case 1 -----------------------
         aShape = new Shape(5, 4, 2, 3, 15);
-        aEntries = new CNumber[]{new CNumber(0.8103, 0.0203), new CNumber(0.5684, 0.4151), new CNumber(0.9044, 0.8734), new CNumber(0.201, 0.7032), new CNumber(0.9682, 0.2723), new CNumber(0.4699, 0.8203), new CNumber(0.3871, 0.3395), new CNumber(0.7851, 0.3768), new CNumber(0.2315, 0.7695), new CNumber(0.8333, 0.8837), new CNumber(0.0398, 0.559), new CNumber(0.0405, 0.9707), new CNumber(0.488, 0.8343), new CNumber(0.2441, 0.7806), new CNumber(0.3995, 0.6793), new CNumber(0.3689, 0.6126), new CNumber(0.0767, 0.9631), new CNumber(0.8007, 0.4023)};
+        aEntries = new Complex128[]{new Complex128(0.8103, 0.0203), new Complex128(0.5684, 0.4151), new Complex128(0.9044, 0.8734), new Complex128(0.201, 0.7032), new Complex128(0.9682, 0.2723), new Complex128(0.4699, 0.8203), new Complex128(0.3871, 0.3395), new Complex128(0.7851, 0.3768), new Complex128(0.2315, 0.7695), new Complex128(0.8333, 0.8837), new Complex128(0.0398, 0.559), new Complex128(0.0405, 0.9707), new Complex128(0.488, 0.8343), new Complex128(0.2441, 0.7806), new Complex128(0.3995, 0.6793), new Complex128(0.3689, 0.6126), new Complex128(0.0767, 0.9631), new Complex128(0.8007, 0.4023)};
         aIndices = new int[][]{
                 {0, 0, 0, 0, 0},
                 {0, 1, 0, 0, 7},

@@ -1,7 +1,7 @@
 package org.flag4j.sparse_vector;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -28,7 +28,7 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
         assertArrayEquals(expIndices, a.indices);
 
         // ------------- Sub-case 2 -------------
@@ -48,7 +48,7 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
@@ -85,7 +85,7 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
 
         // ------------- Sub-case 2 -------------
         expSize = -1;
@@ -126,6 +126,6 @@ class CooVectorConstructorTests {
 
         assertEquals(expSize, a.size());
         assertEquals(expShape, a.shape);
-        assertArrayEquals(expEntries, a.entries);
+        assertArrayEquals(expEntries, a.data);
     }
 }

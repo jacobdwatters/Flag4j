@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2024-08-09">
-<meta name="description" content="declaration: package: org.flag4j.core.sparse_base, class: RealSparseTensorBase">
+<meta name="description" content="declaration: package: org.flag4j.core_old.sparse_base, class: RealSparseTensorBase">
 <meta name="generator" content="javadoc/ClassWriter">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/stylesheet.css" title="Style">
@@ -80,13 +80,13 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.core.sparse_base</a></div>
-<h1 title="Class RealSparseTensorBase" class="title">Class RealSparseTensorBase&lt;T extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr>U,<wbr>W,<wbr>Z&gt;</h1>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.core_old.sparse_base</a></div>
+<h1 title="Class RealSparseTensorBase" class="title">Class RealSparseTensorBase&lt;T extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr>U,<wbr>W,<wbr>Z&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../TensorBase.html" title="class in org.flag4j.core">org.flag4j.core.TensorBase</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;
-<div class="inheritance"><a href="SparseTensorBase.html" title="class in org.flag4j.core.sparse_base">org.flag4j.core.sparse_base.SparseTensorBase</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;
-<div class="inheritance">org.flag4j.core.sparse_base.RealSparseTensorBase&lt;T,<wbr>U,<wbr>W,<wbr>Z&gt;</div>
+<div class="inheritance"><a href="../TensorBase.html" title="class in org.flag4j.core_old">org.flag4j.core_old.TensorBase</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;
+<div class="inheritance"><a href="SparseTensorBase.html" title="class in org.flag4j.core_old.sparse_base">org.flag4j.core_old.sparse_base.SparseTensorBase</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;
+<div class="inheritance">org.flag4j.core_old.sparse_base.RealSparseTensorBase&lt;T,<wbr>U,<wbr>W,<wbr>Z&gt;</div>
 </div>
 </div>
 </div>
@@ -101,16 +101,16 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../RealTensorMixin.html" title="interface in org.flag4j.core">RealTensorMixin</a>&lt;T,<wbr>W&gt;</code>, <code><a href="SparseTensorMixin.html" title="interface in org.flag4j.core.sparse_base">SparseTensorMixin</a></code>, <code><a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></code>, <code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;T&gt;</code>, <code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code>, <code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../RealTensorMixin.html" title="interface in org.flag4j.core_old">RealTensorMixin</a>&lt;T,<wbr>W&gt;</code>, <code><a href="SparseTensorMixin.html" title="interface in org.flag4j.core_old.sparse_base">SparseTensorMixin</a></code>, <code><a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></code>, <code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;T&gt;</code>, <code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code>, <code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="../../arrays/sparse/CooMatrix.html" title="class in org.flag4j.arrays.sparse">CooMatrix</a></code>, <code><a href="../../arrays/sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a></code>, <code><a href="../../arrays/sparse/CooVector.html" title="class in org.flag4j.arrays.sparse">CooVector</a></code>, <code><a href="../../arrays/sparse/CsrMatrix.html" title="class in org.flag4j.arrays.sparse">CsrMatrix</a></code></dd>
+<dd><code><a href="../../arrays/sparse/CooMatrix.html" title="class in org.flag4j.arrays_old.sparse">CooMatrix</a></code>, <code><a href="../../arrays/sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a></code>, <code><a href="../../arrays/sparse/CooVector.html" title="class in org.flag4j.arrays_old.sparse">CooVector</a></code>, <code><a href="../../arrays/sparse/CsrMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrMatrix</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">RealSparseTensorBase&lt;T extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr>U,<wbr>W,<wbr>Z&gt;</span>
-<span class="extends-implements">extends <a href="SparseTensorBase.html" title="class in org.flag4j.core.sparse_base">SparseTensorBase</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;
-implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core">RealTensorMixin</a>&lt;T,<wbr>W&gt;</span></div>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">RealSparseTensorBase&lt;T extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;T,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr>U,<wbr>W,<wbr>Z&gt;</span>
+<span class="extends-implements">extends <a href="SparseTensorBase.html" title="class in org.flag4j.core_old.sparse_base">SparseTensorBase</a>&lt;T,<wbr>U,<wbr>W,<wbr>Z,<wbr>T,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;
+implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core_old">RealTensorMixin</a>&lt;T,<wbr>W&gt;</span></div>
 <div class="block">Base class for all sparse tensor.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -129,10 +129,10 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
 <div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.flag4j.core.sparse_base.SparseTensorBase">Fields inherited from class&nbsp;org.flag4j.core.sparse_base.<a href="SparseTensorBase.html" title="class in org.flag4j.core.sparse_base">SparseTensorBase</a></h3>
+<h3 id="fields-inherited-from-class-org.flag4j.core.sparse_base.SparseTensorBase">Fields inherited from class&nbsp;org.flag4j.core_old.sparse_base.<a href="SparseTensorBase.html" title="class in org.flag4j.core_old.sparse_base">SparseTensorBase</a></h3>
 <code><a href="SparseTensorBase.html#indices">indices</a>, <a href="SparseTensorBase.html#nnz">nnz</a></code></div>
 <div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.flag4j.core.TensorBase">Fields inherited from class&nbsp;org.flag4j.core.<a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a></h3>
+<h3 id="fields-inherited-from-class-org.flag4j.core.TensorBase">Fields inherited from class&nbsp;org.flag4j.core_old.<a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a></h3>
 <code><a href="../TensorBase.html#DEFAULT_ROUND_TO_ZERO_THRESHOLD">DEFAULT_ROUND_TO_ZERO_THRESHOLD</a>, <a href="../TensorBase.html#entries">entries</a>, <a href="../TensorBase.html#shape">shape</a></code></div>
 </section>
 </li>
@@ -146,7 +146,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,int,double%5B%5D,int%5B%5D%5B%5D)" class="member-name-link">RealSparseTensorBase</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,int,double%5B%5D,int%5B%5D%5B%5D)" class="member-name-link">RealSparseTensorBase</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  int&nbsp;nonZeroEntries,
  double[]&nbsp;entries,
  int[][]&nbsp;indices)</code></div>
@@ -154,7 +154,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Creates a sparse tensor with specified shape.</div>
 </div>
 <div class="col-first odd-row-color"><code>protected </code></div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,int,double%5B%5D,int%5B%5D,int%5B%5D...)" class="member-name-link">RealSparseTensorBase</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,int,double%5B%5D,int%5B%5D,int%5B%5D...)" class="member-name-link">RealSparseTensorBase</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  int&nbsp;nonZeroEntries,
  double[]&nbsp;entries,
  int[]&nbsp;initIndices,
@@ -227,20 +227,20 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Checks if this tensor only contains zeros.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#makeComplexTensor(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,int%5B%5D%5B%5D)" class="member-name-link">makeComplexTensor</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#makeComplexTensor(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D,int%5B%5D%5B%5D)" class="member-name-link">makeComplexTensor</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;entries,
  int[][]&nbsp;indices)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">A factory for creating a complex sparse tensor.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#makeDenseTensor(org.flag4j.core.Shape,double%5B%5D)" class="member-name-link">makeDenseTensor</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#makeDenseTensor(org.flag4j.core.Shape,double%5B%5D)" class="member-name-link">makeDenseTensor</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">A factory for creating a real dense tensor.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#makeTensor(org.flag4j.core.Shape,double%5B%5D,int%5B%5D%5B%5D)" class="member-name-link">makeTensor</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#makeTensor(org.flag4j.core.Shape,double%5B%5D,int%5B%5D%5B%5D)" class="member-name-link">makeTensor</a><wbr>(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries,
  int[][]&nbsp;indices)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
@@ -330,25 +330,25 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.sparse_base.SparseTensorBase">Methods inherited from class&nbsp;org.flag4j.core.sparse_base.<a href="SparseTensorBase.html" title="class in org.flag4j.core.sparse_base">SparseTensorBase</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.sparse_base.SparseTensorBase">Methods inherited from class&nbsp;org.flag4j.core_old.sparse_base.<a href="SparseTensorBase.html" title="class in org.flag4j.core_old.sparse_base">SparseTensorBase</a></h3>
 <code><a href="SparseTensorBase.html#density()">density</a>, <a href="SparseTensorBase.html#sparsity()">sparsity</a>, <a href="SparseTensorBase.html#toDense()">toDense</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorBase">Methods inherited from class&nbsp;org.flag4j.core.<a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorBase">Methods inherited from class&nbsp;org.flag4j.core_old.<a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a></h3>
 <code><a href="../TensorBase.html#allClose(T)">allClose</a>, <a href="../TensorBase.html#allClose(T,double,double)">allClose</a>, <a href="../TensorBase.html#getEntries()">getEntries</a>, <a href="../TensorBase.html#getRank()">getRank</a>, <a href="../TensorBase.html#getSelf()">getSelf</a>, <a href="../TensorBase.html#getShape()">getShape</a>, <a href="../TensorBase.html#sameLength(org.flag4j.core.TensorBase,org.flag4j.core.TensorBase,int)">sameLength</a>, <a href="../TensorBase.html#sameShape(org.flag4j.core.TensorBase)">sameShape</a>, <a href="../TensorBase.html#tensorEquals(org.flag4j.core.TensorBase)">tensorEquals</a>, <a href="../TensorBase.html#totalEntries()">totalEntries</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.RealTensorMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../RealTensorMixin.html" title="interface in org.flag4j.core">RealTensorMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.RealTensorMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../RealTensorMixin.html" title="interface in org.flag4j.core_old">RealTensorMixin</a></h3>
 <code><a href="../RealTensorMixin.html#toComplex()">toComplex</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorComparisonsMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorComparisonsMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></h3>
 <code><a href="../TensorComparisonsMixin.html#equals(java.lang.Object)">equals</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorManipulationsMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorManipulationsMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a></h3>
 <code><a href="../TensorManipulationsMixin.html#flatten()">flatten</a>, <a href="../TensorManipulationsMixin.html#flatten(int)">flatten</a>, <a href="../TensorManipulationsMixin.html#reshape(org.flag4j.core.Shape)">reshape</a>, <a href="../TensorManipulationsMixin.html#set(double,int...)">set</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorOperationsMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorOperationsMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a></h3>
 <code><a href="../TensorOperationsMixin.html#add(double)">add</a>, <a href="../TensorOperationsMixin.html#add(org.flag4j.complex_numbers.CNumber)">add</a>, <a href="../TensorOperationsMixin.html#add(T)">add</a>, <a href="../TensorOperationsMixin.html#copy()">copy</a>, <a href="../TensorOperationsMixin.html#elemDiv(U)">elemDiv</a>, <a href="../TensorOperationsMixin.html#elemMult(T)">elemMult</a>, <a href="../TensorOperationsMixin.html#get(int...)">get</a>, <a href="../TensorOperationsMixin.html#sub(double)">sub</a>, <a href="../TensorOperationsMixin.html#sub(org.flag4j.complex_numbers.CNumber)">sub</a>, <a href="../TensorOperationsMixin.html#sub(T)">sub</a>, <a href="../TensorOperationsMixin.html#T()">T</a>, <a href="../TensorOperationsMixin.html#transpose()">transpose</a></code></div>
 </section>
 </li>
@@ -365,7 +365,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,int,double[],int[][])">
 <h3>RealSparseTensorBase</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">RealSparseTensorBase</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">RealSparseTensorBase</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  int&nbsp;nonZeroEntries,
  double[]&nbsp;entries,
  int[][]&nbsp;indices)</span></div>
@@ -392,7 +392,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,int,double[],int[],int[]...)">
 <h3>RealSparseTensorBase</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">RealSparseTensorBase</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">RealSparseTensorBase</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  int&nbsp;nonZeroEntries,
  double[]&nbsp;entries,
  int[]&nbsp;initIndices,
@@ -436,7 +436,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <section class="detail" id="makeTensor(org.flag4j.core.Shape,double[],int[][])">
 <h3>makeTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a></span>&nbsp;<span class="element-name">makeTensor</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a></span>&nbsp;<span class="element-name">makeTensor</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries,
  int[][]&nbsp;indices)</span></div>
 <div class="block">A factory for creating a real sparse tensor.</div>
@@ -455,7 +455,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <section class="detail" id="makeDenseTensor(org.flag4j.core.Shape,double[])">
 <h3>makeDenseTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a></span>&nbsp;<span class="element-name">makeDenseTensor</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a></span>&nbsp;<span class="element-name">makeDenseTensor</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries)</span></div>
 <div class="block">A factory for creating a real dense tensor.</div>
 <dl class="notes">
@@ -472,7 +472,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <section class="detail" id="makeComplexTensor(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber[],int[][])">
 <h3>makeComplexTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a></span>&nbsp;<span class="element-name">makeComplexTensor</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a></span>&nbsp;<span class="element-name">makeComplexTensor</span><wbr><span class="parameters">(<a href="../Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;entries,
  int[][]&nbsp;indices)</span></div>
 <div class="block">A factory for creating a complex sparse tensor.</div>
@@ -495,7 +495,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="SparseTensorMixin.html#sortIndices()">sortIndices</a></code>&nbsp;in interface&nbsp;<code><a href="SparseTensorMixin.html" title="interface in org.flag4j.core.sparse_base">SparseTensorMixin</a></code></dd>
+<dd><code><a href="SparseTensorMixin.html#sortIndices()">sortIndices</a></code>&nbsp;in interface&nbsp;<code><a href="SparseTensorMixin.html" title="interface in org.flag4j.core_old.sparse_base">SparseTensorMixin</a></code></dd>
 </dl>
 </div>
 </section>
@@ -508,7 +508,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Gets the number of non-zero entries stored in this sparse tensor.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="SparseTensorBase.html#nonZeroEntries()">nonZeroEntries</a></code>&nbsp;in class&nbsp;<code><a href="SparseTensorBase.html" title="class in org.flag4j.core.sparse_base">SparseTensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="SparseTensorBase.html#nonZeroEntries()">nonZeroEntries</a></code>&nbsp;in class&nbsp;<code><a href="SparseTensorBase.html" title="class in org.flag4j.core_old.sparse_base">SparseTensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr>double[],<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The number of non-zero entries stored in this tensor.</dd>
 </dl>
@@ -524,7 +524,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Finds the minimum value in this tensor. If this tensor is complex, then this method finds the smallest value in magnitude.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorPropertiesMixin.html#min()">min</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="../TensorPropertiesMixin.html#min()">min</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>The minimum value (smallest in magnitude for a complex valued tensor) in this tensor.</dd>
 </dl>
@@ -540,7 +540,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Finds the maximum value in this tensor. If this tensor is complex, then this method finds the largest value in magnitude.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorPropertiesMixin.html#max()">max</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="../TensorPropertiesMixin.html#max()">max</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>The maximum value (largest in magnitude for a complex valued tensor) in this tensor.</dd>
 </dl>
@@ -557,7 +557,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
  to <a href="../TensorPropertiesMixin.html#min()"><code>TensorPropertiesMixin.min()</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorPropertiesMixin.html#minAbs()">minAbs</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="../TensorPropertiesMixin.html#minAbs()">minAbs</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>The minimum value, in absolute value, in this tensor.</dd>
 </dl>
@@ -574,7 +574,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
  to <a href="../TensorPropertiesMixin.html#max()"><code>TensorPropertiesMixin.max()</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorPropertiesMixin.html#maxAbs()">maxAbs</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="../TensorPropertiesMixin.html#maxAbs()">maxAbs</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>The maximum value, in absolute value, in this tensor.</dd>
 </dl>
@@ -590,7 +590,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Checks if this tensor contains only non-negative values.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../RealTensorMixin.html#isPos()">isPos</a></code>&nbsp;in interface&nbsp;<code><a href="../RealTensorMixin.html" title="interface in org.flag4j.core">RealTensorMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>&gt;</code></dd>
+<dd><code><a href="../RealTensorMixin.html#isPos()">isPos</a></code>&nbsp;in interface&nbsp;<code><a href="../RealTensorMixin.html" title="interface in org.flag4j.core_old">RealTensorMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>True if this tensor only contains non-negative values. Otherwise, returns false.</dd>
 </dl>
@@ -606,7 +606,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Checks if this tensor contains only non-positive values.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../RealTensorMixin.html#isNeg()">isNeg</a></code>&nbsp;in interface&nbsp;<code><a href="../RealTensorMixin.html" title="interface in org.flag4j.core">RealTensorMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>&gt;</code></dd>
+<dd><code><a href="../RealTensorMixin.html#isNeg()">isNeg</a></code>&nbsp;in interface&nbsp;<code><a href="../RealTensorMixin.html" title="interface in org.flag4j.core_old">RealTensorMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>trie if this tensor only contains non-positive values. Otherwise, returns false.</dd>
 </dl>
@@ -622,7 +622,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Checks if this tensor only contains zeros.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorComparisonsMixin.html#isZeros()">isZeros</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></code></dd>
+<dd><code><a href="../TensorComparisonsMixin.html#isZeros()">isZeros</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>True if this tensor only contains zeros. Otherwise, returns false.</dd>
 </dl>
@@ -637,7 +637,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Checks if this sparse tensors non-zero values are all ones.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorComparisonsMixin.html#isOnes()">isOnes</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></code></dd>
+<dd><code><a href="../TensorComparisonsMixin.html#isOnes()">isOnes</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>True if this sparse tensors non-zero values are all ones. False otherwise.</dd>
 </dl>
@@ -653,7 +653,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Sums together all entries in the tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#sum()">sum</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#sum()">sum</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The sum of all entries in this tensor.</dd>
 </dl>
@@ -669,7 +669,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Computes scalar multiplication of a tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#mult(double)">mult</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#mult(double)">mult</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>factor</code> - Scalar value to multiply with tensor.</dd>
 <dt>Returns:</dt>
@@ -687,7 +687,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Computes scalar multiplication of a tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#mult(org.flag4j.complex_numbers.CNumber)">mult</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#mult(org.flag4j.complex_numbers.CNumber)">mult</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>factor</code> - Scalar value to multiply with tensor.</dd>
 <dt>Returns:</dt>
@@ -705,7 +705,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Computes the scalar division of a tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#div(double)">div</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#div(double)">div</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>divisor</code> - The scalar value to divide tensor by.</dd>
 <dt>Returns:</dt>
@@ -723,7 +723,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Computes the scalar division of a tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#div(org.flag4j.complex_numbers.CNumber)">div</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#div(org.flag4j.complex_numbers.CNumber)">div</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>divisor</code> - The scalar value to divide tensor by.</dd>
 <dt>Returns:</dt>
@@ -741,7 +741,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Computes the element-wise square root of a tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#sqrt()">sqrt</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#sqrt()">sqrt</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The result of applying an element-wise square root to this tensor. Note, this method will compute
  the principle square root i.e. the square root with positive real part.</dd>
@@ -759,7 +759,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
  be computed.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#abs()">abs</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#abs()">abs</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The result of applying an element-wise absolute value/magnitude to this tensor.</dd>
 </dl>
@@ -776,7 +776,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
  in the reshaped tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorManipulationsMixin.html#reshape(int...)">reshape</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
+<dd><code><a href="../TensorManipulationsMixin.html#reshape(int...)">reshape</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>dims</code> - Shape of the new tensor.</dd>
 <dt>Returns:</dt>
@@ -794,7 +794,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Finds the indices of the maximum value in this tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorPropertiesMixin.html#argMax()">argMax</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="../TensorPropertiesMixin.html#argMax()">argMax</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>The indices of the maximum value in this tensor. If this value occurs multiple times, the indices of the first
  entry (in row-major ordering) are returned.</dd>
@@ -811,7 +811,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Finds the indices of the minimum value in this tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorPropertiesMixin.html#argMin()">argMin</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="../TensorPropertiesMixin.html#argMin()">argMin</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 <dt>Returns:</dt>
 <dd>The indices of the minimum value in this tensor. If this value occurs multiple times, the indices of the first
  entry (in row-major ordering) are returned.</dd>
@@ -828,7 +828,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Computes the reciprocals, element-wise, of a tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorOperationsMixin.html#recip()">recip</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
+<dd><code><a href="../TensorOperationsMixin.html#recip()">recip</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">U</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">W</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">Z</a>,<wbr><a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;,<wbr><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>A tensor containing the reciprocal elements of this tensor.</dd>
 </dl>
@@ -844,7 +844,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Rounds each entry of this tensor to the nearest whole number.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorManipulationsMixin.html#round()">round</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
+<dd><code><a href="../TensorManipulationsMixin.html#round()">round</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>A copy of this tensor with each entry rounded to the nearest whole number.</dd>
 <dt>See Also:</dt>
@@ -868,7 +868,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
 <div class="block">Rounds each entry in this tensor to the nearest whole number.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorManipulationsMixin.html#round(int)">round</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
+<dd><code><a href="../TensorManipulationsMixin.html#round(int)">round</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>precision</code> - The number of decimal places to round to. This value must be non-negative.</dd>
 <dt>Returns:</dt>
@@ -897,7 +897,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
  <a href="../TensorManipulationsMixin.html#roundToZero(double)"><code>TensorManipulationsMixin.roundToZero(double)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorManipulationsMixin.html#roundToZero()">roundToZero</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
+<dd><code><a href="../TensorManipulationsMixin.html#roundToZero()">roundToZero</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>A copy of this matrix with rounded values.</dd>
 <dt>See Also:</dt>
@@ -922,7 +922,7 @@ implements <a href="../RealTensorMixin.html" title="interface in org.flag4j.core
  independently.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../TensorManipulationsMixin.html#roundToZero(double)">roundToZero</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
+<dd><code><a href="../TensorManipulationsMixin.html#roundToZero(double)">roundToZero</a></code>&nbsp;in interface&nbsp;<code><a href="../TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a> extends <a href="../TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="RealSparseTensorBase.html" title="type parameter in RealSparseTensorBase">T</a>,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?,<wbr>?&gt;&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>threshold</code> - Threshold for rounding values to zero. That is, if a value in this matrix is less than the threshold in absolute value then it
                   will be rounded to zero. This value must be non-negative.</dd>

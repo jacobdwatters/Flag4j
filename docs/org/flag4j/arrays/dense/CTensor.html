@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2024-08-09">
-<meta name="description" content="declaration: package: org.flag4j.arrays.dense, class: CTensor">
+<meta name="description" content="declaration: package: org.flag4j.arrays_old.dense, class: CTensor">
 <meta name="generator" content="javadoc/ClassWriter">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/stylesheet.css" title="Style">
@@ -80,14 +80,14 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.arrays.dense</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">org.flag4j.arrays_old.dense</a></div>
 <h1 title="Class CTensor" class="title">Class CTensor</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../../core/TensorBase.html" title="class in org.flag4j.core">org.flag4j.core.TensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;
-<div class="inheritance"><a href="../../core/dense_base/DenseTensorBase.html" title="class in org.flag4j.core.dense_base">org.flag4j.core.dense_base.DenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;
-<div class="inheritance"><a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core.dense_base">org.flag4j.core.dense_base.ComplexDenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&gt;
-<div class="inheritance">org.flag4j.arrays.dense.CTensor</div>
+<div class="inheritance"><a href="../../core/TensorBase.html" title="class in org.flag4j.core_old">org.flag4j.core_old.TensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;
+<div class="inheritance"><a href="../../core/dense_base/DenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">org.flag4j.core_old.dense_base.DenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;
+<div class="inheritance"><a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">org.flag4j.core_old.dense_base.ComplexDenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&gt;
+<div class="inheritance">org.flag4j.arrays_old.dense.CTensorOld</div>
 </div>
 </div>
 </div>
@@ -96,12 +96,12 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code>, <code><a href="../../core/ComplexTensorMixin.html" title="interface in org.flag4j.core">ComplexTensorMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&gt;</code>, <code><a href="../../core/dense_base/DenseMixin.html" title="interface in org.flag4j.core.dense_base">DenseMixin</a>&lt;<a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="../../core/TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></code>, <code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code>, <code><a href="../../core/TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code>, <code><a href="../../core/TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="../../core/TensorPropertiesMixin.html" title="interface in org.flag4j.core">TensorPropertiesMixin</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code>, <code><a href="../../core/ComplexTensorMixin.html" title="interface in org.flag4j.core_old">ComplexTensorMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&gt;</code>, <code><a href="../../core/dense_base/DenseMixin.html" title="interface in org.flag4j.core_old.dense_base">DenseMixin</a>&lt;<a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="../../core/TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></code>, <code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code>, <code><a href="../../core/TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code>, <code><a href="../../core/TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code>, <code><a href="../../core/TensorPropertiesMixin.html" title="interface in org.flag4j.core_old">TensorPropertiesMixin</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CTensor</span>
-<span class="extends-implements">extends <a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&gt;
-implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&gt;
+implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</span></div>
 <div class="block">Complex dense tensor.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -120,7 +120,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
 <div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.flag4j.core.TensorBase">Fields inherited from class&nbsp;org.flag4j.core.<a href="../../core/TensorBase.html" title="class in org.flag4j.core">TensorBase</a></h3>
+<h3 id="fields-inherited-from-class-org.flag4j.core.TensorBase">Fields inherited from class&nbsp;org.flag4j.core_old.<a href="../../core/TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a></h3>
 <code><a href="../../core/TensorBase.html#DEFAULT_ROUND_TO_ZERO_THRESHOLD">DEFAULT_ROUND_TO_ZERO_THRESHOLD</a>, <a href="../../core/TensorBase.html#entries">entries</a>, <a href="../../core/TensorBase.html#shape">shape</a></code></div>
 </section>
 </li>
@@ -132,39 +132,39 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.arrays.dense.CTensor)" class="member-name-link">CTensor</a><wbr>(<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;A)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.arrays.dense.CTensor)" class="member-name-link">CTensor</a><wbr>(<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;A)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a complex tensor whose shape and entries are specified by another tensor.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.arrays.dense.Tensor)" class="member-name-link">CTensor</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;A)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.arrays.dense.Tensor)" class="member-name-link">CTensor</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;A)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a complex tensor whose shape and entries are specified by another tensor.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructs a tensor with given shape filled with zeros.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,double)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,double)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double&nbsp;fillValue)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,double%5B%5D)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,double%5B%5D)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,int%5B%5D)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,int%5B%5D)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  int[]&nbsp;entries)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&nbsp;fillValue)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">CTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;entries)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
@@ -183,53 +183,53 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.flag4j.arrays.dense.Tensor)" class="member-name-link">add</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.flag4j.arrays.dense.Tensor)" class="member-name-link">add</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">add</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">add</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">add</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">add</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEq(org.flag4j.arrays.dense.Tensor)" class="member-name-link">addEq</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEq(org.flag4j.arrays.dense.Tensor)" class="member-name-link">addEq</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEq(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">addEq</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEq(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">addEq</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEq(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">addEq</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEq(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">addEq</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemDiv(org.flag4j.arrays.dense.Tensor)" class="member-name-link">elemDiv</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemDiv(org.flag4j.arrays.dense.Tensor)" class="member-name-link">elemDiv</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise division between two tensors.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemMult(org.flag4j.arrays.dense.Tensor)" class="member-name-link">elemMult</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemMult(org.flag4j.arrays.dense.Tensor)" class="member-name-link">elemMult</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise multiplication between two tensors.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemMult(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">elemMult</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemMult(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">elemMult</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise multiplication between two tensors.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemMult(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">elemMult</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#elemMult(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">elemMult</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise multiplication between two tensors.</div>
 </div>
@@ -238,124 +238,124 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks if an object is equal to this tensor object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#flatten()" class="member-name-link">flatten</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Flattens tensor to single dimension.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#flatten(int)" class="member-name-link">flatten</a><wbr>(int&nbsp;axis)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Flattens a tensor along the specified axis.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSelf()" class="member-name-link">getSelf</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Simply returns a reference of this tensor.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#H()" class="member-name-link">H</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the conjugate transpose of this tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#H(int...)" class="member-name-link">H</a><wbr>(int...&nbsp;axes)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the conjugate transpose of this tensor.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#H(int,int)" class="member-name-link">H</a><wbr>(int&nbsp;axis1,
  int&nbsp;axis2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the transpose of a tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeRealTensor(org.flag4j.core.Shape,double%5B%5D)" class="member-name-link">makeRealTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeRealTensor(org.flag4j.core.Shape,double%5B%5D)" class="member-name-link">makeRealTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Factory to create a real tensor with the specified shape and size.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeTensor(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">makeTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeTensor(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber%5B%5D)" class="member-name-link">makeTensor</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;entries)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Factory to create a tensor with the specified shape and size.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sub(org.flag4j.arrays.dense.Tensor)" class="member-name-link">sub</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sub(org.flag4j.arrays.dense.Tensor)" class="member-name-link">sub</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sub(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">sub</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sub(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">sub</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise subtraction between two tensors of the same rank.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sub(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">sub</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sub(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">sub</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise subtraction between two tensors of the same rank.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subEq(org.flag4j.arrays.dense.Tensor)" class="member-name-link">subEq</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subEq(org.flag4j.arrays.dense.Tensor)" class="member-name-link">subEq</a><wbr>(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subEq(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">subEq</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subEq(org.flag4j.arrays.sparse.CooCTensor)" class="member-name-link">subEq</a><wbr>(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subEq(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">subEq</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subEq(org.flag4j.arrays.sparse.CooTensor)" class="member-name-link">subEq</a><wbr>(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#T()" class="member-name-link">T</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the transpose of a tensor.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#T(int...)" class="member-name-link">T</a><wbr>(int...&nbsp;axes)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the transpose of this tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#T(int,int)" class="member-name-link">T</a><wbr>(int&nbsp;axis1,
  int&nbsp;axis2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the transpose of a tensor.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tensorDot(org.flag4j.arrays.dense.CTensor)" class="member-name-link">tensorDot</a><wbr>(<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;src2)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tensorDot(org.flag4j.arrays.dense.CTensor)" class="member-name-link">tensorDot</a><wbr>(<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;src2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the tensor dot product of this tensor with a second tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tensorDot(org.flag4j.arrays.dense.CTensor,int%5B%5D,int%5B%5D)" class="member-name-link">tensorDot</a><wbr>(<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;src2,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tensorDot(org.flag4j.arrays.dense.CTensor,int%5B%5D,int%5B%5D)" class="member-name-link">tensorDot</a><wbr>(<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;src2,
  int[]&nbsp;aAxes,
  int[]&nbsp;bAxes)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tensorInv(int)" class="member-name-link">tensorInv</a><wbr>(int&nbsp;numIndices)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Computes the 'inverse' of this tensor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toCoo()" class="member-name-link">toCoo</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Converts this dense tensor to an equivalent sparse COO tensor.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toMatrix()" class="member-name-link">toMatrix</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Converts this tensor to an equivalent matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toMatrix(org.flag4j.core.Shape)" class="member-name-link">toMatrix</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;matShape)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toMatrix(org.flag4j.core.Shape)" class="member-name-link">toMatrix</a><wbr>(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;matShape)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Converts this tensor to a matrix with the specified shape.</div>
 </div>
@@ -364,7 +364,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Formats this tensor as a human-readable string.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toVector()" class="member-name-link">toVector</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Converts this tensor to an equivalent vector.</div>
@@ -373,25 +373,25 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.dense_base.ComplexDenseTensorBase">Methods inherited from class&nbsp;org.flag4j.core.dense_base.<a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core.dense_base">ComplexDenseTensorBase</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.dense_base.ComplexDenseTensorBase">Methods inherited from class&nbsp;org.flag4j.core_old.dense_base.<a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">ComplexDenseTensorBase</a></h3>
 <code><a href="../../core/dense_base/ComplexDenseTensorBase.html#abs()">abs</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#add(double)">add</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#add(org.flag4j.complex_numbers.CNumber)">add</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#add(T)">add</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#addEq(java.lang.Double)">addEq</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#addEq(org.flag4j.complex_numbers.CNumber)">addEq</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#addEq(T)">addEq</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#allClose(T,double,double)">allClose</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#argMax()">argMax</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#argMin()">argMin</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#conj()">conj</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#copy()">copy</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#div(double)">div</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#div(org.flag4j.complex_numbers.CNumber)">div</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#elemDiv(T)">elemDiv</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#elemMult(T)">elemMult</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#get(int...)">get</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#hashCode()">hashCode</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#isComplex()">isComplex</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#isOnes()">isOnes</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#isReal()">isReal</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#isZeros()">isZeros</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#max()">max</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#maxAbs()">maxAbs</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#min()">min</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#minAbs()">minAbs</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#mult(double)">mult</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#mult(org.flag4j.complex_numbers.CNumber)">mult</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#recip()">recip</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#reshape(int...)">reshape</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#reshape(org.flag4j.core.Shape)">reshape</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#round()">round</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#round(int)">round</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#roundToZero()">roundToZero</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#roundToZero(double)">roundToZero</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#set(double,int...)">set</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#set(org.flag4j.complex_numbers.CNumber,int...)">set</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#sqrt()">sqrt</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#sub(double)">sub</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#sub(org.flag4j.complex_numbers.CNumber)">sub</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#sub(T)">sub</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#subEq(java.lang.Double)">subEq</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#subEq(org.flag4j.complex_numbers.CNumber)">subEq</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#subEq(T)">subEq</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#sum()">sum</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#toReal()">toReal</a>, <a href="../../core/dense_base/ComplexDenseTensorBase.html#toRealSafe()">toRealSafe</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorBase">Methods inherited from class&nbsp;org.flag4j.core.<a href="../../core/TensorBase.html" title="class in org.flag4j.core">TensorBase</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorBase">Methods inherited from class&nbsp;org.flag4j.core_old.<a href="../../core/TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a></h3>
 <code><a href="../../core/TensorBase.html#allClose(T)">allClose</a>, <a href="../../core/TensorBase.html#getEntries()">getEntries</a>, <a href="../../core/TensorBase.html#getRank()">getRank</a>, <a href="../../core/TensorBase.html#getShape()">getShape</a>, <a href="../../core/TensorBase.html#sameLength(org.flag4j.core.TensorBase,org.flag4j.core.TensorBase,int)">sameLength</a>, <a href="../../core/TensorBase.html#sameShape(org.flag4j.core.TensorBase)">sameShape</a>, <a href="../../core/TensorBase.html#tensorEquals(org.flag4j.core.TensorBase)">tensorEquals</a>, <a href="../../core/TensorBase.html#totalEntries()">totalEntries</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.ComplexTensorExclusiveMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.ComplexTensorExclusiveMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a></h3>
 <code><a href="../../core/ComplexTensorExclusiveMixin.html#hermTranspose(int...)">hermTranspose</a>, <a href="../../core/ComplexTensorExclusiveMixin.html#hermTranspose(int,int)">hermTranspose</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.ComplexTensorMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../../core/ComplexTensorMixin.html" title="interface in org.flag4j.core">ComplexTensorMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.ComplexTensorMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../../core/ComplexTensorMixin.html" title="interface in org.flag4j.core_old">ComplexTensorMixin</a></h3>
 <code><a href="../../core/ComplexTensorMixin.html#hermTranspose()">hermTranspose</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorExclusiveMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorExclusiveMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a></h3>
 <code><a href="../../core/TensorExclusiveMixin.html#add(org.flag4j.arrays.dense.CTensor)">add</a>, <a href="../../core/TensorExclusiveMixin.html#elemDiv(org.flag4j.arrays.dense.CTensor)">elemDiv</a>, <a href="../../core/TensorExclusiveMixin.html#elemMult(org.flag4j.arrays.dense.CTensor)">elemMult</a>, <a href="../../core/TensorExclusiveMixin.html#getRank()">getRank</a>, <a href="../../core/TensorExclusiveMixin.html#sub(org.flag4j.arrays.dense.CTensor)">sub</a>, <a href="../../core/TensorExclusiveMixin.html#tensorDot(T,int)">tensorDot</a>, <a href="../../core/TensorExclusiveMixin.html#tensorDot(T,int,int)">tensorDot</a>, <a href="../../core/TensorExclusiveMixin.html#tensorInv()">tensorInv</a>, <a href="../../core/TensorExclusiveMixin.html#transpose(int...)">transpose</a>, <a href="../../core/TensorExclusiveMixin.html#transpose(int,int)">transpose</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.flag4j.core.TensorOperationsMixin">Methods inherited from interface&nbsp;org.flag4j.core.<a href="../../core/TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a></h3>
+<h3 id="methods-inherited-from-class-org.flag4j.core.TensorOperationsMixin">Methods inherited from interface&nbsp;org.flag4j.core_old.<a href="../../core/TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a></h3>
 <code><a href="../../core/TensorOperationsMixin.html#transpose()">transpose</a></code></div>
 </section>
 </li>
@@ -408,7 +408,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape)">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape)</span></div>
 <div class="block">Constructs a tensor with given shape filled with zeros.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -421,7 +421,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,double)">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double&nbsp;fillValue)</span></div>
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 <dl class="notes">
@@ -436,7 +436,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber)">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&nbsp;fillValue)</span></div>
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 <dl class="notes">
@@ -451,7 +451,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,double[])">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries)</span></div>
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 <dl class="notes">
@@ -468,7 +468,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,int[])">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  int[]&nbsp;entries)</span></div>
 <div class="block">Constructs a tensor with given shape filled with specified values.</div>
 <dl class="notes">
@@ -485,7 +485,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber[])">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;entries)</span></div>
 <div class="block">Constructs a tensor with given shape filled with specified values.
  Note, unlike other constructors, the entries parameter is not copied.</div>
@@ -503,7 +503,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.arrays.dense.Tensor)">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;A)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;A)</span></div>
 <div class="block">Creates a complex tensor whose shape and entries are specified by another tensor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -516,7 +516,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="&lt;init&gt;(org.flag4j.arrays.dense.CTensor)">
 <h3>CTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;A)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CTensor</span><wbr><span class="parameters">(<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;A)</span></div>
 <div class="block">Creates a complex tensor whose shape and entries are specified by another tensor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -537,12 +537,12 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="makeTensor(org.flag4j.core.Shape,org.flag4j.complex_numbers.CNumber[])">
 <h3>makeTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">makeTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">makeTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  <a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[]&nbsp;entries)</span></div>
 <div class="block">Factory to create a tensor with the specified shape and size.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/dense_base/DenseTensorBase.html#makeTensor(org.flag4j.core.Shape,D)">makeTensor</a></code>&nbsp;in class&nbsp;<code><a href="../../core/dense_base/DenseTensorBase.html" title="class in org.flag4j.core.dense_base">DenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="../../core/dense_base/DenseTensorBase.html#makeTensor(org.flag4j.core.Shape,D)">makeTensor</a></code>&nbsp;in class&nbsp;<code><a href="../../core/dense_base/DenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">DenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>shape</code> - Shape of the tensor to make.</dd>
 <dd><code>entries</code> - Entries of the tensor to make.</dd>
@@ -556,11 +556,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="toCoo()">
 <h3>toCoo</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a></span>&nbsp;<span class="element-name">toCoo</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a></span>&nbsp;<span class="element-name">toCoo</span>()</div>
 <div class="block">Converts this dense tensor to an equivalent sparse COO tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/dense_base/DenseTensorBase.html#toCoo()">toCoo</a></code>&nbsp;in class&nbsp;<code><a href="../../core/dense_base/DenseTensorBase.html" title="class in org.flag4j.core.dense_base">DenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="../../core/dense_base/DenseTensorBase.html#toCoo()">toCoo</a></code>&nbsp;in class&nbsp;<code><a href="../../core/dense_base/DenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">DenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>A sparse COO tensor which is equivalent to this dense tensor.</dd>
 </dl>
@@ -571,11 +571,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="getSelf()">
 <h3>getSelf</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">getSelf</span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">getSelf</span>()</div>
 <div class="block">Simply returns a reference of this tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorBase.html#getSelf()">getSelf</a></code>&nbsp;in class&nbsp;<code><a href="../../core/TensorBase.html" title="class in org.flag4j.core">TensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorBase.html#getSelf()">getSelf</a></code>&nbsp;in class&nbsp;<code><a href="../../core/TensorBase.html" title="class in org.flag4j.core_old">TensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>[],<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>A reference to this tensor.</dd>
 </dl>
@@ -586,12 +586,12 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="makeRealTensor(org.flag4j.core.Shape,double[])">
 <h3>makeRealTensor</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a></span>&nbsp;<span class="element-name">makeRealTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;shape,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a></span>&nbsp;<span class="element-name">makeRealTensor</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;shape,
  double[]&nbsp;entries)</span></div>
 <div class="block">Factory to create a real tensor with the specified shape and size.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/dense_base/ComplexDenseTensorBase.html#makeRealTensor(org.flag4j.core.Shape,double%5B%5D)">makeRealTensor</a></code>&nbsp;in class&nbsp;<code><a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/dense_base/ComplexDenseTensorBase.html#makeRealTensor(org.flag4j.core.Shape,double%5B%5D)">makeRealTensor</a></code>&nbsp;in class&nbsp;<code><a href="../../core/dense_base/ComplexDenseTensorBase.html" title="class in org.flag4j.core_old.dense_base">ComplexDenseTensorBase</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>shape</code> - Shape of the tensor to make.</dd>
 <dd><code>entries</code> - Entries of the tensor to make.</dd>
@@ -605,12 +605,12 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="flatten(int)">
 <h3>flatten</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">flatten</span><wbr><span class="parameters">(int&nbsp;axis)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">flatten</span><wbr><span class="parameters">(int&nbsp;axis)</span></div>
 <div class="block">Flattens a tensor along the specified axis. The resulting tensor will have the same rank but only have values
  along the single specified axis.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorManipulationsMixin.html#flatten(int)">flatten</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorManipulationsMixin.html#flatten(int)">flatten</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>axis</code> - Axis along which to flatten tensor.</dd>
 <dt>Throws:</dt>
@@ -627,13 +627,13 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <div class="block">Checks if an object is equal to this tensor object.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorComparisonsMixin.html#equals(java.lang.Object)">equals</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorComparisonsMixin.html" title="interface in org.flag4j.core">TensorComparisonsMixin</a></code></dd>
+<dd><code><a href="../../core/TensorComparisonsMixin.html#equals(java.lang.Object)">equals</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorComparisonsMixin.html" title="interface in org.flag4j.core_old">TensorComparisonsMixin</a></code></dd>
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>object</code> - Object to check equality with this tensor.</dd>
 <dt>Returns:</dt>
-<dd>True if the two tensors have the same shape, are numerically equivalent, and are of type <a href="CTensor.html" title="class in org.flag4j.arrays.dense"><code>CTensor</code></a>.
+<dd>True if the two tensors have the same shape, are numerically equivalent, and are of type <a href="CTensor.html" title="class in org.flag4j.arrays_old.dense"><code>CTensor</code></a>.
  False otherwise.</dd>
 </dl>
 </div>
@@ -643,12 +643,12 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="H()">
 <h3>H</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">H</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">H</span>()</div>
 <div class="block">Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
  and takes the complex conjugate of the elements along these axes. Same as <a href="../../core/ComplexTensorMixin.html#hermTranspose()"><code>ComplexTensorMixin.hermTranspose()</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/ComplexTensorMixin.html#H()">H</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorMixin.html" title="interface in org.flag4j.core">ComplexTensorMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/ComplexTensorMixin.html#H()">H</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorMixin.html" title="interface in org.flag4j.core_old">ComplexTensorMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The complex transpose of this tensor.</dd>
 </dl>
@@ -659,7 +659,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="H(int,int)">
 <h3>H</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">H</span><wbr><span class="parameters">(int&nbsp;axis1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">H</span><wbr><span class="parameters">(int&nbsp;axis1,
  int&nbsp;axis2)</span></div>
 <div class="block">Computes the transpose of a tensor. Same as <a href="../../core/ComplexTensorExclusiveMixin.html#hermTranspose(int,int)"><code>ComplexTensorExclusiveMixin.hermTranspose(int, int)</code></a>.
  In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
@@ -668,7 +668,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
  <a href="#H()"><code>H()</code></a> to conjugate transpose first and last axes.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#H(int,int)">H</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#H(int,int)">H</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>axis1</code> - First axis to exchange and apply complex conjugate.</dd>
 <dd><code>axis2</code> - Second axis to exchange and apply complex conjugate.</dd>
@@ -682,12 +682,12 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="H(int...)">
 <h3>H</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">H</span><wbr><span class="parameters">(int...&nbsp;axes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">H</span><wbr><span class="parameters">(int...&nbsp;axes)</span></div>
 <div class="block">Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
  the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as <a href="../../core/ComplexTensorExclusiveMixin.html#hermTranspose(int...)"><code>ComplexTensorExclusiveMixin.hermTranspose(int[])</code></a>}.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#H(int...)">H</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#H(int...)">H</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>axes</code> - Permutation of tensor axis. If the tensor has rank <code>N</code>, then this must be an array of length
              <code>N</code> which is a permutation of <code>{0, 1, 2, ..., N-1}</code>.</dd>
@@ -703,11 +703,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="addEq(org.flag4j.arrays.dense.Tensor)">
 <h3>addEq</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEq</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEq</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#addEq(org.flag4j.arrays.dense.Tensor)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#addEq(org.flag4j.arrays.dense.Tensor)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the addition.</dd>
 <dt>Throws:</dt>
@@ -720,11 +720,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="addEq(org.flag4j.arrays.sparse.CooCTensor)">
 <h3>addEq</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEq</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEq</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise addition of two tensors of the same rank and stores the result in this tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#addEq(org.flag4j.arrays.sparse.CooCTensor)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#addEq(org.flag4j.arrays.sparse.CooCTensor)">addEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the addition.</dd>
 <dt>Throws:</dt>
@@ -737,11 +737,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="subEq(org.flag4j.arrays.dense.Tensor)">
 <h3>subEq</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">subEq</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">subEq</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#subEq(org.flag4j.arrays.dense.Tensor)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#subEq(org.flag4j.arrays.dense.Tensor)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the subtraction.</dd>
 <dt>Throws:</dt>
@@ -754,11 +754,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="subEq(org.flag4j.arrays.sparse.CooCTensor)">
 <h3>subEq</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">subEq</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">subEq</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#subEq(org.flag4j.arrays.sparse.CooCTensor)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/ComplexTensorExclusiveMixin.html#subEq(org.flag4j.arrays.sparse.CooCTensor)">subEq</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/ComplexTensorExclusiveMixin.html" title="interface in org.flag4j.core_old">ComplexTensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the subtraction.</dd>
 <dt>Throws:</dt>
@@ -771,7 +771,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="T(int,int)">
 <h3>T</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">T</span><wbr><span class="parameters">(int&nbsp;axis1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">T</span><wbr><span class="parameters">(int&nbsp;axis1,
  int&nbsp;axis2)</span></div>
 <div class="block">Computes the transpose of a tensor. Same as <a href="../../core/TensorExclusiveMixin.html#transpose(int,int)"><code>TensorExclusiveMixin.transpose(int, int)</code></a>.
  In the context of a tensor, this exchanges the specified axes.
@@ -779,7 +779,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
  <a href="#T()"><code>T()</code></a> to exchange first and last axes.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#T(int,int)">T</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#T(int,int)">T</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>axis1</code> - First axis to exchange.</dd>
 <dd><code>axis2</code> - Second axis to exchange.</dd>
@@ -793,12 +793,12 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="T(int...)">
 <h3>T</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">T</span><wbr><span class="parameters">(int...&nbsp;axes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">T</span><wbr><span class="parameters">(int...&nbsp;axes)</span></div>
 <div class="block">Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
  the specified axes permutation. Same as <a href="../../core/TensorExclusiveMixin.html#transpose(int...)"><code>TensorExclusiveMixin.transpose(int[])</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#T(int...)">T</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#T(int...)">T</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>axes</code> - Permutation of tensor axis. If the tensor has rank <code>N</code>, then this must be an array of length
              <code>N</code> which is a permutation of <code>{0, 1, 2, ..., N-1}</code>.</dd>
@@ -814,14 +814,14 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="tensorDot(org.flag4j.arrays.dense.CTensor,int[],int[])">
 <h3>tensorDot</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">tensorDot</span><wbr><span class="parameters">(<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;src2,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">tensorDot</span><wbr><span class="parameters">(<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;src2,
  int[]&nbsp;aAxes,
  int[]&nbsp;bAxes)</span></div>
 <div class="block">Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
  computes the sum of products between the two tensors along the specified set of axes.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#tensorDot(T,int%5B%5D,int%5B%5D)">tensorDot</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#tensorDot(T,int%5B%5D,int%5B%5D)">tensorDot</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>src2</code> - Tensor to contract with this tensor.</dd>
 <dd><code>aAxes</code> - Axes along which to compute products for this tensor.</dd>
@@ -841,13 +841,13 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="tensorDot(org.flag4j.arrays.dense.CTensor)">
 <h3>tensorDot</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">tensorDot</span><wbr><span class="parameters">(<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&nbsp;src2)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">tensorDot</span><wbr><span class="parameters">(<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&nbsp;src2)</span></div>
 <div class="block">Computes the tensor dot product of this tensor with a second tensor. That is, sums the product of two tensor
  elements over the last axis of this tensor and the second-to-last axis of <code>src2</code>. If both tensors are
  rank 2, this is equivalent to matrix multiplication.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#tensorDot(T)">tensorDot</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#tensorDot(T)">tensorDot</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>src2</code> - Tensor to compute dot product with this tensor.</dd>
 <dt>Returns:</dt>
@@ -863,11 +863,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="add(org.flag4j.arrays.sparse.CooTensor)">
 <h3>add</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#add(org.flag4j.arrays.sparse.CooTensor)">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#add(org.flag4j.arrays.sparse.CooTensor)">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the addition.</dd>
 <dt>Returns:</dt>
@@ -882,11 +882,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="add(org.flag4j.arrays.dense.Tensor)">
 <h3>add</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#add(org.flag4j.arrays.dense.Tensor)">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#add(org.flag4j.arrays.dense.Tensor)">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the addition.</dd>
 <dt>Returns:</dt>
@@ -901,11 +901,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="sub(org.flag4j.arrays.dense.Tensor)">
 <h3>sub</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">sub</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">sub</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#sub(org.flag4j.arrays.dense.Tensor)">sub</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#sub(org.flag4j.arrays.dense.Tensor)">sub</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the addition.</dd>
 <dt>Returns:</dt>
@@ -920,11 +920,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="add(org.flag4j.arrays.sparse.CooCTensor)">
 <h3>add</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise addition between two tensors of the same rank.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#add(org.flag4j.arrays.sparse.CooCTensor)">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#add(org.flag4j.arrays.sparse.CooCTensor)">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in the addition.</dd>
 <dt>Returns:</dt>
@@ -939,11 +939,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="sub(org.flag4j.arrays.sparse.CooTensor)">
 <h3>sub</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">sub</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">sub</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise subtraction between two tensors of the same rank.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#sub(org.flag4j.arrays.sparse.CooTensor)">sub</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#sub(org.flag4j.arrays.sparse.CooTensor)">sub</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in element-wise subtraction.</dd>
 <dt>Returns:</dt>
@@ -958,11 +958,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="T()">
 <h3>T</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">T</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">T</span>()</div>
 <div class="block">Computes the transpose of a tensor. Same as <a href="../../core/TensorOperationsMixin.html#transpose()"><code>TensorOperationsMixin.transpose()</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorOperationsMixin.html#T()">T</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorOperationsMixin.html" title="interface in org.flag4j.core">TensorOperationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorOperationsMixin.html#T()">T</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorOperationsMixin.html" title="interface in org.flag4j.core_old">TensorOperationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>,<wbr><a href="../../complex_numbers/CNumber.html" title="class in org.flag4j.complex_numbers">CNumber</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The transpose of this tensor.</dd>
 </dl>
@@ -973,11 +973,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="sub(org.flag4j.arrays.sparse.CooCTensor)">
 <h3>sub</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">sub</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">sub</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise subtraction between two tensors of the same rank.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#sub(org.flag4j.arrays.sparse.CooCTensor)">sub</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#sub(org.flag4j.arrays.sparse.CooCTensor)">sub</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Second tensor in element-wise subtraction.</dd>
 <dt>Returns:</dt>
@@ -992,7 +992,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="addEq(org.flag4j.arrays.sparse.CooTensor)">
 <h3>addEq</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEq</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEq</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1007,7 +1007,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="subEq(org.flag4j.arrays.sparse.CooTensor)">
 <h3>subEq</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">subEq</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">subEq</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise subtraction of two tensors of the same rank and stores the result in this tensor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1022,11 +1022,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="elemMult(org.flag4j.arrays.dense.Tensor)">
 <h3>elemMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">elemMult</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">elemMult</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise multiplication between two tensors.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#elemMult(org.flag4j.arrays.dense.Tensor)">elemMult</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#elemMult(org.flag4j.arrays.dense.Tensor)">elemMult</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Tensor to element-wise multiply to this tensor.</dd>
 <dt>Returns:</dt>
@@ -1041,11 +1041,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="elemMult(org.flag4j.arrays.sparse.CooTensor)">
 <h3>elemMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a></span>&nbsp;<span class="element-name">elemMult</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays.sparse">CooTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a></span>&nbsp;<span class="element-name">elemMult</span><wbr><span class="parameters">(<a href="../sparse/CooTensor.html" title="class in org.flag4j.arrays_old.sparse">CooTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise multiplication between two tensors.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#elemMult(org.flag4j.arrays.sparse.CooTensor)">elemMult</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#elemMult(org.flag4j.arrays.sparse.CooTensor)">elemMult</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Tensor to element-wise multiply to this tensor.</dd>
 <dt>Returns:</dt>
@@ -1060,11 +1060,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="elemMult(org.flag4j.arrays.sparse.CooCTensor)">
 <h3>elemMult</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a></span>&nbsp;<span class="element-name">elemMult</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a></span>&nbsp;<span class="element-name">elemMult</span><wbr><span class="parameters">(<a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise multiplication between two tensors.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#elemMult(org.flag4j.arrays.sparse.CooCTensor)">elemMult</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#elemMult(org.flag4j.arrays.sparse.CooCTensor)">elemMult</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Tensor to element-wise multiply to this tensor.</dd>
 <dt>Returns:</dt>
@@ -1079,11 +1079,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="elemDiv(org.flag4j.arrays.dense.Tensor)">
 <h3>elemDiv</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">elemDiv</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays.dense">Tensor</a>&nbsp;B)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">elemDiv</span><wbr><span class="parameters">(<a href="Tensor.html" title="class in org.flag4j.arrays_old.dense">Tensor</a>&nbsp;B)</span></div>
 <div class="block">Computes the element-wise division between two tensors.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#elemDiv(org.flag4j.arrays.dense.Tensor)">elemDiv</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#elemDiv(org.flag4j.arrays.dense.Tensor)">elemDiv</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>B</code> - Tensor to element-wise divide from this tensor.</dd>
 <dt>Returns:</dt>
@@ -1098,7 +1098,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="tensorInv(int)">
 <h3>tensorInv</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">tensorInv</span><wbr><span class="parameters">(int&nbsp;numIndices)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">tensorInv</span><wbr><span class="parameters">(int&nbsp;numIndices)</span></div>
 <div class="block">Computes the 'inverse' of this tensor. That is, computes the tensor <code>X=this.tensorInv()</code> such that
  <a href="../../core/TensorExclusiveMixin.html#tensorDot(T,int)"><code>this.tensorDot(X, numIndices)</code></a> is the
  'identity' tensor for the tensor
@@ -1107,7 +1107,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
  A tensor <code>I</code> is the identity for a tensor dot product if <code>this.tensorDot(I, numIndices).equals(this)</code>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorExclusiveMixin.html#tensorInv(int)">tensorInv</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorExclusiveMixin.html#tensorInv(int)">tensorInv</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorExclusiveMixin.html" title="interface in org.flag4j.core_old">TensorExclusiveMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>,<wbr><a href="../sparse/CooCTensor.html" title="class in org.flag4j.arrays_old.sparse">CooCTensor</a>,<wbr><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>numIndices</code> - The number of first numIndices which are involved in the inverse sum.</dd>
 <dt>Returns:</dt>
@@ -1126,11 +1126,11 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="flatten()">
 <h3>flatten</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a></span>&nbsp;<span class="element-name">flatten</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a></span>&nbsp;<span class="element-name">flatten</span>()</div>
 <div class="block">Flattens tensor to single dimension. To flatten tensor along a single axis.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../core/TensorManipulationsMixin.html#flatten()">flatten</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorManipulationsMixin.html" title="interface in org.flag4j.core">TensorManipulationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays.dense">CTensor</a>&gt;</code></dd>
+<dd><code><a href="../../core/TensorManipulationsMixin.html#flatten()">flatten</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/TensorManipulationsMixin.html" title="interface in org.flag4j.core_old">TensorManipulationsMixin</a>&lt;<a href="CTensor.html" title="class in org.flag4j.arrays_old.dense">CTensor</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The flattened tensor.</dd>
 </dl>
@@ -1141,7 +1141,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="toVector()">
 <h3>toVector</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CVector.html" title="class in org.flag4j.arrays.dense">CVector</a></span>&nbsp;<span class="element-name">toVector</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CVector.html" title="class in org.flag4j.arrays_old.dense">CVector</a></span>&nbsp;<span class="element-name">toVector</span>()</div>
 <div class="block">Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1154,7 +1154,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="toMatrix(org.flag4j.core.Shape)">
 <h3>toMatrix</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">toMatrix</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core">Shape</a>&nbsp;matShape)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">toMatrix</span><wbr><span class="parameters">(<a href="../../core/Shape.html" title="class in org.flag4j.core_old">Shape</a>&nbsp;matShape)</span></div>
 <div class="block">Converts this tensor to a matrix with the specified shape.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1169,7 +1169,7 @@ implements <a href="../../core/ComplexTensorExclusiveMixin.html" title="interfac
 <section class="detail" id="toMatrix()">
 <h3>toMatrix</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CMatrix.html" title="class in org.flag4j.arrays.dense">CMatrix</a></span>&nbsp;<span class="element-name">toMatrix</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CMatrix.html" title="class in org.flag4j.arrays_old.dense">CMatrix</a></span>&nbsp;<span class="element-name">toMatrix</span>()</div>
 <div class="block">Converts this tensor to an equivalent matrix.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +27,13 @@ package org.flag4j.linalg.solvers.exact;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
+import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 
-
 /**
  * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link org.flag4j.linalg.decompositions.lu.LU LU decomposition.}
+ * {@link LU LU decomposition.}
  */
 public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
 
@@ -41,10 +41,7 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
     public ComplexExactSolver() {
-        super(new ComplexLU(),
-                new ComplexForwardSolver(true),
-                new ComplexBackSolver()
-        );
+        super(new ComplexLU(), new ComplexForwardSolver(true), new ComplexBackSolver());
     }
 
 

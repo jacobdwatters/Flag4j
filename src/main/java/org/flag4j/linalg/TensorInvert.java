@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,73 +24,103 @@
 
 package org.flag4j.linalg;
 
+
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.core.Shape;
-import org.flag4j.core.TensorBase;
-import org.flag4j.core.TensorExclusiveMixin;
-import org.flag4j.util.ErrorMessages;
-import org.flag4j.util.ParameterChecks;
-
+import org.flag4j.util.ValidateParameters;
 
 /**
- * This class provides methods for computing the 'inverse' of a tensor with respect to some tensor dot product operation.
+ * This utility class provides static methods for computing the 'inverse' of a tensor with respect to some
+ * tensor dot product operation.
  */
 public final class TensorInvert {
 
     private TensorInvert() {
         // Hide default constructor for utility class.
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
     /**
-     * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
-     * {@link TensorExclusiveMixin#tensorDot(TensorBase, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
-     * dot product operation.</p>
-     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
+     * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link Tensor#tensorDot(AbstractDoubleTensor, int[], int[]) src.tensorDot(X, numIndices)} is the 'identity' tensor for the
+     * tensor dot product operation.
+     *
+     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.
      * @param src Tensor to compute inverse of.
      * @param numIndices The number of first numIndices which are involved in the inverse sum.
      * @return The 'inverse' of this tensor as defined in the above sense.
      * @throws IllegalArgumentException If {@code numIndices} is not positive.
      */
+    @Deprecated
     public static Tensor inv(Tensor src, int numIndices) {
-        ParameterChecks.assertPositive(numIndices);
+        ValidateParameters.ensurePositive(numIndices);
 
         Shape originalShape = src.shape;
         Shape invShape = getInvShape(originalShape, numIndices);
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem and solve.
-        Matrix matInverse = Invert.inv(new Matrix(prod, src.entries.length-prod, src.entries));
+        Matrix matInverse = Invert.inv(new Matrix(prod, src.data.length-prod, src.data));
 
-        return new Tensor(invShape, matInverse.entries); // Reshape as tensor.
+        return new Tensor(invShape, matInverse.data); // Reshape as tensor.
     }
 
 
     /**
-     * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
-     * {@link TensorExclusiveMixin#tensorDot(TensorBase, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
-     * dot product operation.</p>
-     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
+     * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link Tensor#tensorDot(TensorOverSemiRing, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the
+     * tensor dot product operation.
+     *
+     * <p>A tensor {@code I} is the identity for a tensor dot product if
+     * {@code src.tensorDot(I, numIndices).equals(this)}.
+     *
      * @param src Tensor to compute inverse of.
      * @param numIndices The number of first numIndices which are involved in the inverse sum.
      * @return The 'inverse' of this tensor as defined in the above sense.
      * @throws IllegalArgumentException If {@code numIndices} is not positive.
      */
+    public static <T extends AbstractDenseDoubleTensor<T>> T inv(
+            AbstractDenseDoubleTensor<T> src, int numIndices) {
+        ValidateParameters.ensurePositive(numIndices);
+
+        Shape originalShape = src.shape;
+        Shape invShape = getInvShape(originalShape, numIndices);
+        int prod = getProduct(originalShape.getDims(), numIndices);
+
+        // Convert to an equivalent matrix inverse problem and solve.
+        Matrix matInverse = Invert.inv(new Matrix(prod, src.data.length-prod, src.data));
+
+        return src.makeLikeTensor(invShape, matInverse.data); // Reshape as tensor.
+    }
+
+
+    /**
+     * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
+     * {@link Tensor#tensorDot(TensorOverSemiRing, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
+     * dot product operation.
+     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.
+     * @param src Tensor to compute inverse of.
+     * @param numIndices The number of first numIndices which are involved in the inverse sum.
+     * @return The 'inverse' of this tensor as defined in the above sense.
+     * @throws IllegalArgumentException If {@code numIndices} is not positive.
+     */
+    @Deprecated
     public static CTensor inv(CTensor src, int numIndices) {
-        ParameterChecks.assertPositive(numIndices);
+        ValidateParameters.ensurePositive(numIndices);
 
         Shape originalShape = src.shape;
         Shape invShape = getInvShape(originalShape, numIndices);
         int prod = getProduct(originalShape.getDims(), numIndices);
 
         // Convert to an equivalent matrix inverse problem.
-        CMatrix matInverse = Invert.inv(new CMatrix(prod, src.entries.length-prod, src.entries));
+        CMatrix matInverse = Invert.inv(new CMatrix(prod, src.data.length-prod, src.data));
 
-        return new CTensor(invShape, matInverse.entries); // Reshape as tensor.
+        return new CTensor(invShape, matInverse.data); // Reshape as tensor.
     }
 
 
@@ -105,23 +135,23 @@ public final class TensorInvert {
         int[] origDims = originalShape.getDims();
         System.arraycopy(origDims, numIndices, invDims, 0, numIndices);
         System.arraycopy(origDims, 0, invDims, numIndices, 2 * numIndices - numIndices);
-        return new Shape(true, invDims);
+        return new Shape(invDims);
     }
 
 
     /**
-     * Computes the total number of entries in the last {@code numIndices} dimensions of a tensor with dimensions specified by
+     * Computes the total number of data in the last {@code numIndices} dimensions of a tensor with dimensions specified by
      * {@code dims}.
      * @param dims Dimensions of the tensor.
      * @param numIndices Number of last indices to compute product for.
-     * @return The total number of entries in the last {@code numIndices} dimensions of a tensor with dimensions specified by
-     * {@code dims}. That is, the product of the last {@code numIndices} entries of {@code dims}.
+     * @return The total number of data in the last {@code numIndices} dimensions of a tensor with dimensions specified by
+     * {@code dims}. That is, the product of the last {@code numIndices} data of {@code dims}.
      */
     private static int getProduct(int[] dims, int numIndices) {
         int prod = 1;
-        for(int k=numIndices; k<dims.length; k++) {
+        
+        for(int k=numIndices; k<dims.length; k++)
             prod *= dims[k];
-        }
 
         return prod;
     }

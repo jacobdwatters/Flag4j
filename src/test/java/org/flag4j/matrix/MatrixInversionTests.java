@@ -40,7 +40,7 @@ class MatrixInversionTests {
         }; // This matrix is singular
         A = new Matrix(aEntries);
 
-        assertThrows(RuntimeException.class, ()->Invert.inv(A));
+        assertThrows(RuntimeException.class, ()-> Invert.inv(A));
 
 
         // --------------------- Sub-case 3 ---------------------
@@ -50,7 +50,7 @@ class MatrixInversionTests {
         };
         A = new Matrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()->Invert.inv(A));
-        assertThrows(LinearAlgebraException.class, ()->Invert.inv(A.T()));
+        assertThrows(LinearAlgebraException.class, ()-> Invert.inv(A));
+        assertThrows(LinearAlgebraException.class, ()-> Invert.inv(A.T()));
     }
 }

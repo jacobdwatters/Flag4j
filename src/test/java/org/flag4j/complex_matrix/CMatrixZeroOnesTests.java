@@ -1,14 +1,14 @@
 package org.flag4j.complex_matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CMatrixZeroOnesTests {
 
-    CNumber[] aEntries;
+    Complex128[] aEntries;
     CMatrix A;
     boolean exp;
 
@@ -22,7 +22,7 @@ class CMatrixZeroOnesTests {
 
         // ----------------- Sub-case 2 -----------------
         A = new CMatrix(14, 567);
-        A.set(new CNumber(-943, 133.5), 4, 5);
+        A.set(new Complex128(-943, 133.5), 4, 5);
         exp = false;
 
         assertEquals(exp, A.isZeros());
@@ -39,7 +39,7 @@ class CMatrixZeroOnesTests {
 
         // ----------------- Sub-case 2 -----------------
         A = new CMatrix(14, 567, 1);
-        A.set(new CNumber(-943, 133.5), 4, 55);
+        A.set(new Complex128(-943, 133.5), 4, 55);
         exp = false;
 
         assertEquals(exp, A.isOnes());

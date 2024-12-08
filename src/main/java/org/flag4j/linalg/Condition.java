@@ -29,17 +29,35 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.util.ErrorMessages;
 
 
 /**
- * Utility class for computing the condition number of a matrix.
+ * <p>Utility class for computing the condition number of a matrix.
+ *
+ * <p>The condition number of a matrix A is defined as the norm of A times the norm of A<sup>-1</sup> (i.e. the norm of the inverse
+ * of A). That is, cond(A) = ||A|| * ||A<sup>-1</sup>|| where ||A|| may be any matrix norm (generally taken to be the L2-norm).
+ *
+ * <p> Conditions numbers are associated with a linear equation Ax = b and provides a bound on how inaccurate the solution x will be
+ * after approximation before round-off errors are taken into account. If the condition number is large, then a small error in b may
+ * result in large errors in x. Subsequently, if the condition number is small, then the error in x will not be much bigger than the
+ * error in b.
+ *
+ * <p>The condition number is more precisely defined to be the maximum ratio of the relative error in x to the relative error in b.
+ * Let <i>e</i> be the error in b and A be a nonsingular matrix. Then,
+ * <pre>
+ *     cond(A) = max<sub>e,b&ne;0</sub>{ (||b|| / ||A<sup>-1</sup>b||) * (||A<sup>-1</sup>e|| / ||<i>e</i>||) }
+ *             = ||A|| * ||A<sup>-1</sup>|| as stated.</pre>
+ *
+ * <p>When the L2-norm is used to compute the condition number then,
+ * <pre>
+ *     cond(A) = σ<sub>max</sub>(A) / σ<sub>min</sub>(A)</pre>
+ * where σ<sub>max</sub>(A) and σ<sub>min</sub>(A) are the maximum and minimum singular values of A.
  */
-public class Condition {
+public final class Condition {
 
     private Condition() {
         // Hide default constructor for utility class
-        throw new IllegalStateException(ErrorMessages.getUtilityClassErrMsg());
+
     }
 
 

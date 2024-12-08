@@ -5,7 +5,7 @@ import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RealCsrCsrMatMultTests {
@@ -116,7 +116,7 @@ class RealCsrCsrMatMultTests {
                 {0, 832.1, 241, 2, 5.4, 0, 0, 0, 0, 0, 4.1, 0}};
         build();
 
-        assertEquals(expCsr, A.mult2CSR(B));
+        assertEquals(expCsr, A.mult2Csr(B));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{
@@ -139,7 +139,7 @@ class RealCsrCsrMatMultTests {
                 {0, 5, 0}};
         build();
 
-        assertEquals(expCsr, A.mult2CSR(B));
+        assertEquals(expCsr, A.mult2Csr(B));
 
         // ---------------------- Sub-case 3 ----------------------
         aEntries = new double[][]{
@@ -161,7 +161,7 @@ class RealCsrCsrMatMultTests {
                 {0, 0, 0}};
         build(false);
 
-        assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(B));
+        assertThrows(LinearAlgebraException.class, ()->A.mult2Csr(B));
 
         // ---------------------- Sub-case 4 ----------------------
         aEntries = new double[][]{
@@ -185,6 +185,6 @@ class RealCsrCsrMatMultTests {
                 {0, 0, 0}};
         build(false);
 
-        assertThrows(LinearAlgebraException.class, ()->A.mult2CSR(B));
+        assertThrows(LinearAlgebraException.class, ()->A.mult2Csr(B));
     }
 }

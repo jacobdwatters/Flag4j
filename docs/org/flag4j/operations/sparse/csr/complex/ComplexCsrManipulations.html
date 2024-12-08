@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ComplexCsrManipulations</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Utility class for manipulating <a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse"><code>real sparse CSR matrices</code></a>
+<div class="block">Utility class for manipulating <a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse"><code>real sparse CSR matrices</code></a>
  (e.g. row swaps, column swaps, etc.).</div>
 </div>
 </section>
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#moveAndShiftLeft(org.flag4j.arrays.sparse.CsrCMatrix,int,int,int)" class="member-name-link">moveAndShiftLeft</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#moveAndShiftLeft(org.flag4j.arrays.sparse.CsrCMatrix,int,int,int)" class="member-name-link">moveAndShiftLeft</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;newColIdx,
  int&nbsp;currPos,
  int&nbsp;newPos)</code></div>
@@ -132,7 +132,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Moves a non-zero value in a row of a CSR matrix to a new column to the right of its current column.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>private static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#moveAndShiftRight(org.flag4j.arrays.sparse.CsrCMatrix,int,int,int)" class="member-name-link">moveAndShiftRight</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#moveAndShiftRight(org.flag4j.arrays.sparse.CsrCMatrix,int,int,int)" class="member-name-link">moveAndShiftRight</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;newColIdx,
  int&nbsp;currPos,
  int&nbsp;newPos)</code></div>
@@ -140,14 +140,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Moves a non-zero value in a row of a CSR matrix to a new column to the left of its current column.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swapCols(org.flag4j.arrays.sparse.CsrCMatrix,int,int)" class="member-name-link">swapCols</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swapCols(org.flag4j.arrays.sparse.CsrCMatrix,int,int)" class="member-name-link">swapCols</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;colIdx1,
  int&nbsp;colIdx2)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Swaps two columns in a sparse CSR matrix.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swapRows(org.flag4j.arrays.sparse.CsrCMatrix,int,int)" class="member-name-link">swapRows</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#swapRows(org.flag4j.arrays.sparse.CsrCMatrix,int,int)" class="member-name-link">swapRows</a><wbr>(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx1,
  int&nbsp;rowIdx2)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -190,7 +190,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="swapRows(org.flag4j.arrays.sparse.CsrCMatrix,int,int)">
 <h3>swapRows</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swapRows</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swapRows</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;rowIdx1,
  int&nbsp;rowIdx2)</span></div>
 <div class="block">Swaps two rows in a complex sparse CSR matrix. This is done in place.</div>
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="swapCols(org.flag4j.arrays.sparse.CsrCMatrix,int,int)">
 <h3>swapCols</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swapCols</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">swapCols</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;colIdx1,
  int&nbsp;colIdx2)</span></div>
 <div class="block">Swaps two columns in a sparse CSR matrix. This is done in place.</div>
@@ -229,7 +229,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="moveAndShiftRight(org.flag4j.arrays.sparse.CsrCMatrix,int,int,int)">
 <h3>moveAndShiftRight</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">moveAndShiftRight</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">moveAndShiftRight</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;newColIdx,
  int&nbsp;currPos,
  int&nbsp;newPos)</span></div>
@@ -251,7 +251,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="moveAndShiftLeft(org.flag4j.arrays.sparse.CsrCMatrix,int,int,int)">
 <h3>moveAndShiftLeft</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">moveAndShiftLeft</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays.sparse">CsrCMatrix</a>&nbsp;src,
+<div class="member-signature"><span class="modifiers">private static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">moveAndShiftLeft</span><wbr><span class="parameters">(<a href="../../../../arrays/sparse/CsrCMatrix.html" title="class in org.flag4j.arrays_old.sparse">CsrCMatrix</a>&nbsp;src,
  int&nbsp;newColIdx,
  int&nbsp;currPos,
  int&nbsp;newPos)</span></div>

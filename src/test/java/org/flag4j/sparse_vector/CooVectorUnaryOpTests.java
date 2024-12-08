@@ -54,7 +54,6 @@ class CooVectorUnaryOpTests {
         expIndices = new int[]{0, 1, 6, 44, 78, 80};
         exp = new CooVector(sparseSize, expEntries, expIndices);
 
-        assertEquals(exp, a.transpose());
         assertEquals(exp, a.T());
     }
 

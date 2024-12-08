@@ -1,11 +1,15 @@
 package org.flag4j.sparse_csr_matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOperations;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOperations;
+import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -28,7 +32,7 @@ class CsrMatrixAddSubTests {
     static double[][] aEntries;
     static double[][] bEntries;
 
-    static CNumber[][] bCmpEntries;
+    static Complex128[][] bCmpEntries;
     static CsrCMatrix BCmp;
     static CsrCMatrix expAddCmp;
     static CsrCMatrix expAsubBCmp;
@@ -36,7 +40,7 @@ class CsrMatrixAddSubTests {
     static CMatrix expAsubBDenseCmp;
     static CMatrix denseBCmp;
     static double b;
-    static CNumber bCmp;
+    static Complex128 bCmp;
 
     private static void makeRealMatrices() {
         denseA = new Matrix(aEntries);
@@ -98,10 +102,6 @@ class CsrMatrixAddSubTests {
         assertEquals(expAsubB, A.sub(B));
         assertEquals(expBsubA, B.sub(A));
 
-        assertEquals(expAdd, A.add(B.toCoo()));
-        assertEquals(expAsubB, A.sub(B.toCoo()));
-        assertEquals(expBsubA, B.sub(A.toCoo()));
-
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
@@ -109,11 +109,6 @@ class CsrMatrixAddSubTests {
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
         assertThrows(LinearAlgebraException.class, ()->B.add(A));
         assertThrows(LinearAlgebraException.class, ()->B.sub(A));
-
-        assertThrows(LinearAlgebraException.class, ()->A.add(B.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(B.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->B.add(A.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->B.sub(A.toCoo()));
     }
 
 
@@ -134,9 +129,9 @@ class CsrMatrixAddSubTests {
                 {1.345, 983.3, 0, -9.234, 4.52, 0},
         };
         makeRealMatrices();
-        assertEquals(expAddDense, A.add(denseB));
-        assertEquals(expAsubBDense, A.sub(denseB));
-        assertEquals(expBsubADense, B.sub(denseA));
+        assertEquals(expAddDense, RealCsrDenseOperations.add(A, denseB));
+        assertEquals(expAsubBDense, RealCsrDenseOperations.sub(A, denseB));
+        assertEquals(expBsubADense, RealCsrDenseOperations.sub(B, denseA));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
@@ -157,27 +152,24 @@ class CsrMatrixAddSubTests {
                 {0, 0, 0, -23.5, 0, 0},
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmpEntries = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bCmpEntries, CNumber.ZERO);
-        bCmpEntries[0][0] = new CNumber(23, 1.34);
-        bCmpEntries[1][0] = new CNumber(0.133, -41.4);
-        bCmpEntries[1][3] = new CNumber(-4.1, -34.1);
-        bCmpEntries[3][1] = new CNumber(922.1);
-        bCmpEntries[3][5] = new CNumber(34.5, 135);
-        bCmpEntries[4][4] = new CNumber(23.501, 100.23);
+        bCmpEntries = new Complex128[aEntries.length][aEntries[0].length];
+        ArrayUtils.fill(bCmpEntries, Complex128.ZERO);
+        bCmpEntries[0][0] = new Complex128(23, 1.34);
+        bCmpEntries[1][0] = new Complex128(0.133, -41.4);
+        bCmpEntries[1][3] = new Complex128(-4.1, -34.1);
+        bCmpEntries[3][1] = new Complex128(922.1);
+        bCmpEntries[3][5] = new Complex128(34.5, 135);
+        bCmpEntries[4][4] = new Complex128(23.501, 100.23);
         makeCmpMatrices();
-        assertEquals(expAddCmp, A.add(BCmp));
-        assertEquals(expAsubBCmp, A.sub(BCmp));
-        assertEquals(expAddCmp, A.add(BCmp.toCoo()));
-        assertEquals(expAsubBCmp, A.sub(BCmp.toCoo()));
+        assertEquals(expAddCmp, RealComplexCsrOps.add(BCmp, A));
+        assertEquals(expAsubBCmp, RealComplexCsrOps.sub(A, BCmp));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->A.add(BCmp));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(BCmp));
-        assertThrows(LinearAlgebraException.class, ()->A.add(BCmp.toCoo()));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(BCmp.toCoo()));
+        assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.add(BCmp, A));
+
+        assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.sub(A, BCmp));
     }
 
 
@@ -190,23 +182,24 @@ class CsrMatrixAddSubTests {
                 {0, 0, 0, -23.5, 0, 0},
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmpEntries = new CNumber[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bCmpEntries, CNumber.ZERO);
-        bCmpEntries[0][0] = new CNumber(23, 1.34);
-        bCmpEntries[1][0] = new CNumber(0.133, -41.4);
-        bCmpEntries[1][3] = new CNumber(-4.1, -34.1);
-        bCmpEntries[3][1] = new CNumber(922.1);
-        bCmpEntries[3][5] = new CNumber(34.5, 135);
-        bCmpEntries[4][4] = new CNumber(23.501, 100.23);
+        bCmpEntries = new Complex128[aEntries.length][aEntries[0].length];
+        ArrayUtils.fill(bCmpEntries, Complex128.ZERO);
+        bCmpEntries[0][0] = new Complex128(23, 1.34);
+        bCmpEntries[1][0] = new Complex128(0.133, -41.4);
+        bCmpEntries[1][3] = new Complex128(-4.1, -34.1);
+        bCmpEntries[3][1] = new Complex128(922.1);
+        bCmpEntries[3][5] = new Complex128(34.5, 135);
+        bCmpEntries[4][4] = new Complex128(23.501, 100.23);
         makeCmpMatrices();
-        assertEquals(expAddDenseCmp, A.add(denseBCmp));
-        assertEquals(expAsubBDenseCmp, A.sub(denseBCmp));
+
+        assertEquals(expAddDenseCmp, RealFieldDenseCsrOperations.add(A, denseBCmp));
+        assertEquals(expAsubBDenseCmp, RealFieldDenseCsrOperations.sub(A, denseBCmp));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->A.add(denseBCmp));
-        assertThrows(LinearAlgebraException.class, ()->A.sub(denseBCmp));
+        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCsrOperations.add(A, denseBCmp));
+        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCsrOperations.sub(A, denseBCmp));
     }
 
 
@@ -220,10 +213,22 @@ class CsrMatrixAddSubTests {
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
         b = 1.2;
+        CsrMatrix expAdd = new Matrix(new double[][]{
+                {0, 0, 0, 0, 0, 0},
+                {1.2324+b, 0, 0, 13.4+b, 0, 0},
+                {0, 0, 0, -23.5+b, 0, 0},
+                {0, 14.1+b, 0, 0, 0, 0},
+                {0, 0, 0, 9.143+b, 1.4+b, -2.1+b}}).toCsr();
+        CsrMatrix expSub = new Matrix(new double[][]{
+                {0, 0, 0, 0, 0, 0},
+                {1.2324-b, 0, 0, 13.4-b, 0, 0},
+                {0, 0, 0, -23.5-b, 0, 0},
+                {0, 14.1-b, 0, 0, 0, 0},
+                {0, 0, 0, 9.143-b, 1.4-b, -2.1-b}}).toCsr();
         makeRealConstMatrices();
 
-        assertEquals(expAddDense, A.add(b));
-        assertEquals(expAsubBDense, A.sub(b));
+        assertEquals(expAdd, A.add(b));
+        assertEquals(expSub, A.sub(b));
 
         // ---------------------- Sub-case 2 ----------------------
         aEntries = new double[][]{
@@ -233,15 +238,30 @@ class CsrMatrixAddSubTests {
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
         b = -2341.200239867181;
+        expAdd = new Matrix(new double[][]{
+                {0, 0, 0, 0, 0, 0},
+                {1.2324+b, 0, 0, 13.4+b, 0, 0},
+                {0, 0, 0, -23.5+b, 0, 0},
+                {0, 14.1+b, 0, 0, 0, 0},
+                {0, 0, 0, 9.143+b, 1.4+b, -2.1+b}}).toCsr();
+        expSub = new Matrix(new double[][]{
+                {0, 0, 0, 0, 0, 0},
+                {1.2324-b, 0, 0, 13.4-b, 0, 0},
+                {0, 0, 0, -23.5-b, 0, 0},
+                {0, 14.1-b, 0, 0, 0, 0},
+                {0, 0, 0, 9.143-b, 1.4-b, -2.1-b}}).toCsr();
         makeRealConstMatrices();
 
-        assertEquals(expAddDense, A.add(b));
-        assertEquals(expAsubBDense, A.sub(b));
+        assertEquals(expAdd, A.add(b));
+        assertEquals(expSub, A.sub(b));
     }
 
 
     @Test
     void addSubCmpConstTests() {
+        CsrCMatrix expAdd;
+        CsrCMatrix expSub;
+
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0, 0, 0},
@@ -249,23 +269,39 @@ class CsrMatrixAddSubTests {
                 {0, 0, 0, -23.5, 0, 0},
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmp = new CNumber(-0.234, 155.2);
+        bCmp = new Complex128(-0.234, 155.2);
+        expAdd = new CooCMatrix(new Shape(5, 6),
+                new Complex128[]{bCmp.add(1.2324), bCmp.add(13.4), bCmp.add(-23.5), bCmp.add(14.1),
+                        bCmp.add(9.143), bCmp.add(1.4), bCmp.add(-2.1)},
+                new int[]{1, 1, 2, 3, 4, 4, 4},
+                new int[]{0, 3, 3, 1, 3, 4, 5}).toCsr();
+        expSub = new CooCMatrix(new Shape(5, 6),
+                new Complex128[]{new Complex128(1.2324).sub(bCmp), new Complex128(13.4).sub(bCmp),
+                        new Complex128(-23.5).sub(bCmp), new Complex128(14.1).sub(bCmp), new Complex128(9.143).sub(bCmp),
+                        new Complex128(1.4).sub(bCmp), new Complex128(-2.1).sub(bCmp)},
+                new int[]{1, 1, 2, 3, 4, 4, 4},
+                new int[]{0, 3, 3, 1, 3, 4, 5}).toCsr();
         makeCmpConstMatrices();
 
-        assertEquals(expAddDenseCmp, A.add(bCmp));
-        assertEquals(expAsubBDenseCmp, A.sub(bCmp));
+        assertEquals(expAdd, A.add(bCmp));
+        assertEquals(expSub, A.sub(bCmp));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new double[][]{
-                {0, 0, 0, 0, 0, 0},
-                {1.2324, 0, 0, 13.4, 0, 0},
-                {0, 0, 0, -23.5, 0, 0},
-                {0, 14.1, 0, 0, 0, 0},
-                {0, 0, 0, 9.143, 1.4, -2.1}};
-        bCmp = new CNumber(-92.14, -7884.7761);
+        bCmp = new Complex128(-92.14, -7884.7761);
+        expAdd = new CooCMatrix(new Shape(5, 6),
+                new Complex128[]{bCmp.add(1.2324), bCmp.add(13.4), bCmp.add(-23.5), bCmp.add(14.1),
+                        bCmp.add(9.143), bCmp.add(1.4), bCmp.add(-2.1)},
+                new int[]{1, 1, 2, 3, 4, 4, 4},
+                new int[]{0, 3, 3, 1, 3, 4, 5}).toCsr();
+        expSub = new CooCMatrix(new Shape(5, 6),
+                new Complex128[]{new Complex128(1.2324).sub(bCmp), new Complex128(13.4).sub(bCmp),
+                        new Complex128(-23.5).sub(bCmp), new Complex128(14.1).sub(bCmp), new Complex128(9.143).sub(bCmp),
+                        new Complex128(1.4).sub(bCmp), new Complex128(-2.1).sub(bCmp)},
+                new int[]{1, 1, 2, 3, 4, 4, 4},
+                new int[]{0, 3, 3, 1, 3, 4, 5}).toCsr();
         makeCmpConstMatrices();
 
-        assertEquals(expAddDenseCmp, A.add(bCmp));
-        assertEquals(expAsubBDenseCmp, A.sub(bCmp));
+        assertEquals(expAdd, A.add(bCmp));
+        assertEquals(expSub, A.sub(bCmp));
     }
 }

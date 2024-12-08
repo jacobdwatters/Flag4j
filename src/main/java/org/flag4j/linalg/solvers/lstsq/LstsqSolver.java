@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,31 +24,27 @@
 
 package org.flag4j.linalg.solvers.lstsq;
 
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
+
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
-import org.flag4j.linalg.solvers.LinearSolver;
-
-
-// TODO: Add option to use SVD instead of QR (SVD should be default). It will be slower but has better numerical properties.
+import org.flag4j.linalg.solvers.LinearMatrixSolver;
 
 /**
- * This class solves a linear system of equations {@code Ax=b} in a least-squares sense. That is,
- * minimizes {@code ||Ax-b||}<sub>2</sub> which is equivalent to solving the normal equations {@code A}<sup>T</sup>{@code Ax=A}<sup>T
- * </sup>{@code b}.
- * This is done using a {@link UnitaryDecomposition QR decomposition}.
+ * <p>This class solves a linear system of equations Ax=b in a least-squares sense. That is,
+ * minimizes ||Ax-b||<sub>2</sub> which is equivalent to solving the normal equations <sup>T</sup>Ax=A<sup>T
+ * </sup>b.
+ *
+ * <p>This is done using a QR decomposition.
  */
-public abstract class LstsqSolver<
-        T extends MatrixMixin<T, T, ?, CMatrix, ?, ?, U, U>,
-        U extends VectorMixin<U, U, ?, CVector, ?, T, T, CMatrix>>
-        implements LinearSolver<T, U> {
+public abstract class LstsqSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>>
+        implements LinearMatrixSolver<T, U> {
+
 
     /**
      * Solver for system with an upper triangular coefficient matrix.
      */
-    protected final LinearSolver<T, U> backSolver;
+    protected final LinearMatrixSolver<T, U> backSolver;
     /**
      * Decomposer to compute the {@code QR} decomposition for using the least-squares solver.
      */
@@ -68,7 +64,7 @@ public abstract class LstsqSolver<
      * @param backSolver The solver to solve the upper triangular system resulting from the {@code QR} decomposition
      *                   which is equivalent to solving the normal equations
      */
-    protected LstsqSolver(UnitaryDecomposition<T, ?> qr, LinearSolver<T, U> backSolver) {
+    protected LstsqSolver(UnitaryDecomposition<T, ?> qr, LinearMatrixSolver<T, U> backSolver) {
         this.qr = qr;
         this.backSolver = backSolver;
     }
@@ -84,7 +80,7 @@ public abstract class LstsqSolver<
     @Override
     public U solve(T A, U b) {
         decompose(A); // Compute the reduced QR decomposition of A.
-        return backSolver.solve(R, Qh.mult(b));
+        return backSolver.solve(R, (U) Qh.mult(b));
     }
 
 
@@ -99,7 +95,7 @@ public abstract class LstsqSolver<
     @Override
     public T solve(T A, T B) {
         decompose(A); // Compute the reduced QR decomposition of A.
-        return backSolver.solve(R, Qh.mult(B));
+        return backSolver.solve(R, (T) Qh.mult(B));
     }
 
 

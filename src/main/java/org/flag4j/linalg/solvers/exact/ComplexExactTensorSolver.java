@@ -24,21 +24,21 @@
 
 package org.flag4j.linalg.solvers.exact;
 
+
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.core.Shape;
 
 
 /**
- * Solver for solving a complex well determined linear tensor equation {@code A*X=B} in an exact sense.
+ * Solver for solving a complex well determined linear tensor equation A*X=B in an exact sense.
  */
 public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix, CVector> {
 
-
     /**
-     * Creates an exact tensor solver for solving a well determined linear tensor equation {@code A*X=B}
-     * for {@code X} in an exact sense.
+     * Creates an exact tensor solver for solving a well determined linear tensor equation A*X=B
+     * for X in an exact sense.
      */
     public ComplexExactTensorSolver() {
         super(new ComplexExactSolver());
@@ -50,11 +50,11 @@ public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix
      *
      * @param A    Tensor to convert to matrix.
      * @param prod Product of all axis lengths in {@code A}.
-     * @return A matrix with the same entries as tensor {@code A} with shape (prod, prod).
+     * @return A matrix with the same data as tensor {@code A} with shape (prod, prod).
      */
     @Override
     protected CMatrix initMatrix(CTensor A, int prod) {
-        return new CMatrix(prod, prod, A.entries);
+        return new CMatrix(prod, prod, A.data);
     }
 
 
@@ -66,19 +66,19 @@ public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix
      */
     @Override
     protected CVector initVector(CTensor B) {
-        return new CVector(B.entries);
+        return new CVector(B.data);
     }
 
 
     /**
      * Wraps solution as a tensor and reshapes to the proper shape.
      *
-     * @param x           Vector solution to matrix linear equation which is equivalent to the tensor equation {@code A*X=B}.
-     * @param outputShape Shape for the solution tensor {@code X}.
-     * @return The solution {@code X} to the linear tensor equation {@code A*X=B}.
+     * @param x           Vector solution to matrix linear equation which is equivalent to the tensor equation A*X=B.
+     * @param outputShape Shape for the solution tensor X.
+     * @return The solution X to the linear tensor equation A*X=B.
      */
     @Override
     protected CTensor wrap(CVector x, Shape outputShape) {
-        return new CTensor(outputShape, x.entries);
+        return new CTensor(outputShape, x.data);
     }
 }

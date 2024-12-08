@@ -2,6 +2,7 @@ package org.flag4j.vector;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,8 +43,8 @@ class VectorRepeatTests {
 
         // ---------------------- Sub-case 3 ----------------------
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 0));
-        assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, -2));
-        assertThrows(IllegalArgumentException.class, ()-> a.repeat(13, 2));
+        assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, -2));
+        assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, 2));
     }
 
 

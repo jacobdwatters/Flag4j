@@ -1,12 +1,12 @@
 package org.flag4j.sparse_vector;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -64,15 +64,15 @@ class CooVectorConversionTests {
 
     @Test
     void toComplex() {
-        CNumber[] expEntries;
+        Complex128[] expEntries;
         int[] expIndices;
         int expSize;
         CooCVector exp;
 
         // ------------------- Sub-case 1 -------------------
-        expEntries = new CNumber[]{
-                new CNumber(1.345), new CNumber(-989.234),
-                new CNumber(5.15), new CNumber(617.4)};
+        expEntries = new Complex128[]{
+                new Complex128(1.345), new Complex128(-989.234),
+                new Complex128(5.15), new Complex128(617.4)};
         expIndices = new int[]{4, 56, 9903, 14643};
         expSize = sparseSize;
         exp = new CooCVector(expSize, expEntries, expIndices);

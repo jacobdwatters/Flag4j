@@ -1,12 +1,12 @@
 package org.flag4j.matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
-import org.flag4j.linalg.ops.DirectSum;
+import org.flag4j.linalg.DirectSum;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MatrixDirectSumTests {
 
     double[][] aEntries, bEntries, expEntries;
-    CNumber[][] bComplexEntries, expComplexEntries;
+    Complex128[][] bComplexEntries, expComplexEntries;
     double[] bSparseEntries;
-    CNumber[] bSparseComplexEntries;
+    Complex128[] bSparseComplexEntries;
 
     int[] rowIndices, colIndices;
     Shape sparseShape;
@@ -76,15 +76,15 @@ class MatrixDirectSumTests {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
-        bComplexEntries = new CNumber[][]{{new CNumber(0, 1), new CNumber(8.13)},
-                {new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)}};
+        bComplexEntries = new Complex128[][]{{new Complex128(0, 1), new Complex128(8.13)},
+                {new Complex128(1.44, -9.436), new Complex128(6.71, 8.44)}};
         BComplex = new CMatrix(bComplexEntries);
 
-        expComplexEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0)},
-                {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 1), new CNumber(8.13)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)}};
+        expComplexEntries = new Complex128[][]{
+                {new Complex128(1), new Complex128(2), new Complex128(3), new Complex128(0), new Complex128(0)},
+                {new Complex128(4), new Complex128(5), new Complex128(6), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0, 1), new Complex128(8.13)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(1.44, -9.436), new Complex128(6.71, 8.44)}};
         expComplex = new CMatrix(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.directSum(A, BComplex));
@@ -95,21 +95,21 @@ class MatrixDirectSumTests {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
-        bSparseComplexEntries = new CNumber[]{new CNumber(0, 1), new CNumber(8.13),
-                new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)};
+        bSparseComplexEntries = new Complex128[]{new Complex128(0, 1), new Complex128(8.13),
+                new Complex128(1.44, -9.436), new Complex128(6.71, 8.44)};
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
         sparseShape = new Shape(5, 3);
         BSparseComplex = new CooCMatrix(sparseShape, bSparseComplexEntries, rowIndices, colIndices);
 
-        expComplexEntries = new CNumber[][]{
-                {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 1), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(8.13), new CNumber(1.44, -9.436), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(6.71, 8.44), new CNumber(0)}};
+        expComplexEntries = new Complex128[][]{
+                {new Complex128(1), new Complex128(2), new Complex128(3), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(4), new Complex128(5), new Complex128(6), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0, 1), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(8.13), new Complex128(1.44, -9.436), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(6.71, 8.44), new Complex128(0)}};
         expComplex = new CMatrix(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.directSum(A, BSparseComplex));
@@ -166,15 +166,15 @@ class MatrixDirectSumTests {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
-        bComplexEntries = new CNumber[][]{{new CNumber(0, 1), new CNumber(8.13)},
-                {new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)}};
+        bComplexEntries = new Complex128[][]{{new Complex128(0, 1), new Complex128(8.13)},
+                {new Complex128(1.44, -9.436), new Complex128(6.71, 8.44)}};
         BComplex = new CMatrix(bComplexEntries);
 
-        expComplexEntries = new CNumber[][]{
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 1), new CNumber(8.13)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)},
-                {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0)},
-                {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0)}};
+        expComplexEntries = new Complex128[][]{
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0, 1), new Complex128(8.13)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(1.44, -9.436), new Complex128(6.71, 8.44)},
+                {new Complex128(1), new Complex128(2), new Complex128(3), new Complex128(0), new Complex128(0)},
+                {new Complex128(4), new Complex128(5), new Complex128(6), new Complex128(0), new Complex128(0)}};
         expComplex = new CMatrix(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.invDirectSum(A, BComplex));
@@ -185,21 +185,21 @@ class MatrixDirectSumTests {
         // -------------------- Sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         A = new Matrix(aEntries);
-        bSparseComplexEntries = new CNumber[]{new CNumber(0, 1), new CNumber(8.13),
-                new CNumber(1.44, -9.436), new CNumber(6.71, 8.44)};
+        bSparseComplexEntries = new Complex128[]{new Complex128(0, 1), new Complex128(8.13),
+                new Complex128(1.44, -9.436), new Complex128(6.71, 8.44)};
         rowIndices = new int[]{0, 2, 2, 4};
         colIndices = new int[]{0, 0, 1, 1};
         sparseShape = new Shape(5, 3);
         BSparseComplex = new CooCMatrix(sparseShape, bSparseComplexEntries, rowIndices, colIndices);
 
-        expComplexEntries = new CNumber[][]{
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0, 1), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(8.13), new CNumber(1.44, -9.436), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(6.71, 8.44), new CNumber(0)},
-                {new CNumber(1), new CNumber(2), new CNumber(3), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(4), new CNumber(5), new CNumber(6), new CNumber(0), new CNumber(0), new CNumber(0)}};
+        expComplexEntries = new Complex128[][]{
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0, 1), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(8.13), new Complex128(1.44, -9.436), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(6.71, 8.44), new Complex128(0)},
+                {new Complex128(1), new Complex128(2), new Complex128(3), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(4), new Complex128(5), new Complex128(6), new Complex128(0), new Complex128(0), new Complex128(0)}};
         expComplex = new CMatrix(expComplexEntries);
 
         assertEquals(expComplex, DirectSum.invDirectSum(A, BSparseComplex));

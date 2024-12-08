@@ -84,9 +84,9 @@ loadScripts(document, 'script');</script>
 <h1 title="Class RealHess" class="title">Class RealHess</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr>double[]&gt;
-<div class="inheritance"><a href="../unitary/RealUnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition</a>
-<div class="inheritance">org.flag4j.linalg.decompositions.hess.RealHess</div>
+<div class="inheritance"><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">org.flag4j.linalg.decompositions.unitary.UnitaryDecompositionOld</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr>double[]&gt;
+<div class="inheritance"><a href="../unitary/RealUnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">org.flag4j.linalg.decompositions.unitary.RealUnitaryDecompositionOld</a>
+<div class="inheritance">org.flag4j.linalg.decompositions.hess.RealHessOld</div>
 </div>
 </div>
 </div>
@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&gt;</code></dd>
+<dd><code><a href="../Decomposition.html" title="interface in org.flag4j.linalg.decompositions">Decomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&gt;</code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -167,21 +167,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RealHess.html" title="class in org.flag4j.linalg.decompositions.hess">RealHess</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decompose(org.flag4j.arrays.dense.Matrix)" class="member-name-link">decompose</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decompose(org.flag4j.arrays.dense.Matrix)" class="member-name-link">decompose</a><wbr>(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Applies decomposition to the source matrix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getH()" class="member-name-link">getH</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the upper Hessenburg matrix <code>H</code> from the Hessenburg decomposition.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUpper()" class="member-name-link">getUpper</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the upper Hessenburg matrix from the last decomposition.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initQ()" class="member-name-link">initQ</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates and initializes Q to the appropriately sized identity matrix.</div>
@@ -241,7 +241,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="decompose(org.flag4j.arrays.dense.Matrix)">
 <h3>decompose</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RealHess.html" title="class in org.flag4j.linalg.decompositions.hess">RealHess</a></span>&nbsp;<span class="element-name">decompose</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>&nbsp;src)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RealHess.html" title="class in org.flag4j.linalg.decompositions.hess">RealHess</a></span>&nbsp;<span class="element-name">decompose</span><wbr><span class="parameters">(<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>&nbsp;src)</span></div>
 <div class="block">Applies decomposition to the source matrix. Note, the computation of the unitary matrix <code>Q</code> in the decomposition is
  deferred until <a href="../unitary/RealUnitaryDecomposition.html#getQ()"><code>RealUnitaryDecomposition.getQ()</code></a> is explicitly called. This allows for efficient decompositions when <code>Q</code> is not needed.</div>
 <dl class="notes">
@@ -259,11 +259,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="initQ()">
 <h3>initQ</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">initQ</span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">initQ</span>()</div>
 <div class="block">Creates and initializes Q to the appropriately sized identity matrix.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../unitary/UnitaryDecomposition.html#initQ()">initQ</a></code>&nbsp;in class&nbsp;<code><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr>double[]&gt;</code></dd>
+<dd><code><a href="../unitary/UnitaryDecomposition.html#initQ()">initQ</a></code>&nbsp;in class&nbsp;<code><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr>double[]&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>An identity matrix with the appropriate size.</dd>
 </dl>
@@ -274,11 +274,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getUpper()">
 <h3>getUpper</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getUpper</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getUpper</span>()</div>
 <div class="block">Gets the upper Hessenburg matrix from the last decomposition. Same as <a href="#getH()"><code>getH()</code></a></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../unitary/UnitaryDecomposition.html#getUpper()">getUpper</a></code>&nbsp;in class&nbsp;<code><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a>,<wbr>double[]&gt;</code></dd>
+<dd><code><a href="../unitary/UnitaryDecomposition.html#getUpper()">getUpper</a></code>&nbsp;in class&nbsp;<code><a href="../unitary/UnitaryDecomposition.html" title="class in org.flag4j.linalg.decompositions.unitary">UnitaryDecomposition</a>&lt;<a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a>,<wbr>double[]&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The upper Hessenburg matrix from the last decomposition.</dd>
 </dl>
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getH()">
 <h3>getH</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays.dense">Matrix</a></span>&nbsp;<span class="element-name">getH</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../arrays/dense/Matrix.html" title="class in org.flag4j.arrays_old.dense">Matrix</a></span>&nbsp;<span class="element-name">getH</span>()</div>
 <div class="block">Gets the upper Hessenburg matrix <code>H</code> from the Hessenburg decomposition.</div>
 <dl class="notes">
 <dt>Returns:</dt>

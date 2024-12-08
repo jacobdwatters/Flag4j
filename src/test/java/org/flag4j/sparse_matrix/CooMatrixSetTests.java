@@ -1,7 +1,7 @@
 package org.flag4j.sparse_matrix;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +36,7 @@ class CooMatrixSetTests {
         expColIndices = new int[]{3, 4, 0, 2, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.set(445, 1, 2));
+        assertEquals(exp, a.set(445d, 1, 2));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -76,7 +76,7 @@ class CooMatrixSetTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         CooMatrix final0a = a;
-        assertThrows(Exception.class, ()->final0a.set(1, 6, 1));
+        assertThrows(Exception.class, ()->final0a.set(1d, 6, 1));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(5, 2);
@@ -86,7 +86,7 @@ class CooMatrixSetTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         CooMatrix final1a = a;
-        assertThrows(Exception.class, ()->final1a.set(1, 1, 9));
+        assertThrows(Exception.class, ()->final1a.set(1d, 1, 9));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(5, 2);
@@ -96,7 +96,7 @@ class CooMatrixSetTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         CooMatrix final2a = a;
-        assertThrows(Exception.class, ()->final2a.set(1, -1, 1));
+        assertThrows(Exception.class, ()->final2a.set(1d, -1, 1));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(5, 2);
@@ -106,7 +106,7 @@ class CooMatrixSetTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         CooMatrix final3a = a;
-        assertThrows(Exception.class, ()->final3a.set(1, 1, -1));
+        assertThrows(Exception.class, ()->final3a.set(1d, 1, -1));
 
         // ---------------------  Sub-case 8 ---------------------
         aShape = new Shape(3, 5);
@@ -121,6 +121,6 @@ class CooMatrixSetTests {
         expColIndices = new int[]{3, 4, 0, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.set(445, 0, 4));
+        assertEquals(exp, a.set(445d, 0, 4));
     }
 }

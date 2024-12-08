@@ -1,8 +1,9 @@
 package org.flag4j.sparse_matrix;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.core.Shape;
+import org.flag4j.linalg.ops.sparse.coo.real.RealSparseMatrixGetSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,7 +42,7 @@ class CooMatrixSetColTests {
         expColIndices = new int[]{0, 1, 2, 0, 2, 0, 0, 0};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setCol(bEntries, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setCol(a, 0, bEntries));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(11, 23);
@@ -58,7 +59,7 @@ class CooMatrixSetColTests {
         expColIndices = new int[]{16, 16, 16, 16, 14, 16, 3, 16, 9, 16, 16, 15, 16, 16, 4, 16};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setCol(bEntries, 16));
+        assertEquals(exp, RealSparseMatrixGetSet.setCol(a, 16, bEntries));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(5, 1000);
@@ -75,7 +76,7 @@ class CooMatrixSetColTests {
         expColIndices = new int[]{118, 999, 335, 999, 419, 999, 424, 880, 999, 134, 358, 492, 949, 999};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setCol(bEntries, 999));
+        assertEquals(exp, RealSparseMatrixGetSet.setCol(a, 999, bEntries));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -88,7 +89,7 @@ class CooMatrixSetColTests {
 
         CooMatrix final0a = a;
         double[] final0b = bEntries;
-        assertThrows(Exception.class, ()->final0a.setCol(final0b, 6));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setCol(final0a, 6, final0b));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -101,7 +102,7 @@ class CooMatrixSetColTests {
 
         CooMatrix final1a = a;
         double[] final1b = bEntries;
-        assertThrows(Exception.class, ()->final1a.setCol(final1b, 3));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setCol(final1a, 3, final1b));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -114,7 +115,7 @@ class CooMatrixSetColTests {
 
         CooMatrix final2a = a;
         double[] final2b = bEntries;
-        assertThrows(Exception.class, ()->final2a.setCol(final2b, 3));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setCol(final2a, 3, final2b));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -127,7 +128,7 @@ class CooMatrixSetColTests {
 
         CooMatrix final3a = a;
         double[] final3b = bEntries;
-        assertThrows(Exception.class, ()->final3a.setCol(final3b, 19));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setCol(final3a, 19, final3b));
     }
 
 
@@ -140,7 +141,7 @@ class CooMatrixSetColTests {
         CooMatrix a;
 
         Shape bShape;
-        int[] bindices;
+        int[] bIndices;
         double[] bEntries;
         CooVector b;
 
@@ -159,8 +160,8 @@ class CooMatrixSetColTests {
 
         bShape = new Shape(5);
         bEntries = new double[]{0.42925, 0.95116};
-        bindices = new int[]{2, 3};
-        b = new CooVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{2, 3};
+        b = new CooVector(bShape.get(0), bEntries, bIndices);
 
         expShape = new Shape(5, 3);
         expEntries = new double[]{0.69683, 0.42925, 0.95116, 0.01005};
@@ -179,8 +180,8 @@ class CooMatrixSetColTests {
 
         bShape = new Shape(11);
         bEntries = new double[]{0.42701, 0.22431, 0.48719, 0.79679};
-        bindices = new int[]{5, 6, 7, 10};
-        b = new CooVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{5, 6, 7, 10};
+        b = new CooVector(bShape.get(0), bEntries, bIndices);
 
         expShape = new Shape(11, 23);
         expEntries = new double[]{0.09879, 0.44944, 0.42701, 0.22431, 0.48719, 0.51234, 0.10826, 0.79679};
@@ -199,8 +200,8 @@ class CooMatrixSetColTests {
 
         bShape = new Shape(5);
         bEntries = new double[]{0.92473, 0.36888};
-        bindices = new int[]{1, 4};
-        b = new CooVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{1, 4};
+        b = new CooVector(bShape.get(0), bEntries, bIndices);
 
         expShape = new Shape(5, 1000);
         expEntries = new double[]{0.548, 0.12782, 0.71044, 0.03123, 0.92473, 0.73197, 0.23329, 0.76449, 0.62306, 0.77283, 0.36888};
@@ -219,8 +220,8 @@ class CooMatrixSetColTests {
 
         bShape = new Shape(3);
         bEntries = new double[]{0.93917};
-        bindices = new int[]{2};
-        b = new CooVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{2};
+        b = new CooVector(bShape.get(0), bEntries, bIndices);
 
         CooMatrix final0a = a;
         CooVector final0b = b;
@@ -235,8 +236,8 @@ class CooMatrixSetColTests {
 
         bShape = new Shape(5);
         bEntries = new double[]{0.41526, 0.41046};
-        bindices = new int[]{0, 2};
-        b = new CooVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{0, 2};
+        b = new CooVector(bShape.get(0), bEntries, bIndices);
 
         CooMatrix final1a = a;
         CooVector final1b = b;
@@ -251,8 +252,8 @@ class CooMatrixSetColTests {
 
         bShape = new Shape(2);
         bEntries = new double[]{0.55374};
-        bindices = new int[]{1};
-        b = new CooVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{1};
+        b = new CooVector(bShape.get(0), bEntries, bIndices);
 
         CooMatrix final2a = a;
         CooVector final2b = b;
@@ -267,8 +268,8 @@ class CooMatrixSetColTests {
 
         bShape = new Shape(3);
         bEntries = new double[]{0.838};
-        bindices = new int[]{0};
-        b = new CooVector(bShape.get(0), bEntries, bindices);
+        bIndices = new int[]{0};
+        b = new CooVector(bShape.get(0), bEntries, bIndices);
 
         CooMatrix final3a = a;
         CooVector final3b = b;

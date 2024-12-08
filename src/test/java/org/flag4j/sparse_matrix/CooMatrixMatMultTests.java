@@ -1,11 +1,11 @@
 package org.flag4j.sparse_matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -173,10 +173,10 @@ public class CooMatrixMatMultTests {
         Shape bShape;
         int[] bRowIndices;
         int[] bColIndices;
-        CNumber[] bEntries;
+        Complex128[] bEntries;
         CooCMatrix b;
 
-        CNumber[][] expEntries;
+        Complex128[][] expEntries;
         CMatrix exp;
 
         // ---------------------  Sub-case 1 ---------------------
@@ -187,15 +187,15 @@ public class CooMatrixMatMultTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 6);
-        bEntries = new CNumber[]{new CNumber("0.97659+0.45171i"), new CNumber("0.46223+0.97387i"), new CNumber("0.41417+0.44065i"), new CNumber("0.24366+0.1466i"), new CNumber("0.85504+0.88395i"), new CNumber("0.57655+0.76298i"), new CNumber("0.9899+0.63576i"), new CNumber("0.80167+0.75526i")};
+        bEntries = new Complex128[]{new Complex128("0.97659+0.45171i"), new Complex128("0.46223+0.97387i"), new Complex128("0.41417+0.44065i"), new Complex128("0.24366+0.1466i"), new Complex128("0.85504+0.88395i"), new Complex128("0.57655+0.76298i"), new Complex128("0.9899+0.63576i"), new Complex128("0.80167+0.75526i")};
         bRowIndices = new int[]{0, 1, 2, 2, 2, 4, 4, 4};
         bColIndices = new int[]{4, 0, 2, 4, 5, 0, 1, 5};
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
-        expEntries = new CNumber[][]{
-                {new CNumber("0.1910513735+0.2528286826i"), new CNumber("0.328023163+0.21067179119999999i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.2656493879+0.2502705062i")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.39695709479999997+0.42233658599999996i"), new CNumber("0.0"), new CNumber("0.417269133+0.22549202340000002i"), new CNumber("0.8195045376+0.847213038i")}};
+        expEntries = new Complex128[][]{
+                {new Complex128("0.1910513735+0.2528286826i"), new Complex128("0.328023163+0.21067179119999999i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.2656493879+0.2502705062i")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.39695709479999997+0.42233658599999996i"), new Complex128("0.0"), new Complex128("0.417269133+0.22549202340000002i"), new Complex128("0.8195045376+0.847213038i")}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.mult(b));
@@ -208,23 +208,23 @@ public class CooMatrixMatMultTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(23, 11);
-        bEntries = new CNumber[]{new CNumber("0.38502+0.04552i"), new CNumber("0.88032+0.92607i"), new CNumber("0.69907+0.14743i"), new CNumber("0.07625+0.69487i"), new CNumber("0.94955+0.72765i"), new CNumber("0.46059+0.2665i"), new CNumber("0.29256+0.59195i"), new CNumber("0.35903+0.22833i"), new CNumber("0.68831+0.51803i"), new CNumber("0.79154+0.54282i"), new CNumber("0.05943+0.73128i"), new CNumber("0.12081+0.91091i"), new CNumber("0.26697+0.15171i"), new CNumber("0.61822+0.37349i"), new CNumber("0.98401+0.95508i"), new CNumber("0.02764+0.09211i"), new CNumber("0.30162+0.36956i"), new CNumber("0.16954+0.90695i"), new CNumber("0.71821+0.88465i"), new CNumber("0.97409+0.48991i")};
+        bEntries = new Complex128[]{new Complex128("0.38502+0.04552i"), new Complex128("0.88032+0.92607i"), new Complex128("0.69907+0.14743i"), new Complex128("0.07625+0.69487i"), new Complex128("0.94955+0.72765i"), new Complex128("0.46059+0.2665i"), new Complex128("0.29256+0.59195i"), new Complex128("0.35903+0.22833i"), new Complex128("0.68831+0.51803i"), new Complex128("0.79154+0.54282i"), new Complex128("0.05943+0.73128i"), new Complex128("0.12081+0.91091i"), new Complex128("0.26697+0.15171i"), new Complex128("0.61822+0.37349i"), new Complex128("0.98401+0.95508i"), new Complex128("0.02764+0.09211i"), new Complex128("0.30162+0.36956i"), new Complex128("0.16954+0.90695i"), new Complex128("0.71821+0.88465i"), new Complex128("0.97409+0.48991i")};
         bRowIndices = new int[]{0, 0, 0, 1, 1, 7, 9, 11, 12, 14, 14, 14, 14, 16, 17, 18, 18, 18, 19, 22};
         bColIndices = new int[]{1, 7, 8, 4, 10, 0, 10, 4, 10, 4, 5, 6, 10, 9, 5, 5, 6, 8, 8, 6};
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
-        expEntries = new CNumber[][]{
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.2625335874+0.031038722399999996i"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.6002637984+0.6314593508999999i"), new CNumber("0.47667486089999994+0.1005280941i"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0676955125+0.6169125347i"), new CNumber("0.0036598124000000003+0.012196285099999999i"), new CNumber("0.0399375042+0.0489334396i"), new CNumber("0.0"), new CNumber("0.0224487914+0.12008924950000001i"), new CNumber("0.0"), new CNumber("0.8430199855+0.6460149465i")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.6544401341+0.8061019265i"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0"), new CNumber("0.0")}};
+        expEntries = new Complex128[][]{
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.2625335874+0.031038722399999996i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.6002637984+0.6314593508999999i"), new Complex128("0.47667486089999994+0.1005280941i"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0676955125+0.6169125347i"), new Complex128("0.0036598124000000003+0.012196285099999999i"), new Complex128("0.0399375042+0.0489334396i"), new Complex128("0.0"), new Complex128("0.0224487914+0.12008924950000001i"), new Complex128("0.0"), new Complex128("0.8430199855+0.6460149465i")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.6544401341+0.8061019265i"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.mult(b));
@@ -237,17 +237,17 @@ public class CooMatrixMatMultTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(3, 1);
-        bEntries = new CNumber[]{new CNumber("0.7751+0.28177i"), new CNumber("0.19258+0.76919i"), new CNumber("0.41388+0.04817i")};
+        bEntries = new Complex128[]{new Complex128("0.7751+0.28177i"), new Complex128("0.19258+0.76919i"), new Complex128("0.41388+0.04817i")};
         bRowIndices = new int[]{0, 1, 2};
         bColIndices = new int[]{0, 0, 0};
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
-        expEntries = new CNumber[][]{
-                {new CNumber("0.0149326532+0.0596429926i")},
-                {new CNumber("0.8300783766000001+0.30005007100000003i")},
-                {new CNumber("0.0")},
-                {new CNumber("0.0")},
-                {new CNumber("0.0")}};
+        expEntries = new Complex128[][]{
+                {new Complex128("0.0149326532+0.0596429926i")},
+                {new Complex128("0.8300783766000001+0.30005007100000003i")},
+                {new Complex128("0.0")},
+                {new Complex128("0.0")},
+                {new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.mult(b));
@@ -260,17 +260,17 @@ public class CooMatrixMatMultTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(3, 2);
-        bEntries = new CNumber[]{new CNumber("0.8595+0.96772i"), new CNumber("0.2566+0.82298i"), new CNumber("0.31544+0.16909i")};
+        bEntries = new Complex128[]{new Complex128("0.8595+0.96772i"), new Complex128("0.2566+0.82298i"), new Complex128("0.31544+0.16909i")};
         bRowIndices = new int[]{0, 1, 2};
         bColIndices = new int[]{0, 1, 0};
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
-        expEntries = new CNumber[][]{
-                {new CNumber("0.0"), new CNumber("0.175416892+0.5626055876i")},
-                {new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.0"), new CNumber("0.0")},
-                {new CNumber("0.251200644+0.1346548215i"), new CNumber("0.077457276+0.24842474280000001i")},
-                {new CNumber("0.28512193500000005+0.3210217556i"), new CNumber("0.0")}};
+        expEntries = new Complex128[][]{
+                {new Complex128("0.0"), new Complex128("0.175416892+0.5626055876i")},
+                {new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.0"), new Complex128("0.0")},
+                {new Complex128("0.251200644+0.1346548215i"), new Complex128("0.077457276+0.24842474280000001i")},
+                {new Complex128("0.28512193500000005+0.3210217556i"), new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.mult(b));
@@ -283,7 +283,7 @@ public class CooMatrixMatMultTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(2, 5);
-        bEntries = new CNumber[]{new CNumber("0.22478+0.28297i"), new CNumber("0.76721+0.81123i")};
+        bEntries = new Complex128[]{new Complex128("0.22478+0.28297i"), new Complex128("0.76721+0.81123i")};
         bRowIndices = new int[]{0, 1};
         bColIndices = new int[]{1, 1};
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
@@ -300,7 +300,7 @@ public class CooMatrixMatMultTests {
         a = new CooMatrix(aShape, aEntries, aRowIndices, aColIndices);
 
         bShape = new Shape(5, 5);
-        bEntries = new CNumber[]{new CNumber("0.12542+0.21611i"), new CNumber("0.14945+0.22213i")};
+        bEntries = new Complex128[]{new Complex128("0.12542+0.21611i"), new Complex128("0.14945+0.22213i")};
         bRowIndices = new int[]{3, 4};
         bColIndices = new int[]{0, 0};
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);

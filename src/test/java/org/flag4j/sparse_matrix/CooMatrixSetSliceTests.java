@@ -1,8 +1,9 @@
 package org.flag4j.sparse_matrix;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.core.Shape;
+import org.flag4j.linalg.ops.sparse.coo.real.RealSparseMatrixGetSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +50,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 2, 2, 0};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 2, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 2, 0));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -70,7 +71,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{8, 2, 10, 4, 8, 1, 2, 6, 7, 4, 7, 8, 9, 2, 4, 7, 8, 1, 5};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 18, 1));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 18, 1));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -91,7 +92,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{1, 0, 2, 1, 4, 2, 2, 2, 4, 1, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 0, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 0, 0));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -108,7 +109,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final0a = a;
         CooMatrix final0b = b;
-        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -125,7 +126,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final1a = a;
         CooMatrix final1b = b;
-        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -142,7 +143,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final2a = a;
         CooMatrix final2b = b;
-        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -159,7 +160,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final3a = a;
         CooMatrix final3b = b;
-        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 
 
@@ -198,7 +199,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 0, 1, 2, 0, 1, 2};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 2, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 2, 0));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -221,7 +222,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{2, 3, 3, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 18, 1));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 18, 1));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -242,7 +243,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 1, 0, 1, 0, 1, 4, 1, 3, 3, 0, 4, 4, 3, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 0, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 0, 0));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -257,7 +258,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final0a = a;
         Matrix final0b = b;
-        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -274,7 +275,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final1a = a;
         Matrix final1b = b;
-        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -290,7 +291,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final2a = a;
         Matrix final2b = b;
-        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -305,7 +306,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final3a = a;
         Matrix final3b = b;
-        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 
 
@@ -342,7 +343,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 0, 1, 2, 0, 1, 2};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 2, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 2, 0));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -364,7 +365,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{2, 3, 3, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 18, 1));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 18, 1));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -384,7 +385,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 1, 0, 1, 0, 1, 4, 1, 3, 3, 0, 4, 4, 3, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 0, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 0, 0));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -398,7 +399,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final0a = a;
         double[][] final0b = b;
-        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -414,7 +415,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final1a = a;
         double[][] final1b = b;
-        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -429,7 +430,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final2a = a;
         double[][] final2b = b;
-        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -443,7 +444,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final3a = a;
         double[][] final3b = b;
-        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 
 
@@ -480,7 +481,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 0, 1, 2, 0, 1, 2};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 2, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 2, 0));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -502,7 +503,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{2, 3, 3, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 18, 1));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 18, 1));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -522,7 +523,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 1, 0, 1, 0, 1, 4, 1, 3, 3, 0, 4, 4, 3, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 0, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 0, 0));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -536,7 +537,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final0a = a;
         Double[][] final0b = b;
-        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -552,7 +553,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final1a = a;
         Double[][] final1b = b;
-        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -567,7 +568,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final2a = a;
         Double[][] final2b = b;
-        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -581,7 +582,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final3a = a;
         Double[][] final3b = b;
-        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 
 
@@ -618,7 +619,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 0, 1, 2, 0, 1, 2};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 2, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 2, 0));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -640,7 +641,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{2, 3, 3, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 18, 1));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 18, 1));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -660,7 +661,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 1, 0, 1, 0, 1, 4, 1, 3, 3, 0, 4, 4, 3, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 0, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 0, 0));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -674,7 +675,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final0a = a;
         int[][] final0b = b;
-        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -690,7 +691,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final1a = a;
         int[][] final1b = b;
-        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -705,7 +706,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final2a = a;
         int[][] final2b = b;
-        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -719,7 +720,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final3a = a;
         int[][] final3b = b;
-        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 
 
@@ -756,7 +757,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 0, 1, 2, 0, 1, 2};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 2, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 2, 0));
 
         // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(23, 11);
@@ -778,7 +779,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{2, 3, 3, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 18, 1));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 18, 1));
 
         // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
@@ -798,7 +799,7 @@ class CooMatrixSetSliceTests {
         expColIndices = new int[]{0, 1, 0, 1, 0, 1, 4, 1, 3, 3, 0, 4, 4, 3, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, a.setSlice(b, 0, 0));
+        assertEquals(exp, RealSparseMatrixGetSet.setSlice(a, b, 0, 0));
 
         // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(3, 5);
@@ -812,7 +813,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final0a = a;
         Integer[][] final0b = b;
-        assertThrows(Exception.class, ()->final0a.setSlice(final0b, -1, 2));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
         // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(3, 5);
@@ -828,7 +829,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final1a = a;
         Integer[][] final1b = b;
-        assertThrows(Exception.class, ()->final1a.setSlice(final1b, 0, 16));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
         // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(3, 5);
@@ -843,7 +844,7 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final2a = a;
         Integer[][] final2b = b;
-        assertThrows(Exception.class, ()->final2a.setSlice(final2b, 2, 0));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
         // ---------------------  Sub-case 7 ---------------------
         aShape = new Shape(3, 5);
@@ -857,6 +858,6 @@ class CooMatrixSetSliceTests {
 
         CooMatrix final3a = a;
         Integer[][] final3b = b;
-        assertThrows(Exception.class, ()->final3a.setSlice(final3b, 0, 4));
+        assertThrows(Exception.class, ()->RealSparseMatrixGetSet.setSlice(final3a, final3b, 0, 4));
     }
 }

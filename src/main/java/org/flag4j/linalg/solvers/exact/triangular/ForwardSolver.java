@@ -24,27 +24,25 @@
 
 package org.flag4j.linalg.solvers.exact.triangular;
 
-import org.flag4j.core.MatrixMixin;
-import org.flag4j.core.VectorMixin;
-import org.flag4j.linalg.solvers.LinearSolver;
-import org.flag4j.util.Flag4jConstants;
-import org.flag4j.util.ParameterChecks;
-import org.flag4j.util.exceptions.SingularMatrixException;
 
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.linalg.solvers.LinearMatrixSolver;
+import org.flag4j.util.Flag4jConstants;
+import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * This solver solves linear systems of equations where the coefficient matrix in a lower triangular real dense matrix
- * and the constant vector is a real dense vector. That is, solves, {@code L*x=b} or {@code L*X=B} for the vector {@code x} or the
- * matrix {@code X} respectively where {@code L} is a lower triangular matrix.
+ * and the constant vector is a real dense vector. That is, solves, L*x=b or L*X=B for the vector x or the
+ * matrix X respectively where L is a lower triangular matrix.
  *
  * @param <T> Type of coefficient matrix.
  * @param <U> Vector type equivalent to the coefficient matrix.
  * @param <V> Type of the internal storage datastructures in the matrix and vector.
  */
-public abstract class ForwardSolver<
-        T extends MatrixMixin<T, ?, ?, ?, ?, ?, U, ?>,
-        U extends VectorMixin<U, ?, ?, ?, ?, T, ?, ?>,
-        V> implements LinearSolver<T, U> {
+public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>, V>
+        implements LinearMatrixSolver<T, U> {
 
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
@@ -62,7 +60,7 @@ public abstract class ForwardSolver<
      */
     protected final boolean enforceLower;
     /**
-     * Storage for solution in solves which return a 00000000
+     * Storage for solution in solves which return a matrix.
      */
     T X;
     /**
@@ -96,8 +94,8 @@ public abstract class ForwardSolver<
      * true and {@code coeff} is not upper triangular.
      */
     protected void checkParams(T coeff, int constantRows) {
-        ParameterChecks.assertSquare(coeff.shape());
-        ParameterChecks.assertEquals(coeff.numRows(), constantRows);
+        ValidateParameters.ensureSquare(coeff.getShape());
+        ValidateParameters.ensureEquals(coeff.numRows(), constantRows);
 
         if(enforceLower && !coeff.isTriL()) {
             throw new IllegalArgumentException("Expecting matrix L to be lower triangular.");

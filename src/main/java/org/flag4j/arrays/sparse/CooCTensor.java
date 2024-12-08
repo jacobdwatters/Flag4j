@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,18 @@
 
 package org.flag4j.arrays.sparse;
 
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
 import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.complex_numbers.CNumber;
-import org.flag4j.core.ComplexTensorExclusiveMixin;
-import org.flag4j.core.Shape;
-import org.flag4j.core.TensorBase;
-import org.flag4j.core.sparse_base.ComplexSparseTensorBase;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.operations.dense.real.RealDenseTranspose;
-import org.flag4j.operations.dense_sparse.coo.complex.ComplexDenseSparseOperations;
-import org.flag4j.operations.dense_sparse.coo.real_complex.RealComplexDenseSparseOperations;
-import org.flag4j.operations.sparse.coo.complex.ComplexCooTensorDot;
-import org.flag4j.operations.sparse.coo.complex.ComplexCooTensorOperations;
-import org.flag4j.operations.sparse.coo.complex.ComplexSparseEquals;
-import org.flag4j.operations.sparse.coo.real_complex.RealComplexCooTensorOperations;
+import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ParameterChecks;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,887 +43,304 @@ import java.util.List;
 
 
 /**
- * Complex sparse tensor. Stored in coordinate (COO) format.
+ * <p>Sparse complex tensor stored in coordinate list (COO) format. The data of this COO tensor are of type {@link Complex128}
+ *
+ * <p>The non-zero data and non-zero indices of a COO tensor are mutable but the {@link #shape} and total number of
+ * {@link #data non-zero data} is fixed.
+ *
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.
+ *
+ * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
+ * tensor).
+ *
+ * <p>A sparse COO tensor is stored as:
+ * <ul>
+ *     <li>The full {@link #shape shape} of the tensor.</li>
+ *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
+ *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
+ *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
+ *
+ *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
+ *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
+ *     index of {@code data[i]}.
+ *     </li>
+ * </ul>
  */
-public class CooCTensor
-        extends ComplexSparseTensorBase<CooCTensor, CTensor, CooTensor>
-        implements ComplexTensorExclusiveMixin<CooCTensor>
-{
+public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Complex128> {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Creates a tensor with the specified data and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero data of this tensor of this tensor.
+     * @param indices Indices of the non-zero data of this tensor.
+     */
+    public CooCTensor(Shape shape, Complex128[] entries, int[][] indices) {
+        super(shape, entries, indices);
+        if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
+    }
 
 
     /**
-     * Creates a sparse tensor with specified shape filled with zeros.
-     * @param shape Shape of the tensor.
+     * Creates a tensor with the specified data and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero data of this tensor of this tensor.
+     * @param indices Indices of the non-zero data of this tensor.
+     */
+    public CooCTensor(Shape shape, List<Complex128> entries, List<int[]> indices) {
+        super(shape, entries.toArray(new Complex128[0]), indices.toArray(new int[0][]));
+        if(super.data.length == 0 || super.data[0] == null) setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a tensor with the specified data and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero data of this tensor of this tensor.
+     * @param indices Indices of the non-zero data of this tensor.
+     */
+    public CooCTensor(Shape shape, Complex64[] entries, int[][] indices) {
+        super(shape, new Complex128[entries.length], indices);
+        setZeroElement(Complex128.ZERO);
+
+        for(int i=0, size=entries.length; i<size; i++)
+            this.data[i] = new Complex128((Complex64) entries[i]);
+    }
+
+
+    /**
+     * Creates a tensor with the specified data and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero data of this tensor of this tensor.
+     * @param indices Indices of the non-zero data of this tensor.
      */
     public CooCTensor(Shape shape) {
-        super(shape, 0, new CNumber[0], new int[0][0]);
-        this.shape.makeStridesIfNull();
+        super(shape, new Complex128[0], new int[0][shape.getRank()]);
+        setZeroElement(Complex128.ZERO);
     }
 
 
     /**
-     * Creates a sparse tensor with specified shape filled with zeros.
-     * @param shape Shape of the tensor.
-     * @param nonZeroEntries Non-zero entries of the tensor.
-     * @param indices Indices of the non-zero entries of the tensor.
+     * Creates a tensor with the specified data and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero data of this tensor of this tensor.
+     * @param indices Indices of the non-zero data of this tensor.
      */
-    public CooCTensor(Shape shape, double[] nonZeroEntries, int[][] indices) {
-        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
-        this.shape.makeStridesIfNull();
+    public CooCTensor(Shape shape, double[] entries, int[][] indices) {
+        super(shape, ArrayUtils.wrapAsComplex128(entries, null), indices);
+        setZeroElement(Complex128.ZERO);
+    }
 
-        for(int i=0; i<indices.length; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
+
+    /**
+     * Constructs a copy of a sparse COO tensor.
+     * @param b Tensor to construct copy of.
+     */
+    public CooCTensor(CooCTensor b) {
+        super(b.shape, b.data.clone(), ArrayUtils.deepCopy(b.indices, null));
+    }
+
+
+    @Override
+    public Complex128[] makeEmptyDataArray(int length) {
+        return new Complex128[length];
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
+     * {@code data}. The resulting tensor will also have
+     * the same non-zero indices as this tensor.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
+     *
+     * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
+     * {@code data}.
+     */
+    @Override
+    public CooCTensor makeLikeTensor(Shape shape, Complex128[] entries) {
+        return new CooCTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero data.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Non-zero data of the tensor to construct.
+     * @param indices Indices of the non-zero data of the tensor.
+     *
+     * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
+     */
+    @Override
+    public CooCTensor makeLikeTensor(Shape shape, Complex128[] entries, int[][] indices) {
+        return new CooCTensor(shape, entries, indices);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero data.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Non-zero data of the tensor to construct.
+     * @param indices Indices of the non-zero data of the tensor.
+     *
+     * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
+     */
+    @Override
+    public CooCTensor makeLikeTensor(Shape shape, List<Complex128> entries, List<int[]> indices) {
+        return new CooCTensor(shape, entries, indices);
+    }
+
+
+    /**
+     * Constructs a dense tensor that is a similar type as this sparse COO tensor.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries The data of the dense tensor to construct.
+     *
+     * @return A dense tensor that is a similar type as this sparse COO tensor.
+     */
+    @Override
+    public CTensor makeLikeDenseTensor(Shape shape, Complex128[] entries) {
+        return new CTensor(shape, entries);
+    }
+
+
+    /**
+     * Converts this complex vector to a real vector.
+     * @return A real vector containing the real components of all non-zero values in this vector. The imaginary components are
+     * ignored.
+     */
+    public CooTensor toReal() {
+        return new CooTensor(shape, Complex128Ops.toReal(data), indices.clone());
+    }
+
+
+    /**
+     * Checks if all data of this matrix are real.
+     * @return {@code true} if all data of this matrix are real; {@code false} otherwise.
+     */
+    public boolean isReal() {
+        return Complex128Ops.isReal(data);
+    }
+
+
+    /**
+     * Checks if any entry within this matrix has non-zero imaginary component.
+     * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
+     */
+    public boolean isComplex() {
+        return Complex128Ops.isComplex(data);
+    }
+
+
+    /**
+     * Rounds all data within this tensor to the specified precision.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A new tensor containing the data of this tensor rounded to the specified precision.
+     */
+    public CooCTensor round(int precision) {
+        return new CooCTensor(shape, Complex128Ops.round(data, precision), ArrayUtils.deepCopy(indices, null));
+    }
+
+
+    /**
+     * Sets all elements of this tensor to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
+     * @return A copy of this tensor with all data within {@code tol} of zero set to zero.
+     */
+    public CooCTensor roundToZero(double tolerance) {
+        Complex128[] rounded = Complex128Ops.roundToZero(data, tolerance);
+        List<Complex128> dest = new ArrayList<>(data.length);
+        List<int[]> destIndices = new ArrayList<>(data.length);
+
+        for(int i = 0, size = data.length; i<size; i++) {
+            if(!rounded[i].isZero()) {
+                dest.add(rounded[i]);
+                destIndices.add(indices[i].clone());
+            }
         }
+
+        return new CooCTensor(shape, dest, destIndices);
     }
 
 
     /**
-     * Creates a sparse tensor with specified shape filled with zeros.
-     * @param shape Shape of the tensor.
-     * @param nonZeroEntries Non-zero entries of the tensor.
-     * @param indices Indices of the non-zero entries of the tensor.
+     * Converts this tensor to a matrix with specified shape.
+     * @param newShape Shape of matrix to convert this tensor to. Shape must be broadcastable with this tensors shape and have rank 2.
+     * @return A matrix of the specified shape with the same non-zero data as this tensor.
      */
-    public CooCTensor(Shape shape, int[] nonZeroEntries, int[][] indices) {
-        super(shape, nonZeroEntries.length, new CNumber[nonZeroEntries.length], indices);
-        this.shape.makeStridesIfNull();
+    public CooCMatrix toMatrix(Shape newShape) {
+        ValidateParameters.ensureRank(newShape, 2);
+        CooCTensor t = reshape(newShape); // Reshape as rank 2 tensor. Broadcastable check made here.
+        int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
 
-        for(int i=0; i<nnz; i++) {
-            super.entries[i] = new CNumber(nonZeroEntries[i]);
-        }
+        return new CooCMatrix(newShape, t.data.clone(), tIndices[0], tIndices[1]);
     }
 
 
     /**
-     * Creates a sparse tensor with specified shape filled with zeros.
-     * @param shape Shape of the tensor.
-     * @param nonZeroEntries Non-zero entries of the tensor.
-     * @param indices Indices of the non-zero entries of the tensor.
+     * Sets the element of this tensor at the specified target index.
+     *
+     * @param value New value to set the specified index of this tensor to.
+     * @param target Index of the element to set.
+     *
+     * @return If this tensor is dense, a reference to this tensor is returned. If this tensor is sparse, a copy of this tensor with
+     * the updated value is returned.
+     *
+     * @throws IndexOutOfBoundsException If {@code target} is not within the bounds of this tensor.
      */
-    public CooCTensor(Shape shape, CNumber[] nonZeroEntries, int[][] indices) {
-        super(shape, nonZeroEntries.length, nonZeroEntries, indices);
-        this.shape.makeStridesIfNull();
+    public CooCTensor set(double value, int... target) {
+        return super.set(new Complex128(value), target);
     }
 
 
     /**
-     * Creates a sparse tensor with specified shape and non-zero values/indices.
-     * @param shape Shape of the tensor.
-     * @param nonZeroEntries Non-zero entries of the tensor.
-     * @param indices Indices of the non-zero entries of the tensor.
-     */
-    public CooCTensor(Shape shape, List<CNumber> nonZeroEntries, List<int[]> indices) {
-        super(shape, nonZeroEntries.size(),
-                nonZeroEntries.toArray(new CNumber[0]),
-                indices.toArray(new int[0][]));
-        this.shape.makeStridesIfNull();
-    }
-
-
-    /**
-     * Constructs a sparse complex tensor whose non-zero values, indices, and shape are specified by another sparse complex
-     * tensor.
-     * @param A The sparse complex tensor to construct a copy of.
-     */
-    public CooCTensor(CooCTensor A) {
-        super(A.shape, A.nonZeroEntries(), A.entries.clone(), new int[A.indices.length][A.indices[0].length]);
-        shape.makeStridesIfNull();
-
-        for(int i=0; i<indices.length; i++) {
-            super.indices[i] = A.indices[i].clone();
-        }
-    }
-
-
-    /**
-     * Checks if an object is equal to this sparse COO tensor.
-     * @param object Object to compare this sparse COO tensor to.
-     * @return True if the object is a {@link CooCTensor}, has the same shape as this tensor, and is element-wise equal to this
-     * tensor.
+     * Checks if an object is equal to this tensor object.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CooCTensor}.
+     * False otherwise.
      */
     @Override
     public boolean equals(Object object) {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        CooCTensor src2 = (CooCTensor) object;
-        return ComplexSparseEquals.tensorEquals(this, src2);
-    }
-
-
-    /**
-     * Simply returns a reference of this tensor.
-     *
-     * @return A reference to this tensor.
-     */
-    @Override
-    protected CooCTensor getSelf() {
-        return this;
+        return CooFieldEquals.cooTensorEquals(this, (CooCTensor) object);
     }
 
 
     @Override
-    public boolean allClose(CooCTensor tensor, double relTol, double absTol) {
-        return ComplexSparseEquals.allCloseTensor(this, tensor, relTol, absTol);
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
-     * and takes the complex conjugate of the elements along these axes. Same as {@link #H}.
-     *
-     * @return The complex transpose of this tensor.
-     */
-    @Override
-    public CooCTensor hermTranspose() {
-        return H(0, getRank()-1);
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. In the context of a tensor, this swaps the first and last axes
-     * and takes the complex conjugate of the elements along these axes. Same as {@link #hermTranspose()}.
-     *
-     * @return The complex transpose of this tensor.
-     */
-    @Override
-    public CooCTensor H() {
-        return H(0, getRank()-1);
-    }
-
-
-    /**
-     * <p>Copies this tensor and sets the specified {@code index} to {@code value}.</p>
-     *
-     * <p>Note: unlike with dense tensors, this method returns a copy of this
-     * tensor with the specified value updated and does <b>NOT</b> return a reference to this tensor. Because of this, it may be
-     * expensive to make frequent updates to a sparse tensor.</p>
-     *
-     * @param value Value to set.
-     * @param index The index of this tensor for which to set the value.
-     * @return A copy of this tensor with the specified value set.
-     */
-    @Override
-    public CooCTensor set(CNumber value, int...index) {
-        ParameterChecks.assertValidIndex(shape, index);
-        CooCTensor dest;
-
-        // Check if value already exists in tensor.
-        int idx = -1;
-        for(int i=0; i<indices.length; i++) {
-            if(Arrays.equals(indices[i], index)) {
-                idx = i;
-                break; // Found in tensor, no need to continue.
-            }
-        }
-
-        if(idx > -1) {
-            // Copy entries and set new value.
-            dest = new CooCTensor(shape, entries.clone(), ArrayUtils.deepCopy(indices, null));
-            dest.entries[idx] = value;
-            dest.indices[idx] = index;
-        } else {
-            // Copy old indices and insert new one.
-            int[][] newIndices = new int[indices.length + 1][getRank()];
-            ArrayUtils.deepCopy(indices, newIndices);
-            newIndices[indices.length] = index;
-
-            // Copy old entries and insert new one.
-            CNumber[] newEntries = Arrays.copyOf(entries, entries.length+1);
-            newEntries[newEntries.length-1] = value;
-
-            dest = new CooCTensor(shape, newEntries, newIndices);
-            dest.sortIndices();
-        }
-
-        return dest;
-    }
-
-
-    /**
-     * <p>Copies this tensor and sets the specified {@code index} to {@code value}.</p>
-     *
-     * <p>Note: unlike with dense tensors, this method returns a copy of this
-     * tensor with the specified value updated and does <b>NOT</b> return a reference to this tensor. Because of this, it may be
-     * expensive to make frequent updates to a sparse tensor.</p>
-     *
-     * @param value Value to set.
-     * @param index The index of this tensor for which to set the value.
-     * @return A copy of this tensor with the specified value set.
-     */
-    @Override
-    public CooCTensor set(double value, int... indices) {
-        return set(new CNumber(value), indices);
-    }
-
-
-    /**
-     * Copies and reshapes tensor if possible. The total number of entries in this tensor must match the total number of entries
-     * in the reshaped tensor.
-     *
-     * @param newShape Shape of the new tensor.
-     * @return A tensor which is equivalent to this tensor but with the specified shape.
-     * @throws IllegalArgumentException If this tensor cannot be reshaped to the specified dimensions.
-     */
-    @Override
-    public CooCTensor reshape(Shape newShape) {
-        ParameterChecks.assertBroadcastable(shape, newShape);
-        newShape.makeStridesIfNull();
-
-        int rank = indices[0].length;
-        int newRank = newShape.getRank();
-        int nnz = entries.length;
-
-        int[] oldStrides = shape.getStrides();
-        int[] newStrides = newShape.getStrides();
-
-        int[][] newIndices = new int[nnz][newRank];
+    public int hashCode() {
+        // Ignores explicit zeros to maintain contract with equals method.
+        int result = 17;
+        result = 31*result + shape.hashCode();
 
         for(int i=0; i<nnz; i++) {
-            int flatIndex = 0;
-            for(int j=0; j < rank; j++) {
-                flatIndex += indices[i][j] * oldStrides[j];
-            }
-
-            for(int j=0; j<newRank; j++) {
-                newIndices[i][j] = flatIndex / newStrides[j];
-                flatIndex %= newStrides[j];
+            if (!data[i].isZero()) {
+                result = 31*result + data[i].hashCode();
+                result = 31*result + Arrays.hashCode(indices[i]);
             }
         }
 
-        return new CooCTensor(newShape, Arrays.copyOf(entries, entries.length), newIndices);
+        return result;
     }
 
 
     /**
-     * Flattens tensor to single dimension. This method does not preserve rank. To flatten tensor along a single axis (and preserve
-     * the rank) use {@link #flatten(int)}.
+     * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
+     * non-zero data, and non-zero indices.
      *
-     * @return The flattened tensor.
-     * @see #flatten(int)
-     */
-    @Override
-    public CooCTensor flatten() {
-        int[][] destIndices = new int[entries.length][1];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            destIndices[i][0] = shape.entriesIndex(indices[i]);
-
-        return new CooCTensor(new Shape(shape.totalEntries().intValueExact()), entries.clone(), destIndices);
-    }
-
-
-    /**
-     * Flattens a tensor along the specified axis. Unlike {@link #flatten()}, this method will preserve the rank of the tensor.
-     *
-     * @param axis Axis along which to flatten tensor.
-     * @throws IllegalArgumentException If the axis is negative or larger than <code>this.{@link #getRank()}-1</code>.
-     * @see #flatten()
-     */
-    @Override
-    public CooCTensor flatten(int axis) {
-        ParameterChecks.assertIndexInBounds(indices[0].length, axis);
-        int[][] destIndices = new int[indices.length][indices[0].length];
-
-        // Compute new shape.
-        int[] destShape = new int[indices[0].length];
-        Arrays.fill(destShape, 1);
-        destShape[axis] = shape.totalEntries().intValueExact();
-
-        for(int i=0, size=entries.length; i<size; i++)
-            destIndices[i][axis] = shape.entriesIndex(indices[i]);
-
-        return new CooCTensor(new Shape(destShape), entries.clone(), destIndices);
-    }
-
-
-    /**
-     * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
-     * computes the sum of products between the two tensors along the specified set of axes.
-     *
-     * @param src2 Tensor to contract with this tensor.
-     * @param aAxes Axes along which to compute products for this tensor.
-     * @param bAxes Axes along which to compute products for {@code src2} tensor.
-     *
-     * @return The tensor dot product over the specified axes.
-     *
-     * @throws IllegalArgumentException If the two tensors shapes do not match along the specified axes pairwise in
-     *                                  {@code aAxes} and {@code bAxes}.
-     * @throws IllegalArgumentException If {@code aAxes} and {@code bAxes} do not match in length, or if any of the axes
-     *                                  are out of bounds for the corresponding tensor.
-     */
-    @Override
-    public CTensor tensorDot(CooCTensor src2, int[] aAxes, int[] bAxes) {
-        return ComplexCooTensorDot.tensorDot(this, src2, aAxes, bAxes);
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #transpose(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes.
-     * Also see {@link #transpose()} and
-     * {@link #T()} to exchange first and last axes.
-     *
-     * @param axis1 First axis to exchange.
-     * @param axis2 Second axis to exchange.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CooCTensor T(int axis1, int axis2) {
-        int rank = getRank();
-        ParameterChecks.assertIndexInBounds(rank, axis1, axis2);
-
-        if(axis1 == axis2) return copy(); // Simply return a copy.
-
-        int[][] transposeIndices = new int[nnz][rank];
-        CNumber[] transposeEntries = new CNumber[nnz];
-
-        for(int i=0; i<nnz; i++) {
-            transposeEntries[i] = entries[i];
-            transposeIndices[i] = indices[i].clone();
-            ArrayUtils.swap(transposeIndices[i], axis1, axis2);
-        }
-
-        // Create sparse coo tensor and sort values lexicographically.
-        CooCTensor transpose = new CooCTensor(shape.swapAxes(axis1, axis2), transposeEntries, transposeIndices);
-        transpose.sortIndices();
-
-        return transpose;
-    }
-
-
-    /**
-     * Computes the transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation. Same as {@link #transpose(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     *
-     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
-     *
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public CooCTensor T(int... axes) {
-        int rank = getRank();
-        ParameterChecks.assertEquals(rank, axes.length);
-        ParameterChecks.assertPermutation(axes);
-
-        int[][] transposeIndices = new int[nnz][rank];
-        CNumber[] transposeEntries = new CNumber[nnz];
-
-        // Permute the indices according to the permutation array.
-        for(int i=0; i < nnz; i++) {
-            transposeEntries[i] = entries[i];
-            transposeIndices[i] = indices[i].clone();
-
-            for(int j = 0; j < rank; j++) {
-                transposeIndices[i][j] = indices[i][axes[j]];
-            }
-        }
-
-        // Create sparse coo tensor and sort values lexicographically.
-        CooCTensor transpose = new CooCTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
-        transpose.sortIndices();
-
-        return transpose;
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     *
-     * @return The result of adding the tensor B to this tensor element-wise.
-     *
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CooCTensor add(CooTensor B) {
-        return RealComplexCooTensorOperations.add(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     *
-     * @return The result of adding the tensor B to this tensor element-wise.
-     *
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor add(Tensor B) {
-        return RealComplexDenseSparseOperations.add(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     *
-     * @return The result of adding the tensor B to this tensor element-wise.
-     *
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor sub(Tensor B) {
-        return RealComplexDenseSparseOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     *
-     * @return The result of adding the tensor B to this tensor element-wise.
-     *
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor add(CTensor B) {
-        return ComplexDenseSparseOperations.add(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise addition between two tensors of the same rank.
-     *
-     * @param B Second tensor in the addition.
-     * @return The result of adding the tensor B to this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CooCTensor add(CooCTensor B) {
-        return ComplexCooTensorOperations.add(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     *
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     *
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CooCTensor sub(CooTensor B) {
-        return RealComplexCooTensorOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     *
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     *
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CTensor sub(CTensor B) {
-        return ComplexDenseSparseOperations.sub(this, B);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CTensor add(double a) {
-        return RealComplexDenseSparseOperations.add(this, a);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CTensor add(CNumber a) {
-        return ComplexDenseSparseOperations.add(this, a);
-    }
-
-
-    /**
-     * Computes the element-wise subtraction between two tensors of the same rank.
-     *
-     * @param B Second tensor in element-wise subtraction.
-     * @return The result of subtracting the tensor B from this tensor element-wise.
-     * @throws IllegalArgumentException If this tensor and B have different shapes.
-     */
-    @Override
-    public CooCTensor sub(CooCTensor B) {
-        return ComplexCooTensorOperations.sub(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     *
-     * @return The result of the element-wise tensor multiplication.
-     *
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public CooCTensor elemMult(Tensor B) {
-        return RealComplexDenseSparseOperations.elemMult(B, this);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     *
-     * @return The result of the element-wise tensor multiplication.
-     *
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public CooCTensor elemMult(CooTensor B) {
-        return RealComplexCooTensorOperations.elemMult(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     *
-     * @return The result of the element-wise tensor multiplication.
-     *
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public CooCTensor elemMult(CTensor B) {
-        return ComplexDenseSparseOperations.elemMult(B, this);
-    }
-
-
-    /**
-     * Adds specified value to all entries of this tensor.
-     *
-     * @param a Value to add to all entries of this tensor.
-     * @return The result of adding the specified value to each entry of this tensor.
-     */
-    @Override
-    public CTensor sub(double a) {
-        return RealComplexDenseSparseOperations.sub(this, a);
-    }
-
-
-    /**
-     * Subtracts a specified value from all entries of this tensor.
-     *
-     * @param a Value to subtract from all entries of this tensor.
-     * @return The result of subtracting the specified value from each entry of this tensor.
-     */
-    @Override
-    public CTensor sub(CNumber a) {
-        return ComplexDenseSparseOperations.sub(this, a);
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #T()}.
-     *
-     * @return The transpose of this tensor.
-     */
-    @Override
-    public CooCTensor transpose() {
-        return T(0, getRank()-1);
-    }
-
-
-    /**
-     * <p>Computes the transpose of a tensor. Same as {@link #transpose()}.</p>
-     *
-     * <p>This method transposes the tensor by exchanges the first and last index
-     * of the tensor. Thus, for a rank 2 tensor, this method is equivalent to a matrix transpose.</p>
-     *
-     * <p>{@link #T(int, int)} and {@link #T(int...)} offer more general tensor transposes.</p>
-     *
-     * @return The transpose of this tensor.
-     * @see #transpose()
-     * @see #T(int, int)
-     * @see #T(int...)
-     */
-    @Override
-    public CooCTensor T() {
-        return T(0, getRank()-1);
-    }
-
-
-    /**
-     * Gets the element in this tensor at the specified indices.
-     *
-     * @param indices Indices of element.
-     * @return The element at the specified indices.
-     * @throws IllegalArgumentException If the number of indices does not match the rank of this tensor.
-     */
-    @Override
-    public CNumber get(int... indices) {
-        ParameterChecks.assertValidIndex(shape, indices);
-
-        for(int i = 0; i < nnz; i++) {
-            if(Arrays.equals(this.indices[i], indices)) {
-                return entries[i];
-            }
-        }
-
-        return CNumber.ZERO; // Return zero if the index is not found
-    }
-
-
-    /**
-     * Creates a copy of this tensor.
-     *
-     * @return A copy of this tensor.
-     */
-    @Override
-    public CooCTensor copy() {
-        return new CooCTensor(shape, Arrays.copyOf(entries, entries.length), ArrayUtils.deepCopy(indices, null));
-    }
-
-
-    /**
-     * Computes the element-wise multiplication between two tensors.
-     *
-     * @param B Tensor to element-wise multiply to this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
-     */
-    @Override
-    public CooCTensor elemMult(CooCTensor B) {
-        return ComplexCooTensorOperations.elemMult(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise division between two tensors.
-     *
-     * @param B Tensor to element-wise divide with this tensor.
-     * @return The result of the element-wise tensor multiplication.
-     * @throws IllegalArgumentException If this tensor and {@code B} do not have the same shape.
-     */
-    @Override
-    public CooCTensor elemDiv(CTensor B) {
-        return ComplexDenseSparseOperations.elemDiv(this, B);
-    }
-
-
-    /**
-     * Computes the element-wise division between two tensors.
-     *
-     * @param B Tensor to element-wise divide from this tensor.
-     *
-     * @return The result of the element-wise tensor division.
-     *
-     * @throws IllegalArgumentException If the tensors do not have the same shape.
-     */
-    @Override
-    public CooCTensor elemDiv(Tensor B) {
-        return RealComplexDenseSparseOperations.elemDiv(this, B);
-    }
-
-
-    /**
-     * <p>Computes the 'inverse' of this tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
-     * {@link #tensorDot(TensorBase, int)  this.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor dot product operation.
-     * A tensor {@code I} is the identity for a tensor dot product if {@code this.tensorDot(I, numIndices).equals(this)}.</p>
-     *
-     * <p>WARNING: This method will convert this tensor to a dense tensor.</p>
-     *
-     * @param numIndices The number of first numIndices which are involved in the inverse sum.
-     *
-     * @return The 'inverse' of this tensor as defined in the above sense.
-     *
-     * @see #tensorInv()
-     */
-    @Override
-    public CTensor tensorInv(int numIndices) {
-        return toDense().tensorInv(numIndices);
-    }
-
-
-    /**
-     * A factory for creating a complex sparse tensor.
-     *
-     * @param shape   Shape of the sparse tensor to make.
-     * @param entries Non-zero entries of the sparse tensor to make.
-     * @param indices Non-zero indices of the sparse tensor to make.
-     * @return A tensor created from the specified parameters.
-     */
-    @Override
-    protected CooCTensor makeTensor(Shape shape, CNumber[] entries, int[][] indices) {
-        return new CooCTensor(shape, entries, indices);
-    }
-
-
-    /**
-     * A factory for creating a real sparse tensor.
-     *
-     * @param shape   Shape of the sparse tensor to make.
-     * @param entries Non-zero entries of the sparse tensor to make.
-     * @param indices Non-zero indices of the sparse tensor to make.
-     * @return A tensor created from the specified parameters.
-     */
-    @Override
-    protected CooTensor makeRealTensor(Shape shape, double[] entries, int[][] indices) {
-        return new CooTensor(shape, entries, indices);
-    }
-
-
-    /**
-     * Converts a sparse {@link CooCTensor} from a dense {@link Tensor}. This is likely only worthwhile for very sparse tensors.
-     * @param src Dense tensor to convert to sparse COO tensor.
-     * @return A COO tensor which is equivalent to the {@code src} dense tensor.
-     */
-    public static CooCTensor fromDense(CTensor src) {
-        List<CNumber> entries = new ArrayList<>();
-        List<int[]> indices = new ArrayList<>();
-
-        int size = src.entries.length;
-        CNumber value;
-
-        for(int i=0; i<size; i++) {
-            value = src.entries[i];
-
-            if(value.equals(CNumber.ZERO)) {
-                entries.add(value);
-                indices.add(src.shape.getIndices(i));
-            }
-        }
-
-        return new CooCTensor(src.shape, entries.toArray(new CNumber[0]), indices.toArray(new int[0][]));
-    }
-
-
-    /**
-     * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be broadcastable with the shape of this tensor.
-     * @return A matrix of shape {@code matShape} with the values of this tensor.
-     */
-    public CooCMatrix toMatrix(Shape matShape) {
-        ParameterChecks.assertRank(2, matShape);
-        CooCTensor t = reshape(matShape); // Reshape as rank 2 tensor. Broadcastable check made here.
-        int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
-
-        return new CooCMatrix(matShape, t.entries.clone(), tIndices[0], tIndices[1]);
-    }
-
-
-    /**
-     * Converts this sparse tensor to an equivalent dense tensor.
-     *
-     * @return A dense tensor which is equivalent to this sparse tensor.
-     */
-    @Override
-    public CTensor toDense() {
-        CNumber[] entries = new CNumber[totalEntries().intValueExact()];
-
-        for(int i = 0; i< nnz; i++) {
-            entries[shape.entriesIndex(indices[i])] = this.entries[i];
-        }
-
-        return new CTensor(shape, entries);
-    }
-
-
-    /**
-     * Computes the transpose of a tensor. Same as {@link #hermTranspose(int, int)}.
-     * In the context of a tensor, this exchanges the specified axes and takes the complex conjugate of elements along
-     * those axes.
-     * Also see {@link #hermTranspose()} and
-     * {@link #H()} to conjugate transpose first and last axes.
-     *
-     * @param axis1 First axis to exchange and apply complex conjugate.
-     * @param axis2 Second axis to exchange and apply complex conjugate.
-     *
-     * @return The conjugate transpose of this tensor.
-     */
-    @Override
-    public CooCTensor H(int axis1, int axis2) {
-        int rank = getRank();
-        ParameterChecks.assertIndexInBounds(rank, axis1, axis2);
-
-        if(axis1 == axis2) return copy(); // Simply return a copy.
-
-        int[][] transposeIndices = new int[nnz][rank];
-        CNumber[] transposeEntries = new CNumber[nnz];
-
-        for(int i=0; i<nnz; i++) {
-            transposeEntries[i] = entries[i].conj();
-            transposeIndices[i] = indices[i].clone();
-            ArrayUtils.swap(transposeIndices[i], axis1, axis2);
-        }
-
-        // Create sparse coo tensor and sort values lexicographically.
-        CooCTensor transpose = new CooCTensor(shape.swapAxes(axis1, axis2), transposeEntries, transposeIndices);
-        transpose.sortIndices();
-
-        return transpose;
-    }
-
-
-    /**
-     * Computes the conjugate transpose of this tensor. That is, interchanges the axes of this tensor so that it matches
-     * the specified axes permutation and takes the complex conjugate of the elements of these axes. Same as {@link #hermTranspose(int[])}.
-     *
-     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
-     * {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
-     *
-     * @return The conjugate transpose of this tensor with its axes permuted by the {@code axes} array.
-     *
-     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
-     */
-    @Override
-    public CooCTensor H(int... axes) {
-        int rank = getRank();
-        ParameterChecks.assertEquals(rank, axes.length);
-        ParameterChecks.assertPermutation(axes);
-
-        int[][] transposeIndices = new int[nnz][rank];
-        CNumber[] transposeEntries = new CNumber[nnz];
-
-        // Permute the indices according to the permutation array.
-        for(int i = 0; i < nnz; i++) {
-            transposeEntries[i] = entries[i].conj();
-            transposeIndices[i] = indices[i].clone();
-
-            for(int j = 0; j < rank; j++) {
-                transposeIndices[i][j] = indices[i][axes[j]];
-            }
-        }
-
-        // Create sparse coo tensor and sort values lexicographically.
-        CooCTensor transpose = new CooCTensor(shape.swapAxes(axes), transposeEntries, transposeIndices);
-        transpose.sortIndices();
-
-        return transpose;
-    }
-
-
-    /**
-     * <p>Formats this sparse COO tensor as a human-readable string specificing the full shape,
-     * non-zero entries, and non-zero indices.</p>
-     *
-     * @return A human-readable string specificing the full shape, non-zero entries, and non-zero indices of this tensor.
+     * @return A human-readable string specifying the full shape, non-zero data, and non-zero indices of this tensor.
      */
     public String toString() {
         int maxCols = PrintOptions.getMaxColumns();
@@ -940,9 +351,9 @@ public class CooCTensor
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("Non-zero Entries: " + PrettyPrint.abrivatedArray(entries, maxCols, padding, precision, centring) + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centring) + "\n");
         sb.append("Non-zero Indices: " +
-                PrettyPrint.abrivatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
 
         return sb.toString();
     }

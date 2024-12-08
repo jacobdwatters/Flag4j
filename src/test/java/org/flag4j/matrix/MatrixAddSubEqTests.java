@@ -1,9 +1,8 @@
 package org.flag4j.matrix;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.core.Shape;
-import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,40 +40,7 @@ class MatrixAddSubEqTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
-    }
-
-
-    @Test
-    void addEqSparseTestCase() {
-        double[] bEntries;
-        CooMatrix B;
-
-        // --------------------- Sub-case 1 ---------------------
-        aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
-        A = new Matrix(aEntries);
-        bEntries = new double[]{1.34, -93.346};
-        rowIndices = new int[]{0, 1};
-        colIndices = new int[]{2, 1};
-        sparseShape = A.shape;
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
-        exp = A.add(B);
-
-        A.addEq(B);
-
-        assertEquals(exp, A);
-
-        // --------------------- Sub-case 2 ---------------------
-        aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
-        A = new Matrix(aEntries);
-        bEntries = new double[]{1.34, -93.346};
-        rowIndices = new int[]{0, 1};
-        colIndices = new int[]{2, 1};
-        sparseShape = new Shape(5, 3);
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
-
-        CooMatrix finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.addEq(finalB));
+        assertThrows(TensorShapeException.class, ()->A.addEq(finalB));
     }
 
 
@@ -117,40 +83,7 @@ class MatrixAddSubEqTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
-    }
-
-
-    @Test
-    void subEqSparseTestCase() {
-        double[] bEntries;
-        CooMatrix B;
-
-        // --------------------- Sub-case 1 ---------------------
-        aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
-        A = new Matrix(aEntries);
-        bEntries = new double[]{1.34, -93.346};
-        rowIndices = new int[]{0, 1};
-        colIndices = new int[]{2, 1};
-        sparseShape = A.shape;
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
-        exp = A.sub(B);
-
-        A.subEq(B);
-
-        assertEquals(exp, A);
-
-        // --------------------- Sub-case 2 ---------------------
-        aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
-        A = new Matrix(aEntries);
-        bEntries = new double[]{1.34, -93.346};
-        rowIndices = new int[]{0, 1};
-        colIndices = new int[]{2, 1};
-        sparseShape = new Shape(5, 3);
-        B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
-
-        CooMatrix finalB = B;
-        assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
+        assertThrows(TensorShapeException.class, ()->A.subEq(finalB));
     }
 
 

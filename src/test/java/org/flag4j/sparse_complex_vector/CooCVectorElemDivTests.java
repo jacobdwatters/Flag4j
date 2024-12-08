@@ -1,9 +1,11 @@
 package org.flag4j.sparse_complex_vector;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
-import org.flag4j.complex_numbers.CNumber;
+import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +19,10 @@ class CooCVectorElemDivTests {
 
 
     @Test
-    void denseElemDivTestCase() {
-        CNumber[] aValues = {
-                new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
-                new CNumber(25.612, 0.0245)};
+    void denseDivTestCase() {
+        Complex128[] aValues = {
+                new Complex128(1.3345, -9.25), new Complex128(0, -45.62),
+                new Complex128(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
         a = new CooCVector(size, aValues, aIndices);
@@ -28,87 +30,87 @@ class CooCVectorElemDivTests {
         double[] bValues;
         int[] expIndices;
         Vector b;
-        CNumber[] expValues;
+        Complex128[] expValues;
         CooCVector exp;
 
         // -------------------- Sub-case 1 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51, 0.14};
         b = new Vector(bValues);
 
-        expValues = new CNumber[]{new CNumber(1.3345, -9.25).div(1.223), new CNumber(0, -45.62).div(3.4),
-                new CNumber(25.612, 0.0245).div(-14.51)};
+        expValues = new Complex128[]{new Complex128(1.3345, -9.25).div(1.223), new Complex128(0, -45.62).div(3.4),
+                new Complex128(25.612, 0.0245).div(-14.51)};
         expIndices = new int[]{0, 2, 5};
         exp = new CooCVector(size, expValues, expIndices);
-        assertEquals(exp, a.elemDiv(b));
+        assertEquals(exp, RealFieldDenseCooVectorOps.elemDiv(a, b));
 
         // -------------------- Sub-case 2 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51};
         b = new Vector(bValues);
 
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()-> RealFieldDenseCooVectorOps.elemDiv(a, finalB));
     }
 
 
     @Test
-    void denseComplexElemDivTestCase() {
-        CNumber[] aValues = {
-                new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
-                new CNumber(25.612, 0.0245)};
+    void denseComplexDivTestCase() {
+        Complex128[] aValues = {
+                new Complex128(1.3345, -9.25), new Complex128(0, -45.62),
+                new Complex128(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
         a = new CooCVector(size, aValues, aIndices);
 
-        CNumber[] bValues, expValues;
+        Complex128[] bValues, expValues;
         int[] expIndices;
         CVector b;
         CooCVector exp;
 
         // -------------------- Sub-case 1 --------------------
-        bValues = new CNumber[]{new CNumber(24.3, -0.013), new CNumber(0, 13.6),
-                new CNumber(2.4), new CNumber(-994.1 ,1.45), new CNumber(1495, 13.4),
-                new CNumber(9924.515, 51.5), new CNumber(24.56, -88.351)};
+        bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6),
+                new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4),
+                new Complex128(9924.515, 51.5), new Complex128(24.56, -88.351)};
         b = new CVector(bValues);
 
-        expValues = new CNumber[]{
-                new CNumber(1.3345, -9.25).div(new CNumber(24.3, -0.013)),
-                new CNumber(0, -45.62).div(new CNumber(2.4)),
-                new CNumber(25.612, 0.0245).div(new CNumber(9924.515, 51.5))};
+        expValues = new Complex128[]{
+                new Complex128(1.3345, -9.25).div(new Complex128(24.3, -0.013)),
+                new Complex128(0, -45.62).div(new Complex128(2.4)),
+                new Complex128(25.612, 0.0245).div(new Complex128(9924.515, 51.5))};
         expIndices = new int[]{0, 2, 5};
         exp = new CooCVector(size, expValues, expIndices);
-        assertEquals(exp, a.elemDiv(b));
+        assertEquals(exp, DenseCooFieldVectorOps.elemDiv(a, b));
 
         // -------------------- Sub-case 2 --------------------
-        bValues = new CNumber[]{new CNumber(24.3, -0.013), new CNumber(0, 13.6), new CNumber(24),
-                new CNumber(2.4), new CNumber(-994.1 ,1.45), new CNumber(1495, 13.4)};
+        bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6), new Complex128(24),
+                new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4)};
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->a.elemDiv(finalB));
+        assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldVectorOps.elemDiv(a, finalB));
     }
 
 
     @Test
     void complexScalarDivTestCase() {
-        CNumber[] aValues = {
-                new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
-                new CNumber(25.612, 0.0245)};
+        Complex128[] aValues = {
+                new Complex128(1.3345, -9.25), new Complex128(0, -45.62),
+                new Complex128(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
         a = new CooCVector(size, aValues, aIndices);
 
-        CNumber[] expValues;
+        Complex128[] expValues;
         int[] expIndices;
-        CNumber b;
+        Complex128 b;
         CooCVector exp;
 
         // -------------------- Sub-case 1 --------------------
-        b = new CNumber(23.55, -984.2);
+        b = new Complex128(23.55, -984.2);
 
-        expValues = new CNumber[]{
-                new CNumber(1.3345, -9.25).div(b),
-                new CNumber(0, -45.62).div(b),
-                new CNumber(25.612, 0.0245).div(b)};
+        expValues = new Complex128[]{
+                new Complex128(1.3345, -9.25).div(b),
+                new Complex128(0, -45.62).div(b),
+                new Complex128(25.612, 0.0245).div(b)};
         expIndices = new int[]{0, 2, 5};
         exp = new CooCVector(size, expValues, expIndices);
         assertEquals(exp, a.div(b));
@@ -117,14 +119,14 @@ class CooCVectorElemDivTests {
 
     @Test
     void realScalarDivTestCase() {
-        CNumber[] aValues = {
-                new CNumber(1.3345, -9.25), new CNumber(0, -45.62),
-                new CNumber(25.612, 0.0245)};
+        Complex128[] aValues = {
+                new Complex128(1.3345, -9.25), new Complex128(0, -45.62),
+                new Complex128(25.612, 0.0245)};
         int[] aIndices = {0, 2, 5};
         size = 7;
         a = new CooCVector(size, aValues, aIndices);
 
-        CNumber[] expValues;
+        Complex128[] expValues;
         int[] expIndices;
         double b;
         CooCVector exp;
@@ -132,10 +134,10 @@ class CooCVectorElemDivTests {
         // -------------------- Sub-case 1 --------------------
         b = 24.5;
 
-        expValues = new CNumber[]{
-                new CNumber(1.3345, -9.25).div(b),
-                new CNumber(0, -45.62).div(b),
-                new CNumber(25.612, 0.0245).div(b)};
+        expValues = new Complex128[]{
+                new Complex128(1.3345, -9.25).div(b),
+                new Complex128(0, -45.62).div(b),
+                new Complex128(25.612, 0.0245).div(b)};
         expIndices = new int[]{0, 2, 5};
         exp = new CooCVector(size, expValues, expIndices);
         assertEquals(exp, a.div(b));

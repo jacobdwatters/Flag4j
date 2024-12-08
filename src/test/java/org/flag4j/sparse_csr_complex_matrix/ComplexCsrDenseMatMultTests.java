@@ -1,19 +1,19 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ComplexCsrDenseMatMultTests {
     static CsrCMatrix A;
     static CMatrix aDense;
-    static CNumber[][] aEntries;
+    static Complex128[][] aEntries;
     static Matrix B;
     static double[][] bEntries;
     static CMatrix exp;
@@ -29,11 +29,11 @@ class ComplexCsrDenseMatMultTests {
     @Test
     void multTests() {
         // ---------------------- Sub-case 1 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(80.1, 2.5)},
-                {new CNumber(0), new CNumber(1.41, -92.2), new CNumber(0), new CNumber(0, 15.5), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(-9.25, 23.5), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(-999.1155, 2.25), new CNumber(-1, 1)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(80.1, 2.5)},
+                {new Complex128(0), new Complex128(1.41, -92.2), new Complex128(0), new Complex128(0, 15.5), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(-9.25, 23.5), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(-999.1155, 2.25), new Complex128(-1, 1)}};
         bEntries = new double[][]{
                 {0.72773, 0.90836},
                 {0.02926, 0.3265},
@@ -46,18 +46,18 @@ class ComplexCsrDenseMatMultTests {
         assertEquals(exp, A.mult(B));
 
         // ---------------------- Sub-case 2 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(-77.3, -15122.1), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0, 803.2), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(-9.345, 58.1), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(1.45, -23), new CNumber(0)},
-                {new CNumber(345), new CNumber(2.4, 5.61), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(4.45, -67.2), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0, 803.2), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(-9.345, 58.1), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(1.45, -23), new Complex128(0)},
+                {new Complex128(345), new Complex128(2.4, 5.61), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(4.45, -67.2), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(1)}};
         bEntries = new double[][]{
                 {0.72773, 0.90836},
                 {0.02926, 0.3265},
@@ -68,18 +68,18 @@ class ComplexCsrDenseMatMultTests {
         assertEquals(exp, A.mult(B));
 
         // ---------------------- Sub-case 3 ----------------------
-        aEntries = new CNumber[][]{
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(-77.3, -15122.1), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0, 803.2), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(-9.345, 58.1), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(1.45, -23), new CNumber(0)},
-                {new CNumber(345), new CNumber(2.4, 5.61), new CNumber(0), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(4.45, -67.2), new CNumber(0)},
-                {new CNumber(0), new CNumber(0), new CNumber(0), new CNumber(1)}};
+        aEntries = new Complex128[][]{
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0, 803.2), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(-9.345, 58.1), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(1.45, -23), new Complex128(0)},
+                {new Complex128(345), new Complex128(2.4, 5.61), new Complex128(0), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(4.45, -67.2), new Complex128(0)},
+                {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(1)}};
         bEntries = new double[][]{
                 {0.72773, 0.90836},
                 {0.02926, 0.3265},

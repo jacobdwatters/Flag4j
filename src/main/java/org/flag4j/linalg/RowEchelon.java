@@ -24,17 +24,23 @@
 
 package org.flag4j.linalg;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
 
 /**
- * This class contains several methods for computing row echelon, reduced row echelon, and extended reduced row echelon
+ * This class contains static methods for computing row echelon, reduced row echelon, and extended reduced row echelon
  * forms of a matrix.
  */
-public class RowEchelon {
+public final class RowEchelon {
+
+    private RowEchelon() {
+        // Hide default constructor for utility class.
+        
+    }
+
 
     /**
      * Computes a row echelon form of a Matrix. For a reduced row echelon form use {@link #rref(Matrix)}.
@@ -75,20 +81,20 @@ public class RowEchelon {
         // Convert U to reduced row echelon form.
         for(int j=0; j<colStop; j++) {
             pivotRow = j*U.numCols;
-            pivotValue = U.entries[pivotRow + j];
+            pivotValue = U.data[pivotRow + j];
 
             // Scale row so pivot is 1.
             for(int k=j; k<U.numCols; k++) {
-                U.entries[pivotRow + k] = U.entries[pivotRow + k]/pivotValue;
+                U.data[pivotRow + k] = U.data[pivotRow + k]/pivotValue;
             }
 
             // Zero out column above pivot.
             for(int i=0; i<j; i++) {
                 iRow = i*U.numCols;
-                m = U.entries[iRow + j];
+                m = U.data[iRow + j];
 
                 for(int k=j; k<U.numCols; k++) {
-                    U.entries[iRow + k] -= m*U.entries[pivotRow + k];
+                    U.data[iRow + k] -= m*U.data[pivotRow + k];
                 }
             }
         }
@@ -110,25 +116,25 @@ public class RowEchelon {
         int colStop = Math.min(U.numCols, U.numRows);
         int pivotRow;
         int iRow;
-        CNumber m;
+        Complex128 m;
 
         // Convert U to reduced row echelon form.
         for(int j=0; j<colStop; j++) {
             pivotRow = j*U.numCols;
-            m = U.entries[pivotRow + j];
+            m = (Complex128) U.data[pivotRow + j];
 
             // Scale row so pivot is 1.
             for(int k=j; k<U.numCols; k++) {
-                U.entries[pivotRow + k] = U.entries[pivotRow + k].div(m);
+                U.data[pivotRow + k] = U.data[pivotRow + k].div(m);
             }
 
             // Zero out column above pivot.
             for(int i=0; i<j; i++) {
                 iRow = i*U.numCols;
-                m = U.entries[iRow + j];
+                m = (Complex128) U.data[iRow + j];
 
                 for(int k=j; k<U.numCols; k++) {
-                    U.entries[iRow + k] = U.entries[iRow + k].sub(m.mult(U.entries[pivotRow + k]));
+                    U.data[iRow + k] = U.data[iRow + k].sub(m.mult((Complex128) U.data[pivotRow + k]));
                 }
             }
         }
@@ -138,7 +144,8 @@ public class RowEchelon {
 
 
     /**
-     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to
+     * {@code {@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}}
      * @param A Matrix for which to compute extended reduced row echelon form of.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
      * appropriately sized identity matrix.
@@ -149,12 +156,13 @@ public class RowEchelon {
 
 
     /**
-     * Computes the extended reduced row echelon form of a matrix. This is equivalent to <code>{@link #rref(CMatrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
+     * Computes the extended reduced row echelon form of a matrix. This is equivalent to
+     * {@code {@link #rref(CMatrix) rref(A.augment(CMatrix.I(A.numRows())))}}
      * @param A Matrix for which to compute extended reduced row echelon form of.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
      * appropriately sized identity matrix.
      */
     public static CMatrix erref(CMatrix A) {
-        return rref(A.augment(Matrix.I(A.numRows)));
+        return rref(A.augment(CMatrix.I(A.numRows)));
     }
 }

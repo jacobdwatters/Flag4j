@@ -1,15 +1,15 @@
 package org.flag4j.linalg;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.junit.jupiter.api.BeforeAll;
 
 
 class SubSpaceTests {
 
     static double[][] aEntries, expAEntries;
-    static CNumber[][] bEntries, expBEntries;
+    static Complex128[][] bEntries, expBEntries;
 
     static Matrix A, expA;
     static CMatrix B, expB;
@@ -22,9 +22,9 @@ class SubSpaceTests {
                 {34.6, 0, 2.4, 2},
                 {-912.5, 15, 25.2, -0.3}};
 
-        bEntries = new CNumber[][]{
-                {new CNumber(44.5, -9.43), new CNumber(0, 2.45)},
-                {CNumber.ZERO, new CNumber(-0.03, 2.5)}};
+        bEntries = new Complex128[][]{
+                {new Complex128(44.5, -9.43), new Complex128(0, 2.45)},
+                {Complex128.ZERO, new Complex128(-0.03, 2.5)}};
 
         A = new Matrix(aEntries);
         B = new CMatrix(bEntries);
@@ -45,9 +45,9 @@ class SubSpaceTests {
 //        assertEquals(expA, SubSpace.getColSpace(A));
 //
 //        // -------------------- Sub-case 2 --------------------
-//        expBEntries = new CNumber[][]{
-//                {new CNumber(-0.005034449960744143, 0.9999829442968625)},
-//                {new CNumber(-5.042897264281646E-5, 0.0029602172030675465)}
+//        expBEntries = new Complex128[][]{
+//                {new Complex128(-0.005034449960744143, 0.9999829442968625)},
+//                {new Complex128(-5.042897264281646E-5, 0.0029602172030675465)}
 //        };
 //        expB = new CMatrix(expBEntries);
 //
@@ -68,9 +68,9 @@ class SubSpaceTests {
 //        assertEquals(expA, SubSpace.getRowSpace(A));
 //
 //        // -------------------- Sub-case 2 --------------------
-//        expBEntries = new CNumber[][]{
-//                {new CNumber(-0.21192004255855398, 0.975797068015846)},
-//                {new CNumber(0.05394352470531291, 2.7158060783330235E-4)}
+//        expBEntries = new Complex128[][]{
+//                {new Complex128(-0.21192004255855398, 0.975797068015846)},
+//                {new Complex128(0.05394352470531291, 2.7158060783330235E-4)}
 //        };
 //        expB = new CMatrix(expBEntries);
 //
@@ -92,9 +92,9 @@ class SubSpaceTests {
 //        assertEquals(expA, SubSpace.getNullSpace(A));
 //
 //        // -------------------- Sub-case 2 --------------------
-//        expBEntries = new CNumber[][]{
-//                {new CNumber(0.021880100969376936, -0.04930759368727217)},
-//                {new CNumber(0.976851607231742, 0.2070047338470861)}
+//        expBEntries = new Complex128[][]{
+//                {new Complex128(0.021880100969376936, -0.04930759368727217)},
+//                {new Complex128(0.976851607231742, 0.2070047338470861)}
 //        };
 //        expB = new CMatrix(expBEntries);
 //
@@ -115,9 +115,9 @@ class SubSpaceTests {
 //        assertEquals(expA, SubSpace.getLeftNullSpace(A));
 //
 //        // -------------------- Sub-case 2 --------------------
-//        expBEntries = new CNumber[][]{
-//                {new CNumber(6.830867186744245E-4, 0.0028807675201914145)},
-//                {new CNumber(-0.21902916510606682, -0.9757138204432532)}
+//        expBEntries = new Complex128[][]{
+//                {new Complex128(6.830867186744245E-4, 0.0028807675201914145)},
+//                {new Complex128(-0.21902916510606682, -0.9757138204432532)}
 //        };
 //        expB = new CMatrix(expBEntries);
 //

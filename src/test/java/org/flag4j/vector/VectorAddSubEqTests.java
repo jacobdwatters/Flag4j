@@ -2,6 +2,7 @@ package org.flag4j.vector;
 
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +61,7 @@ class VectorAddSubEqTests {
         expEntries = new double[]{1.34+34.677, 6.266, -90.45};
         exp = new Vector(expEntries);
 
-        A.addEq(B);
+        RealDenseSparseVectorOperations.addEq(A, B);
         assertEquals(exp, A);
 
         // -------------------- Sub-case 2 --------------------
@@ -72,7 +73,7 @@ class VectorAddSubEqTests {
         B = new CooVector(size, bEntries, indices);
 
         CooVector finalB = B;
-        assertThrows(LinearAlgebraException.class, () -> A.addEq(finalB));
+        assertThrows(LinearAlgebraException.class, () -> RealDenseSparseVectorOperations.addEq(A, finalB));
     }
 
 
@@ -138,7 +139,7 @@ class VectorAddSubEqTests {
         expEntries = new double[]{1.34-34.677, 6.266, -90.45};
         exp = new Vector(expEntries);
 
-        A.subEq(B);
+        RealDenseSparseVectorOperations.subEq(A, B);
         assertEquals(exp, A);
 
         // -------------------- Sub-case 2 --------------------
@@ -150,7 +151,7 @@ class VectorAddSubEqTests {
         B = new CooVector(size, bEntries, indices);
 
         CooVector finalB = B;
-        assertThrows(LinearAlgebraException.class, () -> A.subEq(finalB));
+        assertThrows(LinearAlgebraException.class, () -> RealDenseSparseVectorOperations.subEq(A, finalB));
     }
 
 

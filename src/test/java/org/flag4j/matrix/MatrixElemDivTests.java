@@ -1,8 +1,8 @@
 package org.flag4j.matrix;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.complex_numbers.CNumber;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -13,26 +13,23 @@ class MatrixElemDivTests {
     Matrix A, B, result, expResult;
     CMatrix BC, resultC, expResultC;
     double[][] entriesA, entriesB;
-    CNumber[][] entriesBC;
+    Complex128[][] entriesBC;
 
     private double[] getExp(double[] src1, double[] src2) {
         double[] result = new double[src1.length];
 
-        for(int i=0; i<result.length; i++) {
+        for(int i=0; i<result.length; i++)
             result[i] = src1[i]/src2[i];
-        }
 
         return result;
     }
 
-    private CNumber[] getExp(double[] src1, CNumber[] src2) {
-        CNumber[] result = new CNumber[src1.length];
+    private Complex128[] getExp(double[] src1, Complex128[] src2) {
+        Complex128[] result = new Complex128[src1.length];
         double divisor;
 
-        for(int i=0; i<result.length; i++) {
-            divisor = src2[i].re*src2[i].re + src2[i].im*src2[i].im;
-            result[i] = new CNumber(src1[i]*src2[i].re / divisor, -src1[i]*src2[i].im / divisor);
-        }
+        for(int i=0; i<result.length; i++)
+            result[i] = src2[i].multInv().mult(src1[i]);
 
         return result;
     }
@@ -45,11 +42,11 @@ class MatrixElemDivTests {
         entriesB = new double[][]{{4.344, 555.6, 94, -0.4442}, {0.0000234, 1333.4, 44.5, 134.3}};
         A = new Matrix(entriesA);
         B = new Matrix(entriesB);
-        expResult = new Matrix(A.shape, getExp(A.entries, B.entries));
+        expResult = new Matrix(A.shape, getExp(A.data, B.data));
 
-        result = A.elemDiv(B);
+        result = A.div(B);
 
-        assertArrayEquals(expResult.entries, result.entries);
+        assertArrayEquals(expResult.data, result.data);
         assertEquals(expResult.shape, result.shape);
 
         // ----------------- Sub-case 1 -----------------
@@ -66,25 +63,25 @@ class MatrixElemDivTests {
     void elemDivComplexTestCase() {
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
-        entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3), CNumber.ZERO},
-                {new CNumber(4.55, -93.2), new CNumber(-2, -13), new CNumber(8.9), new CNumber(0, 13)}};
+        entriesBC = new Complex128[][]{{new Complex128(1.4, 5), new Complex128(0, -1), new Complex128(1.3), Complex128.ZERO},
+                {new Complex128(4.55, -93.2), new Complex128(-2, -13), new Complex128(8.9), new Complex128(0, 13)}};
         A = new Matrix(entriesA);
         BC = new CMatrix(entriesBC);
-        expResultC = new CMatrix(A.shape, getExp(A.entries, BC.entries));
+        expResultC = new CMatrix(A.shape, getExp(A.data, BC.data));
 
-        resultC = A.elemDiv(BC);
+        resultC = A.div(BC);
 
-        for(int i=0; i<resultC.entries.length; i++) {
-            if(Double.isNaN(expResultC.entries[i].re)) {
-                assertTrue(Double.isNaN(resultC.entries[i].re));
+        for(int i = 0; i<resultC.data.length; i++) {
+            if(Double.isNaN(((Complex128) expResultC.data[i]).re)) {
+                assertTrue(Double.isNaN(((Complex128) resultC.data[i]).re));
             } else {
-                assertEquals(expResultC.entries[i].re, resultC.entries[i].re);
+                assertEquals(((Complex128) expResultC.data[i]).re, ((Complex128) resultC.data[i]).re);
             }
 
-            if(Double.isNaN(expResultC.entries[i].im)) {
-                assertTrue(Double.isNaN(resultC.entries[i].im));
+            if(Double.isNaN(((Complex128) expResultC.data[i]).im)) {
+                assertTrue(Double.isNaN(((Complex128) resultC.data[i]).im));
             } else {
-                assertEquals(expResultC.entries[i].im, resultC.entries[i].im);
+                assertEquals(((Complex128) expResultC.data[i]).im, ((Complex128) resultC.data[i]).im);
             }
         }
 
@@ -92,11 +89,11 @@ class MatrixElemDivTests {
 
         // ----------------- Sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
-        entriesBC = new CNumber[][]{{new CNumber(1.4, 5), new CNumber(0, -1), new CNumber(1.3)},
-                {new CNumber(4.55, -93.2), new CNumber(-2, -13), new CNumber(8.9)}};
+        entriesBC = new Complex128[][]{{new Complex128(1.4, 5), new Complex128(0, -1), new Complex128(1.3)},
+                {new Complex128(4.55, -93.2), new Complex128(-2, -13), new Complex128(8.9)}};
         A = new Matrix(entriesA);
         BC = new CMatrix(entriesBC);
 
-        assertThrows(LinearAlgebraException.class, ()->A.elemMult(BC));
+        assertThrows(LinearAlgebraException.class, ()->A.div(BC));
     }
 }

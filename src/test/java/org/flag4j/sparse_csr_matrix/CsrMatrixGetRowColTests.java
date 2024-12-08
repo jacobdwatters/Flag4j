@@ -1,8 +1,8 @@
 package org.flag4j.sparse_csr_matrix;
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.core.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -73,7 +73,7 @@ class CsrMatrixGetRowColTests {
         expIndices = new int[]{0, 6-4, 7-4, 10-4};
         exp = new CooVector(expSize, expEntries, expIndices);
 
-        assertEquals(exp, A.getRowAfter(4, 5));
+        assertEquals(exp, A.getRow(5, 4, A.numRows));
 
         // --------------------- sub-case 2 ---------------------
         aShape = new Shape(201, 235);
@@ -87,14 +87,14 @@ class CsrMatrixGetRowColTests {
         expIndices = new int[]{0, 53-52, 95-52};
         exp = new CooVector(expSize, expEntries, expIndices);
 
-        assertEquals(exp, A.getRowAfter(52, 186));
+        assertEquals(exp, A.getRow(186, 52, A.numRows));
 
         // --------------------- sub-case 3 ---------------------
         A = new CsrMatrix(1000, 15235);
-        assertThrows(IndexOutOfBoundsException.class, ()->A.getRowAfter(32, -1));
-        assertThrows(IndexOutOfBoundsException.class, ()->A.getRowAfter(552, 1001));
-        assertThrows(IndexOutOfBoundsException.class, ()->A.getRowAfter(-2, -4));
-        assertThrows(IndexOutOfBoundsException.class, ()->A.getRowAfter(523523, 20015));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-1, 32, A.numRows));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(1001, 552, A.numRows));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-4, -2, A.numRows));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(20015, 523523, A.numRows));
     }
 
 
