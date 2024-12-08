@@ -6,47 +6,56 @@
 # Flag4j - Fast Linear Algebra for Java
 Flag4j is a fast and easy to use linear algebra library for Java and provides operations and linear algebra routines for real/complex sparse/dense tensors, matrices, and vectors.
 
-## State of Project as of 16-FEB-2024
-Flag4j is currently in the final steps of development before an initial beta release. Nearly all features have been fully implemented or beta implementations.
+## State of Project as of 7-DEC-2024
+Flag4j is currently in the final steps of development before an initial beta release. 
+Nearly all features have been fully implemented or beta implementations.
 
-Updates: 
-- The QR, Hessenburg and Schur decompositions have had a complete overall.
-  - QR/Hessenburg/Schur: The way reflectors are computed and applied has been significantly improved in terms of performance, stability, and sensitivity to over(under)flow issues.
-  - Schur: Some correctness issues have been ironed out and significant performance enhancements have been made. The decomposition uses an implicit double shifted QR algorithm.
-    This means computing eigenvalues should be more accurate/correct and significantly faster in most cases.
-- Tensor Solver: Added a solver which can solve tensor equations of the form $A \cdot X = B$ where $A, \ X$, and $B$ are tensors of arbitrary rank and shape as long as the shapes are conducive to
-  computing the tensor dot product `B = A.dot(X)`.
-- Tensor Inverse: Added ability to compute the inverse of an arbitrary invertible tensor $A$, $A^{-1}$ relative to a specified tensor product.
+### Recent Updates:
+- I/O Improvements:
+  - All tensors, vectors, and matrices may be serialized.
+  - Added support for reading/writing from/to Matrix Market Exchange file formats.
+    - Currently only supports a subset including real/complex/integer dense general matrices 
+    and real/complex/integer coordinate general matrices
+  - Added support for reading/writing from/to csv files for real and complex matrices (i.e. `Matrix` and `CMatrix`).
+- Improved API: There have been significant changes to the API specifically with the inheritance hierarchy of arrays (tensors, 
+  matrices, vectors). This was in part to serve the creation of general field/ring/semiring tensors.
+- New Algebraic Structures and Generic Tensors:
+  - Added `Field`, `Ring`, and `Semiring` interfaces representing the mathematical objects.
+    - Complex numbers are now implemented as a `Field`. There are now 64-bit and 128-bit variants of complex numbers.
+    - Several reference implementations of the interfaces are provided, e.g. `Bool`, `RealInt16`, `Complex128`.
+  - Added generic `FieldMatrix<T extends Field<T>>` for creating matrices for a generic field. This allows users
+  to easily create a matrix for a custom field which implements the `Field` interface. Support for generic 
+  ring and semiring matrices are planed.
 ___
 
 ## Features and Functionality
 
 ### Algebraic Objects
-- Complex Numbers
+- Complex numbers, fields, rings, and semirings.
 - Vectors
-  - Real/Complex Dense Vector
-  - Real/Complex Sparse Vector
+  - Real/complex/field dense vector
+  - Real/complex/field sparse vector
 - Matrices
     - Dense Matrices
-        - Real/Complex Dense Matrix
+        - Real/complex/field dense dense matrix
     - Sparse Matrices
-        - Real/Complex COO Matrix
-        - Real/Complex CSR Matrix
-        - Real/Complex Symmetric Tri-diagonal Matrix. 
-        - Permutation Matrix
+        - Real/complex/field COO matrix
+        - Real/complex/field CSR matrix
+        - Real/complex/field symmetric tri-diagonal matrix. 
+        - Permutation matrix
 - Tensors
-    - Real/Complex Dense Tensor
-    - Real/Complex Sparse COO Tensor
+    - Real/complex/field dense tensor
+    - Real/complex/field sparse COO tensor
 
 ### Operations
-- Basic Arithmetic Operations: Add, subtract, scalar/element multiply, scalar/element divide, etc.
-- Basic Properties: Tensor/matrix/vector shape, non-zero entries, etc.
-- Basic Manipulations: Insert, join/stack/augment, extract, etc.
-- Basic Comparisons: Equal, same shape, etc.
-- Vector Operations
-  - Arithmetic: Inner/outer/cross product, vector norms, etc.
+- Basic Arithmetic Operations: add, subtract, scalar/element multiply, scalar/element divide, etc.
+- Basic Properties: tensor/matrix/vector shape, non-zero entries, etc.
+- Basic Manipulations: insert, join/stack/augment, extract, etc.
+- Basic Comparisons: equal, same shape, etc.
+- Vector Operations:
+  - Arithmetic: inner/outer/cross product, vector norms, etc.
   - Comparisons: Parallel, orthogonal, etc.
-- Matrix Operations
+- Matrix Operations:
   - Arithmetic: Matrix multiplication, transpose, matrix norms, inverse, pseudo-inverse, etc.
   - Features: Matrix rank, symmetric, definiteness, eigenvalues and vectors, singularity, triangular, etc.
   - Comparisons: Similar, etc. 
@@ -55,23 +64,24 @@ ___
   - Comparisons: Tensor rank/dimension, etc.
 
 ### Matrix Decompositions
-- LU Decompositions
+- LU Decompositions (real/complex)
   - No pivoting
   - Partial Pivoting
   - Full Pivoting
-- QR Decomposition
+- QR Decomposition (real/complex)
   - Householder Reflectors
   - Full/Reduced
-- Cholesky Decomposition
-- Hessenburg Decomposition
-- Eigen/Schur Decompositions
-- Singular Value Decomposition
+- Cholesky Decomposition (real/complex)
+- Hessenburg Decomposition (real/complex)
+  - General and specialized symmetric and Hermitian implementations are provided.
+- Eigen/Schur Decompositions (real/complex)
+- Singular Value Decomposition (real/complex)
 
 ### Linear Solvers
 - Exact solution for well determined matrix systems
   - General systems
   - Triangular systems
-- Exact solution for well determined tensor equations
+- Exact solution for well determined tensor or matrix equations
 - Least Squares solution
 
 ### Linear and Homography Transformations
@@ -90,5 +100,7 @@ ___
 - Random Vectors
 - Random Tensors
 
-### I/O
-- Read/Write tensors, matrices, and vectors to/from a file.
+### I/O: Read/write tensors, matrices, and vectors to/from a file.
+- Serialization (all types)
+- Matrix Market Exchange Format (all real/complex dense and sparse matrix types)
+- CSV format (only supported for `Matrix` and `CMatrix`)
