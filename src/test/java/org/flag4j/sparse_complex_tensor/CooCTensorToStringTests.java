@@ -50,6 +50,7 @@ class CooCTensorToStringTests {
         A = new CooCTensor(aShape, aEntries, aIndices);
 
         exp = "Shape: (5, 4, 2, 3, 15)\n" +
+                "nnz: 18\n" +
                 "Non-zero Entries: [ 0.8103 + 0.0203i  0.5684 + 0.4151i  0.9044 + 0.8734i  0.201 + 0.7032i  0.9682 + 0.2723i  0.4699 + 0.8203i  0.3871 + 0.3395i  0.7851 + 0.3768i  0.2315 + 0.7695i  ...  0.8007 + 0.4023i ]\n" +
                 "Non-zero Indices: [ [ 0  0  0  0  0 ]  \n" +
                 "                    [ 0  1  0  0  7 ]  \n" +
@@ -69,24 +70,26 @@ class CooCTensorToStringTests {
         PrintOptions.setMaxColumns(3);
         PrintOptions.setPrecision(3);
 
-        exp = "Shape: (5, 4, 2, 3, 15)\n" +
-                "Non-zero Entries: [ 0.81 + 0.02i  0.568 + 0.415i  ...  0.801 + 0.402i ]\n" +
-                "Non-zero Indices: [ [ 0  0  ...  0 ]  \n" +
-                "                    [ 0  1  ...  7 ]  \n" +
-                "                    [ 0  2  ...  4 ]  \n" +
-                "                    [ 0  3  ...  11 ]  \n" +
-                "                    [ 0  3  ...  10 ]  \n" +
-                "                    [ 0  3  ...  6 ]  \n" +
-                "                    [ 1  1  ...  7 ]  \n" +
-                "                    [ 2  0  ...  8 ]  \n" +
-                "                    [ 2  0  ...  10 ]  \n" +
-                "                    [ 2  2  ...  12 ]  \n" +
-                "                    [ 2  2  ...  6 ]  \n" +
-                "                    [ 3  0  ...  2 ]  \n" +
-                "                    [ 3  0  ...  1 ]  \n" +
-                "                    [ 4  0  ...  10 ]  \n" +
-                "                     ...  \n" +
-                "                    [ 4  3  ...  13 ]  ]";
+        exp = """
+                Shape: (5, 4, 2, 3, 15)
+                nnz: 18
+                Non-zero Entries: [ 0.81 + 0.02i  0.568 + 0.415i  ...  0.801 + 0.402i ]
+                Non-zero Indices: [ [ 0  0  ...  0 ] \s
+                                    [ 0  1  ...  7 ] \s
+                                    [ 0  2  ...  4 ] \s
+                                    [ 0  3  ...  11 ] \s
+                                    [ 0  3  ...  10 ] \s
+                                    [ 0  3  ...  6 ] \s
+                                    [ 1  1  ...  7 ] \s
+                                    [ 2  0  ...  8 ] \s
+                                    [ 2  0  ...  10 ] \s
+                                    [ 2  2  ...  12 ] \s
+                                    [ 2  2  ...  6 ] \s
+                                    [ 3  0  ...  2 ] \s
+                                    [ 3  0  ...  1 ] \s
+                                    [ 4  0  ...  10 ] \s
+                                     ... \s
+                                    [ 4  3  ...  13 ]  ]""";
         assertEquals(exp, A.toString());
     }
 }

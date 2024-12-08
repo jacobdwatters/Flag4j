@@ -30,7 +30,9 @@ import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class contains methods for checking the equality of real sparse tensors.
@@ -86,48 +88,17 @@ public final class RealSparseEquals {
      * @return True if the matrices are equal. False otherwise.
      */
     public static boolean cooMatrixEquals(CooMatrix src1, CooMatrix src2) {
-        // Check if shapes are equal.
-        if (!src1.shape.equals(src2.shape)) return false;
+        if(src1 == null || src2 == null) return false;
+        if(src1 == src2) return true;
+        if(!src1.shape.equals(src2.shape)) return false;
 
-        // Counters for explicitly stored zero values.
-        int aZeroCount = 0;
-        int bZeroCount = 0;
+        // Drop any explicitly stored zeros.
+        src1 = src1.dropZeros();
+        src2 = src2.dropZeros();
 
-        // Create src1 HashMap ignoring the explicit zeros in first matrix.
-        Map<Integer, Double> nonZeroMapA = new HashMap<>();
-        for (int i=0; i < src1.nnz; i++) {
-            if (src1.data[i] != 0.0) {
-                nonZeroMapA.put(i-aZeroCount, src1.data[i]);
-            } else{
-                aZeroCount++;
-            }
-        }
-
-        // Iterate over matrix src2's data and compare with matrix src1's data.
-        for (int i=0; i<src2.nnz; i++) {
-            int key = i-bZeroCount;
-            double valueB = src2.data[i];
-
-            // If valueB is non-zero, check against matrix src1.
-            if(valueB != 0.0) {
-                Double valueA = nonZeroMapA.remove(key);
-
-                // If valueA is null or values differ, matrices are not equal.
-                if (valueA == null || !valueA.equals(valueB)) return false;
-            } else {
-                bZeroCount++;
-
-                // If valueB is zero, ensure matrix first matrix also has zero or does not contain the key.
-                if (nonZeroMapA.containsKey(key)) {
-                    return false;
-                }
-            }
-        }
-
-        if(nonZeroMapA.size() != 0) return false; // Then matrix src1 must have contained src1 non-zero value that src2 did not.
-
-        // All checks passed, matrices are equal.
-        return true;
+        return Arrays.equals(src1.data, src2.data)
+                && Arrays.equals(src1.rowIndices, src2.rowIndices)
+                && Arrays.equals(src1.colIndices, src2.colIndices);
     }
 
 

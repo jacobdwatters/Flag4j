@@ -109,8 +109,8 @@ public final class MatrixMarketWriter {
                 comments
         );
 
-        // Transpose to ensure colum-major ordering as required by Matrix Market Exchange Format.
-        mat = mat.T();
+        // Transpose in the case of a dense matrix as Matrix Market array files are column major.
+        mat = isDense ? mat.T() : mat;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writeHeader(writer, header, shapeData);

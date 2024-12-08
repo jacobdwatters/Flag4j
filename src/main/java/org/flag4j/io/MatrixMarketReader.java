@@ -33,6 +33,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.Flag4jParsingException;
 
@@ -381,6 +382,8 @@ public class MatrixMarketReader {
                     "The number of  data lines does not match the number of non-zero data specified: " + cols + ".");
         }
 
+        // Ensure that the data is sorted by indices lexicographically as this is not required by Matrix Market.
+        CooDataSorter<T> sorter = new CooDataSorter<>(data, rowIndices, colIndices).sparseSort();
         return new SparseMatrixData<T>(new Shape(rows, cols), data, rowIndices, colIndices);
     }
 }
