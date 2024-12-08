@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,53 +26,22 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooFieldVector;
-import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.Arrays;
 
 /**
- * <p>Instances of this class represents a dense vector backed by a {@link Field} array. The {@code FieldVector} class
- * provides functionality for matrix operations whose elements are members of a field, supporting mutable data with a fixed shape.
+ * <p>A dense vector whose data are {@link Field field} elements.
  *
- * <p>A {@code FieldVector} is essentially equivalent to a rank-1 tensor but includes extended functionality
- * and may offer improved performance for certain operations compared to general rank n tensors.
+ * <p>Vectors are 1D tensors (i.e. rank 1 tensor).
  *
- * <p><b>Key Features:</b>
- * <ul>
- *   <li>Support for standard vector operations like addition, subtraction, and inner/outer products.</li>
- *   <li>Conversion methods to other representations, such as {@link FieldMatrix}, {@link FieldTensor}, or COO (Coordinate).</li>
- *   <li>Utility methods for checking properties like being the zero vector.</li>
- * </ul>
+ * <p>FieldVectors have mutable data but a fixed size.
  *
- * <p><b>Example Usage:</b>
- * <pre>{@code
- * // Constructing a complex matrix from an array of complex numbers
- * Complex128[] complexData = {
- *     new Complex128(1, 2), new Complex128(3, 4),
- *     new Complex128(5, 6), new Complex128(7, 8)
- * };
- * FieldVector<Complex128> vector = new FieldVector(complexData);
- *
- * // Performing vector inner/outer product.
- * Complex128 inner = vector.inner(vector);
- * FieldMatrix<Complex128> outer = vector.outer(vector);
- *
- * // Checking if the vector only contains zeros.
- * boolean isZero = vector.isZeros();
- * }</pre>
- *
- * @param <T> Type of the {@link Field field} element for the matrix.
- *
- * @see FieldVector
- * @see FieldTensor
- * @see AbstractDenseFieldMatrix
- * @see CVector
+ * @param <T> Type of the field element for the vector.
  */
 public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<FieldVector<T>, FieldMatrix<T>, T> {
     private static final long serialVersionUID = 1L;
@@ -96,18 +65,6 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
     public FieldVector(int size, T fillValue) {
         super(new Shape(size), (T[]) new Field[size]);
         Arrays.fill(data, fillValue);
-    }
-
-
-    /**
-     * Constructs a dense complex vector with the given shape and entries.
-     * @param shape The shape of the vector. Must be rank-1 and satisfy {@code shape.totalEntriesIntValueExact() == data.length}.
-     * @param data The entries of the vector.
-     * @throws LinearAlgebraException If {@code shape.getRank() != 1}
-     * @throws IllegalArgumentException If {@code shape.totalEntriesIntValueExact() != data.length}
-     */
-    public FieldVector(Shape shape, T[] entries) {
-        super(shape, entries);
     }
 
 
@@ -146,7 +103,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      */
     @Override
     public FieldVector<T> makeLikeTensor(Shape shape, T[] entries) {
-        ValidateParameters.ensureAllEqual(shape.totalEntriesIntValueExact(), entries.length);
+        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
         ValidateParameters.ensureRank(shape, 1);
         return new FieldVector<T>(entries);
     }
@@ -201,12 +158,38 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      */
     public String toString() {
         StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
 
-        result.append(PrettyPrint.abbreviatedArray(data,
-                PrintOptions.getMaxColumns(),
-                PrintOptions.getPadding(),
-                PrintOptions.getPrecision(),
-                PrintOptions.useCentering()));
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int width;
+        String value;
+
+        // Get data up until the stopping point.
+        int padding = PrintOptions.getPadding();
+        boolean centering = PrintOptions.useCentering();
+        int precision = PrintOptions.getPrecision();
+
+        for(int i = 0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(data[i], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        if(stopIndex < size-1) {
+            width = padding + 3;
+            value = "...";
+            value = centering ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        // Get last entry now
+        value = StringUtils.ValueOfRound(data[size-1], precision);
+        width = padding + value.length();
+        value = centering ? StringUtils.center(value, width) : value;
+        result.append(String.format("%-" + width + "s", value));
+
+        result.append("]");
 
         return result.toString();
     }
