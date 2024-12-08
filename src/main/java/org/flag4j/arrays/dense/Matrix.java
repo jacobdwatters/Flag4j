@@ -28,7 +28,6 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
@@ -68,57 +67,46 @@ import java.util.List;
 
 
 /**
- * <p>A real dense matrix backed by a primitive double array.
- * <p>A matrix is essentially a rank-2 {@link Tensor} but has some additional
- *
- * <p>The {@link #data} of a matrix are mutable but the {@link #shape} is fixed.
- *
- * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i> have improved
- * performance for some ops.
- */
-
-/**
- * <p>Instances of this class represents a complex dense matrix backed by a {@link Complex128} array. The {@code CMatrix} class
- * provides functionality for complex matrix operations, supporting mutable data with a fixed shape.
- * This class extends {@link AbstractDenseFieldMatrix} and offers additional methods optimized for complex
+ * <p>Instances of this class represents a complex dense matrix backed by a {@code double[]} array. The {@code Matrix} class
+ * provides functionality for real dense matrix operations, supporting mutable data with a fixed shape. This class extends
+ * {@link AbstractDenseDoubleTensor} and offers additional methods optimized for complex
  * arithmetic and matrix computations.
  *
- * <p>A {@code CMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
+ * <p>A {@code Matrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
  * and may offer improved performance for certain operations compared to general tensors.
  *
  * <p><b>Key Features:</b>
  * <ul>
- *   <li>Construction from various data types such as arrays of {@link Complex128}, {@code double}, and {@link String}.</li>
  *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
- *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
- *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
+ *   <li>Conversion methods to other matrix representations, such as {@link CooMatrix COO} (Coordinate) and {@link CsrMatrix CSR}
+ *   (Compressed Sparse Row) formats.</li>
+ *   <li>Utility methods for checking properties like being orthogonal, symmetric, etc.</li>
  * </ul>
  *
  * <p><b>Example Usage:</b>
  * <pre>{@code
  * // Constructing a complex matrix from a 2D array of complex numbers
- * Complex128[][] complexData = {
- *     { new Complex128(1, 2), new Complex128(3, 4) },
- *     { new Complex128(5, 6), new Complex128(7, 8) }
- * };
- * CMatrix matrix = new CMatrix(complexData);
+ * double[][] data = {
+ *     { 1, 2, 3 },
+ *     { 4, 5, 6 },
+ *     { 7, 8, 9,}};
+ * Matrix matrix = new Matrix(data);
  *
  * // Performing matrix multiplication.
- * CMatrix result = matrix.mult(matrix);
+ * Matrix result = matrix.mult(matrix);
  *
  * // Performing matrix transpose.
- * CMatrix transpose = matrix.T();
+ * Matrix transpose = matrix.T();
  *
- * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
- * CMatrix conjugateTranspose = matrix.H();
+ * // Performing matrix transpose.
+ * Matrix conjugateTranspose = matrix.T();
  *
- * // Checking if the matrix is unitary.
- * boolean isUnitary = matrix.isUnitary();
+ * // Checking if the matrix is orthogonal.
+ * boolean isUnitary = matrix.isOrthogonal();
  * }</pre>
  *
- * @see Complex128
- * @see CVector
- * @see AbstractDenseFieldMatrix
+ * @see Tensor
+ * @see Vector
  */
 public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {
@@ -818,7 +806,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public boolean isOrthogonal() {
-        return numRows == numCols && RealDenseProperties.isCloseToIdentity(this.multTranspose(this));
+        return numRows == numCols && RealDenseProperties.isCloseToIdentity(multTranspose(this));
     }
 
 
