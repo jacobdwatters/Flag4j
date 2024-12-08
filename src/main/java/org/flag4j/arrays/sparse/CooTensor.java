@@ -965,6 +965,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
+        sb.append("nnz: ").append(nnz).append("\n");
         sb.append("Non-zero Entries: " +
                 PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering) + "\n");
         sb.append("Non-zero Indices: " +
