@@ -46,10 +46,10 @@ public final class PrettyPrint {
      * @param maxEntries The maximum number of data to print.
      * @param padding The amount of padding to use between each entry.
      * @param precision The number of decimal places to print for each value.
-     * @param centring Flag indicating if each value should be centered within the padding.
+     * @param centering Flag indicating if each value should be centered within the padding.
      * @return A string representing the abbreviated and formatted array.
      */
-    public static String abbreviatedArray(double[] arr, int maxEntries, int padding, int precision, boolean centring) {
+    public static String abbreviatedArray(double[] arr, int maxEntries, int padding, int precision, boolean centering) {
         ValidateParameters.ensureNonNegative(maxEntries, padding, precision);
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -59,7 +59,7 @@ public final class PrettyPrint {
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
             value = StringUtils.ValueOfRound(arr[i], precision);
             width = padding + value.length();
-            value = centring ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
@@ -67,7 +67,7 @@ public final class PrettyPrint {
         if(maxEntries < arr.length) {
             width = padding + 3;
             value = "...";
-            value = centring ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
@@ -86,11 +86,11 @@ public final class PrettyPrint {
      * @param maxEntries The maximum number of data to print.
      * @param padding The amount of padding to use between each entry.
      * @param precision The number of decimal places to print for each value.
-     * @param centring Flag indicating if each value should be centered within the padding.
+     * @param centering Flag indicating if each value should be centered within the padding.
      * @return A string representing the abbreviated and formatted array.
      */
     public static <T extends Field<T>> String abbreviatedArray(Field<T>[] arr, int maxEntries, int padding, int precision,
-                                                               boolean centring) {
+                                                               boolean centering) {
         ValidateParameters.ensureNonNegative(maxEntries, padding, precision);
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -100,7 +100,7 @@ public final class PrettyPrint {
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
             value = StringUtils.ValueOfRound((Complex128) arr[i], precision);
             width = padding + value.length();
-            value = centring ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
@@ -108,7 +108,7 @@ public final class PrettyPrint {
         if(maxEntries < arr.length) {
             width = padding + 3;
             value = "...";
-            value = centring ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
@@ -127,9 +127,9 @@ public final class PrettyPrint {
      * @param maxRows Maximum number of rows to print.
      * @param maxCols The maximum number of columns to print.
      * @param padding The amount of padding to use between each entry.
-     * @param centring Flag indicating if each value should be centered within the padding.
+     * @param centering Flag indicating if each value should be centered within the padding.
      * @param offset Offset for array rows after the first.
-     * @param centring Flag indicating if each value should be centered within the padding.
+     * @param centering Flag indicating if each value should be centered within the padding.
      * @return A string representing the abbreviated and formatted array.
      */
     public static String abbreviatedArray(int[][] arr, int maxRows, int maxCols, int padding, int offset, boolean centering) {
@@ -168,10 +168,10 @@ public final class PrettyPrint {
      * @param maxEntries The maximum number of data to print.
      * @param padding The amount of padding to use between each entry.
      * @param precision The number of decimal places to print for each value.
-     * @param centring Flag indicating if each value should be centered within the padding.
+     * @param centering Flag indicating if each value should be centered within the padding.
      * @return A string representing the abbreviated and formatted array.
      */
-    public static String abbreviatedArray(int[] arr, int maxEntries, int padding, boolean centring) {
+    public static String abbreviatedArray(int[] arr, int maxEntries, int padding, boolean centering) {
         ValidateParameters.ensureNonNegative(maxEntries, padding);
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -181,7 +181,7 @@ public final class PrettyPrint {
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
             value = String.valueOf(arr[i]);
             width = padding + value.length();
-            value = centring ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
@@ -189,7 +189,7 @@ public final class PrettyPrint {
         if(maxEntries < arr.length) {
             width = padding + 3;
             value = "...";
-            value = centring ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 

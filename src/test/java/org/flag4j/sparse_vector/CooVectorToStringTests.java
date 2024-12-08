@@ -35,7 +35,7 @@ class CooVectorToStringTests {
         // --------------------- Sub-case 1 ---------------------
         exp = "shape: (3056)\n" +
                 "Non-zero data: [ 1.34  525  63.7  -0.0234 ]\n" +
-                "Indices: [1, 567, 1567, 2506]";
+                "Indices: [ 1  567  1567  2506 ]";
         assertEquals(exp, a.toString());
 
         // --------------------- Sub-case 2 ---------------------
@@ -44,7 +44,7 @@ class CooVectorToStringTests {
         PrintOptions.setPrecision(2);
         exp = "shape: (3056)\n" +
                 "Non-zero data: [1.34  ...  -0.02  ]\n" +
-                "Indices: [1, 567, 1567, 2506]";
+                "Indices: [1  ...  2506  ]";
         assertEquals(exp, a.toString());
     }
 }

@@ -82,6 +82,15 @@ public class SymmTriDiag implements Serializable {
 
 
     /**
+     * Gets the shape of this symmetric tri-diagonal matrix.
+     * @return The shape of this symmetric tri-diagonal matrix.
+     */
+    public Shape getShape() {
+        return new Shape(size, size);
+    }
+
+
+    /**
      * Gets the entry within this symmetric tri-diagonal matrix at the specified indices.
      * @param rowIdx Row index of entry to get.
      * @param colIdx Column index of entry to get.
@@ -152,14 +161,5 @@ public class SymmTriDiag implements Serializable {
         int hash = 17 + Arrays.hashCode(diag);
         hash = hash*31 + Arrays.hashCode(offDiag);
         return hash;
-    }
-
-
-    /**
-     * Gets the shape of this symmetric tri-diagonal matrix.
-     * @return The shape of this symmetric tri-diagonal matrix.
-     */
-    public Shape getShape() {
-        return new Shape(size, size);
     }
 }

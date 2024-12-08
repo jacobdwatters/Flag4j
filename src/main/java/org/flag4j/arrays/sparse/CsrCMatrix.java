@@ -32,6 +32,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
@@ -44,7 +45,6 @@ import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -554,7 +554,11 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
         result.append("Non-zero data: [");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int maxCols = PrintOptions.getMaxColumns();
+        int padding = PrintOptions.getPadding();
+        boolean centering = PrintOptions.useCentering();
+
+        int stopIndex = Math.min(maxCols -1, size-1);
         int width;
         String value;
 
@@ -562,29 +566,32 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
             // Get data up until the stopping point.
             for(int i=0; i<stopIndex; i++) {
                 value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-                width = PrintOptions.getPadding() + value.length();
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                width = padding + value.length();
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             if(stopIndex < size-1) {
-                width = PrintOptions.getPadding() + 3;
+                width = padding + 3;
                 value = "...";
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             // Get last entry now
             value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         result.append("]\n");
 
-        result.append("Row Pointers: ").append(Arrays.toString(rowPointers)).append("\n");
-        result.append("Col Indices: ").append(Arrays.toString(colIndices));
+        result.append("Row Pointers: ")
+                .append(PrettyPrint.abbreviatedArray(rowPointers, maxCols, padding, centering))
+                .append("\n");
+        result.append("Col Indices: ")
+                .append(PrettyPrint.abbreviatedArray(colIndices, maxCols, padding, centering));
 
         return result.toString();
     }

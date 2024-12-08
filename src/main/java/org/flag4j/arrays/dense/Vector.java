@@ -915,24 +915,28 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         String value;
 
         // Get data up until the stopping point.
-        for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centering = PrintOptions.useCentering();
+
+        for(int i = 0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(data[i], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         if(stopIndex < size-1) {
-            width = PrintOptions.getPadding() + 3;
+            width = padding + 3;
             value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         // Get last entry now
         value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        width = padding + value.length();
+        value = centering ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));
 
         result.append("]");

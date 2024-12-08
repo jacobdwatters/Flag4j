@@ -336,14 +336,14 @@ public class CooFieldTensor<T extends Field<T>>
         int maxCols = PrintOptions.getMaxColumns();
         int padding = PrintOptions.getPadding();
         int precision = PrintOptions.getPrecision();
-        boolean centring = PrintOptions.useCentering();
+        boolean centering = PrintOptions.useCentering();
 
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centring) + "\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering) + "\n");
         sb.append("Non-zero Indices: " +
-                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centering));
 
         return sb.toString();
     }
