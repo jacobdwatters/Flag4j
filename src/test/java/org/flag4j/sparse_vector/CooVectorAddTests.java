@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -96,14 +96,14 @@ class CooVectorAddTests {
         double[] expValues = {1+1.34, 5, -0.0024+51.6, 1, 2001.256, 61-0.00245, -99.24, 1.5};
         exp = new Vector(expValues);
 
-        assertEquals(exp, RealDenseSparseVectorOperations.add(b, a));
+        assertEquals(exp, RealDenseSparseVectorOps.add(b, a));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new double[]{1, 5, -0.0024, 1, 2001.256, 61};
         b = new Vector(bValues);
 
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealDenseSparseVectorOperations.add(finalB, a));
+        assertThrows(LinearAlgebraException.class, ()->RealDenseSparseVectorOps.add(finalB, a));
     }
 
 

@@ -34,7 +34,7 @@ import org.flag4j.linalg.ops.dense.DenseSemiringTensorDot;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringElemMult;
-import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOps;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -243,7 +243,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
     @Override
     public T add(T b) {
         V[] sum = (V[]) new Ring[data.length];
-        DenseSemiringOperations.add(data, shape, b.data, b.shape, sum);
+        DenseSemiringOps.add(data, shape, b.data, b.shape, sum);
         return makeLikeTensor(shape, sum);
     }
 
@@ -254,7 +254,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @param b Second tensor in the element-wise sum.
      */
     public void addEq(T b) {
-        DenseSemiringOperations.add(data, shape, b.data, b.shape, data);
+        DenseSemiringOps.add(data, shape, b.data, b.shape, data);
     }
 
 
@@ -317,7 +317,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
-        Shape destShape = DenseSemiringOperations.getTrShape(shape, axis1, axis2);
+        Shape destShape = DenseSemiringOps.getTrShape(shape, axis1, axis2);
         V[] destEntries = (V[]) new Ring[destShape.totalEntriesIntValueExact()];
         return makeLikeTensor(destShape, destEntries);
     }

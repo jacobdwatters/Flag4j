@@ -387,7 +387,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         if(axis1 == axis2) return copy();
 
-        return RealCsrOperations.transpose(this);
+        return RealCsrOps.transpose(this);
     }
 
 
@@ -411,7 +411,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
             throw new LinearAlgebraException("Cannot transpose axes: "  + Arrays.toString(axes) + " for tensor of rank 2.");
         }
 
-        return RealCsrOperations.transpose(this);
+        return RealCsrOps.transpose(this);
     }
 
 
@@ -946,7 +946,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public CsrMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        return RealCsrOperations.getSlice(this, rowStart, rowEnd, colStart, colEnd);
+        return RealCsrOps.getSlice(this, rowStart, rowEnd, colStart, colEnd);
     }
 
 
@@ -1313,7 +1313,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public CsrMatrix T() {
-        return RealCsrOperations.transpose(this);
+        return RealCsrOps.transpose(this);
     }
 
 
@@ -1390,7 +1390,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public CsrMatrix add(CsrMatrix b) {
-        return RealCsrOperations.applyBinOpp(this, b, Double::sum, null);
+        return RealCsrOps.applyBinOpp(this, b, Double::sum, null);
     }
 
 
@@ -1405,7 +1405,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public CsrMatrix elemMult(CsrMatrix b) {
-        return RealCsrOperations.elemMult(this, b);
+        return RealCsrOps.elemMult(this, b);
     }
 
 
@@ -1420,7 +1420,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     @Override
     public CsrMatrix sub(CsrMatrix b) {
-        return RealCsrOperations.applyBinOpp(this, b, (Double x, Double y)->x-y, (Double x) -> -x);
+        return RealCsrOps.applyBinOpp(this, b, (Double x, Double y)->x-y, (Double x) -> -x);
     }
 
 

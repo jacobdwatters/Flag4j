@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CMatrixUnaryOperationsTests {
+class CMatrixUnaryOpsTests {
 
     Complex128[][] aEntries, expEntries;
     double[][] expReEntries;

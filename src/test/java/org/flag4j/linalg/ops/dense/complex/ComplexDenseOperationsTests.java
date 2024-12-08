@@ -6,13 +6,13 @@ import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
 import org.flag4j.linalg.ops.common.semiring_ops.SemiringOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ComplexDenseOperationsTests {
+class ComplexDenseOpsTests {
 
     Complex128[] src1, src2;
     Complex128[] expResult;
@@ -33,7 +33,7 @@ class ComplexDenseOperationsTests {
                 new Complex128(0.9133, -1943.134), new Complex128(-9234.1, 10.3-3245)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertArrayEquals(expResult, DenseSemiringOperations.add(src1, shape1, src2, shape2, null));
+        assertArrayEquals(expResult, DenseSemiringOps.add(src1, shape1, src2, shape2, null));
 
         // ---------- Sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -42,7 +42,7 @@ class ComplexDenseOperationsTests {
                 new Complex128(0.9133, -1943.134), new Complex128(-9234.1, 10.3-3245), new Complex128(0, 1)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> DenseSemiringOperations.add(src1, shape1, src2, shape2, null));
+        assertThrows(LinearAlgebraException.class, () -> DenseSemiringOps.add(src1, shape1, src2, shape2, null));
 
         // ---------- Sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
@@ -50,7 +50,7 @@ class ComplexDenseOperationsTests {
         src2 = new Complex128[]{new Complex128(9-9234.23, -1), new Complex128(-0.99+109.2234, 13.445+1.435)};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
-        assertThrows(LinearAlgebraException.class, () -> DenseSemiringOperations.add(src1, shape1, src2, shape2, null));
+        assertThrows(LinearAlgebraException.class, () -> DenseSemiringOps.add(src1, shape1, src2, shape2, null));
     }
 
 

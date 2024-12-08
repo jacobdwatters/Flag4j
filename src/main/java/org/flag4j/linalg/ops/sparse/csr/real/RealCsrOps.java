@@ -45,9 +45,9 @@ import java.util.function.UnaryOperator;
 /**
  * This class contains low-level implementations for ops on CSR matrices.
  */
-public final class RealCsrOperations {
+public final class RealCsrOps {
 
-    private RealCsrOperations() {
+    private RealCsrOps() {
         // Hide default constructor for utility class.
         
     }

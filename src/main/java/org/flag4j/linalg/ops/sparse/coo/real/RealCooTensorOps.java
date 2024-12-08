@@ -37,9 +37,9 @@ import java.util.List;
 /**
  * Utility class for computing ops between two real sparse COO tensors backed by a primitive double array.
  */
-public final class RealCooTensorOperations {
+public final class RealCooTensorOps {
 
-    private RealCooTensorOperations() {
+    private RealCooTensorOps() {
         // Hide default constructor for utility class.
         
     }

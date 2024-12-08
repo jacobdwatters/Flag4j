@@ -32,7 +32,6 @@ import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.function.BiFunction;
@@ -42,9 +41,9 @@ import java.util.function.UnaryOperator;
  * This class contains low-level ops which act on a real/complex dense and a complex/real
  * sparse CSR matrix.
  */
-public final class RealFieldDenseCsrOperations {
+public final class RealFieldDenseCsrOps {
 
-    private RealFieldDenseCsrOperations() {
+    private RealFieldDenseCsrOps() {
         // Hide default constructor for utility class.
         
     }

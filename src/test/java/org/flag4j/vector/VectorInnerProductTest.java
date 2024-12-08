@@ -5,8 +5,8 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOperations;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +47,7 @@ class VectorInnerProductTest {
         b = new CooVector(sparseSize, bEntries, indices);
         exp = -13.7209785;
 
-        assertEquals(exp, RealDenseSparseVectorOperations.inner(a.data, b.data, b.indices, b.size));
+        assertEquals(exp, RealDenseSparseVectorOps.inner(a.data, b.data, b.indices, b.size));
     }
 
 
@@ -63,7 +63,7 @@ class VectorInnerProductTest {
         b = new CVector(bEntries);
         exp = new Complex128("-21336.40357-10217.030400000001j");
 
-        assertEquals(exp, RealFieldDenseVectorOperations.inner(a.data, b.data));
+        assertEquals(exp, RealFieldDenseVectorOps.inner(a.data, b.data));
     }
 
 

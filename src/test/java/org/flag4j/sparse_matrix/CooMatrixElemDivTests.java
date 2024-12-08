@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +47,7 @@ class CooMatrixElemDivTests {
         expColIndices = new int[]{3, 1, 1, 0, 0};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, RealDenseSparseMatrixOperations.elemDiv(A, B));
+        assertEquals(exp, RealDenseSparseMatrixOps.elemDiv(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -68,7 +68,7 @@ class CooMatrixElemDivTests {
         expColIndices = new int[]{3, 1, 3};
         exp = new CooMatrix(expShape, expEntries, expRowIndices, expColIndices);
 
-        assertEquals(exp, RealDenseSparseMatrixOperations.elemDiv(A, B));
+        assertEquals(exp, RealDenseSparseMatrixOps.elemDiv(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(3, 5);
@@ -86,7 +86,7 @@ class CooMatrixElemDivTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(Exception.class, ()->RealDenseSparseMatrixOperations.elemDiv(A, finalB));
+        assertThrows(Exception.class, ()->RealDenseSparseMatrixOps.elemDiv(A, finalB));
     }
 
 

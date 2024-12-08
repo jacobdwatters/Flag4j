@@ -28,6 +28,7 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
@@ -41,19 +42,19 @@ import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseDeterminant;
 import org.flag4j.linalg.ops.dense.real.RealDenseEquals;
 import org.flag4j.linalg.ops.dense.real.RealDenseProperties;
-import org.flag4j.linalg.ops.dense.real.RealDenseSetOperations;
+import org.flag4j.linalg.ops.dense.real.RealDenseSetOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemDiv;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemMult;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseMatMult;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatMult;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
-import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOperations;
-import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -74,6 +75,50 @@ import java.util.List;
  *
  * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i> have improved
  * performance for some ops.
+ */
+
+/**
+ * <p>Instances of this class represents a complex dense matrix backed by a {@link Complex128} array. The {@code CMatrix} class
+ * provides functionality for complex matrix operations, supporting mutable data with a fixed shape.
+ * This class extends {@link AbstractDenseFieldMatrix} and offers additional methods optimized for complex
+ * arithmetic and matrix computations.
+ *
+ * <p>A {@code CMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
+ * and may offer improved performance for certain operations compared to general tensors.
+ *
+ * <p><b>Key Features:</b>
+ * <ul>
+ *   <li>Construction from various data types such as arrays of {@link Complex128}, {@code double}, and {@link String}.</li>
+ *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
+ *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
+ *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
+ * </ul>
+ *
+ * <p><b>Example Usage:</b>
+ * <pre>{@code
+ * // Constructing a complex matrix from a 2D array of complex numbers
+ * Complex128[][] complexData = {
+ *     { new Complex128(1, 2), new Complex128(3, 4) },
+ *     { new Complex128(5, 6), new Complex128(7, 8) }
+ * };
+ * CMatrix matrix = new CMatrix(complexData);
+ *
+ * // Performing matrix multiplication.
+ * CMatrix result = matrix.mult(matrix);
+ *
+ * // Performing matrix transpose.
+ * CMatrix transpose = matrix.T();
+ *
+ * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
+ * CMatrix conjugateTranspose = matrix.H();
+ *
+ * // Checking if the matrix is unitary.
+ * boolean isUnitary = matrix.isUnitary();
+ * }</pre>
+ *
+ * @see Complex128
+ * @see CVector
+ * @see AbstractDenseFieldMatrix
  */
 public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {
@@ -1056,7 +1101,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     public Matrix setValues(Double[][] values) {
         ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
-        RealDenseSetOperations.setValues(values, data);
+        RealDenseSetOps.setValues(values, data);
         return this;
     }
 
@@ -1072,7 +1117,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     public Matrix setValues(double[][] values) {
         ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
-        RealDenseSetOperations.setValues(values, data);
+        RealDenseSetOps.setValues(values, data);
         return this;
     }
 
@@ -1088,7 +1133,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     public Matrix setValues(Integer[][] values) {
         ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
-        RealDenseSetOperations.setValues(values, data);
+        RealDenseSetOps.setValues(values, data);
         return this;
     }
 
@@ -1104,7 +1149,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     public Matrix setValues(int[][] values) {
         ValidateParameters.ensureEqualShape(shape, new Shape(values.length, values[0].length));
-        RealDenseSetOperations.setValues(values, data);
+        RealDenseSetOps.setValues(values, data);
         return this;
     }
 
@@ -1120,7 +1165,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     public Matrix setValues(Matrix values) {
         ValidateParameters.ensureEqualShape(shape, values.shape);
-        RealDenseSetOperations.setValues(values.data, data);
+        RealDenseSetOps.setValues(values.data, data);
         return this;
     }
 
@@ -1611,7 +1656,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise sum of this matrix and {@code b}
      */
     public Matrix add(CsrMatrix b) {
-        return RealCsrDenseOperations.applyBinOpp(this, b, Double::sum);
+        return RealCsrDenseOps.applyBinOpp(this, b, Double::sum);
     }
 
 
@@ -1621,7 +1666,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise sum of this matrix and {@code b}
      */
     public Matrix add(CooMatrix b) {
-        return RealDenseSparseMatrixOperations.add(this, b);
+        return RealDenseSparseMatrixOps.add(this, b);
     }
 
 
@@ -1631,7 +1676,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise sum of this matrix and {@code b}
      */
     public CMatrix add(CsrCMatrix b) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, b, (Double x, Complex128 y)->y.add(x));
+        return RealComplexCsrDenseOps.applyBinOpp(this, b, (Double x, Complex128 y)->y.add(x));
     }
 
 
@@ -1675,7 +1720,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise difference of this matrix and {@code b}
      */
     public Matrix sub(CsrMatrix b) {
-        return RealCsrDenseOperations.applyBinOpp(this, b, Double::sum);
+        return RealCsrDenseOps.applyBinOpp(this, b, Double::sum);
     }
 
 
@@ -1685,7 +1730,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise difference of this matrix and {@code b}
      */
     public Matrix sub(CooMatrix b) {
-        return RealDenseSparseMatrixOperations.sub(this, b);
+        return RealDenseSparseMatrixOps.sub(this, b);
     }
 
 
@@ -1695,7 +1740,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise difference of this matrix and {@code b}
      */
     public CMatrix sub(CsrCMatrix b) {
-        return RealComplexCsrDenseOperations.applyBinOpp(this, b, (Double x, Complex128 y)->new Complex128(x-y.re, y.im));
+        return RealComplexCsrDenseOps.applyBinOpp(this, b, (Double x, Complex128 y)->new Complex128(x-y.re, y.im));
     }
 
 
@@ -1913,7 +1958,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CooMatrix elemMult(CooMatrix b) {
-        return RealDenseSparseMatrixOperations.elemMult(this, b);
+        return RealDenseSparseMatrixOps.elemMult(this, b);
     }
 
 

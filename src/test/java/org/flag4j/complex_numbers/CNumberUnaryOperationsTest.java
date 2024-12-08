@@ -4,7 +4,7 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class Complex128UnaryOperationsTest {
+class Complex128UnaryOpsTest {
     Complex128 a;
     Complex128 expValue, value;
     double expValueDouble, valueDouble;

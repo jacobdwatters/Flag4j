@@ -33,9 +33,9 @@ import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 /**
  * This class provides low level methods for computing ops on dense semiring tensors.
  */
-public final class DenseSemiringOperations {
+public final class DenseSemiringOps {
 
-    private DenseSemiringOperations() {
+    private DenseSemiringOps() {
         // Hide constructor
         
     }

@@ -39,9 +39,9 @@ import java.util.List;
 /**
  * This class contains low level implementations for ops on a real sparse COO vector.
  */
-public final class RealCooVectorOperations {
+public final class RealCooVectorOps {
 
-    private RealCooVectorOperations() {
+    private RealCooVectorOps() {
         // Hide default constructor for utility class.
         
     }

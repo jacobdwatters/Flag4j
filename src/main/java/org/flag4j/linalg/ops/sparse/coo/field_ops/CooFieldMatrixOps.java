@@ -40,9 +40,9 @@ import java.util.List;
  * This class has low level implementations for ops between two sparse coo
  * {@link Field} matrices.
  */
-public final class CooFieldMatrixOperations {
+public final class CooFieldMatrixOps {
 
-    private CooFieldMatrixOperations() {
+    private CooFieldMatrixOps() {
         // Hide default constructor for utility class.
         
     }

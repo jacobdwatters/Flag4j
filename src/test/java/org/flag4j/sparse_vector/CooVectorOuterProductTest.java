@@ -7,9 +7,9 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -82,7 +82,7 @@ class CooVectorOuterProductTest {
                 {new Complex128("-12.535700000000002-0.22826200000000002i"), new Complex128("0.0"), new Complex128("926.1450000000001-7630.4993i"), new Complex128("0.0"), new Complex128("0.0")}};
         exp = new CMatrix(expEntries);
 
-        assertEquals(exp, RealComplexSparseVectorOperations.outerProduct(a, b));
+        assertEquals(exp, RealComplexSparseVectorOps.outerProduct(a, b));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(1.34, 0.0244), new Complex128(-99, 815.66)};
@@ -90,7 +90,7 @@ class CooVectorOuterProductTest {
         b = new CooCVector(sparseSize+103, bEntries, bIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOperations.outerProduct(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOps.outerProduct(a, finalB));
     }
 
 
@@ -111,7 +111,7 @@ class CooVectorOuterProductTest {
                 {-12.535700000000002, 0.0121615, -108.14380000000001, -0.0, 126.2925}};
         exp = new Matrix(expEntries);
         Matrix act = new Matrix(a.size, b.size,
-                RealDenseSparseVectorOperations.outerProduct(a.data, a.indices, a.size, b.data));
+                RealDenseSparseVectorOps.outerProduct(a.data, a.indices, a.size, b.data));
 
         assertEquals(exp, act);
 
@@ -121,7 +121,7 @@ class CooVectorOuterProductTest {
 
         Vector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealDenseSparseVectorOperations.outerProduct(a.data, a.indices, a.size, finalB.data));
+                ()->RealDenseSparseVectorOps.outerProduct(a.data, a.indices, a.size, finalB.data));
     }
 
 

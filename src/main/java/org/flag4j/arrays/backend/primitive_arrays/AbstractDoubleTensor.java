@@ -31,7 +31,7 @@ import org.flag4j.arrays.backend.field_arrays.TensorOverField;
 import org.flag4j.linalg.ops.common.real.AggregateReal;
 import org.flag4j.linalg.ops.common.real.RealOps;
 import org.flag4j.linalg.ops.common.real.RealProperties;
-import org.flag4j.linalg.ops.dense.real.RealDenseOperations;
+import org.flag4j.linalg.ops.dense.real.RealDenseOps;
 import org.flag4j.util.Flag4jConstants;
 
 /**
@@ -377,7 +377,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T add(double b) {
-        return makeLikeTensor(shape, RealDenseOperations.add(data, b, null));
+        return makeLikeTensor(shape, RealDenseOps.add(data, b, null));
     }
 
 
@@ -388,7 +388,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public void addEq(double b) {
-        RealDenseOperations.add(data, b, data);
+        RealDenseOps.add(data, b, data);
     }
 
 
@@ -425,7 +425,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T sub(double b) {
-        return makeLikeTensor(shape, RealDenseOperations.sub(data, b, null));
+        return makeLikeTensor(shape, RealDenseOps.sub(data, b, null));
     }
 
 
@@ -436,7 +436,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public void subEq(double b) {
-        RealDenseOperations.sub(data, b, data);
+        RealDenseOps.sub(data, b, data);
     }
 
 
@@ -514,7 +514,7 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
      */
     @Override
     public T recip() {
-        return makeLikeTensor(shape, RealDenseOperations.recip(data));
+        return makeLikeTensor(shape, RealDenseOps.recip(data));
     }
 
 

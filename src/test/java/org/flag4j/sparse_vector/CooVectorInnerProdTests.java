@@ -6,9 +6,9 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -70,7 +70,7 @@ class CooVectorInnerProdTests {
 
         exp = 55.15 + 5.6*-41.13 + 215.0*6.133;
 
-        assertEquals(exp, RealDenseSparseVectorOperations.inner(b.data, a.data, a.indices, a.size));
+        assertEquals(exp, RealDenseSparseVectorOps.inner(b.data, a.data, a.indices, a.size));
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new double[]{
@@ -80,7 +80,7 @@ class CooVectorInnerProdTests {
         b = new Vector(bEntries);
         Vector finalB = b;
         assertThrows(IllegalArgumentException.class,
-                ()->RealDenseSparseVectorOperations.inner(finalB.data, a.data, a.indices, a.size));
+                ()->RealDenseSparseVectorOps.inner(finalB.data, a.data, a.indices, a.size));
     }
 
 
@@ -99,7 +99,7 @@ class CooVectorInnerProdTests {
                 new Complex128(-67,14).conj().mult(5.6), new Complex128(24,-56.134).conj().mult(-9.355)
         });
 
-        assertEquals(exp, RealComplexSparseVectorOperations.inner(a, b));
+        assertEquals(exp, RealComplexSparseVectorOps.inner(a, b));
 
         // ----------------------- Sub-case 2 -----------------------
         bEntries = new Complex128[]{new Complex128(1.334, 9.4), new Complex128(-67,14), new Complex128(24,-56.134)};
@@ -107,7 +107,7 @@ class CooVectorInnerProdTests {
         b = new CooCVector(sparseSize-1, bEntries, bIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOperations.inner(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOps.inner(a, finalB));
     }
 
 

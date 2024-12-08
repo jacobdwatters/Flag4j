@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOperations;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +51,7 @@ class CVectorOuterProductTests {
         exp = new CMatrix(expEntries);
 
         actData = new Complex128[a.size*b.size];
-        RealFieldDenseVectorOperations.outerProduct(a.data, b.data, actData);
+        RealFieldDenseVectorOps.outerProduct(a.data, b.data, actData);
         CMatrix act = new CMatrix(a.size, b.size, actData);
 
         assertEquals(exp, act);
@@ -66,7 +66,7 @@ class CVectorOuterProductTests {
         exp = new CMatrix(expEntries);
 
         actData = new Complex128[a.size*b.size];
-        RealFieldDenseVectorOperations.outerProduct(a.data, b.data, actData);
+        RealFieldDenseVectorOps.outerProduct(a.data, b.data, actData);
         act = new CMatrix(a.size, b.size, actData);
 
         assertEquals(exp, act);

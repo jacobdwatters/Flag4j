@@ -7,8 +7,8 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOperations;
-import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOperations;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOps;
+import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOps;
 import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -129,9 +129,9 @@ class CsrMatrixAddSubTests {
                 {1.345, 983.3, 0, -9.234, 4.52, 0},
         };
         makeRealMatrices();
-        assertEquals(expAddDense, RealCsrDenseOperations.add(A, denseB));
-        assertEquals(expAsubBDense, RealCsrDenseOperations.sub(A, denseB));
-        assertEquals(expBsubADense, RealCsrDenseOperations.sub(B, denseA));
+        assertEquals(expAddDense, RealCsrDenseOps.add(A, denseB));
+        assertEquals(expAsubBDense, RealCsrDenseOps.sub(A, denseB));
+        assertEquals(expBsubADense, RealCsrDenseOps.sub(B, denseA));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
@@ -192,14 +192,14 @@ class CsrMatrixAddSubTests {
         bCmpEntries[4][4] = new Complex128(23.501, 100.23);
         makeCmpMatrices();
 
-        assertEquals(expAddDenseCmp, RealFieldDenseCsrOperations.add(A, denseBCmp));
-        assertEquals(expAsubBDenseCmp, RealFieldDenseCsrOperations.sub(A, denseBCmp));
+        assertEquals(expAddDenseCmp, RealFieldDenseCsrOps.add(A, denseBCmp));
+        assertEquals(expAsubBDenseCmp, RealFieldDenseCsrOps.sub(A, denseBCmp));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCsrOperations.add(A, denseBCmp));
-        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCsrOperations.sub(A, denseBCmp));
+        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCsrOps.add(A, denseBCmp));
+        assertThrows(LinearAlgebraException.class, ()->RealFieldDenseCsrOps.sub(A, denseBCmp));
     }
 
 

@@ -5,7 +5,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOperations;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,14 +42,14 @@ class CVectorInnerProductTests {
         b = new Vector(bEntries);
         exp = new Complex128("25.12969816999999 + 8968.199567075002i");
 
-        assertEquals(exp, RealFieldDenseVectorOperations.inner(a.data, b.data));
+        assertEquals(exp, RealFieldDenseVectorOps.inner(a.data, b.data));
 
         // -------------------- Sub-case 2 --------------------
         bEntries = new double[]{1.455, 1.56, -8815.56};
         b = new Vector(bEntries);
 
         Vector finalB = b;
-        assertThrows(IllegalArgumentException.class, ()->RealFieldDenseVectorOperations.inner(a.data, finalB.data));
+        assertThrows(IllegalArgumentException.class, ()->RealFieldDenseVectorOps.inner(a.data, finalB.data));
     }
 
 

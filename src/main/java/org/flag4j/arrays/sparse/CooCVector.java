@@ -34,7 +34,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -341,7 +341,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return The element-wise sum of this vector and {@code b}.
      */
     public CooCVector add(CooVector b) {
-        return RealComplexSparseVectorOperations.add(this, b);
+        return RealComplexSparseVectorOps.add(this, b);
     }
 
 

@@ -31,7 +31,7 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low-level implementations of setting ops for real dense tensors.
  */
-public final class RealDenseSetOperations {
+public final class RealDenseSetOps {
 
 
     /**

@@ -33,9 +33,9 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low-level implementations of setting ops for dense field tensors.
  */
-public final class DenseFieldSetOperations {
+public final class DenseFieldSetOps {
 
-    private DenseFieldSetOperations() {
+    private DenseFieldSetOps() {
         // Hide constructor.
         throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg(getClass()));
     }

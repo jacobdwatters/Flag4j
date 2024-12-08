@@ -49,16 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
-/**
- * <p>A complex dense matrix backed by a {@link Complex128} array.
- *
- * <p>A CMatrix has mutable data but fixed shape.
- *
- * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i>
- * have improved performance for some ops.
- */
-
 /**
  * <p>Instances of this class represents a complex dense matrix backed by a {@link Complex128} array. The {@code CMatrix} class
  * provides functionality for complex matrix operations, supporting mutable data with a fixed shape.

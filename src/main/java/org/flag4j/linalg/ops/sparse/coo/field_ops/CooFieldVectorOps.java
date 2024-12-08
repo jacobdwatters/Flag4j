@@ -42,9 +42,9 @@ import java.util.List;
  * This utility class contains methods for computing ops between two sparse coo
  * {@link Field} vectors.
  */
-public final class CooFieldVectorOperations {
+public final class CooFieldVectorOps {
 
-    private CooFieldVectorOperations() {
+    private CooFieldVectorOps() {
         
     }
 

@@ -32,9 +32,9 @@ import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 /**
  * This class provides low level methods for computing ops on real dense tensors.
  */
-public final class RealDenseOperations {
+public final class RealDenseOps {
 
-    private RealDenseOperations() {
+    private RealDenseOps() {
         // Hide constructor
 
     }

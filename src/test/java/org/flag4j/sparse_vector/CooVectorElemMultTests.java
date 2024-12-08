@@ -5,8 +5,8 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOps;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -100,7 +100,7 @@ class CooVectorElemMultTests {
                 new Complex128(0, 4.51).mult(-0.00245)};
         expIndices = new int[]{2, 81};
         exp = new CooCVector(151, expValues, expIndices);
-        assertEquals(exp, RealComplexSparseVectorOperations.elemMult(b, a));
+        assertEquals(exp, RealComplexSparseVectorOps.elemMult(b, a));
 
         // -------------------- Sub-case 2 --------------------
         bValues = new Complex128[]{new Complex128(2.441, -9.245), new Complex128(0, 4.51), new Complex128(24.5)};
@@ -108,7 +108,7 @@ class CooVectorElemMultTests {
         b = new CooCVector(size+134, bValues, bIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOperations.elemMult(finalB, a));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOps.elemMult(finalB, a));
     }
 
 
@@ -133,7 +133,7 @@ class CooVectorElemMultTests {
                 new Complex128(2.4).mult(51.6), new Complex128(-994.1 ,1.45).mult(-0.00245)};
         expIndices = new int[]{0, 2, 3};
         exp = new CooCVector(size, expValues, expIndices);
-        assertEquals(exp, RealComplexDenseSparseVectorOperations.elemMult(b, a));
+        assertEquals(exp, RealComplexDenseSparseVectorOps.elemMult(b, a));
 
         // -------------------- Sub-case 2 --------------------
         bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6), new Complex128(24),
@@ -141,7 +141,7 @@ class CooVectorElemMultTests {
         b = new CVector(bValues);
 
         CVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealComplexDenseSparseVectorOperations.elemMult(finalB, a));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexDenseSparseVectorOps.elemMult(finalB, a));
     }
 
 

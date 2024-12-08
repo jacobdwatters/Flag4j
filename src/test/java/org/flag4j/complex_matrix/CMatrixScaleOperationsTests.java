@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CMatrixScaleOperationsTests {
+class CMatrixScaleOpsTests {
 
     Complex128[][] aEntries, expEntries;
     CMatrix A, exp;

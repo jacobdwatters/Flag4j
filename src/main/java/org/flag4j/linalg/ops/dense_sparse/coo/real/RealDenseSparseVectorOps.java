@@ -33,10 +33,10 @@ import org.flag4j.util.ValidateParameters;
  * This class provides low level methods for computing ops between a real dense/sparse vector and a
  * real sparse/dense vector.
  */
-public class RealDenseSparseVectorOperations {
+public class RealDenseSparseVectorOps {
 
 
-    private RealDenseSparseVectorOperations() {
+    private RealDenseSparseVectorOps() {
         // Hide default constructor in utility class.
     }
 

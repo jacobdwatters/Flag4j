@@ -26,15 +26,14 @@ package org.flag4j.linalg.ops.dense.real_field_ops;
 
 
 import org.flag4j.algebraic_structures.Field;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
  * This class provides low level implementations for vector ops with one dense real vector and one dense field vector.
  */
-public final class RealFieldDenseVectorOperations {
+public final class RealFieldDenseVectorOps {
 
-    private RealFieldDenseVectorOperations() {
+    private RealFieldDenseVectorOps() {
         // Hide default constructor for utility class.
         
     }

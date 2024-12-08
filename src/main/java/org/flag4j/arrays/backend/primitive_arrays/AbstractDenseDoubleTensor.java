@@ -32,9 +32,9 @@ import org.flag4j.linalg.ops.common.real.RealOps;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.real.RealDenseElemDiv;
 import org.flag4j.linalg.ops.dense.real.RealDenseElemMult;
-import org.flag4j.linalg.ops.dense.real.RealDenseOperations;
+import org.flag4j.linalg.ops.dense.real.RealDenseOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTensorDot;
-import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOps;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -146,7 +146,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
         // TODO: For methods like RealDenseOperations.sub which only take arrays, the shape check should be done in the method itself
         //   and we will perform no bounds check in RealDenseOperations.sub (which needs to be documented within the method itself).
         ValidateParameters.ensureEqualShape(shape, b.shape);
-        return makeLikeTensor(shape, RealDenseOperations.sub(data, b.data, null));
+        return makeLikeTensor(shape, RealDenseOps.sub(data, b.data, null));
     }
 
 
@@ -159,7 +159,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     public void subEq(T b) {
         ValidateParameters.ensureEqualShape(shape, b.shape);
-        RealDenseOperations.sub(data, b.data, data);
+        RealDenseOps.sub(data, b.data, data);
     }
 
 
@@ -175,7 +175,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public T add(T b) {
         ValidateParameters.ensureEqualShape(shape, b.shape);
-        return makeLikeTensor(shape, RealDenseOperations.add(data, b.data, null));
+        return makeLikeTensor(shape, RealDenseOps.add(data, b.data, null));
     }
 
     /**
@@ -187,7 +187,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     public void addEq(T b) {
         ValidateParameters.ensureEqualShape(shape, b.shape);
-        RealDenseOperations.add(data, b.data, data);
+        RealDenseOps.add(data, b.data, data);
     }
 
 
@@ -260,9 +260,9 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public Tensor tensorTr(int axis1, int axis2) {
-        Shape destShape = DenseSemiringOperations.getTrShape(shape, axis1, axis2);
+        Shape destShape = DenseSemiringOps.getTrShape(shape, axis1, axis2);
         double[] destEntries = new double[destShape.totalEntriesIntValueExact()];
-        RealDenseOperations.tensorTr(shape, data, axis1, axis2, destShape, destEntries);
+        RealDenseOps.tensorTr(shape, data, axis1, axis2, destShape, destEntries);
         return new Tensor(destShape, destEntries);
     }
 

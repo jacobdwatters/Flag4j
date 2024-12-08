@@ -33,7 +33,7 @@ import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
 import org.flag4j.linalg.ops.dense.DenseSemiringTensorDot;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringElemMult;
-import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOperations;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOps;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -180,7 +180,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     @Override
     public T add(T b) {
         V[] sum = (V[]) new Semiring[data.length];
-        DenseSemiringOperations.add(data, shape, b.data, b.shape, sum);
+        DenseSemiringOps.add(data, shape, b.data, b.shape, sum);
         return makeLikeTensor(shape, sum);
     }
 
@@ -191,7 +191,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @param b Second tensor in the element-wise sum.
      */
     public void addEq(T b) {
-        DenseSemiringOperations.add(data, shape, b.data, b.shape, data);
+        DenseSemiringOps.add(data, shape, b.data, b.shape, data);
     }
 
 
@@ -254,9 +254,9 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
-        Shape destShape = DenseSemiringOperations.getTrShape(shape, axis1, axis2);
+        Shape destShape = DenseSemiringOps.getTrShape(shape, axis1, axis2);
         V[] destEntries = makeEmptyDataArray(destShape.totalEntriesIntValueExact());
-        DenseSemiringOperations.tensorTr(shape, data, axis1, axis2, destShape, destEntries);
+        DenseSemiringOps.tensorTr(shape, data, axis1, axis2, destShape, destEntries);
         return makeLikeTensor(destShape, destEntries);
     }
 

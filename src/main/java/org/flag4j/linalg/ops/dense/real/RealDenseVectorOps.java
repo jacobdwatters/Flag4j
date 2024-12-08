@@ -33,14 +33,14 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class provides low level implementations for several vector operation.
  */
-public final class RealDenseVectorOperations {
+public final class RealDenseVectorOps {
 
     /**
      * Minimum number of data to apply concurrent algorithm for outer product.
      */
     private static final int OUTER_CONCURRENT_THRESHOLD = 275_000;
 
-    private RealDenseVectorOperations() {
+    private RealDenseVectorOps() {
         // Hide default constructor for utility class.
         
     }

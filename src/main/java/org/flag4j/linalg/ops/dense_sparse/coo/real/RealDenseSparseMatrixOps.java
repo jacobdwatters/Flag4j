@@ -34,9 +34,9 @@ import org.flag4j.util.ValidateParameters;
 /**
  * This class contains low-level ops between a real dense and real sparse matrix.
  */
-public class RealDenseSparseMatrixOperations {
+public class RealDenseSparseMatrixOps {
 
-    private RealDenseSparseMatrixOperations() {
+    private RealDenseSparseMatrixOps() {
         // Hide default constructor for utility class.
         
     }

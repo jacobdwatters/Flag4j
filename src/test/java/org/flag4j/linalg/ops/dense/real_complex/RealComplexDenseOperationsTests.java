@@ -3,7 +3,7 @@ package org.flag4j.linalg.ops.dense.real_complex;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOperations;
+import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import static org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps.sub;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class RealComplexDenseOperationsTests {
+class RealComplexDenseOpsTests {
     Complex128[] src1, expResult, act;
     double[] src2;
     double a;
@@ -63,7 +63,7 @@ class RealComplexDenseOperationsTests {
                 new Complex128(10.34-3, -9.331), new Complex128(10.34+4.13, -9.331)};
 
         Complex128[] act = new Complex128[4];
-        RealFieldDenseVectorOperations.add(src2, aC, act);
+        RealFieldDenseVectorOps.add(src2, aC, act);
         assertArrayEquals(expResult, act);
     }
 

@@ -4,10 +4,10 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.ops.common.real.RealOps;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.linalg.ops.dense.real.RealDenseOperations.*;
+import static org.flag4j.linalg.ops.dense.real.RealDenseOps.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class RealDenseOperationsTests {
+class RealDenseOpsTests {
     double[] src1, src2;
     double[] expResult;
     double[] act;

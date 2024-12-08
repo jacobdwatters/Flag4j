@@ -39,9 +39,9 @@ import java.util.List;
 /**
  * Utility class for computing ops between a complex sparse COO tensor and a real coo tensor.
  */
-public final class RealComplexCooTensorOperations {
+public final class RealComplexCooTensorOps {
 
-    private RealComplexCooTensorOperations() {
+    private RealComplexCooTensorOps() {
         // Hide default constructor for utility class.
     }
 

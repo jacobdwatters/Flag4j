@@ -40,9 +40,9 @@ import java.util.List;
 /**
  * This class contains low level implementations of ops on a real sparse tensor and a complex sparse tensor.
  */
-public final class RealComplexSparseVectorOperations {
+public final class RealComplexSparseVectorOps {
 
-    private RealComplexSparseVectorOperations() {
+    private RealComplexSparseVectorOps() {
         // Hide default constructor for utility class.
         
     }

@@ -38,9 +38,9 @@ import java.util.function.UnaryOperator;
 /**
  * This class contains low-level ops which act on a dense and a sparse CSR field matrix.
  */
-public final class DenseCsrFieldOperations {
+public final class DenseCsrFieldOps {
 
-    private DenseCsrFieldOperations() {
+    private DenseCsrFieldOps() {
         // Hide default constructor for utility class.
         
     }

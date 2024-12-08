@@ -37,7 +37,7 @@ import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooConcat;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.CooGetSet;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringVectorOps;
 import org.flag4j.util.ArrayUtils;
@@ -406,7 +406,7 @@ public abstract class AbstractCooFieldVector<
      */
     @Override
     public Y inner(T b) {
-        return CooFieldVectorOperations.inner(this, b);
+        return CooFieldVectorOps.inner(this, b);
     }
 
 

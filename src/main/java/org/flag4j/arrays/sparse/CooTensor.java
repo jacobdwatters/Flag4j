@@ -35,9 +35,9 @@ import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorDot;
-import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorOps;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooTensorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooTensorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -498,7 +498,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor add(CooTensor b) {
-        return RealCooTensorOperations.add(this, b);
+        return RealCooTensorOps.add(this, b);
     }
 
 
@@ -512,7 +512,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCTensor add(CooCTensor b) {
-        return RealComplexCooTensorOperations.add(b, this);
+        return RealComplexCooTensorOps.add(b, this);
     }
 
 
@@ -527,7 +527,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor sub(CooTensor b) {
-        return RealCooTensorOperations.sub(this, b);
+        return RealCooTensorOps.sub(this, b);
     }
 
 
@@ -590,7 +590,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor elemMult(CooTensor b) {
-        return RealCooTensorOperations.elemMult(this, b);
+        return RealCooTensorOps.elemMult(this, b);
     }
 
 

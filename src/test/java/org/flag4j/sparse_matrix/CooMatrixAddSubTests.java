@@ -6,7 +6,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.junit.jupiter.api.Test;
@@ -187,7 +187,7 @@ class CooMatrixAddSubTests {
                 {-0.08218, -0.4592, -0.39446, -0.76215, -0.09589}};
         exp = new Matrix(expEntries);
 
-        assertEquals(exp, RealDenseSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, RealDenseSparseMatrixOps.sub(A, B));
 
         // ------------------- Sub-case 2 -------------------
         aShape = new Shape(3, 5);
@@ -208,7 +208,7 @@ class CooMatrixAddSubTests {
                 {-0.29138, -0.92012, 0.21785624640775136, -0.19584, -0.80848}};
         exp = new Matrix(expEntries);
 
-        assertEquals(exp, RealDenseSparseMatrixOperations.sub(A, B));
+        assertEquals(exp, RealDenseSparseMatrixOps.sub(A, B));
 
         // ------------------- Sub-case 3 -------------------
         aShape = new Shape(9, 5);
@@ -224,7 +224,7 @@ class CooMatrixAddSubTests {
         B = new Matrix(bEntries);
 
         Matrix finalB = B;
-        assertThrows(Exception.class, ()->RealDenseSparseMatrixOperations.sub(A, finalB));
+        assertThrows(Exception.class, ()->RealDenseSparseMatrixOps.sub(A, finalB));
     }
 
 

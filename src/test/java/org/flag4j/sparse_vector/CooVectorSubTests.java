@@ -5,9 +5,9 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -68,7 +68,7 @@ class CooVectorSubTests {
         int[] expIndices = {0, 1, 5, 6, 103};
         exp = new CooCVector(size, expValues, expIndices);
 
-        assertEquals(exp, RealComplexSparseVectorOperations.sub(a, b));
+        assertEquals(exp, RealComplexSparseVectorOps.sub(a, b));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new Complex128[]{new Complex128(1, -0.024),
@@ -77,7 +77,7 @@ class CooVectorSubTests {
         b = new CooCVector(size+13, bValues, bIndices);
 
         CooCVector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOperations.sub(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()->RealComplexSparseVectorOps.sub(a, finalB));
     }
 
 
@@ -97,14 +97,14 @@ class CooVectorSubTests {
         double[] expValues = {-1+1.34, -5, 0.0024+51.6, -1, -2001.256, -61-0.00245, 99.24, -1.5};
         exp = new Vector(expValues);
 
-        assertEquals(exp, RealDenseSparseVectorOperations.sub(a, b));
+        assertEquals(exp, RealDenseSparseVectorOps.sub(a, b));
 
         // --------------------- Sub-case 2 ---------------------
         bValues = new double[]{1, 5, -0.0024, 1, 2001.256, 61};
         b = new Vector(bValues);
 
         Vector finalB = b;
-        assertThrows(LinearAlgebraException.class, ()->RealDenseSparseVectorOperations.sub(a, finalB));
+        assertThrows(LinearAlgebraException.class, ()->RealDenseSparseVectorOps.sub(a, finalB));
     }
 
 
