@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,10 +38,9 @@ import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BinaryOperator;
+import java.util.function.BiFunction;
 
 /**
  * <p>Base class for all sparse tensors stored in coordinate list (COO) format. The data of this COO tensor are elements of a
@@ -82,7 +81,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
     /**
      * The zero element for the semiring that this tensor's elements belong to.
      */
-    protected V zeroElement;
+    private V zeroElement;
     /**
      * <p>The non-zero indices of this sparse tensor.
      *
@@ -114,10 +113,10 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
         ValidateParameters.validateTensorIndices(shape, indices);
         this.indices = indices;
         this.nnz = data.length;
-        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries())).doubleValue();
 
         // Attempt to set the zero element for the semiring.
-        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+        this.zeroElement = (data.length > 0) ? data[0].getZero() : null;
     }
 
 
@@ -252,7 +251,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
         CooTensorDot<V> problem = new CooTensorDot<>(shape, data, indices,
                 src2.shape, src2.data, src2.indices,
                 aAxes, bAxes);
-        V[] dest= makeEmptyDataArray(problem.getOutputSize());
+        V[] dest = (V[]) new Semiring[problem.getOutputSize()];
         problem.compute(dest);
         return makeLikeDenseTensor(problem.getOutputShape(), dest);
     }
@@ -271,7 +270,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -292,7 +291,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     @Override
     public T T() {
-        V[] destEntries= makeEmptyDataArray(nnz);
+        V[] destEntries = (V[]) new Semiring[nnz];
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices,0, shape.getRank()-1, destEntries, destIndices);
         return makeLikeTensor(shape.swapAxes(0, rank-1), destEntries, destIndices);
@@ -313,7 +312,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     @Override
     public T T(int axis1, int axis2) {
-        V[] destEntries= makeEmptyDataArray(nnz);
+        V[] destEntries = (V[]) new Semiring[nnz];
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axis1, axis2, destEntries, destIndices);
         return makeLikeTensor(shape.swapAxes(axis1, axis2), destEntries, destIndices);
@@ -336,7 +335,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     @Override
     public T T(int... axes) {
-        V[] destEntries= makeEmptyDataArray(nnz);
+        V[] destEntries = (V[]) new Semiring[nnz];
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axes, destEntries, destIndices);
         return makeLikeTensor(shape.permuteAxes(axes), destEntries, destIndices);
@@ -442,12 +441,12 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
         if (idx >= 0) {
             // Target index found.
             destEntries = data.clone();
-            destIndices = ArrayUtils.deepCopy2D(indices, null);
+            destIndices = ArrayUtils.deepCopy(indices, null);
             destEntries[idx] = value;
             destIndices[idx] = target;
         } else {
             // Target not found, insert new value and index.
-            destEntries= makeEmptyDataArray(nnz + 1);
+            destEntries = (V[]) new Semiring[nnz + 1];
             destIndices = new int[nnz + 1][rank];
             int insertionPoint = - (idx + 1);
             CooGetSet.cooInsertNewValue(value, target, data, indices, insertionPoint, destEntries, destIndices);
@@ -467,7 +466,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
     @Override
     public T flatten() {
         return makeLikeTensor(
-                shape.flatten(),
+                new Shape(shape.totalEntriesIntValueExact()),
                 data.clone(),
                 SparseUtils.cooFlattenIndices(shape, indices));
     }
@@ -523,7 +522,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      * @throws ArithmeticException If the number of data in the dense tensor exceeds 2,147,483,647.
      */
     public U toDense() {
-        V[] denseEntries= makeEmptyDataArray(shape.totalEntriesIntValueExact());
+        V[] denseEntries = (V[]) new Semiring[shape.totalEntriesIntValueExact()];
         CooConversions.toDense(shape, data, indices, denseEntries);
         return makeLikeDenseTensor(shape, denseEntries);
     }
@@ -532,9 +531,9 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
     /**
      * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
-     * @see #coalesce(BinaryOperator)
+     * @see #coalesce(BiFunction)
      */
     public T coalesce() {
         SparseTensorData<V> tensor = SparseUtils.coalesce(Semiring::add, shape, data, indices);
@@ -549,7 +548,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
      * @see #coalesce()
      */
-    public T coalesce(BinaryOperator<V> aggregator) {
+    public T coalesce(BiFunction<V, V, V> aggregator) {
         SparseTensorData<V> tensor = SparseUtils.coalesce(aggregator, shape, data, indices);
         return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
     }

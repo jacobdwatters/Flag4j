@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,23 +29,20 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
-import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.*;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
-import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -57,7 +54,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BinaryOperator;
+import java.util.function.BiFunction;
 
 
 /**
@@ -73,8 +70,7 @@ import java.util.function.BinaryOperator;
  * efficient
  * matrix ops.
  *
- * <h3>COO Representation:</h3>
- * A sparse COO matrix is stored as:
+ * <p>A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
@@ -95,7 +91,6 @@ import java.util.function.BinaryOperator;
  */
 public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         implements MatrixMixin<CooMatrix, Matrix, CooVector, Double> {
-    // TODO: Implement sparse-matrix dense-vector multiplication. (And for other sparse matrix types including CSR).
 
     private static final long serialVersionUID = 1L;
 
@@ -183,15 +178,15 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooMatrix(Shape shape, List<Double> entries, List<Integer> rowIndices, List<Integer> colIndices) {
-        super(shape, ArrayConversions.fromDoubleList(entries));
+        super(shape, ArrayUtils.fromDoubleList(entries));
         ValidateParameters.ensureArrayLengthsEq(entries.size(), rowIndices.size(), colIndices.size());
         ValidateParameters.ensureTrue(
                 shape.totalEntries().compareTo(BigInteger.valueOf(entries.size())) >= 0,
                 "Shape " + shape + " cannot hold " + entries.size() + "data.");
         ValidateParameters.ensureRank(shape, 2);
 
-        this.rowIndices = ArrayConversions.fromIntegerList(rowIndices);
-        this.colIndices = ArrayConversions.fromIntegerList(colIndices);
+        this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
+        this.colIndices = ArrayUtils.fromIntegerList(colIndices);
         ValidateParameters.ensureArrayLengthsEq(super.data.length, this.rowIndices.length, this.colIndices.length);
 
         nnz = super.data.length;
@@ -280,7 +275,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
                 "Shape " + shape + " cannot hold " + entries.length + "data.");
         ValidateParameters.ensureRank(shape, 2);
 
-        ArrayConversions.asDouble(entries, super.data);
+        ArrayUtils.asDouble(entries, super.data);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -447,7 +442,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public CsrMatrix toCsr() {
         int[] csrRowPointers = new int[numRows + 1];
 
-        // Copy the non-zero data and column indices. Count number of data per row.
+        // Copy the non-zero data anc column indices. Count number of data per row.
         for(int i = 0, size = data.length; i<size; i++)
             csrRowPointers[rowIndices[i] + 1]++;
 
@@ -504,7 +499,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureIndicesInBounds(numRows, indices[0]);
         ValidateParameters.ensureIndicesInBounds(numCols, indices[1]);
 
-        return RealCooMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
+        return RealSparseMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
     }
 
 
@@ -587,7 +582,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix add(CooMatrix b) {
-        return RealSparseMatrixOps.add(this, b);
+        return RealSparseMatrixOperations.add(this, b);
     }
 
 
@@ -602,7 +597,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix sub(CooMatrix b) {
-        return RealSparseMatrixOps.sub(this, b);
+        return RealSparseMatrixOperations.sub(this, b);
     }
 
 
@@ -684,7 +679,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix elemMult(CooMatrix b) {
-        return RealSparseMatrixOps.elemMult(this, b);
+        return RealSparseMatrixOperations.elemMult(this, b);
     }
 
 
@@ -704,7 +699,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * {@code this.getRank() - 2} with the same shape as this tensor but with {@code axis1} and {@code axis2} removed.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -863,7 +858,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     @Override
     public Double get(int row, int col) {
         ValidateParameters.validateTensorIndex(shape, row, col);
-        return RealCooMatrixGetSet.matrixGet(this, row, col);
+        return RealSparseMatrixGetSet.matrixGet(this, row, col);
     }
 
 
@@ -975,7 +970,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureMatMultShapes(shape, b.shape);
 
         return new Matrix(numRows, b.numCols,
-                RealSparseMatMult.standard(
+                RealSparseMatrixMultiplication.standard(
                         data, rowIndices, colIndices, shape,
                     b.data, b.rowIndices, b.colIndices, b.shape
                 )
@@ -1043,7 +1038,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(MatrixMixin, int)
+     * @see #stack(MatrixMixinOld, int)
      * @see #augment(CooMatrix)
      */
     public CooMatrix stack(CooMatrix b) {
@@ -1080,7 +1075,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(CooMatrix) 
-     * @see #stack(MatrixMixin, int)
+     * @see #stack(MatrixMixinOld, int)
      */
     @Override
     public CooMatrix augment(CooMatrix b) {
@@ -1135,13 +1130,10 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
         // Copy values and indices from vector.
         System.arraycopy(b.data, 0, destEntries, data.length, b.data.length);
-        Arrays.fill(destColIndices, data.length, destColIndices.length, numCols);
-        System.arraycopy(b.indices, 0, destRowIndices, data.length, b.data.length);
+        Arrays.fill(destRowIndices, data.length, destRowIndices.length, numRows);
+        System.arraycopy(b.indices, 0, destColIndices, data.length, b.data.length);
 
-        CooMatrix aug = new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
-        aug.sortIndices();
-
-        return aug;
+        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1186,7 +1178,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public boolean isSymmetric() {
-        return RealSparseMatrixProperties.isSymmetric(shape, data, rowIndices, colIndices);
+        return RealSparseMatrixProperties.isSymmetric(this);
     }
 
 
@@ -1209,7 +1201,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @see #isSymmetric()
      */
     public boolean isAntiSymmetric() {
-        return RealSparseMatrixProperties.isAntiSymmetric(shape, data, rowIndices, colIndices);
+        return RealSparseMatrixProperties.isAntiSymmetric(this);
     }
 
 
@@ -1293,7 +1285,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix setSliceCopy(CooMatrix values, int rowStart, int colStart) {
-        return RealCooMatrixGetSet.setSlice(this, values, rowStart, colStart);
+        return RealSparseMatrixGetSet.setSlice(this, values, rowStart, colStart);
     }
 
 
@@ -1312,7 +1304,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        return RealCooMatrixGetSet.getSlice(this, rowStart, rowEnd, colStart, colEnd);
+        return RealSparseMatrixGetSet.getSlice(this, rowStart, rowEnd, colStart, colEnd);
     }
 
 
@@ -1329,7 +1321,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public CooMatrix set(Double value, int row, int col) {
         ValidateParameters.ensureValidArrayIndices(numRows, row);
         ValidateParameters.ensureValidArrayIndices(numCols, col);
-        return RealCooMatrixGetSet.matrixSet(this, row, col, value);
+        return RealSparseMatrixGetSet.matrixSet(this, row, col, value);
     }
 
 
@@ -1421,7 +1413,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public Vector mult(CooVector b) {
-        double[] dest = RealSparseMatMult.standardVector(
+        double[] dest = RealSparseMatrixMultiplication.standardVector(
                 data, rowIndices, colIndices, shape,
                 b.data, b.indices
         );
@@ -1467,7 +1459,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      *                                        the number of rows in this matrix.
      */
     public CooVector getRow(int rowIdx) {
-        return RealCooMatrixGetSet.getRow(this, rowIdx);
+        return RealSparseMatrixGetSet.getRow(this, rowIdx);
     }
 
 
@@ -1485,7 +1477,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
      */
     public CooVector getRow(int rowIdx, int colStart, int colEnd) {
-        return RealCooMatrixGetSet.getRow(this, rowIdx, colStart, colEnd);
+        return RealSparseMatrixGetSet.getRow(this, rowIdx, colStart, colEnd);
     }
 
 
@@ -1500,7 +1492,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      *                                        the number of columns in this matrix.
      */
     public CooVector getCol(int colIdx) {
-        return RealCooMatrixGetSet.getCol(this, colIdx);
+        return RealSparseMatrixGetSet.getCol(this, colIdx);
     }
 
 
@@ -1519,7 +1511,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
     public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
-        return RealCooMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
+        return RealSparseMatrixGetSet.getCol(this, colIdx, rowStart, rowEnd);
     }
 
 
@@ -1542,8 +1534,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
         return new CooVector(
                 Math.min(numRows, numCols),
-                ArrayConversions.fromDoubleList(destEntries),
-                ArrayConversions.fromIntegerList(destIndices)
+                ArrayUtils.fromDoubleList(destEntries),
+                ArrayUtils.fromIntegerList(destIndices)
         );
     }
 
@@ -1621,7 +1613,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @throws IndexOutOfBoundsException If {@code colIndex < 0 || colIndex >= this.numCols}.
      */
     public CooMatrix setCol(CooVector values, int colIndex) {
-        return RealCooMatrixGetSet.setCol(this, colIndex, values);
+        return RealSparseMatrixGetSet.setCol(this, colIndex, values);
     }
 
 
@@ -1638,7 +1630,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix setRow(CooVector values, int rowIndex) {
-        return RealCooMatrixGetSet.setRow(this, rowIndex, values);
+        return RealSparseMatrixGetSet.setRow(this, rowIndex, values);
     }
 
 
@@ -1652,7 +1644,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * If this matrix is sparse a copy will be created with the new row and returned.
      */
     public CooMatrix setRow(double[] row, int rowIdx) {
-        return RealCooMatrixGetSet.setRow(this, rowIdx, row);
+        return RealSparseMatrixGetSet.setRow(this, rowIdx, row);
     }
 
 
@@ -1681,7 +1673,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The element-wise product of this matrix and {@code b}.
      */
     public CooMatrix elemMult(Matrix b) {
-        return RealDenseSparseMatrixOps.elemMult(b, this);
+        return RealDenseSparseMatrixOperations.elemMult(b, this);
     }
 
 
@@ -1698,9 +1690,9 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     /**
      * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
-     * @see #coalesce(BinaryOperator)
+     * @see #coalesce(BiFunction)
      */
     public CooMatrix coalesce() {
         SparseMatrixData<Double> mat = SparseUtils.coalesce(Double::sum, shape, data, rowIndices, colIndices);
@@ -1715,7 +1707,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
      * @see #coalesce()
      */
-    public CooMatrix coalesce(BinaryOperator<Double> aggregator) {
+    public CooMatrix coalesce(BiFunction<Double, Double, Double> aggregator) {
         SparseMatrixData<Double> mat = SparseUtils.coalesce(aggregator, shape, data, rowIndices, colIndices);
         return new CooMatrix(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }
@@ -1728,23 +1720,6 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public CooMatrix dropZeros() {
         SparseMatrixData<Double> mat = SparseUtils.dropZeros(shape, data, rowIndices, colIndices);
         return new CooMatrix(mat.shape(), mat.data(), mat.rowData(), mat.colData());
-    }
-
-
-    /**
-     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
-     * This method is part of the "Visitor Pattern" and allows operations to be performed
-     * on the matrix without modifying the matrix's class directly.
-     *
-     * @param visitor The visitor implementing the operation to be performed.
-     *
-     * @return The result of the visitor's operation, typically another matrix or a scalar value.
-     *
-     * @throws NullPointerException if the visitor is {@code null}.
-     */
-    @Override
-    public <R> R accept(MatrixVisitor<R> visitor) {
-        return visitor.visit(this);
     }
 
 
@@ -1790,47 +1765,39 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("nnz: ").append(nnz).append("\n");
         result.append("Non-zero data: [");
 
-        int maxCols = PrintOptions.getMaxColumns();
-        int padding = PrintOptions.getPadding();
-        boolean centering = PrintOptions.useCentering();
-        int precision = PrintOptions.getPrecision();
-
-        int stopIndex = Math.min(maxCols -1, size-1);
+        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
         int width;
         String value;
 
         if(data.length > 0) {
             // Get data up until the stopping point.
-            for(int i = 0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(data[i], precision);
-                width = padding + value.length();
-                value = centering ? StringUtils.center(value, width) : value;
+            for(int i=0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
+                width = PrintOptions.getPadding() + value.length();
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             if(stopIndex < size-1) {
-                width = padding + 3;
+                width = PrintOptions.getPadding() + 3;
                 value = "...";
-                value = centering ? StringUtils.center(value, width) : value;
+                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(data[size-1], precision);
-            width = padding + value.length();
-            value = centering ? StringUtils.center(value, width) : value;
+            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         result.append("]\n");
-        result.append("Row Indices: ")
-                .append(PrettyPrint.abbreviatedArray(rowIndices, maxCols, padding, centering))
-                .append("\n");
-        result.append("Col Indices: ")
-                .append(PrettyPrint.abbreviatedArray(colIndices, maxCols, padding, centering));
+
+        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
+        result.append("Column Indices: ").append(Arrays.toString(colIndices));
 
         return result.toString();
     }
