@@ -70,7 +70,7 @@ public class Shape implements Serializable {
      */
     private final int[] dims;
     /**
-     * An array containing the strides of all dimensions within this shape.
+     * An array containing the strides of all dimensions within this shape. This is computed lazily and cached.
      */
     private int[] strides;
     /**
@@ -93,34 +93,6 @@ public class Shape implements Serializable {
         // Ensure all dimensions for the shape object are non-negative.
         ValidateParameters.ensureNonNegative(dims);
         this.dims = dims;
-    }
-
-
-    /**
-     * Constructs a shape object from specified dimensions with an optional check for validating the specified dimensions.
-     *
-     * @param dims A list of the dimension measurements for this shape object. Must be non-negative but will <b>NOT</b> be verified if
-     * {@code unsafe == false}.
-     * @param unsafe Flag indicating if an explicit check should be made that all value in {@code dims} are valid. If {@code true},
-     * a check will be made. If {@code false}, no sanity check will be made.
-     */
-    private Shape(int[] dims, boolean validateDims) {
-        if (validateDims) ValidateParameters.ensureNonNegative(dims);
-        this.dims = dims;
-    }
-
-
-    /**
-     * <p>Factory method for constructing a shape object with <i>no</i> sanity checks for the dimensions of the shape.
-     * <p><b>Warning</b>: It is <i>highly</i> recommended to avoid using this method and instead use the provided constructor
-     * {@link #Shape(int...)}. This constructor may yield slight performance benefits but its use is generally discouraged as the
-     * unsafe nature of this method is unlikely a desired trade off.
-     *
-     * @param dims A list of the dimension measurements for this shape object. Must be non-negative but no explicit check is made.
-     * @return A shape object with the specified dimensions.
-     */
-    public static Shape unsafeMakeShape(int... dims) {
-        return new Shape(dims, false);
     }
 
 
@@ -387,25 +359,6 @@ public class Shape implements Serializable {
         if(b.getClass() != getClass()) return false;
 
         return Arrays.equals(dims, ((Shape) b).dims);
-    }
-
-
-    /**
-     * Gets the next indices for a tensor with this shape.
-     * @param currentIndices Current indices. This array is modified.
-     * @param i Index of 1D data array.
-     */
-    public void getNextIndices(int[] currentIndices, int i) {
-        int next = i + 1;
-
-        for (int j = 0; j < currentIndices.length; j++) {
-            if (next % strides[j] == 0) {
-                currentIndices[j]++;
-                if (currentIndices[j] == dims[j]) {
-                    currentIndices[j] = 0; // Wrap around when the dimension's limit is reached.
-                }
-            }
-        }
     }
 
 

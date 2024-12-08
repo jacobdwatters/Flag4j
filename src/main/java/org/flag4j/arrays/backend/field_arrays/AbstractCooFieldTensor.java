@@ -25,6 +25,7 @@
 package org.flag4j.arrays.backend.field_arrays;
 
 import org.flag4j.algebraic_structures.Field;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.arrays.backend.AbstractTensor;
@@ -46,6 +47,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 
 /**
@@ -686,5 +688,41 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     @Override
     public boolean isNaN() {
         return FieldOps.isInfinite(data);
+    }
+
+
+    /**
+     * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
+     * @see #coalesce(BiFunction)
+     */
+    public T coalesce() {
+        SparseTensorData<V> tensor = SparseUtils.coalesce(Semiring::add, shape, data, indices);
+        return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
+    }
+
+
+    /**
+     * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
+     * @see #coalesce()
+     */
+    public T coalesce(BiFunction<V, V, V> aggregator) {
+        SparseTensorData<V> tensor = SparseUtils.coalesce(aggregator, shape, data, indices);
+        return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO tensor.
+     * @return A copy of this COO tensor with any explicitly stored zeros removed.
+     */
+    public T dropZeros() {
+        SparseTensorData<V> tensor = SparseUtils.dropZeros(shape, data, indices);
+        return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
     }
 }

@@ -27,15 +27,15 @@ package org.flag4j.arrays;
 import java.util.Arrays;
 
 /**
- * <p>Data record to store an ordered list of values (i.e., an n-tuple).
+ * <p>Data record to store an ordered list of integers (i.e., an n-tuple).
  * <p>Tuples immutable.
- * @param data The values of the tuple.
- * @param <T> The type of the elements in the tuple.
- * @see IntTuple
+ *
+ * @param data The values of the integer tuple.
+ * @see Tuple
  * @see Pair
  * @see Triple
  */
-public record Tuple<T>(T[] data) {
+public record IntTuple(int[] data) {
 
     /**
      * Gets the size of the tuple.
@@ -57,6 +57,6 @@ public record Tuple<T>(T[] data) {
         if(obj == null) return false;
         if(obj.getClass() != getClass()) return false;
 
-        return Arrays.equals(data, ((Tuple<?>)obj).data);
+        return Arrays.equals(data, ((IntTuple)obj).data);
     }
 }

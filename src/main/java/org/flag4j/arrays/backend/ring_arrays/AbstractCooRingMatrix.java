@@ -25,6 +25,7 @@
 package org.flag4j.arrays.backend.ring_arrays;
 
 import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.SparseVectorData;
@@ -32,6 +33,7 @@ import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.*;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
@@ -46,6 +48,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import static org.flag4j.linalg.ops.sparse.SparseUtils.copyRanges;
 
@@ -1305,5 +1308,41 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
             destIndices[i] = rowIndices[i]*colIndices[i];
 
         return makeLikeVector(new Shape(numRows*numCols), data.clone(), destIndices);
+    }
+
+
+    /**
+     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
+     * @see #coalesce(BiFunction)
+     */
+    public T coalesce() {
+        SparseMatrixData<W> mat = SparseUtils.coalesce(Semiring::add, shape, data, rowIndices, colIndices);
+        return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
+    }
+
+
+    /**
+     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
+     * @see #coalesce()
+     */
+    public T coalesce(BiFunction<W, W, W> aggregator) {
+        SparseMatrixData<W> mat = SparseUtils.coalesce(aggregator, shape, data, rowIndices, colIndices);
+        return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO matrix.
+     * @return A copy of this COO matrix with any explicitly stored zeros removed.
+     */
+    public T dropZeros() {
+        SparseMatrixData<W> mat = SparseUtils.dropZeros(shape, data, rowIndices, colIndices);
+        return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }
 }

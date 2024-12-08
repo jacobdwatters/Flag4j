@@ -26,11 +26,13 @@ package org.flag4j.arrays.sparse;
 
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.real.RealProperties;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorDot;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorOperations;
@@ -47,6 +49,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 
 /**
@@ -874,6 +877,42 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     public void sortIndices() {
         CooDataSorter.wrap(data, indices).sparseSort().unwrap(data, indices);
+    }
+
+
+    /**
+     * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
+     * @see #coalesce(BiFunction)
+     */
+    public CooTensor coalesce() {
+        SparseTensorData<Double> tensor = SparseUtils.coalesce(Double::sum, shape, data, indices);
+        return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
+    }
+
+
+    /**
+     * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
+     * @see #coalesce()
+     */
+    public CooTensor coalesce(BiFunction<Double, Double,Double> aggregator) {
+        SparseTensorData<Double> tensor = SparseUtils.coalesce(aggregator, shape, data, indices);
+        return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO tensor.
+     * @return A copy of this COO tensor with any explicitly stored zeros removed.
+     */
+    public CooTensor dropZeros() {
+        SparseTensorData<Double> tensor = SparseUtils.dropZeros(shape, data, indices);
+        return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
     }
 
 

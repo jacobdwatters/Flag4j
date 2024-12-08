@@ -26,6 +26,7 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
@@ -37,6 +38,7 @@ import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOperations;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.*;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
@@ -52,6 +54,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 
 /**
@@ -1681,6 +1684,42 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     public CooCMatrix elemMult(CMatrix b) {
         return RealComplexDenseCooMatOps.elemMult(b, this);
+    }
+
+
+    /**
+     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
+     * @see #coalesce(BiFunction)
+     */
+    public CooMatrix coalesce() {
+        SparseMatrixData<Double> mat = SparseUtils.coalesce(Double::sum, shape, data, rowIndices, colIndices);
+        return new CooMatrix(mat.shape(), mat.data(), mat.rowData(), mat.colData());
+    }
+
+
+    /**
+     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
+     * @see #coalesce()
+     */
+    public CooMatrix coalesce(BiFunction<Double, Double, Double> aggregator) {
+        SparseMatrixData<Double> mat = SparseUtils.coalesce(aggregator, shape, data, rowIndices, colIndices);
+        return new CooMatrix(mat.shape(), mat.data(), mat.rowData(), mat.colData());
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO matrix.
+     * @return A copy of this COO matrix with any explicitly stored zeros removed.
+     */
+    public CooMatrix dropZeros() {
+        SparseMatrixData<Double> mat = SparseUtils.dropZeros(shape, data, rowIndices, colIndices);
+        return new CooMatrix(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }
 
 

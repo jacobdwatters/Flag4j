@@ -148,10 +148,10 @@ public final class DenseCooFieldMatrixOps {
      * @param shape1 Shape of the first matrix in element-wise product.
      * @param data1 Entries of the first matrix in the element-wise product.
      * @param shape2 Shape of the second matrix in the element-wise product.
-     * @param data2 Non-zero entries of the second matrix in the element-wise product.
+     * @param data2 Non-zero data of the second matrix in the element-wise product.
      * @param rowIndices2 Non-zero row indices of the second matrix in the element-wise product.
      * @param colIndices2 Non-zero column indices of the second matrix in the element-wise product.
-     * @param dest Array to store the non-zero entries of the sparse COO matrix resulting from the element-wise multiplication
+     * @param dest Array to store the non-zero data of the sparse COO matrix resulting from the element-wise multiplication
      * (modified). Must have same length as {@code data2}. May be the same array as {@code data2}.
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !shape1.equals(shape2)}
      */

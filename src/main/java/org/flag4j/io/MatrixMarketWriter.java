@@ -126,7 +126,7 @@ public final class MatrixMarketWriter {
      * @param writer The {@link BufferedWriter} to use when writing to file.
      * @param header The Matrix Market Exchange Format header to write to the file.
      * @param shapeData Contains, in order, either the number of rows and number of columns, <i>or</i> the number of rows, columns,
-     * and the number of non-zero entries.
+     * and the number of non-zero data.
      * @throws IOException If an I/O error occurs.
      */
     private static void writeHeader(
@@ -221,7 +221,7 @@ public final class MatrixMarketWriter {
      * Writes a sparse COO array to a file such that each entry and its indices are on its own line according to the Matrix Market
      * Exchange Format.
      * @param writer The {@link BufferedWriter} to use when writing to file.
-     * @param data The non-zero entries to write to the file.
+     * @param data The non-zero data to write to the file.
      * @param rowIndices The non-zero row indices to write to the file.
      * @param colIndices The non-zero column indices to write to the file.
      * @throws IOException If an I/O error occurs.
@@ -240,7 +240,7 @@ public final class MatrixMarketWriter {
      * Writes a sparse COO array to a file such that each entry and its indices are on its own line according to the Matrix Market
      * Exchange Format.
      * @param writer The {@link BufferedWriter} to use when writing to file.
-     * @param data The non-zero entries to write to the file.
+     * @param data The non-zero data to write to the file.
      * @param rowIndices The non-zero row indices to write to the file.
      * @param colIndices The non-zero column indices to write to the file.
      * @throws IOException If an I/O error occurs.

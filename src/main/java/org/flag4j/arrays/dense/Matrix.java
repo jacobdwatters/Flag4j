@@ -324,7 +324,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * Flattens this matrix along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
-     * @return A new matrix containing the same entries as this matrix but flattened along the specified axis.
+     * @return A new matrix containing the same data as this matrix but flattened along the specified axis.
      * <ul>
      *     <li>If {@code axis == 0} a matrix with the shape {@code (this.numRows*this.numCols, 1)} is returned.</li>
      *     <li>If {@code axis == 1} a matrix with the shape {@code (1, this.numRows*this.numCols)} is returned.</li>

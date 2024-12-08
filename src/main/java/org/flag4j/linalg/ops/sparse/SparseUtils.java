@@ -26,7 +26,8 @@ package org.flag4j.linalg.ops.sparse;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Field;
-import org.flag4j.arrays.Shape;
+import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.arrays.*;
 import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
@@ -34,6 +35,7 @@ import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * <p>Contains common utility functions for working with sparse matrices.
@@ -377,5 +379,355 @@ public final class SparseUtils {
             System.arraycopy(srcRowIndices, 0, destRowIndices, 0, destRowIndices.length);
             System.arraycopy(srcColIndices, 0, destColIndices, 0, destColIndices.length);
         }
+    }
+
+
+    /**
+     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @param shape Shape of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowIndices The non-zero row indices of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from the coalesce operation.
+     */
+    public static <T> SparseMatrixData<T> coalesce(
+            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
+        HashMap<Pair<Integer, Integer>, T> coalescedValues = new HashMap<>();
+        List<Integer> destRowIndices = new ArrayList<>(data.length);
+        List<Integer> destColIndices = new ArrayList<>(data.length);
+
+        for(int i = 0; i< data.length; i++) {
+            Pair<Integer, Integer> idx = new Pair<>(rowIndices[i], colIndices[i]);
+            T value = data[i];
+
+            if(coalescedValues.containsKey(idx)) {
+                // The index is already present.
+                value = aggregator.apply(coalescedValues.get(idx),  value);
+            } else {
+                destRowIndices.add(idx.first());
+                destColIndices.add(idx.second());
+            }
+
+            coalescedValues.put(idx, value);
+        }
+
+        List<T> destValues = new ArrayList<>(coalescedValues.values());
+
+        return new SparseMatrixData<>(shape, destValues, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Coalesces this sparse COO tensor. An uncoalesced matrix is a sparse tensor with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @param shape Shape of the COO tensor.
+     * @param data The non-zero data of the COO tensor.
+     * @param rowIndices The non-zero row indices of the COO tensor.
+     * @param colIndices The non-zero column indices of the COO tensor.
+     * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from the coalesce operation.
+     */
+    public static <T> SparseTensorData<T> coalesce(
+            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[][] indices) {
+        HashMap<IntTuple, T> coalescedValues = new HashMap<>();
+        List<int[]> destIndices = new ArrayList<>(data.length);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            IntTuple idx = new IntTuple(indices[i].clone());
+            T value = data[i];
+
+            if(coalescedValues.containsKey(idx)) {
+                // The index is already present.
+                value = aggregator.apply(coalescedValues.get(idx),  value);
+            } else {
+                destIndices.add(idx.data());
+            }
+
+            coalescedValues.put(idx, value);
+        }
+
+        List<T> destValues = new ArrayList<>(coalescedValues.values());
+
+        return new SparseTensorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Coalesces this sparse COO vector. An uncoalesced matrix is a sparse vector with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @param shape Shape of the COO vector.
+     * @param data The non-zero data of the COO vector.
+     * @param rowIndices The non-zero row indices of the COO vector.
+     * @param colIndices The non-zero column indices of the COO vector.
+     * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from the coalesce operation.
+     */
+    public static <T> SparseVectorData<T> coalesce(
+            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[] indices) {
+        HashMap<Integer, T> coalescedValues = new HashMap<>();
+        List<Integer> destIndices = new ArrayList<>(data.length);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            int idx = indices[i];
+            T value = data[i];
+
+            if(coalescedValues.containsKey(idx)) {
+                // The index is already present.
+                value = aggregator.apply(coalescedValues.get(idx),  value);
+            } else {
+                destIndices.add(idx);
+            }
+
+            coalescedValues.put(idx, value);
+        }
+
+        List<T> destValues = new ArrayList<>(coalescedValues.values());
+
+        return new SparseVectorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO matrix.
+     @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from dropping all explicit zeros.
+     */
+    public static <T extends Semiring<T>> SparseMatrixData<T> dropZeros(Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
+        int estSize = data.length / 2;
+        List<T> destValues = new ArrayList<>(estSize);
+        List<Integer> destRowIndices = new ArrayList<>(estSize);
+        List<Integer> destColIndices = new ArrayList<>(estSize);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            T v = data[i];
+
+            if(!v.isZero()) {
+                destValues.add(v);
+                destRowIndices.add(rowIndices[i]);
+                destColIndices.add(colIndices[i]);
+            }
+        }
+
+        return new SparseMatrixData<>(shape, destValues, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO tensor.
+     * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from dropping all explicit zeros.
+     */
+    public static <T extends Semiring<T>> SparseTensorData<T> dropZeros(Shape shape, T[] data, int[][] indices) {
+        int estSize = data.length / 2;
+        List<T> destValues = new ArrayList<>(estSize);
+        List<int[]> destIndices = new ArrayList<>(estSize);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            T v = data[i];
+
+            if(!v.isZero()) {
+                destValues.add(v);
+                destIndices.add(indices[i].clone());
+            }
+        }
+
+        return new SparseTensorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO vector.
+     * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from dropping all explicit zeros.
+     */
+    public static <T extends Semiring<T>> SparseVectorData<T> dropZeros(Shape shape, T[] data, int[] indices) {
+        int estSize = data.length / 2;
+        List<T> destValues = new ArrayList<>(estSize);
+        List<Integer> destIndices = new ArrayList<>(estSize);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            T v = data[i];
+
+            if(!v.isZero()) {
+                destValues.add(v);
+                destIndices.add(indices[i]);
+            }
+        }
+
+        return new SparseVectorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @param shape Shape of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowIndices The non-zero row indices of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from the coalesce operation.
+     */
+    public static SparseMatrixData<Double> coalesce(
+            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
+        HashMap<Pair<Integer, Integer>, Double> coalescedValues = new HashMap<>();
+        List<Integer> destRowIndices = new ArrayList<>(data.length);
+        List<Integer> destColIndices = new ArrayList<>(data.length);
+
+        for(int i = 0; i< data.length; i++) {
+            Pair<Integer, Integer> idx = new Pair<>(rowIndices[i], colIndices[i]);
+            double value = data[i];
+
+            if(coalescedValues.containsKey(idx)) {
+                // The index is already present.
+                value = aggregator.apply(coalescedValues.get(idx),  value);
+            } else {
+                destRowIndices.add(idx.first());
+                destColIndices.add(idx.second());
+            }
+
+            coalescedValues.put(idx, value);
+        }
+
+        List<Double> destValues = new ArrayList<>(coalescedValues.values());
+
+        return new SparseMatrixData<>(shape, destValues, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Coalesces this sparse COO tensor. An uncoalesced matrix is a sparse tensor with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @param shape Shape of the COO tensor.
+     * @param data The non-zero data of the COO tensor.
+     * @param rowIndices The non-zero row indices of the COO tensor.
+     * @param colIndices The non-zero column indices of the COO tensor.
+     * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from the coalesce operation.
+     */
+    public static SparseTensorData<Double> coalesce(
+            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[][] indices) {
+        HashMap<IntTuple, Double> coalescedValues = new HashMap<>();
+        List<int[]> destIndices = new ArrayList<>(data.length);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            IntTuple idx = new IntTuple(indices[i].clone());
+            double value = data[i];
+
+            if(coalescedValues.containsKey(idx)) {
+                // The index is already present.
+                value = aggregator.apply(coalescedValues.get(idx),  value);
+            } else {
+                destIndices.add(idx.data());
+            }
+
+            coalescedValues.put(idx, value);
+        }
+
+        List<Double> destValues = new ArrayList<>(coalescedValues.values());
+
+        return new SparseTensorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO matrix.
+     @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from dropping all explicit zeros.
+     */
+    public static SparseMatrixData<Double> dropZeros(Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
+        int estSize = data.length / 2;
+        List<Double> destValues = new ArrayList<>(estSize);
+        List<Integer> destRowIndices = new ArrayList<>(estSize);
+        List<Integer> destColIndices = new ArrayList<>(estSize);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            double v = data[i];
+
+            if(v != 0.0) {
+                destValues.add(v);
+                destRowIndices.add(rowIndices[i]);
+                destColIndices.add(colIndices[i]);
+            }
+        }
+
+        return new SparseMatrixData<>(shape, destValues, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO tensor.
+     * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from dropping all explicit zeros.
+     */
+    public static SparseTensorData<Double> dropZeros(Shape shape, double[] data, int[][] indices) {
+        int estSize = data.length / 2;
+        List<Double> destValues = new ArrayList<>(estSize);
+        List<int[]> destIndices = new ArrayList<>(estSize);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            double v = data[i];
+
+            if(v != 0.0) {
+                destValues.add(v);
+                destIndices.add(indices[i].clone());
+            }
+        }
+
+        return new SparseTensorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Coalesces this sparse COO vector. An uncoalesced matrix is a sparse vector with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @param shape Shape of the COO vector.
+     * @param data The non-zero data of the COO vector.
+     * @param rowIndices The non-zero row indices of the COO vector.
+     * @param colIndices The non-zero column indices of the COO vector.
+     * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from the coalesce operation.
+     */
+    public static SparseVectorData<Double> coalesce(
+            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[] indices) {
+        HashMap<Integer, Double> coalescedValues = new HashMap<>();
+        List<Integer> destIndices = new ArrayList<>(data.length);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            int idx = indices[i];
+            double value = data[i];
+
+            if(coalescedValues.containsKey(idx)) {
+                // The index is already present.
+                value = aggregator.apply(coalescedValues.get(idx),  value);
+            } else {
+                destIndices.add(idx);
+            }
+
+            coalescedValues.put(idx, value);
+        }
+
+        List<Double> destValues = new ArrayList<>(coalescedValues.values());
+
+        return new SparseVectorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO vector.
+     * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from dropping all explicit zeros.
+     */
+    public static SparseVectorData<Double> dropZeros(Shape shape, double[] data, int[] indices) {
+        int estSize = data.length / 2;
+        List<Double> destValues = new ArrayList<>(estSize);
+        List<Integer> destIndices = new ArrayList<>(estSize);
+
+        for(int i=0, nnz=data.length; i<nnz; i++) {
+            double v = data[i];
+
+            if(v != 0.0) {
+                destValues.add(v);
+                destIndices.add(indices[i]);
+            }
+        }
+
+        return new SparseVectorData<>(shape, destValues, destIndices);
     }
 }

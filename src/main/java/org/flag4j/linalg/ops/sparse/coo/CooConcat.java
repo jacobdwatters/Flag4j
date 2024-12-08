@@ -246,9 +246,9 @@ public final class CooConcat {
      * from the two vectors where the first row of the matrix is given by the fist vector in the stack operation and the second
      * row is given by the second vector.
      *
-     * @param src1 Non-zero entries of the fist COO vector to stack.
+     * @param src1 Non-zero data of the fist COO vector to stack.
      * @param src1Indices Non-zero indices of the first COO vector to stack.
-     * @param src2 Non-zero entries of the second COO vector to stack.
+     * @param src2 Non-zero data of the second COO vector to stack.
      * @param src2Indices Non-zero indices of the second COO vector to stack.
      * @param destEntries Array to store the non
      */

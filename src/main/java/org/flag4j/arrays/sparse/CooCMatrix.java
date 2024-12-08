@@ -82,8 +82,6 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
     private static final long serialVersionUID = 1L;
 
-    // TODO: add coalesce() which creates a new tensor checking to remove explicit zeros.
-
     /**
      * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *

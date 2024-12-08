@@ -25,7 +25,7 @@
 package org.flag4j.arrays.backend.field_arrays;
 
 import org.flag4j.algebraic_structures.Field;
-import org.flag4j.arrays.Pair;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.SparseVectorData;
@@ -36,6 +36,7 @@ import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.*;
 import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldMatrixProperties;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
@@ -51,7 +52,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -1426,46 +1426,29 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
     }
 
 
-    // TODO: Add the below methods for all other sparse types (including real primitive implementations.)
     /**
      * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by summing duplicated data.
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
+     * @see #coalesce(BiFunction)
      */
     public T coalesce() {
-        return coalesce(Field::add);
+        SparseMatrixData<W> mat = SparseUtils.coalesce(Semiring::add, shape, data, rowIndices, colIndices);
+        return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }
 
 
     /**
      * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by aggregating duplicated data.
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
      * @param aggregator Custom aggregation function to combine multiple.
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
+     * @see #coalesce()
      */
     public T coalesce(BiFunction<W, W, W> aggregator) {
-        HashMap<Pair<Integer, Integer>, W> coalescedValues = new HashMap<>();
-        List<Integer> destRowIndices = new ArrayList<>(data.length);
-        List<Integer> destColIndices = new ArrayList<>(data.length);
-
-        for(int i = 0; i< data.length; i++) {
-            Pair<Integer, Integer> idx = new Pair<>(rowIndices[i], colIndices[i]);
-            W value = data[i];
-
-            if(coalescedValues.containsKey(idx)) {
-                // The index is already present.
-                value = aggregator.apply(coalescedValues.get(idx),  value);
-            } else {
-                destRowIndices.add(idx.first());
-                destColIndices.add(idx.second());
-            }
-
-            coalescedValues.put(idx, value);
-        }
-
-        List<W> destValues = new ArrayList<>(coalescedValues.values());
-
-        return makeLikeTensor(shape, destValues, destRowIndices, destColIndices);
+        SparseMatrixData<W> mat = SparseUtils.coalesce(aggregator, shape, data, rowIndices, colIndices);
+        return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }
 
 
@@ -1474,21 +1457,8 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
      * @return A copy of this COO matrix with any explicitly stored zeros removed.
      */
     public T dropZeros() {
-        int estSize = data.length / 2;
-        List<W> destValues = new ArrayList<>(estSize);
-        List<Integer> destRowIndices = new ArrayList<>(estSize);
-        List<Integer> destColIndices = new ArrayList<>(estSize);
-
-        for(int i=0; i<nnz; i++) {
-            W v = data[i];
-
-            if(!v.isZero()) {
-                destValues.add(v);
-                destRowIndices.add(rowIndices[i]);
-                destColIndices.add(colIndices[i]);
-            }
-        }
-
-        return makeLikeTensor(shape, destValues, destRowIndices, destColIndices);
+        SparseMatrixData<W> mat = SparseUtils.dropZeros(shape, data, rowIndices, colIndices);
+        return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }
+
 }

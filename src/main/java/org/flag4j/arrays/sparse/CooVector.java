@@ -26,6 +26,7 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CVector;
@@ -39,6 +40,7 @@ import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOperations;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
@@ -51,6 +53,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 
 /**
@@ -115,6 +118,23 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
         this.size = shape.get(0);
         this.indices = indices;
         this.nnz = entries.length;
+    }
+
+
+    /**
+     * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
+     *
+     * @param size The size of this vector.
+     * @param data The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
+     */
+    public CooVector(Shape shape, List<Double> data, List<Integer> indices) {
+        super(shape, ArrayUtils.fromDoubleList(data));
+        ValidateParameters.ensureRank(shape, 1);
+        ValidateParameters.ensureArrayLengthsEq(this.data.length, indices.size());
+        this.size = shape.get(0);
+        this.indices = ArrayUtils.fromIntegerList(indices);
+        this.nnz = this.data.length;
     }
 
 
@@ -1216,6 +1236,42 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     public CooCVector div(Complex128 divisor) {
         return new CooCVector(size, Complex128Ops.scalDiv(data, divisor), indices.clone());
+    }
+
+
+    /**
+     * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
+     * @see #coalesce(BiFunction)
+     */
+    public CooVector coalesce() {
+        SparseVectorData<Double> vec = SparseUtils.coalesce(Double::sum, shape, data, indices);
+        return new CooVector(vec.shape(), vec.data(), vec.indices());
+    }
+
+
+    /**
+     * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
+     * @see #coalesce()
+     */
+    public CooVector coalesce(BiFunction<Double, Double, Double> aggregator) {
+        SparseVectorData<Double> vec = SparseUtils.coalesce(aggregator, shape, data, indices);
+        return new CooVector(vec.shape(), vec.data(), vec.indices());
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO vector.
+     * @return A copy of this COO vector with any explicitly stored zeros removed.
+     */
+    public CooVector dropZeros() {
+        SparseVectorData<Double> vec = SparseUtils.dropZeros(shape, data, indices);
+        return new CooVector(vec.shape(), vec.data(), vec.indices());
     }
 
 

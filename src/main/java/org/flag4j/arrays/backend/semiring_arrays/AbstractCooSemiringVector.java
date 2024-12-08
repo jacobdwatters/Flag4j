@@ -32,6 +32,7 @@ import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooConcat;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.CooGetSet;
@@ -43,6 +44,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 
 /**
@@ -717,5 +719,41 @@ public abstract class AbstractCooSemiringVector<
         ValidateParameters.validateTensorIndex(shape, idx);
         Y value = CooGetSet.getCoo(data, indices, idx);
         return (value == null) ? getZeroElement() : value;
+    }
+
+
+    /**
+     * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
+     * @see #coalesce(BiFunction)
+     */
+    public T coalesce() {
+        SparseVectorData<Y> vec = SparseUtils.coalesce(Semiring::add, shape, data, indices);
+        return makeLikeTensor(vec.shape(), vec.data(), vec.indices());
+    }
+
+
+    /**
+     * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
+     * @see #coalesce()
+     */
+    public T coalesce(BiFunction<Y, Y, Y> aggregator) {
+        SparseVectorData<Y> vec = SparseUtils.coalesce(aggregator, shape, data, indices);
+        return makeLikeTensor(vec.shape(), vec.data(), vec.indices());
+    }
+
+
+    /**
+     * Drops any explicit zeros in this sparse COO vector.
+     * @return A copy of this COO vector with any explicitly stored zeros removed.
+     */
+    public T dropZeros() {
+        SparseVectorData<Y> vec = SparseUtils.dropZeros(shape, data, indices);
+        return makeLikeTensor(vec.shape(), vec.data(), vec.indices());
     }
 }

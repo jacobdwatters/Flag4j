@@ -411,7 +411,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      */
     @Override
     protected CooCVector makeLikeCooTensor(Shape shape, Complex128[] entries, int[][] indices) {
-        // Check for case when vector contains no non-zero entries.
+        // Check for case when vector contains no non-zero data.
         return (indices.length == 0)
                 ? new CooCVector(shape, entries, new int[0])
                 : new CooCVector(shape, entries, indices[0]);
