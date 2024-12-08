@@ -341,6 +341,7 @@ public class CooFieldTensor<T extends Field<T>>
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
+        sb.append("nnz: ").append(nnz).append("\n");
         sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering) + "\n");
         sb.append("Non-zero Indices: " +
                 PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centering));

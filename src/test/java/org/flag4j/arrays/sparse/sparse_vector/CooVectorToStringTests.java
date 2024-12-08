@@ -33,18 +33,22 @@ class CooVectorToStringTests {
     @Test
     void toStringTestCase() {
         // --------------------- Sub-case 1 ---------------------
-        exp = "shape: (3056)\n" +
-                "Non-zero data: [ 1.34  525  63.7  -0.0234 ]\n" +
-                "Indices: [ 1  567  1567  2506 ]";
+        exp = """
+                shape: (3056)
+                nnz: 4
+                Non-zero data: [ 1.34  525  63.7  -0.0234 ]
+                Indices: [ 1  567  1567  2506 ]""";
         assertEquals(exp, a.toString());
 
         // --------------------- Sub-case 2 ---------------------
         PrintOptions.setCentering(false);
         PrintOptions.setMaxColumns(2);
         PrintOptions.setPrecision(2);
-        exp = "shape: (3056)\n" +
-                "Non-zero data: [1.34  ...  -0.02  ]\n" +
-                "Indices: [1  ...  2506  ]";
+        exp = """
+                shape: (3056)
+                nnz: 4
+                Non-zero data: [1.34  ...  -0.02  ]
+                Indices: [1  ...  2506  ]""";
         assertEquals(exp, a.toString());
     }
 }

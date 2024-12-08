@@ -1131,10 +1131,13 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
         // Copy values and indices from vector.
         System.arraycopy(b.data, 0, destEntries, data.length, b.data.length);
-        Arrays.fill(destRowIndices, data.length, destRowIndices.length, numRows);
-        System.arraycopy(b.indices, 0, destColIndices, data.length, b.data.length);
+        Arrays.fill(destColIndices, data.length, destColIndices.length, numCols);
+        System.arraycopy(b.indices, 0, destRowIndices, data.length, b.data.length);
 
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        CooMatrix aug = new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        aug.sortIndices();
+
+        return aug;
     }
 
 
@@ -1766,6 +1769,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("nnz: ").append(nnz).append("\n");
         result.append("Non-zero data: [");
 
         int maxCols = PrintOptions.getMaxColumns();

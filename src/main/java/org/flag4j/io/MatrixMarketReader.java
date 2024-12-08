@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.Flag4jParsingException;
 
 import java.io.BufferedReader;
@@ -54,7 +54,7 @@ import java.util.function.Function;
  * <ul>
  *   <li>Object: matrix</li>
  *   <li>Format: coordinate, array</li>
- *   <li>Field: real, integer, complex</li>
+ *   <li>MMField: real, integer, complex</li>
  *   <li>MMSymmetry: general</li>
  * </ul>
  * <p>Headers must be of the form:
@@ -232,7 +232,7 @@ public class MatrixMarketReader {
     private void loadDenseRealMatrix() throws IOException {
         Pair<Shape, List<Double>> matData = loadDenseMatrix(Double::parseDouble);
         Shape shape = matData.first();
-        double[] data = ArrayConversions.fromDoubleList(matData.second());
+        double[] data = ArrayUtils.fromDoubleList(matData.second());
 
         // Transpose to account for column major ordering in Matrix Market Format.
         mat = new Matrix(shape.swapAxes(0, 1), data).T();
