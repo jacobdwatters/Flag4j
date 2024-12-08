@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,9 +33,9 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
-import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -104,7 +104,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param indices The indices of the non-zero data.
      */
     public CooCVector(int size, List<Complex128> entries, List<Integer> indices) {
-        super(new Shape(size), entries.toArray(new Complex128[0]), ArrayConversions.fromIntegerList(indices));
+        super(new Shape(size), entries.toArray(new Complex128[0]), ArrayUtils.fromIntegerList(indices));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -116,7 +116,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param indices The indices of the non-zero data.
      */
     public CooCVector(Shape shape, List<Complex128> entries, List<Integer> indices) {
-        super(shape, entries.toArray(new Complex128[0]), ArrayConversions.fromIntegerList(indices));
+        super(shape, entries.toArray(new Complex128[0]), ArrayUtils.fromIntegerList(indices));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -138,7 +138,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param indices Non-zero indices of the sparse vector.
      */
     public CooCVector(int size, double[] entries, int[] indices) {
-        super(new Shape(size), ArrayConversions.toComplex128(entries, null), indices);
+        super(new Shape(size), ArrayUtils.wrapAsComplex128(entries, null), indices);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -394,7 +394,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        return CooSemiringEquals.cooVectorEquals(this, (CooCVector) object);
+        return CooFieldEquals.cooVectorEquals(this, (CooCVector) object);
     }
 
 
@@ -423,7 +423,6 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("nnz: ").append(nnz).append("\n");
         result.append("Non-zero data: [");
 
         int maxCols = PrintOptions.getMaxColumns();

@@ -39,13 +39,13 @@ import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOps;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
-import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
-import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
+import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -379,7 +379,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public Double inner(CooVector b) {
-        return RealCooVectorOperations.inner(this, b);
+        return RealCooVectorOps.inner(this, b);
     }
 
 
@@ -766,7 +766,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooVector add(CooVector b) {
-        return RealCooVectorOperations.add(this, b);
+        return RealCooVectorOps.add(this, b);
     }
 
 
@@ -780,7 +780,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @throws IllegalArgumentException If this tensor and {@code b} do not have the same shape.
      */
     public CooCVector add(CooCVector b) {
-        return RealComplexSparseVectorOperations.add(b, this);
+        return RealComplexSparseVectorOps.add(b, this);
     }
 
 
@@ -795,7 +795,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooVector sub(CooVector b) {
-        return RealCooVectorOperations.sub(this, b);
+        return RealCooVectorOps.sub(this, b);
     }
 
 
@@ -810,7 +810,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooVector elemMult(CooVector b) {
-        return RealCooVectorOperations.elemMult(this, b);
+        return RealCooVectorOps.elemMult(this, b);
     }
 
 
@@ -1071,7 +1071,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooMatrix repeat(int n, int axis) {
-        return RealCooVectorOperations.repeat(this, n, axis);
+        return RealCooVectorOps.repeat(this, n, axis);
     }
 
 
@@ -1087,7 +1087,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public CooMatrix stack(CooVector b) {
-        return RealCooVectorOperations.stack(this, b);
+        return RealCooVectorOps.stack(this, b);
     }
 
 
@@ -1134,7 +1134,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      */
     @Override
     public Matrix outer(CooVector b) {
-        return RealCooVectorOperations.outerProduct(this, b);
+        return RealCooVectorOps.outerProduct(this, b);
     }
 
 
@@ -1181,7 +1181,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @throws org.flag4j.util.exceptions.TensorShapeException If the two vectors are not the same size.
      */
     public CooVector elemMult(Vector b) {
-        return RealDenseSparseVectorOperations.elemMult(b, this);
+        return RealDenseSparseVectorOps.elemMult(b, this);
     }
 
 
@@ -1216,7 +1216,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CooVector div(Vector b) {
-        return RealDenseSparseVectorOperations.elemDiv(this, b);
+        return RealDenseSparseVectorOps.elemDiv(this, b);
     }
 
 
@@ -1226,7 +1226,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The element-wise quotient of this vector and {@code b}.
      */
     public CooCVector div(CVector b) {
-        return RealComplexDenseSparseVectorOperations.elemDiv(this, b);
+        return RealComplexDenseSparseVectorOps.elemDiv(this, b);
     }
 
 
