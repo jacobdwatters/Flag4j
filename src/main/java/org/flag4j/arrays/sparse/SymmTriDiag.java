@@ -34,10 +34,10 @@ import java.util.Arrays;
 
 /**
  * <p>A real symmetric tri-diagonal matrix. This class stores the non-zero values of the symmetric tri-diagonal matrix
- * and has limited support for ops with such a matrix.</p>
+ * and has limited support for ops with such a matrix.
  *
  * <p>A matrix is symmetric tri-diagonal if it is symmetric and all values below the first sub-diagonal and above the first
- * super-diagonal are zero.</p>
+ * super-diagonal are zero.
  *
  * <p>For example, the following matrix is in symmetric tri-diagonal form where each {@code X} may hold a different value (provided
  * the matrix is symmetric):
@@ -47,9 +47,11 @@ import java.util.Arrays;
  *      [ 0 X X X 0 ]
  *      [ 0 0 X X X ]
  *      [ 0 0 0 X X ]]</pre>
- * </p>
+ * 
  */
 public class SymmTriDiag implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Stores the diagonal data of this symmetric tri-diagonal matrix.

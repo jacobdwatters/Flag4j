@@ -33,17 +33,17 @@ import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 /**
  * <p>This class solves a linear system of equations Ax=b in a least-squares sense. That is,
  * minimizes ||Ax-b||<sub>2</sub> which is equivalent to solving the normal equations
- * A<sup>T</sup>Ax=A<sup>T</sup>b.</p>
+ * A<sup>T</sup>Ax=A<sup>T</sup>b.
  *
- * <p>This is done efficiently using a {@link RealQR QR decomposition}.</p>
+ * <p>This is done efficiently using a {@link RealQR QR decomposition}.
  */
 public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
 
     /**
-     * <p>Constructs a least-squares solver to solve a system Ax=b in a least square sense.</p>
+     * <p>Constructs a least-squares solver to solve a system Ax=b in a least square sense.
      *
      * <p>That is, minimizes ||Ax-b||<sub>2</sub> which is equivalent to solving the normal equations
-     * A<sup>T</sup>Ax=A<sup>T</sup>b.</p>
+     * A<sup>T</sup>Ax=A<sup>T</sup>b.
      */
     public RealLstsqSolver() {
         super(new RealQR(), new RealBackSolver());

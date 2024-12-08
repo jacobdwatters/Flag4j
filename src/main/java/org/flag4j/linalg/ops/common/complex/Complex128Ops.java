@@ -25,9 +25,7 @@
 package org.flag4j.linalg.ops.common.complex;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -38,34 +36,17 @@ public final class Complex128Ops {
 
     private Complex128Ops() {
         // Hide constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
     /**
-     * Computes the element-wise square root of a tensor.
-     * @param src Elements of the tensor.
-     * @return The element-wise square root of the tensor.
-     */
-    public static Complex128[] sqrt(Complex128[] src) {
-        Complex128[] roots = new Complex128[src.length];
-
-        for(int i=0; i<roots.length; i++)
-            roots[i] = src[i].sqrt();
-
-        return roots;
-    }
-
-
-
-    /**
-     * Computes the element-wise square root of a tensor.
+     * Computes the element-wise square root of a tensor as complex values. This allows for the square root of a negative number.
      * @param src Elements of the tensor.
      * @return The element-wise square root of the tensor.
      */
     public static Complex128[] sqrt(double[] src) {
         Complex128[] roots = new Complex128[src.length];
-
         for(int i=0; i<roots.length; i++)
             roots[i] = Complex128.sqrt(src[i]);
 
@@ -74,39 +55,7 @@ public final class Complex128Ops {
 
 
     /**
-     * Computes the element-wise absolute value of a tensor.
-     * @param src Elements of the tensor.
-     * @return The element-wise absolute value of the tensor.
-     */
-    public static double[] abs(Complex128[] src) {
-        double[] abs = new double[src.length];
-
-        for(int i=0; i<abs.length; i++)
-            abs[i] = src[i].mag();
-
-        return abs;
-    }
-
-
-    /**
-     * Rounds the values of a tensor to the nearest integer. Also see {@link #round(Complex128[], int)}.
-     * @param src Entries of the tensor to round.
-     * @return The result of rounding all data of the source tensor to the nearest integer.
-     * @throws IllegalArgumentException If {@code precision} is negative.
-     */
-    public static Complex128[] round(Complex128[] src) {
-        Complex128[] dest = new Complex128[src.length];
-
-        for(int i=0; i<dest.length; i++)
-            dest[i] = Complex128.round((Complex128) src[i]);
-
-        return dest;
-    }
-
-
-    /**
-     * Rounds the values of a tensor with specified precision. Note, if precision is zero, {@link #round(Field[])} is
-     * preferred.
+     * Rounds the values of a tensor with specified precision.
      * @param src Entries of the tensor to round.
      * @param precision Precision to round to (i.e. the number of decimal places).
      * @return The result of rounding all data of the source tensor with the specified precision.
@@ -118,7 +67,7 @@ public final class Complex128Ops {
 
         Complex128[] dest = new Complex128[src.length];
         for(int i=0; i<dest.length; i++)
-            dest[i] = Complex128.round((Complex128) src[i], precision);
+            dest[i] = Complex128.round(src[i], precision);
 
         return dest;
     }
@@ -137,81 +86,10 @@ public final class Complex128Ops {
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
 
         Complex128[] dest = new Complex128[src.length];
-
         for(int i=0; i<dest.length; i++)
-            dest[i] = Complex128.roundToZero((Complex128) src[i], threshold);
+            dest[i] = Complex128.roundToZero(src[i], threshold);
 
         return dest;
-    }
-
-
-    /**
-     * Computes the scalar multiplication of a tensor.
-     * @param entries Entries of the tensor.
-     * @param factor Scalar value to multiply.
-     * @return The scalar multiplication of the tensor.
-     */
-    public static Complex128[] scalMult(double[] entries, Complex128 factor) {
-        Complex128[] product = new Complex128[entries.length];
-
-        for(int i=0, size=entries.length; i<size; i++)
-            product[i] = factor.mult(entries[i]);
-
-        return product;
-    }
-
-
-    /**
-     * Computes the scalar multiplication of a tensor.
-     * @param src Entries of the tensor.
-     * @param dest Array to store result in. May be null.
-     * @param factor Scalar value to multiply.
-     * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
-     * @throws ArrayIndexOutOfBoundsException If {@code dest} is not at least the size of {@code src}.
-     */
-    public static Complex128[] scalMult(Complex128[] src, Complex128[] dest, Complex128 factor) {
-        int size = src.length;
-        if(dest==null) dest = new Complex128[size];
-
-        for(int i=0; i<size; i++)
-            dest[i] = src[i].mult(factor);
-
-        return dest;
-    }
-
-
-    /**
-     * Computes the scalar multiplication of a tensor.
-     * @param src Entries of the tensor.
-     * @param dest Array to store result in. May be null.
-     * @param factor Scalar value to multiply.
-     * @param start Starting index of scalar multiplication.
-     * @param stop Stopping index of scalar multiplication.
-     * @return A reference to the {@code dest} array if it was not null. Otherwise, a new array will be formed.
-     * @throws ArrayIndexOutOfBoundsException If {@code dest} is not the size of {@code src}.
-     */
-    public static Complex128[] scalMult(Complex128[] src, Complex128[] dest, Complex128 factor, int start, int stop) {
-        if(dest==null) dest = new Complex128[src.length];
-
-        for(int i=start; i<stop; i++)
-            dest[i] = src[i].mult(factor);
-
-        return dest;
-    }
-
-
-    /**
-     * Computes the element-wise complex conjugate of a tensor.
-     * @param src Entries of the tensor.
-     * @return The element-wise complex conjugate of the tensor
-     */
-    public static Complex128[] conj(Complex128[] src) {
-        Complex128[] conjugate = new Complex128[src.length];
-
-        for(int i=0; i<src.length; i++)
-            conjugate[i] = src[i].conj();
-
-        return conjugate;
     }
 
 
@@ -224,7 +102,7 @@ public final class Complex128Ops {
         double[] real = new double[src.length];
 
         for(int i=0; i<src.length; i++)
-            real[i] = ((Complex128) src[i]).re;
+            real[i] = src[i].re;
 
         return real;
     }
@@ -251,21 +129,31 @@ public final class Complex128Ops {
 
 
     /**
-     * Computes the scalar division of a tensor.
-     * @param entries Entries of the tensor.
-     * @param divisor Scalar value to divide each element ot the tensor by.
-     * @return The scalar division of the tensor.
+     * Checks whether a tensor contains only real values.
+     * @param entries Entries of dense tensor or non-zero data of sparse tensor.
+     * @return True if the tensor only contains real values. Returns false otherwise.
      */
-    public static Complex64[] scalDiv(float[] entries, Complex64 divisor) {
-        Complex64[] quotient = new Complex64[entries.length];
+    public static boolean isReal(Complex128[] entries) {
+        if(entries == null) return false;
 
-        float denom = divisor.re*divisor.re + divisor.im*divisor.im;
+        for(Complex128 entry : entries)
+            if(entry.im != 0) return false;
 
-        for(int i=0, size=entries.length; i<size; i++) {
-            float a = entries[i];
-            quotient[i] = new Complex64(a*divisor.re / denom, -a*divisor.im / denom);
-        }
+        return true;
+    }
 
-        return quotient;
+
+    /**
+     * Checks whether a tensor contains at least one non-real value.
+     * @param entries Entries of dense tensor or non-zero data of sparse tensor.
+     * @return True if the tensor contains at least one non-real value. Returns false otherwise.
+     */
+    public static boolean isComplex(Complex128[] entries) {
+        if(entries == null) return false;
+
+        for(Complex128 entry : entries)
+            if(entry.im != 0) return true;
+
+        return false;
     }
 }

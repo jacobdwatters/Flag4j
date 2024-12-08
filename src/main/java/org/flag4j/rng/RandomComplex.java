@@ -24,8 +24,8 @@
 
 package org.flag4j.rng;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Complex64;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Complex64;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Random;

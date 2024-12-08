@@ -34,7 +34,7 @@ import org.flag4j.util.Flag4jConstants;
 import java.util.Arrays;
 
 /**
- * <p>This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.</p>
+ * <p>This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.
  *
  * <p>That is, decomposes a rectangular matrix M into M=USV<sup>H</sup> where U and V are
  * unitary matrices whose columns are the left and right singular vectors of M and S is a rectangular

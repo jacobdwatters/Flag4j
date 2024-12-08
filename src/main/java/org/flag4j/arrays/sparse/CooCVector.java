@@ -24,14 +24,13 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
-import org.flag4j.linalg.ops.common.complex.Complex128Properties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOperations;
@@ -46,17 +45,17 @@ import java.util.List;
 
 /**
  * <p>A complex sparse vector stored in coordinate list (COO) format. The {@link #data} of this COO vector are
- * {@link Complex128}'s.</p>
+ * {@link Complex128}'s.
  *
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
- * and total number of non-zero data is fixed.</p>
+ * and total number of non-zero data is fixed.
  *
- * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.
  *
  * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
- * vector).</p>
+ * vector).
  *
- * <p>A sparse COO vector is stored as:</p>
+ * <p>A sparse COO vector is stored as:
  * <ul>
  *     <li>The full {@link #shape}/{@link #size} of the vector.</li>
  *     <li>The non-zero {@link #data} of the vector. All other data in the vector are
@@ -65,11 +64,12 @@ import java.util.List;
  * </ul>
  *
  * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
- * verified. Every operation implemented in this class will preserve the lexicographical sorting.</p>
+ * verified. Every operation implemented in this class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  */
 public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooCMatrix, CMatrix, Complex128> {
+
 
     /**
      * Creates a tensor with the specified data and shape.
@@ -288,10 +288,10 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
 
     /**
      * Checks if all data of this matrix are real.
-     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     * @return {@code true} if all data of this matrix are real; {@code false} otherwise.
      */
     public boolean isReal() {
-        return Complex128Properties.isReal(data);
+        return Complex128Ops.isReal(data);
     }
 
 
@@ -300,7 +300,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
      */
     public boolean isComplex() {
-        return Complex128Properties.isComplex(data);
+        return Complex128Ops.isComplex(data);
     }
 
 

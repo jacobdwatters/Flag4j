@@ -24,8 +24,6 @@
 
 package org.flag4j.concurrency;
 
-import org.flag4j.util.ErrorMessages;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -37,7 +35,7 @@ import java.util.logging.Logger;
 public final class ThreadManager {
     private ThreadManager() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
     /**
@@ -106,10 +104,10 @@ public final class ThreadManager {
 
     /**
      * <p>Computes a specified tensor operation concurrently by evenly dividing work among available threads (specified by
-     * {@link Configurations#getNumThreads()}).</p>
+     * {@link Configurations#getNumThreads()}).
      *
      * <p>WARNING: This method provides <i>no</i> guarantees of thread safety. It is the responsibility of the caller to ensure that
-     * {@code operation} is thread safe.</p>
+     * {@code operation} is thread safe.
      *
      * @param totalSize Total size of the outer loop for the operation.
      * @param operation Operation to be computed.
@@ -143,15 +141,15 @@ public final class ThreadManager {
 
     /**
      * <p>Computes a specified blocked tensor operation concurrently by evenly dividing work among available threads (specified by
-     * {@link Configurations#getNumThreads()}).</p>
+     * {@link Configurations#getNumThreads()}).
      *
      * <p>Unlike {@link #concurrentOperation(int, TensorOperation)} this method respects the block size of the blocked operation.
      * This means tasks split across threads will be aligned to block borders if possible which allows for the improved cache
      * performance benefits of blocked ops to be fully realized. For this reason, it is not recommended to use
-     * {@link #concurrentOperation(int, TensorOperation)} to compute a blocked operation concurrently.</p>
+     * {@link #concurrentOperation(int, TensorOperation)} to compute a blocked operation concurrently.
      *
      * <p>WARNING: This method provides <i>no</i> guarantees of thread safety. It is the responsibility of the caller to ensure that
-     * {@code blockedOperation} is thread safe.</p>
+     * {@code blockedOperation} is thread safe.
      *
      * @param totalSize Total size of the outer loop for the operation.
      * @param blockSize Size of the block used in the {@code blockedOperation}.

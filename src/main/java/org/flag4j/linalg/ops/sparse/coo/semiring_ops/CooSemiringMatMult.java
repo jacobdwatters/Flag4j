@@ -24,11 +24,10 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +42,7 @@ import java.util.concurrent.ConcurrentMap;
 public final class CooSemiringMatMult {
 
     private CooSemiringMatMult() {
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
@@ -189,7 +188,7 @@ public final class CooSemiringMatMult {
 
     /**
      * <p>Computes the multiplication between a sparse matrix and a sparse vector using a concurrent implementation
-     * of the standard algorithm.</p>
+     * of the standard algorithm.
      *
      * <p>NOTE: Caution should be exercised when using this method.
      * It is rarely faster than {@link #standardVector(Semiring[], int[], int[], Shape, Semiring[], int[])

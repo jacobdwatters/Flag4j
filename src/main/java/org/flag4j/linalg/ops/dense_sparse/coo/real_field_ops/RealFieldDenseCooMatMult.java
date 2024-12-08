@@ -25,11 +25,10 @@
 package org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -41,7 +40,7 @@ public final class RealFieldDenseCooMatMult {
 
     private RealFieldDenseCooMatMult() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

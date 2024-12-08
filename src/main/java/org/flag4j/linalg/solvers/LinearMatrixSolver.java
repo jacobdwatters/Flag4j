@@ -28,32 +28,35 @@ import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.VectorMixin;
 
 /**
- * This interface specifies methods which all linear matrix system solvers should implement.
+ * <p>Interface representing a solver for linear systems involving matrices and vectors. Implementations
+ * of this interface provide methods to solve equations such as <i>Ax=b</i> and
+ * <i>AX=B</i>, where <i>A</i>, <i>B</i>, and <i>X</i> are matrices, and <i>x</i> and <i>b</i> are vectors.
  *
- * <p>Solvers may solve in an exact sense or in a least squares sense.</p>
+ * <p>Solvers may compute exact solutions or approximate solutions in a least squares sense, depending on the properties of the system.
  *
- * @param <T> Type of the matrices in the linear system.
- * @param <U> Type of the vectors in the linear system.
+ * @param <T> The type of matrices in the linear system, extending {@link MatrixMixin}.
+ * @param <U> The type of vectors in the linear system, extending {@link VectorMixin}.
  */
 public interface LinearMatrixSolver<T extends MatrixMixin<T, ?, U, ?>,
         U extends VectorMixin<U, T, ?, ?>> extends LinearSolver<T> {
 
 
     /**
-     * Solves the linear system of equations given by A*x=b for the vector x.
-     * @param A Coefficient matrix in the linear system.
-     * @param b Vector of constants in the linear system.
-     * @return The solution to x in the linear system A*x=b.
+     * Solves the linear system of equations <i>Ax=b</i> for the vector <i>x</i>.
+     *
+     * @param A The coefficient matrix <i>A</i> in the linear system.
+     * @param b The constant vector in the linear system.
+     * @return The solution vector <i>x</i> satisfying <i>Ax=b</i>.
      */
     U solve(T A, U b);
 
 
     /**
-     * Solves the set of linear system of equations given by A*X=B for the matrix X where
-     * A, B, and X are matrices.
-     * @param A Coefficient matrix in the linear system.
-     * @param B Matrix of constants in the linear system.
-     * @return The solution to X in the linear system A*X=B.
+     * Solves the linear matrix equation <i>AX=B</i> for the matrix <i>X</i>.
+     *
+     * @param A The coefficient matrix in the linear system.
+     * @param B The constant matrix in the linear system.
+     * @return The solution matrix <i>X</i> satisfying <i>AX=B</i>.
      */
     @Override
     T solve(T A, T B);

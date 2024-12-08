@@ -26,27 +26,26 @@ package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
 /**
- * <p>This utility class contains methods for combining or joining sparse COO tensors, matrices, and vectors.</p>
- * <p>All methods in this class will result in non-zero data and indices being lexicographically sorted.</p>
+ * <p>This utility class contains methods for combining or joining sparse COO tensors, matrices, and vectors.
+ * <p>All methods in this class will result in non-zero data and indices being lexicographically sorted.
  */
 public final class CooConcat {
 
     private CooConcat() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
     /**
-     * <p>Stacks two sparse COO matrices along columns.</p>
+     * <p>Stacks two sparse COO matrices along columns.
      * <p>WARNING: This method does <i>not</i> perform any bounds checks. If the destination arrays are not large enough, an
-     * {@link IndexOutOfBoundsException} will be thrown.</p>
+     * {@link IndexOutOfBoundsException} will be thrown.
      *
      * @param src1Entries Non-zero data of the first COO matrix to stack.
      * @param src1RowIndices Row indices of the first COO matrix to stack.

@@ -24,10 +24,10 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
-import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
@@ -84,6 +84,8 @@ import java.util.List;
  */
 public class CooVector extends AbstractDoubleTensor<CooVector>
         implements VectorMixin<CooVector, CooMatrix, Matrix, Double> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * The indices of the non-zero data in this sparse COO vector.
@@ -245,7 +247,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
      * computes the sum of products between the two tensors along the specified set of axes.
      *
-     * @param src2 TensorOld to contract with this tensor.
+     * @param src2 Tensor to contract with this tensor.
      * @param aAxes Axes along which to compute products for this tensor.
      * @param bAxes Axes along which to compute products for {@code src2} tensor.
      *
@@ -444,7 +446,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @param b Vector to compare to this vector.
      *
-     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
+     * @return {@code true} if the vector {@code b} is parallel to this vector and the same size; {@code false} otherwise.
      * @implNote This method uses a tolerance of {@code tol = 1.0e-12} to verify if the two vectors are parallel. Specifically, the
      * scaled
      * difference between the two vectors is computed using their first non-zero data as
@@ -499,7 +501,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @param b Vector to compare to this vector.
      *
-     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     * @return {@code true} if the vector {@code b} is perpendicular to this vector and the same size; {@code false} otherwise.
      *
      * @see #isParallel(CooVector)
      * @implNote This method checks if the vector is perpendicular by checking if the inner product is essentially zero:
@@ -629,7 +631,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * @param axis Axis along which to flatten tensor.
      *
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than {@code this.{@link #getRank()}-1}.
      * @see #flatten()
      */
     @Override
@@ -794,7 +796,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     /**
      * <p>Computes the generalized trace of this tensor along the specified axes.
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
      * {@code axis1} and {@code axis2} removed.
      *
@@ -1083,7 +1085,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
      * 
      *
-     * @param b VectorOld to stack with this vector.
+     * @param b Vector to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
      * vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
      *

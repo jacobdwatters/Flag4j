@@ -24,7 +24,7 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.fields.*;
+import org.flag4j.algebraic_structures.*;
 
 /**
  * A class which provides simple utility methods for {@link String strings}.
@@ -32,7 +32,7 @@ import org.flag4j.algebraic_structures.fields.*;
 public final class StringUtils {
 
     private StringUtils() { // hide public constructor
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
@@ -92,10 +92,10 @@ public final class StringUtils {
             valueOf = Complex128.round((Complex128) value, precision).toString();
         else if(value instanceof Complex64)
             valueOf = Complex64.round((Complex64) value, precision).toString();
-        else if(value instanceof RealFloat64)
-            valueOf = RealFloat64.round((RealFloat64) value, precision).toString();
-        else if(value instanceof RealFloat32)
-            valueOf = RealFloat32.round((RealFloat32) value, precision).toString();
+        else if(value instanceof Real64)
+            valueOf = Real64.round((Real64) value, precision).toString();
+        else if(value instanceof Real32)
+            valueOf = Real32.round((Real32) value, precision).toString();
         else
             valueOf = value.toString();
 

@@ -17,15 +17,15 @@
     </distributionManagement>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.11.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.3</version>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.11.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -42,8 +42,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
+                    <useIncrementalCompilation>true</useIncrementalCompilation>
                     <source>23</source>
                     <target>23</target>
                     <compilerArgs>

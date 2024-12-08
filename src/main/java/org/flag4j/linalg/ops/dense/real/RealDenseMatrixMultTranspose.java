@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.dense.real;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for
@@ -38,7 +37,7 @@ public final class RealDenseMatrixMultTranspose {
 
     private RealDenseMatrixMultTranspose() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+
     }
 
 

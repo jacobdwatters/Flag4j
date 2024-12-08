@@ -32,10 +32,10 @@ import org.flag4j.util.ValidateParameters;
 /**
  * <p>This class is the base class for all decompositions which proceed by using unitary transformations
  * (specifically HouseholderOld reflectors) to bring a matrix into an upper triangular matrix (QR decomposition) or an upper Hessenburg
- * matrix (Hessenburg decomposition).</p>
+ * matrix (Hessenburg decomposition).
  *
  * <p>While the QR and Hessenburg decomposition are distinct, they have similar implementations and so this class provides common
- * code for the two decompositions.</p>
+ * code for the two decompositions.
  *
  * @param <T> Type of the matrix to be decomposed.
  * @param <U> Internal storage datatype of the matrix.
@@ -45,23 +45,23 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
     /**
      * <p>
      * Storage for the upper triangular/Hessenburg matrix and the vectors of the HouseholderOld reflectors used in the decomposition.
-     * </p>
+     * 
      *
      * <p>
      * The upper triangular/Hessenburg will have all zeros below either the diagonal or the first sub-diagonal and will be stored
      * in the top corner above that diagonal. For instance, if the quasi-triangular matrix is truly upper triangular, it will be
      * stored at and above the principle diagonal. If the quasi-triangular matrix is upper Hessenburg, it will be stored at and
      * above the first sub-diagonal.
-     * </p>
+     * 
      *
      * <p>
      * The HouseholderOld reflectors used to bring the original matrix to the upper triangular/Hessenburg
      * form will be stored as the columns below the last non-zero sub-diagonal of the quasi-triangular matrix. The first value of
      * each reflector is not stored but is assumed to be 1.
-     * </p>
+     * 
      *
      * <p>This provides compact storage for decompositions which proceed by unitary transformations. Further, the full computation
-     * of the unitary matrix can be deferred until it is needed.</p>
+     * of the unitary matrix can be deferred until it is needed.
      */
     protected T transformMatrix;
     /**
@@ -187,7 +187,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
 
 
     /**
-     * Initialized any work arrays_old to be used in computing the decomposition with the proper size.
+     * Initialized any work arrays to be used in computing the decomposition with the proper size.
      * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code max(numRows, numCols)}
      */
     protected abstract void initWorkArrays(int maxAxisSize);

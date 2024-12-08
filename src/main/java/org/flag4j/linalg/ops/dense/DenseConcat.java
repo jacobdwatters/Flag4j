@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.dense;
 
 
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -39,7 +38,7 @@ public final class DenseConcat {
 
     private DenseConcat() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
@@ -106,17 +105,17 @@ public final class DenseConcat {
     /**
      * <p>
      * Stacks two vectors along specified axis.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
      * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
+     * 
      *
      * @param src1 Entries of the first vector. Must be the same size as {@code src2}.
      * @param src2 Entries of teh second vector. Must be the same size as {@code src1}.

@@ -28,7 +28,7 @@ package org.flag4j.linalg.ops.dense.semiring_ops;
 // TODO: Investigate the performance of utilizing a selection cache which caches the implementation to be used for recent matrix sizes.
 //  Should probably be implemented as a LRU cache (or similar) by extending LinkedHashMap
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.DenseSemiringTensorBinaryOperation;
 import org.flag4j.util.ValidateParameters;

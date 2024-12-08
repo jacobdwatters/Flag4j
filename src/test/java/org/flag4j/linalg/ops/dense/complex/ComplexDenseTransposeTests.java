@@ -1,6 +1,6 @@
 package org.flag4j.linalg.ops.dense.complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.junit.jupiter.api.Test;
 
 import static org.flag4j.linalg.ops.dense.field_ops.DenseFieldTranspose.*;

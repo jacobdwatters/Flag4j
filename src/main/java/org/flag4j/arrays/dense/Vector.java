@@ -24,10 +24,10 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
-import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
@@ -52,14 +52,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>A dense vector backed by a primitive double array.</p>
+ * <p>A dense vector backed by a primitive double array.
  *
- * <p>Vectors are 1D tensors (i.e. rank 1 tensor).</p>
+ * <p>Vectors are 1D tensors (i.e. rank 1 tensor).
  *
- * <p>Vectors have mutable data but are fixed in size.</p>
+ * <p>Vectors have mutable data but are fixed in size.
  */
 public class Vector extends AbstractDenseDoubleTensor<Vector>
         implements VectorMixin<Vector, Matrix, Matrix, Double> {
+    private static final long serialVersionUID = 1L;
 
     /**
      * The size of this vector. That is, the number of data in this vector.
@@ -195,7 +196,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @param axis Axis along which to flatten tensor.
      *
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than {@code this.{@link #getRank()}-1}.
      * @see #flatten()
      */
     @Override
@@ -265,17 +266,17 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
     /**
      * <p>
      * Stacks two vectors along specified axis.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
      * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
+     * 
      *
      * @param b Vector to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
@@ -330,8 +331,8 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * Converts a vector to an equivalent matrix representing either a row or column vector.
      *
      * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
-     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.</p>
-     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.</p>
+     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.
+     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.
      *
      * @return A matrix equivalent to this vector.
      */
@@ -379,7 +380,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
 
 
     /**
-     * <p>Computes the dot product between two vectors.</p>
+     * <p>Computes the dot product between two vectors.
      *
      * @param b Second vector in the dot product.
      *
@@ -483,7 +484,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @param b Vector to compare to this vector.
      *
-     * @return True if the vector {@code b} is parallel to this vector and the same size. Otherwise, returns false.
+     * @return {@code true} if the vector {@code b} is parallel to this vector and the same size; {@code false} otherwise.
      *
      * @see #isPerp(Vector)
      */
@@ -522,7 +523,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      *
      * @param b Vector to compare to this vector.
      *
-     * @return True if the vector {@code b} is perpendicular to this vector and the same size. Otherwise, returns false.
+     * @return {@code true} if the vector {@code b} is perpendicular to this vector and the same size; {@code false} otherwise.
      *
      * @see #isParallel(Vector)
      */

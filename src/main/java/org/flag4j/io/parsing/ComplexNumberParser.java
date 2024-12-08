@@ -24,26 +24,38 @@
 
 package org.flag4j.io.parsing;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Complex64;
 
 /**
  * A parser for parsing complex numbers represented as a string.
  */
-public class ComplexNumberParser {
+public final class ComplexNumberParser {
+
+    /**
+     * TODO: Redesign context-free grammar and finite-state machine to allow for full floating point strings as an individual token.
+     *  We can delegate the parsing of doubles to `Double.parseDouble(String)` to simplify the implementation of this class.
+     *  CFG: Should be something like this (where <DOUBLE> is parsable by `Double.parseDouble(String)`):
+     *  <COMPLEX_NUMBER> → <DOUBLE>
+     *      | <DOUBLE> <Sign> <IMAGINARY>
+     *      | <IMAGINARY>
+     *  <IMAGINARY> → <DOUBLE> i
+     *      | i
+     *      | - i
+     *  <SIGN> → + | -
+     */
 
     private ComplexNumberParser() {
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        // Hide default constructor for utility class.
     }
 
 
     /**
      * Parses a complex number in the form of a string into its real and imaginary parts.
-     * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
-     * <code>2</code> and <code>3</code> respectively.
+     * For example, the string {@code "2+3i"} would be parsed into real and imaginary parts
+     * {@code 2} and {@code 3} respectively.
      *
-     * @param num Complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * @param num Complex number in one of three forms: {@code a + bi, a,} or {@code bi} where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)
      * @return The complex number represented by the {@code num} as a {@link Complex128}.
      */
@@ -55,25 +67,25 @@ public class ComplexNumberParser {
 
     /**
      * Parses a complex number in the form of a string into its real and imaginary parts.
-     * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
-     * <code>2</code> and <code>3</code> respectively.
+     * For example, the string {@code "2+3i"} would be parsed into real and imaginary parts
+     * {@code 2} and {@code 3} respectively.
      *
-     * @param num Complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * @param num Complex number in one of three forms: {@code a + bi, a,} or {@code bi} where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)
      * @return The complex number represented by the {@code num} as a {@link Complex64}.
      */
     public static Complex64 parseNumberToComplex64(String num) {
         double[] components = getComponents(num);
-        return new Complex64(components[0], components[1]);
+        return new Complex64((float) components[0], (float) components[1]);
     }
 
 
     /**
      * Parses a complex number in the form of a string into its real and imaginary parts.
-     * For example, the string <code>"2+3i"</code> would be parsed into real and imaginary parts
-     * <code>2</code> and <code>3</code> respectively.
+     * For example, the string {@code "2+3i"} would be parsed into real and imaginary parts
+     * {@code 2} and {@code 3} respectively.
      *
-     * @param num - complex number in one of three forms: <code>a + bi, a,</code> or <code>bi</code> where a and b are
+     * @param num - complex number in one of three forms: {@code a + bi, a,} or {@code bi} where a and b are
      * 				real numbers and i is the imaginary unit sqrt(-1)
      * @return The complex number represented by the string num.
      */
@@ -82,10 +94,10 @@ public class ComplexNumberParser {
 
         ComplexNumberLexer lex = new ComplexNumberLexer(num);
 
-        ComplexNumberToken token;
-        ComplexNumberToken operator;
-        ComplexNumberToken real;
-        ComplexNumberToken imaginary;
+        Token token;
+        Token operator;
+        Token real;
+        Token imaginary;
 
         token = lex.getNextToken();
         if(token.matches("im", "i")) { // then we have the imaginary unit.

@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.dense_sparse.coo.real;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains several low level methods for computing matrix-matrix multiplications with a transpose for
@@ -36,7 +35,7 @@ public class RealDenseSparseMatrixMultTranspose {
 
     private RealDenseSparseMatrixMultTranspose() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

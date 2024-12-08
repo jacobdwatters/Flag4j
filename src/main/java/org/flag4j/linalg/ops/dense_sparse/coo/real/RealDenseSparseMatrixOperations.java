@@ -29,7 +29,6 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.ops.common.real.RealOps;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -39,7 +38,7 @@ public class RealDenseSparseMatrixOperations {
 
     private RealDenseSparseMatrixOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -179,12 +178,12 @@ public class RealDenseSparseMatrixOperations {
      * <p>
      *     If the dense matrix contains a zero at the same index the sparse matrix contains a non-zero, the result will be
      *     either {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
-     * </p>
+     * 
      *
      * <p>
      *     If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
      *     zero. This is done to realize computational benefits from ops with sparse matrices.
-     * </p>
+     * 
      *
      * @param src1 Real sparse matrix and numerator in element-wise quotient.
      * @param src2 Real Dense matrix and denominator in element-wise quotient.

@@ -24,14 +24,13 @@
 
 package org.flag4j.linalg.ops.dense.real_field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class provides methods for checking the equality of one dense real and one dense field tensors.
@@ -40,7 +39,7 @@ public final class RealFieldDenseEquals {
 
     private RealFieldDenseEquals() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

@@ -49,7 +49,7 @@ public final class PositiveDefiniteness {
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
-     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
     public static boolean isPosDef(Matrix src) {
@@ -71,7 +71,7 @@ public final class PositiveDefiniteness {
      * greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
-     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
     public static boolean isSymmPosDef(Matrix src) {
@@ -93,7 +93,7 @@ public final class PositiveDefiniteness {
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
-     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
      * @see #isPosSemiDef(CMatrix)
      */
     public static boolean isPosDef(CMatrix src) {
@@ -115,7 +115,7 @@ public final class PositiveDefiniteness {
      * greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
-     * @return True if the matrix is positive definite. Otherwise, returns false.
+     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
     public static boolean isSymmPosDef(CMatrix src) {
@@ -137,7 +137,7 @@ public final class PositiveDefiniteness {
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.
-     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
+     * @return {@code true} if the matrix is positive semi-definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
     public static boolean isPosSemiDef(Matrix src) {
@@ -159,7 +159,7 @@ public final class PositiveDefiniteness {
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.
-     * @return True if the matrix is positive semi-definite. Otherwise, returns false.
+     * @return {@code true} if the matrix is positive semi-definite; {@code false} otherwise.
      * @see #isPosSemiDef(CMatrix)
      */
     public static boolean isPosSemiDef(CMatrix src) {

@@ -33,11 +33,11 @@ import org.flag4j.linalg.Eigen;
 
 /**
  * <p>Instances of this class can be used to compute the singular value decomposition (SVD) of a
- * {@link Matrix real dense matrix}.</p>
+ * {@link Matrix real dense matrix}.
  *
  * <p>That is, decompose a rectangular matrix M as M=USV<sup>T</sup> where U and V are
  * orthogonal matrices whose columns are the left and right singular vectors of M and S is a rectangular
- * diagonal matrix containing the singular values of M.</p>
+ * diagonal matrix containing the singular values of M.
  */
 public class RealSVD extends SVD<Matrix> {
 

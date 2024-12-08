@@ -24,10 +24,10 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
@@ -82,6 +82,7 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
 public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         implements MatrixMixin<CsrMatrix, Matrix, CooVector, Double> {
 
+    private static final long serialVersionUID = 1L;
 
     /**
      * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #data} arrays.
@@ -178,10 +179,21 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
+     * Gets the length of the data array which backs this matrix.
+     *
+     * @return The length of the data array which backs this matrix.
+     */
+    @Override
+    public int dataLength() {
+        return data.length;
+    }
+
+
+    /**
      * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
      * computes the sum of products between the two tensors along the specified set of axes.
      *
-     * @param src2 TensorOld to contract with this tensor.
+     * @param src2 Tensor to contract with this tensor.
      * @param aAxes Axes along which to compute products for this tensor.
      * @param bAxes Axes along which to compute products for {@code src2} tensor.
      *
@@ -199,11 +211,11 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
 
 
     /**
-     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     * <p>Computes the generalized trace of this tensor along the specified axes.
      *
      * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * {@code axis1} and {@code axis2} removed.
      *
      * @param axis1 First axis for 2D sub-array.
      * @param axis2 Second axis for 2D sub-array.
@@ -299,7 +311,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *
      * @param axis Axis along which to flatten tensor.
      *
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than {@code this.{@link #getRank()}-1}.
      * @see #flatten()
      */
     @Override
@@ -535,7 +547,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     /**
      * Checks if this matrix is upper triangular.
      *
-     * @return True is this matrix is upper triangular. Otherwise, returns false.
+     * @return {@code true} is this matrix is upper triangular; {@code false} otherwise.
      *
      * @see #isTri()
      * @see #isTriL()
@@ -562,7 +574,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     /**
      * Checks if this matrix is lower triangular.
      *
-     * @return True is this matrix is lower triangular. Otherwise, returns false.
+     * @return {@code true} is this matrix is lower triangular; {@code false} otherwise.
      *
      * @see #isTri()
      * @see #isTriU()
@@ -590,7 +602,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
      * only ones along the principle diagonal and zeros everywhere else.
      *
-     * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if this matrix is the identity matrix; {@code false} otherwise.
      *
      * @see #isCloseToI()
      */
@@ -802,7 +814,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     /**
      * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
      *
-     * @return True if this matrix is symmetric. Otherwise, returns false.
+     * @return {@code true} if this matrix is symmetric; {@code false} otherwise.
      *
      * @see #isAntiSymmetric()
      */
@@ -815,7 +827,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     /**
      * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
      *
-     * @return True if this matrix is Hermitian. Otherwise, returns false.
+     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
      */
     @Override
     public boolean isHermitian() {
@@ -826,7 +838,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     /**
      * Checks if a matrix is anti-symmetric. That is, if the matrix is equal to the negative of its transpose.
      *
-     * @return True if this matrix is anti-symmetric. Otherwise, returns false.
+     * @return {@code true} if this matrix is anti-symmetric; {@code false} otherwise.
      *
      * @see #isSymmetric()
      */
@@ -838,7 +850,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     /**
      * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
      *
-     * @return True if this matrix it is orthogonal. Otherwise, returns false.
+     * @return {@code true} if this matrix it is orthogonal; {@code false} otherwise.
      */
     @Override
     public boolean isOrthogonal() {

@@ -25,8 +25,7 @@
 package org.flag4j.linalg.ops.common.semiring_ops;
 
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.algebraic_structures.Semiring;
 
 /**
  * This utility class contains methods useful for aggregating arrays of {@link Semiring}'s.
@@ -35,7 +34,7 @@ public final class AggregateSemiring {
 
     private AggregateSemiring() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

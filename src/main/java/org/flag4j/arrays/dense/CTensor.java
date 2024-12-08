@@ -24,17 +24,16 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Complex64;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Complex64;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
-import org.flag4j.arrays.backend.ring.TensorOverRing;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
+import org.flag4j.arrays.backend.ring_arrays.TensorOverRing;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.io.parsing.ComplexNumberParser;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
-import org.flag4j.linalg.ops.common.complex.Complex128Properties;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldTensorOps;
@@ -47,11 +46,12 @@ import java.util.Arrays;
 
 
 /**
- * <p>A dense complex tensor backed by an array of {@link Complex128}'s.</p>
+ * <p>A dense complex tensor backed by an array of {@link Complex128}'s.
  *
- * <p>The {@link #data} of a tensor are mutable but the {@link #shape} is fixed.</p>
+ * <p>The {@link #data} of a tensor are mutable but the {@link #shape} is fixed.
  */
 public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
+    private static final long serialVersionUID = 1L;
 
 
     /**
@@ -438,10 +438,10 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
 
     /**
      * Checks if all data of this tensor are real.
-     * @return {@code true} if all data of this tensor are real. Otherwise, returns {@code false}.
+     * @return {@code true} if all data of this tensor are real; {@code false} otherwise.
      */
     public boolean isReal() {
-        return Complex128Properties.isReal(data);
+        return Complex128Ops.isReal(data);
     }
 
 
@@ -450,7 +450,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
      * @return {@code true} if any entry of this tensor has a non-zero imaginary component.
      */
     public boolean isComplex() {
-        return Complex128Properties.isComplex(data);
+        return Complex128Ops.isComplex(data);
     }
 
 

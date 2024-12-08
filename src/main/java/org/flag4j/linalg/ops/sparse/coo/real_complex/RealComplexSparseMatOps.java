@@ -24,14 +24,13 @@
 
 package org.flag4j.linalg.ops.sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public final class RealComplexSparseMatOps {
 
     private RealComplexSparseMatOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

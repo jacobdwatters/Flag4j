@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.unitary;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.Flag4jConstants;
@@ -71,14 +71,14 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      * Creates a real unitary decomposer which will reduce the matrix to an upper triangular/Hessenburg matrix which is has zeros below
      * the specified sub-diagonal.
      *
-     * <p>Allows for specification if the reflectors used to bring matrix to upper triangular/Hessenburg form to be stored or not.</p>
+     * <p>Allows for specification if the reflectors used to bring matrix to upper triangular/Hessenburg form to be stored or not.
      *
      * <p>If the {@code Q} matrix is need, then {@code storeReflectors} must be true. If {@code Q} is <b>NOT</b> needed, then
-     * not storing the reflectors <i>may</i> improve performance slightly by avoiding unneeded copies.</p>
+     * not storing the reflectors <i>may</i> improve performance slightly by avoiding unneeded copies.
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy ops.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy ops.
      *
      * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all data
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
@@ -92,10 +92,10 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
 
 
     /**
-     * <p>Gets the unitary {@code Q} matrix from the {@code QR} decomposition.</p>
+     * <p>Gets the unitary {@code Q} matrix from the {@code QR} decomposition.
      *
      * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
-     * null.</p>
+     * null.
      *
      * @return The {@code Q} matrix from the {@code QR} decomposition. Note, if the reflectors for this decomposition were not saved,
      * then {@code Q} can not be computed and this method will return {@code null}.
@@ -148,7 +148,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
 
 
     /**
-     * Initialized any work arrays_old to be used in computing the decomposition with the proper size.
+     * Initialized any work arrays to be used in computing the decomposition with the proper size.
      *
      * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code max(numRows, numCols)}
      */

@@ -25,11 +25,10 @@
 package org.flag4j.linalg.ops.sparse.coo.field_ops;
 
 
-import org.flag4j.algebraic_structures.Pair;
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.Pair;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,14 +45,14 @@ public final class CooFieldMatrixProperties {
 
     private CooFieldMatrixProperties() {
         // Hide public constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
     /**
      * Checks if a complex sparse matrix is the identity matrix.
      * @param src Matrix to check if it is the identity matrix.
-     * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isIdentity(AbstractCooFieldMatrix<?, ?, ?, T> src) {
         // Ensure the matrix is square and there are at least the same number of non-zero data as data on the diagonal.
@@ -75,7 +74,7 @@ public final class CooFieldMatrixProperties {
     /**
      * Checks if a real sparse matrix is close to the identity matrix.
      * @param src Matrix to check if it is the identity matrix.
-     * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isCloseToIdentity(AbstractCooFieldMatrix<?, ?, ?, T> src) {
         // Ensure the matrix is square and there are the same number of non-zero data as data on the diagonal.
@@ -113,7 +112,7 @@ public final class CooFieldMatrixProperties {
             return false;
 
         // Build a map from (row, col) to value for quick access.
-        Map<Pair<Integer>, T> matrixMap = new HashMap<>();
+        Map<Pair<Integer, Integer>, T> matrixMap = new HashMap<>();
         int nnz = entries.length; // Number of non-zero data.
 
         for (int i = 0; i < nnz; i++) {
@@ -125,7 +124,7 @@ public final class CooFieldMatrixProperties {
         }
 
         // Iterate over the data to check for Hermitian property.
-        for (Map.Entry<Pair<Integer>, T> entry : matrixMap.entrySet()) {
+        for (Map.Entry<Pair<Integer, Integer>, T> entry : matrixMap.entrySet()) {
             int row = entry.getKey().first();
             int col = entry.getKey().second();
             T value = entry.getValue();

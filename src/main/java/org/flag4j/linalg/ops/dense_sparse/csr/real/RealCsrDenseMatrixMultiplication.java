@@ -29,7 +29,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -40,7 +39,7 @@ public final class RealCsrDenseMatrixMultiplication {
 
     private RealCsrDenseMatrixMultiplication() {
         // Hide default constructor for utility method.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

@@ -25,7 +25,7 @@
 package org.flag4j.linalg.transformations;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -37,17 +37,17 @@ import org.flag4j.util.ValidateParameters;
 import java.util.Arrays;
 
 /**
- * <p>This class contains methods for computing real or complex Givens' rotation matrices.</p>
+ * <p>This class contains methods for computing real or complex Givens' rotation matrices.
  * 
  * <p>A Givens' rotator is a square matrix G(i, k, theta) which, when left multiplied to a vector, represents
  * a counterclockwise rotation of theta radians of the vector in the (i, j) plane. Givens rotators
- * are a unitary transformation.</p>
+ * are a unitary transformation.
  */
 public final class Givens {
 
     private Givens() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -186,13 +186,13 @@ public final class Givens {
 
 
     /**
-     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.</p>
+     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.
      *
      * <p>Specifically, computes G*A[i-1:i+1][i-1:i+1] where i={@code row}, G is the 2x2 Givens rotator,
      * A is the matrix to apply the reflector to, and A[i-1:i+1][i-1:]
-     * represents the slice of A the reflector effects which has shape (2, A.numCols - i - 1).</p>
+     * represents the slice of A the reflector effects which has shape (2, A.numCols - i - 1).
      *
-     * <p>This method is likely to be faster than computing this multiplication explicitly.</p>
+     * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
      * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.
@@ -234,13 +234,13 @@ public final class Givens {
 
 
     /**
-     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place</p>
+     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place
      *
      * <p>Specifically, computes A[:][i-1:i+1]*G<sup>H</sup>
      * where i={@code row}, G is the 2x2 Givens rotator, A is the matrix to apply the reflector to, and A[:i+1][i-1:i+1]
-     * represents the slice of A the reflector effects which has shape {(row+1, 2).</p>
+     * represents the slice of A the reflector effects which has shape {(row+1, 2).
      *
-     * <p>This method is likely to be faster than computing this multiplication explicitly.</p>
+     * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
      * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.
@@ -286,13 +286,13 @@ public final class Givens {
 
 
     /**
-     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.</p>
+     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.
      *
      * <p>Specifically, computes G*A[i-1:i+1][i-1:i+1] where i={@code row},  G is the 2x2 Givens rotator,
      * A is the matrix to apply the reflector to, and {A[i-1:i+1][i-1:]
-     * represents the slice of A the reflector effects which has shape (2, A.numCols - i - 1).</p>
+     * represents the slice of A the reflector effects which has shape (2, A.numCols - i - 1).
      *
-     * <p>This method is likely to be faster than computing this multiplication explicitly.</p>
+     * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
      * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.
@@ -337,13 +337,13 @@ public final class Givens {
 
 
     /**
-     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place</p>
+     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place
      *
      * <p>Specifically, computes A[:][i-1:i+1]*G<sup>H</sup>
      * where i={@code row}, G is the 2x2 Givens rotator, A is the matrix to apply the reflector to, and
-     * {@code A[:i+1][i-1:i+1]} represents the slice of A the reflector effects which has shape {@code (row+1, 2)}.</p>
+     * {@code A[:i+1][i-1:i+1]} represents the slice of A the reflector effects which has shape {@code (row+1, 2)}.
      *
-     * <p>This method is likely to be faster than computing this multiplication explicitly.</p>
+     * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
      * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.

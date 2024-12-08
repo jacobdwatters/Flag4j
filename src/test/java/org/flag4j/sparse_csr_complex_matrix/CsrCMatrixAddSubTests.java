@@ -1,6 +1,6 @@
 package org.flag4j.sparse_csr_complex_matrix;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
@@ -9,7 +9,7 @@ import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.dense_sparse.csr.field_ops.DenseCsrFieldOperations;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOperations;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOperations;
-import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOperations;
+import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.AfterEach;
@@ -117,16 +117,16 @@ class CsrCMatrixAddSubTests {
                 {0, 0, 0, 0, 0, 0},
         };
         makeMatrices();
-        assertEquals(expAdd, RealComplexCsrOperations.add(A, B));
-        assertEquals(expAsubB, RealComplexCsrOperations.sub(A, B));
-        assertEquals(expBsubA, RealComplexCsrOperations.sub(B, A));
+        assertEquals(expAdd, RealComplexCsrOps.add(A, B));
+        assertEquals(expAsubB, RealComplexCsrOps.sub(A, B));
+        assertEquals(expBsubA, RealComplexCsrOps.sub(B, A));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrCMatrix(new Shape(2, 3), new Complex128[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.add(A, B));
-        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.sub(A, B));
-        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.sub(B, A));
+        assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.add(A, B));
+        assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.sub(A, B));
+        assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.sub(B, A));
     }
 
 

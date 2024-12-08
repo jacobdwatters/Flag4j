@@ -24,95 +24,37 @@
 
 package org.flag4j.io.parsing;
 
-
-import org.flag4j.util.exceptions.ComplexNumberParsingException;
+import org.flag4j.util.exceptions.Flag4jParsingException;
 
 /**
  * A lexer for producing the tokens of a complex number represented as a string.
  */
-class ComplexNumberLexer {
+class ComplexNumberLexer extends Lexer {
     /**
      * Error message for unexpected symbol.
      */
-    private static final String ERR_MSG = "Unexpected symbol while parsing CNumber: %s";
-
-    /**
-     * Content of the lexer.
-     */
-    protected String content;
+    private static final String ERR_MSG = "Unexpected symbol while parsing: %s";
 
     /**
      * @param content - String representation of complex number
      */
     public ComplexNumberLexer(String content) {
-        this.content = content;
+        super(content);
     }
 
 
     /**
-     * Gets the content of this Lexer.
-     * @return content of Lexer
-     */
-    public String getContent() { return content; }
-
-
-    /**
-     * @param code - ascii value of character
-     * @return returns true if character is digit. Otherwise, returns false.
-     */
-    protected boolean digit(int code ) {
-        return 48<=code && code<=57;
-    }
-
-
-
-    /**
-     * Produces individual symbols from content, left to right, as ascii values.
-     *
-     * @return Returns ascii value of the next symbol from content. If content is empty then returns -1
-     */
-    protected int getNextSymbol() {
-        int result = -1;
-
-        if (content.length() > 0) {
-            result = content.charAt(0);
-            content = content.substring(1);
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Replaces unneeded symbol back into content string.
-     *
-     * Note: This method should only be used when the programmer is confident the token
-     * is not an unexpected token.
-     *
-     * @param sym - symbol to place back into content string
-     */
-    protected void putBackSymbol(int sym) {
-        if(sym == -1) {
-            content = "";
-        }
-        else {
-            content = (char) sym + content;
-        }
-    }
-
-
-    /**
-     * Produces next {@link ComplexNumberToken} from complex number string. Also removes this
-     * ComplexNumberToken from the string. This method implements a finite automata which describes the legal arrangement of
+     * Produces next {@link Token} from complex number string. Also removes this
+     * Token from the string. This method implements a finite automata which describes the legal arrangement of
      * tokens within a complex number.
      *
-     * @return Next {@link ComplexNumberToken} in string.
-     * @throws RuntimeException If the string is not a valid representation of a complex number.
+     * @return Next {@link Token} in string.
+     * @throws Flag4jParsingException If the string is not a valid representation of a complex number.
      */
-    public ComplexNumberToken getNextToken() {
+    public Token getNextToken() {
         int state = 1;  // State of Finite Automata
         boolean done = false;
-        StringBuilder dataBuilder = new StringBuilder(); // specific info for the ComplexNumberToken
+        StringBuilder dataBuilder = new StringBuilder(); // specific info for the Token
         int sym;  // holds current symbol
 
 
@@ -129,7 +71,7 @@ class ComplexNumberLexer {
                     dataBuilder.append((char) sym);
                     done = true;
                 }
-                else if(digit(sym)) {
+                else if(isDigit(sym)) {
                     state = 3;
                     dataBuilder.append((char) sym);
                 }
@@ -155,7 +97,7 @@ class ComplexNumberLexer {
                     putBackSymbol(sym);
                     done = true;
                 }
-                else if(digit(sym)) {
+                else if(isDigit(sym)) {
                     state = 3;
                     dataBuilder.append((char) sym);
                 }
@@ -165,7 +107,7 @@ class ComplexNumberLexer {
                 }
             }
             else if(state == 3) {
-                if(digit(sym)) {
+                if(isDigit(sym)) {
                     // State does not need to change here.
                     dataBuilder.append((char) sym);
                 }
@@ -179,7 +121,7 @@ class ComplexNumberLexer {
                 }
             }
             else if(state == 7) {
-                if(digit(sym)) {
+                if(isDigit(sym)) {
                     state = 8;
                     dataBuilder.append((char) sym);
                 }
@@ -188,7 +130,7 @@ class ComplexNumberLexer {
                 }
             }
             else if(state == 8) {
-                if(digit(sym)) {
+                if(isDigit(sym)) {
                     // State does not need to change here.
                     dataBuilder.append((char) sym);
                 }
@@ -201,16 +143,16 @@ class ComplexNumberLexer {
         } while(!done);
 
         if(state == 2 || state == 4) { // we have an operator
-            return new ComplexNumberToken("opp", dataBuilder.toString());
+            return new Token("opp", dataBuilder.toString());
         }
         else if(state == 3 || state == 8) { // we have a number
-            return new ComplexNumberToken("num", dataBuilder.toString());
+            return new Token("num", dataBuilder.toString());
         }
         else if(state == 5) { // end of number
-            return new ComplexNumberToken("eof", dataBuilder.toString());
+            return new Token("eof", dataBuilder.toString());
         }
         else if(state == 6) { // we have the imaginary unit
-            return new ComplexNumberToken("im","i");
+            return new Token("im","i");
         }
         else {
             error("Somehow Lexer FA halted in bad state " + state);
@@ -224,6 +166,6 @@ class ComplexNumberLexer {
      * @param message - error message to print
      */
     protected static void error( String message ) {
-        throw new ComplexNumberParsingException(message);
+        throw new Flag4jParsingException(message);
     }
 }

@@ -24,10 +24,9 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.field.*;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.field_arrays.*;
 import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -38,7 +37,7 @@ public final class DenseCooFieldEquals {
 
     private DenseCooFieldEquals() {
         // Hide constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

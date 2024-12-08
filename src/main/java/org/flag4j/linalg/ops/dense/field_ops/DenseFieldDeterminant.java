@@ -25,13 +25,12 @@
 package org.flag4j.linalg.ops.dense.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.linalg.decompositions.lu.FieldLU;
 import org.flag4j.linalg.decompositions.lu.LU;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -43,7 +42,7 @@ public final class DenseFieldDeterminant {
 
     private DenseFieldDeterminant() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -103,9 +102,9 @@ public final class DenseFieldDeterminant {
 
 
     /**
-     * <p>Computes the determinant of a triangular matrix.</p>
+     * <p>Computes the determinant of a triangular matrix.
      * <p>WARNING: This method <i>does not</i> make <i>any</i> sanity checks. That is, no checks are made that {@code tri} is
-     * square or triangular.</p>
+     * square or triangular.
      * @param tri Triangular matrix. Assumed to be a square triangular matrix.
      * @return The determinant of the triangular matrix {@code tri}.
      */

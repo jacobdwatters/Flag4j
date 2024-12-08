@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -36,12 +35,12 @@ public final class CooTranspose {
 
     private CooTranspose() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
     /**
-     * <p>Computes the transpose of a sparse COO tensor by exchanging {@code axis1} and {@code axis2}.</p>
+     * <p>Computes the transpose of a sparse COO tensor by exchanging {@code axis1} and {@code axis2}.
      *
      * @param shape Shape of the tensor to transpose.
      * @param srcEntries The non-zero data of the tensor to transpose.

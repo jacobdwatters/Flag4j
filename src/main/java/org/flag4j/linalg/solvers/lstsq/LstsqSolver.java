@@ -33,9 +33,9 @@ import org.flag4j.linalg.solvers.LinearMatrixSolver;
 /**
  * <p>This class solves a linear system of equations Ax=b in a least-squares sense. That is,
  * minimizes ||Ax-b||<sub>2</sub> which is equivalent to solving the normal equations <sup>T</sup>Ax=A<sup>T
- * </sup>b.</p>
+ * </sup>b.
  *
- * <p>This is done using a QR decomposition.</p>
+ * <p>This is done using a QR decomposition.
  */
 public abstract class LstsqSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>>
         implements LinearMatrixSolver<T, U> {

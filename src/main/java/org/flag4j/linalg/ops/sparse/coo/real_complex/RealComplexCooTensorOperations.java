@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.ops.sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
@@ -194,9 +194,9 @@ public final class RealComplexCooTensorOperations {
 
 
     /**
-     * <p>Computes the element-wise multiplication between two sparse COO tensors.</p>
+     * <p>Computes the element-wise multiplication between two sparse COO tensors.
      *
-     * <p>Assumes indices of both tensors are sorted lexicographically.</p>
+     * <p>Assumes indices of both tensors are sorted lexicographically.
      *
      * @param src1 First tensor in the element-wise multiplication.
      * @param src2 Second tensor in the element-wise multiplication.
@@ -223,15 +223,15 @@ public final class RealComplexCooTensorOperations {
             }
         }
 
-        // Truncate arrays_old if necessary.
+        // Truncate arrays if necessary.
         return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 
 
     /**
-     * <p>Computes the element-wise multiplication between two sparse COO tensors.</p>
+     * <p>Computes the element-wise multiplication between two sparse COO tensors.
      *
-     * <p>Assumes indices of both tensors are sorted lexicographically.</p>
+     * <p>Assumes indices of both tensors are sorted lexicographically.
      *
      * @param src1 First tensor in the element-wise multiplication.
      * @param src2 Second tensor in the element-wise multiplication.
@@ -258,7 +258,7 @@ public final class RealComplexCooTensorOperations {
             }
         }
 
-        // Truncate arrays_old if necessary.
+        // Truncate arrays if necessary.
         return new CooCTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

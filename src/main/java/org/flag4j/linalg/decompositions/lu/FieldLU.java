@@ -24,18 +24,18 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
  * <p>This class provides methods for computing the LU decomposition of a dense matrix whose elements are members
- * of a {@link Field}.</p>
+ * of a {@link Field}.
  *
  * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU} which are determined by the
  * {@link org.flag4j.linalg.decompositions.lu.LU.Pivoting pivoting} used.
- * .</p>
+ * .
  */
 public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
 

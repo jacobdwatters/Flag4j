@@ -25,8 +25,7 @@
 package org.flag4j.io;
 
 
-import org.flag4j.algebraic_structures.fields.*;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.algebraic_structures.*;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -38,7 +37,6 @@ public final class PrettyPrint {
 
     private PrettyPrint() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -92,7 +90,7 @@ public final class PrettyPrint {
      * @return A string representing the abbreviated and formatted array.
      */
     public static <T extends Field<T>> String abbreviatedArray(Field<T>[] arr, int maxEntries, int padding, int precision,
-                                                         boolean centring) {
+                                                               boolean centring) {
         ValidateParameters.ensureNonNegative(maxEntries, padding, precision);
         StringBuilder result = new StringBuilder("[");
         String value;
@@ -317,7 +315,7 @@ public final class PrettyPrint {
 
     /**
      * Compute the length of the string representation of the specified field value rounded to {@code precision} if possible.
-     * @param value Field value to round. If the value cannot be rounded the length of the object unchanged will be returned.
+     * @param value MMField value to round. If the value cannot be rounded the length of the object unchanged will be returned.
      * @param precision The precision to round {@code value} to.
      * @return
      */
@@ -327,10 +325,10 @@ public final class PrettyPrint {
             length = Complex128.round((Complex128) value, precision).toString().length();
         else if(value instanceof Complex64)
             length = Complex64.round((Complex64) value, precision).toString().length();
-        else if(value instanceof RealFloat64)
-            length = RealFloat64.round((RealFloat64) value, precision).toString().length();
-        else if(value instanceof RealFloat32)
-            length = RealFloat32.round((RealFloat32) value, precision).toString().length();
+        else if(value instanceof Real64)
+            length = Real64.round((Real64) value, precision).toString().length();
+        else if(value instanceof Real32)
+            length = Real32.round((Real32) value, precision).toString().length();
         else
             length = value.toString().length();
 

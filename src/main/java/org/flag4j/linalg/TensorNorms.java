@@ -24,13 +24,12 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -40,7 +39,7 @@ public final class TensorNorms {
 
     private TensorNorms() {
         // Hide default constructor for utility class
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
     // TODO: Ensure the below infNorm methods correct? These seems to be a max norm. Are the same?
@@ -217,8 +216,8 @@ public final class TensorNorms {
     public static double tensorNormL2(Complex128[] src) {
         double norm = 0;
 
-        for(Complex128 cNumber : src)
-            norm += Complex128.pow((Complex128) cNumber, 2).mag();
+        for(Complex128 value : src)
+            norm += Complex128.pow((Complex128) value, 2).mag();
 
         return Math.sqrt(norm);
     }
@@ -233,8 +232,8 @@ public final class TensorNorms {
     public static double tensorNormLp(Complex128[] src, double p) {
         double norm = 0;
 
-        for(Complex128 cNumber : src)
-            norm += Complex128.pow((Complex128) cNumber, p).mag();
+        for(Complex128 value : src)
+            norm += Complex128.pow((Complex128) value, p).mag();
 
         return Math.pow(norm, 1.0/p);
     }

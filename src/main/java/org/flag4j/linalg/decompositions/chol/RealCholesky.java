@@ -32,11 +32,11 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>An instance of this class allows for the computation of a Cholesky decomposition for a
- * real dense {@link Matrix matrix}.</p>
+ * real dense {@link Matrix matrix}.
  *
  * <p>Given a symmetric positive-definite matrix A, the Cholesky decomposition will decompose the matrix into
  * A=LL<sup>T</sup> where L is a lower triangular matrix and L<sup>T</sup> is the
- * transpose of L.</p>
+ * transpose of L.
  */
 public class RealCholesky extends Cholesky<Matrix> {
 

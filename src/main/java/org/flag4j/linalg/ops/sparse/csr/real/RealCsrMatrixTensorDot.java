@@ -38,7 +38,7 @@ public final class RealCsrMatrixTensorDot {
 
     private RealCsrMatrixTensorDot() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

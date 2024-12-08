@@ -24,8 +24,6 @@
 
 package org.flag4j.linalg.ops.common.real;
 
-import org.flag4j.util.ErrorMessages;
-
 /**
  * This class provides low level methods for checking tensor properties. These methods can be applied to
  * either sparse or dense real tensors.
@@ -34,14 +32,13 @@ public final class RealProperties {
 
     private RealProperties() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
      * Checks if a tensor only contain positive values. If the tensor is sparse, only the non-zero data are considered.
      * @param entries Entries of the tensor in question.
-     * @return True if the tensor contains only positive values. Otherwise, returns false.
+     * @return {@code true} if the tensor contains only positive values; {@code false} otherwise.
      */
     public static boolean isPos(double[] entries) {
         boolean result = true;
@@ -60,7 +57,7 @@ public final class RealProperties {
     /**
      * Checks if a tensor only contain negative values. If the tensor is sparse, only the non-zero data are considered.
      * @param entries Entries of the tensor in question.
-     * @return True if the tensor contains only negative values. Otherwise, returns false.
+     * @return {@code true} if the tensor contains only negative values; {@code false} otherwise.
      */
     public static boolean isNeg(double[] entries) {
         boolean result = true;
@@ -138,7 +135,7 @@ public final class RealProperties {
     /**
      * Checks if this tensor only contains ones.
      * @param src Elements of the tensor.
-     * @return True if this tensor only contains ones. Otherwise, returns false.
+     * @return {@code true} if this tensor only contains ones; {@code false} otherwise.
      */
     public static boolean isOnes(double[] src) {
         boolean allZeros = true;
@@ -157,7 +154,7 @@ public final class RealProperties {
     /**
      * Checks if <i>any</i> of the elements of a tensor contain a {@link Double#NaN}.
      * @param src Entries of the tensor.
-     * @return {@code true} is any entry of {@code src} is {@link Double#NaN}. Otherwise, returns {@code false}.
+     * @return {@code true} is any entry of {@code src} is {@link Double#NaN}; {@code false} otherwise.
      */
     public static boolean isNaN(double[] src) {
         for(double value : src)
@@ -184,7 +181,7 @@ public final class RealProperties {
     /**
      * Checks if <i>any</i> of the elements of a tensor is infinite.
      * @param src Entries of the tensor.
-     * @return {@code true} is any entry of {@code src} is {@link Double#isInfinite(double) infinite}. Otherwise, returns {@code false}.
+     * @return {@code true} is any entry of {@code src} is {@link Double#isInfinite(double) infinite}; {@code false} otherwise.
      */
     public static boolean isInfinite(double[] src) {
         for(double value : src)

@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
@@ -32,7 +32,6 @@ import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.real.RealOps;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -42,7 +41,7 @@ public final class RealComplexDenseCooOps {
 
     private RealComplexDenseCooOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

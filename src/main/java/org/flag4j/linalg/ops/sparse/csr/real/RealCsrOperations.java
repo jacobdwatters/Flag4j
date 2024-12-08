@@ -34,7 +34,6 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public final class RealCsrOperations {
 
     private RealCsrOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -116,14 +115,14 @@ public final class RealCsrOperations {
      * matrix addition algorithm.
      * @param src1 The first matrix in the operation.
      * @param src2 The second matrix in the operation.
-     * @param bOpp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
+     * @param bOpp Binary operator to apply element-wise to {@code src1} and {@code src2}.
      * @param uOpp Unary operator for use with binary ops which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code bOpp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code bOpp.apply(x, uOpp.apply(y))}.
-     * @return The result of applying the specified binary operation to <code>src1</code> and <code>src2</code>
+     * @return The result of applying the specified binary operation to {@code src1} and {@code src2}
      * element-wise.
-     * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
+     * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
     public static CsrMatrix applyBinOpp(CsrMatrix src1, CsrMatrix src2,
                                         BinaryOperator<Double> bOpp,

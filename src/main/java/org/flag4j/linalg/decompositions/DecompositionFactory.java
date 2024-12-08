@@ -38,7 +38,6 @@ import org.flag4j.linalg.decompositions.qr.RealQR;
 import org.flag4j.linalg.decompositions.schur.RealSchur;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * A factory class for creating decomposers to perform various matrix decompositions.
@@ -47,7 +46,7 @@ public final class DecompositionFactory {
 
     private DecompositionFactory() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

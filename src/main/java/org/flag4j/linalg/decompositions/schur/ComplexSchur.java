@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.schur;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.Eigen;
@@ -39,12 +39,12 @@ import org.flag4j.util.Flag4jConstants;
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
 /**
- * <p>This class computes the Schur decomposition of a complex dense square matrix.</p>
+ * <p>This class computes the Schur decomposition of a complex dense square matrix.
  *
  * <p>That is, decompose a square matrix A into A=UTU<sup>H</sup> where U is a unitary
  * matrix and T is a quasi-upper triangular matrix called the Schur form of A. T is upper triangular
  * except for possibly 2x2 blocks along the diagonal. T is similar to A. Meaning they share the same eigenvalues.
- * </p>
+ * 
  *
  * <p>This code was adapted from the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a> library and the description of
  * the Francis implicit double shifted QR algorithm given in
@@ -69,10 +69,10 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a complex dense matrix.</p>
+     * <p>Creates a decomposer to compute the Schur decomposition for a complex dense matrix.
      *
      * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
-     * set the seed for the pseudo-random number generator using {@link #ComplexSchur(long)}</p>
+     * set the seed for the pseudo-random number generator using {@link #ComplexSchur(long)}
      */
     public ComplexSchur() {
         super(true, new RandomComplex(), new ComplexHess());
@@ -81,14 +81,14 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
     /**
      * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the U matrix may or may not
-     * be computed.</p>
+     * be computed.
      *
-     * <p>If the U matrix is not needed, passing {@code computeU = false} may provide a performance improvement.</p>
+     * <p>If the U matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * <p>By default if a constructor with no {@code computeU} parameter is called, U <b>WILL</b> be computed.</p>
+     * <p>By default if a constructor with no {@code computeU} parameter is called, U <b>WILL</b> be computed.
      *
      * <p>Note: This decomposer <i>may</i> use random numbers during the decomposition. If reproducible results are desired,
-     * set the seed for the pseudo-random number generator using {@link #ComplexSchur(boolean, long)}</p>
+     * set the seed for the pseudo-random number generator using {@link #ComplexSchur(boolean, long)}
      *
      * @param computeU Flag indicating if the unitary U matrix should be computed for the Schur decomposition. If true,
      * U will be computed. If false, U will not be computed.
@@ -117,13 +117,13 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
 
     /**
-     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.</p>
+     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.
      *
      * <p>That is, if {@code exceptionalThreshold = 10}, then at most 10 QR algorithm iterations will be performed.
      * If, by the 10th iteration, no convergence has been detected which allows for deflation, then a QR algorithm iteration
-     * will be performed with a random (i.e. exceptional) shift.</p>
+     * will be performed with a random (i.e. exceptional) shift.
      *
-     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}</p>
+     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}
      *
      * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without deflation
      *                             before performing an iteration with random shifts.
@@ -142,14 +142,14 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
      * for when computing the decomposition. The maximum number of iterations is computed as
      * <pre>
      *     {@code maxIteration = maxIterationFactor * src.numRows;} </pre>
-     * If the algorithm does not converge within this limit, an error will be thrown.</p>
+     * If the algorithm does not converge within this limit, an error will be thrown.
      *
      * <p>By default, this is computed as
      * <pre>
      *     {@code maxIterations = }{@link #DEFAULT_MAX_ITERS_FACTOR}{@code * src.numRows;}</pre>
      *
      * where {@code src} is the matrix
-     * being decomposed.</p>
+     * being decomposed.
      *
      * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
      * QR algorithm for.
@@ -164,7 +164,7 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
 
     /**
-     * <p>Computes the Schur decomposition of the input matrix.</p>
+     * <p>Computes the Schur decomposition of the input matrix.
      *
      * @implNote The Schur decomposition is computed using the Francis implicit double shifted QR algorithm.
      * There are known cases where this variant of the QR algorithm fail to converge. Random shifting is employed when the
@@ -180,7 +180,7 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
 
     /**
-     * Initializes temporary work arrays_old to be used in the decomposition.
+     * Initializes temporary work arrays to be used in the decomposition.
      */
     @Override
     protected void setUpArrays() {

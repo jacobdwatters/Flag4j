@@ -24,15 +24,14 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Complex64;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Complex64;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
-import org.flag4j.linalg.ops.common.complex.Complex128Properties;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
@@ -47,7 +46,7 @@ import java.util.Arrays;
 
 // TODO: Javadoc.
 public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex128> {
-
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a complex vector with the specified {@code data}.
@@ -480,10 +479,10 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
 
     /**
      * Checks if all data of this vector are real.
-     * @return {@code true} if all data of this tensor are real. Otherwise, returns {@code false}.
+     * @return {@code true} if all data of this tensor are real; {@code false} otherwise.
      */
     public boolean isReal() {
-        return Complex128Properties.isReal(data);
+        return Complex128Ops.isReal(data);
     }
 
 
@@ -492,7 +491,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @return {@code true} if any entry of this vector has a non-zero imaginary component.
      */
     public boolean isComplex() {
-        return Complex128Properties.isComplex(data);
+        return Complex128Ops.isComplex(data);
     }
 
 

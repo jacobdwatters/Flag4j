@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.dense_sparse.coo.real;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.common.real.RealOps;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -39,7 +38,6 @@ public class RealDenseSparseVectorOperations {
 
     private RealDenseSparseVectorOperations() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

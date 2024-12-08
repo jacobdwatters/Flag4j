@@ -24,11 +24,10 @@
 
 package org.flag4j.linalg.ops.sparse.csr;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseMatrixData;
+import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public final class CsrOps {
 
     private CsrOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
     /**
@@ -123,14 +122,14 @@ public final class CsrOps {
      * @param src2Entries Non-zero data of the second CSR matrix.
      * @param src2RowPointers Non-zero row pointers of the second CSR matrix.
      * @param src2ColIndices Non-zero column indices of the second CSR matrix.
-     * @param opp Binary operator to apply element-wise to <code>src1</code> and <code>src2</code>.
+     * @param opp Binary operator to apply element-wise to {@code src1} and {@code src2}.
      * @param uOpp Unary operator for use with binary ops which are not commutative such as subtraction. If the operation is
      * commutative this should be {@code null}. If the binary operation is not commutative, it needs to be decomposable to one
      * commutative binary operation {@code opp} and one unary operation {@code uOpp} such that it is equivalent to
      * {@code opp.apply(x, uOpp.apply(y))}.
-     * @return The result of applying the specified binary operation to <code>src1</code> and <code>src2</code>
+     * @return The result of applying the specified binary operation to {@code src1} and {@code src2}
      * element-wise.
-     * @throws IllegalArgumentException If <code>src1</code> and <code>src2</code> do not have the same shape.
+     * @throws IllegalArgumentException If {@code src1} and {@code src2} do not have the same shape.
      */
     public static <T> SparseMatrixData<T> applyBinOpp(Shape shape1, T[] src1Entries, int[] src1RowPointers, int[] src1ColIndices,
                                                       Shape shape2, T[] src2Entries, int[] src2RowPointers, int[] src2ColIndices,
@@ -283,7 +282,7 @@ public final class CsrOps {
         for(int i=rowIdx1+1; i<=rowIdx2; i++)
             rowPointers[i] += diff;
 
-        // Copy updated arrays_old to this tensor's storage.
+        // Copy updated arrays to this tensor's storage.
         System.arraycopy(updatedEntries, 0, entries, start1, updatedEntries.length);
         System.arraycopy(updatedColIndices, 0, colIndices, start1, updatedEntries.length);
     }

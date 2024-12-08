@@ -31,9 +31,9 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * <p>This solver solves linear systems of equations where the coefficient matrix in an {@link Matrix#isTriU() upper triangular}
- * real dense matrix and the constant vector is a real dense vector or matrix.</p>
+ * real dense matrix and the constant vector is a real dense vector or matrix.
  *
- * <p>That is, solves a linear system of equations U*x=b or U*X=B where U is an upper triangular matrix.</p>
+ * <p>That is, solves a linear system of equations U*x=b or U*X=B where U is an upper triangular matrix.
  */
 public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 

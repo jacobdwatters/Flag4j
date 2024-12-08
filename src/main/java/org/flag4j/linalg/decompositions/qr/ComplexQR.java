@@ -29,11 +29,11 @@ import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 
 
 /**
- * <p>Instances of this class compute the {@code QR} decomposition of a {@link CMatrix complex dense matrix}.</p>
+ * <p>Instances of this class compute the {@code QR} decomposition of a {@link CMatrix complex dense matrix}.
  * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
- * and an upper triangular matrix {@code R} such that {@code A=QR}.</p>
+ * and an upper triangular matrix {@code R} such that {@code A=QR}.
  *
- * <p>Much of this code has been adapted from the EJML library.</p>
+ * <p>Much of this code has been adapted from the EJML library.
  */
 public class ComplexQR extends ComplexUnitaryDecomposition {
 

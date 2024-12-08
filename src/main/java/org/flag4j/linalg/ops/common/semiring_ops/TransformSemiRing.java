@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.common.semiring_ops;
 
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.util.ErrorMessages;
 
 import java.util.function.BinaryOperator;
@@ -62,10 +62,10 @@ public final class TransformSemiRing {
     /**
      * <p>Applies a specified function to each element of the given array and returns a new array containing the results of the
      * mapping operation. This produces a new array where each element is the result of applying the provided {@code mapper}
-     * function to the corresponding element in the input array.</p>
+     * function to the corresponding element in the input array.
      *
      * <p>For example, if the array contains elements [a, b, c] and the {@code mapper} function multiplies each element by 2,
-     * the returned array will contain [2a, 2b, 2c].</p>
+     * the returned array will contain [2a, 2b, 2c].
      *
      * @param values the array of field elements to map; must not be null
      * @param mapper the mapping function to apply to each element; must not be null
@@ -91,15 +91,15 @@ public final class TransformSemiRing {
     /**
      * <p>Reduces the given array of field elements to a single element by repeatedly applying a binary operator
      * to combine elements. The reduction is performed from left to right, starting with the first element
-     * in the array and hence is a "left-reduce" or "left fold".</p>
+     * in the array and hence is a "left-reduce" or "left fold".
      *
      * <p>The {@code reduce} operation applies the specified {@code accumulator} function to the first
      * element and the second element, then applies it to the result and the third element, and so on
      * until all elements have been combined into a single result. The operation assumes that the array
-     * contains at least one element.</p>
+     * contains at least one element.
      *
      * <p>For example, if the array contains elements [a, b, c, d] and the accumulator is a function
-     * which adds elements, the method would compute (((a + b) + c) + d).</p>
+     * which adds elements, the method would compute (((a + b) + c) + d).
      *
      * @param values The array of field elements to reduce. Cannot be empty or null.
      * @param accumulator The binary operator to combine elements.

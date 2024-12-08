@@ -28,7 +28,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
@@ -39,7 +38,7 @@ public final class DenseTranspose {
 
     private DenseTranspose() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

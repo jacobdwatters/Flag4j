@@ -29,12 +29,13 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.TensorMixin;
 import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend.semiring_arrays.TensorOverSemiring;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.util.ValidateParameters;
 
 /**
- * <p>Solves a well determined system of equations A*X=B in an exact sense where A, X, and B are tensors.</p>
+ * <p>Solves a well determined system of equations <i>AX=B</i> in an exact sense where <i>A</i>, <i>X</i>, and <i>B</i> are tensors.
  *
  * @param <T> Type of tensor in equation to solve.
  * @param <U> Matrix type equivalent of tensor to solve.
@@ -46,8 +47,8 @@ public abstract class ExactTensorSolver<T extends TensorMixin<T, ?, ?>,
 
 
     /**
-     * Solver to solve a linear matrix equation C*x=d for X where C is a matrix and
-     * x and d are vectors.
+     * Solver to solve a linear matrix equation <i>Cx=d</i> for <i>X</i> where <i>C</i> is a matrix and
+     * <i>x</i> and <i>d</i> are vectors.
      */
     private final LinearMatrixSolver<U, V> matrixSolver;
 
@@ -63,15 +64,15 @@ public abstract class ExactTensorSolver<T extends TensorMixin<T, ?, ?>,
 
 
     /**
-     * <p>Solves the linear tensor equation given by A*X=B for the tensor X.</p>
+     * <p>Solves the linear tensor equation given by <i>AX=B</i> for the tensor <i>X</i>.
      *
-     * <p>All indices of X are summed over in the tensor product with the rightmost indices of A as if by
-     * {@link TensorOverSemiRing#tensorDot(TensorOverSemiRing, int[], int[]) A.tensorDot(X, M, N)} where
+     * <p>All indices of <i>X</i> are summed over in the tensor product with the rightmost indices of <i>A</i> as if by
+     * {@link org.flag4j.arrays.backend.semiring_arrays.TensorOverSemiring#tensorDot(TensorOverSemiring, int[], int[])} where
      * {@code M = new int[]{X.rank()-1, X.rank(), X.rank()+1, ..., A.rank()-1}} and
-     * {@code N = new int[]{0, 1, ..., X.rank()-1}}</p>
+     * {@code N = new int[]{0, 1, ..., X.rank()-1}}
      * @param A Coefficient tensor in the linear system.
      * @param B Tensor of constants in the linear system.
-     * @return The solution to X in the linear system A*X=B.
+     * @return The solution to <i>X</i> in the linear system <i>AX=B</i>.
      */
     @Override
     public T solve(T A, T B) {
@@ -98,10 +99,10 @@ public abstract class ExactTensorSolver<T extends TensorMixin<T, ?, ?>,
 
     /**
      * Constructs the shape of the output.
-     * @param A Tensor corresponding to A in A*X=B.
-     * @param B Tensor corresponding to B in A*X=B.
+     * @param A Tensor corresponding to A in <i>AX=B</i>.
+     * @param B Tensor corresponding to B in <i>AX=B</i>.
      * @param aRankOriginal Original rank of {@code A} before any reshaping.
-     * @return The shape of X in A*X=B.
+     * @return The shape of <i>X</i> in <i>AX=B</i>.
      */
     protected Shape getOutputShape(T A, T B, int aRankOriginal) {
         int start = -(aRankOriginal - B.getRank());
@@ -143,9 +144,9 @@ public abstract class ExactTensorSolver<T extends TensorMixin<T, ?, ?>,
 
     /**
      * Wraps solution as a tensor and reshapes to the proper shape.
-     * @param x Vector solution to matrix linear equation which is equivalent to the tensor equation A*X=B.
-     * @param outputShape Shape for the solution tensor X.
-     * @return The solution X to the linear tensor equation A*X=B.
+     * @param x Vector solution to matrix linear equation which is equivalent to the tensor equation <i>Ax=b</i>.
+     * @param outputShape Shape for the solution tensor <i>x</i>.
+     * @return The solution <i>x</i> to the linear tensor equation <i>Ax=b</i>.
      */
     protected abstract T wrap(V x, Shape outputShape);
 }

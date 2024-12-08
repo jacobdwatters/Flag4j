@@ -1,7 +1,7 @@
 package org.flag4j.linalg.ops.dense.real_complex;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseVectorOperations;
 import org.flag4j.util.exceptions.LinearAlgebraException;

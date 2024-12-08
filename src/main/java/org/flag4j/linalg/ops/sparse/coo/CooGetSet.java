@@ -25,11 +25,10 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.arrays.backend.SparseVectorData;
+import org.flag4j.arrays.SparseMatrixData;
+import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -37,14 +36,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>A utility class that aids in getting or setting specified elements of a sparse COO tensor, matrix, or vector.</p>
- * <p>All methods in this class guarantee all results will be properly lexicographically sorted by indices.</p>
+ * <p>A utility class that aids in getting or setting specified elements of a sparse COO tensor, matrix, or vector.
+ * <p>All methods in this class guarantee all results will be properly lexicographically sorted by indices.
  */
 public final class CooGetSet {
 
     private CooGetSet() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

@@ -34,7 +34,6 @@ import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
 import org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolver;
 import org.flag4j.linalg.solvers.lstsq.RealLstsqSolver;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains several methods for computing the subspace of a matrix.
@@ -43,7 +42,7 @@ public final class SubSpace {
 
     private SubSpace() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

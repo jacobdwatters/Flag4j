@@ -24,25 +24,24 @@
 
 package org.flag4j.linalg.ops.dense.real_field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
 /**
  * <p>This class contains several low level methods for computing matrix-matrix multiplications with a transpose for a
- * real dense matrix and a dense field matrix.</p>
+ * real dense matrix and a dense field matrix.
  *
- * <p><b>Warning:</b> These methods do not perform any sanity checks.</p>
+ * <p><b>Warning:</b> These methods do not perform any sanity checks.
  */
 public final class RealFieldDenseMatMultTranspose {
 
     private RealFieldDenseMatMultTranspose() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

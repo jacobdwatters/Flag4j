@@ -25,24 +25,26 @@
 package org.flag4j.linalg.solvers;
 
 
-import org.flag4j.arrays.backend.semiring.TensorOverSemiring;
-
 /**
- * <p>This interface specifies methods which all linear system solvers should implement.
+ * <p>Interface representing a linear system solver for tensor equations. Implementations of this interface
+ * provide methods to solve linear equations involving tensors, such as <i>AX=B</i>, where
+ * <i>A</i>, <i>B</i>, and <i>X</i> are tensors.
  *
- * <p>Solvers may solve in an exact sense or in a least squares sense.
+ * <p>Solvers may compute exact solutions or approximate solutions in a least squares sense, depending on the
+ * properties of the tensor equation.
  *
- * @param <T> Type of the tensor in the linear system.
+ * @param <T> The type of tensor in the linear system.
  */
 public interface LinearSolver<T> {
 
     /**
-     * Solves the linear tensor equation given by A*X=B for the tensor X. All indices of X are summed over in
-     * the tensor product with the rightmost indices of A as if by
-     * {@link org.flag4j.arrays.backend.ring.TensorOverRing#tensorDot(TensorOverSemiring, int) A.tensorDot(X, X.getRank())}.
-     * @param A Coefficient tensor in the linear system.
-     * @param B Tensor of constants in the linear system.
-     * @return The solution to the tensor X in the linear system A*X=B.
+     * Solves the linear tensor equation <i>AX=B</i> for the tensor <i>X</i>. The multiplication <i>AX</i> is defined such that
+     * it performs a tensor dot product over all indices of <i>X</i> with the rightmost indices of <i>A</i>, equivalent to
+     * {@code A.tensorDot(X, X.getRank())}.
+     *
+     * @param A The coefficient tensor in the linear system.
+     * @param B The constant tensor in the linear system.
+     * @return The solution tensor <i>X</i> satisfying <i>AX=B</i>.
      */
     T solve(T A, T B);
 }

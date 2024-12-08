@@ -25,20 +25,20 @@
 package org.flag4j.linalg.ops.dense.ring_ops;
 
 
-import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
- * This utility class contains methods for computing ops on dense {@link org.flag4j.algebraic_structures.rings.Ring}
+ * This utility class contains methods for computing ops on dense {@link Ring}
  * Vectors.
  */
 public final class DenseRingVectorOps {
 
     private DenseRingVectorOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

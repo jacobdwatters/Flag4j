@@ -29,7 +29,6 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.common.real.RealProperties;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.*;
 
@@ -40,7 +39,7 @@ public final class RealSparseEquals {
 
     private RealSparseEquals(){
         // Hide default constructor for base class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

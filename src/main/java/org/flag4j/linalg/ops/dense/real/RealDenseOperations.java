@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.dense.real;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import static org.flag4j.util.ArrayUtils.makeNewIfNull;
@@ -37,7 +36,7 @@ public final class RealDenseOperations {
 
     private RealDenseOperations() {
         // Hide constructor
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+
     }
 
 

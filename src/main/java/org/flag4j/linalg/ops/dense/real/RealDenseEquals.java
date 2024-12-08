@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.dense.real;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -39,7 +38,7 @@ public final class RealDenseEquals {
 
     private RealDenseEquals() {
         // Hide constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -47,7 +46,7 @@ public final class RealDenseEquals {
      * Checks if two real dense vectors are equal.
      * @param src1 Entries of first vector.
      * @param src2 Entries of second vector.
-     * @return True if the two vectors are element-wise numerically equal. Otherwise, returns false.
+     * @return {@code true} if the two vectors are element-wise numerically equal; {@code false} otherwise.
      */
     public static boolean vectorEquals(double[] src1, double[] src2) {
         return Arrays.equals(src1, src2);

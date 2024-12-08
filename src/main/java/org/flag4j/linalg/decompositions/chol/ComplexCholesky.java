@@ -25,7 +25,7 @@
 package org.flag4j.linalg.decompositions.chol;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
@@ -33,19 +33,19 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>An instance of this class allows for the computation of a Cholesky decomposition of a complex Hermitian
- * positive-definite matrix.</p>
+ * positive-definite matrix.
  *
  * <p>Given a complex Hermitian positive-definite matrix A, the Cholesky decomposition will decompose it into
  * A=LL<sup>H</sup> where L is a lower triangular matrix and L<sup>H</sup> is the conjugate
- * transpose of L.</p>
+ * transpose of L.
  */
 public class ComplexCholesky extends Cholesky<CMatrix> {
 
     /**
-     * <p>Constructs a complex Cholesky decomposer.</p>
+     * <p>Constructs a complex Cholesky decomposer.
      *
      * <p>If you would like to enforce a check for hermitian symmetry at the time
-     * of decomposition, see {@link #ComplexCholesky(boolean)}.</p>
+     * of decomposition, see {@link #ComplexCholesky(boolean)}.
      */
     public ComplexCholesky() {
         super(false);

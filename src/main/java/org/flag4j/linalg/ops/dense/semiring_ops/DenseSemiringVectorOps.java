@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.ops.dense.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ErrorMessages;
 
@@ -36,7 +36,7 @@ public final class DenseSemiringVectorOps {
 
     private DenseSemiringVectorOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

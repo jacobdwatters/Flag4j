@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -35,7 +34,7 @@ public final class CooManipulations {
 
     private CooManipulations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

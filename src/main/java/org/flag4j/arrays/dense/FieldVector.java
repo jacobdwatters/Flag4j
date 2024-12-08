@@ -24,9 +24,9 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooFieldVector;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.util.StringUtils;
@@ -35,16 +35,16 @@ import org.flag4j.util.ValidateParameters;
 import java.util.Arrays;
 
 /**
- * <p>A dense vector whose data are {@link Field field} elements.</p>
+ * <p>A dense vector whose data are {@link Field field} elements.
  *
- * <p>Vectors are 1D tensors (i.e. rank 1 tensor).</p>
+ * <p>Vectors are 1D tensors (i.e. rank 1 tensor).
  *
- * <p>FieldVectors have mutable data but a fixed size.</p>
+ * <p>FieldVectors have mutable data but a fixed size.
  *
  * @param <T> Type of the field element for the vector.
  */
 public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<FieldVector<T>, FieldMatrix<T>, T> {
-
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a vector with the specified data.

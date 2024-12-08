@@ -25,8 +25,6 @@
 package org.flag4j.linalg.ops.sparse.coo.real;
 
 
-import org.flag4j.util.ErrorMessages;
-
 /**
  * This utility class provides methods for inserting/removing values in a real sparse vector.
  */
@@ -34,6 +32,6 @@ public final class RealSparseManipulations {
 
     private RealSparseManipulations() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+
     }
 }

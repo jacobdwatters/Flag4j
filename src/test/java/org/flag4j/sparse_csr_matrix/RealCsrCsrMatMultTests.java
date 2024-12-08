@@ -5,7 +5,7 @@ import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RealCsrCsrMatMultTests {

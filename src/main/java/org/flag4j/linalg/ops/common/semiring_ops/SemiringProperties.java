@@ -24,24 +24,22 @@
 
 package org.flag4j.linalg.ops.common.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.algebraic_structures.Semiring;
 
 
 /**
- * This utility class provides methods useful for determining properties of semi-ring tensors.
+ * This utility class provides methods useful for determining properties of semiring tensors.
  */
 public final class SemiringProperties {
 
     private SemiringProperties() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     /**
      * Checks if an array contains only zeros.
      * @param src Array to check if it only contains zeros.
-     * @return True if the {@code src} array contains only zeros. Otherwise, returns {@code false}.
+     * @return True if the {@code src} array contains only zeros; {@code false} otherwise.
      */
     public static <T extends Semiring<T>> boolean isZeros(T[] src) {
         for(T value: src)
@@ -54,7 +52,7 @@ public final class SemiringProperties {
     /**
      * Checks if an array contains only ones.
      * @param src Array to check if it only contains ones.
-     * @return {@code true} if the {@code src} array contains only ones. Otherwise, returns {@code false}.
+     * @return {@code true} if the {@code src} array contains only ones; {@code false} otherwise.
      */
     public static <T extends Semiring<T>> boolean isOnes(T[] src) {
         for(T value: src)

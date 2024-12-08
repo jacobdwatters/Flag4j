@@ -45,6 +45,32 @@ import java.math.BigInteger;
  * @param <U> Storage for data of this tensor.
  * @param <V> Type (or wrapper) of an element of this tensor.
  */
+
+/**
+ * <p>The base abstract class for all tensors, including matrices and vectors.
+ *
+ * <p>A tensor is a multidimensional array that consists of:
+ * <ul>
+ *     <li><b>Shape:</b> The {@link #shape} of the tensor specifies the dimensions of the tensor along each axis.
+ *     The number of axes in the tensor is referred to as the "{@link #rank}" and corresponds to the number of
+ *     indices required to uniquely identify an element within the tensor.</li>
+ *     <li><b>Data:</b> A one-dimensional container for the {@link #data} of the tensor.
+ *     If the tensor is dense, this contains all the data of the tensor.
+ *     If the tensor is sparse, this contains only the non-zero elements of the tensor.</li>
+ * </ul>
+ *
+ * <p>This abstract class provides common functionality and properties for all tensor types.
+ * Subclasses should implement the abstract methods to provide specific behaviors for different
+ * tensor types and data storage mechanisms (e.g., dense or sparse).
+ *
+ * @param <T> The specific type of the tensor (used for method return types in a fluent API).
+ * @param <U> The type of the data storage container for this tensor. This should be an array, list, or similar list-like structure.
+ * @param <V> The type (or wrapper) of the individual data elements in this tensor. If the tensors elements are primitive types, this
+ * should be their corresponding wrapper class. If the elements are an {@link Object}, then this should be the same type as the
+ * object.
+ * @see org.flag4j.arrays.dense
+ * @see org.flag4j.arrays.sparse
+ */
 public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
         implements Serializable, TensorMixin<T, U, V> {
 
@@ -164,7 +190,7 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
      * Flattens a tensor along the specified axis.
      *
      * @param axis Axis along which to flatten tensor.
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than {@code this.{@link #getRank()}-1}.
      * @see #flatten()
      */
     public abstract T flatten(int axis);

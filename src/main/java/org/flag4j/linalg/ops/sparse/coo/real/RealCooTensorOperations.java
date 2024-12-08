@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.sparse.coo.real;
 
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -42,7 +41,7 @@ public final class RealCooTensorOperations {
 
     private RealCooTensorOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -146,9 +145,9 @@ public final class RealCooTensorOperations {
 
 
     /**
-     * <p>Computes the element-wise multiplication between two sparse COO tensors.</p>
+     * <p>Computes the element-wise multiplication between two sparse COO tensors.
      *
-     * <p>Assumes indices of both tensors are sorted lexicographically.</p>
+     * <p>Assumes indices of both tensors are sorted lexicographically.
      *
      * @param src1 First tensor in the element-wise multiplication.
      * @param src2 Second tensor in the element-wise multiplication.
@@ -183,7 +182,7 @@ public final class RealCooTensorOperations {
             }
         }
 
-        // Truncate arrays_old if necessary.
+        // Truncate arrays if necessary.
         return src1.makeLikeTensor(src1.shape, Arrays.copyOf(productEntries, count), Arrays.copyOf(productIndices, count));
     }
 }

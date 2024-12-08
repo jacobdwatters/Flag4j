@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.ops;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.*;
 import org.flag4j.linalg.ops.dense.real.RealDenseMatrixMultiplication;
@@ -33,7 +33,6 @@ import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseMatMult;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseMatMultTranspose;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMult;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMultTranspose;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -43,7 +42,7 @@ public final class MatrixMultiplyDispatcher {
 
     private MatrixMultiplyDispatcher() {
         // Hide constructor of utility class
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

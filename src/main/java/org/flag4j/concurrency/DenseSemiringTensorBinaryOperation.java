@@ -24,11 +24,11 @@
 
 package org.flag4j.concurrency;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 
 /**
- * This interface specifies a binary operation on two dense {@link org.flag4j.algebraic_structures.semirings.Semiring} tensors.
+ * This interface specifies a binary operation on two dense {@link Semiring} tensors.
  */
 public interface DenseSemiringTensorBinaryOperation {
 

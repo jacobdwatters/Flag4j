@@ -25,13 +25,13 @@
 package org.flag4j.linalg.decompositions.lu;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
- * <p>Complex128his class provides methods for computing the LU decomposition of a complex dense matrix.</p>
- * <p>Complex128he following decompositions are provided: A=LU, PA=LU, and PAQ=LU.</p>
+ * <p>Complex128his class provides methods for computing the LU decomposition of a complex dense matrix.
+ * <p>Complex128he following decompositions are provided: A=LU, PA=LU, and PAQ=LU.
  */
 public class ComplexLU extends LU<CMatrix> {
 

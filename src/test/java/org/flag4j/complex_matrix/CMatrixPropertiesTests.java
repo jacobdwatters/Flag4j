@@ -1,18 +1,17 @@
 package org.flag4j.complex_matrix;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CMatrixPropertiesTests {
 
     Complex128[][] entriesA;
     CMatrix A;
     boolean expBoolResult;
+
 
     @Test
     void isIdentityTestCase() {
@@ -140,7 +139,7 @@ class CMatrixPropertiesTests {
         // --------------- Sub-case 2 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
-                {new Complex128(-0.442), new Complex128(13.5,1.4), new Complex128(35.6)},
+                {new Complex128(-0.442), new Complex128(13.5, 1.4), new Complex128(35.6)},
                 {new Complex128(0.4441), new Complex128(6), new Complex128(90)}};
         A = new CMatrix(entriesA);
         expBoolResult = false;
@@ -181,7 +180,7 @@ class CMatrixPropertiesTests {
         // --------------- Sub-case 2 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
-                {new Complex128(-0.442), new Complex128(13.5,1.4), new Complex128(35.6)}};
+                {new Complex128(-0.442), new Complex128(13.5, 1.4), new Complex128(35.6)}};
         A = new CMatrix(entriesA);
         expBoolResult = false;
         assertTrue(A.isComplex());

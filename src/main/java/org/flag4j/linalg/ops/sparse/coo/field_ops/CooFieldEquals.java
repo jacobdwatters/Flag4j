@@ -24,15 +24,14 @@
 
 package org.flag4j.linalg.ops.sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.Pair;
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
-import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
-import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.arrays.Pair;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldVector;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.*;
 
@@ -44,7 +43,7 @@ public final class CooFieldEquals {
 
     private CooFieldEquals() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -105,7 +104,7 @@ public final class CooFieldEquals {
         if (a == null || b == null || !a.shape.equals(b.shape)) return false;
 
         // Use maps to store non-zero values by their row and column indices.
-        Map<Pair<Integer>, T> nonZeroMapA = new HashMap<>();
+        Map<Pair<Integer, Integer>, T> nonZeroMapA = new HashMap<>();
         for (int i = 0; i < a.nnz; i++) {
             if (a.data[i] == null) return false;
             if (!a.data[i].isZero())
@@ -116,7 +115,7 @@ public final class CooFieldEquals {
         for (int i = 0; i < b.nnz; i++) {
             if (b.data[i] == null) return false;
 
-            Pair<Integer> key = new Pair<>(b.rowIndices[i], b.colIndices[i]);
+            Pair<Integer, Integer> key = new Pair<>(b.rowIndices[i], b.colIndices[i]);
             T valueB = b.data[i];
 
             if (!valueB.isZero()) {

@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.sparse.coo.real;
 
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
@@ -38,7 +37,6 @@ public final class RealSparseNorms {
 
     private RealSparseNorms() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

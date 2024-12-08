@@ -24,10 +24,9 @@
 
 package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 
-import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseTensorData;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -36,13 +35,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Utility class for computing ops on sparse COO {@link org.flag4j.algebraic_structures.rings.Ring} tensors.
+ * Utility class for computing ops on sparse COO {@link Ring} tensors.
  */
 public final class CooRingTensorOps {
 
     private CooRingTensorOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

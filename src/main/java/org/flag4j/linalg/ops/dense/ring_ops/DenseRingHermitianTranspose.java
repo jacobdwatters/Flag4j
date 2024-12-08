@@ -24,12 +24,11 @@
 
 package org.flag4j.linalg.ops.dense.ring_ops;
 
-import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * Utility class for computing the hermitian transpose of a dense {@link Ring} tensor or matrix.
@@ -38,7 +37,7 @@ public final class DenseRingHermitianTranspose {
     
     private DenseRingHermitianTranspose() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
     /**

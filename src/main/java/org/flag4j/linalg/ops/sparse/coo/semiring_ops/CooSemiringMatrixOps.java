@@ -24,10 +24,9 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -35,13 +34,13 @@ import java.util.List;
 
 /**
  * Utility class for computing various ops on and between sparse COO
- * {@link org.flag4j.algebraic_structures.semirings.Semiring} matrices.
+ * {@link Semiring} matrices.
  */
 public final class CooSemiringMatrixOps {
 
     private CooSemiringMatrixOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

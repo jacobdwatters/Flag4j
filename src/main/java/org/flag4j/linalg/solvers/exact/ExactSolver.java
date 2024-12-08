@@ -36,9 +36,9 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
 
 /**
- * <p>Solves a well determined system of equations Ax=b in an exact sense by using a LU decomposition.</p>
+ * <p>Solves a well determined system of equations Ax=b in an exact sense by using a LU decomposition.
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
- * {@link LstsqSolver least-squares solver}.</p>
+ * {@link LstsqSolver least-squares solver}.
  */
 public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
         U extends VectorMixin<U, T, ?, ?>>

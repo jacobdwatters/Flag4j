@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.dense.real;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 
@@ -43,7 +42,7 @@ public final class RealDenseVectorOperations {
 
     private RealDenseVectorOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

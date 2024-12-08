@@ -25,10 +25,9 @@
 package org.flag4j.linalg.ops.dense.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldTensor;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This utility class contains methods useful for verifying properties of a {@link FieldTensor}.
@@ -37,7 +36,7 @@ public final class DenseFieldProperties {
 
     private DenseFieldProperties() {
         // Hide constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -47,7 +46,7 @@ public final class DenseFieldProperties {
      * @param shape Shape of the matrix.
      * @param src Entries of the matrix.
      *
-     * @return True if this matrix is hermitian. Otherwise, returns false.
+     * @return {@code true} if this matrix is hermitian; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isHermitian(Shape shape, T[] src) {
         if(shape.get(0)!=shape.get(1)) return false;
@@ -73,7 +72,7 @@ public final class DenseFieldProperties {
      * Checks if a real dense matrix is anti-hermitian. That is, if the matrix is equal to its negative conjugate transpose.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
-     * @return True if this matrix is anti-hermitian. Otherwise, returns false.
+     * @return {@code true} if this matrix is anti-hermitian; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isAntiHermitian(T[] src, Shape shape) {
         if(shape.get(0)!=shape.get(1)) return false;

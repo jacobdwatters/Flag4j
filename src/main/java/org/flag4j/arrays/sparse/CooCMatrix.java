@@ -24,16 +24,15 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
-import org.flag4j.linalg.ops.common.complex.Complex128Properties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
@@ -80,6 +79,8 @@ import java.util.List;
  * <p>If indices need to be sorted, call {@link #sortIndices()}.
  */
 public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooCVector, Complex128> {
+
+    private static final long serialVersionUID = 1L;
 
     // TODO: add coalesce() which creates a new tensor checking to remove explicit zeros.
 
@@ -432,10 +433,10 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
     /**
      * Checks if all data of this matrix are real.
-     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     * @return {@code true} if all data of this matrix are real; {@code false} otherwise.
      */
     public boolean isReal() {
-        return Complex128Properties.isReal(data);
+        return Complex128Ops.isReal(data);
     }
 
 
@@ -444,7 +445,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
      */
     public boolean isComplex() {
-        return Complex128Properties.isComplex(data);
+        return Complex128Ops.isComplex(data);
     }
 
 

@@ -24,12 +24,11 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains static methods for computing row echelon, reduced row echelon, and extended reduced row echelon
@@ -39,7 +38,7 @@ public final class RowEchelon {
 
     private RowEchelon() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -146,7 +145,7 @@ public final class RowEchelon {
 
     /**
      * Computes the extended reduced row echelon form of a matrix. This is equivalent to
-     * <code>{@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}</code>
+     * {@code {@link #rref(Matrix) rref(A.augment(Matrix.I(A.numRows())))}}
      * @param A Matrix for which to compute extended reduced row echelon form of.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
      * appropriately sized identity matrix.
@@ -158,7 +157,7 @@ public final class RowEchelon {
 
     /**
      * Computes the extended reduced row echelon form of a matrix. This is equivalent to
-     * <code>{@link #rref(CMatrix) rref(A.augment(CMatrix.I(A.numRows())))}</code>
+     * {@code {@link #rref(CMatrix) rref(A.augment(CMatrix.I(A.numRows())))}}
      * @param A Matrix for which to compute extended reduced row echelon form of.
      * @return A matrix in reduced row echelon form which is row-equivalent to this matrix augmented with the
      * appropriately sized identity matrix.

@@ -55,7 +55,6 @@ public final class PrintOptions {
 
     private PrintOptions() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
     }
 
 
@@ -65,15 +64,15 @@ public final class PrintOptions {
      * For instance, if {@code padding=4} then two spaces will be placed on either side of each element.
      * Further, since this is done per element, each element will have 4 spaces between them (in addition to any
      * additional padding from column alignment within a matrix).
-     * </p>
+     * 
      *
      * <p>
      * If negative, zero padding will be used.
-     * </p>
+     * 
      *
      * <p>
      * Default Value: {@link #DEFAULT_PADDING}
-     * </p>
+     * 
      */
     private static int padding = DEFAULT_PADDING;
 
@@ -85,11 +84,11 @@ public final class PrintOptions {
      * indices larger than this value, except for the last row,
      * will not be printed. If zero or negative all rows will be printed.
      * The last row is always printed
-     * </p>
+     * 
      *
      * <p>
      * Default Value: {@link #DEFAULT_MAX_ROWS}
-     * </p>
+     * 
      */
     private static int maxRows = DEFAULT_MAX_ROWS;
 

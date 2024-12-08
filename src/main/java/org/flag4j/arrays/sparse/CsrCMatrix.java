@@ -24,17 +24,16 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.SparseMatrixData;
+import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
-import org.flag4j.linalg.ops.common.complex.Complex128Properties;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
@@ -50,31 +49,33 @@ import java.util.List;
 
 /**
  * <p>A complex sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
- * {@link Complex128}'s.</p>
+ * {@link Complex128}'s.
  *
  * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero data} is fixed.</p>
+ * and {@link #nnz total number of non-zero data} is fixed.
  *
- * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.</p>
+ * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.
  *
- * <p>A sparse CSR matrix is stored as:</p>
+ * <p>A sparse CSR matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
  *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
  *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
  *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
- *     {@code i}.</p>
+ *     {@code i}.
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
  * <p>Note: many ops assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any ops implemented in this
- * class will preserve the lexicographical sorting.</p>
+ * class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.
  */
 public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooCVector, Complex128> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column
@@ -84,7 +85,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
-     * values in row {@code i}.</p>
+     * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
@@ -103,7 +104,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
-     * values in row {@code i}.</p>
+     * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
@@ -136,7 +137,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
-     * values in row {@code i}.</p>
+     * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
@@ -156,7 +157,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param entries The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
-     * values in row {@code i}.</p>
+     * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
@@ -301,10 +302,10 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
     /**
      * Checks if all data of this matrix are real.
-     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     * @return {@code true} if all data of this matrix are real; {@code false} otherwise.
      */
     public boolean isReal() {
-        return Complex128Properties.isReal(data);
+        return Complex128Ops.isReal(data);
     }
 
 
@@ -313,7 +314,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
      */
     public boolean isComplex() {
-        return Complex128Properties.isComplex(data);
+        return Complex128Ops.isComplex(data);
     }
 
 

@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.sparse.csr.real;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +39,7 @@ public final class RealCsrEquals {
 
     private RealCsrEquals() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

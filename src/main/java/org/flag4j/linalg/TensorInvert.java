@@ -26,12 +26,12 @@ package org.flag4j.linalg;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -42,15 +42,15 @@ public final class TensorInvert {
 
     private TensorInvert() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
     /**
      * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
-     * {@link Tensor#tensorDot(TensorOverSemiRing, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
-     * dot product operation.</p>
-     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
+     * {@link Tensor#tensorDot(AbstractDoubleTensor, int[], int[]) src.tensorDot(X, numIndices)} is the 'identity' tensor for the
+     * tensor dot product operation.
+     *
+     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.
      * @param src Tensor to compute inverse of.
      * @param numIndices The number of first numIndices which are involved in the inverse sum.
      * @return The 'inverse' of this tensor as defined in the above sense.
@@ -74,10 +74,10 @@ public final class TensorInvert {
     /**
      * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
      * {@link Tensor#tensorDot(TensorOverSemiRing, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the
-     * tensor dot product operation.</p>
+     * tensor dot product operation.
      *
      * <p>A tensor {@code I} is the identity for a tensor dot product if
-     * {@code src.tensorDot(I, numIndices).equals(this)}.</p>
+     * {@code src.tensorDot(I, numIndices).equals(this)}.
      *
      * @param src Tensor to compute inverse of.
      * @param numIndices The number of first numIndices which are involved in the inverse sum.
@@ -102,8 +102,8 @@ public final class TensorInvert {
     /**
      * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
      * {@link Tensor#tensorDot(TensorOverSemiRing, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
-     * dot product operation.</p>
-     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.</p>
+     * dot product operation.
+     * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.
      * @param src Tensor to compute inverse of.
      * @param numIndices The number of first numIndices which are involved in the inverse sum.
      * @return The 'inverse' of this tensor as defined in the above sense.

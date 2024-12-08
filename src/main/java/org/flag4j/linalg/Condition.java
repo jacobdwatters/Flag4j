@@ -29,7 +29,6 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
-import org.flag4j.util.ErrorMessages;
 
 
 /**
@@ -58,7 +57,7 @@ public final class Condition {
 
     private Condition() {
         // Hide default constructor for utility class
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+
     }
 
 

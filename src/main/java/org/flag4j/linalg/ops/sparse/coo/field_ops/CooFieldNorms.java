@@ -24,10 +24,9 @@
 
 package org.flag4j.linalg.ops.sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
@@ -40,7 +39,7 @@ public final class CooFieldNorms {
 
     private CooFieldNorms() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

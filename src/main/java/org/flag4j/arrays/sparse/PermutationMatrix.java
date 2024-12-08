@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
@@ -52,6 +52,8 @@ import java.util.Arrays;
  * the other matrix.
  */
 public class PermutationMatrix implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Tracks row/column swaps within the permutation matrix. For an {@code n-by-n} permutation matrix, this array will

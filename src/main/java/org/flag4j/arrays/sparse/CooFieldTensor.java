@@ -25,9 +25,9 @@
 package org.flag4j.arrays.sparse;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrettyPrint;
@@ -45,27 +45,27 @@ import java.util.List;
 
 
 /**
- * <p>Sparse tensor stored in coordinate list (COO) format. The data of this COO tensor are elements of a {@link Field}</p>
+ * <p>Sparse tensor stored in coordinate list (COO) format. The data of this COO tensor are elements of a {@link Field}
  *
  * <p>The non-zero data and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero data is
- * fixed.</p>
+ * fixed.
  *
- * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.</p>
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
- * tensor).</p>
+ * tensor).
  *
- * <p>A sparse COO tensor is stored as:</p>
+ * <p>A sparse COO tensor is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
- *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
  *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
- *     index of {@code data[i]}.</p>
+ *     index of {@code data[i]}.
  *     </li>
  * </ul>
  *
@@ -73,6 +73,8 @@ import java.util.List;
  */
 public class CooFieldTensor<T extends Field<T>>
         extends AbstractCooFieldTensor<CooFieldTensor<T>, FieldTensor<T>, T> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * creates a tensor with the specified data and shape.
@@ -326,7 +328,7 @@ public class CooFieldTensor<T extends Field<T>>
 
     /**
      * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
-     * non-zero data, and non-zero indices.</p>
+     * non-zero data, and non-zero indices.
      *
      * @return A human-readable string specifying the full shape, non-zero data, and non-zero indices of this tensor.
      */

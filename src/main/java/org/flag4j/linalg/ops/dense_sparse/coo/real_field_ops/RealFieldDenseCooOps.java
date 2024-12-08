@@ -25,13 +25,12 @@
 package org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -41,7 +40,6 @@ public final class RealFieldDenseCooOps {
 
     private RealFieldDenseCooOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

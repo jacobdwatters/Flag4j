@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.dense.real_field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -36,7 +36,7 @@ public final class RealFieldDenseVectorOperations {
 
     private RealFieldDenseVectorOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

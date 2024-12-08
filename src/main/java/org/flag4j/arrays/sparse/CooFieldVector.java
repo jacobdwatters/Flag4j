@@ -24,9 +24,9 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrintOptions;
@@ -42,17 +42,17 @@ import java.util.List;
 
 /**
  * <p>A sparse vector stored in coordinate list (COO) format. The {@link #data} of this COO vector are
- * elements of a {@link Field}.</p>
+ * elements of a {@link Field}.
  *
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
- * and total number of non-zero data is fixed.</p>
+ * and total number of non-zero data is fixed.
  *
- * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.</p>
+ * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.
  *
  * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
- * vector).</p>
+ * vector).
  *
- * <p>A sparse COO vector is stored as:</p>
+ * <p>A sparse COO vector is stored as:
  * <ul>
  *     <li>The full {@link #shape}/{@link #size} of the vector.</li>
  *     <li>The non-zero {@link #data} of the vector. All other data in the vector are
@@ -65,15 +65,16 @@ import java.util.List;
  * element-wise ops only act on the non-zero data of the sparse tensor as to not affect the sparsity.
  *
  * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
- * verified. Every operation implemented in this class will preserve the lexicographical sorting.</p>
+ * verified. Every operation implemented in this class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  *
  * @param <T> Type of the field element in this vector.
  */
 public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<CooFieldVector<T>,
         FieldVector<T>, CooFieldMatrix<T>, FieldMatrix<T>, T> {
 
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
@@ -249,8 +250,8 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * Converts a vector to an equivalent matrix representing either a row or column vector.
      *
      * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
-     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.</p>
-     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.</p>
+     * <p>If {@code true}, the vector will be converted to a matrix representing a column vector.
+     * <p>If {@code false}, The vector will be converted to a matrix representing a row vector.
      *
      * @return A matrix equivalent to this vector.
      */

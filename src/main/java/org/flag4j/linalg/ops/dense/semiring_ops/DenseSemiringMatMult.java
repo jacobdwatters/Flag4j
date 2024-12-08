@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.dense.semiring_ops;
 
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
@@ -40,7 +40,7 @@ import java.util.Arrays;
 public final class DenseSemiringMatMult {
 
     private DenseSemiringMatMult() {
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
@@ -35,7 +35,6 @@ import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldNorms;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseNorms;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -45,7 +44,7 @@ public final class MatrixNorms {
 
     private MatrixNorms() {
         // Hide default constructor for utility class
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+
     }
 
 

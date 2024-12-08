@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -34,7 +34,6 @@ import org.flag4j.linalg.decompositions.schur.RealSchur;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -49,7 +48,7 @@ public final class Eigen {
 
     private Eigen() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

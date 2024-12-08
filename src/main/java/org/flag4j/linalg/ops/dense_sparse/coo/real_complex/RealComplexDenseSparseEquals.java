@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Matrix;
@@ -35,7 +35,6 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -46,7 +45,7 @@ public final class RealComplexDenseSparseEquals {
 
     private RealComplexDenseSparseEquals() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

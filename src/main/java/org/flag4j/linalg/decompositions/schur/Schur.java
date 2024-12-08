@@ -34,11 +34,11 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * <p>The base class for Schur decompositions.</p>
+ * <p>The base class for Schur decompositions.
  *
  * <p>The Schur decomposition decomposes a square matrix A into A=UTU<sup>H</sup> where U is a unitary
  * matrix and T is a quasi-upper triangular matrix called the "Schur form" of A. T is upper triangular
- * except for possibly 2-by-2 blocks along the principle diagonal. T is similar to A meaning they have equivalent eigenvalues.</p>
+ * except for possibly 2-by-2 blocks along the principle diagonal. T is similar to A meaning they have equivalent eigenvalues.
  *
  * @param <T> The type of matrix to be decomposed.
  * @param <U> The type for the internal storage datastructure of the matrix to be decomposed.
@@ -128,9 +128,9 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.</p>
+     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.
      *
-     * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.</p>
+     * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
      * @param computeU Flag indicating if the unitary {@code U} matrix should be computed for the Schur decomposition. If true,
      * {@code U} will be computed. If false, {@code U} will not be computed.
@@ -147,13 +147,13 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
 
     /**
-     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.</p>
+     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.
      *
      * <p>That is, if {@code exceptionalThreshold = 10}, then at most 10 iterations QR algorithm iterations will be performed.
      * If, by the 10th iteration, no convergence has been detected which allows for deflation, then a QR algorithm iteration
-     * will be performed with a random (i.e. exceptional) shift.</p>
+     * will be performed with a random (i.e. exceptional) shift.
      *
-     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}</p>
+     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}
      *
      * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without deflation
      *                             before performing an iteration with random shifts.
@@ -171,10 +171,10 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * <p>Specify maximum iteration factor for computing the total number of iterations to run the QR algorithm
      * for when computing the decomposition. The maximum number of iterations is computed as
      * {@code maxIteration = maxIterationFactor * src.numRows;} If the algorithm does not converge within this limit, an
-     * exception will be thrown.</p>
+     * exception will be thrown.
      *
      * <p>By default, this is computed as {@code maxIterations = DEFAULT_MAX_ITERS_FACTOR * src.numRows;}
-     * where {@code src} is the matrix being decomposed (see {@link #DEFAULT_MAX_ITERS_FACTOR}).</p>
+     * where {@code src} is the matrix being decomposed (see {@link #DEFAULT_MAX_ITERS_FACTOR}).
      *
      * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
      * QR algorithm for.
@@ -206,7 +206,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
 
     /**
-     * <p>Computes the Schur decomposition of the input matrix.</p>
+     * <p>Computes the Schur decomposition of the input matrix.
      *
      * @implNote The Schur decomposition is computed using Francis implicit double shifted QR algorithm.
      * There are known cases where this variant of the QR algorithm <i>may</i> fail to converge. Random shifting is employed when the
@@ -273,7 +273,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
 
     /**
-     * Initializes temporary work arrays_old to be used in the decomposition.
+     * Initializes temporary work arrays to be used in the decomposition.
      */
     protected abstract void setUpArrays();
 

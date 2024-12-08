@@ -25,8 +25,6 @@
 package org.flag4j.linalg.ops.dense.real;
 
 
-import org.flag4j.util.ErrorMessages;
-
 /**
  * This class contains several low-level methods useful for computing aggregation ops on dense tensors.
  */
@@ -34,7 +32,7 @@ public final class AggregateDenseReal {
 
     private AggregateDenseReal() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

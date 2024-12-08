@@ -24,11 +24,10 @@
 
 package org.flag4j.linalg.ops.sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +45,6 @@ public final class RealComplexSparseMatrixMultiplication {
 
     private RealComplexSparseMatrixMultiplication() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

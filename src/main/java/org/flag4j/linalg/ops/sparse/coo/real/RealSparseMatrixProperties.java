@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.sparse.coo.real;
 
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,14 +39,14 @@ public final class RealSparseMatrixProperties {
 
     private RealSparseMatrixProperties() {
         // Hide public constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
     /**
      * Checks if a real sparse matrix is the identity matrix.
      * @param src Matrix to check if it is the identity matrix.
-     * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
      */
     public static boolean isIdentity(CooMatrix src) {
         // Ensure the matrix is square and there are at least the same number of non-zero data as data on the diagonal.
@@ -69,7 +68,7 @@ public final class RealSparseMatrixProperties {
     /**
      * Checks if a real sparse matrix is close to the identity matrix.
      * @param src Matrix to check if it is the identity matrix.
-     * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
      */
     public static boolean isCloseToIdentity(CooMatrix src) {
         // Ensure the matrix is square and there are the same number of non-zero data as data on the diagonal.

@@ -24,8 +24,7 @@
 
 package org.flag4j.linalg.ops.common.ring_ops;
 
-import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.algebraic_structures.Ring;
 
 /**
  * Utility class for checking properties of {@link Ring Ring's}
@@ -34,7 +33,6 @@ public final class RingProperties {
     
     private RingProperties() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

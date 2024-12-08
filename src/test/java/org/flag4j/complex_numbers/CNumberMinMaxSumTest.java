@@ -1,6 +1,6 @@
 package org.flag4j.complex_numbers;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -43,14 +43,13 @@ class Complex128MinMaxSumTest {
 
         min = Complex128.min(n1, n2, n3, n4);
 
-        expMin = new Complex128(4.2e-8);
+        expMin = new Complex128(-4.2e-8);
 
         Assertions.assertEquals(expMin, min);
 
         // ------------ Sub-case 2 ------------
         min = Complex128.min();
-        expMin = new Complex128(-1);
-        Assertions.assertEquals(expMin, min);
+        Assertions.assertNull(min);
     }
 
 
@@ -128,14 +127,13 @@ class Complex128MinMaxSumTest {
 
         max = Complex128.max(n1, n2, n3, n4);
 
-        expMax = new Complex128(6457.002646620257);
+        expMax = new Complex128(93.13, -6456.331);
 
         Assertions.assertEquals(expMax, max);
 
         // ------------ Sub-case 2 ------------
         max = Complex128.max();
-        expMax = new Complex128(-1);
-        Assertions.assertEquals(expMax, max);
+        Assertions.assertNull(max);
     }
 
 

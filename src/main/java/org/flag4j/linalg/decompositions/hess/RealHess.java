@@ -33,10 +33,10 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 /**
  * <p>Computes the Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
  * A, computes the decomposition A=QHQ<sup>T</sup> where Q is an orthogonal matrix and
- * H is a matrix in upper Hessenburg form which is similar to A (i.e. has the same eigenvalues).</p>
+ * H is a matrix in upper Hessenburg form which is similar to A (i.e. has the same eigenvalues).
  *
  * <p>A matrix H is in upper Hessenburg form if it is nearly upper triangular. Specifically, if H has
- * all zeros below the first sub-diagonal.</p>
+ * all zeros below the first sub-diagonal.
  *
  * <p>For example, the following matrix is in upper Hessenburg form where each 'x' may hold a different value:
  * <pre>
@@ -45,16 +45,16 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *      [ 0 x x x x ]
  *      [ 0 0 x x x ]
  *      [ 0 0 0 x x ]]</pre>
- * </p>
+ * 
  */
 public class RealHess extends RealUnitaryDecomposition {
 
     /**
      * <p>Creates a real Hessenburg decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros
-     * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.</p>
+     * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.
      *
      * <p>By default, the orthogonal matrix <i>will</i> be computed. To specify if the orthogonal matrix should be computed, use
-     * {@link #RealHess(boolean)}.</p>
+     * {@link #RealHess(boolean)}.
      *
      * @see #RealHess(boolean)
      */
@@ -65,7 +65,7 @@ public class RealHess extends RealUnitaryDecomposition {
 
     /**
      * <p>Creates a real Hessenburg decomposer which will reduce the matrix to an upper quasi-triangular matrix which is has zeros
-     * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.</p>
+     * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.
      *
      * @param computeQ Flag indicating if the orthogonal matrix in the Hessenburg decomposition should be computed. If it is not
      * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.

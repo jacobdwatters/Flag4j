@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.dense.real;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains low-level implementations for ops which check if a tensor satisfies some property.
@@ -35,7 +34,7 @@ public final class RealDenseProperties {
 
     private RealDenseProperties() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

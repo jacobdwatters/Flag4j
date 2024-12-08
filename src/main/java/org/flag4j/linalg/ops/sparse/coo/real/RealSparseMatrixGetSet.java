@@ -30,7 +30,6 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public final class RealSparseMatrixGetSet {
 
     private RealSparseMatrixGetSet() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

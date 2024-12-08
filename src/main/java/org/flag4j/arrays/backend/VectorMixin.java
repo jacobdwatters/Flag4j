@@ -46,10 +46,10 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
 
 
     /**
-     * <p>Computes the inner product between two vectors.</p>
+     * <p>Computes the inner product between two vectors.
      *
      * <p>Note: this method is distinct from {@link #dot(VectorMixin)}. The inner product is equivalent to the dot product
-     * of this tensor with the conjugation of {@code b}.</p>
+     * of this tensor with the conjugation of {@code b}.
      *
      * @param b Second vector in the inner product.
      * @return The inner product between this vector and the vector {@code b}.
@@ -60,10 +60,10 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
 
 
     /**
-     * <p>Computes the dot product between two vectors.</p>
+     * <p>Computes the dot product between two vectors.
      *
      * <p>Note: this method is distinct from {@link #inner(VectorMixin)}. The inner product is equivalent to the dot product
-     * of this tensor with the conjugation of {@code b}.</p>
+     * of this tensor with the conjugation of {@code b}.
      *
      * @param b Second vector in the dot product.
      *
@@ -123,19 +123,19 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
     /**
      * <p>
      * Stacks two vectors along specified axis.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
      * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     * </p>
+     * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
      * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     * </p>
+     * 
      *
-     * @param b    VectorOld to stack with this vector.
+     * @param b    Vector to stack with this vector.
      * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
      *             vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
      * @return The result of stacking this vector and the vector {@code b}.
@@ -169,8 +169,8 @@ public interface VectorMixin<T extends VectorMixin<T, U, V, W>,
     /**
      * Converts a vector to an equivalent matrix representing either a row or column vector.
      * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
-     *                    <p>If {@code true}, the vector will be converted to a matrix representing a column vector.</p>
-     *                    <p>If {@code false}, The vector will be converted to a matrix representing a row vector.</p>
+     *                    <p>If {@code true}, the vector will be converted to a matrix representing a column vector.
+     *                    <p>If {@code false}, The vector will be converted to a matrix representing a row vector.
      * @return A matrix equivalent to this vector.
      */
     U toMatrix(boolean columVector);

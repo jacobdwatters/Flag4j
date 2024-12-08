@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.sparse.csr.real;
 
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -39,7 +38,7 @@ public final class RealCsrManipulations {
 
     private RealCsrManipulations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -92,7 +91,7 @@ public final class RealCsrManipulations {
         for(int i=rowIdx1+1; i<=rowIdx2; i++)
             src.rowPointers[i] += diff;
 
-        // Copy updated arrays_old to this tensors' storage.
+        // Copy updated arrays to this tensors' storage.
         System.arraycopy(updatedEntries, 0, src.data, start1, updatedEntries.length);
         System.arraycopy(updatedColIndices, 0, src.colIndices, start1, updatedEntries.length);
     }

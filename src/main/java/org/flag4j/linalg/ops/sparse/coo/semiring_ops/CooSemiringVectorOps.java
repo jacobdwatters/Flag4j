@@ -24,10 +24,9 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseVectorData;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -35,14 +34,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>Utility class for computing ops between sparse COO {@link org.flag4j.algebraic_structures.semirings.Semiring} vectors.</p>
- * <p>Methods in this class assume that non-zero data are sorted lexicographically by index.</p>
+ * <p>Utility class for computing ops between sparse COO {@link Semiring} vectors.
+ * <p>Methods in this class assume that non-zero data are sorted lexicographically by index.
  */
 public final class CooSemiringVectorOps {
 
     private CooSemiringVectorOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

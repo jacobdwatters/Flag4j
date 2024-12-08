@@ -32,12 +32,12 @@ import org.flag4j.linalg.Eigen;
 
 /**
  * <p>Instances of this class can be used to compute the singular value decomposition (SVD) of a
- * {@link CMatrix complex dense matrix}.</p>
+ * {@link CMatrix complex dense matrix}.
  *
  *
  * <p>That is, decompose a rectangular matrix M as M=USV<sup>H</sup> where U and V are
  * unitary matrices whose columns are the left and right singular vectors of M and S is a real rectangular
- * diagonal matrix containing the singular values of M.</p>
+ * diagonal matrix containing the singular values of M.
  */
 public class ComplexSVD extends SVD<CMatrix> {
 

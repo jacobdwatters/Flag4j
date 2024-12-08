@@ -23,8 +23,48 @@
  */
 
 /**
- * <p>Implementations for dense tensors, matrices, and vectors.</p>
+ * <p>Provides implementations for dense tensors, matrices, and vectors.
+ * 
+ * <p>This package includes:
+ * <ul>
+ *   <li><b>Vectors:</b> One-dimensional arrays representing mathematical vectors.</li>
+ *   <li><b>Matrices:</b> Two-dimensional arrays representing mathematical matrices.</li>
+ *   <li><b>Tensors:</b> Multi-dimensional arrays representing higher-order tensors.</li>
+ * </ul>
  *
- * <p>There are real, complex, and {@link org.flag4j.algebraic_structures.fields.Field field} implementations for each array type.</p>
+ * <p>The implementations support various numeric types and algebraic structures:
+ * <ul>
+ *   <li><b>Real Numbers:</b> Dense arrays of real numbers (double-precision floating-point).</li>
+ *   <li><b>Complex Numbers:</b> Dense arrays of complex numbers ({@link org.flag4j.algebraic_structures.Complex64} or
+ *   {@link org.flag4j.algebraic_structures.Complex128}).</li>
+ *   <li><b>Generic MMField Elements:</b> Dense arrays parameterized over a generic
+ *   {@link org.flag4j.algebraic_structures.Field MMField}.</li>
+ *   <li><b>Ring and Semiring Elements:</b> Dense arrays parameterized over {@link org.flag4j.algebraic_structures.Ring Ring}
+ *   and {@link org.flag4j.algebraic_structures.Semiring Semiring} elements.</li>
+ * </ul>
+ *
+ * <p>The package provides optimized implementations for numerical computations, including basic arithmetic operations,
+ * linear algebra routines, and tensor operations. These implementations are designed for performance and ease of use.
+ *
+ * <h2>Package Contents</h2>
+ * <ul>
+ *   <li>{@link org.flag4j.arrays.dense.Vector Vector} - Dense vector of real numbers (backed by primitive {@code double} array).</li>
+ *   <li>{@link org.flag4j.arrays.dense.Matrix Matrix} - Dense matrix of real numbers (backed by primitive {@code double} array).</li>
+ *   <li>{@link org.flag4j.arrays.dense.Tensor Tensor} - Dense tensor of real numbers (backed by primitive {@code double} array).</li>
+ *   <li>{@link org.flag4j.arrays.dense.CVector CVector} - Dense vector of complex numbers (backed by
+ *   {@link org.flag4j.algebraic_structures.Complex128 Complex128} array).</li>
+ *   <li>{@link org.flag4j.arrays.dense.CMatrix CMatrix} - Dense matrix of complex numbers (backed by
+ *   {@link org.flag4j.algebraic_structures.Complex128 Complex128} array).</li>
+ *   <li>{@link org.flag4j.arrays.dense.CTensor CTensor} - Dense tensor of complex numbers (backed by
+ *   {@link org.flag4j.algebraic_structures.Complex128 Complex128} array).</li>
+ *   <li>{@link org.flag4j.arrays.dense.FieldVector FieldVector&lt;T&gt;} - Dense vector parameterized over a field element
+ *   {@code T extends MMField<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.FieldMatrix FieldMatrix&lt;T&gt;} - Dense matrix parameterized over a field element
+ *   {@code T extends MMField<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.FieldTensor FieldTensor&lt;T&gt;} - Dense tensor parameterized over a field element
+ *   {@code T extends MMField<T>}.</li>
+ * </ul>
+ *
+ * @see org.flag4j.arrays.sparse
  */
 package org.flag4j.arrays.dense;

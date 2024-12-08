@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.sparse.coo.real;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public final class RealSparseMatrixOperations {
 
     private RealSparseMatrixOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

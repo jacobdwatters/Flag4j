@@ -29,7 +29,6 @@ import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.real.RealProperties;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -40,7 +39,7 @@ public class RealDenseSparseEquals {
 
     private RealDenseSparseEquals() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

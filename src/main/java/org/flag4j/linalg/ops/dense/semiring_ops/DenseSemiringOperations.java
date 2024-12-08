@@ -24,21 +24,20 @@
 
 package org.flag4j.linalg.ops.dense.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
 /**
- * This class provides low level methods for computing ops on dense semi-ring tensors.
+ * This class provides low level methods for computing ops on dense semiring tensors.
  */
 public final class DenseSemiringOperations {
 
     private DenseSemiringOperations() {
         // Hide constructor
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -50,7 +49,7 @@ public final class DenseSemiringOperations {
      * @param shape2 Shape of second tensor.
      * @param dest Array to store result in. May be {@code null} or the same array as {@code src1} or {@code src2}.
      * @return The {@code dest} array if {@code dest != null}. If {@code dest != null}
-     * @throws IllegalArgumentException If entry arrays_old are not the same size.
+     * @throws IllegalArgumentException If entry arrays are not the same size.
      */
     public static <T extends Semiring<T>> T[] add(T[] src1, Shape shape1,
                                                   T[] src2, Shape shape2,
@@ -90,11 +89,11 @@ public final class DenseSemiringOperations {
 
 
     /**
-     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     * <p>Computes the generalized trace of this tensor along the specified axes.
      *
      * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * {@code axis1} and {@code axis2} removed.
      *
      * @param shape Shape of the tensor to compute the trace of.
      * @param src Entries of the tensor to compute the trace of.

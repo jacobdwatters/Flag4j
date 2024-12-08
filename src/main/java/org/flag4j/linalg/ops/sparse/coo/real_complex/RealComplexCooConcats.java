@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.sparse.coo.real_complex;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
@@ -43,7 +43,7 @@ public final class RealComplexCooConcats {
 
     private RealComplexCooConcats() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

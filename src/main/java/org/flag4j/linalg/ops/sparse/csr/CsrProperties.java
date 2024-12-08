@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.sparse.csr;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -37,7 +36,7 @@ public final class CsrProperties {
 
     private CsrProperties() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
@@ -47,7 +46,7 @@ public final class CsrProperties {
      * @param values Non-zero values of a CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
-     * @return {@code true} if the CSR matrix is symmetric. Otherwise, returns {@code false}.
+     * @return {@code true} if the CSR matrix is symmetric; {@code false} otherwise.
      */
     public static <T> boolean isSymmetric(Shape shape, T[] values, int[] rowPointers, int[] colIndices) {
         int numRows = shape.get(0);

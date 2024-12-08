@@ -25,10 +25,9 @@
 package org.flag4j.linalg.ops.dense.real_field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -45,7 +44,7 @@ public final class RealFieldDenseElemDiv {
 
     private RealFieldDenseElemDiv() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -121,7 +120,7 @@ public final class RealFieldDenseElemDiv {
     /**
      * Chooses if a concurrent algorithm for element-wise multiplication should be used based on the shape of the two tensors.
      * @param numEntries Total data in the tensors to multiply.
-     * @return True if a concurrent algorithm should be used for element-wise multiplication. Otherwise, returns false.
+     * @return {@code true} if a concurrent algorithm should be used for element-wise multiplication; {@code false} otherwise.
      */
     private static boolean useConcurrent(int numEntries) {
         return numEntries >= CONCURRENT_THRESHOLD;

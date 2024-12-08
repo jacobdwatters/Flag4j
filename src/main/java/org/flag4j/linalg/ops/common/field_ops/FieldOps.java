@@ -25,12 +25,12 @@
 package org.flag4j.linalg.ops.common.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.util.ErrorMessages;
 
 /**
  * This utility class contains ops for tensors whose elements are members of a
- * {@link org.flag4j.algebraic_structures.fields.Field}.
+ * {@link Field}.
  */
 public final class FieldOps {
 
@@ -237,7 +237,7 @@ public final class FieldOps {
     /**
      * Checks if all elements of a tensor are finite.
      * @param src Elements of the tensor.
-     * @return {@code true} if every entry of {@code src} is finite. Otherwise, returns {@code false}.
+     * @return {@code true} if every entry of {@code src} is finite; {@code false} otherwise.
      */
     public static <V extends Field<V>> boolean isFinite(V[] src) {
         for(int i=0, size=src.length; i<size; i++)
@@ -250,7 +250,7 @@ public final class FieldOps {
     /**
      * Checks if any element of a tensor is infinite.
      * @param src Elements of the tensor.
-     * @return {@code true} if any entry of {@code src} is infinite. Otherwise, returns {@code false}.
+     * @return {@code true} if any entry of {@code src} is infinite; {@code false} otherwise.
      */
     public static <V extends Field<V>> boolean isInfinite(V[] src) {
         for(int i=0, size=src.length; i<size; i++)
@@ -263,7 +263,7 @@ public final class FieldOps {
     /**
      * Checks if any element of a tensor is NaN.
      * @param src Elements of the tensor.
-     * @return {@code true} if any entry of {@code src} is NaN. Otherwise, returns {@code false}.
+     * @return {@code true} if any entry of {@code src} is NaN; {@code false} otherwise.
      */
     public static <V extends Field<V>> boolean isNaN(V[] src) {
         for(int i=0, size=src.length; i<size; i++)

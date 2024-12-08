@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg.ops.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
@@ -36,11 +36,11 @@ import org.flag4j.util.ValidateParameters;
 import java.util.*;
 
 /**
- * <p>Contains common utility functions for working with sparse matrices.</p>
+ * <p>Contains common utility functions for working with sparse matrices.
  *
  * <p>All methods in this class which accept non-zero data and non-zero indices, they are assumed to be sorted
  * lexicographically. Similarly, all ops which store results in user provided destination arrays will also produce in
- * lexicographically sorted arrays.</p>
+ * lexicographically sorted arrays.
  */
 public final class SparseUtils {
 
@@ -219,14 +219,14 @@ public final class SparseUtils {
 
     /**
      * <p>Checks if two {@link CsrMatrix CSR Matrices} are equal considering the fact that one may explicitly store zeros at some
-     * position that the other does not store.</p>
+     * position that the other does not store.
      *
      * <p>
      * If zeros are explicitly stored at some position in only one matrix, it will be checked that the
      * other matrix does not have a non-zero value at the same index. If it does, the matrices will not be equal. If no value is
      * stored for that index then it is assumed to be zero by definition of the CSR format and the equality check continues with the
      * remaining values.
-     * </p>
+     * 
      *
      * @param src1 First CSR matrix in the equality comparison.
      * @param src2 Second CSR matrix in the equality comparison.
@@ -284,15 +284,15 @@ public final class SparseUtils {
 
 
     /**
-     * <p>Checks if two {@link CsrFieldMatrix CSR Field matrices} are equal considering the fact that one may explicitly store zeros at
-     * some position that the other does not store.</p>
+     * <p>Checks if two {@link CsrFieldMatrix CSR MMField matrices} are equal considering the fact that one may explicitly store zeros at
+     * some position that the other does not store.
      *
      * <p>
      * If zeros are explicitly stored at some position in only one matrix, it will be checked that the
      * other matrix does not have a non-zero value at the same index. If it does, the matrices will not be equal. If no value is
      * stored for that index then it is assumed to be zero by definition of the CSR format and the equality check continues with the
      * remaining values.
-     * </p>
+     * 
      *
      * @param src1 First CSR matrix in the equality comparison.
      * @param src2 Second CSR matrix in the equality comparison.

@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * Utility class for converting COO tensor to another type of tensor.
@@ -34,7 +33,7 @@ public final class CooConversions {
 
     private CooConversions() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

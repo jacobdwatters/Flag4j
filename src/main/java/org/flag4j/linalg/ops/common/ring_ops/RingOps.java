@@ -24,17 +24,17 @@
 
 package org.flag4j.linalg.ops.common.ring_ops;
 
-import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * Utility class useful for computing ops on {@link org.flag4j.algebraic_structures.rings.Ring} tensors.
+ * Utility class useful for computing ops on {@link Ring} tensors.
  */
 public final class RingOps {
 
     private RingOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

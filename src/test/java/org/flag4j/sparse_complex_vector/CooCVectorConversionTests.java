@@ -1,7 +1,7 @@
 package org.flag4j.sparse_complex_vector;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCMatrix;

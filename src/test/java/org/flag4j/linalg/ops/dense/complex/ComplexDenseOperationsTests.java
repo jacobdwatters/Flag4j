@@ -1,6 +1,6 @@
 package org.flag4j.linalg.ops.dense.complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;

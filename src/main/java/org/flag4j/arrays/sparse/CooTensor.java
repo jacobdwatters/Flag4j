@@ -26,7 +26,7 @@ package org.flag4j.arrays.sparse;
 
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
@@ -51,27 +51,27 @@ import java.util.Map;
 
 /**
  * <p>A real sparse tensor stored in coordinate list (COO) format. The {@link #data} of this COO tensor are
- * primitive doubles.</p>
+ * primitive doubles.
  *
  * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO tensor are mutable but the {@link #shape}
- * and total number of non-zero data is fixed.</p>
+ * and total number of non-zero data is fixed.
  *
- * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.</p>
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
- * tensor).</p>
+ * tensor).
  *
- * <p>A sparse COO tensor is stored as:</p>
+ * <p>A sparse COO tensor is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
- *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
  *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
- *     index of {@code data[i]}.</p>
+ *     index of {@code data[i]}.
  *     </li>
  * </ul>
  *
@@ -85,6 +85,8 @@ import java.util.Map;
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  */
 public class CooTensor extends AbstractDoubleTensor<CooTensor> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * The non-zero indices of this tensor. Must have shape {@code (nnz, rank)}.
@@ -373,7 +375,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      *
      * @param axis Axis along which to flatten tensor.
      *
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than {@code this.{@link #getRank()}-1}.
      * @see #flatten()
      */
     @Override
@@ -593,7 +595,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
      * computes the sum of products between the two tensors along the specified set of axes.
      *
-     * @param src2 TensorOld to contract with this tensor.
+     * @param src2 Tensor to contract with this tensor.
      * @param aAxes Axes along which to compute products for this tensor.
      * @param bAxes Axes along which to compute products for {@code src2} tensor.
      *
@@ -611,11 +613,11 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
 
 
     /**
-     * <p>Computes the generalized trace of this tensor along the specified axes.</p>
+     * <p>Computes the generalized trace of this tensor along the specified axes.
      *
-     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays_old of this tensor specified by
+     * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of this tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to this tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * {@code axis1} and {@code axis2} removed.
      *
      * @param axis1 First axis for 2D sub-array.
      * @param axis2 Second axis for 2D sub-array.
@@ -703,9 +705,9 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
 
 
     /**
-     * <p>Computes the product of all non-zero values in this tensor.</p>
+     * <p>Computes the product of all non-zero values in this tensor.
      *
-     * <p>NOTE: This is <b>only</b> the product of the non-zero values in this tensor.</p>
+     * <p>NOTE: This is <b>only</b> the product of the non-zero values in this tensor.
      *
      * @return The product of all non-zero values in this tensor.
      */
@@ -794,9 +796,9 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
 
 
     /**
-     * <p>Computes the element-wise reciprocals of the non-zero elements of this sparse tensor.</p>
+     * <p>Computes the element-wise reciprocals of the non-zero elements of this sparse tensor.
      *
-     * <p>Note: This method <b>only</b> computes the reciprocals of the non-zero elements.</p>
+     * <p>Note: This method <b>only</b> computes the reciprocals of the non-zero elements.
      *
      * @return A tensor containing the reciprocal non-zero elements of this tensor.
      */
@@ -911,7 +913,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
 
     /**
      * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
-     * non-zero data, and non-zero indices.</p>
+     * non-zero data, and non-zero indices.
      *
      * @return A human-readable string specifying the full shape, non-zero data, and non-zero indices of this tensor.
      */

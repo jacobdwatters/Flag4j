@@ -24,10 +24,9 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseTensorData;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -41,7 +40,7 @@ public final class CooSemiringTensorOps {
 
     private CooSemiringTensorOps() {
         // Hide constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
@@ -100,9 +99,9 @@ public final class CooSemiringTensorOps {
 
 
     /**
-     * <p>Computes the element-wise multiplication between two complex sparse COO tensors.</p>
+     * <p>Computes the element-wise multiplication between two complex sparse COO tensors.
      *
-     * <p>Assumes indices of both tensors are sorted lexicographically by their indices.</p>
+     * <p>Assumes indices of both tensors are sorted lexicographically by their indices.
      * @param shape1 Shape of the first tensor.
      * @param src1Entries Non-zero data of the first tensor.
      * @param src1Indices Non-zero indices of the first tensor.
@@ -157,11 +156,11 @@ public final class CooSemiringTensorOps {
 
 
     /**
-     * <p>Computes the generalized trace of a tensor along the specified axes.</p>
+     * <p>Computes the generalized trace of a tensor along the specified axes.
      *
      * <p>The generalized tensor trace is the sum along the diagonal values of the 2D sub-arrays of the {@code src} tensor specified by
      * {@code axis1} and {@code axis2}. The shape of the resulting tensor is equal to the {@code src} tensor with the
-     * {@code axis1} and {@code axis2} removed.</p>
+     * {@code axis1} and {@code axis2} removed.
      *
      * @param shape1 Shape of the tensor.
      * @param src1Entries Non-zero data of the tensor.

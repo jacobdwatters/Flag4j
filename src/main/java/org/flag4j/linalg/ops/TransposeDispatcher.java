@@ -24,20 +24,19 @@
 
 package org.flag4j.linalg.ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
-import org.flag4j.arrays.backend.primitive.AbstractDoubleTensor;
-import org.flag4j.arrays.backend.semiring.AbstractDenseSemiringTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.ops.dense.DenseTranspose;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldHermitianTranspose;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldTranspose;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingHermitianTranspose;
-import org.flag4j.util.ErrorMessages;
 
 import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
@@ -70,7 +69,7 @@ public final class TransposeDispatcher {
 
     private TransposeDispatcher() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

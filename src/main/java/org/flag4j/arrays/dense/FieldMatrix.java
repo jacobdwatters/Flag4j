@@ -24,9 +24,9 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.io.PrettyPrint;
@@ -41,17 +41,17 @@ import java.util.List;
 
 
 /**
- * <p>A dense matrix whose data are {@link Field} elements.</p>
+ * <p>A dense matrix whose data are {@link Field} elements.
  *
- * <p>Field matrices have mutable data but fixed shape.</p>
+ * <p>MMField matrices have mutable data but fixed shape.
  *
  * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and may have improved performance
- * for some ops.</p>
+ * for some ops.
  *
  * @param <T> Type of the {@link Field field} element for the matrix.
  */
 public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<FieldMatrix<T>, FieldVector<T>, T> {
-
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a dense field matrix with the specified data and shape.
@@ -324,10 +324,10 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.</p>
+     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
      * <p>For large {@code n} values, this method <i>may</i> significantly more efficient than calling
-     * {@code #mult(Matrix) this.mult(this)} {@code n} times.</p>
+     * {@code #mult(Matrix) this.mult(this)} {@code n} times.
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity
      */

@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.sparse.csr.real;
 
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains low-level implementations for evaluating properties of real sparse CSR matrices.
@@ -34,7 +33,7 @@ public final class RealCsrProperties {
 
     private RealCsrProperties() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -99,7 +98,7 @@ public final class RealCsrProperties {
     /**
      * Checks if the {@code src} matrix is symmetric.
      * @param src Source matrix to check symmetry of.
-     * @return True if {@code src} is symmetric. Otherwise, returns false.
+     * @return {@code true} if {@code src} is symmetric; {@code false} otherwise.
      */
     public static boolean isSymmetric(CsrMatrix src) {
         // Check for early returns.
@@ -113,7 +112,7 @@ public final class RealCsrProperties {
     /**
      * Checks if the {@code src} matrix is anti-symmetric.
      * @param src Source matrix to check symmetry of.
-     * @return True if {@code src} is symmetric. Otherwise, returns false.
+     * @return {@code true} if {@code src} is symmetric; {@code false} otherwise.
      */
     public static boolean isAntiSymmetric(CsrMatrix src) {
         // Check for early returns.

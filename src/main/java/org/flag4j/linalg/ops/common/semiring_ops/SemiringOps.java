@@ -25,19 +25,20 @@
 package org.flag4j.linalg.ops.common.semiring_ops;
 
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.util.ErrorMessages;
 
 /**
  * This utility class contains ops for tensors whose elements are members of a
- * {@link org.flag4j.algebraic_structures.fields.Field}. The implementations in this class are agnostic
+ * {@link Field}. The implementations in this class are agnostic
  */
 public final class SemiringOps {
 
 
     private SemiringOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

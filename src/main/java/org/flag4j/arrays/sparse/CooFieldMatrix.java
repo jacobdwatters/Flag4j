@@ -24,9 +24,9 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
@@ -45,17 +45,17 @@ import java.util.List;
 
 /**
  * <p>A sparse matrix stored in coordinate list (COO) format. The {@link #data} of this COO tensor are
- * elements of a {@link Field}.</p>
+ * elements of a {@link Field}.
  *
  * <p>The {@link #data non-zero data} and non-zero indices of a COO matrix are mutable but the {@link #shape}
- * and total number of non-zero data is fixed.</p>
+ * and total number of non-zero data is fixed.
  *
- * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.</p>
+ * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.
  *
  * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
- * matrix).</p>
+ * matrix).
  *
- * <p>A sparse COO matrix is stored as:</p>
+ * <p>A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
@@ -66,9 +66,9 @@ import java.util.List;
  *
  * <p>Note: many ops assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
  * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any ops implemented in this
- * class will preserve the lexicographical sorting.</p>
+ * class will preserve the lexicographical sorting.
  *
- * <p>If indices need to be sorted, call {@link #sortIndices()}.</p>
+ * <p>If indices need to be sorted, call {@link #sortIndices()}.
  *
  * @param <T> Type of the {@link Field field} element in this matrix.
  */
@@ -238,7 +238,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      * <p>For matrices, calling {@code this.tensorDot(src2, new int[]{1}, new int[]{0})} is equivalent to matrix multiplication.
      * However, it is highly recommended to use {@link #mult(CooFieldVector)} instead.
      *
-     * @param src2 TensorOld to contract with this tensor.
+     * @param src2 Tensor to contract with this tensor.
      * @param aAxes Axes along which to compute products for this tensor.
      * @param bAxes Axes along which to compute products for {@code src2} tensor.
      *
@@ -256,9 +256,9 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
 
     /**
-     * <p>Converts this sparse COO matrix to an equivalent compressed sparse row (CSR) matrix.</p>
+     * <p>Converts this sparse COO matrix to an equivalent compressed sparse row (CSR) matrix.
      * <p>It is often easier and more efficient to construct a matrix in COO format first then convert to a CSR matrix for efficient
-     * computations.</p>
+     * computations.
      *
      * @return A CSR matrix equivalent to this COO matrix.
      */

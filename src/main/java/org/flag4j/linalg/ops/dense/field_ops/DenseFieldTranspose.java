@@ -24,13 +24,12 @@
 
 package org.flag4j.linalg.ops.dense.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * Utility class for computing the transpose of a dense {@link FieldTensor field tensor}.
@@ -39,7 +38,7 @@ public final class DenseFieldTranspose {
 
     private DenseFieldTranspose() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

@@ -24,11 +24,10 @@
 
 package org.flag4j.linalg.ops.dense_sparse.csr.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public final class DenseCsrFieldOperations {
 
     private DenseCsrFieldOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

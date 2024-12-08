@@ -25,17 +25,15 @@
 package org.flag4j.linalg.ops.common.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.algebraic_structures.Field;
 
 /**
- * Utility class for evaluating properties of {@link org.flag4j.algebraic_structures.fields.Field} tensors.
+ * Utility class for evaluating properties of {@link Field} tensors.
  */
 public final class FieldProperties {
 
     private FieldProperties() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
     }
 
 

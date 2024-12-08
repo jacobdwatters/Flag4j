@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg.ops.dense.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.SparseMatrixData;
-import org.flag4j.arrays.backend.SparseTensorData;
+import org.flag4j.arrays.SparseMatrixData;
+import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -41,7 +41,7 @@ public final class DenseSemiringConversions {
 
     private DenseSemiringConversions() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 

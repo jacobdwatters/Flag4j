@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.dense.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.concurrency.Configurations;

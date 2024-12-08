@@ -29,18 +29,18 @@ import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.linalg.decompositions.Decomposition;
 
 /**
- * <p>This abstract class specifies methods for computing the Cholesky decomposition of a positive-definite matrix.</p>
+ * <p>This abstract class specifies methods for computing the Cholesky decomposition of a positive-definite matrix.
  *
  * <p>The Cholesky decomposition is essentially a special case of the {@link org.flag4j.linalg.decompositions.lu.LU LU
  * decomposition} for Hermitian positive-definite matrices where the upper triangular matrix is the Hermitian transpose
- * of the lower triangular matrix.</p>
+ * of the lower triangular matrix.
  *
  * <p>Given a Hermitian positive-definite matrix A, the Cholesky decomposition will decompose it into
  * A=LL<sup>H</sup> where L is a lower triangular matrix and L<sup>H</sup> is the conjugate
- * transpose of L.</p>
+ * transpose of L.
  *
  * <p>If A is a real valued symmetric positive-definite matrix, then the decomposition simplifies to
- * A=LL<sup>T</sup>.</p>
+ * A=LL<sup>T</sup>.
  *
  * @param <T> The type of matrix to compute the Cholesky decomposition of.
  */

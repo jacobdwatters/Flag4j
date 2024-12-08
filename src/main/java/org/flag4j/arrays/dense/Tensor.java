@@ -25,9 +25,9 @@
 package org.flag4j.arrays.dense;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.io.PrintOptions;
@@ -48,14 +48,15 @@ import java.util.List;
 
 
 /**
- * <p>A real dense tensor backed by a primitive double array.</p>
+ * <p>A real dense tensor backed by a primitive double array.
  *
  * <p>A tensor is a multidimensional array. If N indices are required to uniquely identify all elements of a tensor, then the
- * tensor is considered an N-dimensional tensor/array or a rank-N tensor.</p>
+ * tensor is considered an N-dimensional tensor/array or a rank-N tensor.
  *
- * <p>The {@link #data} of a Tensor are mutable but the {@link #shape} is fixed.</p>
+ * <p>The {@link #data} of a Tensor are mutable but the {@link #shape} is fixed.
  */
 public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a zero tensor with the shape.
@@ -108,7 +109,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      *
      * @param axis Axis along which to flatten tensor.
      *
-     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is not positive or larger than {@code this.{@link #getRank()}-1}.
      * @see #flatten()
      */
     @Override

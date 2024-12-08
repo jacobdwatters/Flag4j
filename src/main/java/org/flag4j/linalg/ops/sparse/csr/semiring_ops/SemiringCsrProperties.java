@@ -24,19 +24,19 @@
 
 package org.flag4j.linalg.ops.sparse.csr.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.ErrorMessages;
 
 /**
  * Utility class containing methods useful for determining certain properties of a
- * sparse CSR {@link org.flag4j.algebraic_structures.semirings.Semiring} matrix.
+ * sparse CSR {@link Semiring} matrix.
  */
 public final class SemiringCsrProperties {
 
     private SemiringCsrProperties() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
@@ -46,7 +46,7 @@ public final class SemiringCsrProperties {
      * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR Matrix.
-     * @return {@code true} if the CSR matrix is upper-triangular. Otherwise, returns {@code false}.
+     * @return {@code true} if the CSR matrix is upper-triangular; {@code false} otherwise.
      */
     public static <T extends Semiring<T>> boolean isTriU(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
         final int numRows = shape.get(0);
@@ -71,7 +71,7 @@ public final class SemiringCsrProperties {
      * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR Matrix.
-     * @return {@code true} if the CSR matrix is lower-triangular. Otherwise, returns {@code false}.
+     * @return {@code true} if the CSR matrix is lower-triangular; {@code false} otherwise.
      */
     public static <T extends Semiring<T>> boolean isTriL(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
         final int numRows = shape.get(0);

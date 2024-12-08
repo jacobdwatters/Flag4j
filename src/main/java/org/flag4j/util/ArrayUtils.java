@@ -24,11 +24,7 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Complex64;
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.rings.Ring;
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -44,7 +40,7 @@ public final class ArrayUtils {
 
     private ArrayUtils() {
         // Hide Constructor
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -352,11 +348,11 @@ public final class ArrayUtils {
     /**
      * <p>
      * Fills an array with zeros separated by the given stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Staring point in array to apply strided zero fill.
@@ -376,11 +372,11 @@ public final class ArrayUtils {
     /**
      * <p>
      * Fills an array with zeros separated by the given stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Staring point in array to apply strided zero fill.
@@ -402,12 +398,12 @@ public final class ArrayUtils {
      * Fills an array with a range of zeros, each separated by the given stride. Specifically, the destination array will
      * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be separated by
      * the stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
      * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Starting point to apply strided zero fill.
@@ -433,12 +429,12 @@ public final class ArrayUtils {
      * Fills an array with a range of zeros, each separated by the given stride. Specifically, the destination array will
      * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be separated by
      * the stride.
-     * </p>
+     * 
      *
      * <p>
      * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
      * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
-     * </p>
+     * 
      *
      * @param dest   Array to fill with strided zeros.
      * @param start  Starting point to apply strided zero fill.
@@ -808,8 +804,8 @@ public final class ArrayUtils {
      *
      * @param src1 Double array.
      * @param src2 Complex number array.
-     * @return True if all data in {@code src2} have zero imaginary component and real component equal to the
-     * corresponding entry in {@code src1}. Otherwise, returns false.
+     * @return {@code true} if all data in {@code src2} have zero imaginary component and real component equal to the
+     * corresponding entry in {@code src1}; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean equals(double[] src1, T[] src2) {
         boolean equal = true;

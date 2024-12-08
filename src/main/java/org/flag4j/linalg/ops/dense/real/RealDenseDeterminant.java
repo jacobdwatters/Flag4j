@@ -28,7 +28,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -38,7 +37,6 @@ public final class RealDenseDeterminant {
 
     private RealDenseDeterminant() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

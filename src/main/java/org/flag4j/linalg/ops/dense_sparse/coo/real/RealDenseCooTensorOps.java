@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.dense_sparse.coo.real;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -37,7 +36,7 @@ public class RealDenseCooTensorOps {
 
     private RealDenseCooTensorOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

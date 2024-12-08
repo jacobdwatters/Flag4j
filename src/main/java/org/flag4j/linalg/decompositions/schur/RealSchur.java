@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.schur;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -39,17 +39,17 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
 
 /**
- * <p>This class computes the Schur decomposition of a real dense square matrix.</p>
+ * <p>This class computes the Schur decomposition of a real dense square matrix.
  *
  * <p>That is, decompose a square matrix A into A=UTU<sup>T</sup> where U is an orthogonal
  * matrix and  is a block-upper triangular matrix called the real-Schur form of A. T is upper triangular
  * except for possibly 2-by-22 blocks along the diagonal. T is similar to A.
- * </p>
+ * 
  *
  * <p>This code was adapted from the code found in the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>
  * library and the description of the Francis implicit double shifted QR algorithm from
  * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
- * Computations 3rd Edition by David S. Watkins</a>.</p>
+ * Computations 3rd Edition by David S. Watkins</a>.
  */
 public class RealSchur extends Schur<Matrix, double[]> {
 
@@ -65,10 +65,10 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.</p>
+     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.
      *
      * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
-     * set the seed for the pseudo-random number generator using {@link #RealSchur(long)}</p>
+     * set the seed for the pseudo-random number generator using {@link #RealSchur(long)}
      */
     public RealSchur() {
         super(true, new RandomComplex(), new RealHess());
@@ -77,14 +77,14 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
     /**
      * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the {@code U} matrix may or may not
-     * be computed.</p>
+     * be computed.
      *
-     * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.</p>
+     * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * <p>By default if a constructor with no {@code computeU} parameter is called, {@code U} <b>WILL</b> be computed.</p>
+     * <p>By default if a constructor with no {@code computeU} parameter is called, {@code U} <b>WILL</b> be computed.
      *
      * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
-     * set the seed for the pseudo-random number generator using {@link #RealSchur(boolean, long)}</p>
+     * set the seed for the pseudo-random number generator using {@link #RealSchur(boolean, long)}
      *
      * @param computeU Flag indicating if the unitary {@code U} matrix should be computed for the Schur decomposition. If true,
      * {@code U} will be computed. If false, {@code U} will not be computed.
@@ -113,13 +113,13 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.</p>
+     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.
      *
      * <p>That is, if {@code exceptionalThreshold = 10}, then at most 10 iterations QR algorithm iterations will be performed.
      * If, by the 10th iteration, no convergence has been detected which allows for deflation, then a QR algorithm iteration
-     * will be performed with a random (i.e. exceptional) shift.</p>
+     * will be performed with a random (i.e. exceptional) shift.
      *
-     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}</p>
+     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}
      *
      * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without deflation
      *                             before performing an iteration with random shifts.
@@ -138,14 +138,14 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * for when computing the decomposition. The maximum number of iterations is computed as
      * <pre>
      *     {@code maxIteration = maxIterationFactor * src.numRows;} </pre>
-     * If the algorithm does not converge within this limit, an error will be thrown.</p>
+     * If the algorithm does not converge within this limit, an error will be thrown.
      *
      * <p>By default, this is computed as
      * <pre>
      *     {@code maxIterations = }{@link #DEFAULT_MAX_ITERS_FACTOR}{@code * src.numRows;}</pre>
      *
      * where {@code src} is the matrix
-     * being decomposed.</p>
+     * being decomposed.
      *
      * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
      * QR algorithm for.
@@ -160,7 +160,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * <p>Computes the Schur decomposition of the input matrix.</p>
+     * <p>Computes the Schur decomposition of the input matrix.
      *
      * @implNote The Schur decomposition is computed using the Francis implicit double shifted QR algorithm.
      * There are known cases where this variant of the QR algorithm fail to converge. Random shifting is employed when the
@@ -176,7 +176,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Initializes temporary work arrays_old to be used in the decomposition.
+     * Initializes temporary work arrays to be used in the decomposition.
      */
     @Override
     protected void setUpArrays() {
@@ -506,17 +506,17 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * <p>Converts the real schur form computed in the last decomposition to the complex Schur form.</p>
+     * <p>Converts the real schur form computed in the last decomposition to the complex Schur form.
      *
      * <p>That is, converts the real block
      * upper triangular Schur matrix to a complex valued properly upper triangular matrix. If the unitary transformation matrix
-     * {@code U} was computed, the transformations will also be updated accordingly.</p>
+     * {@code U} was computed, the transformations will also be updated accordingly.
      *
      * <p>This method was adapted from the code given by
-     * <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html">scipy.linalg.rsf2csf</a> (v1.12.0).</p>
+     * <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html">scipy.linalg.rsf2csf</a> (v1.12.0).
      *
      * @return An array of length 2 containing the complex Schur matrix {@code T} from the last decomposition, and if computed, the
-     * complex unitary transformation matrix {@code U} from the decomposition. If {@code U} was not computed, then the arrays_old second
+     * complex unitary transformation matrix {@code U} from the decomposition. If {@code U} was not computed, then the arrays second
      * value will be null.
      */
     public CMatrix[] real2ComplexSchur() {

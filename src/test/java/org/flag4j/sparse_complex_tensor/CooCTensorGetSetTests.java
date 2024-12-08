@@ -1,6 +1,6 @@
 package org.flag4j.sparse_complex_tensor;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.junit.jupiter.api.Test;

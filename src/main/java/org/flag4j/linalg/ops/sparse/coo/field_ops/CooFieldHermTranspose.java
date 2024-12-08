@@ -25,11 +25,10 @@
 package org.flag4j.linalg.ops.sparse.coo.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -38,7 +37,7 @@ import org.flag4j.util.ValidateParameters;
 public final class CooFieldHermTranspose {
 
     private CooFieldHermTranspose() {
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
     /**

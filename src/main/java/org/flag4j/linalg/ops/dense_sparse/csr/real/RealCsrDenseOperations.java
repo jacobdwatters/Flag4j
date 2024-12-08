@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.dense_sparse.csr.real;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -41,7 +40,7 @@ public class RealCsrDenseOperations {
 
     private RealCsrDenseOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

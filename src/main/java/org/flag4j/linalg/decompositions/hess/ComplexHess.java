@@ -32,10 +32,10 @@ import org.flag4j.util.ValidateParameters;
 /**
  * <p>Computes the Hessenburg decomposition of a complex dense square matrix. That is, for a square matrix
  * A, computes the decomposition A=QHQ<sup>H</sup> where Q is an unitary matrix and
- * H is a matrix in upper Hessenburg form and is similar to A (i.e. has the same eigenvalues).</p>
+ * H is a matrix in upper Hessenburg form and is similar to A (i.e. has the same eigenvalues).
  *
  * <p>A matrix H is in upper Hessenburg form if it is nearly upper triangular. Specifically, if H has
- * all zeros below the first sub-diagonal.</p>
+ * all zeros below the first sub-diagonal.
  *
  * <p>For example, the following matrix is in upper Hessenburg form where each 'x' is a placeholder which may hold a different
  * value:
@@ -45,17 +45,17 @@ import org.flag4j.util.ValidateParameters;
  *      [ 0 x x x x ]
  *      [ 0 0 x x x ]
  *      [ 0 0 0 x x ]]</pre>
- * </p>
+ * 
  */
 public class ComplexHess extends ComplexUnitaryDecomposition {
 
 
     /**
      * <p>Creates a complex Hessenburg decomposer. This decomposer will compute the Hessenburg decomposition
-     * for complex dense matrices.</p>
+     * for complex dense matrices.
      *
      * <p>By default, the unitary matrix <i>will</i> be computed. To specify if the unitary matrix should be computed, use
-     * {@link #ComplexHess(boolean)}.</p>
+     * {@link #ComplexHess(boolean)}.
      *
      * @see #ComplexHess(boolean)
      */
@@ -66,7 +66,7 @@ public class ComplexHess extends ComplexUnitaryDecomposition {
 
     /**
      * <p>Creates a complex Hessenburg decomposer. This decomposer will compute the Hessenburg decomposition
-     * for complex dense matrices.</p>
+     * for complex dense matrices.
      *
      * @param computeQ Flag indicating if the unitary matrix in the Hessenburg decomposition should be computed. If it is not
      * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.

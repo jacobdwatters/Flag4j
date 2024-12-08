@@ -25,25 +25,24 @@
 package org.flag4j.linalg.ops.dense.real_field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
 /**
  * <p>This class contains several low level methods for computing dense matrix-matrix multiplications between one field matrix and one
- * real matrix.</p>
+ * real matrix.
  *
- * <p>Warning: This class does not perform any sanity checks on the input.</p>
+ * <p>Warning: This class does not perform any sanity checks on the input.
  */
 public final class RealFieldDenseMatMult {
 
     private RealFieldDenseMatMult() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

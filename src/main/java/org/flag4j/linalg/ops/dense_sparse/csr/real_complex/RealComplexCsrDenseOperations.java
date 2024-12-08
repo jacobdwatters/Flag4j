@@ -24,13 +24,12 @@
 
 package org.flag4j.linalg.ops.dense_sparse.csr.real_complex;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -45,7 +44,7 @@ public final class RealComplexCsrDenseOperations {
 
     private RealComplexCsrDenseOperations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

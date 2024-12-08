@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.sparse.csr.real_complex;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
@@ -34,7 +34,6 @@ import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
@@ -47,7 +46,7 @@ public final class RealComplexCsrMatMult {
 
     private RealComplexCsrMatMult() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

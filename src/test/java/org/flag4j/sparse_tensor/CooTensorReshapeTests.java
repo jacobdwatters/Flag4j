@@ -5,8 +5,8 @@ import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CooTensorReshapeTests {
     static CooTensor A;

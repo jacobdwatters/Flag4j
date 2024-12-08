@@ -24,11 +24,10 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -41,7 +40,6 @@ public final class DenseCooFieldMatMult {
 
     private DenseCooFieldMatMult() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
     // TODO: Investigate if blocked algorithms provide any speedup for multiplying a sparse/dense matrix to a dense/sparse matrix.

@@ -25,16 +25,15 @@
 package org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
+import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -47,14 +46,14 @@ public final class RealFieldDenseCsrMatMult {
 
     private RealFieldDenseCsrMatMult() {
         // Hide default constructor for utility method.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
     /**
-     * <p>Computes the matrix multiplication between a real sparse CSR matrix and a complex dense matrix.</p>
+     * <p>Computes the matrix multiplication between a real sparse CSR matrix and a complex dense matrix.
      * <p>WARNING: If the first matrix is very large but not very sparse, this method may be slower than converting the
-     * first matrix to a dense matrix and computing a dense-dense matrix multiplication.</p>
+     * first matrix to a dense matrix and computing a dense-dense matrix multiplication.
      * @param src1 First matrix in the matrix multiplication.
      * @param src2 Second matrix in the matrix multiplication.
      * @return The result of the matrix multiplication between {@code src1} and {@code src2}.

@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.dense_sparse.coo.real;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains low level methods for computing the matrix multiplication (and matrix vector multiplication) between
@@ -37,7 +36,7 @@ public class RealDenseSparseMatMult {
 
     private RealDenseSparseMatMult() {
         // Hide default constructor.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
     // TODO: Investigate if blocked algorithms provide any speedup for multiplying a sparse/dense matrix to a dense/sparse matrix.

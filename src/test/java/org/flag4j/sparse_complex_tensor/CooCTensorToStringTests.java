@@ -1,13 +1,13 @@
 package org.flag4j.sparse_complex_tensor;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CooCTensorToStringTests {
 

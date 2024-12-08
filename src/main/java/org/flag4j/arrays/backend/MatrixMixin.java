@@ -56,6 +56,13 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
 
     /**
+     * Gets the length of the data array which backs this matrix.
+     * @return The length of the data array which backs this matrix.
+     */
+    int dataLength();
+
+
+    /**
      * Gets the element of this matrix at this specified {@code row} and {@code col}.
      * @param row Row index of the item to get from this matrix.
      * @param col Column index of the item to get from this matrix.
@@ -72,9 +79,9 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
 
     /**
-     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.</p>
+     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      *
-     * <p>Same as {@link #tr()}.</p>
+     * <p>Same as {@link #tr()}.
      *
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
@@ -83,9 +90,9 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
 
     /**
-     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.</p>
+     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      *
-     * <p>Same as {@link #trace()}.</p>
+     * <p>Same as {@link #trace()}.
      *
      * @return The trace of this matrix.
      * @throws IllegalArgumentException If this matrix is not square.
@@ -143,7 +150,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
     /**
      * Checks if this matrix is triangular (i.e. upper triangular, diagonal, lower triangular).
-     * @return True is this matrix is triangular. Otherwise, returns false.
+     * @return {@code true} is this matrix is triangular; {@code false} otherwise.
      */
     default boolean isTri() {
         return isTriL() || isTriU();
@@ -152,7 +159,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
     /**
      * Checks if this matrix is diagonal.
-     * @return True is this matrix is diagonal. Otherwise, returns false.
+     * @return {@code true} is this matrix is diagonal; {@code false} otherwise.
      */
     default boolean isDiag() {
         return isTriL() && isTriU();
@@ -162,7 +169,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
     /**
      * Checks if this matrix is upper triangular.
      *
-     * @return True is this matrix is upper triangular. Otherwise, returns false.
+     * @return {@code true} is this matrix is upper triangular; {@code false} otherwise.
      * @see #isTri()
      * @see #isTriL()
      * @see #isDiag()
@@ -173,7 +180,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
     /**
      * Checks if this matrix is lower triangular.
      *
-     * @return True is this matrix is lower triangular. Otherwise, returns false.
+     * @return {@code true} is this matrix is lower triangular; {@code false} otherwise.
      * @see #isTri()
      * @see #isTriU()
      * @see #isDiag()
@@ -185,7 +192,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
      * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
      * only ones along the principle diagonal and zeros everywhere else.
      *
-     * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if this matrix is the identity matrix; {@code false} otherwise.
      */
     boolean isI();
 
@@ -319,14 +326,14 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
 
     /**
      * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
-     * @return True if this matrix is symmetric. Otherwise, returns false.
+     * @return {@code true} if this matrix is symmetric; {@code false} otherwise.
      */
     boolean isSymmetric();
 
 
     /**
      * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
-     * @return True if this matrix is Hermitian. Otherwise, returns false.
+     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
      */
     boolean isHermitian();
 
@@ -334,7 +341,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
     /**
      * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
      *
-     * @return True if this matrix it is orthogonal. Otherwise, returns false.
+     * @return {@code true} if this matrix it is orthogonal; {@code false} otherwise.
      */
     boolean isOrthogonal();
 

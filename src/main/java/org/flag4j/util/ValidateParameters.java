@@ -24,7 +24,7 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -40,7 +40,7 @@ public final class ValidateParameters {
 
     // Hide constructor
     private ValidateParameters() {
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -128,10 +128,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total data.
+     * Checks if arrays have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
+     * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -140,10 +140,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total data.
+     * Checks if arrays have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
+     * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, Object[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -152,10 +152,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total data.
+     * Checks if arrays have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
+     * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(double[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -164,10 +164,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total data.
+     * Checks if arrays have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
+     * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(int[][] arr1, double[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -176,10 +176,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total data.
+     * Checks if arrays have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
+     * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, Complex128[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -188,10 +188,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total data.
+     * Checks if arrays have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
+     * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(double[][] arr1, Complex128[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -200,10 +200,10 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays_old have the same number of total data.
+     * Checks if arrays have the same number of total data.
      * @param arr1 First array.
      * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays_old do not have the same number of total data.
+     * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(int[][] arr1, Complex128[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
@@ -612,8 +612,8 @@ public final class ValidateParameters {
 
 
     /**
-     * <p>Checks if all provided {@code axes} are valid with respect to the rank of the given {@code shape}.</p>
-     * <p>Specifically, an axis is valid if {@code axis >= 0 && axis < shape.getRank()}.</p>
+     * <p>Checks if all provided {@code axes} are valid with respect to the rank of the given {@code shape}.
+     * <p>Specifically, an axis is valid if {@code axis >= 0 && axis < shape.getRank()}.
      * @param shape Shape of interest.
      * @param axes Axes to validate.
      * @throws LinearAlgebraException If {@code axis < 0 || axis >= shape.getRank()} for any axis in {@code axes}.
@@ -631,8 +631,8 @@ public final class ValidateParameters {
 
 
     /**
-     * <p>Checks if all provided {@code axes} are valid with respect to the rank of the given {@code rank}.</p>
-     * <p>Specifically, an axis is valid if {@code axis >= 0 && axis < rank}.</p>
+     * <p>Checks if all provided {@code axes} are valid with respect to the rank of the given {@code rank}.
+     * <p>Specifically, an axis is valid if {@code axis >= 0 && axis < rank}.
      * @param rank Rank of a tensor/shape.
      * @param axes Axes to validate.
      * @throws LinearAlgebraException If {@code axis < 0 || axis >= shape.getRank()} for any axis in {@code axes}.

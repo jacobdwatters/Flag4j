@@ -29,18 +29,17 @@ import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 
 /**
- * <p>Utility class for computing tensor dot products between two {@link CooTensor real sparse COO tensors}.</p>
+ * <p>Utility class for computing tensor dot products between two {@link CooTensor real sparse COO tensors}.
  */
 public final class RealCooTensorDot {
 
     private RealCooTensorDot() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 

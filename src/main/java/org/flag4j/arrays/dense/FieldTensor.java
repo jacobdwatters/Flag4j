@@ -24,9 +24,9 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
 import org.flag4j.arrays.sparse.CooFieldTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
@@ -38,13 +38,14 @@ import java.util.Arrays;
 
 
 /**
- * <p>A dense tensor whose data are {@code Field} elements.</p>
+ * <p>A dense tensor whose data are {@code MMField} elements.
  *
- * <p>The {@link #data} of a field tensor are mutable but the {@link #shape} is fixed.</p>
+ * <p>The {@link #data} of a field tensor are mutable but the {@link #shape} is fixed.
  *
  * @param <T> Type of the field element for the tensor.
  */
 public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<FieldTensor<T>, T> {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a tensor with the specified data and shape.

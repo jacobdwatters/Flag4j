@@ -29,8 +29,8 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * <p>This class provides methods for computing the LU decomposition of a real dense matrix.</p>
- * <p>The following decompositions are provided: A=LU, PA=LU, and PAQ=LU.</p>
+ * <p>This class provides methods for computing the LU decomposition of a real dense matrix.
+ * <p>The following decompositions are provided: A=LU, PA=LU, and PAQ=LU.
  */
 public class RealLU extends LU<Matrix> {
     

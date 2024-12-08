@@ -6,9 +6,6 @@ module flag4j {
 
     // Abstract algebra stuff.
     exports org.flag4j.algebraic_structures;
-    exports org.flag4j.algebraic_structures.fields;
-    exports org.flag4j.algebraic_structures.rings;
-    exports org.flag4j.algebraic_structures.semirings;
 
     // nD array stuff.
     exports org.flag4j.arrays;
@@ -70,7 +67,6 @@ module flag4j {
     exports org.flag4j.linalg.ops.sparse;
 
     exports org.flag4j.linalg.ops.sparse.coo;
-    exports org.flag4j.linalg.ops.sparse.coo.complex;
     exports org.flag4j.linalg.ops.sparse.coo.field_ops;
     exports org.flag4j.linalg.ops.sparse.coo.real;
     exports org.flag4j.linalg.ops.sparse.coo.real_complex;

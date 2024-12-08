@@ -24,11 +24,11 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
-import org.flag4j.arrays.backend.primitive.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
@@ -77,6 +77,7 @@ import java.util.List;
  */
 public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {
+    private static final long serialVersionUID = 1L;
 
     /**
      * The number of rows in this matrix.
@@ -296,6 +297,17 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
+     * Gets the length of the data array which backs this matrix.
+     *
+     * @return The length of the data array which backs this matrix.
+     */
+    @Override
+    public int dataLength() {
+        return data.length;
+    }
+
+
+    /**
      * Flattens this matrix to a row vector.
      *
      * @return The flattened matrix.
@@ -317,7 +329,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      *     <li>If {@code axis == 0} a matrix with the shape {@code (this.numRows*this.numCols, 1)} is returned.</li>
      *     <li>If {@code axis == 1} a matrix with the shape {@code (1, this.numRows*this.numCols)} is returned.</li>
      * </ul>
-     * @throws ArrayIndexOutOfBoundsException If the axis is negative or larger than <code>this.{@link #getRank()}-1</code>.
+     * @throws ArrayIndexOutOfBoundsException If the axis is negative or larger than {@code this.{@link #getRank()}-1}.
      * @see #flatten()
      */
     @Override
@@ -419,9 +431,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
-     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.</p>
+     * <p>Computes the trace of this matrix. That is, the sum of elements along the principle diagonal of this matrix.
      *
-     * <p>Same as {@link #trace()}.</p>
+     * <p>Same as {@link #trace()}.
      *
      * @return The trace of this matrix.
      *
@@ -443,7 +455,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     /**
      * Checks if this matrix is upper triangular.
      *
-     * @return True is this matrix is upper triangular. Otherwise, returns false.
+     * @return {@code true} is this matrix is upper triangular; {@code false} otherwise.
      *
      * @see #isTri()
      * @see #isTriL()
@@ -468,7 +480,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     /**
      * Checks if this matrix is lower triangular.
      *
-     * @return True is this matrix is lower triangular. Otherwise, returns false.
+     * @return {@code true} is this matrix is lower triangular; {@code false} otherwise.
      *
      * @see #isTri()
      * @see #isTriU()
@@ -494,7 +506,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * Checks if this matrix is the identity matrix. That is, checks if this matrix is square and contains
      * only ones along the principle diagonal and zeros everywhere else.
      *
-     * @return True if this matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if this matrix is the identity matrix; {@code false} otherwise.
      */
     @Override
     public boolean isI() {
@@ -527,15 +539,15 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
-     * <p>Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).</p>
+     * <p>Computes the rank of this matrix (i.e. the number of linearly independent rows/columns in this matrix).
      *
      * <p>This is computed as the number of singular values greater than {@code tol} where:
      * <pre>{@code double tol = 2.0*Math.max(rows, cols)*Flag4jConstants.EPS_F64*Math.min(this.numRows, this.numCols);}</pre>
-     * </p>
+     *
      *
      * <p>Note the "matrix rank" is <b>NOT</b> related to the "{@link AbstractTensor#getRank() tensor rank}" which
      * is number of indices
-     * needed to uniquely specify an entry in the tensor.</p>
+     * needed to uniquely specify an entry in the tensor.
      *
      * @return The matrix rank of this matrix.
      */
@@ -735,7 +747,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     /**
      * Checks if a matrix is symmetric. That is, if the matrix is square and equal to its transpose.
      *
-     * @return True if this matrix is symmetric. Otherwise, returns false.
+     * @return {@code true} if this matrix is symmetric; {@code false} otherwise.
      */
     @Override
     public boolean isSymmetric() {
@@ -746,7 +758,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     /**
      * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
      *
-     * @return True if this matrix is Hermitian. Otherwise, returns false.
+     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
      */
     @Override
     public boolean isHermitian() {
@@ -757,7 +769,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     /**
      * Checks if this matrix is orthogonal. That is, if the inverse of this matrix is equal to its transpose.
      *
-     * @return True if this matrix it is orthogonal. Otherwise, returns false.
+     * @return {@code true} if this matrix it is orthogonal; {@code false} otherwise.
      */
     @Override
     public boolean isOrthogonal() {
@@ -1333,9 +1345,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
-     * <p>Converts this matrix to an equivalent vector.</p>
+     * <p>Converts this matrix to an equivalent vector.
      *
-     * <p>If this matrix is not shaped as a row/column vector, it will first be flattened then converted to a vector.</p>
+     * <p>If this matrix is not shaped as a row/column vector, it will first be flattened then converted to a vector.
      *
      * @return A vector equivalent to this matrix.
      */
@@ -1851,10 +1863,10 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
 
 
     /**
-     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.</p>
+     * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
      * <p>For large {@code n} values, this method <i>may</i> be significantly more efficient than calling
-     * {@link #mult(Matrix) this.mult(this)} a total of {@code n} times.</p>
+     * {@link #mult(Matrix) this.mult(this)} a total of {@code n} times.
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity
      */

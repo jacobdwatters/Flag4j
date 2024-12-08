@@ -31,16 +31,16 @@ import org.flag4j.util.ArrayUtils;
 
 
 /**
- * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.</p>
+ * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.
  *
  * <p>The {@code LU} decomposition, decomposes a matrix {@code A} into a unit lower triangular matrix {@code L}
- * and an upper triangular matrix {@code U} such that {@code A=LU}.</p>
+ * and an upper triangular matrix {@code U} such that {@code A=LU}.
  *
  * <p>If partial pivoting is used, the decomposition will also yield a permutation matrix {@code P} such that
- * {@code PA=LU}.</p>
+ * {@code PA=LU}.
  *
  * <p>If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
- *  {@code PAQ=LU}.</p>
+ *  {@code PAQ=LU}.
  *
  * @param <T> Type of the matrix to decompose.
  */

@@ -25,7 +25,7 @@
 package org.flag4j.linalg.transformations;
 
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -33,7 +33,6 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.real.RealOps;
 import org.flag4j.linalg.ops.common.semiring_ops.SemiringOps;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This class contains methods for computing real or complex Householder reflectors (also known as elementary reflectors).
@@ -43,7 +42,7 @@ public final class Householder {
 
     private Householder() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -79,7 +78,7 @@ public final class Householder {
      *
      * <p>This method may be used in conjunction with {@link #leftMultReflector(Matrix, Vector, double, int, int, int)} and
      * {@link #rightMultReflector(Matrix, Vector, double, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
-     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
+     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)
      *
      * @param normal Vector normal to the plane which {@code H} reflects across.
      * @return The vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> which reflects across a plane
@@ -111,7 +110,7 @@ public final class Householder {
      *
      * <p>This method may be used in conjunction with {@link #leftMultReflector(CMatrix, CVector, Complex128, int, int, int)} and
      * {@link #rightMultReflector(CMatrix, CVector, Complex128, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
-     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)</p>
+     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)
      *
      * @param normal The vector normal to the plane the Householder reflector will reflect through\.
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
@@ -308,10 +307,10 @@ public final class Householder {
 
     /**
      * <p>Applies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector {@code v} to a
-     * symmetric matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.</p>
+     * symmetric matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.
      *
      * <p>Note: no check is made to
-     * explicitly check that the {@code src} matrix is actually symmetric.</p>
+     * explicitly check that the {@code src} matrix is actually symmetric.
      *
      * @param src Matrix to apply the Householder reflector to. Assumed to be square and symmetric. Upper triangular portion
      * overwritten with the result.
@@ -372,7 +371,7 @@ public final class Householder {
      * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>T</sup>{@code )*A}.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
-     * matrix.</p>
+     * matrix.
      * @param src Source matrix apply Householder vector to (modified).
      * @param householderVector Householder vector {@code v}.
      * @param alpha Scalar value in Householder matrix.
@@ -394,7 +393,7 @@ public final class Householder {
      * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>T</sup>{@code )}.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
-     * matrix.</p>
+     * matrix.
      *
      * @param src Source matrix apply Householder vector to (modified).
      * @param householderVector Householder vector {@code v}.
@@ -418,7 +417,7 @@ public final class Householder {
      * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>H</sup>{@code )*A}.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
-     * matrix.</p>
+     * matrix.
      *
      * @param src Source matrix apply Householder vector to (modified).
      * @param householderVector Householder vector {@code v}.
@@ -441,7 +440,7 @@ public final class Householder {
      * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>H</sup>{@code )}.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
-     * matrix.</p>
+     * matrix.
      *
      * @param src Source matrix apply Householder vector to (modified).
      * @param householderVector Householder vector {@code v}.
@@ -461,10 +460,10 @@ public final class Householder {
 
     /**
      * <p>Applies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector {@code v} to a
-     * Hermitian matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.</p>
+     * Hermitian matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.
      *
      * <p>Note: no check is made to
-     * explicitly check that the {@code src} matrix is actually Hermitian.</p>
+     * explicitly check that the {@code src} matrix is actually Hermitian.
      *
      * @param src Matrix to apply the Householder reflector to. Assumed to be square and Hermitian. Upper triangular portion
      * overwritten with the result.

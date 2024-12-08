@@ -24,15 +24,14 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
-import org.flag4j.linalg.ops.common.complex.Complex128Properties;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
@@ -59,7 +58,52 @@ import java.util.List;
  * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and <i>may</i>
  * have improved performance for some ops.
  */
+
+/**
+ * <p>Instances of this class represents a complex dense matrix backed by a {@link Complex128} array. The {@code CMatrix} class
+ * provides functionality for complex matrix operations, supporting mutable data with a fixed shape.
+ * This class extends {@link AbstractDenseFieldMatrix} and offers additional methods optimized for complex
+ * arithmetic and matrix computations.
+ *
+ * <p>A {@code CMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
+ * and may offer improved performance for certain operations compared to general tensors.
+ *
+ * <p><b>Key Features:</b>
+ * <ul>
+ *   <li>Construction from various data types such as arrays of {@link Complex128}, {@code double}, and {@link String}.</li>
+ *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
+ *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
+ *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
+ * </ul>
+ *
+ * <p><b>Example Usage:</b>
+ * <pre>{@code
+ * // Constructing a complex matrix from a 2D array of complex numbers
+ * Complex128[][] complexData = {
+ *     { new Complex128(1, 2), new Complex128(3, 4) },
+ *     { new Complex128(5, 6), new Complex128(7, 8) }
+ * };
+ * CMatrix matrix = new CMatrix(complexData);
+ *
+ * // Performing matrix multiplication.
+ * CMatrix result = matrix.mult(matrix);
+ *
+ * // Performing matrix transpose.
+ * CMatrix transpose = matrix.T();
+ *
+ * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
+ * CMatrix conjugateTranspose = matrix.H();
+ *
+ * // Checking if the matrix is unitary.
+ * boolean isUnitary = matrix.isUnitary();
+ * }</pre>
+ *
+ * @see Complex128
+ * @see CVector
+ * @see AbstractDenseFieldMatrix
+ */
 public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex128> {
+    private static final long serialVersionUID = 1L;
 
 
     /**
@@ -841,10 +885,10 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
     /**
      * Checks if all data of this matrix are real.
-     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     * @return {@code true} if all data of this matrix are real; {@code false} otherwise.
      */
     public boolean isReal() {
-        return Complex128Properties.isReal(data);
+        return Complex128Ops.isReal(data);
     }
 
 
@@ -853,14 +897,14 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
      */
     public boolean isComplex() {
-        return Complex128Properties.isComplex(data);
+        return Complex128Ops.isComplex(data);
     }
 
 
     /**
      * Checks if this matrix is unitary. That is, if the inverse of this matrix is approximately equal to its conjugate transpose.
      *
-     * @return True if this matrix it is unitary. Otherwise, returns false.
+     * @return {@code true} if this matrix it is unitary; {@code false} otherwise.
      */
     public boolean isUnitary() {
         // TODO: Investigate what precision should be used in rounding.

@@ -24,15 +24,14 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
-import org.flag4j.algebraic_structures.fields.Complex64;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Complex64;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
-import org.flag4j.linalg.ops.common.complex.Complex128Properties;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
@@ -44,31 +43,33 @@ import java.util.List;
 
 
 /**
- * <p>Sparse complex tensor stored in coordinate list (COO) format. The data of this COO tensor are of type {@link Complex128}</p>
+ * <p>Sparse complex tensor stored in coordinate list (COO) format. The data of this COO tensor are of type {@link Complex128}
  *
  * <p>The non-zero data and non-zero indices of a COO tensor are mutable but the {@link #shape} and total number of
- * {@link #data non-zero data} is fixed.</p>
+ * {@link #data non-zero data} is fixed.
  *
- * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.</p>
+ * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.
  *
  * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
- * tensor).</p>
+ * tensor).
  *
- * <p>A sparse COO tensor is stored as:</p>
+ * <p>A sparse COO tensor is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the tensor.</li>
  *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
  *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
- *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.</p>
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
  *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
- *     index of {@code data[i]}.</p>
+ *     index of {@code data[i]}.
  *     </li>
  * </ul>
  */
 public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Complex128> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a tensor with the specified data and shape.
@@ -226,10 +227,10 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
 
     /**
      * Checks if all data of this matrix are real.
-     * @return {@code true} if all data of this matrix are real. Otherwise, returns {@code false}.
+     * @return {@code true} if all data of this matrix are real; {@code false} otherwise.
      */
     public boolean isReal() {
-        return Complex128Properties.isReal(data);
+        return Complex128Ops.isReal(data);
     }
 
 
@@ -238,7 +239,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @return {@code true} if any entry of this matrix has a non-zero imaginary component.
      */
     public boolean isComplex() {
-        return Complex128Properties.isComplex(data);
+        return Complex128Ops.isComplex(data);
     }
 
 
@@ -337,7 +338,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
 
     /**
      * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
-     * non-zero data, and non-zero indices.</p>
+     * non-zero data, and non-zero indices.
      *
      * @return A human-readable string specifying the full shape, non-zero data, and non-zero indices of this tensor.
      */

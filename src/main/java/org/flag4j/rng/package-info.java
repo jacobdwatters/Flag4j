@@ -24,6 +24,6 @@
 
 /**
  * <p>This package contains classes for Pseudo-random generation of real/complex numbers, and arrays, vectors,
- * matrices, and tensors. </p>
+ * matrices, and tensors. 
  */
 package org.flag4j.rng;

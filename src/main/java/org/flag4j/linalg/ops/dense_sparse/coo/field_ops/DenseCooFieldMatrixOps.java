@@ -24,13 +24,12 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldMatrix;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public final class DenseCooFieldMatrixOps {
 
     private DenseCooFieldMatrixOps() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -179,12 +178,12 @@ public final class DenseCooFieldMatrixOps {
      * <p>
      *     If the dense matrix contains a zero at the same index the sparse matrix contains a non-zero, the result will be
      *     either {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
-     * </p>
+     * 
      *
      * <p>
      *     If the dense matrix contains a zero at an index for which the sparse matrix is also zero, the result will be
      *     zero. This is done to realize computational benefits from ops with sparse matrices.
-     * </p>
+     * 
      *
      * @param src1 Real sparse matrix and numerator in element-wise quotient.
      * @param src2 Real Dense matrix and denominator in element-wise quotient.

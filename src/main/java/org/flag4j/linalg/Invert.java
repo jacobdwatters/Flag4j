@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.Cholesky;
@@ -41,7 +41,6 @@ import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
@@ -55,7 +54,7 @@ public final class Invert {
 
     private Invert() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -342,7 +341,7 @@ public final class Invert {
      *
      * @param src1 First matrix.
      * @param src2 Second matrix.
-     * @return True if matrix src2 is an inverse of this matrix. Otherwise, returns false. Otherwise, returns false.
+     * @return {@code true} if matrix src2 is an inverse of this matrix; {@code false} otherwise. Otherwise, returns false.
      */
     public static boolean isInv(Matrix src1, Matrix src2) {
         boolean result;
@@ -362,7 +361,7 @@ public final class Invert {
      *
      * @param src1 First matrix.
      * @param src2 Second matrix.
-     * @return True if matrix src2 is an inverse (approximately) of this matrix. Otherwise, returns false. Otherwise, returns false.
+     * @return {@code true} if matrix src2 is an inverse (approximately) of this matrix; {@code false} otherwise. Otherwise, returns false.
      */
     public static boolean isInv(CMatrix src1, CMatrix src2) {
         boolean result;

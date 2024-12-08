@@ -24,9 +24,8 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,13 +34,13 @@ import java.util.stream.IntStream;
 
 /**
  * This class contains low level implementations for methods to evaluate certain properties of a sparse COO
- * {@link org.flag4j.algebraic_structures.semirings.Semiring} matrix. For example, if the matrix is symmetric.
+ * {@link Semiring} matrix. For example, if the matrix is symmetric.
  */
 public final class CooSemiringMatrixProperties {
 
     private CooSemiringMatrixProperties() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(getClass()));
+        
     }
 
 
@@ -51,7 +50,7 @@ public final class CooSemiringMatrixProperties {
      * @param entries Non-zero data of the matrix.
      * @param rowIndices Non-zero row indices of the matrix.
      * @param colIndices Non-zero column indices of the matrix.
-     * @return True if the {@code src} matrix is the identity matrix. Otherwise, returns false.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
      */
     public static <T extends Semiring<T>> boolean isIdentity(
             Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {

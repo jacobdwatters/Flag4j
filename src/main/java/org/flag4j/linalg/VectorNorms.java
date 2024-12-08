@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.algebraic_structures.rings.Ring;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.arrays.dense.Vector;
@@ -33,7 +33,6 @@ import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
-import org.flag4j.util.ErrorMessages;
 
 
 /**
@@ -43,7 +42,7 @@ public final class VectorNorms {
 
     private VectorNorms() {
         // Hide default constructor for utility class
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
     /**
@@ -277,7 +276,7 @@ public final class VectorNorms {
      *     <li>If {@code p} is {@link Double#NEGATIVE_INFINITY}, then this method computes the minimum norm.</li>
      * </ul>
      *
-     * <p>Warning, if {@code p} is very large in absolute value, overflow errors may occur.</p>
+     * <p>Warning, if {@code p} is very large in absolute value, overflow errors may occur.
      * @return The {@code p}-norm of the vector.
      */
     public static double norm(double[] src, double p) {

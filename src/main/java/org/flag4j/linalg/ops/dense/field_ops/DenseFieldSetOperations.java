@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.dense.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
@@ -46,7 +46,7 @@ public final class DenseFieldSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total data.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total data.
      */
     public static <T extends Field<T>> void setValues(T[] src, final T[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
@@ -59,7 +59,7 @@ public final class DenseFieldSetOperations {
      *
      * @param src New values of the matrix.
      * @param dest Destination array for values.
-     * @throws IllegalArgumentException If the source and destination arrays_old have different number of total data.
+     * @throws IllegalArgumentException If the source and destination arrays have different number of total data.
      */
     public static <T extends Field<T>> void setValues(T[][] src, final T[] dest) {
         ValidateParameters.ensureTotalEntriesEq(src, dest);

@@ -1,6 +1,6 @@
 package org.flag4j.sparse_csr_matrix;
 
-import org.flag4j.algebraic_structures.fields.Complex128;
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
@@ -9,7 +9,7 @@ import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOperations;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOperations;
-import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOperations;
+import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
@@ -161,15 +161,15 @@ class CsrMatrixAddSubTests {
         bCmpEntries[3][5] = new Complex128(34.5, 135);
         bCmpEntries[4][4] = new Complex128(23.501, 100.23);
         makeCmpMatrices();
-        assertEquals(expAddCmp, RealComplexCsrOperations.add(BCmp, A));
-        assertEquals(expAsubBCmp, RealComplexCsrOperations.sub(A, BCmp));
+        assertEquals(expAddCmp, RealComplexCsrOps.add(BCmp, A));
+        assertEquals(expAsubBCmp, RealComplexCsrOps.sub(A, BCmp));
 
         // ---------------------- Sub-case 2 ----------------------
         A = new CsrMatrix(new Shape(2, 3), new double[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
-        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.add(BCmp, A));
+        assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.add(BCmp, A));
 
-        assertThrows(LinearAlgebraException.class, ()->RealComplexCsrOperations.sub(A, BCmp));
+        assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.sub(A, BCmp));
     }
 
 

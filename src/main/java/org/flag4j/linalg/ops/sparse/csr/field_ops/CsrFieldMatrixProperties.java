@@ -24,9 +24,8 @@
 
 package org.flag4j.linalg.ops.sparse.csr.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
 
 /**
  * This utility class contains methods usefully for determining properties of a sparse CSR
@@ -36,7 +35,6 @@ public final class CsrFieldMatrixProperties {
 
     private CsrFieldMatrixProperties() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
@@ -102,7 +100,7 @@ public final class CsrFieldMatrixProperties {
     /**
      * Checks if the {@code src} matrix is symmetric.
      * @param src Source matrix to check symmetry of.
-     * @return True if {@code src} is symmetric. Otherwise, returns false.
+     * @return {@code true} if {@code src} is symmetric; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isSymmetric(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
@@ -116,7 +114,7 @@ public final class CsrFieldMatrixProperties {
     /**
      * Checks if the {@code src} matrix is anti-symmetric.
      * @param src Source matrix to check symmetry of.
-     * @return True if {@code src} is symmetric. Otherwise, returns false.
+     * @return {@code true} if {@code src} is symmetric; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isAntiSymmetric(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
@@ -130,7 +128,7 @@ public final class CsrFieldMatrixProperties {
     /**
      * Checks if the {@code src} matrix is Hermitian.
      * @param src Source matrix to check.
-     * @return True if {@code src} is Hermitian. Otherwise, returns false.
+     * @return {@code true} if {@code src} is Hermitian; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isHermitian(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.
@@ -144,7 +142,7 @@ public final class CsrFieldMatrixProperties {
     /**
      * Checks if the {@code src} matrix is anti-Hermitian.
      * @param src Source matrix to check.
-     * @return True if {@code src} is Hermitian. Otherwise, returns false.
+     * @return {@code true} if {@code src} is Hermitian; {@code false} otherwise.
      */
     public static <T extends Field<T>> boolean isAntiHermitian(AbstractCsrFieldMatrix<?, ?, ?, T> src) {
         // Check for early returns.

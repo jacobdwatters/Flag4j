@@ -33,14 +33,6 @@ import java.util.Arrays;
 import java.util.StringJoiner;
 
 /**
- * <p>An object to store the shape of a tensor. Shapes are immutable.
- *
- * <p>Multidimensional indices can be efficiently computed from a flat 1D array index using a shape object as it internally
- * maintains strides (see {@link #getIndices(int)} and {@link #getStrides()}). Strides are the step size needed to move from one
- * element to another along each axis in the tensor.
- */
-
-/**
  * Represents the shape of a multidimensional array (e.g. tensor, matrix, vector, etc.), specifying its dimensions and providing
  * utilities for shape-related ops.
  *
@@ -59,18 +51,20 @@ import java.util.StringJoiner;
  * <p>This class is a fundamental building block for tensor ops, particularly in contexts where multidimensional
  * indexing and dimension manipulations are required.
  *
- * <p>Example usage:
+ * <h2>Example usage:</h2>
  *
- * <blockquote><pre>
+ * <pre>{@code
  * Shape shape = new Shape(); // Creates a shape for a scalar value.
  * shape = new Shape(3, 4, 5); // Creates a shape for a 3x4x5 tensor.
  * int rank = shape.getRank(); // Gets the rank (number of dimensions).
  * int[] strides = shape.getStrides(); // Retrieves the strides for this shape.
  * int flatIndex = shape.entriesIndex(2, 1, 4); // Converts multidimensional indices to a flat index.
- * int[] multiDimIndex = shape.
- * </pre></blockquote>
+ * int[] multiDimIndex = shape.}
+ * </pre>
  */
 public class Shape implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * An array containing the size of each dimension of this shape.
      */
@@ -217,6 +211,7 @@ public class Shape implements Serializable {
                 throw new IndexOutOfBoundsException("Index " + idx + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
             }
+
             index += idx*strides[i];
         }
 

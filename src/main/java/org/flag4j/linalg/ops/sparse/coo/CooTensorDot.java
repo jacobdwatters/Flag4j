@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 
-import org.flag4j.algebraic_structures.semirings.Semiring;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.ops.TensorDot;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;

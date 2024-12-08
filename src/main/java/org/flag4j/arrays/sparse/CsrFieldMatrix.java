@@ -24,11 +24,11 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
-import org.flag4j.arrays.backend.field.AbstractCooFieldTensor;
-import org.flag4j.arrays.backend.field.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrintOptions;
@@ -75,6 +75,7 @@ import java.util.List;
 public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<CsrFieldMatrix<T>,
         FieldMatrix<T>, CooFieldVector<T>, T> {
 
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
@@ -494,7 +495,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * Computes the tensor contraction of this tensor with a specified tensor over the specified set of axes. That is,
      * computes the sum of products between the two tensors along the specified set of axes.
      *
-     * @param src2 TensorOld to contract with this tensor.
+     * @param src2 Tensor to contract with this tensor.
      * @param aAxes Axes along which to compute products for this tensor.
      * @param bAxes Axes along which to compute products for {@code src2} tensor.
      *

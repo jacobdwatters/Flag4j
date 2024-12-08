@@ -24,12 +24,11 @@
 
 package org.flag4j.linalg.ops.sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.fields.Field;
+import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public final class CooFieldMatrixManipulations {
 
     private CooFieldMatrixManipulations() {
         // Hide default constructor for utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
+        
     }
 
 
@@ -60,7 +59,7 @@ public final class CooFieldMatrixManipulations {
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int size = src.data.length - (startEnd[1]-startEnd[0]);
 
-        // Initialize arrays_old.
+        // Initialize arrays.
         V[] entries = (V[]) new Field[size];
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
@@ -154,7 +153,7 @@ public final class CooFieldMatrixManipulations {
 
 
     /**
-     * A helper method which copies from a sparse matrix to a set of three arrays_old (non-zero data, row indices, and
+     * A helper method which copies from a sparse matrix to a set of three arrays (non-zero data, row indices, and
      * column indices) but skips over a specified range.
      * @param src Source sparse matrix to copy from.
      * @param entries Array to copy {@code} src non-zero data to.

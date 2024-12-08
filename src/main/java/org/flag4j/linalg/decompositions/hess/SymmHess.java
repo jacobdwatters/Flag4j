@@ -34,10 +34,10 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * <p>Computes the Hessenburg decomposition of a real dense symmetric matrix. That is, for a square, symmetric matrix
  * A, computes the decomposition A=QHQ<sup>T</sup> where Q is an orthogonal matrix and
  * H is a symmetric matrix in tri-diagonal form (special case of Hessenburg form) which is similar to A
- * (i.e. has the same eigenvalues).</p>
+ * (i.e. has the same eigenvalues).
  *
  * <p>A matrix H is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonals.
- * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.</p>
+ * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.
  *
  * <p>For example, the following matrix is in symmetric tri-diagonal form where each 'x' may hold a different value (provided
  * the matrix is symmetric):
@@ -47,7 +47,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *      [ 0 x x x 0 ]
  *      [ 0 0 x x x ]
  *      [ 0 0 0 x x ]]</pre>
- * </p>
+ * 
  */
 public class SymmHess extends RealHess {
 

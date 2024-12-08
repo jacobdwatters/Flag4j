@@ -24,8 +24,7 @@
 
 package org.flag4j.linalg.ops.sparse.coo.field_ops;
 
-import org.flag4j.arrays.backend.field.AbstractCooFieldMatrix;
-import org.flag4j.util.ErrorMessages;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 
 import java.util.Arrays;
 
@@ -36,7 +35,6 @@ public final class CooFieldElementSearch {
 
     private CooFieldElementSearch() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 

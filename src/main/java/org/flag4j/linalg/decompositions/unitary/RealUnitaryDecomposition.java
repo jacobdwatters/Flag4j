@@ -67,14 +67,14 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      * the specified sub-diagonal (must be 0 or 1).
      *
      * <p>Allows for specification if the reflectors used to bring matrix to upper triangular/Hessenburg form are to be stored or
-     * not.</p>
+     * not.
      *
      * <p>If the {@code Q} matrix is need, then {@code storeReflectors} must be true. If {@code Q} is <b>NOT</b> needed, then
-     * not storing the reflectors <i>may</i> improve performance slightly by avoiding unneeded copies.</p>
+     * not storing the reflectors <i>may</i> improve performance slightly by avoiding unneeded copies.
      *
      * <p>It should be noted that if performance is improved, it will be a very slight improvement compared
      * to the total time to compute the decomposition. This is because the computation of {@code Q} is only
-     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy ops.</p>
+     * evaluated lazily once {@link #getQ()} is called, so this will only save on copy ops.
      *
      * @param subDiagonal Sub-diagonal of the upper triangular/Hessenburg matrix. That is, the sub-diagonal for which all data
      *                    below will be zero in the final upper quasi-triangular matrix. Must be Zero or one. If zero, it will be
@@ -88,10 +88,10 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
 
     /**
-     * <p>Gets the unitary {@code Q} matrix from the unitary decomposition.</p>
+     * <p>Gets the unitary {@code Q} matrix from the unitary decomposition.
      *
      * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
-     * null.</p>
+     * null.
      *
      * @return The {@code Q} matrix from the unitary decomposition. Note, if the reflectors for this decomposition were not saved,
      * then {@code Q} can not be computed and this method will return {@code null}.
@@ -145,7 +145,7 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
 
 
     /**
-     * Initialized any work arrays_old to be used in computing the decomposition with the proper size.
+     * Initialized any work arrays to be used in computing the decomposition with the proper size.
      *
      * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code max(numRows, numCols)}
      */

@@ -25,11 +25,10 @@
 package org.flag4j.linalg.ops.dense_sparse.coo.field_ops;
 
 
-import org.flag4j.algebraic_structures.fields.Field;
-import org.flag4j.arrays.backend.field.AbstractCooFieldVector;
-import org.flag4j.arrays.backend.field.AbstractDenseFieldVector;
+import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -42,7 +41,6 @@ public final class DenseCooFieldVectorOps {
 
     private DenseCooFieldVectorOps() {
         // Hide default constructor in utility class.
-        throw new UnsupportedOperationException(ErrorMessages.getUtilityClassErrMsg(this.getClass()));
     }
 
 
