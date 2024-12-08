@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,94 +26,52 @@ package org.flag4j.arrays.sparse;
 
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.AbstractTensor;
+import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
 import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
-import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BinaryOperator;
 
 
 /**
- * <p>Instances of this class represent a sparse matrix using the compressed sparse row (CSR) format where
- * all data elements belonging to a specified {@link Field} type.
- * This class is optimized for efficient storage and operations on matrices with a high proportion of zero elements.
- * The non-zero values of the matrix are stored in a compact form, reducing memory usage and improving performance for many matrix
- * operations.
+ * <p>A sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
+ * elements of a {@link Field}.
  *
- * <h3>CSR Representation:</h3>
- * A CSR matrix is represented internally using three main arrays:
+ * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
+ * and {@link #nnz total number of non-zero data} is fixed.
+ *
+ * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.
+ *
+ * <p>A sparse CSR matrix is stored as:
  * <ul>
- *   <li><b>Data:</b> Non-zero values are stored in a one-dimensional array {@link #data} of length {@link #nnz}. Any element not
- *   specified in {@code data} is implicitly zero. It is also possible to explicitly store zero values in this array, although this
- *   is generally not desirable. To remove explicitly defined zeros, use {@link #dropZeros()}</li>
- *
- *   <li><b>Row Pointers:</b> A 1D array {@link #rowPointers} of length {@code numRows + 1} where {@code rowPointers[i]} indicates
- *   the starting index in the {@code data} and {@code colIndices} arrays for row {@code i}. The last entry of {@code rowPointers}
- *   equals the length of {@code data}. That is, all non-zero values in {@code data} which are in row {@code i} are between
- *   {@code data[rowIndices[i]} (inclusive) and {@code data[rowIndices[i + 1]} (exclusive).</li>
- *
- *   <li><b>Column Indices:</b> A 1D array {@link #colIndices} of length {@link #nnz} storing the column indices corresponding to each non-zero
- *   value in {@code data}.</li>
+ *     <li>The full {@link #shape shape} of the matrix.</li>
+ *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
+ *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
+ *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
+ *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
+ *     {@code i}.
+ *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
  *
- * <p>The total number of non-zero elements ({@link #nnz}) and the shape are fixed for a given instance, but the values
- * in {@link #data} and their corresponding {@link #rowPointers} and {@link #colIndices} may be updated. Many operations
- * assume that the indices are sorted lexicographically by row, and then by column, but this is not strictly enforced.
- * All provided operations preserve the lexicographical row-major sorting of data and indices. If there is any doubt about the
- * ordering of indices, use {@link #sortIndices()} to ensure they are explicitly sorted. CSR tensors may also store multiple entries
- * for the same index (referred to as an uncoalesced tensor). To combine all duplicated entries use {@link #coalesce()} or
- * {@link #coalesce(BinaryOperator)}.
+ * <p>Note: many ops assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
+ * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any ops implemented in this
+ * class will preserve the lexicographical sorting.
  *
- * <p>CSR matrices are optimized for efficient storage and operations on matrices with a high proportion of zero elements.
- * CSR matrices are ideal for row-wise operations and matrix-vector multiplications. In general, CSR matrices are not efficient at
- * handling many incremental updates. In this case {@link CooMatrix COO matrices} are usually preferred.
+ * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.
  *
- * <p>Conversion to other formats, such as COO or dense matrices, can be performed using {@link #toCoo()} or {@link #toDense()}.
- *
- * <h3>Usage Examples:</h3>
- * <pre>{@code
- * // Define matrix data.
- * Shape shape = new Shape(8, 8);
- * Complex128[] data = {
- *      new Complex128(1, 2), new Complex128(3, 4),
- *      new Complex128(5, 6), new Complex128(7, 8)
- * };
- * int[] rowPointers = {0, 1, 1, 1, 1, 3, 3, 3, 4}
- * int[] colIndices = {0, 0, 5, 2};
- *
- * // Create CSR matrix.
- * CsrFieldMatrix<Complex128> matrix = new CsrFieldMatrix<>(shape, data, rowPointers, colIndices);
- *
- * // Add matrices.
- * CsrFieldMatrix<Complex128> sum = matrix.add(matrix);
- *
- * // Compute matrix-matrix multiplication.
- * Matrix prod = matrix.mult(matrix);
- * CsrFieldMatrix<Complex128> sparseProd = matrix.mult2Csr(matrix);
- *
- * // Compute matrix-vector multiplication.
- * FieldVector<Complex128> denseVector = new FieldVector(matrix.numCols, new Complex128(5, 6));
- * FieldMatrix<Complex128> matrixVectorProd = matrix.mult(denseVector);
- * }</pre>
- *
- * @param <T> The type of elements stored in this matrix, constrained by the {@link Field} interface.
- * @see FieldMatrix
- * @see CooFieldMatrix
- * @see FieldVector
- * @see CooFieldVector
+ * @param <T> Type of field element of this matrix.
  */
 public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<CsrFieldMatrix<T>,
         FieldMatrix<T>, CooFieldVector<T>, T> {
@@ -149,19 +107,8 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      */
     public CsrFieldMatrix(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, (T[]) entries.toArray(new Field[entries.size()]),
-                ArrayConversions.fromIntegerList(rowPointers),
-                ArrayConversions.fromIntegerList(colIndices));
-    }
-
-
-    /**
-     * Constructs a sparse CSR matrix representing the zero matrix for the field which {@code fieldElement} belongs to.
-     * @param shape Shape of the CSR matrix to construct.
-     * @param fieldElement Element of the field which the entries of this
-     */
-    public CsrFieldMatrix(Shape shape, T fieldElement) {
-        super(shape, (T[]) new Field[0], new int[0], new int[0]);
-        setZeroElement(fieldElement.getZero());
+                ArrayUtils.fromIntegerList(rowPointers),
+                ArrayUtils.fromIntegerList(colIndices));
     }
 
 
@@ -284,7 +231,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * @param shape@return A COO tensor equivalent to this CSR matrix which has been reshaped to {@code newShape}
      */
     @Override
-    public CooFieldTensor<T> toTensor(Shape shape) {
+    public AbstractCooFieldTensor<?, ?, T> toTensor(Shape shape) {
         return toCoo().toTensor(shape);
     }
 
@@ -397,7 +344,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * @throws ArrayIndexOutOfBoundsException If {@code rowIdx} is less than zero or greater than/equal to
      *                                        the number of rows in this matrix.
      */
-    @Override
     public CooFieldVector<T> getRow(int rowIdx) {
         ValidateParameters.ensureIndicesInBounds(numRows, rowIdx);
         int start = rowPointers[rowIdx];
@@ -568,73 +514,47 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
 
     /**
-     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
-     * This method is part of the "Visitor Pattern" and allows operations to be performed
-     * on the matrix without modifying the matrix's class directly.
-     *
-     * @param visitor The visitor implementing the operation to be performed.
-     *
-     * @return The result of the visitor's operation, typically another matrix or a scalar value.
-     *
-     * @throws NullPointerException if the visitor is {@code null}.
-     */
-    @Override
-    public <R> R accept(MatrixVisitor<R> visitor) {
-        return visitor.visit(this);
-    }
-
-
-    /**
-     * Drops any explicit zeros in this sparse COO matrix.
-     * @return A copy of this Csr matrix with any explicitly stored zeros removed.
-     */
-    public CsrFieldMatrix<T> dropZeros() {
-        SparseMatrixData<T> dest = SparseUtils.dropZerosCsr(shape, data, rowPointers, colIndices);
-        return new CooFieldMatrix<>(dest.shape(), dest.data(), dest.rowData(), dest.colData()).toCsr();
-    }
-
-
-    /**
-     * Coalesces this sparse CSR matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
-     * @return A new coalesced sparse CSR matrix which is equivalent to this CSR matrix.
-     * @see #coalesce(BinaryOperator)
-     */
-    public CsrFieldMatrix<T> coalesce() {
-        return toCoo().coalesce().toCsr();
-    }
-
-
-    /**
-     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
-     * @param aggregator Custom aggregation function to combine multiple.
-     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
-     * @see #coalesce()
-     */
-    public CsrFieldMatrix<T> coalesce(BinaryOperator<T> aggregator) {
-        return toCoo().coalesce(aggregator).toCsr();
-    }
-
-
-    /**
      * Formats this sparse matrix as a human-readable string.
      * @return A human-readable string representing this sparse matrix.
      */
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("nnz: ").append(nnz).append("\n");
+        result.append("Non-zero data: [");
 
         int maxCols = PrintOptions.getMaxColumns();
         boolean centering = PrintOptions.useCentering();
         int precision = PrintOptions.getPrecision();
         int padding = PrintOptions.getPadding();
 
-        result.append("Non-zero data: ")
-                .append(PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering))
-                .append("\n");
+        int stopIndex = Math.min(maxCols -1, size-1);
+        int width;
+        String value;
+
+        if(data.length > 0) {
+            // Get data up until the stopping point.
+            for(int i = 0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(data[i], precision);
+                width = padding + value.length();
+                value = centering ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            if(stopIndex < size-1) {
+                width = padding + 3;
+                value = "...";
+                value = centering ? StringUtils.center(value, width) : value;
+                result.append(String.format("%-" + width + "s", value));
+            }
+
+            // Get last entry now
+            value = StringUtils.ValueOfRound(data[size-1], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
+
+        result.append("]\n");
         result.append("Row Pointers: ")
                 .append(PrettyPrint.abbreviatedArray(rowPointers, maxCols, padding, centering))
                 .append("\n");

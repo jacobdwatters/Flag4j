@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,7 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -135,7 +134,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @param indices Indices of the non-zero data of this tensor.
      */
     public CooCTensor(Shape shape, double[] entries, int[][] indices) {
-        super(shape, ArrayConversions.toComplex128(entries, null), indices);
+        super(shape, ArrayUtils.wrapAsComplex128(entries, null), indices);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -145,7 +144,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @param b Tensor to construct copy of.
      */
     public CooCTensor(CooCTensor b) {
-        super(b.shape, b.data.clone(), ArrayUtils.deepCopy2D(b.indices, null));
+        super(b.shape, b.data.clone(), ArrayUtils.deepCopy(b.indices, null));
     }
 
 
@@ -168,7 +167,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      */
     @Override
     public CooCTensor makeLikeTensor(Shape shape, Complex128[] entries) {
-        return new CooCTensor(shape, entries, ArrayUtils.deepCopy2D(indices, null));
+        return new CooCTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -250,7 +249,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @return A new tensor containing the data of this tensor rounded to the specified precision.
      */
     public CooCTensor round(int precision) {
-        return new CooCTensor(shape, Complex128Ops.round(data, precision), ArrayUtils.deepCopy2D(indices, null));
+        return new CooCTensor(shape, Complex128Ops.round(data, precision), ArrayUtils.deepCopy(indices, null));
     }
 
 
@@ -316,7 +315,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        return CooSemiringEquals.cooTensorEquals(this, (CooCTensor) object);
+        return CooFieldEquals.cooTensorEquals(this, (CooCTensor) object);
     }
 
 
@@ -352,7 +351,6 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("nnz: ").append(nnz).append("\n");
         sb.append("Non-zero Entries: " +
                 PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering) + "\n");
         sb.append("Non-zero Indices: " +
