@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,10 +31,14 @@ import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -72,47 +76,6 @@ import java.util.Arrays;
  *
  * @param <T> Type of the {@link Field field} for elements of the matrix.
  *
- * @see FieldVector
- * @see FieldTensor
- * @see AbstractDenseFieldMatrix
- */
-
-/**
- * <p>Instances of this class represents a dense matrix backed by a {@link Field} array. The {@code FieldMatrix} class
- * provides functionality for matrix operations whose elements are members of a field, supporting mutable data with a fixed shape.
- *
- * <p>A {@code FieldMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
- * and may offer improved performance for certain operations compared to general tensors.
- *
- * <p><b>Key Features:</b>
- * <ul>
- *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
- *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
- *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
- * </ul>
- *
- * <p><b>Example Usage:</b>
- * <pre>{@code
- * // Constructing a complex matrix from a 2D array of complex numbers
- * Complex128[][] complexData = {
- *     { new Complex128(1, 2), new Complex128(3, 4) },
- *     { new Complex128(5, 6), new Complex128(7, 8) }
- * };
- * FieldMatrix<Complex128> matrix = new FieldMatrix(complexData);
- *
- * // Performing matrix multiplication.
- * FieldMatrix<Complex128> result = matrix.mult(matrix);
- *
- * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
- * FieldMatrix<Complex128> conjugateTranspose = matrix.H();  // May not be supported for all field types.
- *
- * // Checking if the matrix is unitary.
- * boolean isUnitary = matrix.isUnitary();
- * }</pre>
- *
- * @param <T> Type of the {@link Field field} element for the matrix.
- *
- * @see FieldMatrix
  * @see FieldVector
  * @see FieldTensor
  * @see AbstractDenseFieldMatrix
@@ -204,20 +167,6 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
     @Override
     protected CooFieldMatrix<T> makeLikeCooTensor(Shape shape, T[] entries, int[][] indices) {
         return makeLikeCooMatrix(shape, entries, indices[0], indices[1]);
-    }
-
-
-    /**
-     * Constructs a vector of a similar type as this matrix.
-     *
-     * @param shape Shape of the vector to construct. Must be rank 1.
-     * @param entries Entries of the vector.
-     *
-     * @return A vector of a similar type as this matrix.
-     */
-    @Override
-    protected FieldVector<T> makeLikeVector(Shape shape, T[] entries) {
-        return new FieldVector<>(shape, entries);
     }
 
 
@@ -498,11 +447,109 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
+     * Gets a row of the matrix formatted as a human-readable string.
+     * @param rowIndex Index of the row to get.
+     * @param columnsToPrint List of column indices to print.
+     * @param maxWidths List of maximum string lengths for each column.
+     * @return A human-readable string representation of the specified row.
+     */
+    private String rowToString(int rowIndex, List<Integer> columnsToPrint, List<Integer> maxWidths) {
+        StringBuilder sb = new StringBuilder();
+
+        // Start the row with appropriate bracket.
+        sb.append(rowIndex > 0 ? " [" : "[");
+
+        // Loop over the columns to print.
+        for (int i = 0; i < columnsToPrint.size(); i++) {
+            int colIndex = columnsToPrint.get(i);
+            String value;
+            int width = PrintOptions.getPadding() + maxWidths.get(i);
+
+            if (colIndex == -1) // Placeholder for truncated columns.
+                value = "...";
+            else
+                value = StringUtils.ValueOfRound(this.get(rowIndex, colIndex), PrintOptions.getPrecision());
+
+            if (PrintOptions.useCentering())
+                value = StringUtils.center(value, width);
+
+            sb.append(String.format("%-" + width + "s", value));
+        }
+
+        // Close the row.
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+
+    /**
      * Generates a human-readable string representing this matrix.
      * @return A human-readable string representing this matrix.
      */
     @Override
     public String toString() {
-        return PrettyPrint.matrixToString(shape, data);
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
+
+        if (data.length == 0) {
+            result.append("[]"); // No data in this matrix.
+        } else {
+            int numRows = this.numRows;
+            int numCols = this.numCols;
+
+            int maxRows = PrintOptions.getMaxRows();
+            int maxCols = PrintOptions.getMaxColumns();
+
+            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
+            boolean truncatedRows = maxRows < numRows;
+
+            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
+            boolean truncatedCols = maxCols < numCols;
+
+            // Build list of column indices to print
+            List<Integer> columnsToPrint = new ArrayList<>();
+            for (int j = 0; j < colStopIndex; j++)
+                columnsToPrint.add(j);
+
+            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
+            columnsToPrint.add(numCols - 1); // Always include the last column.
+
+            // Compute maximum widths for each column
+            List<Integer> maxWidths = new ArrayList<>();
+            for (Integer colIndex : columnsToPrint) {
+                int maxWidth;
+                if (colIndex == -1)
+                    maxWidth = 3; // Width for '...'.
+                else
+                    maxWidth = PrettyPrint.maxStringLength(getCol(colIndex).data, rowStopIndex + 1);
+
+                maxWidths.add(maxWidth);
+            }
+
+            // Build the rows up to the stopping index.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(i, columnsToPrint, maxWidths));
+                result.append("\n");
+            }
+
+            if (truncatedRows) {
+                // Print a '...' row to indicate truncated rows.
+                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
+                String value = "...";
+
+                if (PrintOptions.useCentering())
+                    value = StringUtils.center(value, totalWidth);
+
+                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+            }
+
+            // Append the last row.
+            result.append(rowToString(numRows - 1, columnsToPrint, maxWidths));
+        }
+
+        result.append("]");
+
+        return result.toString();
     }
 }

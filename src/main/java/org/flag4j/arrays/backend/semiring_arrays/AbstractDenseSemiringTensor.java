@@ -56,7 +56,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     /**
      * The zero element for the semiring that this tensor's elements belong to.
      */
-    private final V ZERO_ELEMENT;
+    protected V zeroElement;
 
 
     /**
@@ -69,7 +69,34 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     protected AbstractDenseSemiringTensor(Shape shape, V[] data) {
         super(shape, data);
         ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), data.length);
-        this.ZERO_ELEMENT = (data.length > 0) ? data[0].getZero() : null;
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+    }
+
+
+    /**
+     * Sets the zero element for the field of this tensor.
+     * @param zeroElement The zero element of this tensor.
+     * @throws IllegalArgumentException If {@code zeroElement} is not an additive identity for the field.
+     *
+     * @see #getZeroElement()
+     */
+    public void setZeroElement(V zeroElement) {
+        if (zeroElement.isZero())
+            this.zeroElement = zeroElement;
+        else
+            throw new IllegalArgumentException("The provided zeroElement is not an additive identity.");
+    }
+
+
+    /**
+     * Gets the zero element for the field of this tensor.
+     * @return The zero element for the field of this tensor. If it could not be determined during construction of this object
+     * and has not been set explicitly by {@link #setZeroElement(Semiring)} then {@code null} will be returned.
+     *
+     * @see #setZeroElement(Semiring)
+     */
+    public V getZeroElement() {
+        return zeroElement;
     }
 
 
@@ -81,7 +108,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @param colIndices Non-zero column indices of the COO tensor.
      * @return A sparse COO tensor which is of a similar type as this dense tensor.
      */
-    protected abstract AbstractCooSemiringTensor<?, ?, V> makeLikeCooTensor(
+    protected abstract AbstractTensor<?, V[], V> makeLikeCooTensor(
             Shape shape, V[] data, int[][] indices);
 
 
@@ -127,7 +154,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T flatten() {
-        return makeLikeTensor(new Shape(shape.totalEntriesIntValueExact()), data.clone());
+        return makeLikeTensor(shape.flatten(), data.clone());
     }
 
 
@@ -249,7 +276,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -357,92 +384,6 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
 
 
     /**
-     * <p>Checks if an object is equal to this tensor.
-     * <p>An object is considered equal to this tensor if it meets <i>all</i> the following conditions:
-     * <ul>
-     *     <li>The object is an instance of {@link AbstractDenseSemiringMatrix}.</li>
-     *     <li>The object is not null: {@code object != null}</li>
-     *     <li>The object has the same shape as this tensor: {@code ((AbstractDenseSemiringMatrix<?, ?, ?>) object).shape.equals(this
-     *     .shape)}.</li>
-     *     <li>The objects data are element-wise equal to the data of this tensor.</li>
-     * </ul>
-     * 
-     * <p>These conditions implement an equivalency relation on non-null dense semiring tensors meaning the following are satisfied:
-     * The {@code equals} method implements an equivalence relation
-     * on non-null object references:
-     * <ul>
-     * <li>It is <i>reflexive</i>: for any non-null reference value
-     *     {@code x}, {@code x.equals(x)} should return
-     *     {@code true}.
-     * <li>It is <i>symmetric</i>: for any non-null reference values
-     *     {@code x} and {@code y}, {@code x.equals(y)}
-     *     should return {@code true} if and only if
-     *     {@code y.equals(x)} returns {@code true}.
-     * <li>It is <i>transitive</i>: for any non-null reference values
-     *     {@code x}, {@code y}, and {@code z}, if
-     *     {@code x.equals(y)} returns {@code true} and
-     *     {@code y.equals(z)} returns {@code true}, then
-     *     {@code x.equals(z)} should return {@code true}.
-     * <li>It is <i>consistent</i>: for any non-null reference values
-     *     {@code x} and {@code y}, multiple invocations of
-     *     {@code x.equals(y)} consistently return {@code true}
-     *     or consistently return {@code false}, provided no
-     *     information used in {@code equals} comparisons on the
-     *     objects is modified.
-     * <li>For any non-null reference value {@code x},
-     *     {@code x.equals(null)} should return {@code false}.
-     * </ul>
-     * 
-     * @param object Object to compare to this tensor.
-     * @return {@code true} if this object is non-null and equal to this tensor as defined above; {@code false} otherwise.
-     */
-    @Override
-    public boolean equals(Object object) {
-        if(this == object) return true;
-        if(object == null || object.getClass() != getClass()) return false;
-
-        AbstractDenseSemiringMatrix<?, ?, ?> src2 = (AbstractDenseSemiringMatrix<?, ?, ?>) object;
-
-        return shape.equals(src2.shape) && Arrays.equals(data, src2.data);
-    }
-
-
-    /**
-     * {@return a hash code value for this tensor} This method is
-     * supported for the benefit of hash tables such as those provided by
-     * {@link java.util.HashMap}.
-     * <p>
-     * The general contract of {@code hashCode} is:
-     * <ul>
-     * <li>Whenever it is invoked on the same object more than once during
-     *     an execution of a Java application, the {@code hashCode} method
-     *     must consistently return the same integer, provided no information
-     *     used in {@code equals} comparisons on the object is modified.
-     *     This integer need not remain consistent from one execution of an
-     *     application to another execution of the same application.
-     * <li>If two objects are equal according to the {@link
-     *     #equals(Object) equals} method, then calling the {@code
-     *     hashCode} method on each of the two objects must produce the
-     *     same integer result.
-     * <li>It is <em>not</em> required that if two objects are unequal
-     *     according to the {@link #equals(Object) equals} method, then
-     *     calling the {@code hashCode} method on each of the two objects
-     *     must produce distinct integer results.  However, the programmer
-     *     should be aware that producing distinct integer results for
-     *     unequal objects may improve the performance of hash tables.
-     * </ul>
-     */
-    @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Arrays.hashCode(data);
-
-        return hash;
-    }
-
-
-    /**
      * Converts this tensor to an equivalent sparse COO tensor.
      * @return A sparse COO tensor that is equivalent to this dense tensor.
      * @see #toCoo(double)
@@ -462,9 +403,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     public AbstractTensor<?, V[], V> toCoo(double estimatedSparsity) {
         SparseTensorData<V> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
-        // TODO: Consider implementing something like this for all instances of converting to arrays:
-        //  (V[]) data.data().stream().toArray(size -> (V[]) Array.newInstance(Semiring.class, size))
-        V[] cooEntries = data.data().toArray((V[]) new Semiring[data.data().size()]);
+        V[] cooEntries = data.data().toArray(makeEmptyDataArray(data.data().size()));
         return makeLikeCooTensor(data.shape(), cooEntries, data.indicesToArray());
     }
 }

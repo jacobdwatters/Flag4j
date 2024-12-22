@@ -54,7 +54,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 
 /**
@@ -828,7 +828,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * {@code this.getRank() - 2} with the same shape as this tensor but with {@code axis1} and {@code axis2} removed.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -1243,9 +1243,9 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     /**
      * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
-     * @see #coalesce(BiFunction)
+     * @see #coalesce(BinaryOperator)
      */
     public CooVector coalesce() {
         SparseVectorData<Double> vec = SparseUtils.coalesce(Double::sum, shape, data, indices);
@@ -1260,7 +1260,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
      * @see #coalesce()
      */
-    public CooVector coalesce(BiFunction<Double, Double, Double> aggregator) {
+    public CooVector coalesce(BinaryOperator<Double> aggregator) {
         SparseVectorData<Double> vec = SparseUtils.coalesce(aggregator, shape, data, indices);
         return new CooVector(vec.shape(), vec.data(), vec.indices());
     }

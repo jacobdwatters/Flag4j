@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,12 +38,11 @@ import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooConcats;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
-import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
-import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -110,8 +109,8 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix(Shape shape, List<Complex128> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
                 entries.toArray(new Complex128[entries.size()]),
-                ArrayConversions.fromIntegerList(rowIndices),
-                ArrayConversions.fromIntegerList(colIndices));
+                ArrayUtils.fromIntegerList(rowIndices),
+                ArrayUtils.fromIntegerList(colIndices));
         ValidateParameters.ensureRank(shape, 2);
         if(entries.size() == 0 || entries.get(0) == null)
             setZeroElement(Complex128.ZERO);
@@ -156,8 +155,8 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix(int rows, int cols, List<Complex128> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
                 entries.toArray(new Complex128[entries.size()]),
-                ArrayConversions.fromIntegerList(rowIndices),
-                ArrayConversions.fromIntegerList(colIndices));
+                ArrayUtils.fromIntegerList(rowIndices),
+                ArrayUtils.fromIntegerList(colIndices));
         if(super.data.length == 0 || super.data[0] == null) setZeroElement(Complex128.ZERO);
     }
 
@@ -184,7 +183,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooCMatrix(Shape shape, double[] entries, int[] rowIndices, int[] colIndices) {
-        super(shape, ArrayConversions.toComplex128(entries, null), rowIndices, colIndices);
+        super(shape, ArrayUtils.wrapAsComplex128(entries, null), rowIndices, colIndices);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -337,17 +336,6 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     @Override
     public CsrCMatrix makeLikeCsrMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
-    }
-
-
-    /**
-     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
-     *
-     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
-     */
-    @Override
-    public boolean isHermitian() {
-        return CooRingMatrixOps.isHermitian(shape, data, rowIndices, colIndices);
     }
 
 
@@ -579,7 +567,9 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public boolean equals(Object object) {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
-        return CooSemiringEquals.cooMatrixEquals(this, ((CooCMatrix) object));
+
+        return CooFieldEquals.cooMatrixEquals(this.dropZeros(),
+                ((CooCMatrix) object).dropZeros());
     }
 
 

@@ -54,7 +54,7 @@ import java.util.function.Function;
  * <ul>
  *   <li>Object: matrix</li>
  *   <li>Format: coordinate, array</li>
- *   <li>MMField: real, integer, complex</li>
+ *   <li>Field: real, integer, complex</li>
  *   <li>MMSymmetry: general</li>
  * </ul>
  * <p>Headers must be of the form:

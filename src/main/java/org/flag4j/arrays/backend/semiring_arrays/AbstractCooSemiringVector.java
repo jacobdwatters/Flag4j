@@ -44,7 +44,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 
 /**
@@ -110,27 +110,28 @@ public abstract class AbstractCooSemiringVector<
 
 
     /**
-     * Creates a tensor with the specified data and shape.
+     * Creates a sparse COO semiring vector with the specified data and shape.
      *
-     * @param shape Shape of this tensor.
-     * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
+     * @param shape Shape of this vector. Must be rank-1.
+     * @param entries Non-zero entries of this COO vector.
+     * @param indices Non-zero indices of this COO vector.
      */
-    protected AbstractCooSemiringVector(int size, Y[] entries, int[] indices) {
-        super(new Shape(size), entries);
+    protected AbstractCooSemiringVector(Shape shape, Y[] entries, int[] indices) {
+        super(shape, entries);
         ValidateParameters.ensureRank(shape, 1);
         ValidateParameters.ensureIndicesInBounds(shape.get(0), indices);
         if(entries.length != indices.length) {
             throw new IllegalArgumentException("data and indices arrays of a COO vector must have the same length but got " +
                     "lengths" + entries.length + " and " + indices.length + ".");
         }
+
+        this.size = shape.totalEntriesIntValueExact();
         if(entries.length > size) {
             throw new IllegalArgumentException("The number of data cannot be greater than the size of the vector but but got " +
                     "data.length=" + entries.length + " and size=" + size + ".");
         }
 
         this.indices = indices;
-        this.size = size;
         this.nnz = entries.length;
         sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries())).doubleValue();
 
@@ -622,7 +623,7 @@ public abstract class AbstractCooSemiringVector<
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -725,9 +726,9 @@ public abstract class AbstractCooSemiringVector<
     /**
      * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
-     * @see #coalesce(BiFunction)
+     * @see #coalesce(BinaryOperator)
      */
     public T coalesce() {
         SparseVectorData<Y> vec = SparseUtils.coalesce(Semiring::add, shape, data, indices);
@@ -742,7 +743,7 @@ public abstract class AbstractCooSemiringVector<
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
      * @see #coalesce()
      */
-    public T coalesce(BiFunction<Y, Y, Y> aggregator) {
+    public T coalesce(BinaryOperator<Y> aggregator) {
         SparseVectorData<Y> vec = SparseUtils.coalesce(aggregator, shape, data, indices);
         return makeLikeTensor(vec.shape(), vec.data(), vec.indices());
     }

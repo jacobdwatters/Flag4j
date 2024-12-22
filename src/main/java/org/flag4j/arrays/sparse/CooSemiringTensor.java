@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -214,7 +214,7 @@ public class CooSemiringTensor<T extends Semiring<T>> extends AbstractCooSemirin
      */
     @Override
     public CooSemiringTensor<T> makeLikeTensor(Shape shape, T[] entries) {
-        return new CooSemiringTensor<>(shape, entries, ArrayUtils.deepCopy2D(indices, null));
+        return new CooSemiringTensor<>(shape, entries, ArrayUtils.deepCopy(indices, null));
     }
 
     /**

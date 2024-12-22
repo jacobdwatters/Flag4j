@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -63,18 +63,6 @@
  *   {@code T extends Field<T>}.</li>
  *   <li>{@link org.flag4j.arrays.dense.FieldTensor FieldTensor&lt;T&gt;} - Dense tensor parameterized over a field element
  *   {@code T extends Field<T>}.</li>
- *   <li>{@link org.flag4j.arrays.dense.RingVector RingVector&lt;T&gt;} - Dense vector parameterized over a ring element
- *   {@code T extends Ring<T>}.</li>
- *   <li>{@link org.flag4j.arrays.dense.RingMatrix RingMatrix&lt;T&gt;} - Dense matrix parameterized over a ring element
- *   {@code T extends Ring<T>}.</li>
- *   <li>{@link org.flag4j.arrays.dense.RingTensor RingTensor&lt;T&gt;} - Dense tensor parameterized over a ring element
- *   {@code T extends Ring<T>}.</li>
- *   <li>{@link org.flag4j.arrays.dense.SemiringVector SemiringVector&lt;T&gt;} - Dense vector parameterized over a semiring element
- *   {@code T extends semiring<T>}.</li>
- *   <li>{@link org.flag4j.arrays.dense.SemiringMatrix SemiringMatrix&lt;T&gt;} - Dense matrix parameterized over a semiring element
- *   {@code T extends semiring<T>}.</li>
- *   <li>{@link org.flag4j.arrays.dense.SemiringTensor SemiringTensor&lt;T&gt;} - Dense tensor parameterized over a semiring element
- *   {@code T extends semiring<T>}.</li>
  * </ul>
  *
  * @see org.flag4j.arrays.sparse
