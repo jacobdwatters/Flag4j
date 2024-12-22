@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +27,14 @@ package org.flag4j.arrays.sparse;
 import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingMatrix;
+import org.flag4j.arrays.backend.ring_arrays.AbstractCsrRingMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.RingMatrix;
 import org.flag4j.arrays.dense.RingTensor;
 import org.flag4j.arrays.dense.RingVector;
-import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.List;
@@ -134,8 +134,8 @@ public class CooRingMatrix<T extends Ring<T>> extends AbstractCooRingMatrix<
     public CooRingMatrix(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
                 (T[]) entries.toArray(new Ring[entries.size()]),
-                ArrayConversions.fromIntegerList(rowIndices),
-                ArrayConversions.fromIntegerList(colIndices));
+                ArrayUtils.fromIntegerList(rowIndices),
+                ArrayUtils.fromIntegerList(colIndices));
     }
 
 
@@ -165,8 +165,8 @@ public class CooRingMatrix<T extends Ring<T>> extends AbstractCooRingMatrix<
     public CooRingMatrix(int rows, int cols, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
                 (T[]) entries.toArray(new Ring[entries.size()]),
-                ArrayConversions.fromIntegerList(rowIndices),
-                ArrayConversions.fromIntegerList(colIndices));
+                ArrayUtils.fromIntegerList(rowIndices),
+                ArrayUtils.fromIntegerList(colIndices));
     }
 
 
@@ -242,7 +242,7 @@ public class CooRingMatrix<T extends Ring<T>> extends AbstractCooRingMatrix<
      * @return A CSR matrix of a similar type to this sparse COO matrix.
      */
     @Override
-    public CsrRingMatrix<T> makeLikeCsrMatrix(
+    public AbstractCsrRingMatrix<?, RingMatrix<T>, CooRingVector<T>, T> makeLikeCsrMatrix(
             Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrRingMatrix<>(shape, entries, rowPointers, colIndices);
     }
@@ -370,15 +370,14 @@ public class CooRingMatrix<T extends Ring<T>> extends AbstractCooRingMatrix<
 
 
     /**
-     * Computes the element-wise absolute value of this tensor.
+     * {@inheritDoc}
      *
-     * @return The element-wise absolute value of this tensor.
+     * <p><b>Warning:</b> This method will throw a {@link UnsupportedOperationException} as subtraction is not supported for
+     * ring tensors.
      */
     @Override
-    public CooMatrix abs() {
-        double[] dest = new double[data.length];
-        RingOps.abs(data, dest);
-        return new CooMatrix(shape, dest, rowIndices.clone(), colIndices.clone());
+    public CooRingMatrix<T> sub(CooRingMatrix<T> b) {
+        throw new UnsupportedOperationException("Subtraction not supported for matrix type: " + getClass().getName());
     }
 
 

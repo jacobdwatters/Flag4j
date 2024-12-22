@@ -1,4 +1,4 @@
-package org.flag4j.arrays.sparse.complex_coo_matrix;
+package org.flag4j.complex_sparse_matrix;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CooCMatrixMultTransposeTests {
+public class CooCMatrixMultTransposeTests {
 
 
     @Test
@@ -28,7 +28,7 @@ class CooCMatrixMultTransposeTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // ---------------------  sub-case 1 ---------------------
+        // ---------------------  Sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.13333+0.54407i"), new Complex128("0.28186+0.80017i"), new Complex128("0.27979+0.90149i")};
         aRowIndices = new int[]{0, 0, 1};
@@ -47,10 +47,9 @@ class CooCMatrixMultTransposeTests {
         };
 
         exp = new CMatrix(expEntries);
-
         assertEquals(exp, a.multTranspose(b));
 
-        // ---------------------  sub-case 2 ---------------------
+        // ---------------------  Sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new Complex128[]{new Complex128("0.1091+0.67734i"), new Complex128("0.86221+0.18731i"), new Complex128("0.86577+0.3935i"), new Complex128("0.79207+0.16091i"), new Complex128("0.15273+0.23584i"), new Complex128("0.40546+0.55037i"), new Complex128("0.06335+0.55614i"), new Complex128("0.45687+0.32064i"), new Complex128("0.84184+0.56079i"), new Complex128("0.53839+0.56551i"), new Complex128("0.82059+0.48871i"), new Complex128("0.19813+0.82157i"), new Complex128("0.23558+0.75971i"), new Complex128("0.89675+0.70556i"), new Complex128("0.30268+0.21512i")};
         aRowIndices = new int[]{0, 0, 0, 1, 1, 2, 2, 2, 4, 5, 6, 7, 8, 10, 10};
@@ -81,7 +80,7 @@ class CooCMatrixMultTransposeTests {
         CMatrix act = a.multTranspose(b);
         assertTrue(exp.allClose(act));
 
-        // ---------------------  sub-case 3 ---------------------
+        // ---------------------  Sub-case 3 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new Complex128[]{new Complex128("0.84627+0.52397i"), new Complex128("0.65009+0.84477i"), new Complex128("0.66607+0.81437i"), new Complex128("0.1052+0.24359i")};
         aRowIndices = new int[]{0, 2, 3, 3};
@@ -104,7 +103,7 @@ class CooCMatrixMultTransposeTests {
 
         assertEquals(exp, a.multTranspose(b));
 
-        // ---------------------  sub-case 4 ---------------------
+        // ---------------------  Sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new Complex128[]{new Complex128("0.02414+0.82288i"), new Complex128("0.94529+0.19391i"), new Complex128("0.1772+0.50064i"), new Complex128("0.09017+0.45946i")};
         aRowIndices = new int[]{2, 3, 3, 3};
@@ -127,7 +126,7 @@ class CooCMatrixMultTransposeTests {
 
         assertEquals(exp, a.multTranspose(b));
 
-        // ---------------------  sub-case 5 ---------------------
+        // ---------------------  Sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new Complex128[]{new Complex128("0.43846+0.30964i"), new Complex128("0.76753+0.33258i"), new Complex128("0.92751+0.69248i"), new Complex128("0.18901+0.72498i")};
         aRowIndices = new int[]{0, 1, 1, 4};
@@ -144,7 +143,7 @@ class CooCMatrixMultTransposeTests {
         CooCMatrix final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
-        // ---------------------  sub-case 6 ---------------------
+        // ---------------------  Sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new Complex128[]{new Complex128("0.65534+0.28091i"), new Complex128("0.29233+0.20161i"), new Complex128("0.10737+0.28494i"), new Complex128("0.24774+0.02259i")};
         aRowIndices = new int[]{1, 3, 3, 4};

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,7 @@ public final class CooSemiringTensorOps {
 
     private CooSemiringTensorOps() {
         // Hide constructor for utility class. for utility class.
+        
     }
 
 
@@ -178,8 +179,8 @@ public final class CooSemiringTensorOps {
             int axis1, int axis2) {
         // Validate parameters.
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.validateArrayIndices(shape.getRank(), axis1, axis2);
-        ValidateParameters.ensureAllEqual(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.ensureValidArrayIndices(shape.getRank(), axis1, axis2);
+        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
 
         int rank = shape.getRank();
         final int nnz = entries.length;

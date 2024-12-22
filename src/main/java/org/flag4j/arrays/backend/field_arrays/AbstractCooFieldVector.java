@@ -49,7 +49,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 
 /**
@@ -515,6 +515,9 @@ public abstract class AbstractCooFieldVector<
      */
     @Override
     public W outer(T b) {
+        // TODO: This should almost certainly return a sparse tensor. It seems unlikely that if a vectors are worth storing as
+        //  as COO vectors that the outer product would be dense. Further, this would almost never be useful as the dense matrix
+        //  would take up so much more memory than the two sparse COO vectors (assuming they are 'very' sparse).
         Shape destShape = new Shape(size, b.size);
         Y[] dest = makeEmptyDataArray(size*b.size);
         CooSemiringVectorOps.outerProduct(data, indices, size, b.data, b.indices, dest);
@@ -633,7 +636,7 @@ public abstract class AbstractCooFieldVector<
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -885,9 +888,9 @@ public abstract class AbstractCooFieldVector<
     /**
      * Coalesces this sparse COO vector. An uncoalesced vector is a sparse vector with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
-     * @see #coalesce(BiFunction)
+     * @see #coalesce(BinaryOperator)
      */
     public T coalesce() {
         SparseVectorData<Y> vec = SparseUtils.coalesce(Semiring::add, shape, data, indices);
@@ -902,7 +905,7 @@ public abstract class AbstractCooFieldVector<
      * @return A new coalesced sparse COO vector which is equivalent to this COO vector.
      * @see #coalesce()
      */
-    public T coalesce(BiFunction<Y, Y, Y> aggregator) {
+    public T coalesce(BinaryOperator<Y> aggregator) {
         SparseVectorData<Y> vec = SparseUtils.coalesce(aggregator, shape, data, indices);
         return makeLikeTensor(vec.shape(), vec.data(), vec.indices());
     }

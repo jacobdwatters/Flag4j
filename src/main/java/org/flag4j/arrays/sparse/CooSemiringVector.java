@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,8 +32,8 @@ import org.flag4j.arrays.dense.SemiringVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 
 import java.util.List;
@@ -142,7 +142,7 @@ public class CooSemiringVector<T extends Semiring<T>> extends AbstractCooSemirin
      * @param indices The indices of the non-zero values.
      */
     public CooSemiringVector(Shape shape, List<T> entries, List<Integer> indices) {
-        super(shape, (T[]) entries.toArray(Semiring[]::new), ArrayConversions.fromIntegerList(indices));
+        super(shape, (T[]) entries.toArray(Semiring[]::new), ArrayUtils.fromIntegerList(indices));
     }
 
 
@@ -162,7 +162,7 @@ public class CooSemiringVector<T extends Semiring<T>> extends AbstractCooSemirin
      * @param indices The indices of the non-zero values.
      */
     public CooSemiringVector(int size, List<T> entries, List<Integer> indices) {
-        super(new Shape(size), (T[]) entries.toArray(Semiring[]::new), ArrayConversions.fromIntegerList(indices));
+        super(new Shape(size), (T[]) entries.toArray(Semiring[]::new), ArrayUtils.fromIntegerList(indices));
     }
 
 
@@ -270,7 +270,7 @@ public class CooSemiringVector<T extends Semiring<T>> extends AbstractCooSemirin
 
         CooSemiringVector<T> src2 = (CooSemiringVector<T>) object;
 
-        return CooSemiringEquals.cooVectorEquals(this, src2);
+        return CooFieldEquals.cooVectorEquals(this, src2);
     }
 
 

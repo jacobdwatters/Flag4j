@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,14 +36,15 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
-import org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops.DenseCsrSemiringMatMult;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
 import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrMatMult;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
+import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.List;
@@ -77,7 +78,6 @@ import java.util.List;
 public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooCVector, Complex128> {
 
     private static final long serialVersionUID = 1L;
-    // TODO: Implement coalesce and and drop zero methods for all CSR classes.
 
     /**
      * Creates a complex sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column
@@ -93,6 +93,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries, rowPointers, colIndices);
+        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -111,8 +112,9 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(Shape shape, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, entries.toArray(new Complex128[0]),
-                ArrayConversions.fromIntegerList(rowPointers),
-                ArrayConversions.fromIntegerList(colIndices));
+                ArrayUtils.fromIntegerList(rowPointers),
+                ArrayUtils.fromIntegerList(colIndices));
+        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -123,6 +125,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(Shape shape) {
         super(shape, new Complex128[0], new int[0], new int[0]);
+        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -142,6 +145,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(int rows, int cols, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         super(new Shape(rows, cols), entries, rowPointers, colIndices);
+        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -161,8 +165,9 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(int rows, int cols, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(new Shape(rows, cols), entries.toArray(new Complex128[0]),
-                ArrayConversions.fromIntegerList(rowPointers),
-                ArrayConversions.fromIntegerList(colIndices));
+                ArrayUtils.fromIntegerList(rowPointers),
+                ArrayUtils.fromIntegerList(colIndices));
+        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -174,6 +179,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(int rows, int cols) {
         super(new Shape(rows, cols), new Complex128[0], new int[0], new int[0]);
+        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -368,7 +374,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @return The result of multiplying this matrix with the matrix {@code b}.
      */
     public CMatrix mult(CMatrix b) {
-        return (CMatrix) DenseCsrSemiringMatMult.standard(this, b);
+        return (CMatrix) DenseCsrFieldMatMult.standard(this, b);
     }
 
 
@@ -618,19 +624,5 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
                 .append(PrettyPrint.abbreviatedArray(colIndices, maxCols, padding, centering));
 
         return result.toString();
-    }
-
-
-    /**
-     * Computes the matrix-vector multiplication of a vector with this matrix.
-     *
-     * @param b Vector in the matrix-vector multiplication.
-     *
-     * @return The result of multiplying this matrix with {@code b}.
-     *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the size of {@code b}.
-     */
-    public CVector mult(CVector b) {
-        return (CVector) DenseCsrSemiringMatMult.standardVector(this, b);
     }
 }

@@ -29,13 +29,14 @@ import org.flag4j.algebraic_structures.Field;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.*;
 import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 /**
  * <p>Contains common utility functions for working with sparse matrices.
@@ -286,7 +287,7 @@ public final class SparseUtils {
 
 
     /**
-     * <p>Checks if two {@link CsrFieldMatrix CSR MMField matrices} are equal considering the fact that one may explicitly store zeros at
+     * <p>Checks if two {@link CsrFieldMatrix CSR Field matrices} are equal considering the fact that one may explicitly store zeros at
      * some position that the other does not store.
      *
      * <p>
@@ -393,7 +394,7 @@ public final class SparseUtils {
      * @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from the coalesce operation.
      */
     public static <T> SparseMatrixData<T> coalesce(
-            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
+            BinaryOperator<T> aggregator, Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
         HashMap<Pair<Integer, Integer>, T> coalescedValues = new HashMap<>();
         List<Integer> destRowIndices = new ArrayList<>(data.length);
         List<Integer> destColIndices = new ArrayList<>(data.length);
@@ -430,7 +431,7 @@ public final class SparseUtils {
      * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from the coalesce operation.
      */
     public static <T> SparseTensorData<T> coalesce(
-            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[][] indices) {
+            BinaryOperator<T> aggregator, Shape shape, T[] data, int[][] indices) {
         HashMap<IntTuple, T> coalescedValues = new HashMap<>();
         List<int[]> destIndices = new ArrayList<>(data.length);
 
@@ -465,7 +466,7 @@ public final class SparseUtils {
      * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from the coalesce operation.
      */
     public static <T> SparseVectorData<T> coalesce(
-            BiFunction<T, T, T> aggregator, Shape shape, T[] data, int[] indices) {
+            BinaryOperator<T> aggregator, Shape shape, T[] data, int[] indices) {
         HashMap<Integer, T> coalescedValues = new HashMap<>();
         List<Integer> destIndices = new ArrayList<>(data.length);
 
@@ -568,7 +569,7 @@ public final class SparseUtils {
      * @return A {@link SparseMatrixData} object containing the data of the COO matrix resulting from the coalesce operation.
      */
     public static SparseMatrixData<Double> coalesce(
-            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
+            BinaryOperator<Double> aggregator, Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
         HashMap<Pair<Integer, Integer>, Double> coalescedValues = new HashMap<>();
         List<Integer> destRowIndices = new ArrayList<>(data.length);
         List<Integer> destColIndices = new ArrayList<>(data.length);
@@ -605,7 +606,7 @@ public final class SparseUtils {
      * @return A {@link SparseTensorData} object containing the data of the COO tensor resulting from the coalesce operation.
      */
     public static SparseTensorData<Double> coalesce(
-            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[][] indices) {
+            BinaryOperator<Double> aggregator, Shape shape, double[] data, int[][] indices) {
         HashMap<IntTuple, Double> coalescedValues = new HashMap<>();
         List<int[]> destIndices = new ArrayList<>(data.length);
 
@@ -686,7 +687,7 @@ public final class SparseUtils {
      * @return A {@link SparseVectorData} object containing the data of the COO vector resulting from the coalesce operation.
      */
     public static SparseVectorData<Double> coalesce(
-            BiFunction<Double, Double, Double> aggregator, Shape shape, double[] data, int[] indices) {
+            BinaryOperator<Double> aggregator, Shape shape, double[] data, int[] indices) {
         HashMap<Integer, Double> coalescedValues = new HashMap<>();
         List<Integer> destIndices = new ArrayList<>(data.length);
 
@@ -694,12 +695,11 @@ public final class SparseUtils {
             int idx = indices[i];
             double value = data[i];
 
-            if(coalescedValues.containsKey(idx)) {
-                // The index is already present.
+            if(coalescedValues.containsKey(idx)) // The index is already present.
                 value = aggregator.apply(coalescedValues.get(idx),  value);
-            } else {
+            else
                 destIndices.add(idx);
-            }
+
 
             coalescedValues.put(idx, value);
         }
@@ -729,5 +729,60 @@ public final class SparseUtils {
         }
 
         return new SparseVectorData<>(shape, destValues, destIndices);
+    }
+
+
+    /**
+     * Drops all explicit zeros within a sparse CSR matrix.
+     * @param src Matrix to drop zeros from.
+     * @return A copy of the {@code src} matrix with all zeros dropped.
+     */
+    public static CsrMatrix dropZerosCsr(CsrMatrix src) {
+        List<Double> destData = new ArrayList<>(src.data.length);
+        List<Integer> destRowIndices = new ArrayList<>(src.data.length);
+        List<Integer> destColIndices = new ArrayList<>(src.data.length);
+
+        // Construct as COO matrix then convert to CSR to simplify implementation.
+        for(int i=0, rows=src.numRows; i<rows; i++) {
+            for(int j=src.rowPointers[i], stop=src.rowPointers[i + 1]; i<stop; i++) {
+                if(src.data[j] != 0.0) {
+                    destData.add(src.data[j]);
+                    destRowIndices.add(i);
+                    destColIndices.add(src.colIndices[i]);
+                }
+            }
+        }
+
+        return new CooMatrix(src.shape, destData, destRowIndices, destColIndices).toCsr();
+    }
+
+
+    /**
+     * Drops all explicit zeros within a sparse CSR matrix.
+     * @param shape Shape of the CSR matrix.
+     * @param data Non-zero entries of the CSR matrix.
+     * @param rowPointers Non-zero row indices of the CSR matrix.
+     * @param colIndices Non-zero column indices of the CSR matrix.
+     * @return A {@link SparseMatrixData} containing the data of the CSR matrix resulting from dropping all zeros from the specified
+     * CSR matrix. Note, the returned data will be in COO format and <i>not</i> CSR.
+     */
+    public static <T extends Semiring<T>> SparseMatrixData<T> dropZerosCsr(
+            Shape shape, T[] data, int[] rowPointers, int[] colIndices) {
+        List<T> destData = new ArrayList<>(data.length);
+        List<Integer> destRowIndices = new ArrayList<>(data.length);
+        List<Integer> destColIndices = new ArrayList<>(data.length);
+
+        // Construct as COO matrix then convert to CSR to simplify implementation.
+        for(int i=0, rows=rowPointers.length-1; i<rows; i++) {
+            for(int j=rowPointers[i], stop=rowPointers[i + 1]; i<stop; i++) {
+                if(data[j].isZero()) {
+                    destData.add(data[j]);
+                    destRowIndices.add(i);
+                    destColIndices.add(colIndices[i]);
+                }
+            }
+        }
+
+        return new SparseMatrixData<>(shape, destData, destRowIndices, destColIndices);
     }
 }

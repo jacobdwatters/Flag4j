@@ -47,7 +47,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 import static org.flag4j.linalg.ops.sparse.SparseUtils.copyRanges;
 
@@ -63,7 +63,8 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.copyRanges;
  * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
  * matrix).
  *
- * <p>A sparse COO matrix is stored as:
+ * <h3>COO Representation:</h3>
+ * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
@@ -337,6 +338,44 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         }
 
         return makeLikeTensor(shape, destEntries, destRowIndices, destColIndices);
+    }
+
+
+    /**
+     * Sets a specified row of this matrix to a vector.
+     *
+     * @param row Vector to replace specified row in this matrix.
+     * @param rowIdx Index of the row to set.
+     *
+     * @return If this matrix is dense, the row set operation is done in place and a reference to this matrix is returned.
+     * If this matrix is sparse a copy will be created with the new row and returned.
+     */
+    @Override
+    public T setRow(V row, int rowIdx) {
+        SparseMatrixData<W> dest = CooGetSet.setRow(
+                shape, data, rowIndices, colIndices,
+                rowIdx, row.size, row.data, row.indices);
+        return makeLikeTensor(dest.shape(), dest.data(), dest.rowData(), dest.colData());
+    }
+
+
+    /**
+     * Sets a column of this matrix at the given index to the specified vector.
+     *
+     * @param col Vector containing new column data.
+     * @param colIndex The index of the column which is to be set.
+     *
+     * @return A copy of this matrix with the specified column set to {@code col}.
+     *
+     * @throws IllegalArgumentException If the {@code col} vector has a different length than the number of rows of this matrix.
+     * @throws IndexOutOfBoundsException If {@code colIndex < 0 || colIndex >= this.numCols}.
+     */
+    public T setCol(V col, int colIndex) {
+        SparseMatrixData<W> dest = CooGetSet.setCol(
+                shape, data, rowIndices, colIndices,
+                colIndex, col.size, col.data, col.indices);
+        CooDataSorter sorter = new CooDataSorter(dest.data(), dest.rowData(), dest.colData()).sparseSort();
+        return makeLikeTensor(dest.shape(), dest.data(), dest.rowData(), dest.colData());
     }
 
 
@@ -1148,7 +1187,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -1227,9 +1266,9 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     /**
      * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
-     * @see #coalesce(BiFunction) 
+     * @see #coalesce(BinaryOperator) 
      */
     public T coalesce() {
         SparseMatrixData<W> mat = SparseUtils.coalesce(Semiring::add, shape, data, rowIndices, colIndices);
@@ -1244,7 +1283,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
      * @see #coalesce() 
      */
-    public T coalesce(BiFunction<W, W, W> aggregator) {
+    public T coalesce(BinaryOperator<W> aggregator) {
         SparseMatrixData<W> mat = SparseUtils.coalesce(aggregator, shape, data, rowIndices, colIndices);
         return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }

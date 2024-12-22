@@ -47,7 +47,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 
 /**
@@ -212,14 +212,14 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T add(T b) {
-        SparseTensorData<V> data = CooSemiringTensorOps.add(
-                shape, this.data, indices,
+        SparseTensorData<V> sum = CooSemiringTensorOps.add(
+                shape, data, indices,
                 b.shape, b.data, b.indices
         );
 
-        return makeLikeTensor(data.shape(),
-                data.data().toArray(makeEmptyDataArray(data.data().size())),
-                data.indices().toArray(new int[data.indices().size()][]));
+        return makeLikeTensor(sum.shape(),
+                sum.data().toArray(makeEmptyDataArray(sum.data().size())),
+                sum.indices().toArray(new int[sum.indices().size()][]));
     }
 
 
@@ -234,11 +234,11 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T elemMult(T b) {
-        SparseTensorData<V> data = CooSemiringTensorOps.elemMult(
-                shape, this.data, indices, b.shape, b.data, b.indices);
-        return makeLikeTensor(data.shape(),
-                data.data().toArray(makeEmptyDataArray(data.data().size())),
-                data.indices().toArray(new int[data.indices().size()][]));
+        SparseTensorData<V> prod = CooSemiringTensorOps.elemMult(
+                shape, data, indices, b.shape, b.data, b.indices);
+        return makeLikeTensor(prod.shape(),
+                prod.data().toArray(makeEmptyDataArray(prod.data().size())),
+                prod.indices().toArray(new int[prod.indices().size()][]));
     }
 
 
@@ -281,16 +281,16 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
-        SparseTensorData<V> data = CooSemiringTensorOps.tensorTr(
-                shape, this.data, indices, axis1, axis2);
-        return makeLikeTensor(data.shape(),
-                data.data().toArray(makeEmptyDataArray(data.data().size())),
-                data.indices().toArray(new int[data.indices().size()][]));
+        SparseTensorData<V> tr = CooSemiringTensorOps.tensorTr(
+                shape, data, indices, axis1, axis2);
+        return makeLikeTensor(tr.shape(),
+                tr.data().toArray(makeEmptyDataArray(tr.data().size())),
+                tr.indices().toArray(new int[tr.indices().size()][]));
     }
 
 
@@ -479,7 +479,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     @Override
     public T flatten() {
         return makeLikeTensor(
-                new Shape(shape.totalEntriesIntValueExact()),
+                shape.flatten(),
                 data.clone(),
                 SparseUtils.cooFlattenIndices(shape, indices));
     }
@@ -552,13 +552,13 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      */
     @Override
     public T sub(T b) {
-        SparseTensorData<V> data = CooRingTensorOps.sub(
-                shape, this.data, indices,
+        SparseTensorData<V> diff = CooRingTensorOps.sub(
+                shape, data, indices,
                 b.shape, b.data, b.indices);
 
-        return makeLikeTensor(data.shape(),
-                data.data().toArray(makeEmptyDataArray(data.data().size())),
-                data.indicesToArray());
+        return makeLikeTensor(diff.shape(),
+                diff.data().toArray(makeEmptyDataArray(diff.data().size())),
+                diff.indicesToArray());
     }
 
 
@@ -694,9 +694,9 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     /**
      * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
-     * @see #coalesce(BiFunction)
+     * @see #coalesce(BinaryOperator)
      */
     public T coalesce() {
         SparseTensorData<V> tensor = SparseUtils.coalesce(Semiring::add, shape, data, indices);
@@ -711,7 +711,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
      * @see #coalesce()
      */
-    public T coalesce(BiFunction<V, V, V> aggregator) {
+    public T coalesce(BinaryOperator<V> aggregator) {
         SparseTensorData<V> tensor = SparseUtils.coalesce(aggregator, shape, data, indices);
         return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
     }

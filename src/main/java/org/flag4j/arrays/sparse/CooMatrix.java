@@ -29,6 +29,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
@@ -55,7 +56,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 
 /**
@@ -71,7 +72,8 @@ import java.util.function.BiFunction;
  * efficient
  * matrix ops.
  *
- * <p>A sparse COO matrix is stored as:
+ * <h3>COO Representation:</h3>
+ * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
@@ -92,6 +94,7 @@ import java.util.function.BiFunction;
  */
 public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         implements MatrixMixin<CooMatrix, Matrix, CooVector, Double> {
+    // TODO: Implement sparse-matrix dense-vector multiplication. (And for other sparse matrix types including CSR).
 
     private static final long serialVersionUID = 1L;
 
@@ -700,7 +703,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * {@code this.getRank() - 2} with the same shape as this tensor but with {@code axis1} and {@code axis2} removed.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -971,7 +974,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
         ValidateParameters.ensureMatMultShapes(shape, b.shape);
 
         return new Matrix(numRows, b.numCols,
-                RealSparseMatrixMultiplication.standard(
+                RealSparseMatMult.standard(
                         data, rowIndices, colIndices, shape,
                     b.data, b.rowIndices, b.colIndices, b.shape
                 )
@@ -1039,7 +1042,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The result of stacking this matrix on top of the matrix {@code b}.
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of columns.
-     * @see #stack(MatrixMixinOld, int)
+     * @see #stack(MatrixMixin, int)
      * @see #augment(CooMatrix)
      */
     public CooMatrix stack(CooMatrix b) {
@@ -1076,7 +1079,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      *
      * @throws IllegalArgumentException If this matrix and matrix {@code b} have a different number of rows.
      * @see #stack(CooMatrix) 
-     * @see #stack(MatrixMixinOld, int)
+     * @see #stack(MatrixMixin, int)
      */
     @Override
     public CooMatrix augment(CooMatrix b) {
@@ -1417,7 +1420,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public Vector mult(CooVector b) {
-        double[] dest = RealSparseMatrixMultiplication.standardVector(
+        double[] dest = RealSparseMatMult.standardVector(
                 data, rowIndices, colIndices, shape,
                 b.data, b.indices
         );
@@ -1694,9 +1697,9 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     /**
      * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
-     * @see #coalesce(BiFunction)
+     * @see #coalesce(BinaryOperator)
      */
     public CooMatrix coalesce() {
         SparseMatrixData<Double> mat = SparseUtils.coalesce(Double::sum, shape, data, rowIndices, colIndices);
@@ -1711,7 +1714,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
      * @see #coalesce()
      */
-    public CooMatrix coalesce(BiFunction<Double, Double, Double> aggregator) {
+    public CooMatrix coalesce(BinaryOperator<Double> aggregator) {
         SparseMatrixData<Double> mat = SparseUtils.coalesce(aggregator, shape, data, rowIndices, colIndices);
         return new CooMatrix(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }
@@ -1724,6 +1727,23 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     public CooMatrix dropZeros() {
         SparseMatrixData<Double> mat = SparseUtils.dropZeros(shape, data, rowIndices, colIndices);
         return new CooMatrix(mat.shape(), mat.data(), mat.rowData(), mat.colData());
+    }
+
+
+    /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param visitor The visitor implementing the operation to be performed.
+     *
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     *
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    @Override
+    public <R> R accept(MatrixVisitor<R> visitor) {
+        return visitor.visit(this);
     }
 
 

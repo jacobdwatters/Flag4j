@@ -29,6 +29,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
@@ -73,7 +74,7 @@ import java.util.List;
  * arithmetic and matrix computations.
  *
  * <p>A {@code Matrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
- * and may offer improved performance for certain operations compared to general tensors.
+ * and may offer improved performance for certain operations compared to general rank-n tensors.
  *
  * <p><b>Key Features:</b>
  * <ul>
@@ -1972,6 +1973,23 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     @Override
     public Matrix H() {
         return T();
+    }
+
+
+    /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param visitor The visitor implementing the operation to be performed.
+     *
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     *
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    @Override
+    public <R> R accept(MatrixVisitor<R> visitor) {
+        return visitor.visit(this);
     }
 
 
