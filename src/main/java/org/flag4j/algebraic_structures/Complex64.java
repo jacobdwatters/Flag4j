@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,10 +44,10 @@ import java.math.RoundingMode;
  *
  * <h2>Usage Example:</h2>
  * <pre>{@code
- * Complex64 a = new Complex64(2.5f, 3.2f);  // Creates a complex number 2.5 + 3.2i.
- * Complex64 b = new Complex64(1, -4);       // Creates a complex number 1 - 4i.
- * Complex64 sum = a.add(b);                 // Sum of a and b.
- * Complex64 product = a.mult(b);            // Product of a and b.
+ * Complex64 a = new Complex64(2.5, 3.2);   // Creates a complex number 2.5 + 3.2i
+ * Complex64 b = new Complex64(1, -4);      // Creates a complex number 1 - 4i
+ * Complex64 sum = a.add(b);                // Sum of a and b
+ * Complex64 product = a.mult(b);           // Product of a and b
  * }</pre>
  *
  * <h2>Special Values:</h2>
@@ -177,15 +177,6 @@ public class Complex64 implements Field<Complex64> {
         Complex64 complexNum = ComplexNumberParser.parseNumberToComplex64(num);
         this.re = complexNum.re;
         this.im = complexNum.im;
-    }
-
-
-    /**
-     * Checks if this complex has zero imaginary part and real part equal to a double.
-     * @return True if {@code this.re == b && this.im == 0}. False otherwise.
-     */
-    public boolean equals(float b) {
-        return this.re == b && this.im == 0;
     }
 
 
@@ -508,6 +499,18 @@ public class Complex64 implements Field<Complex64> {
     public Complex64 conj() {
         if(conjugate == null) conjugate = new Complex64(re, -im);
         return conjugate;
+    }
+
+
+    /**
+     * Compute a raised to the power of b. This method wraps {@link Math#pow(double, double)}
+     * and returns a {@link Complex64}.
+     * @param a The base.
+     * @param b The exponent.
+     * @return a raised to the power of b.
+     */
+    public static Complex64 pow(float a, float b) {
+        return new Complex64((float) Math.pow(a, b));
     }
 
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2025. Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,7 @@ public final class RealDenseTranspose {
 
     private RealDenseTranspose() {
         // Hide constructor for utility class.
+        
     }
 
 
@@ -95,7 +96,7 @@ public final class RealDenseTranspose {
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getNdIndices(i);
-            ArrayUtils.permute(destIndices, axes); // Compute destination indices.
+            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
             dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
@@ -128,7 +129,7 @@ public final class RealDenseTranspose {
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);
-                ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
+                ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
                 dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
             }
         });
@@ -155,7 +156,7 @@ public final class RealDenseTranspose {
         double[] dest = new double[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axis1, axis2);
 
-        // Compute transpose concurrently.
+        // Compute transpose concurrently
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);

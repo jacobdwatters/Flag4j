@@ -1,7 +1,8 @@
-package org.flag4j.arrays.dense.complex_vector;
+package org.flag4j.complex_vector;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
+import org.flag4j.linalg.VectorNorms;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ class CVectorNormTests {
     void normTestCase() {
         // ------------------ Sub-case 1 ------------------
         expNorm = 6126.638392078558;
-        assertEquals(expNorm, a.norm());
+        assertEquals(expNorm, VectorNorms.norm(a));
     }
 
 
@@ -33,27 +34,27 @@ class CVectorNormTests {
     void pNormTestCase() {
         // ------------------ Sub-case 1 ------------------
         expNorm = 6208.346603991548;
-        assertEquals(expNorm, a.norm(1));
+        assertEquals(expNorm, VectorNorms.norm(a, 1));
 
         // ------------------ Sub-case 2 ------------------
-        expNorm = 6126.347178284364;
-        assertEquals(expNorm, a.norm(4.15), 1.0e-12);
+        expNorm =6126.347178284363;
+        assertEquals(expNorm, VectorNorms.norm(a, 4.15));
 
         // ------------------ Sub-case 3 ------------------
-        expNorm = 6126.347172780367;
-        assertEquals(expNorm, a.norm(45), 1.0e-12);
+        expNorm = 6126.347172780369;
+        assertEquals(expNorm, VectorNorms.norm(a, 45));
 
         // ------------------ Sub-case 4 ------------------
         expNorm = 6126.347172780367;
-        assertEquals(expNorm, a.norm(Double.POSITIVE_INFINITY));
+        assertEquals(expNorm, VectorNorms.norm(a, Double.POSITIVE_INFINITY));
 
         // ------------------ Sub-case 5 ------------------
         expNorm = 0.009241438243709998;
-        assertEquals(expNorm, a.norm(-1), 1.0e-12);
+        assertEquals(expNorm, VectorNorms.norm(a, -1));
 
         // ------------------ Sub-case 6 ------------------
         expNorm = 0.009257;
-        assertEquals(expNorm, a.norm(Double.NEGATIVE_INFINITY));
+        assertEquals(expNorm, VectorNorms.norm(a, Double.NEGATIVE_INFINITY));
     }
 
 
@@ -61,6 +62,6 @@ class CVectorNormTests {
     void infNormTestCase() {
         // ------------------ Sub-case 1 ------------------
         expNorm = 6126.347172780367;
-        assertEquals(expNorm, a.norm(Double.POSITIVE_INFINITY));
+        assertEquals(expNorm, VectorNorms.infNorm(a));
     }
 }

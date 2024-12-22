@@ -967,7 +967,7 @@ public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatri
     public U getCol(int colIdx, int rowStart, int rowEnd) {
         ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd-1);
         ValidateParameters.ensureGreaterEq(rowStart, rowEnd);
-        V[] col = makeEmptyDataArray(numRows);
+        V[] col = makeEmptyDataArray(rowEnd-rowStart);
 
         for(int i=rowStart; i<rowEnd; i++)
             col[i] = data[i*numCols + colIdx];

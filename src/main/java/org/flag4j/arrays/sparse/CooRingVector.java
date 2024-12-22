@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,10 +31,9 @@ import org.flag4j.arrays.dense.RingMatrix;
 import org.flag4j.arrays.dense.RingVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingEquals;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 
 import java.util.List;
@@ -144,7 +143,7 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
      * @param indices The indices of the non-zero values.
      */
     public CooRingVector(Shape shape, List<T> entries, List<Integer> indices) {
-        super(shape, (T[]) entries.toArray(Ring[]::new), ArrayConversions.fromIntegerList(indices));
+        super(shape, (T[]) entries.toArray(Ring[]::new), ArrayUtils.fromIntegerList(indices));
     }
 
 
@@ -164,7 +163,7 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
      * @param indices The indices of the non-zero values.
      */
     public CooRingVector(int size, List<T> entries, List<Integer> indices) {
-        super(new Shape(size), (T[]) entries.toArray(Ring[]::new), ArrayConversions.fromIntegerList(indices));
+        super(new Shape(size), (T[]) entries.toArray(Ring[]::new), ArrayUtils.fromIntegerList(indices));
     }
 
 
@@ -272,7 +271,7 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
 
         CooRingVector<T> src2 = (CooRingVector<T>) object;
 
-        return CooSemiringEquals.cooVectorEquals(this, src2);
+        return CooRingEquals.cooVectorEquals(this, src2);
     }
 
 
@@ -345,20 +344,6 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
     }
 
 
-
-    /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    public CooVector abs() {
-        double[] dest = new double[data.length];
-        RingOps.abs(data, dest);
-        return new CooVector(shape, dest, indices.clone());
-    }
-
-
     /**
      * Formats this tensor as a human-readable string. Specifically, a string containing the
      * shape and flatten data of this tensor.
@@ -376,19 +361,19 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
         int precision = PrintOptions.getPrecision();
 
         if(size > 0) {
-            int stopIndex = Math.min(maxCols - 1, size - 1);
+            int stopIndex = Math.min(maxCols -1, size-1);
             int width;
             String value;
 
             // Get data up until the stopping point.
-            for(int i = 0; i < stopIndex; i++) {
+            for(int i = 0; i<stopIndex; i++) {
                 value = StringUtils.ValueOfRound(data[i], precision);
                 width = padding + value.length();
                 value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
-            if(stopIndex < size - 1) {
+            if(stopIndex < size-1) {
                 width = padding + 3;
                 value = "...";
                 value = centering ? StringUtils.center(value, width) : value;
@@ -396,7 +381,7 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(data[size - 1], precision);
+            value = StringUtils.ValueOfRound(data[size-1], precision);
             width = padding + value.length();
             value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

@@ -136,6 +136,42 @@ public class Shape implements Serializable {
 
 
     /**
+     * Returns a slice of this shape starting from the specified index to the end of this shape's dimensions.
+     *
+     * @param startIdx The starting index for slicing (inclusive).
+     * @return A new {@code Shape} object containing the dimensions from {@code startIdx} to the end dimension.
+     * @throws IndexOutOfBoundsException If {@code startIdx} is out of bounds of the rank of this shape.
+     */
+    public Shape slice(int startIdx) {
+        return slice(startIdx, dims.length);
+    }
+
+
+    /**
+     * Returns a slice of this shape from the specified start index to the stop index of this shape's dimensions.
+     *
+     * @param startIdx The starting index for slicing (inclusive).
+     * @param stopIdx The stopping index for slicing (exclusive).
+     * @return A new {@code Shape} object containing the dimensions from {@code startIdx} to {@code stopIdx}.
+     * @throws IndexOutOfBoundsException If {@code startIdx} or {@code stopIdx} is out of bounds.
+     * @throws IllegalArgumentException If {@code startIdx > stopIdx}.
+     */
+    public Shape slice(int startIdx, int stopIdx) {
+        return new Shape(Arrays.copyOfRange(dims, startIdx, stopIdx));
+    }
+
+
+    /**
+     * Flattens this shape to a rank-1 shape with dimension equal to the product of all of this shape's dimensions.
+     * @return A rank-1 shape with dimension equal to the product of all of this shape's dimensions.
+     * @throws ArithmeticException If the product of this shape's dimensions is too large to be stored in a 32-bit integer.
+     */
+    public Shape flatten() {
+        return new Shape(totalEntriesIntValueExact());
+    }
+
+
+    /**
      * Constructs strides for each dimension of this shape as if for a newly constructed tensor.
      * Strides will be a monotonically decreasing sequence with the last stride being 1.
      * @return The strides for all dimensions of a newly constructed tensor with this shape.

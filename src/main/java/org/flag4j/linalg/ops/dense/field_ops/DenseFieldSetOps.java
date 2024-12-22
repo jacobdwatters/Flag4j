@@ -36,7 +36,7 @@ import org.flag4j.util.ValidateParameters;
 public final class DenseFieldSetOps {
 
     private DenseFieldSetOps() {
-        // Hide constructor.
+        // Hide constructor for utility class..
         throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg(getClass()));
     }
 

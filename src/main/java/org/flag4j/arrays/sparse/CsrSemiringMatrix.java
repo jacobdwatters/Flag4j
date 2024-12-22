@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -150,8 +150,8 @@ public class CsrSemiringMatrix<T extends Semiring<T>> extends AbstractCsrSemirin
      */
     public CsrSemiringMatrix(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, (T[]) entries.toArray(new Field[entries.size()]),
-                ArrayConversions.fromIntegerList(rowPointers),
-                ArrayConversions.fromIntegerList(colIndices));
+                ArrayUtils.fromIntegerList(rowPointers),
+                ArrayUtils.fromIntegerList(colIndices));
     }
 
 

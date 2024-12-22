@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2025. Jacob Watters
+ * Copyright (c) 2022-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,7 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.algebraic_structures.*;
 import org.flag4j.arrays.Shape;
 
 import java.lang.reflect.Array;
@@ -37,62 +34,110 @@ import java.util.function.UnaryOperator;
 
 
 /**
- * <p>The {@code ArrayUtils} class provides a set of utility methods for performing operations on arrays.
- * This includes transformations, comparisons, cumulative operations, validations, and copying.
- *
- * <p>For other array operations see: {@link ArrayBuilder}, {@link ArrayConversions}, and {@link ArrayJoiner}.
- *
- * <h3>Key Features:</h3>
- * <ul>
- *   <li>Deep comparison and copying of multidimensional arrays.</li>
- *   <li>Element-wise operations, including transformations, swaps, and permutations.</li>
- *   <li>Efficient searching and validation, including methods for finding unique values, indices, and membership checks.</li>
- *   <li>Flattening and reshaping of multidimensional arrays.</li>
- * </ul>
- *
- * <h3>Usage Examples</h3>
- * <pre>{@code
- * // Compute the cumulative sum of an integer array
- * int[] array = {1, 2, 3, 4};
- * int[] cumSumArray = ArrayUtils.cumSum(array, null);
- *
- * // Check if two 2D arrays are element-wise equal
- * int[][] array1 = {{1, 2}, {3, 4}};
- * int[][] array2 = {{1, 2}, {3, 4}};
- * boolean isEqual = ArrayUtils.deepEquals2D(array1, array2);
- *
- * // Swap elements in an array
- * int[] numbers = {1, 2, 3};
- * ArrayUtils.swap(numbers, 0, 2); // Result: {3, 2, 1}
- *
- * // Find unique values in an array
- * int[] values = {1, 2, 2, 3};
- * int[] uniqueValues = ArrayUtils.uniqueSorted(values); // Result: {1, 2, 3}
- *
- * // Apply a transformation to a numeric array
- * double[] data = {1.0, 2.0, 3.0};
- * ArrayUtils.applyTransform(data, x -> x * x); // Squares each value in the array
- * }</pre>
- *
- * <h3>Restrictions</h3>
- * <ul>
- *   <li>Multidimensional arrays are expected to be rectangular for all methods in this class.
- *   However, this is not explicitly enforced and jagged arrays may cause unexpected behavior.</li>
- *   <li>Many methods assume that input arrays are non-null unless explicitly stated otherwise.</li>
- *   <li>Sorting is required, but not enforced, for some methods to function correctly, such as {@link #contains(int[], int)} and
- *   {@link #findFirstLast(int[], int)}. Passing non-sorted arrays to such method results in undefined behavior.</li>
- * </ul>
- *
- * <p><strong>Note:</strong> This class is a utility class and cannot be instantiated.
- *
- * @see ArrayBuilder
- * @see ArrayConversions
- * @see ArrayJoiner
+ * This class provides several utility methods useful for array manipulation and copying.
  */
 public final class ArrayUtils {
 
+    // TODO: Class needs to be cleaned up a bit (a lot).
+
     private ArrayUtils() {
         // Hide constructor for utility class.
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static int[] makeNewIfNull(int[] arr, int size) {
+        return arr == null ? new int[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static double[] makeNewIfNull(double[] arr, int size) {
+        return arr == null ? new double[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Complex128[] makeNewIfNull(Complex128[] arr, int size) {
+        return arr == null ? new Complex128[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Complex64[] makeNewIfNull(Complex64[] arr, int size) {
+        return arr == null ? new Complex64[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Semiring<T>> T[] makeNewIfNull(T[] arr, int size) {
+        return arr == null ? (T[]) new Semiring[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Ring<T>> T[] makeNewIfNull(T[] arr, int size) {
+        return arr == null ? (T[]) new Ring[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static <T extends Field<T>> T[] makeNewIfNull(T[] arr, int size) {
+        return arr == null ? (T[]) new Field[size] : arr;
+    }
+
+
+    /**
+     * Checks if an array is {@code null} and constructs a new array with the specified {@code size} if so.
+     * @param arr Array of interest.
+     * @param size Size of the array to construct and return in the event that {@code arr == null}.
+     * @return If {@code arr == null} then a new array with length {@code size} is created and returned.
+     * Otherwise, if {@code arr != null} then a reference to {@code arr} is returned.
+     */
+    public static Object[] makeNewIfNull(Object[] arr, int size) {
+        return arr == null ? new Object[size] : arr;
     }
 
 
@@ -106,56 +151,12 @@ public final class ArrayUtils {
      */
     public static int[] cumSum(int[] src, int[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-        dest = ArrayBuilder.getOrCreateArray(dest, src.length);
+        dest = makeNewIfNull(dest, src.length);
 
         for(int i=1, size=src.length; i<size; i++)
             dest[i] = src[i] + src[i-1];
 
         return dest;
-    }
-
-
-    /**
-     * Checks if two primitive 2D integer arrays are element-wise equal.
-     * @param src1 First array in comparison.
-     * @param src2 Second array in comparison.
-     * @return The
-     */
-    public static boolean deepEquals2D(int[][] src1, int[][] src2) {
-        if(src1 == src2) return true;
-        if(src1 == null || src2 == null) return false;
-        if(src1.length != src2.length) return false;
-
-        for(int i=0, size=src1.length; i<size; i++)
-            if(!Arrays.equals(src1[i], src2[i])) return false;
-
-        return true;
-    }
-
-
-    /**
-     * Checks if a double array is numerically equal to a {@link Complex128 complex number} array.
-     *
-     * @param src1 Double array.
-     * @param src2 Complex number array.
-     * @return {@code true} if all data in {@code src2} have zero imaginary component and real component equal to the
-     * corresponding entry in {@code src1}; {@code false} otherwise.
-     */
-    public static <T extends Field<T>> boolean equals(double[] src1, T[] src2) {
-        boolean equal = true;
-
-        if (src1.length != src2.length) {
-            equal = false;
-        } else {
-            for(int i=0, size = src1.length; i < size; i++) {
-                if (src1[i] != ((Complex128) src2[i]).re || ((Complex128) src2[i]).im != 0) {
-                    equal = false;
-                    break; // No need to continue.
-                }
-            }
-        }
-
-        return equal;
     }
 
 
@@ -168,7 +169,7 @@ public final class ArrayUtils {
      * array will be initialized and returned.
      * @throws IllegalArgumentException If the two arrays are not the same shape.
      */
-    public static int[][] deepCopy2D(int[][] src, int[][] dest) {
+    public static int[][] deepCopy(int[][] src, int[][] dest) {
         if(dest == null) dest = new int[src.length][src[0].length];
         if(src == dest) return dest;
         else ValidateParameters.ensureGreaterEq(src.length, dest.length);
@@ -179,6 +180,140 @@ public final class ArrayUtils {
         }
 
         return dest;
+    }
+
+
+    /**
+     * Converts array to an array of {@link Complex128 complex numbers}.
+     *
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
+     */
+    public static Complex128[] wrapAsComplex128(int[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts array to an array of {@link Complex128 complex numbers}.
+     *
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is {@code null}, a new array will be created.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
+     */
+    public static Complex128[] wrapAsComplex128(double[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts array to an array of {@link Complex128 complex numbers}.
+     *
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
+     */
+    public static Complex128[] wrapAsComplex128(Integer[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts array to an array of {@link Complex128 complex numbers}.
+     *
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
+     */
+    public static Complex128[] wrapAsComplex128(Double[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts an array to an array of {@link Complex128 complex numbers}.
+     *
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
+     */
+    public static Complex128[] wrapAsComplex128(Complex64[] src, Complex128[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts array to an array of {@link Complex128 complex numbers}.
+     *
+     * @param src  Array to convert.
+     * @param dest Destination array. If the destination array is null, a new array will be created.
+     * @throws IllegalArgumentException If source and destination arrays do not have the same length.
+     * @return A reference to the {@code dest} array.
+     */
+    public static Complex128[] wrapAsComplex128(String[] src, Complex128[] dest) {
+        if(dest == null) {
+            dest = new Complex128[src.length];
+        }
+        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
+
+        for(int i=0, size=dest.length; i<size; i++)
+            dest[i] = new Complex128(src[i]);
+
+        return dest;
+    }
+
+
+    /**
+     * Checks if two primitive 2D integer arrays are element-wise equal.
+     * @param src1 First array in comparison.
+     * @param src2 Second array in comparison.
+     * @return The
+     */
+    public static boolean deepEquals(int[][] src1, int[][] src2) {
+        if(src1 == src2) return true;
+        if(src1 == null || src2 == null) return false;
+        if(src1.length != src2.length) return false;
+
+        for(int i=0, size=src1.length; i<size; i++)
+            if(!Arrays.equals(src1[i], src2[i])) return false;
+
+        return true;
     }
 
 
@@ -199,20 +334,318 @@ public final class ArrayUtils {
     }
 
 
+
     /**
-     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but wraps floats as complex numbers.
+     * Fills an array of complex numbers with zeros.
      *
-     * @param src     The source array.
-     * @param srcPos  The starting position from which to copy elements of the source array.
-     * @param dest    The destination array for the copy.
-     * @param destPos Starting index to place copied elements in the destination array.
-     * @param length  The number of array elements to be copied.
-     * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
-     *                                        source array length or the destination array length.
+     * @param dest Array to fill with zeros.
      */
-    public static void arraycopy(float[] src, int srcPos, Complex64[] dest, int destPos, int length) {
-        for(int i = 0; i < length; i++)
-            dest[i + destPos] = new Complex64(src[i + srcPos]);
+    public static void fillZeros(Complex128[][] dest) {
+        for(Complex128[] row : dest)
+            Arrays.fill(row, Complex128.ZERO);
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with zeros separated by the given stride.
+     * 
+     *
+     * <p>
+     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+     * 
+     *
+     * @param dest   Array to fill with strided zeros.
+     * @param start  Staring point in array to apply strided zero fill.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride is less than 1.
+     * @throws IllegalArgumentException If start is less than 0.
+     */
+    public static void stridedFillZeros(double[] dest, int start, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride);
+        ValidateParameters.ensureGreaterEq(0, start);
+
+        for(int i = start, stop=dest.length; i < stop; i += stride)
+            dest[i] = 0;
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with zeros separated by the given stride.
+     * 
+     *
+     * <p>
+     * If {@code stride=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}} then the result will be {@code {1, 0, 3, 4, 0, 6, 7, 0, 9}}.
+     * 
+     *
+     * @param dest   Array to fill with strided zeros.
+     * @param start  Staring point in array to apply strided zero fill.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride is less than 1.
+     * @throws IllegalArgumentException If start is less than 0.
+     */
+    public static void stridedFillZeros(Complex128[] dest, int start, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride);
+        ValidateParameters.ensureGreaterEq(0, start);
+
+        for(int i = start; i < dest.length; i += stride)
+            dest[i] = Complex128.ZERO;
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with a range of zeros, each separated by the given stride. Specifically, the destination array will
+     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be separated by
+     * the stride.
+     * 
+     *
+     * <p>
+     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+     * 
+     *
+     * @param dest   Array to fill with strided zeros.
+     * @param start  Starting point to apply strided zero fill.
+     * @param length Number of sequential zeros to fill per stride.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride or length is less than one.
+     * @throws IllegalArgumentException If start is less than zero.
+     */
+    public static void stridedFillZeros(Complex128[] dest, int start, int length, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride, length);
+        ValidateParameters.ensureGreaterEq(0, start);
+        int step = stride+length;
+
+        for (int i = start; i < dest.length; i += step) {
+            for (int j=i, jStop=length+i; j<jStop; j++)
+                dest[i] = Complex128.ZERO;
+        }
+    }
+
+
+    /**
+     * <p>
+     * Fills an array with a range of zeros, each separated by the given stride. Specifically, the destination array will
+     * be filled with several sequential ranges of zeros of specified length. Each range of zeros will be separated by
+     * the stride.
+     * 
+     *
+     * <p>
+     * If {@code stride=2}, {@code length=3}, {@code start=1}, and {@code dest={1, 2, 3, 4, 5, 6, 7, 8, 9}}
+     * then the result will be {1, 0, 0, 0, 5, 0, 0, 0, 9}.
+     * 
+     *
+     * @param dest   Array to fill with strided zeros.
+     * @param start  Starting point to apply strided zero fill.
+     * @param length Number of sequential zeros to fill per stride.
+     * @param stride Number of elements between each value to set to zero within the destination array.
+     * @throws IllegalArgumentException If stride or length is less than one.
+     * @throws IllegalArgumentException If start is less than zero.
+     */
+    public static void stridedFillZeros(double[] dest, int start, int length, int stride) {
+        ValidateParameters.ensureGreaterEq(1, stride, length);
+        ValidateParameters.ensureGreaterEq(0, start);
+        int step = stride+length;
+
+        for(int i=start, stop=dest.length; i<stop; i += step) {
+            for(int j=i, jStop=length+i; j<jStop; j++)
+                dest[i] = 0;
+        }
+    }
+
+
+    /**
+     * Fills an array with specified value.
+     *
+     * @param dest      Array to fill.
+     * @param fillValue Value to fill array with. This will be converted to a member of the field as if by
+     * {@code dest[0].getZero().add(fillValue)}
+     */
+    public static void fill(Complex128[] dest, double fillValue) {
+        Complex128 fillValueComplex = new Complex128(fillValue);
+        Arrays.fill(dest, fillValueComplex);
+    }
+
+
+    /**
+     * Fills an array with specified value.
+     *
+     * @param dest      Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(Complex128[][] dest, Complex128 fillValue) {
+        for(Complex128[] row : dest)
+            Arrays.fill(row, fillValue);
+    }
+
+
+    /**
+     * Fills range of an array with specified value.
+     *
+     * @param dest      Array to fill.
+     * @param fillValue Value to fill array with.
+     * @param from      Staring index of range (inclusive).
+     * @param to        Ending index of range (exclusive).
+     */
+    public static void fill(Complex128[] dest, double fillValue, int from, int to) {
+        ValidateParameters.ensureLessEq(to, from + 1);
+        Complex128 complexFillValue = new Complex128(fillValue);
+        Arrays.fill(dest, from, to, complexFillValue);
+    }
+
+
+    /**
+     * Fills an array with specified value. Similar to {@link Arrays#fill(Object[], Object)} but creates  deep copy of the fill value
+     * for each position.
+     *
+     * @param dest      Array to fill.
+     * @param start     Starting index of range to fill (Inclusive).
+     * @param end       Ending index of range to fill (Exclusive).
+     * @param fillValue Value to fill array with. Each index of the {@code dest} array will be filled with a deep copy
+     *                  of this value.
+     * @throws ArrayIndexOutOfBoundsException If {@code start} or {@code end} is not within the destination array.
+     */
+    public static void fill(Complex128[] dest, int start, int end, Complex128 fillValue) {
+        Arrays.fill(dest, start, end, fillValue);
+    }
+
+
+    /**
+     * Fills an array with the specified value;
+     *
+     * @param dest      Array to fill.
+     * @param fillValue Value to fill array with.
+     */
+    public static void fill(double[][] dest, double fillValue) {
+        for (double[] doubles : dest)
+            Arrays.fill(doubles, fillValue);
+    }
+
+
+    /**
+     * Converts an array of doubles to an {@link ArrayList array list}.
+     *
+     * @param src Array to convert.
+     * @return An equivalent array list.
+     */
+    public static ArrayList<Double> toArrayList(double[] src) {
+        ArrayList<Double> list = new ArrayList<>(src.length);
+
+        for(double value : src)
+            list.add(value);
+
+        return list;
+    }
+
+
+    /**
+     * Converts an array of complex numbers to an {@link ArrayList array list}.
+     *
+     * @param src Array to convert.
+     * @return An equivalent array list.
+     */
+    public static ArrayList<Complex128> toArrayList(Complex128[] src) {
+        ArrayList<Complex128> list = new ArrayList<>(src.length);
+        list.addAll(Arrays.asList(src));
+        return list;
+    }
+
+
+    /**
+     * Converts an array of doubles to a complex {@link ArrayList array list}.
+     *
+     * @param src Array to convert.
+     * @return An equivalent complex array list.
+     */
+    public static ArrayList<Complex128> toComplexArrayList(double[] src) {
+        ArrayList<Complex128> list = new ArrayList<>(src.length);
+
+        for (double value : src)
+            list.add(new Complex128(value));
+
+        return list;
+    }
+
+
+    /**
+     * Converts an array of doubles to an {@link ArrayList array list}.
+     *
+     * @param src Array to convert.
+     * @return An equivalent array list.
+     */
+    public static ArrayList<Integer> toArrayList(int[] src) {
+        ArrayList<Integer> list = new ArrayList<>(src.length);
+
+        for (int value : src)
+            list.add(value);
+
+        return list;
+    }
+
+
+    /**
+     * Converts a list of {@link Double Doubles} objects to a primitive array.
+     *
+     * @param src Source list to convert.
+     * @return An array containing the same values as the {@code src} list.
+     */
+    public static double[] fromDoubleList(List<Double> src) {
+        double[] dest = new double[src.size()];
+
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = src.get(i);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts a list of {@link Integer Integer} objects to a primitive array.
+     *
+     * @param src Source list to convert.
+     * @return An array containing the same values as the {@code src} list.
+     */
+    public static int[] fromIntegerList(List<Integer> src) {
+        int[] dest = new int[src.size()];
+
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = src.get(i);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts a list of {@link Integer Integer} objects to a primitive array.
+     *
+     * @param src  Source list to convert.
+     * @param dest Destination array to store values from {@code src} in (modified). Must be at least as large as {@code src}.
+     * @return A reference to the {@code dest} array.
+     */
+    public static int[] fromIntegerList(List<Integer> src, int[] dest) {
+        ValidateParameters.ensureGreaterEq(src.size(), dest.length);
+
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = src.get(i);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts a list to an array.
+     *
+     * @param src  Source list to convert.
+     * @param dest Destination array to store values from {@code src} in (modified). Must be at least as large as {@code src}.
+     * @return A reference to the {@code dest} array.
+     * @throws IllegalArgumentException If the {@code dest} array is not large enough to store all data of {@code src}
+     *                                  list.
+     */
+    public static <T> T[] fromList(List<T> src, T[] dest) {
+        ValidateParameters.ensureGreaterEq(src.size(), dest.length);
+        return src.toArray(dest);
     }
 
 
@@ -239,7 +672,7 @@ public final class ArrayUtils {
      *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
      * @throws IllegalArgumentException If {@code indices} is not a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
-    public static void permute(int[] src, int[] indices) {
+    public static void swap(int[] src, int[] indices) {
         ValidateParameters.ensurePermutation(indices);
 
         int[] swapped = new int[src.length];
@@ -254,13 +687,13 @@ public final class ArrayUtils {
 
     /**
      * Swaps elements in an array according to a specified permutation. This method should be used with extreme caution as unlike
-     * {@link #permute(int[], int[])}, this method does <i>not</i> verify that {@code indices} is a permutation.
+     * {@link #swap(int[], int[])}, this method does <i>not</i> verify that {@code indices} is a permutation.
      *
      * @param src     Array to swap elements within.
      * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
      *                the array must be a permutation of {@code {0, 1, 2, ..., N-1}}.
      */
-    public static void permuteUnsafe(int[] src, int[] indices) {
+    public static void swapUnsafe(int[] src, int[] indices) {
         int[] swapped = new int[src.length];
         int i = 0;
 
@@ -298,6 +731,98 @@ public final class ArrayUtils {
         Object temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+
+
+    /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+     *
+     * @param start Staring value (inclusive).
+     * @param end   Stopping value (exclusive).
+     * @return An array containing the integer range {@code [start, end)}.
+     * @throws IllegalArgumentException If {@code end < start}.
+     */
+    public static double[] range(int start, int end) {
+        ValidateParameters.ensureGreaterEq(start, end);
+        double[] rangeArr = new double[end - start];
+
+        int rangeIdx = 0;
+        for(int i = start; i < end; i++)
+            rangeArr[rangeIdx++] = i;
+
+        return rangeArr;
+    }
+
+
+    /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive)
+     *
+     * @param start Staring value (inclusive).
+     * @param end   Stopping value (exclusive).
+     * @return An array containing the integer range {@code [start, end)}.
+     * @throws IllegalArgumentException If {@code end < start}.
+     */
+    public static int[] intRange(int start, int end) {
+        ValidateParameters.ensureGreaterEq(start, end);
+        int[] rangeArr = new int[end - start];
+
+        int rangeIdx = 0;
+        for(int i = start; i < end; i++)
+            rangeArr[rangeIdx++] = i;
+
+        return rangeArr;
+    }
+
+
+    /**
+     * Gets an array filled with integers from {@code start} (inclusive) to {@code end} (exclusive) where each int is
+     * repeated {@code stride} times.
+     *
+     * @param start  Staring value (inclusive).
+     * @param end    Stopping value (exclusive).
+     * @param stride Number of times to repeat each integer.
+     * @return An array containing the integer range {@code [start, end)} and each integer is repeated {@code stride}
+     * times.
+     * @throws NegativeArraySizeException If {@code stride} is negative.
+     * @throws IllegalArgumentException   If {@code start} is not in {@code [0, end)}
+     */
+    public static int[] intRange(int start, int end, int stride) {
+        ValidateParameters.ensureInRange(start, 0, end, "start");
+        int[] rangeArr = new int[(end - start) * stride];
+
+        int k = 0;
+        for (int i = start; i < end; i++) {
+            Arrays.fill(rangeArr, k, k + stride, i);
+            k += stride;
+        }
+
+        return rangeArr;
+    }
+
+
+    /**
+     * Checks if a double array is numerically equal to a {@link Complex128 complex number} array.
+     *
+     * @param src1 Double array.
+     * @param src2 Complex number array.
+     * @return {@code true} if all data in {@code src2} have zero imaginary component and real component equal to the
+     * corresponding entry in {@code src1}; {@code false} otherwise.
+     */
+    public static <T extends Field<T>> boolean equals(double[] src1, T[] src2) {
+        boolean equal = true;
+
+        if (src1.length != src2.length) {
+            equal = false;
+        } else {
+            for(int i=0, size = src1.length; i < size; i++) {
+                if (src1[i] != ((Complex128) src2[i]).re || ((Complex128) src2[i]).im != 0) {
+                    equal = false;
+                    break; // No need to continue.
+                }
+            }
+        }
+
+        return equal;
     }
 
 
@@ -405,7 +930,7 @@ public final class ArrayUtils {
         // Verify consistent dimensions.
         validateConsistentDimensions(nDArray, dimensions, 0);
 
-        return new Shape(ArrayConversions.fromIntegerList(dimensions));
+        return new Shape(fromIntegerList(dimensions));
     }
 
 
@@ -639,6 +1164,38 @@ public final class ArrayUtils {
 
 
     /**
+     * Joins two arrays together.
+     *
+     * @param src1 First array to join.
+     * @param src2 Second array to join.
+     * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
+     * followed by the elements of {@code src2}.
+     */
+    public static double[] join(double[] src1, double[] src2) {
+        double[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
+        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
+
+        return concatenate;
+    }
+
+
+    /**
+     * Joins two arrays together.
+     *
+     * @param src1 First array to join.
+     * @param src2 Second array to join.
+     * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
+     * followed by the elements of {@code src2}.
+     */
+    public static int[] join(int[] src1, int[] src2) {
+        int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
+        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
+
+        return concatenate;
+    }
+
+
+    /**
      * Given a list of integers, {@code srcAxes}, which is a subset of {@code {0, 1, 2, ...., dim-1}}
      * in no particular order, compute the integers which are in {@code {0, 1, 2, ...., dim-1}} but not in
      * {@code srcAxes}.
@@ -730,6 +1287,76 @@ public final class ArrayUtils {
             if (arr[i] == key) return i;
 
         return -1;
+    }
+
+
+    /**
+     * Converts an array of {@link Double} objects to a primitive array (i.e. unboxing).
+     *
+     * @param arr Array to unbox.
+     * @param dest Destination array for the unboxed values.
+     * @return If dest was not {@code null} then a reference to {@code dest} is returned. Otherwise, a new array with the unboxed
+     * values is returned.
+     */
+    public static double[] unbox(Double[] arr, double[] dest) {
+        dest = makeNewIfNull(dest, arr.length);
+
+        for (int i=0, size=dest.length; i<size; i++)
+            dest[i] = arr[i];
+
+        return dest;
+    }
+
+
+    /**
+     * Converts an array of {@link Integer} objects to a primitive array (i.e. unboxing).
+     * @param arr Array to unbox.
+     * @param dest Destination array for the unboxed values.
+     * @return If dest was not {@code null} then a reference to {@code dest} is returned. Otherwise, a new array with the unboxed
+     * values is returned.
+     */
+    public static int[] unbox(Integer[] arr, int[] dest) {
+        int size = arr.length;
+        int[] prim = new int[size];
+
+        for (int i = 0; i < size; i++)
+            prim[i] = arr[i];
+
+        return prim;
+    }
+
+
+    /**
+     * Converts a primitive array to an array of equivalent boxed type.
+     *
+     * @param src The source primitive array to box.
+     * @return A boxed array equivalent to the {@code src} primitive array.
+     */
+    public static Double[] boxed(double[] src) {
+        int size = src.length;
+        Double[] boxed = new Double[size];
+
+        for (int i = 0; i < size; i++)
+            boxed[i] = src[i];
+
+        return boxed;
+    }
+
+
+    /**
+     * Converts a primitive array to an array of equivalent boxed type.
+     *
+     * @param src The source primitive array to box.
+     * @return A boxed array equivalent to the {@code src} primitive array.
+     */
+    public static Integer[] boxed(int[] src) {
+        int size = src.length;
+        Integer[] boxed = new Integer[size];
+
+        for (int i = 0; i < size; i++)
+            boxed[i] = src[i];
+
+        return boxed;
     }
 
 
@@ -828,6 +1455,271 @@ public final class ArrayUtils {
         }
 
         return new int[]{lowerBound, upperBound};
+    }
+
+
+    /**
+     * Repeats an array a specified number of times.
+     *
+     * @param numTimes Number of times to repeat the array.
+     * @param src      The source array to repeat.
+     * @return The {@code src} array repeated {@code numTimes times}.
+     */
+    public static int[] repeat(int numTimes, int[] src) {
+        int[] repeated = new int[src.length * numTimes];
+
+        for(int i = 0, size=repeated.length, step=src.length; i < size; i += step)
+            System.arraycopy(src, 0, repeated, i, src.length);
+
+        return repeated;
+    }
+
+
+    /**
+     * Constructs an array filled with a specific value.
+     *
+     * @param size  Size of the array.
+     * @param value Value to set each index of the array.
+     * @return An array of specified {@code size} filled with the specified {@code value}.
+     * @throws NegativeArraySizeException If {@code} is negative.
+     */
+    public static int[] filledArray(int size, int value) {
+        int[] dest = new int[size];
+        Arrays.fill(dest, value);
+
+        return dest;
+    }
+
+
+    /**
+     * Converts an array of ints to an array of doubles.
+     *
+     * @param src  Source array to convert.
+     * @param dest Destination array to store double values equivalent to the values in the {@code src} array.
+     *             If null, a new double array with the same size as {@code src} will be created.
+     * @return A reference to the {@code dest} array.
+     */
+    public static double[] asDouble(int[] src, double[] dest) {
+        dest = makeNewIfNull(dest, src.length);
+
+        for (int i = 0, size=src.length; i < size; i++)
+            dest[i] = src[i];
+
+        return dest;
+    }
+
+
+    /**
+     * Converts an array of {@link Integer Integers} to an array of doubles.
+     *
+     * @param src  Source array to convert.
+     * @param dest Destination array to store double values equivalent to the values in the {@code src} array.
+     *             If null, a new double array with the same size as {@code src} will be created.
+     * @return A reference to the {@code dest} array.
+     */
+    public static double[] asDouble(Integer[] src, double[] dest) {
+        if (dest == null) dest = new double[src.length];
+
+        for(int i = 0, size=src.length; i < size; i++)
+            dest[i] = src[i];
+
+        return dest;
+    }
+
+
+    /**
+     * Splices an array into another array at the specified index.
+     *
+     * @param arr1      First array.
+     * @param arr2      Array to splice into {@code arr1}.
+     * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
+     * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
+     */
+    public static Complex128[] splice(Complex128[] arr1, Complex128[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[arr1.length + arr2.length];
+
+        System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
+        System.arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
+        System.arraycopy(arr1, spliceIdx, spliced, spliceIdx + arr2.length, arr1.length - spliceIdx);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into another array at the specified index.
+     *
+     * @param arr1      First array.
+     * @param arr2      Array to splice into {@code arr1}.
+     * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
+     * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
+     */
+    public static Complex128[] splice(Complex128[] arr1, double[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[arr1.length + arr2.length];
+
+        System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
+        arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
+        System.arraycopy(arr1, spliceIdx, spliced, spliceIdx + arr2.length, arr1.length - spliceIdx);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into another array at the specified index.
+     *
+     * @param arr1      First array.
+     * @param arr2      Array to splice into {@code arr1}.
+     * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
+     * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
+     */
+    public static Complex128[] splice(double[] arr1, Complex128[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[arr1.length + arr2.length];
+
+        arraycopy(arr1, 0, spliced, 0, spliceIdx);
+        System.arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
+        arraycopy(arr1, spliceIdx, spliced, spliceIdx + arr2.length, arr1.length - spliceIdx);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into another array at the specified index.
+     *
+     * @param arr1      First array.
+     * @param arr2      Array to splice into {@code arr1}.
+     * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
+     * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
+     */
+    public static double[] splice(double[] arr1, double[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        double[] spliced = new double[arr1.length + arr2.length];
+
+        System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
+        System.arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
+        System.arraycopy(arr1, spliceIdx, spliced, spliceIdx + arr2.length, arr1.length - spliceIdx);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into another array at the specified index.
+     *
+     * @param arr1      First array.
+     * @param arr2      Array to splice into {@code arr1}.
+     * @param spliceIdx The index within {@code arr1} to splice {@code arr2} into.
+     * @return The result of splicing {@code arr2} into {@code arr1} at the index {@code spliceIdx}.
+     */
+    public static int[] splice(int[] arr1, int[] arr2, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(arr1.length + 1, spliceIdx);
+        int[] spliced = new int[arr1.length + arr2.length];
+
+        System.arraycopy(arr1, 0, spliced, 0, spliceIdx);
+        System.arraycopy(arr2, 0, spliced, spliceIdx, arr2.length);
+        System.arraycopy(arr1, spliceIdx, spliced, spliceIdx + arr2.length, arr1.length - spliceIdx);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into a list at the specified index. The list is implicitly converted to an array.
+     *
+     * @param list      List to splice into.
+     * @param arr       Array to splice into {@code list}.
+     * @param spliceIdx The index within {@code list} to splice {@code arr} into.
+     * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
+     */
+    public static double[] splice(List<Double> list, double[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
+        double[] spliced = new double[list.size() + arr.length];
+
+        for(int i = 0; i < spliceIdx; i++)
+            spliced[i] = list.get(i);
+
+        System.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
+
+        for(int i = spliceIdx; i < list.size(); i++)
+            spliced[i + arr.length] = list.get(i);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into a list at the specified index. The list is implicitly converted to an array.
+     *
+     * @param list      List to splice into.
+     * @param arr       Array to splice into {@code list}.
+     * @param spliceIdx The index within {@code list} to splice {@code arr} into.
+     * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
+     */
+    public static Complex128[] spliceDouble(List<Complex128> list, double[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[list.size() + arr.length];
+
+        for (int i = 0; i < spliceIdx; i++)
+            spliced[i] = (Complex128) list.get(i);
+
+        ArrayUtils.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
+
+        for(int i = spliceIdx; i < list.size(); i++)
+            spliced[i + arr.length] = (Complex128) list.get(i);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into a list at the specified index. The list is implicitly converted to an array.
+     *
+     * @param list      List to splice into.
+     * @param arr       Array to splice into {@code list}.
+     * @param spliceIdx The index within {@code list} to splice {@code arr} into.
+     * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
+     */
+    public static Complex128[] splice(List<Complex128> list, Complex128[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
+        Complex128[] spliced = new Complex128[list.size() + arr.length];
+
+        for (int i = 0; i < spliceIdx; i++)
+            spliced[i] = (Complex128) list.get(i);
+
+        System.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
+
+        for (int i = spliceIdx; i < list.size(); i++)
+            spliced[i + arr.length] = (Complex128) list.get(i);
+
+        return spliced;
+    }
+
+
+    /**
+     * Splices an array into a list at the specified index. The list is implicitly converted to an array.
+     *
+     * @param list      List to splice into.
+     * @param arr       Array to splice into {@code list}.
+     * @param spliceIdx The index within {@code list} to splice {@code arr} into.
+     * @return The result of splicing {@code arr} into {@code list} at the index {@code spliceIdx}.
+     */
+    public static int[] splice(List<Integer> list, int[] arr, int spliceIdx) {
+        ValidateParameters.ensureIndicesInBounds(list.size() + 1, spliceIdx);
+        int[] spliced = new int[list.size() + arr.length];
+
+        for (int i = 0; i < spliceIdx; i++)
+            spliced[i] = list.get(i);
+
+        System.arraycopy(arr, 0, spliced, spliceIdx, arr.length);
+
+        for (int i = spliceIdx; i < list.size(); i++)
+            spliced[i + arr.length] = list.get(i);
+
+        return spliced;
     }
 
 

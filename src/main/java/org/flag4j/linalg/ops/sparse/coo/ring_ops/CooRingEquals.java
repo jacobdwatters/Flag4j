@@ -22,21 +22,22 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
+package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 
-import org.flag4j.algebraic_structures.Semiring;
-import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringMatrix;
-import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringTensor;
-import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringVector;
+
+import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingMatrix;
+import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingTensor;
+import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingVector;
 
 import java.util.Arrays;
 
 /**
- * A utility class for checking equality between COO {@link Semiring} tensors.
+ * A utility class for checking equality between COO {@link Ring} tensors.
  */
-public final class CooSemiringEquals {
+public class CooRingEquals {
 
-    private CooSemiringEquals() {
+    private CooRingEquals() {
         // Hide default constructor.
     }
 
@@ -47,9 +48,9 @@ public final class CooSemiringEquals {
      * @param b Second tensor in the equality check.
      * @return True if the tensors are equal. False otherwise.
      */
-    public static <T extends Semiring<T>> boolean cooTensorEquals(
-            AbstractCooSemiringTensor<?, ?, T> a,
-            AbstractCooSemiringTensor<?, ?, T> b) {
+    public static <T extends Ring<T>> boolean cooTensorEquals(
+            AbstractCooRingTensor<?, ?, T> a,
+            AbstractCooRingTensor<?, ?, T> b) {
         if (a == b) return true;
         if (a == null || b == null) return false;
 
@@ -68,9 +69,9 @@ public final class CooSemiringEquals {
      * @param b Second matrix in the equality check.
      * @return True if the matrices are equal. False otherwise.
      */
-    public static <T extends Semiring<T>> boolean cooMatrixEquals(
-            AbstractCooSemiringMatrix<?, ?, ?, T> a,
-            AbstractCooSemiringMatrix<?, ?, ?, T> b) {
+    public static <T extends Ring<T>> boolean cooMatrixEquals(
+            AbstractCooRingMatrix<?, ?, ?, T> a,
+            AbstractCooRingMatrix<?, ?, ?, T> b) {
         // Early return if possible.
         if (a == b) return true;
         if (a == null || b == null) return false;
@@ -91,9 +92,9 @@ public final class CooSemiringEquals {
      * @param b Second vector in the equality check.
      * @return True if the vectors are equal. False otherwise.
      */
-    public static <T extends Semiring<T>> boolean cooVectorEquals(
-            AbstractCooSemiringVector<?, ?, ?, ?, T> a,
-            AbstractCooSemiringVector<?, ?, ?, ?, T> b) {
+    public static <T extends Ring<T>> boolean cooVectorEquals(
+            AbstractCooRingVector<?, ?, ?, ?, T> a,
+            AbstractCooRingVector<?, ?, ?, ?, T> b) {
         // Early returns if possible.
         if(a == b) return true;
         if(a==null || b==null || !a.shape.equals(b.shape)) return false;

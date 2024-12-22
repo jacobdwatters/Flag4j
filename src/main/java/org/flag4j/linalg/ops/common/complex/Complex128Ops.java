@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2025. Jacob Watters
+ * Copyright (c) 2023-2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,18 +29,19 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.util.ErrorMessages;
 
 /**
- * This class provides low level methods for computing operations on complex tensors. These methods can be applied to
+ * This class provides low level methods for computing ops on complex tensors. These methods can be applied to
  * either sparse or dense complex tensors.
  */
 public final class Complex128Ops {
 
     private Complex128Ops() {
         // Hide constructor for utility class. for utility class.
+        
     }
 
 
     /**
-     * Computes the element-wise square root of a tensor as complex values. This allows for the square root of negative numbers.
+     * Computes the element-wise square root of a tensor as complex values. This allows for the square root of a negative number.
      * @param src Elements of the tensor.
      * @return The element-wise square root of the tensor.
      */
