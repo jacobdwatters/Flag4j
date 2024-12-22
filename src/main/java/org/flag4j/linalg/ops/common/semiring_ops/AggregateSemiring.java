@@ -34,7 +34,6 @@ public final class AggregateSemiring {
 
     private AggregateSemiring() {
         // Hide default constructor for utility class.
-        
     }
 
 

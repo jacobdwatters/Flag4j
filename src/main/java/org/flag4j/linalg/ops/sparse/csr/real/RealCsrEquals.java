@@ -39,7 +39,6 @@ public final class RealCsrEquals {
 
     private RealCsrEquals() {
         // Hide default constructor for utility class.
-        
     }
 
 

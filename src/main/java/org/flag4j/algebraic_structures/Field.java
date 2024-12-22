@@ -57,7 +57,7 @@ package org.flag4j.algebraic_structures;
  * <h6>Extended Operations:</h6>
  *
  * <h2>Implementations:</h2>
- * <p>Implementations of the {@code MMField} interface should ensure that instances are immutable. This means
+ * <p>Implementations of the {@code Field} interface should ensure that instances are immutable. This means
  * that all operations should return new instances rather than modifying existing ones. Immutability guarantees
  * thread safety and consistent behavior across different contexts.
  *
@@ -73,7 +73,7 @@ package org.flag4j.algebraic_structures;
  * definition.
  *
  * <h2>Interface Methods:</h2>
- * <p>The {@code MMField} interface extends the {@link Ring} interface and specifies additional methods that field elements must implement:
+ * <p>The {@code Field} interface extends the {@link Ring} interface and specifies additional methods that field elements must implement:
  * <ul>
  *   <li>{@link #add(Semiring)}: Performs the addition operation, returning a new field element.</li>
  *   <li>{@link #sub(Ring)}: Performs the subtraction operation, defined as addition with the additive inverse.</li>
@@ -89,7 +89,7 @@ package org.flag4j.algebraic_structures;
  *
  * <h2>Usage Example:</h2>
  * <pre>{@code
- * // Assume T is a concrete implementation of MMField<T>
+ * // Assume T is a concrete implementation of Field<T>
  * T a = ...; // Initialize element a
  * T b = ...; // Initialize element b
  *
@@ -116,7 +116,7 @@ package org.flag4j.algebraic_structures;
  * @see Ring
  * @see Semiring
  *
- * @param <T> the type of the field element, which should extend {@code MMField<T>} to ensure type consistency.
+ * @param <T> the type of the field element, which should extend {@code Field<T>} to ensure type consistency.
  */
 public interface Field<T extends Field<T>> extends Ring<T> {
 

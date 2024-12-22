@@ -22,23 +22,20 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.ops.dense.field_ops;
+package org.flag4j.linalg.ops.dense;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 
 import java.util.Arrays;
 
 
 /**
- * This class provides methods for checking the equality of dense tensors whose elements are members of a
- * {@link Field}.
+ * This class provides methods for checking the equality of dense tensors.
  */
-public final class DenseFieldEquals {
+public final class DenseEquals {
 
-    private DenseFieldEquals() {
-        // Hide constructor.
-
+    private DenseEquals() {
+        // Hide constructor for utility class. for utility class.
     }
 
 
@@ -50,7 +47,7 @@ public final class DenseFieldEquals {
      * @param shape2 Shape of second tensor.
      * @return True if the two tensors are the same shape and numerically element-wise equivalent.
      */
-    public static <T extends Field<T>> boolean tensorEquals(T[] src1, Shape shape1,T[] src2, Shape shape2) {
+    public static <T> boolean tensorEquals(T[] src1, Shape shape1, T[] src2, Shape shape2) {
         return shape1.equals(shape2) && Arrays.equals(src1, src2);
     }
 }

@@ -40,7 +40,6 @@ public final class DenseCooFieldTensorOps {
 
     private DenseCooFieldTensorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

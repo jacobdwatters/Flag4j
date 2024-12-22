@@ -42,7 +42,6 @@ public final class RealDenseElemMult {
 
     private RealDenseElemMult() {
         // Hide default constructor for utility class.
-        
     }
 
 

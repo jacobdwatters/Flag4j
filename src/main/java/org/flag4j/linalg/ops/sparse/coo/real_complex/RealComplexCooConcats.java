@@ -31,7 +31,6 @@ import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -43,7 +42,6 @@ public final class RealComplexCooConcats {
 
     private RealComplexCooConcats() {
         // Hide default constructor for utility class.
-        
     }
 
 

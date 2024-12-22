@@ -31,7 +31,6 @@ import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
@@ -47,7 +46,6 @@ public final class Givens {
 
     private Givens() {
         // Hide default constructor for utility class.
-        
     }
 
 

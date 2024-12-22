@@ -40,7 +40,6 @@ public final class CooRingVectorOps {
 
     private CooRingVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

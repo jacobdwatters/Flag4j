@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.dense.ring_ops;
 
 import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -36,7 +35,6 @@ public final class DenseRingTensorOps {
 
     private DenseRingTensorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

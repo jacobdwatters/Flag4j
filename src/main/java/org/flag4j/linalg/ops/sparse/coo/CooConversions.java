@@ -33,7 +33,6 @@ public final class CooConversions {
 
     private CooConversions() {
         // Hide default constructor for utility class.
-        
     }
 
 

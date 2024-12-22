@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.sparse.csr.semiring_ops;
 
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * Utility class containing methods useful for determining certain properties of a
@@ -36,7 +35,6 @@ public final class SemiringCsrProperties {
 
     private SemiringCsrProperties() {
         // Hide default constructor for utility class.
-        
     }
 
 

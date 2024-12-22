@@ -191,7 +191,7 @@ public final class CooSemiringMatMult {
      * of the standard algorithm.
      *
      * <p>NOTE: Caution should be exercised when using this method.
-     * It is rarely faster than {@link #standardVector(Semiring[], int[], int[], Shape, Semiring[], int[])
+     * It is rarely faster than {@link #standardVector(Semiring[], int[], int[], Shape, Semiring[], int[], Semiring[])}
      * 
      * @param src1 Non-zero data of the first sparse matrix.
      * @param rowIndices1 Row indices of non-zero data for the first sparse matrix.

@@ -42,7 +42,6 @@ public final class SubSpace {
 
     private SubSpace() {
         // Hide default constructor for utility class.
-        
     }
 
 

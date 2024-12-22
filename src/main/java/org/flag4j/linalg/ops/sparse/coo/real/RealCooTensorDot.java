@@ -39,7 +39,6 @@ public final class RealCooTensorDot {
 
     private RealCooTensorDot() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -123,7 +122,7 @@ public final class RealCooTensorDot {
         int[][] btMatIndices = RealDenseTranspose.blockedIntMatrix(bt.indices);
 
         // Compute equivalent matrix multiplication problem.
-        double[] productEntries = RealSparseMatrixMultiplication.standard(
+        double[] productEntries = RealSparseMatMult.standard(
                 at.data, atMatIndices[0], atMatIndices[1], at.shape,
                 bt.data, btMatIndices[0], btMatIndices[1], bt.shape
         );

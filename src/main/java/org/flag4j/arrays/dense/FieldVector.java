@@ -26,22 +26,52 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooFieldVector;
+import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
-import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.Arrays;
 
 /**
- * <p>A dense vector whose data are {@link Field field} elements.
+ * <p>Instances of this class represents a dense vector backed by a {@link Field} array. The {@code FieldVector} class
+ * provides functionality for matrix operations whose elements are members of a field, supporting mutable data with a fixed shape.
  *
- * <p>Vectors are 1D tensors (i.e. rank 1 tensor).
+ * <p>A {@code FieldVector} is essentially equivalent to a rank-1 tensor but includes extended functionality
+ * and may offer improved performance for certain operations compared to general rank n tensors.
  *
- * <p>FieldVectors have mutable data but a fixed size.
+ * <p><b>Key Features:</b>
+ * <ul>
+ *   <li>Support for standard vector operations like addition, subtraction, and inner/outer products.</li>
+ *   <li>Conversion methods to other representations, such as {@link FieldMatrix}, {@link FieldTensor}, or COO (Coordinate).</li>
+ *   <li>Utility methods for checking properties like being the zero vector.</li>
+ * </ul>
  *
- * @param <T> Type of the field element for the vector.
+ * <p><b>Example Usage:</b>
+ * <pre>{@code
+ * // Constructing a complex matrix from an array of complex numbers
+ * Complex128[] complexData = {
+ *     new Complex128(1, 2), new Complex128(3, 4),
+ *     new Complex128(5, 6), new Complex128(7, 8)
+ * };
+ * FieldVector<Complex128> vector = new FieldVector(complexData);
+ *
+ * // Performing vector inner/outer product.
+ * Complex128 inner = vector.inner(vector);
+ * FieldMatrix<Complex128> outer = vector.outer(vector);
+ *
+ * // Checking if the vector only contains zeros.
+ * boolean isZero = vector.isZeros();
+ * }</pre>
+ *
+ * @param <T> Type of the {@link Field field} element for the matrix.
+ *
+ * @see FieldVector
+ * @see FieldTensor
+ * @see AbstractDenseFieldMatrix
+ * @see CVector
  */
 public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<FieldVector<T>, FieldMatrix<T>, T> {
     private static final long serialVersionUID = 1L;
@@ -158,38 +188,12 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      */
     public String toString() {
         StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
-        result.append("[");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
-        int width;
-        String value;
-
-        // Get data up until the stopping point.
-        int padding = PrintOptions.getPadding();
-        boolean centering = PrintOptions.useCentering();
-        int precision = PrintOptions.getPrecision();
-
-        for(int i = 0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(data[i], precision);
-            width = padding + value.length();
-            value = centering ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        if(stopIndex < size-1) {
-            width = padding + 3;
-            value = "...";
-            value = centering ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        // Get last entry now
-        value = StringUtils.ValueOfRound(data[size-1], precision);
-        width = padding + value.length();
-        value = centering ? StringUtils.center(value, width) : value;
-        result.append(String.format("%-" + width + "s", value));
-
-        result.append("]");
+        result.append(PrettyPrint.abbreviatedArray(data,
+                PrintOptions.getMaxColumns(),
+                PrintOptions.getPadding(),
+                PrintOptions.getPrecision(),
+                PrintOptions.useCentering()));
 
         return result.toString();
     }

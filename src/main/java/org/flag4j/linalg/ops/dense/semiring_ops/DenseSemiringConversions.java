@@ -28,7 +28,6 @@ import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.SparseTensorData;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public final class DenseSemiringConversions {
 
     private DenseSemiringConversions() {
         // Hide default constructor for utility class.
-        
     }
 
 

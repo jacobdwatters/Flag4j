@@ -45,7 +45,6 @@ public final class RealFieldDenseCsrOps {
 
     private RealFieldDenseCsrOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

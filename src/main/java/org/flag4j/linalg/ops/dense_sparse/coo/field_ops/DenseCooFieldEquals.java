@@ -36,7 +36,7 @@ import java.util.Arrays;
 public final class DenseCooFieldEquals {
 
     private DenseCooFieldEquals() {
-        // Hide constructor for utility class.
+        // Hide constructor for utility class. for utility class.
         
     }
 

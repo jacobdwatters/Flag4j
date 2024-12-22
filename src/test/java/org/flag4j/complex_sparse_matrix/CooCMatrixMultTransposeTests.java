@@ -40,13 +40,13 @@ public class CooCMatrixMultTransposeTests {
         bRowIndices = new int[]{0, 1, 2, 3, 4, 4, 4, 4, 5, 5};
         bColIndices = new int[]{4, 0, 2, 1, 0, 1, 3, 4, 0, 3};
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
-
         expEntries = new Complex128[][]{
-                {new Complex128("-0.20838324060000005+0.7734490298000001i"), new Complex128("0.0"), new Complex128("-0.21402565199999998+0.3477190144i"), new Complex128("0.0"), new Complex128("-0.06750009040000002+0.6540791612000001i"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("-0.32487363849999995+0.9942665476999999i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("-0.6752825893000001+0.9013527855000001i"), new Complex128("-0.006504158300000007+0.35477223290000004i")},
-                {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")}};
-        exp = new CMatrix(expEntries);
+                {new Complex128(0.6471265166000001, 0.4720955922000001), new Complex128(0.0, 0.0), new Complex128(0.35054490559999996, 0.20936514), new Complex128(0.0, 0.0), new Complex128(0.4625325176, 0.46737509720000014), new Complex128(0.0, 0.0)},
+                {new Complex128(0.0, 0.0), new Complex128(0.8307283627, 0.6356093425), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(1.0669550145, 0.3606250357000001), new Complex128(0.2062294519, 0.28874738870000005)},
+                {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)}
+        };
 
+        exp = new CMatrix(expEntries);
         assertEquals(exp, a.multTranspose(b));
 
         // ---------------------  Sub-case 2 ---------------------
@@ -63,22 +63,21 @@ public class CooCMatrixMultTransposeTests {
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new Complex128[][]{
-                {new Complex128(0.0, 0.0), new Complex128(0.5041229467000001, 1.1345101517), new Complex128(0.24952547240000006, 1.0543731129), new Complex128(-0.015226200000000002, 0.28234329939999997), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.6744114998, 1.5859558232000002), new Complex128(-0.07600698659999994, 1.5456070745000001), new Complex128(-0.43907186040000007, 0.18928093840000002), new Complex128(0.046531072199999995, 0.37417912859999997), new Complex128(-0.0975775928, 0.7889532967000001)},
-                {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.058597500600000046, 1.0802855158), new Complex128(-0.08719577350000002, 0.13022300650000002), new Complex128(0.0, 0.0), new Complex128(0.011725000200000009, 0.1401311631), new Complex128(-0.12255934739999996, 0.1762521958), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)},
-                {new Complex128(0.0, 0.0), new Complex128(-0.5927944554, 1.2435035643), new Complex128(-0.2849313674, 0.6772671918), new Complex128(0.08239720699999997, 0.2653166225), new Complex128(-0.39289732529999993, 0.6011732743), new Complex128(0.22182264210000002, 0.3709350777), new Complex128(-0.0011956625999999804, 0.43418583569999997), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(-0.15898989460000004, 0.9007990528), new Complex128(0.0, 0.0)},
+                {new Complex128(0.0, 0.0), new Complex128(1.1862237167, -0.3662328817), new Complex128(0.9584314624000001, -0.5053461729), new Complex128(0.1032923294, -0.263211456), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(1.06828387, 0.08516565020000022), new Complex128(1.352476262, -0.017508797699999912), new Complex128(0.4762989624000001, 0.041841016400000014), new Complex128(0.07331309579999999, 0.3698653146), new Complex128(0.5302201772, -0.5923134767)},
+                {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.7731446978000001, -0.7206272326000001), new Complex128(0.1544977753, -0.026297752100000002), new Complex128(0.0, 0.0), new Complex128(0.12307449780000002, 0.0680212209), new Complex128(0.21096558059999998, -0.039738570200000004), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)},
+                {new Complex128(0.0, 0.0), new Complex128(1.18013854, 0.3849503605), new Complex128(0.8686417363999999, 0.18230937679999998), new Complex128(0.22897174539999998, 0.1573345153), new Complex128(0.8138349663, 0.2343062501), new Complex128(0.4242554997, 0.08249477189999996), new Complex128(0.1786672698, 0.4025332335), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(1.2989661149999998, 0.3946076922), new Complex128(0.0, 0.0)},
                 {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)},
-                {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.8032446517, 0.5981473664), new Complex128(0.41787374019999995, 0.9924672119), new Complex128(-0.23530508850000004, 0.6645160883000001), new Complex128(0.45128538329999995, 0.32465147639999997), new Complex128(0.0, 0.0)},
-                {new Complex128(0.31788576180000006, 0.582581744), new Complex128(0.0, 0.0), new Complex128(-0.14256448309999992, 0.6736574292999999), new Complex128(-0.3001711066999999, 0.6172964485), new Complex128(-0.12581449159999997, 0.6494094918), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.16386615460000004, 0.5969238085999999), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(-0.08253581580000002, 0.4474645036)},
+                {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.8614434379, 0.5107812112), new Complex128(1.0768468534, 0.0032378646999999816), new Complex128(0.5225577333, -0.47316332450000004), new Complex128(0.4734590199, 0.2913651228), new Complex128(0.0, 0.0)},
+                {new Complex128(0.566269064, 0.3461100882), new Complex128(0.0, 0.0), new Complex128(0.6798453997, -0.10931237990000003), new Complex128(0.6312917244999999, -0.26949648830000006), new Complex128(0.6548042022, -0.09377329640000004), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.5881569974, 0.19298055939999997), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.4509776284, -0.06046339020000005)},
                 {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)},
-                {new Complex128(0.0, 0.0), new Complex128(-0.3556836165999999, 0.8542570072), new Complex128(-0.4951126226000001, 0.3135884172), new Complex128(0.0, 0.0), new Complex128(-0.6575209714000001, 0.6173505428), new Complex128(0.0, 0.0), new Complex128(0.011317789800000033, 0.6022607052), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(-0.7734627259000001, 0.2147736557), new Complex128(0.0, 0.0)},
-                {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(-0.6364266546, 0.5598352348), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)},
+                {new Complex128(0.0, 0.0), new Complex128(0.7059655687999999, 0.5982294586000001), new Complex128(0.5836252188000001, 0.053439764599999995), new Complex128(0.0, 0.0), new Complex128(0.8666392612, 0.24978372940000002), new Complex128(0.0, 0.0), new Complex128(0.2644435068, 0.5412168522), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.7863372133000001, -0.1613880371), new Complex128(0.0, 0.0)},
+                {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.8415131794, 0.10153790280000002), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)},
                 {new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)},
-                {new Complex128(-0.31808660069999994, 0.576170949), new Complex128(0.007631027499999998, 0.1532136475), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(-0.3834100199, 1.0406575222), new Complex128(0.16467749090000003, 0.7474379323), new Complex128(0.0, 0.0), new Complex128(-0.030112154800000006, 0.09796254440000002), new Complex128(0.044831667199999994, 0.22757534080000003), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)}
+                {new Complex128(0.48515112569999996, -0.44472512100000006), new Complex128(0.1464201163, -0.03625899070000002), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0), new Complex128(0.9212268649, -0.6175049678), new Complex128(0.7538347157, -0.03233435709999999), new Complex128(0.0, 0.0), new Complex128(0.0826150276, -0.06064782920000001), new Complex128(0.2296627712, -0.03248731519999999), new Complex128(0.0, 0.0), new Complex128(0.0, 0.0)}
         };
         exp = new CMatrix(expEntries);
 
         CMatrix act = a.multTranspose(b);
-
         assertTrue(exp.allClose(act));
 
         // ---------------------  Sub-case 3 ---------------------
@@ -118,11 +117,11 @@ public class CooCMatrixMultTransposeTests {
         b = new CooCMatrix(bShape, bEntries, bRowIndices, bColIndices);
 
         expEntries = new Complex128[][]{
-                {new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("0.0")},
-                {new Complex128("0.0"), new Complex128("-0.783338664+0.5598277289999999i")},
-                {new Complex128("0.0"), new Complex128("0.08237078510000007+1.5644483947i")},
-                {new Complex128("0.0"), new Complex128("0.0")}};
+                {new Complex128(0.0), new Complex128(0.0)},
+                {new Complex128(0.0), new Complex128(0.0)},
+                {new Complex128(0.0), new Complex128(0.8148094991999999, 0.5129444693999999)},
+                {new Complex128(0.0), new Complex128(1.4002444421, -0.6045979338999999)},
+                {new Complex128(0.0), new Complex128(0.0)}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, a.multTranspose(b));

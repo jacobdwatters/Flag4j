@@ -35,7 +35,7 @@ import org.flag4j.util.ErrorMessages;
 public final class Complex128Ops {
 
     private Complex128Ops() {
-        // Hide constructor for utility class.
+        // Hide constructor for utility class. for utility class.
         
     }
 

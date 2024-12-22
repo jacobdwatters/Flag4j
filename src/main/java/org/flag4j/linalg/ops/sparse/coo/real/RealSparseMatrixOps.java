@@ -41,7 +41,6 @@ public final class RealSparseMatrixOps {
 
     private RealSparseMatrixOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

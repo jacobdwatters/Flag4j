@@ -34,7 +34,6 @@ public final class CooManipulations {
 
     private CooManipulations() {
         // Hide default constructor for utility class.
-        
     }
 
 

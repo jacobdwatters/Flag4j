@@ -41,7 +41,6 @@ public final class CooRingTensorOps {
 
     private CooRingTensorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

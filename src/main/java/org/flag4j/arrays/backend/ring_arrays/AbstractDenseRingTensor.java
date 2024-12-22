@@ -44,7 +44,7 @@ import java.util.Arrays;
  * <p>The base class for all dense {@link Ring} tensors.
  * <p>The {@link #data} of an AbstractDenseRingTensor are mutable but the {@link #shape} is fixed.
  *
- * @param <T> The type of this dense arrays tensor.
+ * @param <T> The type of this dense tensor.
  * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
  * {@link #toCoo()}) may result in a sparse tensor.
  * @param <V> The type of the {@link Ring} which this tensor's data belong to.
@@ -68,7 +68,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
     protected AbstractDenseRingTensor(Shape shape, V[] data) {
         super(shape, data);
         ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), data.length);
-        this.zeroElement = (data.length > 0) ? data[0].getZero() : null;
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
     }
 
 
@@ -137,7 +137,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      */
     @Override
     public T flatten() {
-        return makeLikeTensor(new Shape(shape.totalEntriesIntValueExact()), data.clone());
+        return makeLikeTensor(shape.flatten(), data.clone());
     }
 
 
@@ -312,7 +312,7 @@ public abstract class AbstractDenseRingTensor<T extends AbstractDenseRingTensor<
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override

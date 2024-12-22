@@ -35,7 +35,7 @@ import org.flag4j.util.ValidateParameters;
 public final class Projection {
 
     private Projection() {
-        // Hide constructor for utility class.
+        // Hide constructor for utility class. for utility class.
         throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
 
@@ -44,7 +44,7 @@ public final class Projection {
      * Creates a {@code 4x4} perspective projection matrix to transform a 3D point represented in homogeneous
      * coordinates.
      *
-     * @param fov MMField of view in radians (this is the fov in both the {@code x} and {@code y} directions).
+     * @param fov Field of view in radians (this is the fov in both the {@code x} and {@code y} directions).
      *            For distinct field of views see {@link #getPerspective(double, double, double, double, double)}.
      * @param aspectRatio Aspect ratio of the image plane to project to (i.e. {@code width/height}).
      * @param nearClip The distance from the camera to the near clipping plane.
@@ -76,8 +76,8 @@ public final class Projection {
      * Creates a {@code 4x4} perspective projection matrix to transform a 3D point represented in homogeneous
      * coordinates.
      *
-     * @param fovX MMField of view, in radians, in the {@code x} direction.
-     * @param fovY MMField of view, in radians, in the {@code y} direction.
+     * @param fovX Field of view, in radians, in the {@code x} direction.
+     * @param fovY Field of view, in radians, in the {@code y} direction.
      * @param aspectRatio Aspect ratio of the image plane to project to (i.e. {@code width/height}).
      * @param nearClip The distance from the camera to the near clipping plane.
      * @param farClip The distance from the camera to the far clipping plane.

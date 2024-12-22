@@ -43,7 +43,6 @@ public final class CsrOps {
 
     private CsrOps() {
         // Hide default constructor for utility class.
-        
     }
 
     /**

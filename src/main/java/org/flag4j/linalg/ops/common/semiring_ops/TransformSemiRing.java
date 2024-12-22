@@ -37,7 +37,7 @@ import java.util.function.Function;
 public final class TransformSemiRing {
 
     private TransformSemiRing() {
-        // Hide constructor for utility class.
+        // Hide constructor for utility class. for utility class.
         throw new IllegalAccessError(ErrorMessages.getUtilityClassErrMsg());
     }
 

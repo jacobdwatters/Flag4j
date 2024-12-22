@@ -40,7 +40,6 @@ public final class CooSemiringMatrixProperties {
 
     private CooSemiringMatrixProperties() {
         // Hide default constructor for utility class.
-        
     }
 
 

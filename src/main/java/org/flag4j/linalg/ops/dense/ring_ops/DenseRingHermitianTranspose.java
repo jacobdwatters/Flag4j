@@ -37,7 +37,6 @@ public final class DenseRingHermitianTranspose {
     
     private DenseRingHermitianTranspose() {
         // Hide default constructor for utility class.
-        
     }
 
     /**

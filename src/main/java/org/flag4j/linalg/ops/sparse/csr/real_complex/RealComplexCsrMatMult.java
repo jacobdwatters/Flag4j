@@ -46,7 +46,6 @@ public final class RealComplexCsrMatMult {
 
     private RealComplexCsrMatMult() {
         // Hide default constructor for utility class.
-        
     }
 
 

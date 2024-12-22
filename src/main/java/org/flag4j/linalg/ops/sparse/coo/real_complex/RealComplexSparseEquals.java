@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.sparse.coo.real_complex;
 
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.Arrays;
 
@@ -37,7 +36,6 @@ public final class RealComplexSparseEquals {
 
     private RealComplexSparseEquals() {
         // Hide default constructor for utility class.
-        
     }
 
 

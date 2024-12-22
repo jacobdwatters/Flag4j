@@ -38,7 +38,7 @@ import java.util.Arrays;
  */
 public final class ValidateParameters {
 
-    // Hide constructor
+    // Hide constructor for utility class.
     private ValidateParameters() {
         
     }

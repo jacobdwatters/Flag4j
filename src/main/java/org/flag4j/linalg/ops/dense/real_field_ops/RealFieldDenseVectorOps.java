@@ -35,7 +35,6 @@ public final class RealFieldDenseVectorOps {
 
     private RealFieldDenseVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

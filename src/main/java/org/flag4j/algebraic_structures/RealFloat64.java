@@ -24,82 +24,104 @@
 
 package org.flag4j.algebraic_structures;
 
+
 import org.flag4j.util.ErrorMessages;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /**
- * <p>Represents an immutable real number backed by a 32-bit floating-point value.
+ * <p>Represents an immutable real number backed by a 64-bit floating-point value.
  *
- * <p>This class wraps the primitive {@code float} type and provides arithmetic operations
+ * <p>This class wraps the primitive {@code double} type and provides arithmetic operations
  * consistent with a mathematical field. It implements the {@link Field} interface,
  * allowing it to be used in generic algorithms that operate on field elements.
  *
- * @see Real64
+ * @see RealFloat32
  */
-public class Real32 implements Field<Real32> {
+public class RealFloat64 implements Field<RealFloat64> {
     private static final long serialVersionUID = 1L;
 
     /**
      * The numerical value {@code -1.0}.
      */
-    public final static Real32 NEGATIVE_ONE = new Real32(-1f);
+    public final static RealFloat64 NEGATIVE_ONE = new RealFloat64(-1d);
     /**
      * The numerical value {@code 0.0}.
      */
-    public final static Real32 ZERO = new Real32(0f);
+    public final static RealFloat64 ZERO = new RealFloat64(0d);
     /**
      * The numerical value {@code 1.0}.
      */
-    public final static Real32 ONE = new Real32(1f);
+    public final static RealFloat64 ONE = new RealFloat64(1d);
     /**
      * The numerical value {@code 2.0}.
      */
-    public final static Real32 TWO = new Real32(2f);
+    public final static RealFloat64 TWO = new RealFloat64(2d);
     /**
      * The numerical value {@code 3.0}.
      */
-    public final static Real32 THREE = new Real32(3f);
+    public final static RealFloat64 THREE = new RealFloat64(3d);
     /**
      * The numerical value {@code 10.0}.
      */
-    public final static Real32 TEN = new Real32(10f);
+    public final static RealFloat64 TEN = new RealFloat64(10d);
     /**
      * The numerical value representing the square root of two.
      */
-    public final static Real32 ROOT_TWO = new Real32((float) Math.sqrt(2d));
+    public final static RealFloat64 ROOT_TWO = new RealFloat64(Math.sqrt(2d));
     /**
      * The numerical value representing the square root of three.
      */
-    public final static Real32 ROOT_THREE = new Real32((float) Math.sqrt(3d));
+    public final static RealFloat64 ROOT_THREE = new RealFloat64(Math.sqrt(3d));
     /**
      * The numerical value representing pi (π), the ratio of the circumference of a circle to its diameter.
      */
-    public final static Real32 PI = new Real32((float) Math.PI);
-    
+    public final static RealFloat64 PI = new RealFloat64(Math.PI);
 
     /**
      * Numerical value of field element.
      */
-    private final float value;
+    private final double value;
 
 
     /**
-     * Constructs a real 32-bit floating point number.
-     * @param value Value of the 32-bit floating point number.
+     * Constructs a new {@code RealFloat64} instance with the specified {@code RealFloat32} value.
+     *
+     * @param value the {@code RealFloat32} value to be converted and stored.
      */
-    public Real32(float value) {
+    public RealFloat64(RealFloat32 value) {
+        this.value = value.getValue();
+    }
+
+
+    /**
+     * Constructs a new {@code RealFloat64} instance with the specified double value.
+     *
+     * @param value the double value to be stored.
+     */
+    public RealFloat64(double value) {
         this.value = value;
     }
 
 
     /**
-     * Constructs a real 32-bit floating point number by casting a real 64-bit floating point.
-     * @param value Value of the 32-bit floating point number.
+     * Rounds number to specified number of decimal places.
+     *
+     * @param n Number to round.
+     * @param decimals Number of decimals to round to.
+     * @return The number {@code n} rounded to the specified
+     * 		number of decimals. If !Double.isFinite(n.value) then no rounding will be performed and an unmodified {@code n} will
+     * 	be returned.
+     * @throws IllegalArgumentException If decimals is less than zero.
      */
-    public Real32(Real64 value) {
-        this.value = (float) value.getValue();
+    public static RealFloat64 round(RealFloat64 n, int decimals) {
+        if (decimals < 0)
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
+        if (!Double.isFinite(n.value))
+            return n;
+
+        double scale = Math.pow(10, decimals);
+        double value = Math.round(n.value * scale) / scale;
+
+        return new RealFloat64(value);
     }
 
 
@@ -107,7 +129,7 @@ public class Real32 implements Field<Real32> {
      * Gets the value of this field element.
      * @return The value of this field element.
      */
-    public float getValue() {
+    public double getValue() {
         return value;
     }
 
@@ -120,8 +142,8 @@ public class Real32 implements Field<Real32> {
      * @return The sum of this element and {@code b}.
      */
     @Override
-    public Real32 add(Real32 b) {
-        return new Real32(this.value + b.value);
+    public RealFloat64 add(RealFloat64 b) {
+        return new RealFloat64(value + b.value);
     }
 
 
@@ -133,8 +155,8 @@ public class Real32 implements Field<Real32> {
      * @return The difference of this field element and {@code b}.
      */
     @Override
-    public Real32 sub(Real32 b) {
-        return new Real32(this.value - b.value);
+    public RealFloat64 sub(RealFloat64 b) {
+        return new RealFloat64(value - b.value);
     }
 
 
@@ -146,15 +168,15 @@ public class Real32 implements Field<Real32> {
      * @return The product of this field element and {@code b}.
      */
     @Override
-    public Real32 mult(Real32 b) {
-        return new Real32(this.value * b.value);
+    public RealFloat64 mult(RealFloat64 b) {
+        return new RealFloat64(value * b.value);
     }
 
 
     /**
      * <p>Checks if this value is an additive identity for this semiring.
      *
-     * <p>An element 0 is an additive identity if a + 0 = a for any a in the semiring.
+     * <p>An element {@code 0} is an additive identity if {@code a + 0 = a} for any {@code a} in the semiring.
      *
      * @return True if this value is an additive identity for this semiring. Otherwise, false.
      */
@@ -167,7 +189,7 @@ public class Real32 implements Field<Real32> {
     /**
      * <p>Checks if this value is a multiplicative identity for this semiring.
      *
-     * <p>An element 1 is a multiplicative identity if a * 1 = a for any a in the semiring.
+     * <p>An element {@code 1} is a multiplicative identity if {@code a * 1 = a} for any {@code a} in the semiring.
      *
      * @return True if this value is a multiplicative identity for this semiring. Otherwise, false.
      */
@@ -185,7 +207,7 @@ public class Real32 implements Field<Real32> {
      * @return The additive identity for this semiring.
      */
     @Override
-    public Real32 getZero() {
+    public RealFloat64 getZero() {
         return ZERO;
     }
 
@@ -198,7 +220,7 @@ public class Real32 implements Field<Real32> {
      * @return The multiplicative identity for this semiring.
      */
     @Override
-    public Real32 getOne() {
+    public RealFloat64 getOne() {
         return ONE;
     }
 
@@ -209,8 +231,8 @@ public class Real32 implements Field<Real32> {
      * @return The quotient of this field element and {@code b}.
      */
     @Override
-    public Real32 div(Real32 b) {
-        return new Real32(this.value / b.value);
+    public RealFloat64 div(RealFloat64 b) {
+        return new RealFloat64(this.value / b.value);
     }
 
 
@@ -222,8 +244,8 @@ public class Real32 implements Field<Real32> {
      * @return The sum of this element and {@code b}.
      */
     @Override
-    public Real32 add(double b) {
-        return new Real32((float) (value + b));
+    public RealFloat64 add(double b) {
+        return new RealFloat64(value + b);
     }
 
 
@@ -235,8 +257,8 @@ public class Real32 implements Field<Real32> {
      * @return The difference of this ring element and {@code b}.
      */
     @Override
-    public Real32 sub(double b) {
-        return new Real32((float) (value - b));
+    public RealFloat64 sub(double b) {
+        return new RealFloat64(value - b);
     }
 
 
@@ -248,8 +270,8 @@ public class Real32 implements Field<Real32> {
      * @return The product of this field element and {@code b}.
      */
     @Override
-    public Real32 mult(double b) {
-        return new Real32((float) (value * b));
+    public RealFloat64 mult(double b) {
+        return new RealFloat64(value * b);
     }
 
 
@@ -261,8 +283,8 @@ public class Real32 implements Field<Real32> {
      * @return The quotient of this field element and {@code b}.
      */
     @Override
-    public Real32 div(double b) {
-        return new Real32((float) (value / b));
+    public RealFloat64 div(double b) {
+        return new RealFloat64(value / b);
     }
 
 
@@ -275,8 +297,8 @@ public class Real32 implements Field<Real32> {
      * @return The multiplicative inverse for this field element.
      */
     @Override
-    public Real32 multInv() {
-        return new Real32(1f/this.value);
+    public RealFloat64 multInv() {
+        return new RealFloat64(1d/value);
     }
 
 
@@ -288,8 +310,8 @@ public class Real32 implements Field<Real32> {
      * @return The additive inverse for this field element.
      */
     @Override
-    public Real32 addInv() {
-        return new Real32(-this.value);
+    public RealFloat64 addInv() {
+        return new RealFloat64(-value);
     }
 
 
@@ -300,7 +322,7 @@ public class Real32 implements Field<Real32> {
      */
     @Override
     public double mag() {
-        return Math.abs(this.value);
+        return Math.abs(value);
     }
 
 
@@ -310,8 +332,8 @@ public class Real32 implements Field<Real32> {
      * @return The square root of this field element.
      */
     @Override
-    public Real32 sqrt() {
-        return new Real32((float) Math.sqrt(this.value));
+    public RealFloat64 sqrt() {
+        return new RealFloat64((float) Math.sqrt(value));
     }
 
 
@@ -321,8 +343,8 @@ public class Real32 implements Field<Real32> {
      * @param a Value to evaluate signum function on.
      * @return The output of the signum function evaluated on {@code a}.
      */
-    public static Real32 sgn(Real32 a) {
-        return new Real32(Math.signum(a.value));
+    public static RealFloat64 sgn(RealFloat64 a) {
+        return new RealFloat64(Math.signum(a.value));
     }
 
 
@@ -342,8 +364,8 @@ public class Real32 implements Field<Real32> {
      * </ul>
      */
     @Override
-    public int compareTo(Real32 b) {
-        return Float.compare(this.value, b.value);
+    public int compareTo(RealFloat64 b) {
+        return Double.compare(this.value, b.value);
     }
 
 
@@ -365,7 +387,7 @@ public class Real32 implements Field<Real32> {
      */
     @Override
     public boolean isFinite() {
-        return Float.isFinite(this.value);
+        return Double.isFinite(value);
     }
 
 
@@ -376,7 +398,7 @@ public class Real32 implements Field<Real32> {
      */
     @Override
     public boolean isInfinite() {
-        return Float.isInfinite(this.value);
+        return Double.isInfinite(value);
     }
 
 
@@ -387,7 +409,7 @@ public class Real32 implements Field<Real32> {
      */
     @Override
     public boolean isNaN() {
-        return Float.isNaN(this.value);
+        return Double.isNaN(value);
     }
 
 
@@ -396,15 +418,15 @@ public class Real32 implements Field<Real32> {
      * @param values Values to compute product of.
      * @return The product of all values in {@code values}.
      */
-    public static Real32 prod(Real32... values) {
+    public static RealFloat64 prod(RealFloat64... values) {
         if(values == null || values.length == 0)
             throw new IllegalArgumentException("Values cannot be null or empty");
 
-        float prod = values[0].value;
+        double prod = values[0].value;
         for(int i = 1, length=values.length; i < length; i++)
             prod *= values[i].value;
 
-        return new Real32(prod);
+        return new RealFloat64(prod);
     }
 
 
@@ -413,77 +435,57 @@ public class Real32 implements Field<Real32> {
      * @param values Values to compute product of.
      * @return The sum of all values in {@code values}.
      */
-    public static Real32 sum(Real32... values) {
+    public static RealFloat64 sum(RealFloat64... values) {
         if(values == null || values.length == 0)
             throw new IllegalArgumentException("Values cannot be null or empty");
 
-        float prod = values[0].value;
-        for(int i = 1, length=values.length; i < length; i++)
+        double prod = values[0].value;
+        for(int i = 1, length=values.length; i < length; i++) {
             prod += values[i].value;
+        }
 
-        return new Real32(prod);
+        return new RealFloat64(prod);
     }
 
 
     /**
-     * Wraps a primitive float array as a {@link Real32} array.
+     * Wraps a primitive double array as a {@link RealFloat64} array.
      * @param arr Array to wrap.
-     * @return A {@link Real32} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
+     * @return A {@link RealFloat64} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
      * returned.
      */
-    public static Real32[] wrapArray(float... arr) {
+    public static RealFloat64[] wrapArray(double... arr) {
         if(arr == null) return null;
 
-        Real32[] wrapped = new Real32[arr.length];
+        RealFloat64[] wrapped = new RealFloat64[arr.length];
         for(int i=0, size=arr.length; i<size; i++)
-            wrapped[i] = new Real32(arr[i]);
+            wrapped[i] = new RealFloat64(arr[i]);
 
         return wrapped;
     }
 
 
     /**
-     * Wraps a {@link Float} array as a {@link Real32} array.
+     * Wraps a {@link Double} array as a {@link RealFloat64} array.
      * @param arr Array to wrap.
-     * @return A {@link Real32} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
+     * @return A {@link RealFloat64} array containing the values of {@code arr}. If {@code arr==null} then {@code null} will be
      * returned.
      */
-    public static Real32[] wrapArray(Float... arr) {
+    public static RealFloat64[] wrapArray(Double[] arr) {
         if(arr == null) return null;
 
-        Real32[] wrapped = new Real32[arr.length];
+        RealFloat64[] wrapped = new RealFloat64[arr.length];
         for(int i=0, size=arr.length; i<size; i++)
-            wrapped[i] = new Real32(arr[i]);
+            wrapped[i] = new RealFloat64(arr[i]);
 
         return wrapped;
     }
 
 
     /**
-     * Rounds number to specified number of decimal places.
-     *
-     * @param n Number to round.
-     * @param decimals Number of decimals to round to.
-     * @return The number {@code n} rounded to the specified
-     * 		number of decimals.
-     * @throws IllegalArgumentException If decimals is less than zero.
-     */
-    public static Real32 round(Real32 n, int decimals) {
-        if (decimals < 0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
-
-        float value = (Double.isFinite(n.value))
-                ? BigDecimal.valueOf(n.value).setScale(decimals, RoundingMode.HALF_UP).floatValue()
-                : n.value;
-
-        return new Real32(value);
-    }
-
-
-    /**
-     * Checks if an object is equal to this MMField element.
-     * @param b Object to compare to this MMField element.
-     * @return True if the objects are the same or are both {@link Real32}'s and have equal values.
+     * Checks if an object is equal to this Field element.
+     * @param b Object to compare to this Field element.
+     * @return True if the objects are the same or are both {@link RealFloat64}'s and have equal values.
      */
     @Override
     public boolean equals(Object b) {
@@ -492,19 +494,20 @@ public class Real32 implements Field<Real32> {
         if(b == null) return false;
         if(b.getClass() != this.getClass()) return false;
 
-        return this.value == ((Real32) b).value;
+        return this.value == ((RealFloat64) b).value;
     }
 
 
     @Override
     public int hashCode() {
-        return Float.hashCode(value);
+        return Double.hashCode(value);
     }
 
 
     /**
-     * Converts this field element to a string representation.
-     * @return A string representation of this field element.
+     * Returns a string representation of this {@code RealFloat64} instance.
+     *
+     * @return a string representing the value of this instance.
      */
     public String toString() {
         return String.valueOf(this.value);

@@ -6,7 +6,7 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.linalg.ops.sparse.coo.real.RealSparseMatrixMultiplication.*;
+import static org.flag4j.linalg.ops.sparse.coo.real.RealSparseMatMult.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class RealSparseMatMultTests {

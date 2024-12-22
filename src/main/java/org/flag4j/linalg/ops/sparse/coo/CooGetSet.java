@@ -43,7 +43,6 @@ public final class CooGetSet {
 
     private CooGetSet() {
         // Hide default constructor for utility class.
-        
     }
 
 

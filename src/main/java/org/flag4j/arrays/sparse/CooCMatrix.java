@@ -28,6 +28,7 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -63,7 +64,8 @@ import java.util.List;
  * efficient
  * matrix ops.
  *
- * <p>A sparse COO matrix is stored as:
+ * <h3>COO Representation:</h3>
+ * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
@@ -539,6 +541,23 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param visitor The visitor implementing the operation to be performed.
+     *
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     *
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    @Override
+    public <R> R accept(MatrixVisitor<R> visitor) {
+        return visitor.visit(this);
+    }
+
+
+    /**
      * Checks if an object is equal to this matrix object.
      * @param object Object to check equality with this matrix.
      * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link CooCMatrix}.
@@ -549,7 +568,8 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        return CooFieldEquals.cooMatrixEquals(this, (CooCMatrix) object);
+        return CooFieldEquals.cooMatrixEquals(this.dropZeros(),
+                ((CooCMatrix) object).dropZeros());
     }
 
 

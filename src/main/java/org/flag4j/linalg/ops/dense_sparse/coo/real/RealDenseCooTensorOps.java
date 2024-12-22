@@ -36,7 +36,6 @@ public class RealDenseCooTensorOps {
 
     private RealDenseCooTensorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

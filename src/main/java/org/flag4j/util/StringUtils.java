@@ -86,16 +86,16 @@ public final class StringUtils {
      * @param precision Precision to round value to if the value can be rounded.
      * @return The string representation of {@code value} rounded to the specified precision if the field type can be rounded.
      */
-    public static <T extends Field<T>> String ValueOfRound(T value, int precision) {
+    public static <T extends Semiring<T>> String ValueOfRound(T value, int precision) {
         String valueOf;
         if(value instanceof Complex128)
             valueOf = Complex128.round((Complex128) value, precision).toString();
         else if(value instanceof Complex64)
             valueOf = Complex64.round((Complex64) value, precision).toString();
-        else if(value instanceof Real64)
-            valueOf = Real64.round((Real64) value, precision).toString();
-        else if(value instanceof Real32)
-            valueOf = Real32.round((Real32) value, precision).toString();
+        else if(value instanceof RealFloat64)
+            valueOf = RealFloat64.round((RealFloat64) value, precision).toString();
+        else if(value instanceof RealFloat32)
+            valueOf = RealFloat32.round((RealFloat32) value, precision).toString();
         else
             valueOf = value.toString();
 

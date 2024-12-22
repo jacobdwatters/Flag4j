@@ -26,14 +26,15 @@ package org.flag4j.linalg.ops.sparse.coo.field_ops;
 
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.algebraic_structures.Ring;
-import org.flag4j.arrays.Pair;
+import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldVector;
+import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringVector;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * <p>This utility class contains methods for checking the equality, or approximately equal, of sparse COO tensors whose data are
@@ -43,7 +44,6 @@ public final class CooFieldEquals {
 
     private CooFieldEquals() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -57,35 +57,14 @@ public final class CooFieldEquals {
     public static <T extends Field<T>> boolean cooTensorEquals(
             AbstractCooFieldTensor<?, ?, T> a,
             AbstractCooFieldTensor<?, ?, T> b) {
-        // Early returns if possible.
-        if(a == b) return true;
-        if(a==null || b==null || !a.shape.equals(b.shape)) return false;
+        if (a == b) return true;
+        if (a == null || b == null) return false;
 
-        List<T> aEntries = new ArrayList(a.nnz);
-        List<int[]> aIndices = new ArrayList<>(a.nnz);
-
-        List<T> bEntries = new ArrayList(b.nnz);
-        List<int[]> bIndices = new ArrayList(b.nnz);
-
-        for(int i=0; i<a.nnz; i++) {
-            if(a.data[i] == null) return false;
-
-            if(!a.data[i].isZero()) {
-                aEntries.add(a.data[i]);
-                aIndices.add(a.indices[i]);
-            }
-        }
-
-        for(int i=0; i<b.nnz; i++) {
-            if(b.data[i] == null) return false;
-
-            if(!b.data[i].isZero()) {
-                bEntries.add(b.data[i]);
-                bIndices.add(b.indices[i]);
-            }
-        }
-
-        return aEntries.equals(bEntries) && Arrays.deepEquals(aIndices.toArray(new int[0][]), bIndices.toArray(new int[0][]));
+        a = a.coalesce().dropZeros();
+        b = b.coalesce().dropZeros();
+        return a.shape.equals(b.shape)
+                && Arrays.equals(a.data, b.data)
+                && Arrays.deepEquals(a.indices, b.indices);
     }
 
 
@@ -101,35 +80,14 @@ public final class CooFieldEquals {
             AbstractCooFieldMatrix<?, ?, ?, T> b) {
         // Early return if possible.
         if (a == b) return true;
-        if (a == null || b == null || !a.shape.equals(b.shape)) return false;
+        if (a == null || b == null) return false;
 
-        // Use maps to store non-zero values by their row and column indices.
-        Map<Pair<Integer, Integer>, T> nonZeroMapA = new HashMap<>();
-        for (int i = 0; i < a.nnz; i++) {
-            if (a.data[i] == null) return false;
-            if (!a.data[i].isZero())
-                nonZeroMapA.put(new Pair<>(a.rowIndices[i], a.colIndices[i]), a.data[i]);
-        }
-
-        // Compare with matrix b.
-        for (int i = 0; i < b.nnz; i++) {
-            if (b.data[i] == null) return false;
-
-            Pair<Integer, Integer> key = new Pair<>(b.rowIndices[i], b.colIndices[i]);
-            T valueB = b.data[i];
-
-            if (!valueB.isZero()) {
-                // If valueB is non-zero, check against matrix a.
-                T valueA = nonZeroMapA.remove(key);
-                if (valueA == null || !valueA.equals(valueB)) return false;
-            } else {
-                // If valueB is zero, ensure first matrix also has zero or does not contain the key.
-                if (nonZeroMapA.containsKey(key)) return false;
-            }
-        }
-
-        // If nonZeroMapA is not empty, then matrix a has non-zero values that matrix b does not.
-        return nonZeroMapA.isEmpty();
+        a = a.coalesce().dropZeros();
+        b = b.coalesce().dropZeros();
+        return a.shape.equals(b.shape)
+                && Arrays.equals(a.data, b.data)
+                && Arrays.equals(a.rowIndices, b.rowIndices)
+                && Arrays.equals(a.colIndices, b.colIndices);
     }
 
 
@@ -147,31 +105,33 @@ public final class CooFieldEquals {
         if(a == b) return true;
         if(a==null || b==null || !a.shape.equals(b.shape)) return false;
 
-        List<T> aEntries = new ArrayList<>(a.nnz);
-        List<Integer> aIndices = new ArrayList<>(a.nnz);
+        a = a.coalesce().dropZeros();
+        b = b.coalesce().dropZeros();
+        return a.shape.equals(b.shape)
+                && Arrays.equals(a.data, b.data)
+                && Arrays.equals(a.indices, b.indices);
+    }
 
-        List<T> bEntries = new ArrayList<>(b.nnz);
-        List<Integer> bIndices = new ArrayList<>(b.nnz);
 
-        for(int i=0; i<a.nnz; i++) {
-            if(a.data[i] == null) return false;
+    /**
+     * Checks if two real sparse vectors are real. Assumes the indices of each sparse vector are sorted. Any explicitly stored
+     * zero's will be ignored.
+     * @param a First vector in the equality check.
+     * @param b Second vector in the equality check.
+     * @return True if the vectors are equal. False otherwise.
+     */
+    public static <T extends Semiring<T>> boolean cooVectorEquals(
+            AbstractCooSemiringVector<?, ?, ?, ?, T> a,
+            AbstractCooSemiringVector<?, ?, ?, ?, T> b) {
+        // Early returns if possible.
+        if(a == b) return true;
+        if(a==null || b==null || !a.shape.equals(b.shape)) return false;
 
-            if(!a.data[i].isZero()) {
-                aEntries.add(a.data[i]);
-                aIndices.add(a.indices[i]);
-            }
-        }
-
-        for(int i=0; i<b.nnz; i++) {
-            if(b.data[i] == null) return false;
-
-            if(!b.data[i].isZero()) {
-                bEntries.add(b.data[i]);
-                bIndices.add(b.indices[i]);
-            }
-        }
-
-        return aEntries.equals(bEntries) && aIndices.equals(bIndices);
+        a = a.coalesce().dropZeros();
+        b = b.coalesce().dropZeros();
+        return a.shape.equals(b.shape)
+                && Arrays.equals(a.data, b.data)
+                && Arrays.equals(a.indices, b.indices);
     }
 
 
@@ -218,7 +178,7 @@ public final class CooFieldEquals {
 
     /**
      * Checks that all non-zero data are "close" according to
-     * {@link RingProperties#allClose(Field[], Field[])} and all indices are the same.
+     * {@link RingProperties#allClose(Ring[], Ring[])} )} and all indices are the same.
      * @param src1 First vector in comparison.
      * @param src2 Second vector in comparison.
      * @param relTol Relative tolerance.

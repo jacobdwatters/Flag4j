@@ -44,7 +44,6 @@ public final class RealComplexCsrDenseOps {
 
     private RealComplexCsrDenseOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

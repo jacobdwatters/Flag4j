@@ -36,7 +36,7 @@ import org.flag4j.util.ValidateParameters;
 public final class RealFieldDenseOps {
 
     private RealFieldDenseOps() {
-        // Hide constructor for utility class.
+        // Hide constructor for utility class. for utility class.
         
     }
 

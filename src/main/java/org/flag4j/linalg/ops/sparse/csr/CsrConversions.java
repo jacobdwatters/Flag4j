@@ -37,7 +37,6 @@ public final class CsrConversions {
 
     private CsrConversions() {
         // Hide default constructor for utility class.
-        
     }
 
     /**

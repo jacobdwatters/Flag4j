@@ -38,7 +38,6 @@ public class RealDenseSparseMatrixOps {
 
     private RealDenseSparseMatrixOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

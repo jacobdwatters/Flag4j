@@ -46,7 +46,6 @@ public final class RealSparseMatrixGetSet {
 
     private RealSparseMatrixGetSet() {
         // Hide default constructor for utility class.
-        
     }
 
 

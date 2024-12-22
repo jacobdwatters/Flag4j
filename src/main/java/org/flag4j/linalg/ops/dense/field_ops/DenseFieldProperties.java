@@ -35,7 +35,7 @@ import org.flag4j.arrays.dense.FieldTensor;
 public final class DenseFieldProperties {
 
     private DenseFieldProperties() {
-        // Hide constructor for utility class.
+        // Hide constructor for utility class. for utility class.
         
     }
 

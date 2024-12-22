@@ -38,7 +38,6 @@ public final class RealCsrManipulations {
 
     private RealCsrManipulations() {
         // Hide default constructor for utility class.
-        
     }
 
 

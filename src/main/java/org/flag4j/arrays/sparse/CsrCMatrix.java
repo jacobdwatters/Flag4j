@@ -28,6 +28,7 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
@@ -35,6 +36,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
+import org.flag4j.linalg.ops.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
@@ -367,6 +369,16 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
+     * Computes the matrix multiplication between two matrices.
+     * @param b Second matrix in the matrix multiplication.
+     * @return The result of multiplying this matrix with the matrix {@code b}.
+     */
+    public CMatrix mult(CMatrix b) {
+        return (CMatrix) DenseCsrFieldMatMult.standard(this, b);
+    }
+
+
+    /**
      * Computes the matrix-vector multiplication of a vector with this matrix.
      *
      * @param b Vector in the matrix-vector multiplication.
@@ -504,6 +516,23 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix roundToZero(double tolerance) {
         return toCoo().roundToZero(tolerance).toCsr();
+    }
+
+
+    /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param visitor The visitor implementing the operation to be performed.
+     *
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     *
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    @Override
+    public <R> R accept(MatrixVisitor<R> visitor) {
+        return visitor.visit(this);
     }
 
 

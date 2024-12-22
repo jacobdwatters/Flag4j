@@ -35,7 +35,7 @@ import org.flag4j.util.ValidateParameters;
 public final class DenseFieldOps {
 
     private DenseFieldOps() {
-        // Hide constructor
+        // Hide constructor for utility class.
         
     }
 

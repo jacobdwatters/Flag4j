@@ -46,7 +46,6 @@ public final class DecompositionFactory {
 
     private DecompositionFactory() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -203,8 +203,8 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * Checks if an object is equal to this MMField element.
-     * @param b Object to compare to this MMField element.
+     * Checks if an object is equal to this Field element.
+     * @param b Object to compare to this Field element.
      * @return True if the objects are the same or are both {@link Complex128}'s and have equal real and imaginary parts.
      */
     @Override

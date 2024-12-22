@@ -5,6 +5,7 @@ import org.flag4j.arrays.dense.CVector;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CVectorAggregateTests {
@@ -31,36 +32,36 @@ class CVectorAggregateTests {
     }
 
 
-//    @Test
-//    void minTestCase() {
-//        // ------------------ Sub-case 1 ------------------
-//        exp = 0.009257;
-//        assertEquals(exp, a.min());
-//        assertEquals(exp, a.minAbs());
-//    }
-//
-//
-//    @Test
-//    void maxTestCase() {
-//        // ------------------ Sub-case 1 ------------------
-//        exp = new Complex128(1.455, 6126.347).mag();
-//        assertEquals(exp, a.max());
-//        assertEquals(exp, a.maxAbs());
-//    }
+    @Test
+    void minTestCase() {
+        // ------------------ Sub-case 1 ------------------
+        exp = -0.009257;
+        assertEquals(new Complex128(exp), a.min());
+        assertEquals(Math.abs(exp), a.minAbs());
+    }
 
 
-//    @Test
-//    void argminTestCase() {
-//        // ------------------ Sub-case 1 ------------------
-//        expIndices = new int[]{4};
-//        assertArrayEquals(expIndices, a.argmin());
-//    }
-//
-//
-//    @Test
-//    void argmaxTestCase() {
-//        // ------------------ Sub-case 1 ------------------
-//        expIndices = new int[]{0};
-//        assertArrayEquals(expIndices, a.argmax());
-//    }
+    @Test
+    void maxTestCase() {
+        // ------------------ Sub-case 1 ------------------
+        Complex128 expCm = new Complex128(1.455, 6126.347);
+        assertEquals(expCm, a.max());
+        assertEquals(expCm.mag(), a.maxAbs());
+    }
+
+
+    @Test
+    void argminTestCase() {
+        // ------------------ Sub-case 1 ------------------
+        expIndices = new int[]{4};
+        assertArrayEquals(expIndices, a.argmin());
+    }
+
+
+    @Test
+    void argmaxTestCase() {
+        // ------------------ Sub-case 1 ------------------
+        expIndices = new int[]{0};
+        assertArrayEquals(expIndices, a.argmax());
+    }
 }

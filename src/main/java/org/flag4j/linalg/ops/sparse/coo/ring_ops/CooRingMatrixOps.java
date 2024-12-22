@@ -39,7 +39,6 @@ public final class CooRingMatrixOps {
 
     private CooRingMatrixOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

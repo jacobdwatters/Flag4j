@@ -272,6 +272,24 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
 
 
     /**
+     * Computes the matrix-vector multiplication of a vector with this matrix.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of multiplying this matrix with {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the size of
+     *                                {@code b}.
+     */
+    @Override
+    public U mult(U b) {
+        V[] dest = makeEmptyDataArray(numRows);
+        DenseSemiringMatMultDispatcher.dispatchVector(data, shape, b.data, b.shape, dest);
+        return makeLikeVector(new Shape(numRows), dest);
+    }
+
+
+    /**
      * Computes the matrix multiplication between two matrices.
      *
      * @param b Second matrix in the matrix multiplication.
@@ -284,6 +302,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public T mult(T b) {
         V[]  dest = (V[]) new Semiring[numRows*b.numCols];
+        System.out.printf("Shapes: %s, %s.\n", shape, b.shape);
         DenseSemiringMatMultDispatcher.dispatch(data, shape, b.data, b.shape, dest);
         return makeLikeTensor(new Shape(numRows, b.numCols), dest);
     }
@@ -930,9 +949,9 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
         int start = rowIdx*numCols + colStart;
         int stop = rowIdx*numCols + colEnd;
 
-        V[] row = Arrays.copyOfRange(this.data, start, stop);
+        V[] row = Arrays.copyOfRange(data, start, stop);
 
-        return makeLikeVector(shape, row);
+        return makeLikeVector(new Shape(colEnd-colStart), row);
     }
 
 
@@ -952,13 +971,13 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     @Override
     public U getCol(int colIdx, int rowStart, int rowEnd) {
         ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
-        ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
-        V[]  col = (V[]) new Semiring[numRows];
+        ValidateParameters.ensureGreaterEq(rowStart, rowEnd);
+        V[] col = (V[]) new Semiring[rowEnd-rowStart];
 
         for(int i=rowStart; i<rowEnd; i++)
             col[i] = data[i*numCols + colIdx];
 
-        return makeLikeVector(shape, col);
+        return makeLikeVector(new Shape(rowEnd-rowStart), col);
     }
 
 
@@ -1000,6 +1019,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public T H() {
+        // TODO: This should probably be removed from semiring tensors.
         return T(); // Conjugation is not defined on a general semiring. Fall back to standard transpose.
     }
 

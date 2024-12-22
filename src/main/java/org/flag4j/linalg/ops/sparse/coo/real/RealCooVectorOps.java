@@ -43,7 +43,6 @@ public final class RealCooVectorOps {
 
     private RealCooVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -38,7 +38,6 @@ public final class DenseFieldTranspose {
 
     private DenseFieldTranspose() {
         // Hide default constructor for utility class.
-        
     }
 
 

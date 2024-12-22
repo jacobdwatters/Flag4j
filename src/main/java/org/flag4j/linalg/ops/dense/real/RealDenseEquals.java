@@ -37,7 +37,7 @@ import java.util.Arrays;
 public final class RealDenseEquals {
 
     private RealDenseEquals() {
-        // Hide constructor.
+        // Hide constructor for utility class..
         
     }
 

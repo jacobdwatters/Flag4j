@@ -39,7 +39,6 @@ public final class CooFieldNorms {
 
     private CooFieldNorms() {
         // Hide default constructor for utility class.
-        
     }
 
 

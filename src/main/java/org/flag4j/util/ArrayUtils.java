@@ -25,7 +25,9 @@
 package org.flag4j.util;
 
 import org.flag4j.algebraic_structures.*;
+import org.flag4j.arrays.Shape;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -39,8 +41,7 @@ public final class ArrayUtils {
     // TODO: Class needs to be cleaned up a bit (a lot).
 
     private ArrayUtils() {
-        // Hide Constructor
-        
+        // Hide constructor for utility class.
     }
 
 
@@ -907,6 +908,148 @@ public final class ArrayUtils {
 
 
     /**
+     * Infers the shape of a rectangular nD Java array.
+     *
+     * @param nDArray The nD Java array to infer the shape from.
+     * @return The shape of the nD array as a {@code Shape} object.
+     * @throws IllegalArgumentException If {@code nDArray} is not an array or has inconsistent (i.e. non-rectangular) dimensions.
+     */
+    public static Shape nDArrayShape(Object nDArray) {
+        if (nDArray.getClass().isArray()) {
+            throw new IllegalArgumentException("Object is not an array.");
+        }
+
+        List<Integer> dimensions = new ArrayList<>();
+        Object currentLevel = nDArray;
+
+        while (currentLevel != null && currentLevel.getClass().isArray()) {
+            dimensions.add(Array.getLength(currentLevel));
+            currentLevel = (Array.getLength(currentLevel) > 0) ? Array.get(currentLevel, 0) : null;
+        }
+
+        // Verify consistent dimensions.
+        validateConsistentDimensions(nDArray, dimensions, 0);
+
+        return new Shape(fromIntegerList(dimensions));
+    }
+
+
+    /**
+     * Validates that the nD array has consistent (i.e. rectangular) dimensions.
+     *
+     * @param array The nD array to validate.
+     * @param dimensions List of dimensions inferred so far.
+     * @param level Current recursion level (dimension index).
+     * @throws IllegalArgumentException If the dimensions are inconsistent.
+     */
+    private static void validateConsistentDimensions(Object array, List<Integer> dimensions, int level) {
+        if (array == null || !array.getClass().isArray()) {
+            return;
+        }
+
+        int expectedLength = dimensions.get(level);
+        int actualLength = Array.getLength(array);
+
+        if (actualLength != expectedLength) {
+            throw new IllegalArgumentException(
+                    String.format("Inconsistent nD array dimensions at level %d: expected %d, but got %d.", level, expectedLength,
+                            actualLength)
+            );
+        }
+
+        for (int i = 0; i < actualLength; i++) {
+            validateConsistentDimensions(Array.get(array, i), dimensions, level + 1);
+        }
+    }
+
+
+    /**
+     * Recursively validates the shape of the nD array and flattens it into the provided 1D array.
+     *
+     * @param nDArray The nD array to flatten.
+     * @param shape The expected shape of the nD array.
+     * @param flatArray The 1D array to populate with flattened data.
+     * @param offset The starting index for the current level of recursion.
+     * @return The next available index in the flatArray after processing the current nDArray.
+     * @throws IllegalArgumentException If the shape of the nD array is inconsistent with the inferred shape.
+     */
+    public static <T> int nDFlatten(Object nDArray, Shape shape, T[] flatArray, int offset) {
+        if (shape.getRank() == 0)
+            throw new IllegalArgumentException("Shape cannot have rank 0.");
+
+        if (shape.getRank() == 1) {
+            if (!nDArray.getClass().isArray())
+                throw new IllegalArgumentException("Expected a 1D array, but got a non-array object.");
+
+            int length = Array.getLength(nDArray);
+            if (length != shape.get(0))
+                throw new IllegalArgumentException("Shape mismatch: expected " + shape.get(0) + " elements, but got " + length);
+
+            for (int i = 0; i < length; i++)
+                flatArray[offset + i] = (T) Array.get(nDArray, i);
+
+            return offset + length;
+        } else {
+            if (!nDArray.getClass().isArray())
+                throw new IllegalArgumentException("Expected an array of arrays, but got a non-array object.");
+
+            int length = Array.getLength(nDArray);
+            if (length != shape.get(0))
+                throw new IllegalArgumentException("Shape mismatch: expected " + shape.get(0) + " arrays, but got " + length);
+
+            Shape subShape = shape.slice(1);
+            int currentOffset = offset;
+            for (int i = 0; i < length; i++)
+                currentOffset = nDFlatten(Array.get(nDArray, i), subShape, flatArray, currentOffset);
+
+            return currentOffset;
+        }
+    }
+
+
+    /**
+     * Recursively validates the shape of the nD array and flattens it into the provided 1D array.
+     *
+     * @param nDArray The nD array to flatten.
+     * @param shape The expected shape of the nD array.
+     * @param flatArray The 1D array to populate with flattened data.
+     * @param offset The starting index for the current level of recursion.
+     * @return The next available index in the flatArray after processing the current nDArray.
+     * @throws IllegalArgumentException If the shape of the nD array is inconsistent with the inferred shape.
+     */
+    public static int nDFlatten(Object nDArray, Shape shape, double[] flatArray, int offset) {
+        if (shape.getRank() == 0)
+            throw new IllegalArgumentException("Shape cannot have rank 0.");
+
+        if (shape.getRank() == 1) {
+            if (!nDArray.getClass().isArray() || nDArray.getClass().getComponentType() != double.class)
+                throw new IllegalArgumentException("Expected a 1D array of doubles, but got a different type.");
+
+            int length = Array.getLength(nDArray);
+            if (length != shape.get(0))
+                throw new IllegalArgumentException("Shape mismatch: expected " + shape.get(0) + " elements, but got " + length);
+
+            System.arraycopy(nDArray, 0, flatArray, offset, length);
+            return offset + length;
+        } else {
+            if (!nDArray.getClass().isArray())
+                throw new IllegalArgumentException("Expected an array of arrays, but got a non-array object.");
+
+            int length = Array.getLength(nDArray);
+            if (length != shape.get(0))
+                throw new IllegalArgumentException("Shape mismatch: expected " + shape.get(0) + " arrays, but got " + length);
+
+            Shape subShape = shape.slice(1);
+            int currentOffset = offset;
+            for (int i = 0; i < length; i++)
+                currentOffset = nDFlatten(Array.get(nDArray, i), subShape, flatArray, currentOffset);
+
+            return currentOffset;
+        }
+    }
+
+
+    /**
      * Flattens a two-dimensional array.
      *
      * @param src Array to flatten.
@@ -990,6 +1133,25 @@ public final class ArrayUtils {
      */
     public static <T extends Field<T>> T[] flatten(T[][] src) {
         T[] flat = (T[]) new Field[src.length * src[0].length];
+
+        // Copy 2D array to 1D array.
+        int flatIdx = 0;
+        for (T[] row : src)
+            for (T value : row)
+                flat[flatIdx++] = value;
+
+        return (T[]) flat;
+    }
+
+
+    /**
+     * Flattens a two-dimensional array.
+     *
+     * @param src Array to flatten.
+     * @return The flattened array.
+     */
+    public static <T extends Semiring<T>> T[] flatten(T[][] src) {
+        T[] flat = (T[]) new Semiring[src.length * src[0].length];
 
         // Copy 2D array to 1D array.
         int flatIdx = 0;

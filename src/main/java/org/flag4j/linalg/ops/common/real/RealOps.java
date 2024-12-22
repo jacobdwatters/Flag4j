@@ -37,7 +37,6 @@ public final class RealOps {
 
     private RealOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

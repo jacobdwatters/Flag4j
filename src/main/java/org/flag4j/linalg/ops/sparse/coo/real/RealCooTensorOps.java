@@ -41,7 +41,6 @@ public final class RealCooTensorOps {
 
     private RealCooTensorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -54,7 +54,6 @@ public final class Invert {
 
     private Invert() {
         // Hide default constructor for utility class.
-        
     }
 
 

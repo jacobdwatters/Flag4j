@@ -34,11 +34,11 @@
  * </ul>
  * and provides concrete implementations for various data types:
  * <ul>
- *   <li>{@link org.flag4j.algebraic_structures.Bool}</li>
+ *   <li>{@link org.flag4j.algebraic_structures.BoolSemiring}</li>
  *   <li>{@link org.flag4j.algebraic_structures.RealInt16}</li>
  *   <li>{@link org.flag4j.algebraic_structures.RealInt32}</li>
- *   <li>{@link org.flag4j.algebraic_structures.Real32}</li>
- *   <li>{@link org.flag4j.algebraic_structures.Real64}</li>
+ *   <li>{@link org.flag4j.algebraic_structures.RealFloat32}</li>
+ *   <li>{@link org.flag4j.algebraic_structures.RealFloat64}</li>
  *   <li>{@link org.flag4j.algebraic_structures.Complex64}</li>
  *   <li>{@link org.flag4j.algebraic_structures.Complex128}</li>
  * </ul>

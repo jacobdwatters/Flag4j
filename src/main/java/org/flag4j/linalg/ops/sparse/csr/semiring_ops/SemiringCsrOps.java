@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.sparse.csr.semiring_ops;
 
 import org.flag4j.algebraic_structures.Semiring;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * Utility class for computing ops on sparse CSR {@link Semiring} tensors.
@@ -34,7 +33,6 @@ public final class SemiringCsrOps {
 
     private SemiringCsrOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

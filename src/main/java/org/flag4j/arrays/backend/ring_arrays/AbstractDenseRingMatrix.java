@@ -289,6 +289,24 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
 
 
     /**
+     * Computes the matrix-vector multiplication of a vector with this matrix.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of multiplying this matrix with {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the size of
+     *                                {@code b}.
+     */
+    @Override
+    public U mult(U b) {
+        V[] dest = makeEmptyDataArray(numRows);
+        DenseSemiringMatMultDispatcher.dispatchVector(data, shape, b.data, b.shape, dest);
+        return makeLikeVector(new Shape(numRows), dest);
+    }
+
+
+    /**
      * Multiplies this matrix with the transpose of the {@code b} tensor as if by
      * {@code this.mult(b.T())}.
      * For large matrices, this method <i>may</i>, be noticeably faster than directly computing the transpose followed by the
@@ -931,7 +949,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
 
         V[] row = Arrays.copyOfRange(this.data, start, stop);
 
-        return makeLikeVector(shape, row);
+        return makeLikeVector(new Shape(colEnd-colStart), row);
     }
 
 
@@ -951,13 +969,13 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public U getCol(int colIdx, int rowStart, int rowEnd) {
         ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
-        ValidateParameters.ensureGreaterEq(rowEnd, rowStart);
+        ValidateParameters.ensureGreaterEq(rowStart, rowEnd);
         V[] col = makeEmptyDataArray(numRows);
 
         for(int i=rowStart; i<rowEnd; i++)
             col[i] = data[i*numCols + colIdx];
 
-        return makeLikeVector(shape, col);
+        return makeLikeVector(new Shape(rowEnd-rowStart), col);
     }
 
 
@@ -999,7 +1017,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public T H() {
-        return T(); // Conjugation is not defined on a general semiarrays. Fall back to standard transpose.
+        return T(); // Conjugation is not defined on a general semiring array. Fall back to standard transpose.
     }
 
 

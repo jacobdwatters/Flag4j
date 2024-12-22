@@ -40,6 +40,5 @@ public final class Flag4jConstants {
 
     private Flag4jConstants() {
         // Hide default constructor for utility class.
-        
     }
 }

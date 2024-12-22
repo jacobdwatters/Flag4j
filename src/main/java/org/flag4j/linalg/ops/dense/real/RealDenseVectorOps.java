@@ -42,7 +42,6 @@ public final class RealDenseVectorOps {
 
     private RealDenseVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

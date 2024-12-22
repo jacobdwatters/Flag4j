@@ -53,7 +53,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 import static org.flag4j.linalg.ops.sparse.SparseUtils.copyRanges;
 
@@ -70,7 +70,8 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.copyRanges;
  * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
  * matrix).
  *
- * <p>A sparse COO matrix is stored as:
+ * <h3>COO Representation:</h3>
+ * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
@@ -599,22 +600,24 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
         return makeLikeDenseTensor(new Shape(numRows, b.numCols), dest);
     }
 
+    // TODO: Add mult2Sparse methods for all COO matrices.
 
     /**
      * Multiplies this matrix with the transpose of the {@code b} tensor as if by
-     * {@code this.mult(b.T())}.
+     * {@code this.mult(b.H())}.
      * For large matrices, this method may
-     * be significantly faster than directly computing the transpose followed by the multiplication as
-     * {@code this.mult(b.T())}.
+     * be significantly faster than directly computing the Hermitian transpose followed by the multiplication as
+     * {@code this.mult(b.H())}.
      *
      * @param b The second matrix in the multiplication and the matrix to transpose.
      *
-     * @return The result of multiplying this matrix with the transpose of {@code b}.
+     * @return The result of multiplying this matrix with the Hermitian transpose of {@code b}.
      */
     @Override
     public U multTranspose(T b) {
+        // TODO: MAke sure all complex and field matrices use the hermitian transpose for this method.
         ValidateParameters.ensureEquals(numCols, b.numCols);
-        return mult(b.T());
+        return mult(b.H());
     }
 
 
@@ -863,6 +866,7 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
         SparseMatrixData<W> data = CooGetSet.setCol(
                 shape, this.data, rowIndices, colIndices,
                 colIndex, col.size, col.data, col.indices);
+        CooDataSorter sorter = new CooDataSorter(data.data(), data.rowData(), data.colData()).sparseSort();
         return makeLikeTensor(data.shape(), data.data(), data.rowData(), data.colData());
     }
 
@@ -1276,14 +1280,13 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
     public T tensorTr(int axis1, int axis2) {
         ValidateParameters.ensureNotEquals(axis1, axis2);
         ValidateParameters.ensureValidAxes(shape, axis1, axis2);
-
         // TODO: Investigate if this cast (W[]) is safe for example for Complex128[].
         return makeLikeTensor(new Shape(1, 1), (W[]) new Field[]{tr()}, new int[]{0}, new int[]{0});
     }
@@ -1429,9 +1432,9 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
     /**
      * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
-     * @see #coalesce(BiFunction)
+     * @see #coalesce(BinaryOperator)
      */
     public T coalesce() {
         SparseMatrixData<W> mat = SparseUtils.coalesce(Semiring::add, shape, data, rowIndices, colIndices);
@@ -1446,7 +1449,7 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
      * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
      * @see #coalesce()
      */
-    public T coalesce(BiFunction<W, W, W> aggregator) {
+    public T coalesce(BinaryOperator<W> aggregator) {
         SparseMatrixData<W> mat = SparseUtils.coalesce(aggregator, shape, data, rowIndices, colIndices);
         return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
     }

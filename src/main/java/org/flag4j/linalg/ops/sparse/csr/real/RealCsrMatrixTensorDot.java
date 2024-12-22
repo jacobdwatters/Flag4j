@@ -28,7 +28,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -38,7 +37,6 @@ public final class RealCsrMatrixTensorDot {
 
     private RealCsrMatrixTensorDot() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -40,7 +40,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 /**
  * <p>Base class for all sparse tensors stored in coordinate list (COO) format. The data of this COO tensor are elements of a
@@ -116,7 +116,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
         sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries())).doubleValue();
 
         // Attempt to set the zero element for the semiring.
-        this.zeroElement = (data.length > 0) ? data[0].getZero() : null;
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
     }
 
 
@@ -270,7 +270,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -466,7 +466,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
     @Override
     public T flatten() {
         return makeLikeTensor(
-                new Shape(shape.totalEntriesIntValueExact()),
+                shape.flatten(),
                 data.clone(),
                 SparseUtils.cooFlattenIndices(shape, indices));
     }
@@ -531,9 +531,9 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
     /**
      * Coalesces this sparse COO tensor. An uncoalesced tensor is a sparse tensor with multiple data for a single index. This
      * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BiFunction)}.
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
-     * @see #coalesce(BiFunction)
+     * @see #coalesce(BinaryOperator)
      */
     public T coalesce() {
         SparseTensorData<V> tensor = SparseUtils.coalesce(Semiring::add, shape, data, indices);
@@ -548,7 +548,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      * @return A new coalesced sparse COO tensor which is equivalent to this COO tensor.
      * @see #coalesce()
      */
-    public T coalesce(BiFunction<V, V, V> aggregator) {
+    public T coalesce(BinaryOperator<V> aggregator) {
         SparseTensorData<V> tensor = SparseUtils.coalesce(aggregator, shape, data, indices);
         return makeLikeTensor(tensor.shape(), tensor.data(), tensor.indices());
     }

@@ -25,6 +25,7 @@
 package org.flag4j.arrays.backend;
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
@@ -43,7 +44,8 @@ import org.flag4j.util.ValidateParameters;
  * @param <W> The type of an individual matrix element, which may be a primitive type, wrapper class, or a custom object.
  */
 public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
-        U extends MatrixMixin<U, U, ?, W>, V extends VectorMixin<V, ?, U, W>, W> {
+        U extends MatrixMixin<U, U, ?, W>,
+        V extends VectorMixin<V, ?, U, W>, W> {
 
     /**
      * Gets the number of rows in this matrix.
@@ -594,4 +596,49 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
      * @return A vector which
      */
     V toVector();
+
+
+    /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param <R> The return type of the visitor's operation.
+     * @param visitor The visitor implementing the operation to be performed.
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    <R> R accept(MatrixVisitor<R> visitor);
+
+
+    /**
+     * Computes the element-wise sum of two matrices.
+     * @param b Second matrix in the element-wise sum.
+     * @return The element-wise sum of this matrix and {@code b}.
+     */
+    T add(T b);
+
+
+    /**
+     * Computes the element-wise difference of two matrices.
+     * @param b Second matrix in the element-wise difference.
+     * @return The element-wise difference of this matrix and {@code b}.
+     */
+    T sub(T b);
+
+
+    /**
+     * Computes the element-wise product of two matrices.
+     * @param b Second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    T elemMult(T b);
+
+
+    /**
+     * Computes the element-wise quotient of two matrices.
+     * @param b Second matrix in the element-wise quotient.
+     * @return The element-wise quotient of this matrix and {@code b}.
+     */
+    T div(T b);
 }

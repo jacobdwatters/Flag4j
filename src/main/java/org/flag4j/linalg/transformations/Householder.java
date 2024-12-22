@@ -42,7 +42,6 @@ public final class Householder {
 
     private Householder() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -38,7 +38,6 @@ public final class RowEchelon {
 
     private RowEchelon() {
         // Hide default constructor for utility class.
-        
     }
 
 

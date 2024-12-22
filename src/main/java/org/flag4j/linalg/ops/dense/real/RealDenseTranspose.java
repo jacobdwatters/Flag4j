@@ -37,7 +37,7 @@ import org.flag4j.util.ValidateParameters;
 public final class RealDenseTranspose {
 
     private RealDenseTranspose() {
-        // Hide constructor
+        // Hide constructor for utility class.
         
     }
 

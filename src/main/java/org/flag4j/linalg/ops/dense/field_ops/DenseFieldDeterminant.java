@@ -42,7 +42,6 @@ public final class DenseFieldDeterminant {
 
     private DenseFieldDeterminant() {
         // Hide default constructor for utility class.
-        
     }
 
 

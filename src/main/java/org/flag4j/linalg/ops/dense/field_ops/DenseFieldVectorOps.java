@@ -38,7 +38,6 @@ public final class DenseFieldVectorOps {
 
     private DenseFieldVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -38,7 +38,6 @@ public final class DenseTranspose {
 
     private DenseTranspose() {
         // Hide default constructor for utility class.
-        
     }
 
 

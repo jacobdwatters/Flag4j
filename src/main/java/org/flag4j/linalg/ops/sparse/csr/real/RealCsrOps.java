@@ -49,7 +49,6 @@ public final class RealCsrOps {
 
     private RealCsrOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -40,7 +40,6 @@ public class RealCsrDenseOps {
 
     private RealCsrDenseOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

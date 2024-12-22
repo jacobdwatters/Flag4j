@@ -42,7 +42,6 @@ public final class DenseCsrFieldOps {
 
     private DenseCsrFieldOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

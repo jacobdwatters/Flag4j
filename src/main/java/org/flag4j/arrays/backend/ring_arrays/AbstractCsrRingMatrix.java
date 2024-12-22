@@ -49,7 +49,7 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**
- * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
+ * <p>A sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
  * elements of a {@link Ring}.
  *
  * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
@@ -293,6 +293,36 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
     public T set(W value, int... indices) {
         ValidateParameters.validateTensorIndex(shape, indices);
         return set(value, indices[0], indices[1]);
+    }
+
+
+    /**
+     * Sets a specified row of this matrix to a vector.
+     *
+     * @param row Vector to replace specified row in this matrix.
+     * @param rowIdx Index of the row to set.
+     *
+     * @return If this matrix is dense, the row set operation is done in place and a reference to this matrix is returned.
+     * If this matrix is sparse a copy will be created with the new row and returned.
+     */
+    @Override
+    public T setRow(V row, int rowIdx) {
+        return (T) toCoo().setRow(row, rowIdx).toCsr();
+    }
+
+
+    /**
+     * Sets a specified column of this matrix to a vector.
+     *
+     * @param col Vector to replace specified column in this matrix.
+     * @param colIdx Index of the column to set.
+     *
+     * @return If this matrix is dense, the column set operation is done in place and a reference to this matrix is returned.
+     * If this matrix is sparse a copy will be created with the new column and returned.
+     */
+    @Override
+    public T setCol(V col, int colIdx) {
+        return (T) toCoo().setCol(col, colIdx).toCsr();
     }
 
 
@@ -1004,6 +1034,17 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
                 Ring::add, Ring::addInv);
 
         return makeLikeTensor(shape, destData.data(), destData.rowData(), destData.colData());
+    }
+
+
+    /**
+     * <p>Warning: throws {@link UnsupportedOperationException} as division is not defined for general ring matrices.
+     *
+     * <p>{@inheritDoc}
+     */
+    @Override
+    public T div(T b) {
+        throw new UnsupportedOperationException("Division not supported for matrix type: " + getClass().getName());
     }
 
 

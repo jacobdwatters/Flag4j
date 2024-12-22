@@ -41,7 +41,7 @@ import org.flag4j.util.ValidateParameters;
 public final class MatrixMultiplyDispatcher {
 
     private MatrixMultiplyDispatcher() {
-        // Hide constructor of utility class
+        // Hide constructor for utility class. of utility class
         
     }
 

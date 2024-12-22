@@ -41,7 +41,6 @@ public final class RealDenseElemDiv {
 
     private RealDenseElemDiv() {
         // Hide default constructor for utility class.
-        
     }
 
 

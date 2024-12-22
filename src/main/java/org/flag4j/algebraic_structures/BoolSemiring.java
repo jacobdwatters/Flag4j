@@ -39,16 +39,16 @@ package org.flag4j.algebraic_structures;
  * </ul>
  *
  * <p>The class implements the {@link Semiring} interface and adheres to its contract.
- * Instances of {@code Bool} are immutable and thread-safe.
+ * Instances of {@code BoolSemiring} are immutable and thread-safe.
  *
  * <h2>Usage Example:</h2>
  * <pre>{@code
- * Bool a = Bool.TRUE;  // Equivalent to new Bool(true)
- * Bool b = Bool.FALSE; // Equivalent to new Bool(false)
+ * BoolSemiring a = BoolSemiring.TRUE;  // Equivalent to new BoolSemiring(true)
+ * BoolSemiring b = BoolSemiring.FALSE; // Equivalent to new BoolSemiring(false)
  *
- * Bool sum = a.add(b);       // Logical OR: true || false => true
- * Bool product = a.mult(b);  // Logical AND: true && false => false
- * Bool notA = a.not();       // Logical NOT: !true => false
+ * BoolSemiring sum = a.add(b);       // Logical OR: true || false => true
+ * BoolSemiring product = a.mult(b);  // Logical AND: true && false => false
+ * BoolSemiring notA = a.not();       // Logical NOT: !true => false
  * }</pre>
  *
  * <h2>Constants:</h2>
@@ -60,27 +60,26 @@ package org.flag4j.algebraic_structures;
  *
  * @see Semiring
  */
-public class Bool implements Semiring<Bool> {
+public class BoolSemiring implements Semiring<BoolSemiring> {
     private static final long serialVersionUID = 1L;
-
 
     // Constants provided for convenience.
     /**
      * The boolean value true.
      */
-    final public static Bool ONE = new Bool(true);
+    final public static BoolSemiring ONE = new BoolSemiring(true);
     /**
      * The boolean value true.
      */
-    final public static Bool TRUE = ONE;
+    final public static BoolSemiring TRUE = ONE;
     /**
      * The boolean value false.
      */
-    final public static Bool ZERO = new Bool(false);
+    final public static BoolSemiring ZERO = new BoolSemiring(false);
     /**
      * The boolean value false.
      */
-    final public static Bool FALSE = ZERO;
+    final public static BoolSemiring FALSE = ZERO;
 
 
     /**
@@ -90,22 +89,22 @@ public class Bool implements Semiring<Bool> {
 
 
     /**
-     * Constructs a {@code Bool} semiring element with the specified boolean value.
+     * Constructs a {@code BoolSemiring} semiring element with the specified boolean value.
      *
      * @param value the boolean value to wrap.
      */
-    public Bool(boolean value) {
+    public BoolSemiring(boolean value) {
         this.value = value;
     }
 
 
     /**
-     * Constructs a {@code Bool} semiring element from an integer.
+     * Constructs a {@code BoolSemiring} semiring element from an integer.
      *
      * @param value the integer value (must be 0 or 1).
      * @throws IllegalArgumentException if the value is not 0 or 1.
      */
-    public Bool(int value) {
+    public BoolSemiring(int value) {
         if(value == 0) this.value = false;
         else if(value == 1) this.value = true;
         else throw new IllegalArgumentException("Cannot convert int value " + value + " to boolean. Must be 1 or 0.");
@@ -118,35 +117,35 @@ public class Bool implements Semiring<Bool> {
      * <p>This operation is associative and commutative.
      *
      * @param b the second semiring element to add.
-     * @return A new {@code Bool} representing the logical OR of this value and {@code b}.
+     * @return A new {@code BoolSemiring} representing the logical OR of this value and {@code b}.
      */
     @Override
-    public Bool add(Bool b) {
-        return new Bool(value || b.value);
+    public BoolSemiring add(BoolSemiring b) {
+        return new BoolSemiring(value || b.value);
     }
 
 
     /**
-     * <p>Computes the logical OR of this {@code Bool} with another.
+     * <p>Computes the logical OR of this {@code BoolSemiring} with another.
      *
-     * <p>This method is equivalent to {@link #add(Bool)}.
+     * <p>This method is equivalent to {@link #add(BoolSemiring)}.
      *
-     * @param b the {@code Bool} to perform the logical OR with.
-     * @return A new {@code Bool} representing the logical OR of this value and {@code b}.
+     * @param b the {@code BoolSemiring} to perform the logical OR with.
+     * @return A new {@code BoolSemiring} representing the logical OR of this value and {@code b}.
      */
-    public Bool or(Bool b) {
+    public BoolSemiring or(BoolSemiring b) {
         return add(b);
     }
 
 
     /**
-     * Computes the exclusive OR (XOR) of this {@code Bool} with another.
+     * Computes the exclusive OR (XOR) of this {@code BoolSemiring} with another.
      *
-     * @param b the {@code Bool} to perform the XOR with.
-     * @return A new {@code Bool} representing the XOR of this value and {@code b}.
+     * @param b the {@code BoolSemiring} to perform the XOR with.
+     * @return A new {@code BoolSemiring} representing the XOR of this value and {@code b}.
      */
-    public Bool xor(Bool b) {
-        return new Bool(value ^ b.value);
+    public BoolSemiring xor(BoolSemiring b) {
+        return new BoolSemiring(value ^ b.value);
     }
 
 
@@ -156,34 +155,34 @@ public class Bool implements Semiring<Bool> {
      * <p>This operation is associative.
      *
      * @param b the second semiring element to multiply.
-     * @return A new {@code Bool} representing the logical AND of this value and {@code b}.
+     * @return A new {@code BoolSemiring} representing the logical AND of this value and {@code b}.
      */
     @Override
-    public Bool mult(Bool b) {
-        return new Bool(value && b.value);
+    public BoolSemiring mult(BoolSemiring b) {
+        return new BoolSemiring(value && b.value);
     }
 
 
     /**
-     * <p>Computes the logical AND of this {@code Bool} with another.
+     * <p>Computes the logical AND of this {@code BoolSemiring} with another.
      *
-     * <p>This method is equivalent to {@link #mult(Bool)}.
+     * <p>This method is equivalent to {@link #mult(BoolSemiring)}.
      *
-     * @param b the {@code Bool} to perform the logical AND with.
-     * @return A new {@code Bool} representing the logical AND of this value and {@code b}.
+     * @param b the {@code BoolSemiring} to perform the logical AND with.
+     * @return A new {@code BoolSemiring} representing the logical AND of this value and {@code b}.
      */
-    public Bool and(Bool b) {
+    public BoolSemiring and(BoolSemiring b) {
         return mult(b);
     }
 
 
     /**
-     * Computes the logical NOT (negation) of this {@code Bool}.
+     * Computes the logical NOT (negation) of this {@code BoolSemiring}.
      *
-     * @return a new {@code Bool} representing the logical NOT of this value.
+     * @return a new {@code BoolSemiring} representing the logical NOT of this value.
      */
-    public Bool not() {
-        return new Bool(!value);
+    public BoolSemiring not() {
+        return new BoolSemiring(!value);
     }
 
 
@@ -214,6 +213,15 @@ public class Bool implements Semiring<Bool> {
 
 
     /**
+     * Gets the value of this semiring element.
+     * @return The value of this semiring element.
+     */
+    public boolean getValue() {
+        return value;
+    }
+
+
+    /**
      * <p>Gets the additive identity for this semiring.
      *
      * <p>An element 0 is an additive identity if a + 0 = a for any a in the semiring.
@@ -221,7 +229,7 @@ public class Bool implements Semiring<Bool> {
      * @return The additive identity for this semiring.
      */
     @Override
-    public Bool getZero() {
+    public BoolSemiring getZero() {
         return ZERO;
     }
 
@@ -234,7 +242,7 @@ public class Bool implements Semiring<Bool> {
      * @return The multiplicative identity for this semiring.
      */
     @Override
-    public Bool getOne() {
+    public BoolSemiring getOne() {
         return ONE;
     }
 
@@ -255,7 +263,7 @@ public class Bool implements Semiring<Bool> {
      * </ul>
      */
     @Override
-    public int compareTo(Bool b) {
+    public int compareTo(BoolSemiring b) {
         return Boolean.compare(value, b.value);
     }
 
@@ -274,7 +282,7 @@ public class Bool implements Semiring<Bool> {
     /**
      * Checks if an object is equal to this semiring element.
      * @param b Object to compare to this semiring element.
-     * @return True if the objects are the same or are both {@link Bool}'s and have equal values.
+     * @return True if the objects are the same or are both {@link BoolSemiring}'s and have equal values.
      */
     @Override
     public boolean equals(Object b) {
@@ -283,7 +291,7 @@ public class Bool implements Semiring<Bool> {
         if(b == null) return false;
         if(b.getClass() != this.getClass()) return false;
 
-        return this.value == ((Bool) b).value;
+        return this.value == ((BoolSemiring) b).value;
     }
 
 

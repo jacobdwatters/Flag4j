@@ -36,7 +36,6 @@ public final class CsrProperties {
 
     private CsrProperties() {
         // Hide default constructor for utility class.
-        
     }
 
 

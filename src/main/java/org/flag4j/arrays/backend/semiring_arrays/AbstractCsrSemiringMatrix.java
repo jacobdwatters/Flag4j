@@ -48,7 +48,7 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
 
 
 /**
- * <p>A real sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
+ * <p>A sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
  * elements of a {@link Semiring}.
  *
  * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
@@ -699,6 +699,36 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
 
 
     /**
+     * Sets a specified row of this matrix to a vector.
+     *
+     * @param row Vector to replace specified row in this matrix.
+     * @param rowIdx Index of the row to set.
+     *
+     * @return If this matrix is dense, the row set operation is done in place and a reference to this matrix is returned.
+     * If this matrix is sparse a copy will be created with the new row and returned.
+     */
+    @Override
+    public T setRow(V row, int rowIdx) {
+        return (T) toCoo().setRow(row, rowIdx).toCsr();
+    }
+
+
+    /**
+     * Sets a specified column of this matrix to a vector.
+     *
+     * @param col Vector to replace specified column in this matrix.
+     * @param colIdx Index of the column to set.
+     *
+     * @return If this matrix is dense, the column set operation is done in place and a reference to this matrix is returned.
+     * If this matrix is sparse a copy will be created with the new column and returned.
+     */
+    @Override
+    public T setCol(V col, int colIdx) {
+        return (T) toCoo().setCol(col, colIdx).toCsr();
+    }
+
+
+    /**
      * Swaps specified rows in the matrix. This is done in place.
      *
      * @param rowIndex1 Index of the first row to swap.
@@ -1004,22 +1034,14 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      * Converts this sparse CSR matrix to an equivalent sparse COO matrix.
      * @return A sparse COO matrix equivalent to this sparse CSR matrix.
      */
-    public AbstractCooSemiringMatrix toCoo() {
-        W[] cooEntries = (W[]) new Semiring[nnz];
-        int[] cooRowIndices = new int[nnz];
-        int[] cooColIndices = new int[nnz];
-        CsrConversions.toCoo(shape, data, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
-        return makeLikeCooMatrix(shape, cooEntries, cooRowIndices, cooColIndices);
-    }
+    public abstract AbstractCooSemiringMatrix toCoo();
 
 
     /**
      * Converts this CSR matrix to an equivalent sparse COO tensor.
      * @return An sparse COO tensor equivalent to this CSR matrix.
      */
-    public AbstractCooSemiringTensor<?, ?, W> toTensor() {
-        return toCoo().toTensor();
-    }
+    public abstract AbstractCooSemiringTensor<?, ?, W> toTensor();
 
 
     /**
@@ -1039,5 +1061,27 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     public V toVector() {
         return (V) toCoo().toVector();
+    }
+
+
+    /**
+     * <p>Warning: throws {@link UnsupportedOperationException} as subtraction is not defined for general semiring matrices.
+     *
+     * <p>{@inheritDoc}
+     */
+    @Override
+    public T sub(T b) {
+        throw new UnsupportedOperationException("Subtraction not supported for matrix type: " + getClass().getName());
+    }
+
+
+    /**
+     * <p>Warning: throws {@link UnsupportedOperationException} as division is not defined for general semiring matrices.
+     *
+     * <p>{@inheritDoc}
+     */
+    @Override
+    public T div(T b) {
+        throw new UnsupportedOperationException("Division not supported for matrix type: " + getClass().getName());
     }
 }

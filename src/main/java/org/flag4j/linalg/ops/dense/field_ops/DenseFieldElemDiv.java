@@ -36,7 +36,7 @@ import org.flag4j.util.ValidateParameters;
  */
 public final class DenseFieldElemDiv {
     // TODO: The CONCURRENT_THRESHOLD should be configurable. This should serve as a default value and an overloaded method should
-    //  be provided for specifying the threshold so that different MMField implementations can specify their own value.
+    //  be provided for specifying the threshold so that different Field implementations can specify their own value.
 
     /**
      * Minimum number of data in each tensor to apply concurrent algorithm.
@@ -46,7 +46,6 @@ public final class DenseFieldElemDiv {
 
     private DenseFieldElemDiv() {
         // Hide default constructor for utility class.
-        
     }
 
 

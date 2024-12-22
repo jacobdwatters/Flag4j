@@ -44,7 +44,6 @@ public final class RealComplexSparseVectorOps {
 
     private RealComplexSparseVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

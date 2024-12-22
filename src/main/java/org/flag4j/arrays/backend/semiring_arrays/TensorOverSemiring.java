@@ -241,7 +241,7 @@ public interface TensorOverSemiring<T extends TensorOverSemiring<T, U, V, W>,
      *
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      * (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     TensorOverSemiring<?, ?, ?, W> tensorTr(int axis1, int axis2);

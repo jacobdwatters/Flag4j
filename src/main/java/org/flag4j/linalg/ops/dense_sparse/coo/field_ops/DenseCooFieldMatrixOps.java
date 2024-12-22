@@ -41,7 +41,6 @@ public final class DenseCooFieldMatrixOps {
 
     private DenseCooFieldMatrixOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -38,7 +38,6 @@ public final class DenseConcat {
 
     private DenseConcat() {
         // Hide default constructor for utility class.
-        
     }
 
 

@@ -58,10 +58,10 @@ class CVectorNormTests {
     }
 
 
-//    @Test
-//    void infNormTestCase() {
-//        // ------------------ Sub-case 1 ------------------
-//        expNorm = 6126.347172780367;
-//        assertEquals(expNorm, VectorNorms.infNorm(a));
-//    }
+    @Test
+    void infNormTestCase() {
+        // ------------------ Sub-case 1 ------------------
+        expNorm = 6126.347172780367;
+        assertEquals(expNorm, VectorNorms.infNorm(a));
+    }
 }

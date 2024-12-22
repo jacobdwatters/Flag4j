@@ -42,7 +42,6 @@ public final class CsrFieldEquals {
 
     private CsrFieldEquals() {
         // Hide default constructor for utility class.
-        
     }
 
 

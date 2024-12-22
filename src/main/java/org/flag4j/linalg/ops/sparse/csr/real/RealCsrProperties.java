@@ -33,7 +33,6 @@ public final class RealCsrProperties {
 
     private RealCsrProperties() {
         // Hide default constructor for utility class.
-        
     }
 
 

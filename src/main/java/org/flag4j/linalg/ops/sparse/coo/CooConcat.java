@@ -38,7 +38,6 @@ public final class CooConcat {
 
     private CooConcat() {
         // Hide default constructor for utility class.
-        
     }
 
 

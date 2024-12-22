@@ -171,55 +171,55 @@ public final class VectorNorms {
     }
 
 
-//    /**
-//     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
-//     * @param src The vector to compute the norm of.
-//     * @return The infinity norm of the source vector.
-//     */
-//    public static double infNorm(CooVector src) {
-//        return src.maxAbs();
-//    }
+    /**
+     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(CooVector src) {
+        return src.maxAbs();
+    }
 
 
-//    /**
-//     * Computes the infinity norm of a vector. That is, the largest absolute value.
-//     * @param src The vector to compute the norm of.
-//     * @return The infinity norm of the source vector.
-//     */
-//    public static double infNorm(CooCVector src) {
-//        return src.maxAbs();
-//    }
-//
-//
-//    /**
-//     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
-//     * @param src The vector to compute the norm of.
-//     * @return The infinity norm of the source vector.
-//     */
-//    public static double infNorm(Vector src) {
-//        return src.maxAbs();
-//    }
-//
-//
-//    /**
-//     * Computes the infinity norm of a vector. That is, the largest absolute value.
-//     * @param src The vector to compute the norm of.
-//     * @return The infinity norm of the source vector.
-//     */
-//    @Deprecated
-//    public static double infNorm(CVector src) {
-//        return src.maxAbs();
-//    }
-//
-//
-//    /**
-//     * Computes the infinity norm of a vector. That is, the largest absolute value.
-//     * @param src The vector to compute the norm of.
-//     * @return The infinity norm of the source vector.
-//     */
-//    public static double infNorm(FieldVector src) {
-//        return src.maxAbs();
-//    }
+    /**
+     * Computes the infinity norm of a vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(CooCVector src) {
+        return src.maxAbs();
+    }
+
+
+    /**
+     * Computes the infinity norm of a tensor, matrix, or vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(Vector src) {
+        return src.maxAbs();
+    }
+
+
+    /**
+     * Computes the infinity norm of a vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    @Deprecated
+    public static double infNorm(CVector src) {
+        return src.maxAbs();
+    }
+
+
+    /**
+     * Computes the infinity norm of a vector. That is, the largest absolute value.
+     * @param src The vector to compute the norm of.
+     * @return The infinity norm of the source vector.
+     */
+    public static double infNorm(FieldVector src) {
+        return src.maxAbs();
+    }
 
 
     // ---------------------------------------------- Low-level Implementations ----------------------------------------------

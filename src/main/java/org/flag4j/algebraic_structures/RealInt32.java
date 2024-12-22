@@ -186,9 +186,9 @@ public class RealInt32 implements Ring<RealInt32> {
     /**
      * <p>Computes the additive inverse for an element of this field.
      *
-     * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity..
+     * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity.
      *
-     * @return The additive inverse for this field element.
+     * @return The additive inverse for this ring element.
      */
     @Override
     public RealInt32 addInv() {
@@ -197,9 +197,9 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * Computes the magnitude of this field element.
+     * Computes the magnitude of this ring element.
      *
-     * @return The magnitude of this field element.
+     * @return The magnitude of this ring element.
      */
     @Override
     public double mag() {
@@ -208,7 +208,7 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * Evaluates the signum or sign function on a field element.
+     * Evaluates the signum or sign function on a ring element.
      *
      * @param a Value to evaluate signum function on.
      * @return The output of the signum function evaluated on {@code a}.
@@ -220,17 +220,17 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * Compares this element of the ordered field with {@code b}.
+     * Compares this element of the ordered ring with {@code b}.
      *
-     * @param b Second element of the ordered field.
+     * @param b Second element of the ordered ring.
      *
      * @return An int value:
      * <ul>
-     *     <li>0 if this field element is equal to {@code b}.</li>
-     *     <li>< 0 if this field element is less than {@code b}.</li>
-     *     <li>> 0 if this field element is greater than {@code b}.</li>
-     *     Hence, this method returns zero if and only if the two field elements are equal, a negative value if and only the field
-     *     element it was called on is less than {@code b} and positive if and only if the field element it was called on is greater
+     *     <li>0 if this ring element is equal to {@code b}.</li>
+     *     <li>< 0 if this ring element is less than {@code b}.</li>
+     *     <li>> 0 if this ring element is greater than {@code b}.</li>
+     *     Hence, this method returns zero if and only if the two ring elements are equal, a negative value if and only the ring
+     *     element it was called on is less than {@code b} and positive if and only if the ring element it was called on is greater
      *     than {@code b}.
      * </ul>
      */
@@ -252,42 +252,8 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * Computes the product of all data of specified array.
-     * @param values Values to compute product of.
-     * @return The product of all values in {@code values}.
-     */
-    public static RealInt32 prod(RealInt32... values) {
-        if(values == null || values.length == 0)
-            throw new IllegalArgumentException("Values cannot be null or empty");
-
-        int prod = values[0].value;
-        for(int i = 1, length=values.length; i < length; i++)
-            prod *= values[i].value;
-
-        return new RealInt32(prod);
-    }
-
-
-    /**
-     * Computes the sum of all data of specified array.
-     * @param values Values to compute product of.
-     * @return The sum of all values in {@code values}.
-     */
-    public static RealInt32 sum(RealInt32... values) {
-        if(values == null || values.length == 0)
-            throw new IllegalArgumentException("Values cannot be null or empty");
-
-        int sum = values[0].value;
-        for(int i = 1, length=values.length; i < length; i++)
-            sum += values[i].value;
-
-        return new RealInt32(sum);
-    }
-
-
-    /**
-     * Checks if an object is equal to this MMField element.
-     * @param b Object to compare to this MMField element.
+     * Checks if an object is equal to this ring element.
+     * @param b Object to compare to this ring element.
      * @return True if the objects are the same or are both {@link RealInt32}'s and have equal values.
      */
     @Override
@@ -308,8 +274,8 @@ public class RealInt32 implements Ring<RealInt32> {
 
 
     /**
-     * Converts this field element to a string representation.
-     * @return A string representation of this field element.
+     * Converts this ring element to a string representation.
+     * @return A string representation of this ring element.
      */
     public String toString() {
         return String.valueOf(this.value);

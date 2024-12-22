@@ -44,7 +44,6 @@ public final class CooFieldMatrixOps {
 
     private CooFieldMatrixOps() {
         // Hide default constructor for utility class.
-        
     }
 
     /**

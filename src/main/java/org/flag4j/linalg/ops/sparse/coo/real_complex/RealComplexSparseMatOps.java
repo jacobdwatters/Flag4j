@@ -44,7 +44,6 @@ public final class RealComplexSparseMatOps {
 
     private RealComplexSparseMatOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

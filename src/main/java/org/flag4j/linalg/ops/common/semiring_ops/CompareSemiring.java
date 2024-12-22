@@ -34,7 +34,7 @@ import org.flag4j.util.ErrorMessages;
 public final class CompareSemiring {
 
     private CompareSemiring() {
-        // Hide constructor for utility class.
+        // Hide constructor for utility class. for utility class.
         throw new IllegalAccessError(ErrorMessages.getUtilityClassErrMsg());
     }
 

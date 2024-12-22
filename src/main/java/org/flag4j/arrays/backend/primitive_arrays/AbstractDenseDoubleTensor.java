@@ -255,7 +255,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     @Override
@@ -300,6 +300,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argminAbs() {
+        if(data.length == 0) return new int[]{};
         return shape.getNdIndices(RealProperties.argminAbs(data));
     }
 
@@ -312,6 +313,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argmaxAbs() {
+        if(data.length == 0) return new int[]{};
         return shape.getNdIndices(RealProperties.argmaxAbs(data));
     }
 
@@ -324,6 +326,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argmin() {
+        if(data.length == 0) return new int[]{};
         return shape.getNdIndices(RealProperties.argmin(data));
     }
 
@@ -336,6 +339,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public int[] argmax() {
+        if(data.length == 0) return new int[]{};
         return shape.getNdIndices(RealProperties.argmax(data));
     }
 
