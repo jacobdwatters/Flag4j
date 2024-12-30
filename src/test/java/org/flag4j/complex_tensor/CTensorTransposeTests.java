@@ -96,7 +96,7 @@ class CTensorTransposeTests {
 
         // -------------------- Sub-case 7 --------------------
         aAxes = new int[]{0, 1, 3, 2, 4};
-        assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
+        assertThrows(LinearAlgebraException.class, ()->A.T(aAxes));
 
         // -------------------- Sub-case 8 --------------------
         assertThrows(LinearAlgebraException.class, ()->A.T(-1, 0));

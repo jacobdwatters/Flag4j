@@ -30,6 +30,7 @@ import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingVector;
 import org.flag4j.arrays.sparse.CooRingVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 
 import java.util.Arrays;
 
@@ -103,7 +104,7 @@ public class RingVector<T extends Ring<T>> extends AbstractDenseRingVector<RingV
      * @param entries Entries of the dense vector to construct.
      */
     @Override
-    protected RingVector<T> makeLikeTensor(T[] entries) {
+    public RingVector<T> makeLikeTensor(T[] entries) {
         return new RingVector<>(entries);
     }
 
@@ -151,6 +152,19 @@ public class RingVector<T extends Ring<T>> extends AbstractDenseRingVector<RingV
     @Override
     protected CooRingVector<T> makeLikeCooTensor(Shape shape, T[] data, int[][] indices) {
         return new CooRingVector<>(shape, data, indices[0]);
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public Vector abs() {
+        double[] dest = new double[data.length];
+        RingOps.abs(data, dest);
+        return new Vector(shape, dest);
     }
 
 

@@ -47,6 +47,7 @@ public class CooCMatrixMultTransposeTests {
         };
 
         exp = new CMatrix(expEntries);
+
         assertEquals(exp, a.multTranspose(b));
 
         // ---------------------  Sub-case 2 ---------------------

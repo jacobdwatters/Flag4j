@@ -111,13 +111,13 @@ class CMatrixReshapeTests {
         assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
-        expShape = new Shape(1, entries.length);
+        expShape = new Shape(entries.length, 1);
         B = A.flatten(1);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.data, B.data);
 
         // --------------- Sub-case 2 ---------------
-        expShape = new Shape(entries.length, 1);
+        expShape = new Shape(1, entries.length);
         B = A.flatten(0);
         assertEquals(expShape, B.shape);
         assertArrayEquals(A.data, B.data);

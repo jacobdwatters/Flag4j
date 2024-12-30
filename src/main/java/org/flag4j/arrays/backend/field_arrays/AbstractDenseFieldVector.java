@@ -27,12 +27,14 @@ package org.flag4j.arrays.backend.field_arrays;
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.VectorNorms;
+import org.flag4j.linalg.ops.common.field_ops.FieldOps;
+import org.flag4j.linalg.ops.common.field_ops.FieldProperties;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
-import org.flag4j.linalg.ops.dense.DenseConcat;
+import org.flag4j.linalg.ops.dense.field_ops.DenseFieldElemDiv;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
-import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringVectorOps;
 import org.flag4j.util.ValidateParameters;
 
 
@@ -49,13 +51,8 @@ import org.flag4j.util.ValidateParameters;
  */
 public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVector<T, U, V>,
         U extends AbstractDenseFieldMatrix<U, T, V>, V extends Field<V>>
-        extends AbstractDenseFieldTensor<T, V>
-        implements VectorMixin<T, U, U, V> {
-
-    /**
-     * The size of this vector. This is the total number of data stored in this vector.
-     */
-    public final int size;
+        extends AbstractDenseRingVector<T, U, V>
+        implements VectorMixin<T, U, U, V>, FieldTensorMixin<T, T, V> {
 
 
     /**
@@ -67,8 +64,6 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     protected AbstractDenseFieldVector(Shape shape, V[] entries) {
         super(shape, entries);
-        ValidateParameters.ensureRank(shape, 1);
-        size = entries.length;
     }
 
 
@@ -92,38 +87,6 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
 
 
     /**
-     * Constructs a dense vector with the specified {@code data} of the same type as the vector.
-     * @param entries Entries of the dense vector to construct.
-     */
-    public abstract T makeLikeTensor(V[] entries);
-
-
-    /**
-     * Constructs a matrix of similar type to this vector with the specified {@code shape} and {@code data}.
-     * @param shape Shape of the matrix to construct.
-     * @param entries Entries of the matrix to construct.
-     * @return A matrix of similar type to this vector with the specified {@code shape} and {@code data}.
-     */
-    public abstract U makeLikeMatrix(Shape shape, V[] entries);
-
-
-    /**
-     * Joints specified vector with this vector. That is, creates a vector of length {@code this.length() + b.length()} containing
-     * first the elements of this vector followed by the elements of {@code b}.
-     *
-     * @param b Vector to join with this vector.
-     *
-     * @return A vector resulting from joining the specified vector with this vector.
-     */
-    @Override
-    public T join(T b) {
-        V[] dest = makeEmptyDataArray(size + b.size);
-        DenseConcat.concat(data, b.data, dest);
-        return makeLikeTensor(dest);
-    }
-
-
-    /**
      * <p>Computes the inner product between two vectors.
      *
      * @param b Second vector in the inner product.
@@ -136,86 +99,6 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
     @Override
     public V inner(T b) {
         return DenseFieldVectorOps.innerProduct(data, b.data);
-    }
-
-
-    /**
-     * <p>Computes the dot product between two vectors.
-     *
-     * <p>Note: this method is distinct from {@link #inner(AbstractDenseFieldVector)}. The inner product is equivalent to the dot product
-     * of this tensor with the conjugation of {@code b}.
-     *
-     * @param b Second vector in the dot product.
-     *
-     * @return The dot product between this vector and the vector {@code b}.
-     *
-     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
-     * @see #inner(AbstractDenseFieldVector)
-     */
-    @Override
-    public V dot(T b) {
-        return DenseSemiringVectorOps.dotProduct(data, b.data);
-    }
-
-
-    /**
-     * Gets the length of a vector. Same as {@link #size()}.
-     *
-     * @return The length, i.e. the number of data, in this vector.
-     */
-    @Override
-    public int length() {
-        return size;
-    }
-
-
-    /**
-     * Repeats a vector {@code n} times along a certain axis to create a matrix.
-     *
-     * @param n Number of times to repeat vector. Must be positive.
-     * @param axis Axis along which to repeat vector. Must be either 1 or 0.
-     * <ul>
-     *     <li>If {@code axis=0}, then the vector will be treated as a row vector and stacked vertically {@code n} times.</li>
-     *     <li>If {@code axis=1} then the vector will be treated as a column vector and stacked horizontally {@code n} times.</li>
-     * </ul>
-     *
-     * @return A matrix whose rows/columns are this vector repeated.
-     */
-    @Override
-    public U repeat(int n, int axis) {
-        V[] dest = makeEmptyDataArray(size*n);
-        DenseConcat.repeat(data, n, axis, dest); // axis is verified to be 1 or 0 here.
-        Shape shape = (axis==0) ? new Shape(n, size) : new Shape(size, n);
-
-        return makeLikeMatrix(shape, dest);
-    }
-
-
-    /**
-     * <p>Stacks two vectors along specified axis.
-     *
-     * <p>Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
-     *
-     * <p>Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
-     *
-     * @param b Vector to stack with this vector.
-     * @param axis Axis along which to stack vectors. If {@code axis=0}, then vectors are stacked as if they are row
-     * vectors. If {@code axis=1}, then vectors are stacked as if they are column vectors.
-     *
-     * @return The result of stacking this vector and the vector {@code b}.
-     *
-     * @throws IllegalArgumentException If the number of data in this vector is different from the number of
-     *                                  data in the vector {@code b}.
-     * @throws IllegalArgumentException If axis is not either 0 or 1.
-     */
-    @Override
-    public U stack(T b, int axis) {
-        V[] dest = makeEmptyDataArray(2*size);
-        DenseConcat.stack(data, b.data, axis, dest);
-        Shape shape = (axis==0) ? new Shape(2, size) : new Shape(size, 2);
-        return makeLikeMatrix(shape, dest);
     }
 
 
@@ -233,29 +116,6 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
         V[] dest = makeEmptyDataArray(size*b.size);
         DenseFieldVectorOps.outerProduct(data, b.data, dest);
         return makeLikeMatrix(new Shape(size, b.size), dest);
-    }
-
-
-    /**
-     * Converts a vector to an equivalent matrix representing either a row or column vector.
-     *
-     * @param columVector Flag indicating whether to convert this vector to a matrix representing a row or column vector:
-     * <ul>
-     *     <li>If {@code true}, the vector will be converted to a matrix representing a column vector.</li>
-     *     <li>If {@code false}, The vector will be converted to a matrix representing a row vector.</li>
-     * </ul>
-     *
-     * @return A matrix equivalent to this vector.
-     */
-    @Override
-    public U toMatrix(boolean columVector) {
-        if(columVector) {
-            // Convert to column vector.
-            return makeLikeMatrix(new Shape(data.length, 1), data.clone());
-        } else {
-            // Convert to row vector.
-            return makeLikeMatrix(new Shape(1, data.length), data.clone());
-        }
     }
 
 
@@ -279,7 +139,9 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     @Override
     public T normalize() {
-        return div(mag());
+        V[] dest = makeEmptyDataArray(size);
+        FieldOps.div(data, mag(), dest);
+        return makeLikeTensor(shape, dest);
     }
 
 
@@ -296,20 +158,6 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
             mag = mag.add(data[i].mult( data[i]));
 
         return mag.sqrt();
-    }
-
-
-    /**
-     * Gets the element of this vector at the specified index.
-     *
-     * @param idx Index of the element to get within this vector.
-     *
-     * @return The element of this vector at index {@code idx}.
-     */
-    @Override
-    public V get(int idx) {
-        ValidateParameters.validateTensorIndex(shape, idx);
-        return data[idx];
     }
 
 
@@ -332,5 +180,102 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      */
     public double norm(int p) {
         return VectorNorms.norm(data, p);
+    }
+
+
+    /**
+     * Computes the element-wise quotient of two matrices.
+     *
+     * @param b Second matrix in the element-wise quotient.
+     *
+     * @return The element-wise quotient of this matrix and {@code b}.
+     */
+    @Override
+    public T div(T b) {
+        V[] dest = makeEmptyDataArray(data.length);
+        DenseFieldElemDiv.dispatch(data, shape, b.data, b.shape, dest);
+        return makeLikeTensor(shape, dest);
+    }
+
+
+    /**
+     * Computes the element-wise square root of this tensor.
+     *
+     * @return The element-wise square root of this tensor.
+     */
+    @Override
+    public T sqrt() {
+        V[] dest = makeEmptyDataArray(data.length);
+        FieldOps.sqrt(data, dest);
+        return makeLikeTensor(shape, dest);
+    }
+
+
+    /**
+     * Checks if this tensor only contains finite values.
+     *
+     * @return {@code true} if this tensor only contains finite values; {@code false} otherwise.
+     *
+     * @see #isInfinite()
+     * @see #isNaN()
+     */
+    @Override
+    public boolean isFinite() {
+        return FieldOps.isFinite(data);
+    }
+
+
+    /**
+     * Checks if this tensor contains at least one infinite value.
+     *
+     * @return {@code true} if this tensor contains at least one infinite value; {@code false} otherwise.
+     *
+     * @see #isFinite()
+     * @see #isNaN()
+     */
+    @Override
+    public boolean isInfinite() {
+        return FieldOps.isInfinite(data);
+    }
+
+
+    /**
+     * Checks if this tensor contains at least one NaN value.
+     *
+     * @return {@code true} if this tensor contains at least one NaN value; {@code false} otherwise.
+     *
+     * @see #isFinite()
+     * @see #isInfinite()
+     */
+    @Override
+    public boolean isNaN() {
+        return FieldOps.isInfinite(data);
+    }
+
+
+    /**
+     * Checks if all data of this matrix are 'close' as defined below. Custom tolerances may be specified using
+     * {@link #allClose(AbstractDenseFieldVector, double, double)}.
+     * @param b Second tensor in the comparison.
+     * @return True if both tensors have the same shape and all data are 'close' element-wise, i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively and satisfy
+     * {@code |x-y| <= (1E-05 + 1E-08*|y|)}. Otherwise, returns false.
+     * @see #allClose(AbstractDenseFieldVector, double, double) 
+     */
+    public boolean allClose(T b) {
+        return sameShape(b) && FieldProperties.allClose(data, b.data);
+    }
+
+
+    /**
+     * Checks if all data of this matrix are 'close' as defined below.
+     * @param b Second tensor in the comparison.
+     * @return True if both tensors have the same length and all data are 'close' element-wise, i.e.
+     * elements {@code x} and {@code y} at the same positions in the two tensors respectively and satisfy
+     * {@code |x-y| <= (absTol + relTol*|y|)}. Otherwise, returns false.
+     * @see #allClose(AbstractDenseFieldVector)
+     */
+    public boolean allClose(T b, double relTol, double absTol) {
+        return sameShape(b) && FieldProperties.allClose(data, b.data, relTol, absTol);
     }
 }

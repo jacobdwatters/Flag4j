@@ -169,7 +169,7 @@ public interface Field<T extends Field<T>> extends Ring<T> {
      */
     default T div(double b) {
         throw new UnsupportedOperationException("Division with primitive doubles is not supported for this field: "
-                + getClass() + ".");
+                + getClass().getName() + ".");
     }
 
 

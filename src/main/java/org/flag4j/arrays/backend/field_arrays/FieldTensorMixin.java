@@ -25,6 +25,7 @@
 package org.flag4j.arrays.backend.field_arrays;
 
 import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.ring_arrays.RingTensorMixin;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
@@ -45,7 +46,7 @@ import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
  */
 public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
         U extends FieldTensorMixin<U, U, V>, V extends Field<V>>
-        extends TensorOverField<T, U, V[], V> {
+        extends TensorOverField<T, U, V[], V>, RingTensorMixin<T, U, V> {
 
     /**
      * Creates an empty array of the same type as the data array of this tensor.

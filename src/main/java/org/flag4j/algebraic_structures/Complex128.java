@@ -398,6 +398,7 @@ public class Complex128 implements Field<Complex128> {
      * @param b Second element in product.
      * @return The product of this field element and {@code b}.
      */
+    @Override
     public Complex128 mult(double b) {
         return new Complex128(re*b, im*b);
     }

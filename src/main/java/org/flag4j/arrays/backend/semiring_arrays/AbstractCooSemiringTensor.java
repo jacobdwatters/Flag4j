@@ -38,6 +38,7 @@ import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BinaryOperator;
@@ -81,7 +82,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
     /**
      * The zero element for the semiring that this tensor's elements belong to.
      */
-    private V zeroElement;
+    protected V zeroElement;
     /**
      * <p>The non-zero indices of this sparse tensor.
      *
@@ -113,7 +114,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
         ValidateParameters.validateTensorIndices(shape, indices);
         this.indices = indices;
         this.nnz = data.length;
-        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries())).doubleValue();
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
 
         // Attempt to set the zero element for the semiring.
         this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
@@ -251,7 +252,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
         CooTensorDot<V> problem = new CooTensorDot<>(shape, data, indices,
                 src2.shape, src2.data, src2.indices,
                 aAxes, bAxes);
-        V[] dest = (V[]) new Semiring[problem.getOutputSize()];
+        V[] dest= makeEmptyDataArray(problem.getOutputSize());
         problem.compute(dest);
         return makeLikeDenseTensor(problem.getOutputShape(), dest);
     }
@@ -291,7 +292,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     @Override
     public T T() {
-        V[] destEntries = (V[]) new Semiring[nnz];
+        V[] destEntries= makeEmptyDataArray(nnz);
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices,0, shape.getRank()-1, destEntries, destIndices);
         return makeLikeTensor(shape.swapAxes(0, rank-1), destEntries, destIndices);
@@ -312,7 +313,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     @Override
     public T T(int axis1, int axis2) {
-        V[] destEntries = (V[]) new Semiring[nnz];
+        V[] destEntries= makeEmptyDataArray(nnz);
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axis1, axis2, destEntries, destIndices);
         return makeLikeTensor(shape.swapAxes(axis1, axis2), destEntries, destIndices);
@@ -335,7 +336,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     @Override
     public T T(int... axes) {
-        V[] destEntries = (V[]) new Semiring[nnz];
+        V[] destEntries= makeEmptyDataArray(nnz);
         int[][] destIndices = new int[nnz][rank];
         CooTranspose.tensorTranspose(shape, data, indices, axes, destEntries, destIndices);
         return makeLikeTensor(shape.permuteAxes(axes), destEntries, destIndices);
@@ -446,7 +447,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
             destIndices[idx] = target;
         } else {
             // Target not found, insert new value and index.
-            destEntries = (V[]) new Semiring[nnz + 1];
+            destEntries= makeEmptyDataArray(nnz + 1);
             destIndices = new int[nnz + 1][rank];
             int insertionPoint = - (idx + 1);
             CooGetSet.cooInsertNewValue(value, target, data, indices, insertionPoint, destEntries, destIndices);
@@ -522,7 +523,7 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      * @throws ArithmeticException If the number of data in the dense tensor exceeds 2,147,483,647.
      */
     public U toDense() {
-        V[] denseEntries = (V[]) new Semiring[shape.totalEntriesIntValueExact()];
+        V[] denseEntries= makeEmptyDataArray(shape.totalEntriesIntValueExact());
         CooConversions.toDense(shape, data, indices, denseEntries);
         return makeLikeDenseTensor(shape, denseEntries);
     }

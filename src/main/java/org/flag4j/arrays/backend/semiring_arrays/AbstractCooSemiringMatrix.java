@@ -44,6 +44,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,7 +82,7 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.copyRanges;
  *
  * @param <T> Type of this sparse COO matrix.
  * @param <U> Type of dense matrix which is similar to {@code T}.
- * @param <W> Type of sparse COO vector which is similar to {@code T}.
+ * @param <V> Type of sparse COO vector which is similar to {@code T}.
  * @param <W> Type of the semiring element in this matrix.
  */
 public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMatrix<T, U, V, W>,
@@ -94,7 +95,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     /**
      * The zero element for the semiring that this tensor's elements belong to.
      */
-    private W zeroElement;
+    protected W zeroElement;
     /**
      * Row indices for non-zero value of this sparse COO matrix.
      */
@@ -141,10 +142,10 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         nnz = entries.length;
         numRows = shape.get(0);
         numCols = shape.get(1);
-        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries())).doubleValue();
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
 
         // Attempt to set the zero element for the semiring.
-        this.zeroElement = (entries.length > 0) ? entries[0].getZero() : null;
+        this.zeroElement = (entries.length > 0 && entries[0] != null) ? entries[0].getZero() : null;
     }
 
 
@@ -321,7 +322,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
             idx = -idx - 1;
 
             // No non-zero element with these indices exists. Insert new value.
-            destEntries = (W[]) new Semiring[data.length + 1];
+            destEntries = makeEmptyDataArray(data.length + 1);
             destRowIndices = new int[data.length + 1];
             destColIndices = new int[data.length + 1];
 
@@ -624,7 +625,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     @Override
     public U mult(T b) {
         ValidateParameters.ensureMatMultShapes(shape, b.shape);
-        W[] dest = (W[]) new Semiring[numRows*b.numCols];
+        W[] dest = makeEmptyDataArray(numRows*b.numCols);
         CooSemiringMatMult.standard(
                 data, rowIndices, colIndices, shape,
                 b.data, b.rowIndices, b.colIndices, b.shape, dest);
@@ -647,7 +648,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     @Override
     public U multTranspose(T b) {
         ValidateParameters.ensureEquals(numCols, b.numCols);
-        return mult(b.T());
+        return mult(b.H());
     }
 
 
@@ -667,14 +668,14 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         ValidateParameters.ensureEquals(numCols, b.numCols);
 
         Shape destShape = new Shape(numRows+b.numRows, numCols);
-        W[] destEntries = (W[]) new Semiring[data.length + b.data.length];
+        W[] destEntries = makeEmptyDataArray(data.length + b.data.length);
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
         CooConcat.stack(data, rowIndices, colIndices, numRows,
                 b.data, b.rowIndices, b.colIndices,
                 destEntries, destRowIndices, destColIndices);
 
-        return makeLikeTensor(destShape, (W[]) destEntries, destRowIndices, destColIndices);
+        return makeLikeTensor(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -694,7 +695,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         ValidateParameters.ensureEquals(numRows, b.numRows);
 
         Shape destShape = new Shape(numRows, numCols + b.numCols);
-        W[] destEntries = (W[]) new Semiring[data.length + b.data.length];
+        W[] destEntries = makeEmptyDataArray(data.length + b.data.length);
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
         CooConcat.augment(data, rowIndices, colIndices, numCols,
@@ -717,7 +718,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         ValidateParameters.ensureEquals(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
-        W[] destEntries = (W[]) new Semiring[nnz + b.data.length];
+        W[] destEntries = makeEmptyDataArray(nnz + b.data.length);
         int[] destRowIndices = new int[destEntries.length];
         int[] destColIndices = new int[destEntries.length];
         CooConcat.augmentVector(
@@ -812,9 +813,10 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     @Override
     public V getRow(int rowIdx, int start, int stop) {
         SparseVectorData<W> data = CooGetSet.getRow(shape, this.data, rowIndices, colIndices, rowIdx, start, stop);
-        return makeLikeVector(data.shape(),
-                (W[]) data.data().toArray(new Semiring[data.data().size()]),
-                data.indicesToArray());
+        W[] dest = makeEmptyDataArray(data.data().size());
+        data.data().toArray(dest);
+
+        return makeLikeVector(data.shape(), dest, data.indicesToArray());
     }
 
 
@@ -833,9 +835,9 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     @Override
     public V getCol(int colIdx, int start, int stop) {
         SparseVectorData<W> data = CooGetSet.getCol(shape, this.data, rowIndices, colIndices, colIdx, start, stop);
-        return makeLikeVector(data.shape(),
-                (W[]) data.data().toArray(new Semiring[data.data().size()]),
-                data.indicesToArray());
+        W[] dest = makeEmptyDataArray(data.data().size());
+        data.data().toArray(dest);
+        return makeLikeVector(data.shape(), dest, data.indicesToArray());
     }
 
 
@@ -856,8 +858,10 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     @Override
     public V getDiag(int diagOffset) {
         SparseVectorData<W> data = CooGetSet.getDiag(shape, this.data, rowIndices, colIndices, diagOffset);
+        W[] dest = makeEmptyDataArray(data.data().size());
+        data.data().toArray(dest);
         return makeLikeVector(data.shape(),
-                (W[]) data.data().toArray(new Semiring[data.data().size()]),
+                dest,
                 data.indicesToArray());
     }
 
@@ -878,7 +882,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         int size = data.length - (startEnd[1]-startEnd[0]);
 
         // Initialize arrays.
-        W[] entries = (W[]) new Semiring[size];
+        W[] entries = makeEmptyDataArray(size);
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
 
@@ -1212,10 +1216,11 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      * @return A dense matrix equivalent to this sparse COO matrix.
      */
     public U toDense() {
-        W[] entries = (W[]) new Semiring[shape.totalEntriesIntValueExact()];
+        W[] entries = makeEmptyDataArray(shape.totalEntriesIntValueExact());
+        Arrays.fill(entries, getZeroElement());
 
         for(int i = 0; i< nnz; i++)
-            entries[rowIndices[i]*numCols + colIndices[i]] = this.data[i];
+            entries[rowIndices[i]*numCols + colIndices[i]] = data[i];
 
         return makeLikeDenseTensor(shape, entries);
     }
@@ -1226,7 +1231,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      * @return A sparse CSR matrix equivalent to this sparse COO matrix.
      */
     public AbstractCsrSemiringMatrix<?, U, V, W> toCsr() {
-        W[] csrEntries = (W[]) new Semiring[data.length];
+        W[] csrEntries = makeEmptyDataArray(data.length);
         int[] csrRowPointers = new int[numRows + 1];
         int[] csrColPointers = new int[colIndices.length];
         CooConversions.toCsr(shape, data, rowIndices, colIndices, csrEntries, csrRowPointers, csrColPointers);
@@ -1257,7 +1262,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     public V toVector() {
         int[] destIndices = new int[data.length];
         for(int i = 0; i< data.length; i++)
-            destIndices[i] = rowIndices[i]*colIndices[i];
+            destIndices[i] = rowIndices[i]*numCols + colIndices[i];
 
         return makeLikeVector(new Shape(numRows*numCols), data.clone(), destIndices);
     }

@@ -35,6 +35,7 @@ import org.flag4j.arrays.dense.RingTensor;
 import org.flag4j.arrays.dense.RingVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
 import org.flag4j.util.ArrayUtils;
@@ -382,6 +383,19 @@ public class CsrRingMatrix<T extends Ring<T>> extends AbstractCsrRingMatrix<
     @Override
     public CooRingTensor<T> toTensor(Shape shape) {
         return (CooRingTensor<T>) toCoo().toTensor(shape);
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CsrMatrix abs() {
+        double[] dest = new double[data.length];
+        RingOps.abs(data, dest);
+        return new CsrMatrix(shape, dest, rowPointers.clone(), colIndices.clone());
     }
 
 

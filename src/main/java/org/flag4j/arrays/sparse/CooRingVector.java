@@ -31,6 +31,7 @@ import org.flag4j.arrays.dense.RingMatrix;
 import org.flag4j.arrays.dense.RingVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingEquals;
 import org.flag4j.util.ArrayUtils;
@@ -392,5 +393,18 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
                 .append(PrettyPrint.abbreviatedArray(indices, maxCols, padding, centering));
 
         return result.toString();
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CooVector abs() {
+        double[] dest = new double[data.length];
+        RingOps.abs(data, dest);
+        return new CooVector(shape, dest, indices.clone());
     }
 }

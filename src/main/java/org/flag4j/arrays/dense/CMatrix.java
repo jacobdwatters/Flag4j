@@ -310,6 +310,20 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     }
 
 
+    /**
+     * Constructs a vector of a similar type as this matrix.
+     *
+     * @param shape Shape of the vector to construct. Must be rank 1.
+     * @param entries Entries of the vector.
+     *
+     * @return A vector of a similar type as this matrix.
+     */
+    @Override
+    protected CVector makeLikeVector(Shape shape, Complex128[] entries) {
+        return new CVector(shape, entries);
+    }
+
+
     @Override
     public Complex128[] makeEmptyDataArray(int length) {
         return new Complex128[length];

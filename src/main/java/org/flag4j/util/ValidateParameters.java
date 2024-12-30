@@ -32,6 +32,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * This utility class contains several methods for ensuring a parameter has certain properties.
@@ -40,12 +41,9 @@ public final class ValidateParameters {
 
     // Hide constructor for utility class.
     private ValidateParameters() {
-        
     }
 
-
-    // TODO: This class could be cleaned up and organized.
-
+    // TODO: This class needs to be cleaned up. Are all of these methods necessary? Do some need to be renamed?
 
     /**
      * Checks if two {@link Shape} objects are equivalent.
@@ -217,19 +215,10 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If any of the specified values are not equal.
      */
     public static void ensureEquals(double... values) {
-        if(values.length > 0) {
-            boolean equal = true;
-            double base = values[0];
+        boolean equal = allEqual(values);
 
-            for(double v : values) {
-                if(v != base) {
-                    equal = false;
-                    break;
-                }
-            }
-
-            if(!equal)
-                throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
+        if(!equal) {
+            throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
         }
     }
 
@@ -240,19 +229,10 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If any of the specified values are not equal.
      */
     public static void ensureEquals(int... values) {
-        if(values.length > 0) {
-            boolean equal = true;
-            double base = values[0];
+        boolean equal = allEqual(values);
 
-            for(double v : values) {
-                if(v != base) {
-                    equal = false;
-                    break;
-                }
-            }
-
-            if(!equal)
-                throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
+        if(!equal) {
+            throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
         }
     }
 
@@ -436,7 +416,7 @@ public final class ValidateParameters {
     /**
      * Checks if a shape represents a square tensor.
      * @param shape Shape to check.
-     * @throws IllegalArgumentException If all axis of the shape are not the same length.
+     * @throws TensorShapeException If all axis of the shape are not the same length.
      */
     public static void ensureSquare(Shape shape) {
         ValidateParameters.ensureEquals(shape.getDims());
@@ -605,9 +585,8 @@ public final class ValidateParameters {
      * @param indices Indices to validate.
      */
     public static void validateTensorIndices(Shape shape, int[]... indices) {
-        for(int[] index : indices) {
+        for(int[] index : indices)
             validateTensorIndex(shape, index);
-        }
     }
 
 
@@ -654,5 +633,45 @@ public final class ValidateParameters {
     public static void ensureLengthEqualsRank(Shape shape, int size) {
         if(shape.getRank() != size)
             throw new LinearAlgebraException("Array length of " + size + " does not match rank of " + shape.getRank());
+    }
+
+
+    /**
+     * Checks that all values in an array are equal.
+     * @param values Values of interest.
+     * @return {@code ture} if all entries in {@code values} are equal; {@code false} otherwise.
+     */
+    private static boolean allEqual(int... values) {
+        for(int i=0, size=values.length-1; i<size; i++)
+            if(values[i] != values[i+1]) return false;
+
+        return true;
+    }
+
+
+    /**
+     * Checks that all values in an array are equal.
+     * @param values Values of interest.
+     * @return {@code ture} if all entries in {@code values} are equal; {@code false} otherwise.
+     */
+    private static boolean allEqual(double... values) {
+        for(int i=0, size=values.length-1; i<size; i++)
+            if(values[i] != values[i+1]) return false;
+
+        return true;
+    }
+
+
+    /**
+     * Checks that all values in an array are equal.
+     * @param values Values of interest.
+     * @return {@code ture} if all entries in {@code values} are equal (as specified by {@link Objects#equals(Object, Object)});
+     * {@code false} otherwise.
+     */
+    private static <T> boolean allEqual(T[] values) {
+        for(int i=0, size=values.length-1; i<size; i++)
+            if(!Objects.equals(values[i], values[i+1])) return false;
+
+        return true;
     }
 }

@@ -128,7 +128,10 @@ class CMatrixSetOperationTests {
                         {new Complex128(-445, 0.32), new Complex128(4)},
                         {new Complex128(94.1), new Complex128(-1334.5)}};
         exp = new CMatrix(entriesExp);
-        entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0)}, {new Complex128(1), new Complex128(4)}, {new Complex128(1331.14), new Complex128(-1334.5)}};
+        entriesA = new Complex128[][]{{
+            new Complex128(0), new Complex128(0)},
+                {new Complex128(1), new Complex128(4)},
+                {new Complex128(1331.14), new Complex128(-1334.5)}};
         A = new CMatrix(entriesA);
         A.setCol(valuesVec, col);
 
