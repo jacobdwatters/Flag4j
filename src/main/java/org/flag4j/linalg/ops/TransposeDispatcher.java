@@ -24,17 +24,13 @@
 
 package org.flag4j.linalg.ops;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringTensor;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.ops.dense.DenseTranspose;
-import org.flag4j.linalg.ops.dense.field_ops.DenseFieldHermitianTranspose;
-import org.flag4j.linalg.ops.dense.field_ops.DenseFieldTranspose;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingHermitianTranspose;
 
@@ -137,36 +133,6 @@ public final class TransposeDispatcher {
     /**
      * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
      * @param src Matrix to transpose.
-     * @return The transpose of the source matrix.
-     */
-    public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> dispatch(AbstractDenseFieldMatrix<?, ?, T> src) {
-
-        T[] dest;
-
-        TransposeAlgorithms algorithm = chooseAlgorithmComplex(src.shape); // TODO: Need an updated method for this. Or at least a name change.
-
-        switch(algorithm) {
-            case STANDARD:
-                dest = DenseFieldTranspose.standardMatrix(src.data, src.numRows, src.numCols);
-                break;
-            case BLOCKED:
-                dest = DenseFieldTranspose.blockedMatrix(src.data, src.numRows, src.numCols);
-                break;
-            case CONCURRENT_STANDARD:
-                dest = DenseFieldTranspose.standardMatrixConcurrent(src.data, src.numRows, src.numCols);
-                break;
-            default:
-                dest = DenseFieldTranspose.blockedMatrixConcurrent(src.data, src.numRows, src.numCols);
-                break;
-        }
-
-        return src.makeLikeTensor(new Shape(src.numCols, src.numRows), dest);
-    }
-
-
-    /**
-     * Dispatches a matrix transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Matrix to transpose.
      * @param shape Shape of the matrix to transpose.
      * @param dest Array to store the transpose result in. May be {@code null}. If not {@code null}, must be at least as large as
      * {@code src}.
@@ -211,13 +177,13 @@ public final class TransposeDispatcher {
      * @return If {@code dest != null} a reference to the {@code dest} array will be returned. Otherwise, if {@code dest == null}
      * then a new array will be created and returned.
      */
-    public static <T extends Field<T>> void dispatchHermitian(T[] src, Shape shape, T[] dest) {
+    public static <T extends Ring<T>> void dispatchHermitian(T[] src, Shape shape, T[] dest) {
         TransposeAlgorithms algorithm = chooseAlgorithmHermitian(shape);
 
         if(algorithm == TransposeAlgorithms.BLOCKED)
-            DenseFieldHermitianTranspose.blockedMatrixHerm(src, shape.get(0), shape.get(1), dest);
+            DenseRingHermitianTranspose.blockedMatrixHerm(src, shape.get(0), shape.get(1), dest);
         else
-            DenseFieldHermitianTranspose.blockedMatrixConcurrentHerm(src, shape.get(0), shape.get(1), dest);
+            DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(src, shape.get(0), shape.get(1), dest);
     }
 
 
@@ -248,24 +214,6 @@ public final class TransposeDispatcher {
         }
 
         return src.makeLikeTensor(src.shape.swapAxes(axis1, axis2), dest);
-    }
-
-
-    /**
-     * Dispatches a tensor transpose problem to the appropriate algorithm based on its shape and size.
-     * @param src Tensor to transpose.
-     * @param axes Permutation of axes in the tensor transpose.
-     * @return The result of the tensor transpose.
-     * @throws ArrayIndexOutOfBoundsException If either axis is not within the {@code src} tensor.
-     */
-    public static <T extends AbstractDoubleTensor<T>> T dispatchTensor(T src, int[] axes) {
-        TransposeAlgorithms algorithm = chooseAlgorithmTensor(src.data.length);
-
-        double[] dest = algorithm == TransposeAlgorithms.STANDARD ?
-                RealDenseTranspose.standard(src.data, src.shape, axes):
-                RealDenseTranspose.standardConcurrent(src.data, src.shape, axes);
-
-        return src.makeLikeTensor(src.shape.permuteAxes(axes), dest);
     }
 
 

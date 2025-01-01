@@ -1,14 +1,16 @@
 package org.flag4j.linalg.ops.dense.complex;
 
 import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.linalg.ops.dense.ring_ops.DenseRingHermitianTranspose;
 import org.junit.jupiter.api.Test;
 
-import static org.flag4j.linalg.ops.dense.field_ops.DenseFieldTranspose.*;
+import static org.flag4j.linalg.ops.dense.DenseTranspose.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class ComplexDenseTransposeTests {
     Complex128[] A;
     Complex128[] expTranspose, expTransposeH;
+    Complex128[] act;
     int numRows, numCols;
 
 
@@ -35,15 +37,26 @@ class ComplexDenseTransposeTests {
                 new Complex128(3).conj(), new Complex128(7).conj(), new Complex128(11).conj(),
                 new Complex128(4).conj(), new Complex128(8).conj(), new Complex128(12).conj()};
 
-        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
+        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols, null));
 
-        assertArrayEquals(expTransposeH, standardMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrentHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrentHerm(A, numRows, numCols));
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTransposeH, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
 
         // ------------- Sub-case 2 ---------------
         numRows = 6;
@@ -63,15 +76,26 @@ class ComplexDenseTransposeTests {
                 new Complex128(2).conj(), new Complex128(4).conj(), new Complex128(6).conj(),
                 new Complex128(8).conj(), new Complex128(10).conj(), new Complex128(12).conj()};
 
-        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
+        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols, null));
 
-        assertArrayEquals(expTransposeH, standardMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrentHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrentHerm(A, numRows, numCols));
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTransposeH, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
 
         // ------------- Sub-case 3 ---------------
         numRows = 12;
@@ -91,15 +115,26 @@ class ComplexDenseTransposeTests {
                 new Complex128(7).conj(), new Complex128(8).conj(), new Complex128(9).conj(),
                 new Complex128(10).conj(), new Complex128(11).conj(), new Complex128(12).conj()};
 
-        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
+        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols, null));
 
-        assertArrayEquals(expTransposeH, standardMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrentHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrentHerm(A, numRows, numCols));
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTransposeH, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
 
         // ------------- Sub-case 3 ---------------
         numRows = 3;
@@ -117,15 +152,26 @@ class ComplexDenseTransposeTests {
                 new Complex128(2).conj(), new Complex128(5).conj(), new Complex128(8).conj(),
                 new Complex128(3).conj(), new Complex128(6).conj(), new Complex128(9).conj()};
 
-        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
+        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols, null));
 
-        assertArrayEquals(expTransposeH, standardMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrentHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrentHerm(A, numRows, numCols));
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTransposeH, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
 
         // ------------- Sub-case 3 ---------------
         numRows = 1;
@@ -134,14 +180,25 @@ class ComplexDenseTransposeTests {
         expTranspose = new Complex128[]{new Complex128(1.13)};
         expTransposeH = new Complex128[]{new Complex128(1.13).conj()};
 
-        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
+        assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols, null));
+        assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols, null));
 
-        assertArrayEquals(expTransposeH, standardMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, standardMatrixConcurrentHerm(A, numRows, numCols));
-        assertArrayEquals(expTranspose, blockedMatrixConcurrentHerm(A, numRows, numCols));
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTransposeH, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.standardMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
+
+        act = new Complex128[A.length];
+        DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
+        assertArrayEquals(expTranspose, act);
     }
 }

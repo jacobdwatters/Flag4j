@@ -1,4 +1,4 @@
-package org.flag4j.sparse_complex_matrix;
+package org.flag4j.complex_coo_matrix;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CooCMatrixConstructorTests {
+class CooCMatrixConstructorTests {
     Complex128[] expNonZero;
     double[] expNonZeroD;
     int[] expNonZeroI, expRowIndices, expColIndices;

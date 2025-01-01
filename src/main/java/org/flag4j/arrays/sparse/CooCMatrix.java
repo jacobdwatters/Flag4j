@@ -567,8 +567,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public boolean equals(Object object) {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
-        return CooFieldEquals.cooMatrixEquals(this.dropZeros(),
-                ((CooCMatrix) object).dropZeros());
+        return CooFieldEquals.cooMatrixEquals(this, ((CooCMatrix) object));
     }
 
 

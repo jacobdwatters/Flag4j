@@ -38,7 +38,6 @@ import org.flag4j.linalg.ops.sparse.coo.*;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatrixOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatrixProperties;
-import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -132,6 +131,8 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     protected AbstractCooSemiringMatrix(Shape shape, W[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries);
+        // TODO: Need methods which allow custom error message to be passed in. It can be very difficult to
+        //  understand why a COO matrix could not be constructed.
         ValidateParameters.ensureRank(shape, 2);
         ValidateParameters.ensureIndicesInBounds(shape.get(0), rowIndices);
         ValidateParameters.ensureIndicesInBounds(shape.get(1), colIndices);
@@ -389,7 +390,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T flatten() {
-        return flatten(0);
+        return flatten(1);
     }
 
 
@@ -405,7 +406,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     public T flatten(int axis) {
         ValidateParameters.ensureValidAxes(shape, axis);
         int[] dims = {1, 1};
-        dims[1-axis] = shape.totalEntriesIntValueExact();
+        dims[axis] = shape.totalEntriesIntValueExact();
         Shape flatShape = new Shape(dims);
 
         int[] destIndices = new int[data.length];
@@ -414,8 +415,8 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
             destIndices[i] = shape.getFlatIndex(rowIndices[i], colIndices[i]);
 
         return (axis == 0)
-                ? makeLikeTensor(flatShape, data.clone(), new int[data.length], destIndices)
-                : makeLikeTensor(flatShape, data.clone(), destIndices, new int[data.length]);
+                ? makeLikeTensor(flatShape, data.clone(), destIndices, new int[data.length])
+                : makeLikeTensor(flatShape, data.clone(), new int[data.length], destIndices);
     }
 
 
@@ -875,6 +876,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeRow(int rowIndex) {
+        ValidateParameters.ensureValidArrayIndices(numRows, rowIndex);
         Shape shape = new Shape(numRows-1, numCols);
 
         // Find the start and end index within the data array which have the given row index.
@@ -885,8 +887,18 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         W[] entries = makeEmptyDataArray(size);
         int[] rowIndices = new int[size];
         int[] colIndices = new int[size];
-
         copyRanges(this.data, this.rowIndices, this.colIndices, entries, rowIndices, colIndices, startEnd);
+
+        // Shift all row indices occurring after removed row.
+        if (startEnd[0] > 0) {
+            for(int i=startEnd[0], length=rowIndices.length; i<rowIndices.length; i++)
+                rowIndices[i]--;
+        } else {
+            for(int i=0, length=rowIndices.length; i<rowIndices.length; i++) {
+                if(rowIndices[i] > rowIndex)
+                    rowIndices[i]--;
+            }
+        }
 
         return makeLikeTensor(shape, entries, rowIndices, colIndices);
     }
@@ -901,22 +913,41 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeRows(int... rowIdxs) {
-        // TODO: This should be doable for a general COO matrix. Return SparseMatrixData object.
-        Shape shape = new Shape(numRows-rowIdxs.length, numCols);
-        List<W> entries = new ArrayList<>(nnz);
-        List<Integer> rowIndices = new ArrayList<>(nnz);
-        List<Integer> colIndices = new ArrayList<>(nnz);
+        ValidateParameters.ensureValidArrayIndices(numRows, rowIdxs);
+        // Ensure the indices are sorted.
+        Arrays.sort(rowIdxs);
 
-        for(int i=0; i<nnz; i++) {
-            if(!ArrayUtils.contains(rowIdxs, this.rowIndices[i])) {
-                // Then copy the entry over.
-                entries.add(this.data[i]);
-                rowIndices.add(this.rowIndices[i]);
-                colIndices.add(this.colIndices[i]);
+        Shape shape = new Shape(numRows - rowIdxs.length, numCols);
+        List<W> entries = new ArrayList<>(nnz);
+        List<Integer> newRowIndices = new ArrayList<>(nnz);
+        List<Integer> newColIndices = new ArrayList<>(nnz);
+
+        int j = 0; // Points into the rowIdxs array
+        int removeCount = 0; // Tracks number of removed rows.
+
+        for (int i = 0; i < nnz; i++) {
+            int oldRow = rowIndices[i];
+
+            // Advance j while rowIdxs[j] < oldRow, updating removeCount
+            while (j < rowIdxs.length && rowIdxs[j] < oldRow) {
+                removeCount++;
+                j++;
             }
+
+            // If oldRow is one of the removed rows, skip this entry.
+            if (j < rowIdxs.length && rowIdxs[j] == oldRow)
+                continue;
+
+            // Otherwise, shift oldRow by however many removed rows lie below it.
+            int newRow = oldRow - removeCount;
+
+            // Keep the entry
+            entries.add(data[i]);
+            newRowIndices.add(newRow);
+            newColIndices.add(colIndices[i]);
         }
 
-        return makeLikeTensor(shape, entries, rowIndices, colIndices);
+        return makeLikeTensor(shape, entries, newRowIndices, newColIndices);
     }
 
 
@@ -929,6 +960,8 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeCol(int colIndex) {
+        ValidateParameters.ensureValidArrayIndices(numRows, colIndex);
+
         Shape shape = new Shape(numRows, numCols-1);
         List<W> destEntries = new ArrayList<>(data.length);
         List<Integer> destRowIndices = new ArrayList<>(data.length);
@@ -958,23 +991,35 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeCols(int... colIdxs) {
-        Shape shape = new Shape(numRows, numCols-1);
+        ValidateParameters.ensureValidArrayIndices(numRows, colIdxs);
+
+        // Ensure the indices are sorted.
+        Arrays.sort(colIdxs);
+
+        Shape shape = new Shape(numRows, numCols - colIdxs.length);
         List<W> destEntries = new ArrayList<>(data.length);
-        List<Integer> destRowIndices = new ArrayList<>(data.length);
-        List<Integer> destColIndices = new ArrayList<>(data.length);
+        List<Integer> destRowIdx = new ArrayList<>(data.length);
+        List<Integer> destColIdx = new ArrayList<>(data.length);
 
-        for(int i = 0; i< data.length; i++) {
-            int idx = Arrays.binarySearch(colIdxs, colIndices[i]);
+        for (int i = 0; i < data.length; i++) {
+            int oldCol = colIndices[i];
 
-            if(idx < 0) {
-                // Then entry is not in the specified column, so copy it with the appropriate column index shift.
-                destEntries.add(data[i]);
-                destRowIndices.add(rowIndices[i]);
-                destColIndices.add(colIndices[i] + (idx+1));
-            }
+            // Check if oldCol is being removed.
+            int idx = Arrays.binarySearch(colIdxs, oldCol);
+
+            // If idx >= 0, oldCol is in colIdxs then skip this entry.
+            if (idx >= 0) continue;
+
+            // Otherwise, shift column index.
+            int insertionPoint = -idx - 1;
+            int newCol = oldCol - insertionPoint;
+
+            destEntries.add(data[i]);
+            destRowIdx.add(rowIndices[i]);
+            destColIdx.add(newCol);
         }
 
-        return makeLikeTensor(shape, destEntries, destRowIndices, destColIndices);
+        return makeLikeTensor(shape, destEntries, destRowIdx, destColIdx);
     }
 
 
@@ -1077,7 +1122,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T copy() {
-        return makeLikeTensor(shape, data);
+        return makeLikeTensor(shape, data.clone());
     }
 
 

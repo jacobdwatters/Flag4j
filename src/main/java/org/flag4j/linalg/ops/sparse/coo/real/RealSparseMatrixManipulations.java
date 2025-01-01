@@ -28,6 +28,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
 import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +64,17 @@ public final class RealSparseMatrixManipulations {
 
         copyRanges(src, entries, rowIndices, colIndices, startEnd);
 
+        // Shift all row indices occurring after removed row.
+        if (startEnd[0] > 0) {
+            for(int i=startEnd[0], length=rowIndices.length; i<rowIndices.length; i++)
+                rowIndices[i]--;
+        } else {
+            for(int i=0, length=rowIndices.length; i<rowIndices.length; i++) {
+                if(rowIndices[i] > rowIdx)
+                    rowIndices[i]--;
+            }
+        }
+
         return new CooMatrix(shape, entries, rowIndices, colIndices);
     }
 
@@ -77,23 +89,40 @@ public final class RealSparseMatrixManipulations {
      * @return A copy of the {@code src} matrix with the specified rows removed.
      */
     public static CooMatrix removeRows(CooMatrix src, int... rowIdxs) {
-        Shape shape = new Shape(src.numRows-rowIdxs.length, src.numCols);
-        List<Double> entries = new ArrayList<>(src.data.length);
-        List<Integer> rowIndices = new ArrayList<>(src.data.length);
-        List<Integer> colIndices = new ArrayList<>(src.data.length);
+        // Ensure the indices are sorted.
+        Arrays.sort(rowIdxs);
 
-        for(int i = 0; i<src.data.length; i++) {
-            int idx = Arrays.binarySearch(rowIdxs, src.rowIndices[i]);
+        Shape shape = new Shape(src.numRows - rowIdxs.length, src.numCols);
+        List<Double> entries = new ArrayList<>(src.nnz);
+        List<Integer> newRowIndices = new ArrayList<>(src.nnz);
+        List<Integer> newColIndices = new ArrayList<>(src.nnz);
 
-            if(idx < 0) {
-                // Then copy the entry over and apply proper shift to row index.
-                entries.add(src.data[i]);
-                rowIndices.add(src.rowIndices[i] + (idx+1));
-                colIndices.add(src.colIndices[i]);
+        int j = 0; // Points into the rowIdxs array
+        int removeCount = 0; // Tracks number of removed rows.
+
+        for (int i = 0; i < src.nnz; i++) {
+            int oldRow = src.rowIndices[i];
+
+            // Advance j while rowIdxs[j] < oldRow, updating removeCount
+            while (j < rowIdxs.length && rowIdxs[j] < oldRow) {
+                removeCount++;
+                j++;
             }
+
+            // If oldRow is one of the removed rows, skip this entry.
+            if (j < rowIdxs.length && rowIdxs[j] == oldRow)
+                continue;
+
+            // Otherwise, shift oldRow by however many removed rows lie below it.
+            int newRow = oldRow - removeCount;
+
+            // Keep the entry
+            entries.add(src.data[i]);
+            newRowIndices.add(newRow);
+            newColIndices.add(src.colIndices[i]);
         }
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return new CooMatrix(shape, entries, newRowIndices, newColIndices);
     }
 
 
@@ -131,23 +160,35 @@ public final class RealSparseMatrixManipulations {
      * @return A copy of the {@code src} sparse matrix with the specified columns removed.
      */
     public static CooMatrix removeCols(CooMatrix src, int... colIdxs) {
-        Shape shape = new Shape(src.numRows, src.numCols-1);
-        List<Double> entries = new ArrayList<>(src.data.length);
-        List<Integer> rowIndices = new ArrayList<>(src.data.length);
-        List<Integer> colIndices = new ArrayList<>(src.data.length);
+        ValidateParameters.ensureValidArrayIndices(src.numRows, colIdxs);
 
-        for(int i = 0; i<src.data.length; i++) {
-            int idx = Arrays.binarySearch(colIdxs, src.colIndices[i]);
+        // Ensure the indices are sorted.
+        Arrays.sort(colIdxs);
 
-            if(idx < 0) {
-                // Then entry is not in the specified column, so copy it with the appropriate column index shift.
-                entries.add(src.data[i]);
-                rowIndices.add(src.rowIndices[i]);
-                colIndices.add(src.colIndices[i] + (idx+1));
-            }
+        Shape shape = new Shape(src.numRows, src.numCols - colIdxs.length);
+        List<Double> destEntries = new ArrayList<>(src.data.length);
+        List<Integer> destRowIdx = new ArrayList<>(src.data.length);
+        List<Integer> destColIdx = new ArrayList<>(src.data.length);
+
+        for (int i = 0; i < src.data.length; i++) {
+            int oldCol = src.colIndices[i];
+
+            // Check if oldCol is being removed.
+            int idx = Arrays.binarySearch(colIdxs, oldCol);
+
+            // If idx >= 0, oldCol is in colIdxs then skip this entry
+            if (idx >= 0) continue;
+
+            // Otherwise, shift column index.
+            int insertionPoint = -idx - 1;
+            int newCol = oldCol - insertionPoint;
+
+            destEntries.add(src.data[i]);
+            destRowIdx.add(src.rowIndices[i]);
+            destColIdx.add(newCol);
         }
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return new CooMatrix(shape, destEntries, destRowIdx, destColIdx);
     }
 
 
@@ -213,9 +254,9 @@ public final class RealSparseMatrixManipulations {
      */
     public static CooMatrix swapCols(CooMatrix src, int colIdx1, int colIdx2) {
         for(int i = 0; i<src.data.length; i++) {
-            // Swap row indices.
+            // Swap column indices.
             if(src.colIndices[i]==colIdx1) src.colIndices[i] = colIdx2;
-            if(src.colIndices[i]==colIdx2) src.colIndices[i] = colIdx1;
+            else if(src.colIndices[i]==colIdx2) src.colIndices[i] = colIdx1;
         }
 
         // Ensure indices remain sorted properly.

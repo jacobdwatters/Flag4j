@@ -445,9 +445,8 @@ public final class ValidateParameters {
      * @throws LinearAlgebraException If the specified shape does not have the expected rank.
      */
     public static void ensureRank(Shape shape, int expRank) {
-        if(shape.getRank() != expRank) {
+        if(shape.getRank() != expRank)
             throw new LinearAlgebraException(ErrorMessages.shapeRankErr(shape.getRank(), expRank));
-        }
     }
 
 
@@ -457,9 +456,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If the axis is not a valid 2D axis.
      */
     public static void ensureAxis2D(int axis) {
-        if(!(axis == 0 || axis==1)) {
+        if(!(axis == 0 || axis==1))
             throw new IllegalArgumentException(ErrorMessages.getAxisErr(axis, 0, 1));
-        }
     }
 
 

@@ -29,7 +29,6 @@ import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringMatrix;
-import org.flag4j.linalg.ops.TransposeDispatcher;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -98,9 +97,7 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public T H(int axis1, int axis2) {
-        V[] dest = makeEmptyDataArray(data.length);
-        TransposeDispatcher.dispatchTensorHermitian(shape, data, axis1, axis2, dest);
-        return makeLikeTensor(shape.swapAxes(axis1, axis2), dest);
+        return T();
     }
 
 
@@ -120,8 +117,6 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     @Override
     public T H(int... axes) {
-        V[] dest = makeEmptyDataArray(data.length);
-        TransposeDispatcher.dispatchTensorHermitian(shape, data, axes, dest);
-        return makeLikeTensor(shape, dest);
+        return T(axes);
     }
 }
