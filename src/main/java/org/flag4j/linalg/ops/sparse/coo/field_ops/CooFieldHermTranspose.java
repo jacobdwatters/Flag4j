@@ -55,7 +55,7 @@ public final class CooFieldHermTranspose {
      * {@code [srcEntries.length][shape.getRank()]}
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
-     * @see #tensorTranspose(Shape, Object[], int[][], int[], Object[], int[][])
+     * @see #tensorHermTranspose(Shape, Field[], int[][], int[], Field[], int[][])
      */
     public static <T extends Field<T>> void tensorHermTranspose(
             Shape shape, T[] srcEntries, int[][] srcIndices,
