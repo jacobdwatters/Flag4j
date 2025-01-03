@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldHermTranspose;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingHermTranspose;
 import org.flag4j.util.ArrayUtils;
 
 
@@ -112,7 +112,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     public T H(int axis1, int axis2) {
         V[] destData = makeEmptyDataArray(data.length);
         int[][] destIndices = new int[nnz][rank];
-        CooFieldHermTranspose.tensorHermTranspose(shape, data, indices, axis1, axis2, destData, destIndices);
+        CooRingHermTranspose.tensorHermTranspose(shape, data, indices, axis1, axis2, destData, destIndices);
         return makeLikeTensor(shape.swapAxes(axis1, axis2), destData, destIndices);
     }
 
@@ -135,7 +135,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     public T H(int... axes) {
         V[] destData = makeEmptyDataArray(data.length);
         int[][] destIndices = new int[nnz][rank];
-        CooFieldHermTranspose.tensorHermTranspose(shape, data, indices, axes, destData, destIndices);
+        CooRingHermTranspose.tensorHermTranspose(shape, data, indices, axes, destData, destIndices);
         return makeLikeTensor(shape.permuteAxes(axes), destData, destIndices);
     }
 

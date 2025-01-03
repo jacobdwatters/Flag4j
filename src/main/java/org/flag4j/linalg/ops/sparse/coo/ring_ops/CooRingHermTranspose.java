@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,22 @@
  * SOFTWARE.
  */
 
-package org.flag4j.linalg.ops.sparse.coo.field_ops;
+package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 
-
-import org.flag4j.algebraic_structures.Field;
+import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
-/**
- * Utility class for computing the Hermitian transpose of a COO matrix or tensor.
- */
-public final class CooFieldHermTranspose {
 
-    private CooFieldHermTranspose() {
-        
+/**
+ * Utility class for computing the Hermitian transpose of a COO ring matrix or tensor.
+ */
+public final class CooRingHermTranspose {
+
+    private CooRingHermTranspose() {
+        // Hide default constructor for utility class.
     }
 
     /**
@@ -55,9 +55,9 @@ public final class CooFieldHermTranspose {
      * {@code [srcEntries.length][shape.getRank()]}
      *
      * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
-     * @see #tensorHermTranspose(Shape, Field[], int[][], int[], Field[], int[][])
+     * @see #tensorHermTranspose(Shape, Ring[], int[][], int[], Ring[], int[][])
      */
-    public static <T extends Field<T>> void tensorHermTranspose(
+    public static <T extends Ring<T>> void tensorHermTranspose(
             Shape shape, T[] srcEntries, int[][] srcIndices,
             int axis1, int axis2,
             T[] destEntries, int[][] destIndices) {
@@ -98,9 +98,9 @@ public final class CooFieldHermTranspose {
      * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
      * @throws IllegalArgumentException  If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
      */
-    public static <T extends Field<T>> void tensorHermTranspose(
+    public static <T extends Ring<T>> void tensorHermTranspose(
             Shape shape, T[] srcEntries, int[][] srcIndices, int[] axes,
-           T[] destEntries, int[][] destIndices) {
+            T[] destEntries, int[][] destIndices) {
         int rank = shape.getRank();
         ValidateParameters.ensurePermutation(axes, rank);
 

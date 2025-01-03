@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,16 @@
 package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 
 import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.arrays.Pair;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
+import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingMatrix;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Utility class for computing ops on sparse COO {@link Ring} matrices.
@@ -114,5 +118,87 @@ public final class CooRingMatrixOps {
         }
 
         return new SparseMatrixData<V>(shape1, diff, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Checks if a real sparse matrix is close to the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
+     */
+    public static <T extends Ring<T>> boolean isCloseToIdentity(AbstractCooRingMatrix<?, ?, ?, T> src) {
+        // Ensure the matrix is square and there are the same number of non-zero data as data on the diagonal.
+        boolean result = src.isSquare() && src.data.length==src.numRows;
+
+        // Tolerances corresponds to the allClose(...) methods.
+        double diagTol = 1.E-5;
+        double nonDiagTol = 1e-08;
+
+        final T ONE = src.data.length > 0 ? src.data[0].getOne() : null;
+
+        for(int i = 0; i<src.data.length; i++) {
+            if(src.rowIndices[i] == i && src.colIndices[i] == i && src.data[i].sub(ONE).abs() > diagTol ) {
+                return false; // Diagonal value is not close to one.
+            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && src.data[i].mag() > nonDiagTol) {
+                return false; // Non-diagonal value is not close to zero.
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Checks if a sparse COO matrix is hermitian. That is, the matrix is equal to its conjugate transpose.
+     * @param shape Shape of the COO matrix.
+     * @param entries Non-zero data of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @return {@code true} if the {@code src} matrix is hermitian. {@code false} otherwise.
+     */
+    public static <T extends Ring<T>> boolean isHermitian(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
+        // Check if the matrix is square.
+        if (shape.get(0) != shape.get(1))
+            return false;
+
+        // Build a map from (row, col) to value for quick access.
+        Map<Pair<Integer, Integer>, T> matrixMap = new HashMap<>();
+        int nnz = entries.length; // Number of non-zero data.
+
+        for (int i = 0; i < nnz; i++) {
+            int row = rowIndices[i];
+            int col = colIndices[i];
+            T value = entries[i];
+
+            matrixMap.put(new Pair<>(row, col), value);
+        }
+
+        // Iterate over the data to check for Hermitian property.
+        for (Map.Entry<Pair<Integer, Integer>, T> entry : matrixMap.entrySet()) {
+            int row = entry.getKey().first();
+            int col = entry.getKey().second();
+            T value = entry.getValue();
+
+            // Skip data where row > col to avoid redundant checks.
+            if (row > col) continue;
+
+            if (row == col) {
+                // Diagonal data must be real: value == value.conj()
+                if (!value.equals(value.conj())) return false;
+
+            } else {
+                // Get the symmetric value at (col, row).
+                T symValue = matrixMap.get(new Pair<>(col, row));
+
+                if (symValue == null) // Missing symmetric entry implies zero.
+                    symValue = value.getZero();
+
+                // Check if value equals the conjugate of the symmetric value.
+                if (!value.equals(symValue.conj())) return false;
+            }
+        }
+
+        // If all checks pass, the matrix is Hermitian.
+        return true;
     }
 }
