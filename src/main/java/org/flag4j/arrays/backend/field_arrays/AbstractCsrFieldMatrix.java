@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.sparse.csr.CsrOps;
-import org.flag4j.linalg.ops.sparse.csr.field_ops.CsrFieldMatrixProperties;
+import org.flag4j.linalg.ops.sparse.csr.ring_ops.CsrRingProperties;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
 
 public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T, U, V, W>,
@@ -85,7 +85,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
     @Override
     public boolean isHermitian() {
         // For a field matrix, same as isSymmetric.
-        return CsrFieldMatrixProperties.isHermitian(this);
+        return CsrRingProperties.isHermitian(this);
     }
 
 

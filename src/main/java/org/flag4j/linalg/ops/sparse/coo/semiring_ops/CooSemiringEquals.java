@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -77,6 +77,7 @@ public final class CooSemiringEquals {
 
         a = a.coalesce().dropZeros();
         b = b.coalesce().dropZeros();
+
         return a.shape.equals(b.shape)
                 && Arrays.equals(a.data, b.data)
                 && Arrays.equals(a.rowIndices, b.rowIndices)

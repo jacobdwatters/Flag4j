@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,5 +43,7 @@
  * Additionally, some specialized sparse matrix types are provided with limited support for ops:
  * {@link org.flag4j.arrays.sparse.PermutationMatrix permutation matrix} and the {@link org.flag4j.arrays.sparse.SymmTriDiag
  * symmetric tri-diagonal matrix}.
+ *
+ * @see org.flag4j.arrays.dense
  */
 package org.flag4j.arrays.sparse;

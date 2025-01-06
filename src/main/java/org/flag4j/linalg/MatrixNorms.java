@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,8 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldNorms;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseNorms;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingNorms;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -261,7 +261,7 @@ public final class MatrixNorms {
      */
     public static double norm(CooCMatrix src, double p, double q) {
         // Sparse implementation is usually only faster for very sparse matrices.
-        return src.sparsity()>=0.95 ? CooFieldNorms.matrixNormLpq(src, p, q) :
+        return src.sparsity()>=0.95 ? CooRingNorms.matrixNormLpq(src, p, q) :
                 norm(src.toDense(), p, q);
     }
 
@@ -285,7 +285,7 @@ public final class MatrixNorms {
      */
     public static double norm(CooCMatrix src) {
         // Sparse implementation is usually only faster for very sparse matrices.
-        return src.sparsity()>=0.95 ? CooFieldNorms.matrixNormL2(src) :
+        return src.sparsity()>=0.95 ? CooRingNorms.matrixNormL2(src) :
                 norm(src.toDense());
     }
 
@@ -301,7 +301,7 @@ public final class MatrixNorms {
      */
     public static double norm(CooCMatrix src, double p) {
         // Sparse implementation is usually only faster for very sparse matrices.
-        return src.sparsity()>=0.95 ? CooFieldNorms.matrixNormLp(src, p) :
+        return src.sparsity()>=0.95 ? CooRingNorms.matrixNormLp(src, p) :
                 norm(src.toDense(), p);
     }
 

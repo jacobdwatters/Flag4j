@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -192,5 +192,19 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
     @Override
     public T H(int... axes) {
         return T(axes);
+    }
+
+
+    /**
+     * Checks if the matrix is "close" to an identity matrix. Two entries {@code x} and {@code y} are considered
+     * "close" if they satisfy the following:
+     * <pre>{@code
+     *      |x-y| <= (1E-08 + 1E-05*|y|)
+     * }</pre>
+     *
+     * @return {@code true} if the matrix is approximately an identity matrix, otherwise {@code false}.
+     */
+    public boolean isCloseToIdentity() {
+        return CooRingMatrixOps.isCloseToIdentity(this);
     }
 }

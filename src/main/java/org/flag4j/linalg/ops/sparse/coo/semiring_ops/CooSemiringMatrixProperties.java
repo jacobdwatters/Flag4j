@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,6 @@ package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * This class contains low level implementations for methods to evaluate certain properties of a sparse COO
@@ -66,62 +61,5 @@ public final class CooSemiringMatrixProperties {
         }
 
         return true; // If we make it to this point the matrix must be an identity matrix.
-    }
-
-
-    /**
-     * Checks if a sparse matrix is symmetric.
-     * @param shape Shape of the matrix.
-     * @param entries Non-zero data of the matrix.
-     * @param rowIndices Non-zero row indices of the matrix.
-     * @param colIndices Non-zero column indices of the matrix.
-     * @return True if the {@code src} matrix is hermitian. False otherwise.
-     */
-    public static <T extends Semiring<T>> boolean isSymmetric(
-            Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
-        if (shape.get(0) != shape.get(1)) return false; // Quick return for non-square matrix.
-
-        List<T> entriesList = Arrays.asList(entries);
-        List<Integer> rowIndicesList = IntStream.of(rowIndices).boxed().collect(Collectors.toList());
-        List<Integer> colIndicesList = IntStream.of(colIndices).boxed().collect(Collectors.toList());
-
-        boolean result = true;
-
-        while(result && entriesList.size() > 0) {
-            // Extract value of interest.
-            T value = entriesList.remove(0);
-            int row = rowIndicesList.remove(0);
-            int col = colIndicesList.remove(0);
-
-            // Find indices of first and last value whose row index matched the value of interests column index.
-            int rowStart = rowIndicesList.indexOf(col);
-            int rowEnd = rowIndicesList.lastIndexOf(col);
-
-            if(rowStart == -1) {
-                // Then no non-zero value was found.
-                result = value.equals(0);
-            } else {
-                // At least one entry has a row-index matching the specified column index.
-                List<Integer> colIdxRange = colIndicesList.subList(rowStart, rowEnd + 1);
-
-                // Search for element whose column index matches the specified row index
-                int idx = colIdxRange.indexOf(row);
-
-                if(idx == -1) {
-                    // Then no non-zero value was found.
-                    result = value.equals(0);
-                } else {
-                    // Check that value with opposite row/column indices is equal.
-                    result = value.equals(entriesList.get(idx + rowStart));
-
-                    // Remove the value and the indices.
-                    entriesList.remove(idx + rowStart);
-                    rowIndicesList.remove(idx + rowStart);
-                    colIndicesList.remove(idx + rowStart);
-                }
-            }
-        }
-
-        return result;
     }
 }

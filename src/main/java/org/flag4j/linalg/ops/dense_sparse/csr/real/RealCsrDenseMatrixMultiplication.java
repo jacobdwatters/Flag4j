@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,6 @@ public final class RealCsrDenseMatrixMultiplication {
 
     private RealCsrDenseMatrixMultiplication() {
         // Hide default constructor for utility method.
-        
     }
 
 

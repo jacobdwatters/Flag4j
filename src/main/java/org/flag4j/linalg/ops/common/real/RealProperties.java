@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ public final class RealProperties {
      * @param src2 Second array in comparison.
      * @return True if both arrays have the same length and all data are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays respectively and satisfy
-     * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
+     * {@code |a-b| <= (1E-08 + 1E-05*|b|)}. Otherwise, returns false.
      * @see #allClose(double[], double[], double, double)
      */
     public static boolean allClose(double[] src1, double[] src2) {

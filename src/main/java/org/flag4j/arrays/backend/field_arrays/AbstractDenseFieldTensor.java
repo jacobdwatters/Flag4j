@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingTensor;
 import org.flag4j.linalg.ops.TransposeDispatcher;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
-import org.flag4j.linalg.ops.common.field_ops.FieldProperties;
+import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldElemDiv;
 import org.flag4j.util.ValidateParameters;
 
@@ -158,11 +158,11 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      * @param b Second tensor in the comparison.
      * @return True if both tensors have the same shape and all data are 'close' element-wise, i.e.
      * elements {@code x} and {@code y} at the same positions in the two tensors respectively and satisfy
-     * {@code |x-y| <= (1E-05 + 1E-08*|y|)}. Otherwise, returns false.
+     * {@code |x-y| <= (1E-08 + 1E-05*|y|)}. Otherwise, returns false.
      * @see #allClose(AbstractDenseFieldTensor, double, double)
      */
     public boolean allClose(T b) {
-        return sameShape(b) && FieldProperties.allClose(data, b.data);
+        return sameShape(b) && RingProperties.allClose(data, b.data);
     }
 
 
@@ -175,6 +175,6 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      * @see #allClose(AbstractDenseFieldTensor)
      */
     public boolean allClose(T b, double relTol, double absTol) {
-        return sameShape(b) && FieldProperties.allClose(data, b.data, relTol, absTol);
+        return sameShape(b) && RingProperties.allClose(data, b.data, relTol, absTol);
     }
 }

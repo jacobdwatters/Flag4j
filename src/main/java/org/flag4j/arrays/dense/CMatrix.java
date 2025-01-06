@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,8 +38,8 @@ import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
-import org.flag4j.linalg.ops.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops.DenseCsrSemiringMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -818,7 +818,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CsrCMatrix b) {
-        return (CMatrix) DenseCsrFieldMatMult .standard(this, b);
+        return (CMatrix) DenseCsrSemiringMatMult.standard(this, b);
     }
 
 

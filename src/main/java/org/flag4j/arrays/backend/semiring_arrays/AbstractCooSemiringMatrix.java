@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -772,7 +772,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public boolean isSymmetric() {
-        return CooSemiringMatrixProperties.isSymmetric(shape, data, rowIndices, colIndices);
+        return CooProperties.isSymmetric(shape, data, rowIndices, colIndices);
     }
 
 
@@ -1321,8 +1321,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      * @see #coalesce(BinaryOperator) 
      */
     public T coalesce() {
-        SparseMatrixData<W> mat = SparseUtils.coalesce(Semiring::add, shape, data, rowIndices, colIndices);
-        return makeLikeTensor(mat.shape(), mat.data(), mat.rowData(), mat.colData());
+        return coalesce(Semiring::add);
     }
 
 

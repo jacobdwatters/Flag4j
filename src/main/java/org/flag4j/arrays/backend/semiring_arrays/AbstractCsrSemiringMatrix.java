@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -137,6 +137,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     protected AbstractCsrSemiringMatrix(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
+
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
@@ -886,7 +887,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         SparseMatrixData<Semiring<W>> sliceData = CsrOps.getSlice(
-                data, rowPointers, colIndices,
+                shape, data, rowPointers, colIndices,
                 rowStart, rowEnd, colStart, colEnd);
         return makeLikeTensor(sliceData.shape(), (List<W>) sliceData.data(),
                 sliceData.rowData(), sliceData.colData());

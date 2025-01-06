@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -83,6 +83,25 @@ public abstract class AbstractCooRingVector<
      */
     protected AbstractCooRingVector(Shape shape, Y[] entries, int[] indices) {
         super(shape, entries, indices);
+    }
+
+
+    /**
+     * <p>Computes the inner product between two vectors.
+     *
+     * <p>Note: this method is distinct from {@link #dot(AbstractCooSemiringVector)}. The inner product is equivalent to the dot product
+     * of this tensor with the conjugation of {@code b}.
+     *
+     * @param b Second vector in the inner product.
+     *
+     * @return The inner product between this vector and the vector {@code b}.
+     *
+     * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
+     * @see #dot(AbstractCooSemiringVector)
+     */
+    @Override
+    public Y inner(T b) {
+        return CooRingVectorOps.inner(this, b);
     }
 
 

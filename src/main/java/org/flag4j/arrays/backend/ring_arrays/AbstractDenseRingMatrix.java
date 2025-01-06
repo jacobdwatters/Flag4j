@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringMatrix;
+import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -118,5 +119,69 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
     @Override
     public T H(int... axes) {
         return T(axes);
+    }
+
+
+    /**
+     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     *
+     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
+     */
+    @Override
+    public boolean isHermitian() {
+        if(this==null) return false;
+        if(this.data.length==0) return true;
+
+        return numRows==numCols && DenseRingTensorOps.isHermitian(shape, data);
+    }
+
+
+    /**
+     * Checks if the matrix is "close" to an identity matrix. Two entries {@code x} and {@code y} are considered
+     * "close" if they satisfy the following:
+     * <pre>{@code
+     *      |x-y| <= (1E-08 + 1E-05*|y|)
+     * }</pre>
+     *
+     * @return {@code true} if the matrix is approximately an identity matrix, otherwise {@code false}.
+     */
+    public boolean isCloseToIdentity() {
+        return DenseRingTensorOps.isCloseToIdentity(shape, data);
+    }
+
+
+    /**
+     * Checks if two sparse CSR ring matrices are element-wise equal within the following tolerance for two entries {@code x}
+     * and {@code y}:
+     * <pre>{@code
+     *  |x-y| <= (1e-08 + 1e-05*|y|)
+     * }</pre>
+     *
+     * To specify the relative and absolute tolerances use {@link #allClose(AbstractDenseRingMatrix, double, double)}
+     *
+     * @return {@code true} if this matrix and {@code b} element-wise equal within the tolerance {@code |x-y| <= (1e-08 + 1e-05*|y|)}.
+     * @see #allClose(AbstractDenseRingMatrix, double, double)
+     */
+    public boolean allClose(T b) {
+        return allClose(b, 1e-05, 1e-08);
+    }
+
+
+    /**
+     * Checks if two matrices are element-wise equal within the tolerance specified by {@code relTol} and {@code absTol}. Two elements
+     * {@code x} and {@code y} are considered "close" if they satisfy the following:
+     * <pre>{@code
+     *  |x-y| <= (absTol + relTol*|y|)
+     * }</pre>
+     * @param b Matrix to compare to this matrix.
+     * @param relTol Relative tolerance.
+     * @param absTol Absolute tolerance.
+     * @return {@code true} if the {@code src1} matrix is the same shape as the {@code src2} matrix and all data
+     * are 'close', i.e. elements {@code a} and {@code b} at the same positions in the two matrices respectively
+     * satisfy {@code |a-b| <= (absTol + relTol*|b|)}. Otherwise, returns {@code false}.
+     * @see #allClose(AbstractDenseRingMatrix)
+     */
+    public boolean allClose(T b, double relRol, double absTol) {
+        return RingProperties.allClose(data, b.data, relRol, absTol);
     }
 }
