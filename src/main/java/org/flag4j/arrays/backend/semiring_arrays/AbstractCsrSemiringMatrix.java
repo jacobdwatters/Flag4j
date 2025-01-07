@@ -782,7 +782,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isHermitian() {
-        // For a semiring matrix, same as isSymmetric.
+        // For a general semiring matrix, same as isSymmetric.
         return isSymmetric();
     }
 
