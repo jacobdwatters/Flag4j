@@ -40,6 +40,7 @@ import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooConcats;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
 import org.flag4j.util.ArrayUtils;
@@ -336,6 +337,17 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     @Override
     public CsrCMatrix makeLikeCsrMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     *
+     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
+     */
+    @Override
+    public boolean isHermitian() {
+        return CooRingMatrixOps.isHermitian(shape, data, rowIndices, colIndices);
     }
 
 

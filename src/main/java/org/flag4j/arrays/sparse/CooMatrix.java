@@ -1185,7 +1185,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public boolean isSymmetric() {
-        return RealSparseMatrixProperties.isSymmetric(this);
+        return RealSparseMatrixProperties.isSymmetric(shape, data, rowIndices, colIndices);
     }
 
 
@@ -1208,7 +1208,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @see #isSymmetric()
      */
     public boolean isAntiSymmetric() {
-        return RealSparseMatrixProperties.isAntiSymmetric(this);
+        return RealSparseMatrixProperties.isAntiSymmetric(shape, data, rowIndices, colIndices);
     }
 
 

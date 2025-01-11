@@ -2,6 +2,7 @@ package org.flag4j.linalg.ops.common.real;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.MatrixNorms;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,11 +39,13 @@ class MatrixNormTests {
     @Test
     void lpNormTestCase() {
         // ---------------- Sub-case 1  ----------------
-        aEntries = new double[][]{{1.1234, 99.234, 0.000123, -9.1}, {-932.45, 551.35, -0.92342, 124.5}};
+        aEntries = new double[][]{
+                {1.1234, 99.234, 0.000123, -9.1},
+                {-932.45, 551.35, -0.92342, 124.5}};
         A = new Matrix(aEntries);
         expNorm = 1094.9348777384303;
 
-        assertEquals(expNorm, MatrixNorms.norm(A));
+        assertEquals(expNorm, MatrixNorms.norm(A), 1.0e-12);
 
         // ---------------- Sub-case 2  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
@@ -52,16 +55,22 @@ class MatrixNormTests {
         assertEquals(expNorm, MatrixNorms.norm(A));
 
         // ---------------- Sub-case 3  ----------------
-        aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
+        aEntries = new double[][]{
+                {1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
-        expNorm = 1094.7776004801563;
+        expNorm = 1089.5874942580217;
 
-        assertEquals(expNorm, MatrixNorms.norm(A,2));
+        assertEquals(expNorm, MatrixNorms.norm(A,2), 1.0e-12);
 
         // ---------------- Sub-case 4  ----------------
-        aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
+        aEntries = new double[][]{
+                {1.1234, 99.234, 0.000123},
+                {-932.45, 551.35, -0.92342},
+                {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
-        expNorm = 1708.5260729999998;
+        expNorm = 1057.0184;
 
         assertEquals(expNorm, MatrixNorms.norm(A,1));
 
@@ -90,18 +99,18 @@ class MatrixNormTests {
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(IllegalArgumentException.class, ()-> MatrixNorms.norm(A,0));
+        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A,0));
 
         // ---------------- Sub-case 10  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(IllegalArgumentException.class, ()-> MatrixNorms.norm(A, 0, 1));
+        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A, 0, 1));
 
         // ---------------- Sub-case 11  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(IllegalArgumentException.class, ()-> MatrixNorms.norm(A,1, -12));
+        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A,1, -12));
     }
 }

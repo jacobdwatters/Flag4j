@@ -178,7 +178,7 @@ public abstract class AbstractDenseFieldVector<T extends AbstractDenseFieldVecto
      *
      * @return The Euclidean norm of this vector.
      */
-    public double norm(int p) {
+    public double norm(double p) {
         return VectorNorms.norm(data, p);
     }
 

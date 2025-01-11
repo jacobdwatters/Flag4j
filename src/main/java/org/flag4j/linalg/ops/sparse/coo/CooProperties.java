@@ -25,11 +25,12 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 
+import org.flag4j.arrays.Pair;
 import org.flag4j.arrays.Shape;
-import org.flag4j.util.ArrayUtils;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Utility class for computing certain properties of COO matrices. The methods in this class are agnostic to the type of COO matrix.
@@ -43,56 +44,40 @@ public final class CooProperties {
 
     /**
      * Checks if a sparse COO matrix is symmetric.
-     * @param src Matrix to check if it is the hermitian matrix.
-     * @return True if the {@code src} matrix is hermitian. False otherwise.
+     * @param shape The shape of the COO matrix.
+     * @param data Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @param zeroValue Any value in {@code values} equal to {@code zeroValue}
+     * will be considered zero and will not be considered when determining symmetry. Equality is determined according to
+     * {@link Objects#equals(Object, Object)} where if one of the parameters is {@code null} then the result will always be {@code
+     * false}. This means passing {@code zeroValue = null} will result in all items in {@code values} being considered. This is
+     * useful if there is no definable zero value for the values of the COO matrix.
+     * @return {@code true} if the specified COO matrix is symmetric
+     * (i.e. equal to its transpose); {@code false} otherwise.
      */
-    public static <T> boolean isSymmetric(Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
-        // Check that the matrix is square.
-        boolean result = shape.get(0) == shape.get(1);
+    public static <T> boolean isSymmetric(Shape shape, T[] data, int[] rowIndices, int[] colIndices, T zeroValue) {
+        if(shape.get(0) != shape.get(1)) return false; // Early return for non-square matrix.
 
-        List<T> dataList = Arrays.asList(data);
-        List<Integer> rowIdxList = ArrayUtils.toArrayList(rowIndices);
-        List<Integer> colIdxList = ArrayUtils.toArrayList(colIndices);;
+        Map<Pair<Integer, Integer>, T> dataMap = new HashMap<Pair<Integer, Integer>, T>();
 
-        T value;
-        int row;
-        int col;
+        for(int i = 0, size=data.length; i < size; i++) {
+            if(rowIndices[i] == colIndices[i] || Objects.equals(data[i], zeroValue))
+                continue; // This value is zero or on the diagonal. No need to consider.
 
-        while(result && dataList.size() > 0) {
-            // Extract value of interest.
-            value = dataList.remove(0);
-            row = rowIdxList.remove(0);
-            col = colIdxList.remove(0);
+            var p1 = new Pair<>(rowIndices[i], colIndices[i]);
+            var p2 = new Pair<>(colIndices[i], rowIndices[i]);
 
-            // Find indices of first and last value whose row index matched the value of interests column index.
-            int rowStart = rowIdxList.indexOf(col);
-            int rowEnd = rowIdxList.lastIndexOf(col);
-
-            if(rowStart == -1) {
-                // Then no non-zero value was found.
-                result = value.equals(0);
+            if(!dataMap.containsKey(p2)) {
+                dataMap.put(p1, data[i]);
+            } else if(!dataMap.get(p2).equals(data[i])){
+                return false; // Not symmetric.
             } else {
-                // At least one entry has a row-index matching the specified column index.
-                List<Integer> colIdxRange = colIdxList.subList(rowStart, rowEnd + 1);
-
-                // Search for element whose column index matches the specified row index
-                int idx = colIdxRange.indexOf(row);
-
-                if(idx == -1) {
-                    // Then no non-zero value was found.
-                    result = value.equals(0);
-                } else {
-                    // Check that value with opposite row/column indices is equal.
-                    result = value.equals(dataList.get(idx + rowStart));
-
-                    // Remove the value and the indices.
-                    dataList.remove(idx + rowStart);
-                    rowIdxList.remove(idx + rowStart);
-                    colIdxList.remove(idx + rowStart);
-                }
+                dataMap.remove(p2);
             }
         }
 
-        return result;
+        // If there are any remaining values a value with the transposed indices was not found in the matrix.
+        return dataMap.isEmpty();
     }
 }

@@ -771,7 +771,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isSymmetric() {
-        return CsrProperties.isSymmetric(shape, data, rowPointers, colIndices);
+        return CsrProperties.isSymmetric(shape, data, rowPointers, colIndices, zeroElement);
     }
 
 

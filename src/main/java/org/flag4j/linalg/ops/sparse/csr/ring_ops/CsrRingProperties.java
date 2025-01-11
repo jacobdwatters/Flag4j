@@ -27,6 +27,7 @@ package org.flag4j.linalg.ops.sparse.csr.ring_ops;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCsrRingMatrix;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.util.ArrayUtils;
@@ -34,6 +35,7 @@ import org.flag4j.util.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class contains methods to check properties of sparse CSR
@@ -156,15 +158,46 @@ public final class CsrRingProperties {
 
 
     /**
-     * Checks if the {@code src} matrix is Hermitian.
-     * @param src Source matrix to check.
-     * @return {@code true} if {@code src} is Hermitian; {@code false} otherwise.
+     * Checks if a sparse CSR matrix is Hermitian.
+     * @param shape Shape of the CSR matrix.
+     * @param values Non-zero values of a CSR matrix.
+     * @param rowPointers Non-zero row pointers of the CSR matrix.
+     * @param colIndices Non-zero column indices of the CSR matrix.
+     * @return {@code true} if the CSR matrix is Hermitian (i.e. equal to its conjugate transpose); {@code false} otherwise.
      */
-    public static <T extends Ring<T>> boolean isHermitian(AbstractCsrRingMatrix<?, ?, ?, T> src) {
-        // Check for early returns.
-        if(!src.isSquare()) return false;
-        if(src.data.length == 0) return true;
+    public static <T extends Ring<T>> boolean isHermitian(Shape shape, T[] values, int[] rowPointers, int[] colIndices) {
+        int numRows = shape.get(0);
+        int numCols = shape.get(1);
 
-        return src.H().equals(src);
+        if(numRows != numCols) return false; // Early return for non-square matrix.
+
+        for (int i = 0; i < numRows; i++) {
+            int rowStart = rowPointers[i];
+            int rowEnd = rowPointers[i + 1];
+
+            for (int idx = rowStart; idx < rowEnd; idx++) {
+                int j = colIndices[idx];
+
+                if (j >= i && !values[idx].isZero()) {
+                    T val1 = values[idx];
+
+                    // Search for the value with swapped row and column indices.
+                    int pos = Arrays.binarySearch(colIndices,  rowPointers[j], rowPointers[j + 1], i);
+
+                    if (pos >= 0) {
+                        T val2 = values[pos];
+
+                        // Ensure values  are Equal
+                        if (!Objects.equals(val1, val2.conj())) return false;
+
+                    } else {
+                        // Corresponding value not found.
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@ import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.decompositions.svd.SVD;
 import org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolver;
 import org.flag4j.linalg.solvers.lstsq.RealLstsqSolver;
+import org.flag4j.util.Flag4jConstants;
 
 /**
  * This class contains several methods for computing the subspace of a matrix.
@@ -165,7 +166,7 @@ public final class SubSpace {
         boolean result;
 
         RealLstsqSolver lstsq = new RealLstsqSolver();
-        double tol = 1.0E-12; // Tolerance for considering a norm zero.
+        double tol = Flag4jConstants.EPS_F64; // Tolerance for considering a norm zero.
         Vector solution, col;
         result = true;
 
@@ -198,7 +199,7 @@ public final class SubSpace {
         boolean result;
 
         ComplexLstsqSolver lstsq = new ComplexLstsqSolver();
-        double tol = 1.0E-12; // Tolerance for considering a norm zero.
+        double tol = Flag4jConstants.EPS_F64; // Tolerance for considering a norm zero.
         CVector solution, col;
         result = true;
 
@@ -207,7 +208,7 @@ public final class SubSpace {
             col = src2.getCol(j);
             solution = lstsq.solve(src1, col);
 
-            double norm = VectorNorms.norm(src1.mult(solution).sub(col));
+            double norm = src1.mult(solution).sub(col).norm();
             if(norm > tol) {
                 // Then the least squares solution does not provide an "exact" solution.
                 // Hence, the column of src2 cannot be expressed as a linear combination of the columns of src1

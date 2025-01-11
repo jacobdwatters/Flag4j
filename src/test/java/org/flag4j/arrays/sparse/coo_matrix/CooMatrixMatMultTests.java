@@ -1,4 +1,4 @@
-package org.flag4j.arrays.sparse.sparse_matrix;
+package org.flag4j.arrays.sparse.coo_matrix;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;

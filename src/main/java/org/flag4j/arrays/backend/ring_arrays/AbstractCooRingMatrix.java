@@ -204,7 +204,7 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      *
      * @return {@code true} if the matrix is approximately an identity matrix, otherwise {@code false}.
      */
-    public boolean isCloseToIdentity() {
+    public boolean isCloseToI() {
         return CooRingMatrixOps.isCloseToIdentity(this);
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,14 +40,19 @@ public final class CsrProperties {
 
 
     /**
-     * Checks if a CSR matrix is symmetric.
+     * Checks if a sparse CSR matrix is symmetric.
      * @param shape Shape of the CSR matrix.
      * @param values Non-zero values of a CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
+     * @param zeroValue Any value in {@code values} equal to {@code zeroValue}
+     * will be considered zero and will not be considered when determining the symmetry. Equality is determined according to
+     * {@link Objects#equals(Object, Object)} where if one of the parameters is {@code null} then the result will always be {@code
+     * false}. This means passing {@code zeroValue = null} will result in all items in {@code values} being considered. This is
+     * useful if there is no definable zero value for the values of the CSR matrix.
      * @return {@code true} if the CSR matrix is symmetric; {@code false} otherwise.
      */
-    public static <T> boolean isSymmetric(Shape shape, T[] values, int[] rowPointers, int[] colIndices) {
+    public static <T> boolean isSymmetric(Shape shape, T[] values, int[] rowPointers, int[] colIndices, T zeroValue) {
         int numRows = shape.get(0);
         int numCols = shape.get(1);
 
@@ -60,7 +65,7 @@ public final class CsrProperties {
             for (int idx = rowStart; idx < rowEnd; idx++) {
                 int j = colIndices[idx];
 
-                if (j >= i) {
+                if (j >= i && !Objects.equals(values[idx], zeroValue)) {
                     T val1 = values[idx];
 
                     // Search for the value with swapped row and column indices.

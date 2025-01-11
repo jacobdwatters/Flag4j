@@ -43,11 +43,13 @@ public final class CooRingNorms {
 
 
     /**
-     * Computes the L<sub>2</sub> norm of a matrix.
+     * Computes the L<sub>2, 2</sub> norm of a matrix. Also called the Frobenius norm.
      * @param src Source matrix to compute norm of.
-     * @return The L<sub>2</sub> of the {@code src} matrix.
+     * @return The L<sub>2, 2</sub> of the {@code src} matrix.
      */
-    public static <T extends Ring<T>> double matrixNormL2(AbstractCooRingMatrix<?, ?, ?, T> src) {
+    public static <T extends Ring<T>> double matrixNormL22(AbstractCooRingMatrix<?, ?, ?, T> src) {
+        ValidateParameters.ensureSquare(src.shape);
+
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
 
@@ -63,33 +65,6 @@ public final class CooRingNorms {
         // Compute the norm from the column sums.
         for(double colSum : colSums)
             norm += Math.sqrt(colSum);
-
-        return norm;
-    }
-
-
-    /**
-     * Computes the L<sub>p</sub> norm of a matrix.
-     * @param src Source matrix to compute norm of.
-     * @param p Parameter for L<sub>p</sub> norm
-     * @return The L<sub>p</sub> of the {@code src} matrix.
-     */
-    public static <T extends Ring<T>> double matrixNormLp(AbstractCooRingMatrix<?, ?, ?, T> src, double p) {
-        ValidateParameters.ensureGreaterEq(1, p);
-
-        double norm = 0;
-        double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
-
-        // Create a mapping from the unique column indices to a unique position in the colSums array.
-        HashMap<Integer, Integer> columnMap = ArrayUtils.createUniqueMapping(src.colIndices);
-
-        // Compute the column sums.
-        for(int i = 0; i<src.data.length; i++)
-            colSums[columnMap.get(src.colIndices[i])] += Math.pow(src.data[i].mag(), p);
-
-        // Compute the norm from the column sums.
-        for(double colSum : colSums)
-            norm += Math.pow(colSum, 1.0/p);
 
         return norm;
     }

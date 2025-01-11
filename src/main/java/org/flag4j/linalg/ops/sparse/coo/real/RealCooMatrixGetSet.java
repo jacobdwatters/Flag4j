@@ -115,10 +115,8 @@ public final class RealCooMatrixGetSet {
      * @throws IllegalArgumentException If {@code row.length != src.numCols}.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, CooVector row) {
-        if(src.numCols != row.size) {
-            throw new IllegalArgumentException("Cannot set row of matrix with shape " + src.shape
-                    + " with a vector of size " + row.size + ".");
-        }
+        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureEquals(src.numCols, row.size);
 
         int[] rowArray = new int[row.nnz];
         Arrays.fill(rowArray, rowIdx);
@@ -188,84 +186,8 @@ public final class RealCooMatrixGetSet {
             );
 
         } else {
-            // Entries with row index found.
-            destEntries = new double[src.data.length + row.length - (end-start)];
-            destRowIndices = new int[destEntries.length];
-            destColIndices = new int[destEntries.length];
+            end++; // Make end index exclusive to simplify computations.
 
-            System.arraycopy(src.data, 0, destEntries, 0, start);
-            System.arraycopy(row, 0, destEntries, start, row.length);
-            System.arraycopy(
-                    src.data, end,
-                    destEntries, start + row.length, destEntries.length-(start + row.length)
-            );
-
-            System.arraycopy(src.rowIndices, 0, destRowIndices, 0, start);
-            Arrays.fill(destRowIndices, start, start+row.length, rowIdx);
-            System.arraycopy(
-                    src.rowIndices, end,
-                    destRowIndices, start + row.length, destEntries.length-(start + row.length)
-            );
-
-            System.arraycopy(src.colIndices, 0, destColIndices, 0, start);
-            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, start, row.length);
-            System.arraycopy(
-                    src.colIndices, end,
-                    destColIndices, start + row.length, destEntries.length-(start + row.length)
-            );
-        }
-
-        return new CooMatrix(src.shape, destEntries, destRowIndices, destColIndices);
-    }
-
-
-    /**
-     * Sets a specified row of a real sparse matrix to the values of a dense array.
-     * @param src Source matrix to set the row of.
-     * @param rowIdx Index of the row to set.
-     * @param row Dense array containing the data of the row to set.
-     * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
-     */
-    public static CooMatrix setRow(CooMatrix src, int rowIdx, Double[] row) {
-        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
-        ValidateParameters.ensureEquals(src.numCols, row.length);
-
-        int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
-        int start = startEnd[0];
-        int end = startEnd[1];
-
-        double[] destEntries;
-        int[] destRowIndices ;
-        int[] destColIndices;
-
-        if(start<0) {
-            // No data with row index found.
-            destEntries = new double[src.data.length + row.length];
-            destRowIndices = new int[destEntries.length];
-            destColIndices = new int[destEntries.length];
-
-            System.arraycopy(src.data, 0, destEntries, 0, -start-1);
-            System.arraycopy(row, 0, destEntries, -start-1, row.length);
-            System.arraycopy(
-                    src.data, -start-1,
-                    destEntries, -start-1+row.length, destEntries.length-(row.length - start - 1)
-            );
-
-            System.arraycopy(src.rowIndices, 0, destRowIndices, 0, -start-1);
-            Arrays.fill(destRowIndices, -start-1, -start-1+row.length, rowIdx);
-            System.arraycopy(
-                    src.rowIndices, -start-1,
-                    destRowIndices, -start-1+row.length, destRowIndices.length-(row.length - start - 1)
-            );
-
-            System.arraycopy(src.colIndices, 0, destColIndices, 0, -start-1);
-            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, -start-1, row.length);
-            System.arraycopy(
-                    src.colIndices, -start-1,
-                    destColIndices, -start-1+row.length, destColIndices.length-(row.length - start - 1)
-            );
-
-        } else {
             // Entries with row index found.
             destEntries = new double[src.data.length + row.length - (end-start)];
             destRowIndices = new int[destEntries.length];
@@ -487,62 +409,6 @@ public final class RealCooMatrixGetSet {
                 flatValues[pos++] = d;
             }
         }
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
-        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
-
-        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
-    }
-
-
-    /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
-     * @param src Source sparse matrix to copy and set values of.
-     * @param values Dense values of the slice to be set.
-     * @param row Starting row index of slice.
-     * @param col Starting column index of slice.
-     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} array.
-     * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
-     * given the row and column index.
-     */
-    public static CooMatrix setSlice(CooMatrix src, Double[][] values, int row, int col) {
-        // Ensure the values matrix fits inside the src matrix.
-        ValidateParameters.ensureLessEq(src.numRows, values.length + row);
-        ValidateParameters.ensureLessEq(src.numCols, values[0].length + col);
-
-        // Flatten values.
-        double[] flatValues = ArrayUtils.unboxFlatten(values);
-
-        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
-        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
-
-        return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
-    }
-
-
-    /**
-     * Copies a sparse matrix and sets a slice of the sparse matrix to the data of a dense array.
-     * @param src Source sparse matrix to copy and set values of.
-     * @param values Dense values of the slice to be set.
-     * @param row Starting row index of slice.
-     * @param col Starting column index of slice.
-     * @return A copy of the {@code src} matrix with the specified slice set to the {@code values} array.
-     * @throws IllegalArgumentException If the {@code values} array does not fit in the {@code src} matrix
-     * given the row and column index.
-     */
-    public static CooMatrix setSlice(CooMatrix src, Integer[][] values, int row, int col) {
-        // Ensure the values matrix fits inside the src matrix.
-        ValidateParameters.ensureLessEq(src.numRows, values.length + row);
-        ValidateParameters.ensureLessEq(src.numCols, values[0].length + col);
-
-        // Flatten values.
-        double[] flatValues = new double[values.length*values[0].length];
-        int pos = 0;
-        for(Integer[] vRow : values) {
-            for(Integer d : vRow) {
-                flatValues[pos++] = d;
-            }
-        }
-
         int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
         int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 

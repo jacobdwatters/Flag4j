@@ -772,7 +772,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public boolean isSymmetric() {
-        return CooProperties.isSymmetric(shape, data, rowIndices, colIndices);
+        return CooProperties.isSymmetric(shape, data, rowIndices, colIndices, zeroElement);
     }
 
 

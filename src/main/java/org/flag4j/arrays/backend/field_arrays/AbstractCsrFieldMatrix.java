@@ -85,7 +85,7 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
     @Override
     public boolean isHermitian() {
         // For a field matrix, same as isSymmetric.
-        return CsrRingProperties.isHermitian(this);
+        return CsrRingProperties.isHermitian(shape, data, rowPointers, colIndices);
     }
 
 
