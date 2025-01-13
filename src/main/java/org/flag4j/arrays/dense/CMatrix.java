@@ -31,6 +31,7 @@ import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.MatrixNorms;
 import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
@@ -327,6 +328,47 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     @Override
     public Complex128[] makeEmptyDataArray(int length) {
         return new Complex128[length];
+    }
+
+
+    /**
+     * // TODO: Update javadoc.
+     * Computes the Euclidean norm of this vector.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    @Override
+    public double norm() {
+        return MatrixNorms.norm(this);
+    }
+
+
+    /**
+     * // TODO: Update javadoc.
+     * Computes the p-norm of this vector.
+     *
+     * @param p {@code p} value in the p-norm.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    @Override
+    public double norm(double p) {
+        return MatrixNorms.inducedNorm(this, p);
+    }
+
+
+    // TODO: Add schattenNorm(double p)
+
+    /**
+     * // TODO: Update javadoc.
+     * Computes the p-norm of this vector.
+     *
+     * @param p {@code p} value in the p-norm.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    public double norm(double p, double q) {
+        return MatrixNorms.norm(this, p, q);
     }
 
 

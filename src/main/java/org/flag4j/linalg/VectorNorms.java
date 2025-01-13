@@ -30,14 +30,14 @@ import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 
 
 /**
- * A utility class for computing vector norms, including various types of L<sub>p</sub> norms,
+ * A utility class for computing vector norms, including various types of &ell;<sup>p</sup> norms,
  * with support for both dense and sparse vectors. This class provides methods to compute norms
  * for vectors with real entries as well as vectors with entries that belong to a {@link Ring}.
  *
- * <p>The methods in this class utilize scaling internally when computing the L<sub>p</sub> norm to protect against
+ * <p>The methods in this class utilize scaling internally when computing the &ell;<sup>p</sup> norm to protect against
  * overflow and underflow for very large or very small values of {@code p} (in absolute value).
  *
- * <p><strong>Note:</strong> When {@code p < 1}, the results of the L<sub>p</sub> norm methods are not
+ * <p><strong>Note:</strong> When {@code p < 1}, the results of the &ell;<sup>p</sup> norm methods are not
  * technically true mathematical norms but may still be useful for numerical tasks. However, {@code p = 0}
  * will result in {@link Double#NaN}.
  *
@@ -50,12 +50,12 @@ public final class VectorNorms {
     }
 
     /**
-     * <p>Computes the L<sub>2</sub> (Euclidean) norm of a real dense or sparse vector.
+     * <p>Computes the Euclidean (&ell;<sup>2</sup>) norm of a real dense or sparse vector.
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
      * of a sparse vector.
      *
      * @param src Entries of the vector (or non-zero data if vector is sparse) to compute norm of.
-     * @return L<sub>2</sub> (Euclidean) norm
+     * @return Euclidean (&ell;<sup>2</sup>) norm
      */
     public static double norm(double... src) {
         return scaledL2Norm(src);
@@ -63,12 +63,13 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the L<sub>2</sub> (Euclidean) norm of a dense or sparse vector whose entries are members of a {@link Ring}.
+     * <p>Computes the Euclidean (&ell;<sup>2</sup>) norm of a dense or sparse vector whose entries are members of a
+     * {@link Ring}.
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
      * of a sparse vector.
      *
      * @param src Entries of the vector (or non-zero data if vector is sparse) to compute norm of.
-     * @return L<sub>2</sub> (Euclidean) norm
+     * @return Euclidean (&ell;<sup>2</sup>) norm
      */
     public static <T extends Ring<T>> double norm(T... src) {
         return scaledL2Norm(src);
@@ -76,11 +77,11 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the L<sub>p</sub> norm (or p-norm) of a real dense or sparse vector.
+     * <p>Computes the &ell;<sup>p</sup> norm (or p-norm) of a real dense or sparse vector.
      * <p>Some common norms:
      * <ul>
      *     <li>{@code p=1}: The taxicab, city block, or Manhattan norm.</li>
-     *     <li>{@code p=2}: The Euclidean or L<sub>2</sub> norm.</li>
+     *     <li>{@code p=2}: The Euclidean or &ell;<sup>2</sup> norm.</li>
      * </ul>
      *
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
@@ -129,11 +130,11 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the L<sub>p</sub> norm (or p-norm) of a dense or sparse vector whose entries are members of a {@link Ring}.
+     * <p>Computes the &ell;<sup>p</sup> norm (or p-norm) of a dense or sparse vector whose entries are members of a {@link Ring}.
      * <p>Some common norms:
      * <ul>
      *     <li>{@code p=1}: The taxicab, city block, or Manhattan norm.</li>
-     *     <li>{@code p=2}: The Euclidean or L<sub>2</sub> norm.</li>
+     *     <li>{@code p=2}: The Euclidean or &ell;<sup>2</sup> norm.</li>
      * </ul>
      *
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
@@ -182,13 +183,13 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled L<sub>p</sub> norm of a vector.
+     * Computes the scaled &ell;<sup>p</sup> norm of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the L<sub>p</sub> norm for large or small values of {@code p}.
+     * when computing the &ell;<sup>p</sup> norm for large or small values of {@code p}.
      *
-     * @param src The input vector (or non-zero values if vector is sparse) whose L<sub>p</sub> norm is to be computed.
-     * @param p The value of {@code p} for the L<sub>p</sub> norm.
-     * @return The scaled L<sub>p</sub> norm of the input vector.
+     * @param src The input vector (or non-zero values if vector is sparse) whose &ell;<sup>p</sup> norm is to be computed.
+     * @param p The value of {@code p} for the &ell;<sup>p</sup> norm.
+     * @return The scaled &ell;<sup>p</sup> norm of the input vector.
      */
     private static double scaledLpNorm(double[] src, double p) {
         // Find the maximum absolute value in the vector.
@@ -207,12 +208,12 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled L<sub>2</sub> norm (Euclidean norm) of a vector.
+     * Computes the scaled &ell;<sup>2</sup> norm (Euclidean norm) of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the L<sub>2</sub> norm for vectors with very large or very small values.
+     * when computing the &ell;<sup>2</sup> norm for vectors with very large or very small values.
      *
-     * @param src The input vector (or non-zero entries if the vector is sparse) whose L<sub>2</sub> norm is to be computed.
-     * @return The scaled L<sub>2</sub> norm of the input vector.
+     * @param src The input vector (or non-zero entries if the vector is sparse) whose &ell;<sup>2</sup> norm is to be computed.
+     * @return The scaled &ell;<sup>2</sup> norm of the input vector.
      */
     private static double scaledL2Norm(double[] src) {
         // Find the maximum absolute value in the vector.
@@ -233,13 +234,13 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled L<sub>p</sub> norm of a vector.
+     * Computes the scaled &ell;<sup>p</sup> norm of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the L<sub>p</sub> norm for large or small values of {@code p}.
+     * when computing the &ell;<sup>p</sup> norm for large or small values of {@code p}.
      *
-     * @param src The input vector (or non-zero values if vector is sparse) whose L<sub>p</sub> norm is to be computed.
-     * @param p The value of {@code p} for the L<sub>p</sub> norm.
-     * @return The scaled L<sub>p</sub> norm of the input vector.
+     * @param src The input vector (or non-zero values if vector is sparse) whose &ell;<sup>p</sup> norm is to be computed.
+     * @param p The value of {@code p} for the &ell;<sup>p</sup> norm.
+     * @return The scaled &ell;<sup>p</sup> norm of the input vector.
      */
     private static <T extends Ring<T>> double scaledLpNorm(T[] src, double p) {
         // Find the maximum absolute value in the vector.
@@ -258,12 +259,12 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled L<sub>2</sub> norm (Euclidean norm) of a vector.
+     * Computes the scaled &ell;<sup>2</sup> norm (Euclidean norm) of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the L<sub>2</sub> norm for vectors with very large or very small values.
+     * when computing the &ell;<sup>2</sup> norm for vectors with very large or very small values.
      *
-     * @param src The input vector (or non-zero entries if the vector is sparse) whose L<sub>2</sub> norm is to be computed.
-     * @return The scaled L<sub>2</sub> norm of the input vector.
+     * @param src The input vector (or non-zero entries if the vector is sparse) whose &ell;<sup>2</sup> norm is to be computed.
+     * @return The scaled &ell;<sup>2</sup> norm of the input vector.
      */
     private static <T extends Ring<T>> double scaledL2Norm(T[] src) {
         // Find the maximum absolute value in the vector.

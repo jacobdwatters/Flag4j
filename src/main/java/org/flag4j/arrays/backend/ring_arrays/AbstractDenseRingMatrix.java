@@ -29,6 +29,7 @@ import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringMatrix;
+import org.flag4j.linalg.MatrixNorms;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -183,5 +184,17 @@ public abstract class AbstractDenseRingMatrix<T extends AbstractDenseRingMatrix<
      */
     public boolean allClose(T b, double relRol, double absTol) {
         return RingProperties.allClose(data, b.data, relRol, absTol);
+    }
+
+
+    /**
+     * Computes the p-norm of this vector.
+     *
+     * @param p {@code p} value in the p-norm.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    public double norm(int p, int q) {
+        return MatrixNorms.norm(this, p, q);
     }
 }

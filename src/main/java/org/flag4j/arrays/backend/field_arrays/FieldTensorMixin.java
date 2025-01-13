@@ -450,7 +450,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
     }
 
 
-    // TODO: Update this Javadoc. This is incorrect.
+    // TODO: Remove norms. They need only be defined for vectors and matrices.
     /**
      * Computes the Euclidean norm of this vector.
      *
@@ -461,6 +461,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
     }
 
 
+    // TODO: Remove norms. They need only be defined for vectors and matrices.
     /**
      * Computes the p-norm of this vector.
      *
@@ -468,7 +469,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      *
      * @return The Euclidean norm of this vector.
      */
-    default double norm(int p) {
+    default double norm(double p) {
         return VectorNorms.norm(getData(), p);
     }
 }

@@ -113,6 +113,8 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {
     private static final long serialVersionUID = 1L;
 
+    // TODO: Add norm methods.
+
     /**
      * The number of rows in this matrix.
      */

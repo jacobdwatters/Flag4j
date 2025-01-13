@@ -62,7 +62,7 @@ class MatrixNormTests {
         A = new Matrix(aEntries);
         expNorm = 1089.5874942580217;
 
-        assertEquals(expNorm, MatrixNorms.norm(A,2), 1.0e-12);
+        assertEquals(expNorm, MatrixNorms.inducedNorm(A,2), 1.0e-12);
 
         // ---------------- Sub-case 4  ----------------
         aEntries = new double[][]{
@@ -72,7 +72,7 @@ class MatrixNormTests {
         A = new Matrix(aEntries);
         expNorm = 1057.0184;
 
-        assertEquals(expNorm, MatrixNorms.norm(A,1));
+        assertEquals(expNorm, MatrixNorms.inducedNorm(A,1));
 
         // ---------------- Sub-case 5  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
@@ -99,7 +99,7 @@ class MatrixNormTests {
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A,0));
+        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.inducedNorm(A,0));
 
         // ---------------- Sub-case 10  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
@@ -111,6 +111,6 @@ class MatrixNormTests {
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A,1, -12));
+        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A,1, 0));
     }
 }

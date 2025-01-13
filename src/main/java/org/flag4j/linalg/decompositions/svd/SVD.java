@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ package org.flag4j.linalg.decompositions.svd;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.Flag4jConstants;
 
@@ -102,6 +103,16 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
      */
     public Matrix getS() {
         return S;
+    }
+
+
+    /**
+     * Gets the singular values of the last matrix decomposed.
+     *
+     * @return The singular values of the last matrix decomposed.
+     */
+    public Vector getSingularValues() {
+        return S.getDiag();
     }
 
 

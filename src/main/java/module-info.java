@@ -3,6 +3,7 @@
  */
 module flag4j {
     requires java.logging;
+    requires java.desktop;
 
     // Abstract algebra stuff.
     exports org.flag4j.algebraic_structures;

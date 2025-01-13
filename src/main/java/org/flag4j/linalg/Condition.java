@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,8 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.svd.ComplexSVD;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 
+import java.util.function.BiFunction;
+
 
 /**
  * <p>Utility class for computing the condition number of a matrix.
@@ -51,96 +53,183 @@ import org.flag4j.linalg.decompositions.svd.RealSVD;
  * <p>When the L2-norm is used to compute the condition number then,
  * <pre>
  *     cond(A) = σ<sub>max</sub>(A) / σ<sub>min</sub>(A)</pre>
- * where σ<sub>max</sub>(A) and σ<sub>min</sub>(A) are the maximum and minimum singular values of A.
+ * where σ<sub>max</sub>(A) and σ<sub>min</sub>(A) are the maximum and minimum singular values of the matrix A.
+ *
+ * <p>This class supports the computation of the condition number of a real or complex matrix using the following norms.
+ * <ul>
+ *     <li>Induced (operator) norm: {@link #cond(Matrix, double)} and {@link #cond(CMatrix, double)}.</li>
+ *     <li>Schatten norm: {@link #condSchatten(Matrix, double)} and {@link #condSchatten(CMatrix, double)}.</li>
+ *     <li>Frobenius norm: {@link #condFro(Matrix)} and {@link #condFro(CMatrix)}.</li>
+ *     <li>Entry-wise norm: {@link #condEntryWise(Matrix, double)} and {@link #condEntryWise(CMatrix, double)}</li>
+ * </ul>
  */
 public final class Condition {
 
     private Condition() {
         // Hide default constructor for utility class
-
     }
 
 
     /**
-     * Computes the condition number of this matrix using the 2-norm.
-     * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
-     * of the inverse of this matrix.
+     * <p>Computes the condition number of a matrix.
      *
-     * @param src Matrix to compute the condition number of.
-     * @return The condition number of this matrix (Assuming 2-norm). This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
-     */
-    public static double cond(Matrix src) {
-        return cond(src, 2);
-    }
-
-
-    /**
-     * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
-     * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
-     * @param src Matrix to compute the condition number of.
-     * @param p Specifies the order of the norm to be used when computing the condition number.
-     *          Common {@code p} values include:<br>
-     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link MatrixNorms#infNorm(Matrix)}.<br>
-     *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
-     *          - {@code p} = -2, The Smallest singular value.<br>
-     *          - {@code p} = 1, Maximum absolute row sum.<br>
-     * @return The condition number of this matrix using the specified norm. This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
+     * <p>This method computes the condition number using the matrix operator norm induced by the
+     * vector p-norm ({@link MatrixNorms#inducedNorm(Matrix, double)}). {@code p} must be one of the following:
+     * <ul>
+     *     <li>{@code p=1}: Maximum absolute column sum of the matrix.</li>
+     *     <li>{@code p=-1}: Minimum absolute column sum of the matrix.</li>
+     *     <li>{@code p=2}: Spectral norm. Equivalent to the maximum singular value of the matrix.</li>
+     *     <li>{@code p=-2}: Equivalent to the minimum singular value of the matrix.</li>
+     *     <li>{@code p=Double.POSITIVE_INFINITY}: Maximum absolute row sum of the matrix.</li>
+     *     <li>{@code p=Double.NEGATIVE_INFINITY}: Minimum absolute row sum of the matrix.</li>
+     * </ul>
+     * When {@code p < 1}, the "norm" is not a true mathematical norm but may still serve useful numerical purposes.
+     *
+     * <p>To compute the condition number using other norms see one the below methods:
+     * <ul>
+     *     <li>Schatten norm: {@link #condSchatten(Matrix, double)}.</li>
+     *     <li>Frobenius norm: {@link #condFro(Matrix)}</li>
+     *     <li>Entry-wise norm: {@link #condEntryWise(Matrix, double)}</li>
+     * </ul>
+     *
+     * @param src The matrix to compute the condition number of.
+     * @param p The p-value to use in the induced norm during condition number computation.
+     * Must be one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2}, {@link Double#POSITIVE_INFINITY} or
+     * {@link Double#NEGATIVE_INFINITY}.
+     * @return The condition number of {@code src} as computed using the matrix operator norm induced by vector p-norm.
      */
     public static double cond(Matrix src, double p) {
-        double cond;
-
-        if(p==2 || p==-2) {
-            // Compute the singular value decomposition of the matrix.
-            Vector s = new RealSVD(false).decompose(src).getS().getDiag();
-            cond = p==2 ? s.max()/s.min() : s.min()/s.max();
-        } else {
-            cond = MatrixNorms.norm(src, p)*MatrixNorms.norm(Invert.inv(src), p);
+        if(p == 2.0 || p == -2.0) {
+            // Special case for spectral norm. No need to invert matrix explicitly.
+            Vector s = new RealSVD(false).decompose(src).getSingularValues();
+            return (p==2) ? s.max()/s.min() : s.min()/s.max();
         }
 
-        return cond;
+        return cond(src, p, MatrixNorms::inducedNorm);
     }
 
 
     /**
-     * Computes the condition number of this matrix using the 2-norm.
-     * Specifically, the condition number is computed as the norm of this matrix multiplied by the norm
-     * of the inverse of this matrix.
+     * <p>Computes the condition number of a matrix.
      *
-     * @param src Matrix to compute the condition number of.
-     * @return The condition number of this matrix (Assuming 2-norm). This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
-     */
-    public static double cond(CMatrix src) {
-        return cond(src,2);
-    }
-
-
-    /**
-     * Computes the condition number of this matrix using a specified norm. The condition number of a matrix is defined
-     * as the norm of a matrix multiplied by the norm of the inverse of the matrix.
-     * @param src Matrix to compute the condition number of.
-     * @param p Specifies the order of the norm to be used when computing the condition number.
-     *          Common {@code p} values include:<br>
-     *          - {@code p} = {@link Double#POSITIVE_INFINITY}, {@link MatrixNorms#infNorm(CMatrix)}.<br>
-     *          - {@code p} = 2, The standard matrix 2-norm (the largest singular value).<br>
-     *          - {@code p} = -2, The Smallest singular value.<br>
-     *          - {@code p} = 1, Maximum absolute row sum.<br>
-     * @return The condition number of this matrix using the specified norm. This value may be
-     * {@link Double#POSITIVE_INFINITY infinite}.
+     * <p>This method computes the condition number using the matrix operator norm induced by the
+     * vector p-norm ({@link MatrixNorms#inducedNorm(CMatrix, double)}). {@code p} must be one of the following:
+     * <ul>
+     *     <li>{@code p=1}: Maximum absolute column sum of the matrix.</li>
+     *     <li>{@code p=-1}: Minimum absolute column sum of the matrix.</li>
+     *     <li>{@code p=2}: Spectral norm. Equivalent to the maximum singular value of the matrix.</li>
+     *     <li>{@code p=-2}: Equivalent to the minimum singular value of the matrix.</li>
+     *     <li>{@code p=Double.POSITIVE_INFINITY}: Maximum absolute row sum of the matrix.</li>
+     *     <li>{@code p=Double.NEGATIVE_INFINITY}: Minimum absolute row sum of the matrix.</li>
+     * </ul>
+     * When {@code p < 1}, the "norm" is not a true mathematical norm but may still serve useful numerical purposes.
+     *
+     * <p>To compute the condition number using other norms see one the below methods:
+     * <ul>
+     *     <li>Schatten norm: {@link #condSchatten(CMatrix, double)}.</li>
+     *     <li>Frobenius norm: {@link #condFro(CMatrix)}</li>
+     *     <li>Entry-wise norm: {@link #condEntryWise(CMatrix, double)}</li>
+     * </ul>
+     *
+     * @param src The matrix to compute the condition number of.
+     * @param p The p-value to use in the induced norm during condition number computation.
+     * Must be one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2}, {@link Double#POSITIVE_INFINITY} or
+     * {@link Double#NEGATIVE_INFINITY}.
+     * @return The condition number of {@code src} as computed using the matrix operator norm induced by vector p-norm.
      */
     public static double cond(CMatrix src, double p) {
-        double cond;
-
-        if(p==2 || p==-2) {
-            // Compute the singular value decomposition of the matrix.
-            Vector s = new ComplexSVD(false).decompose(src).getS().getDiag();
-            cond = p==2 ? s.max()/s.min() : s.min()/s.max();
-        } else {
-            cond = MatrixNorms.norm(src, p) * MatrixNorms.norm(Invert.inv(src), p);
+        if(p == 2.0 || p == -2.0) {
+            // Special case for spectral norm. No need to invert matrix explicitly.
+            Vector s = new ComplexSVD(false).decompose(src).getSingularValues();
+            return (p==2) ? s.max()/s.min() : s.min()/s.max();
         }
 
-        return cond;
+        return cond(src, p, MatrixNorms::inducedNorm);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using the {@link MatrixNorms#schattenNorm(Matrix, double) Schatten norm}.
+     * @param src Matrix to compute the condition number of.
+     * @param p The p value in the Schatten norm.
+     * @return The condition number of {@code src}.
+     */
+    public static double condSchatten(Matrix src, double p) {
+        return cond(src, p, MatrixNorms::schattenNorm);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using the {@link MatrixNorms#schattenNorm(CMatrix, double) Schatten norm}.
+     * @param src Matrix to compute the condition number of.
+     * @param p The p value in the Schatten norm.
+     * @return The condition number of {@code src}.
+     */
+    public static double condSchatten(CMatrix src, double p) {
+        return cond(src, p, MatrixNorms::schattenNorm);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using the Frobenius norm.
+     * @param src Matrix to compute the condition number of.
+     * @return The condition number of {@code src}.
+     */
+    public static double condFro(Matrix src) {
+        return cond(src, 2, MatrixNorms::schattenNorm);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using the Frobenius norm.
+     * @param src Matrix to compute the condition number of.
+     * @return The condition number of {@code src}.
+     */
+    public static double condFro(CMatrix src) {
+        return cond(src, 2, MatrixNorms::schattenNorm);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using an {@link MatrixNorms#entryWiseNorm(Matrix, double) entry-wise norm}.
+     * @param src Matrix to compute the condition number of.
+     * @return The condition number of {@code src}.
+     */
+    public static double condEntryWise(Matrix src, double p) {
+        return cond(src, p, MatrixNorms::entryWiseNorm);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using an {@link MatrixNorms#entryWiseNorm(CMatrix, double) entry-wise norm}.
+     * @param src Matrix to compute the condition number of.
+     * @return The condition number of {@code src}.
+     */
+    public static double condEntryWise(CMatrix src, double p) {
+        return cond(src, p, MatrixNorms::entryWiseNorm);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using the specified norm.
+     * @param src Matrix to compute the condition number of.
+     * @param p The p-value in the norm.
+     * @param norm The norm to apply when computing the condition number.
+     * @return
+     */
+    private static double cond(Matrix src, double p, BiFunction<Matrix, Double, Double> norm) {
+        return norm.apply(src, p) * norm.apply(Invert.inv(src), p);
+    }
+
+
+    /**
+     * Computes the condition number of a matrix using the specified norm.
+     * @param src Matrix to compute the condition number of.
+     * @param p The p-value in the norm.
+     * @param norm The norm to apply when computing the condition number.
+     * @return
+     */
+    private static double cond(CMatrix src, double p, BiFunction<CMatrix, Double, Double> norm) {
+        return norm.apply(src, p) * norm.apply(Invert.inv(src), p);
     }
 }

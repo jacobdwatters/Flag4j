@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -305,7 +305,7 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      *
      * @return The Euclidean norm of this vector.
      */
-    default double norm(int p) {
+    default double norm(double p) {
         return VectorNorms.norm(getData(), p);
     }
 }
