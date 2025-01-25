@@ -26,9 +26,8 @@ package org.flag4j.linalg.ops.dense.semiring_ops;
 
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
-
-import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
 /**
  * This class provides low level methods for computing ops on dense semiring tensors.
@@ -54,7 +53,7 @@ public final class DenseSemiringOps {
                                                   T[] src2, Shape shape2,
                                                   T[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        dest = makeNewIfNull(dest, src1.length);
+        dest = ArrayBuilder.getOrCreateArray(dest, () -> (T[]) new Semiring[src1.length]);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = src1[i].add(src2[i]);
@@ -78,7 +77,7 @@ public final class DenseSemiringOps {
                                                        T[] src2, Shape shape2,
                                                        T[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        dest = makeNewIfNull(dest, src1.length);
+        dest = ArrayBuilder.getOrCreateArray(dest, () -> (T[]) new Semiring[src1.length]);
 
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = src1[i].add(src2[i]);

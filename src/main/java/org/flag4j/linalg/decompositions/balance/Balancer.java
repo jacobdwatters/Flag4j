@@ -28,7 +28,7 @@ import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.Decomposition;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
 
@@ -617,7 +617,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
      */
     public PermutationMatrix getP() {
         ensureHasBalanced();
-        int[] swapPointers = ArrayUtils.intRange(0, size);
+        int[] swapPointers = ArrayBuilder.intRange(0, size);
 
         int temp;
         int value;

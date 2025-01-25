@@ -34,7 +34,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 
 import java.util.List;
@@ -144,7 +144,7 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
      * @param indices The indices of the non-zero values.
      */
     public CooRingVector(Shape shape, List<T> entries, List<Integer> indices) {
-        super(shape, (T[]) entries.toArray(Ring[]::new), ArrayUtils.fromIntegerList(indices));
+        super(shape, (T[]) entries.toArray(Ring[]::new), ArrayConversions.fromIntegerList(indices));
     }
 
 
@@ -164,7 +164,7 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
      * @param indices The indices of the non-zero values.
      */
     public CooRingVector(int size, List<T> entries, List<Integer> indices) {
-        super(new Shape(size), (T[]) entries.toArray(Ring[]::new), ArrayUtils.fromIntegerList(indices));
+        super(new Shape(size), (T[]) entries.toArray(Ring[]::new), ArrayConversions.fromIntegerList(indices));
     }
 
 

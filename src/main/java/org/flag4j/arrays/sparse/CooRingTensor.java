@@ -214,7 +214,7 @@ public class CooRingTensor<T extends Ring<T>> extends AbstractCooRingTensor<CooR
      */
     @Override
     public CooRingTensor<T> makeLikeTensor(Shape shape, T[] entries) {
-        return new CooRingTensor<>(shape, entries, ArrayUtils.deepCopy(indices, null));
+        return new CooRingTensor<>(shape, entries, ArrayUtils.deepCopy2D(indices, null));
     }
 
     /**
@@ -274,7 +274,7 @@ public class CooRingTensor<T extends Ring<T>> extends AbstractCooRingTensor<CooR
     public CooTensor abs() {
         double[] dest = new double[data.length];
         RingOps.abs(data, dest);
-        return new CooTensor(shape, dest, ArrayUtils.deepCopy(indices, null));
+        return new CooTensor(shape, dest, ArrayUtils.deepCopy2D(indices, null));
     }
 
 

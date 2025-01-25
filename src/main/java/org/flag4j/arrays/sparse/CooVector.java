@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -130,11 +130,11 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param indices The indices of the non-zero values.
      */
     public CooVector(Shape shape, List<Double> data, List<Integer> indices) {
-        super(shape, ArrayUtils.fromDoubleList(data));
+        super(shape, ArrayConversions.fromDoubleList(data));
         ValidateParameters.ensureRank(shape, 1);
         ValidateParameters.ensureArrayLengthsEq(this.data.length, indices.size());
         this.size = shape.get(0);
-        this.indices = ArrayUtils.fromIntegerList(indices);
+        this.indices = ArrayConversions.fromIntegerList(indices);
         this.nnz = this.data.length;
     }
 
@@ -163,9 +163,9 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, List<Double> entries, List<Integer> indices) {
-        super(new Shape(size), ArrayUtils.fromDoubleList(entries));
+        super(new Shape(size), ArrayConversions.fromDoubleList(entries));
         ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
-        this.indices = ArrayUtils.fromIntegerList(indices);
+        this.indices = ArrayConversions.fromIntegerList(indices);
         this.size = size;
         this.nnz = this.data.length;
     }
@@ -190,7 +190,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @param indices The indices of the non-zero values.
      */
     public CooVector(int size, int[] entries, int[] indices) {
-        super(new Shape(size), ArrayUtils.asDouble(entries, null));
+        super(new Shape(size), ArrayConversions.asDouble(entries, null));
         ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         this.indices = indices;
         this.size = size;
@@ -230,8 +230,8 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
 
         return new CooVector(
                 src.size,
-                ArrayUtils.fromDoubleList(nonZeroEntries),
-                ArrayUtils.fromIntegerList(indices)
+                ArrayConversions.fromDoubleList(nonZeroEntries),
+                ArrayConversions.fromIntegerList(indices)
         );
     }
 

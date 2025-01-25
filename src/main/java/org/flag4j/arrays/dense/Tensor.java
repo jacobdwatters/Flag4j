@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,7 @@ import org.flag4j.linalg.ops.dense.real.RealDenseEquals;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseCooTensorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooOps;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -142,7 +143,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape, int... entries) {
         super(shape, new double[entries.length]);
-        ArrayUtils.asDouble(entries, this.data);
+        ArrayConversions.asDouble(entries, this.data);
     }
 
 
@@ -163,7 +164,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape, Double[] entries) {
         super(shape, new double[entries.length]);
-        ArrayUtils.unbox(entries, super.data);
+        ArrayConversions.unbox(entries, super.data);
     }
 
 
@@ -175,7 +176,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      */
     public Tensor(Shape shape, Integer[] entries) {
         super(shape, new double[entries.length]);
-        ArrayUtils.asDouble(entries, super.data);
+        ArrayConversions.asDouble(entries, super.data);
     }
 
 
@@ -423,7 +424,7 @@ public class Tensor extends AbstractDenseDoubleTensor<Tensor> {
      * this tensor and the imaginary components are zero.
      */
     public CTensor toComplex() {
-        return new CTensor(shape, ArrayUtils.wrapAsComplex128(data, null));
+        return new CTensor(shape, ArrayConversions.toComplex128(data, null));
     }
 
 

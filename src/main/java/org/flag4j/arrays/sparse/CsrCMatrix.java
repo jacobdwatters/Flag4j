@@ -42,7 +42,7 @@ import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
 import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrMatMult;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -111,8 +111,8 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(Shape shape, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, entries.toArray(new Complex128[0]),
-                ArrayUtils.fromIntegerList(rowPointers),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowPointers),
+                ArrayConversions.fromIntegerList(colIndices));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -161,8 +161,8 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CsrCMatrix(int rows, int cols, List<Complex128> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(new Shape(rows, cols), entries.toArray(new Complex128[0]),
-                ArrayUtils.fromIntegerList(rowPointers),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowPointers),
+                ArrayConversions.fromIntegerList(colIndices));
         setZeroElement(Complex128.ZERO);
     }
 

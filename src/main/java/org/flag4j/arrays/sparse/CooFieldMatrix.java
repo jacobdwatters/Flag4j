@@ -36,7 +36,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -135,8 +135,8 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     public CooFieldMatrix(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
                 (T[]) entries.toArray(new Field[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
     }
 
 
@@ -166,8 +166,8 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     public CooFieldMatrix(int rows, int cols, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
                 (T[]) entries.toArray(new Field[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
     }
 
 

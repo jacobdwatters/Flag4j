@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,10 +44,10 @@ import java.math.RoundingMode;
  *
  * <h2>Usage Example:</h2>
  * <pre>{@code
- * Complex64 a = new Complex64(2.5, 3.2);   // Creates a complex number 2.5 + 3.2i
- * Complex64 b = new Complex64(1, -4);      // Creates a complex number 1 - 4i
- * Complex64 sum = a.add(b);                // Sum of a and b
- * Complex64 product = a.mult(b);           // Product of a and b
+ * Complex64 a = new Complex64(2.5f, 3.2f);  // Creates a complex number 2.5 + 3.2i.
+ * Complex64 b = new Complex64(1, -4);       // Creates a complex number 1 - 4i.
+ * Complex64 sum = a.add(b);                 // Sum of a and b.
+ * Complex64 product = a.mult(b);            // Product of a and b.
  * }</pre>
  *
  * <h2>Special Values:</h2>
