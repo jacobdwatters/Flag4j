@@ -6,6 +6,7 @@ org.flag4j.arrays.backend.field_arrays
 org.flag4j.arrays.backend.primitive_arrays
 org.flag4j.arrays.backend.ring_arrays
 org.flag4j.arrays.backend.semiring_arrays
+org.flag4j.arrays.backend.smart_visitors
 org.flag4j.arrays.dense
 org.flag4j.arrays.sparse
 org.flag4j.concurrency
@@ -13,6 +14,7 @@ org.flag4j.io
 org.flag4j.io.parsing
 org.flag4j.linalg
 org.flag4j.linalg.decompositions
+org.flag4j.linalg.decompositions.balance
 org.flag4j.linalg.decompositions.chol
 org.flag4j.linalg.decompositions.hess
 org.flag4j.linalg.decompositions.lu
@@ -36,6 +38,7 @@ org.flag4j.linalg.ops.dense_sparse.csr.field_ops
 org.flag4j.linalg.ops.dense_sparse.csr.real
 org.flag4j.linalg.ops.dense_sparse.csr.real_complex
 org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops
+org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops
 org.flag4j.linalg.ops.dense.complex
 org.flag4j.linalg.ops.dense.field_ops
 org.flag4j.linalg.ops.dense.real
@@ -44,15 +47,14 @@ org.flag4j.linalg.ops.dense.ring_ops
 org.flag4j.linalg.ops.dense.semiring_ops
 org.flag4j.linalg.ops.sparse
 org.flag4j.linalg.ops.sparse.coo
-org.flag4j.linalg.ops.sparse.coo.field_ops
 org.flag4j.linalg.ops.sparse.coo.real
 org.flag4j.linalg.ops.sparse.coo.real_complex
 org.flag4j.linalg.ops.sparse.coo.ring_ops
 org.flag4j.linalg.ops.sparse.coo.semiring_ops
 org.flag4j.linalg.ops.sparse.csr
-org.flag4j.linalg.ops.sparse.csr.field_ops
 org.flag4j.linalg.ops.sparse.csr.real
 org.flag4j.linalg.ops.sparse.csr.real_complex
+org.flag4j.linalg.ops.sparse.csr.ring_ops
 org.flag4j.linalg.ops.sparse.csr.semiring_ops
 org.flag4j.linalg.solvers
 org.flag4j.linalg.solvers.exact
