@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,14 +31,10 @@ import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.io.PrettyPrint;
-import org.flag4j.io.PrintOptions;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -461,109 +457,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Gets a row of the matrix formatted as a human-readable string.
-     * @param rowIndex Index of the row to get.
-     * @param columnsToPrint List of column indices to print.
-     * @param maxWidths List of maximum string lengths for each column.
-     * @return A human-readable string representation of the specified row.
-     */
-    private String rowToString(int rowIndex, List<Integer> columnsToPrint, List<Integer> maxWidths) {
-        StringBuilder sb = new StringBuilder();
-
-        // Start the row with appropriate bracket.
-        sb.append(rowIndex > 0 ? " [" : "[");
-
-        // Loop over the columns to print.
-        for (int i = 0; i < columnsToPrint.size(); i++) {
-            int colIndex = columnsToPrint.get(i);
-            String value;
-            int width = PrintOptions.getPadding() + maxWidths.get(i);
-
-            if (colIndex == -1) // Placeholder for truncated columns.
-                value = "...";
-            else
-                value = StringUtils.ValueOfRound(this.get(rowIndex, colIndex), PrintOptions.getPrecision());
-
-            if (PrintOptions.useCentering())
-                value = StringUtils.center(value, width);
-
-            sb.append(String.format("%-" + width + "s", value));
-        }
-
-        // Close the row.
-        sb.append("]");
-
-        return sb.toString();
-    }
-
-
-    /**
      * Generates a human-readable string representing this matrix.
      * @return A human-readable string representing this matrix.
      */
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
-        result.append("[");
-
-        if (data.length == 0) {
-            result.append("[]"); // No data in this matrix.
-        } else {
-            int numRows = this.numRows;
-            int numCols = this.numCols;
-
-            int maxRows = PrintOptions.getMaxRows();
-            int maxCols = PrintOptions.getMaxColumns();
-
-            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
-            boolean truncatedRows = maxRows < numRows;
-
-            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
-            boolean truncatedCols = maxCols < numCols;
-
-            // Build list of column indices to print
-            List<Integer> columnsToPrint = new ArrayList<>();
-            for (int j = 0; j < colStopIndex; j++)
-                columnsToPrint.add(j);
-
-            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
-            columnsToPrint.add(numCols - 1); // Always include the last column.
-
-            // Compute maximum widths for each column
-            List<Integer> maxWidths = new ArrayList<>();
-            for (Integer colIndex : columnsToPrint) {
-                int maxWidth;
-                if (colIndex == -1)
-                    maxWidth = 3; // Width for '...'.
-                else
-                    maxWidth = PrettyPrint.maxStringLength(getCol(colIndex).data, rowStopIndex + 1);
-
-                maxWidths.add(maxWidth);
-            }
-
-            // Build the rows up to the stopping index.
-            for (int i = 0; i < rowStopIndex; i++) {
-                result.append(rowToString(i, columnsToPrint, maxWidths));
-                result.append("\n");
-            }
-
-            if (truncatedRows) {
-                // Print a '...' row to indicate truncated rows.
-                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
-                String value = "...";
-
-                if (PrintOptions.useCentering())
-                    value = StringUtils.center(value, totalWidth);
-
-                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
-            }
-
-            // Append the last row.
-            result.append(rowToString(numRows - 1, columnsToPrint, maxWidths));
-        }
-
-        result.append("]");
-
-        return result.toString();
+        return PrettyPrint.matrixToString(shape, data);
     }
 }

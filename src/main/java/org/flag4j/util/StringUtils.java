@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,18 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.*;
+import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.algebraic_structures.RealFloat32;
+import org.flag4j.algebraic_structures.RealFloat64;
 
 /**
  * A class which provides simple utility methods for {@link String strings}.
  */
 public final class StringUtils {
 
-    private StringUtils() { // hide public constructor
-        
+    private StringUtils() {
+        // hide public constructor for utility class.
     }
 
 
@@ -86,7 +89,7 @@ public final class StringUtils {
      * @param precision Precision to round value to if the value can be rounded.
      * @return The string representation of {@code value} rounded to the specified precision if the field type can be rounded.
      */
-    public static <T extends Semiring<T>> String ValueOfRound(T value, int precision) {
+    public static <T> String ValueOfRound(T value, int precision) {
         String valueOf;
         if(value instanceof Complex128)
             valueOf = Complex128.round((Complex128) value, precision).toString();
