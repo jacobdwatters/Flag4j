@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.common.ring_ops;
 
 import org.flag4j.algebraic_structures.Ring;
-import org.flag4j.util.ErrorMessages;
 
 
 /**
@@ -35,7 +34,6 @@ public final class CompareRing {
 
     private CompareRing() {
         // Hide constructor for utility class. for utility class.
-        throw new IllegalAccessError(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
