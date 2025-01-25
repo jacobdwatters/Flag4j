@@ -34,7 +34,7 @@ public final class Flag4jConstants {
     /**
      * The rounding error for 32-bit floating point numbers.
      */
-    public static final float EPS_F32 = Math.ulp(1.0f) / 2.0f;
+    public static final float EPS_F32 = Math.ulp(1.0f);
     /**
      * The smallest "safe" 32-bit floating point value. That is, the smallest possible float value
      * such that {@code 1.0f / SAFE_MIN_F32} does not overflow.
@@ -49,7 +49,7 @@ public final class Flag4jConstants {
     /**
      * The rounding error for 64-bit double precision floating point numbers.
      */
-    public static final double EPS_F64 = Math.ulp(1.0d) / 2.0;
+    public static final double EPS_F64 = Math.ulp(1.0d);
     /**
      * The smallest "safe" 64-bit floating point value. That is, the smallest possible double value
      * such that {@code 1.0d / SAFE_MIN_F64} does not overflow.

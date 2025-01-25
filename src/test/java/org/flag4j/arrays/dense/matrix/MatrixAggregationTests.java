@@ -13,13 +13,13 @@ class MatrixAggregationTests {
 
     @Test
     void sumTestCase() {
-        // ----------- sub-case 1 -----------
+        // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         expAg = 1.334+-2.3112+334.3+4.13+-35.33+6;
         Assertions.assertEquals(expAg, A.sum());
 
-        // ----------- sub-case 2 -----------
+        // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new Matrix(aEntries);
         expAg = 0.0;
@@ -29,13 +29,13 @@ class MatrixAggregationTests {
 
     @Test
     void minTestCase() {
-        // ----------- sub-case 1 -----------
+        // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         expAg = -35.33;
         Assertions.assertEquals(expAg, A.min());
 
-        // ----------- sub-case 2 -----------
+        // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new Matrix(aEntries);
         expAg = 0.0;
@@ -45,13 +45,13 @@ class MatrixAggregationTests {
 
     @Test
     void maxTestCase() {
-        // ----------- sub-case 1 -----------
+        // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         expAg = 334.3;
         Assertions.assertEquals(expAg, A.max());
 
-        // ----------- sub-case 2 -----------
+        // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new Matrix(aEntries);
         expAg = 0.0;
@@ -61,13 +61,13 @@ class MatrixAggregationTests {
 
     @Test
     void maxAbsTestCase() {
-        // ----------- sub-case 1 -----------
+        // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         expAg = 334.3;
         Assertions.assertEquals(expAg, A.maxAbs());
 
-        // ----------- sub-case 2 -----------
+        // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new Matrix(aEntries);
         expAg = 0.0;
@@ -77,13 +77,13 @@ class MatrixAggregationTests {
 
     @Test
     void minAbsTestCase() {
-        // ----------- sub-case 1 -----------
+        // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         expAg = 1.334;
         Assertions.assertEquals(expAg, A.minAbs());
 
-        // ----------- sub-case 2 -----------
+        // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new Matrix(aEntries);
         expAg = 0.0;
@@ -93,13 +93,13 @@ class MatrixAggregationTests {
 
     @Test
     void argminTestCase() {
-        // ----------- sub-case 1 -----------
+        // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         expIndices = new int[]{1, 1};
         Assertions.assertArrayEquals(expIndices, A.argmin());
 
-        // ----------- sub-case 2 -----------
+        // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new Matrix(aEntries);
         expIndices = new int[]{};
@@ -109,13 +109,13 @@ class MatrixAggregationTests {
 
     @Test
     void argmaxTestCase() {
-        // ----------- sub-case 1 -----------
+        // ----------- Sub-case 1 -----------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         expIndices = new int[]{0, 2};
         Assertions.assertArrayEquals(expIndices, A.argmax());
 
-        // ----------- sub-case 2 -----------
+        // ----------- Sub-case 2 -----------
         aEntries = new double[][]{{}};
         A = new Matrix(aEntries);
         expIndices = new int[]{};

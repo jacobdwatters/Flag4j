@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,6 @@ public final class RealDenseTranspose {
 
     private RealDenseTranspose() {
         // Hide constructor for utility class.
-        
     }
 
 

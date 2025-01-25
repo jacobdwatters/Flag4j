@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -315,7 +315,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
 
-        return CooFieldEquals.cooTensorEquals(this, (CooCTensor) object);
+        return CooSemiringEquals.cooTensorEquals(this, (CooCTensor) object);
     }
 
 

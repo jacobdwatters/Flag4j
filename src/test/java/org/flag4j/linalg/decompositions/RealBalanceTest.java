@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RealBalanceTest {
+public class RealBalanceTest {
     static Shape aShape;
     static double[] aData;
     static Matrix a;
@@ -49,7 +49,7 @@ class RealBalanceTest {
 
     @Test
     void testRealBalance() {
-        // ----------------- sub-case 1 -----------------
+        // ----------------- Sub-case 1 -----------------
         aShape = new Shape(5, 5);
         aData = new double[]{0.0, 0.0, 0.0, 100.2331, -140.0, 0.0, 0.0, 1.2, 2.54, 142.0, 0.0, 3.4, 0.0, 4.12,
                 -10022.2212, 0.0, 0.0, 0.0, 10.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -76,7 +76,7 @@ class RealBalanceTest {
         assertEquals(scale, scaleAct);
         assertEquals(permuteScale, permuteScaleAct);
 
-        // ----------------- sub-case 2 -----------------
+        // ----------------- Sub-case 2 -----------------
         aShape = new Shape(8, 8);
         aData = new double[]{6126.624252232483, 5230.904223529219, 4678.687283176287, 6395.835360234681, 5878.74954814557,
                 7661.393200389235, 1826.4770608063936, 1726.6184250862443, 4122.877054785548, 1567.8469057995724,
@@ -140,7 +140,7 @@ class RealBalanceTest {
         assertEquals(scale, scaleAct);
         assertEquals(permuteScale, permuteScaleAct);
 
-        // ----------------- sub-case 3 -----------------
+        // ----------------- Sub-case 3 -----------------
         aShape = new Shape(11, 11);
         aData = new double[]{1e-08, 0.02, 0.0, 5e-05, 30000.0, 0.0, -1000.0, 0.0, 70.0, 0.0, 9000000.0, 5000.0, 100.0, -0.002, 0.0,
                 0.0, 0.0, 9e-09, 0.0, 0.0, -300000.0, 200.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-09,
@@ -187,7 +187,7 @@ class RealBalanceTest {
         assertEquals(scale, scaleAct);
         assertEquals(permuteScale, permuteScaleAct);
 
-        // ----------------- sub-case 4 -----------------
+        // ----------------- Sub-case 4 -----------------
         aShape = new Shape(8, 8);
         aData = new double[]{3.0, 1.0, 0.0, 1.0, 0.0, 5.0, 0.0, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 3.0, 0.0, 4.0, 1.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0,

@@ -30,7 +30,8 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
-import org.flag4j.util.*;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,15 +115,15 @@ public final class RealCooMatrixGetSet {
      * @throws IllegalArgumentException If {@code row.length != src.numCols}.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, CooVector row) {
-        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
-        ValidateParameters.ensureAllEqual(src.numCols, row.size);
+        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureEquals(src.numCols, row.size);
 
         int[] rowArray = new int[row.nnz];
         Arrays.fill(rowArray, rowIdx);
 
-        List<Double> entries = ArrayConversions.toArrayList(row.data);
-        List<Integer> rowIndices = ArrayConversions.toArrayList(rowArray);
-        List<Integer> colIndices = ArrayConversions.toArrayList(row.indices);
+        List<Double> entries = ArrayUtils.toArrayList(row.data);
+        List<Integer> rowIndices = ArrayUtils.toArrayList(rowArray);
+        List<Integer> colIndices = ArrayUtils.toArrayList(row.indices);
 
         for(int i=0, size=src.nnz; i<size; i++) {
             int srcRow = src.rowIndices[i];
@@ -146,8 +147,8 @@ public final class RealCooMatrixGetSet {
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, double[] row) {
-        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
-        ValidateParameters.ensureAllEqual(src.numCols, row.length);
+        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureEquals(src.numCols, row.length);
 
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
@@ -178,7 +179,7 @@ public final class RealCooMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, -start-1);
-            System.arraycopy(ArrayBuilder.intRange(0, src.numCols), 0, destColIndices, -start-1, row.length);
+            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, -start-1, row.length);
             System.arraycopy(
                     src.colIndices, -start-1,
                     destColIndices, -start-1+row.length, destColIndices.length-(row.length - start - 1)
@@ -207,7 +208,7 @@ public final class RealCooMatrixGetSet {
             );
 
             System.arraycopy(src.colIndices, 0, destColIndices, 0, start);
-            System.arraycopy(ArrayBuilder.intRange(0, src.numCols), 0, destColIndices, start, row.length);
+            System.arraycopy(ArrayUtils.intRange(0, src.numCols), 0, destColIndices, start, row.length);
             System.arraycopy(
                     src.colIndices, end,
                     destColIndices, start + row.length, destEntries.length-(start + row.length)
@@ -229,8 +230,8 @@ public final class RealCooMatrixGetSet {
      * rows in {@code src} matrix.
      */
     public static CooMatrix setCol(CooMatrix src, int colIdx, double[] col) {
-        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
-        ValidateParameters.ensureAllEqual(src.numRows, col.length);
+        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureEquals(src.numRows, col.length);
 
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
@@ -238,7 +239,7 @@ public final class RealCooMatrixGetSet {
         // Initialize destination arrays with the new column and the appropriate indices.
         List<Double> destEntries = DoubleStream.of(col).boxed().collect(Collectors.toList());
         List<Integer> destRowIndices = IntStream.of(
-                ArrayBuilder.intRange(0, col.length)
+                ArrayUtils.intRange(0, col.length)
         ).boxed().collect(Collectors.toList());
         List<Integer> destColIndices = new ArrayList<>(Arrays.asList(colIndices));
 
@@ -256,13 +257,13 @@ public final class RealCooMatrixGetSet {
      * in the {@code col} vector.
      */
     public static CooMatrix setCol(CooMatrix src, int colIdx, CooVector col) {
-        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
-        ValidateParameters.ensureAllEqual(src.numRows, col.size);
+        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureEquals(src.numRows, col.size);
 
         // Initialize destination arrays with the new column and the appropriate indices.
-        List<Double> destEntries = ArrayConversions.toArrayList(col.data);
-        List<Integer> destRowIndices = ArrayConversions.toArrayList(col.indices);
-        List<Integer> destColIndices = ArrayConversions.toArrayList(ArrayBuilder.filledArray(col.nnz, colIdx));
+        List<Double> destEntries = ArrayUtils.toArrayList(col.data);
+        List<Integer> destRowIndices = ArrayUtils.toArrayList(col.indices);
+        List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.nnz, colIdx));
 
         return addNotInCol(destEntries, destRowIndices, destColIndices, src, colIdx);
     }
@@ -315,19 +316,19 @@ public final class RealCooMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, CooMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ValidateParameters.validateArrayIndices(src.numRows, row);
-        ValidateParameters.validateArrayIndices(src.numCols, col);
+        ValidateParameters.ensureIndicesInBounds(src.numRows, row);
+        ValidateParameters.ensureIndicesInBounds(src.numCols, col);
 
         ValidateParameters.ensureLessEq(src.numRows, values.numRows + row);
         ValidateParameters.ensureLessEq(src.numCols, values.numCols + col);
 
         // Initialize lists to new values for the specified slice.
-        List<Double> entries = ArrayConversions.toArrayList(values.data);
-        List<Integer> rowIndices = ArrayConversions.toArrayList(ArrayUtils.shift(row, values.rowIndices));
-        List<Integer> colIndices = ArrayConversions.toArrayList(ArrayUtils.shift(col, values.colIndices));
+        List<Double> entries = ArrayUtils.toArrayList(values.data);
+        List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, values.rowIndices));
+        List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, values.colIndices));
 
-        int[] rowRange = ArrayBuilder.intRange(row, values.numRows + row);
-        int[] colRange = ArrayBuilder.intRange(col, values.numCols + col);
+        int[] rowRange = ArrayUtils.intRange(row, values.numRows + row);
+        int[] colRange = ArrayUtils.intRange(col, values.numCols + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -356,8 +357,8 @@ public final class RealCooMatrixGetSet {
 
         // Flatten values.
         double[] flatValues = ArrayUtils.flatten(values);
-        int[] sliceRows = ArrayBuilder.intRange(row, values.length + row, values[0].length);
-        int[] sliceCols = ArrayJoiner.repeat(values.length, ArrayBuilder.intRange(col, values[0].length + col));
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
         return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
@@ -378,8 +379,8 @@ public final class RealCooMatrixGetSet {
         ValidateParameters.ensureLessEq(src.numRows, values.numRows + row);
         ValidateParameters.ensureLessEq(src.numCols, values.numCols + col);
 
-        int[] sliceRows = ArrayBuilder.intRange(row, values.numRows + row, values.numCols);
-        int[] sliceCols = ArrayJoiner.repeat(values.numRows, ArrayBuilder.intRange(col, values.numCols + col));
+        int[] sliceRows = ArrayUtils.intRange(row, values.numRows + row, values.numCols);
+        int[] sliceCols = ArrayUtils.repeat(values.numRows, ArrayUtils.intRange(col, values.numCols + col));
 
         return setSlice(src, values.data, values.numRows, values.numCols, sliceRows, sliceCols, row, col);
     }
@@ -408,8 +409,8 @@ public final class RealCooMatrixGetSet {
                 flatValues[pos++] = d;
             }
         }
-        int[] sliceRows = ArrayBuilder.intRange(row, values.length + row, values[0].length);
-        int[] sliceCols = ArrayJoiner.repeat(values.length, ArrayBuilder.intRange(col, values[0].length + col));
+        int[] sliceRows = ArrayUtils.intRange(row, values.length + row, values[0].length);
+        int[] sliceCols = ArrayUtils.repeat(values.length, ArrayUtils.intRange(col, values[0].length + col));
 
         return setSlice(src, flatValues, values.length, values[0].length, sliceRows, sliceCols, row, col);
     }
@@ -430,12 +431,12 @@ public final class RealCooMatrixGetSet {
     private static CooMatrix setSlice(CooMatrix src, double[] values, int numRows, int numCols,
                                       int[] sliceRows, int[] sliceCols, int row, int col) {
         // Copy vales and row/column indices (with appropriate shifting) to destination lists.
-        List<Double> entries = ArrayConversions.toArrayList(values);
-        List<Integer> rowIndices = ArrayConversions.toArrayList(sliceRows);
-        List<Integer> colIndices = ArrayConversions.toArrayList(sliceCols);
+        List<Double> entries = ArrayUtils.toArrayList(values);
+        List<Integer> rowIndices = ArrayUtils.toArrayList(sliceRows);
+        List<Integer> colIndices = ArrayUtils.toArrayList(sliceCols);
 
-        int[] rowRange = ArrayBuilder.intRange(row, numRows + row);
-        int[] colRange = ArrayBuilder.intRange(col, numCols + col);
+        int[] rowRange = ArrayUtils.intRange(row, numRows + row);
+        int[] colRange = ArrayUtils.intRange(col, numCols + col);
 
         copyValuesNotInSlice(src, entries, rowIndices, colIndices, rowRange, colRange);
 
@@ -454,7 +455,7 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified row from this sparse matrix.
      */
     public static CooVector getRow(CooMatrix src, int rowIdx) {
-        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
+        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -479,8 +480,8 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static CooVector getRow(CooMatrix src, int rowIdx, int start, int end) {
-        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
-        ValidateParameters.validateArrayIndices(src.numCols, start, end-1);
+        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
+        ValidateParameters.ensureIndicesInBounds(src.numCols, start, end-1);
         ValidateParameters.ensureLessEq(end-1, start);
 
         List<Double> entries = new ArrayList<>();
@@ -504,7 +505,7 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified column from this sparse matrix.
      */
     public static CooVector getCol(CooMatrix src, int colIdx) {
-        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
+        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -529,8 +530,8 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static CooVector getCol(CooMatrix src, int colIdx, int start, int end) {
-        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
-        ValidateParameters.validateArrayIndices(src.numRows, start, end);
+        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
+        ValidateParameters.ensureIndicesInBounds(src.numRows, start, end);
         ValidateParameters.ensureLessEq(end, start);
 
         List<Double> entries = new ArrayList<>();

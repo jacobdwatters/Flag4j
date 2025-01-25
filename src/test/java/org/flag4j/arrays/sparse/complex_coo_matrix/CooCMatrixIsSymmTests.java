@@ -17,7 +17,7 @@ class CooCMatrixIsSymmTests {
         Complex128[] aData;
         CooCMatrix a;
 
-        // -------------------- sub-case 1 --------------------
+        // -------------------- Sub-case 1 --------------------
         aShape = new Shape(51, 51);
         aData = new Complex128[]{new Complex128(0.711, 0.3), new Complex128(0.875, 0.657),
                 new Complex128(0.057, 0.164), new Complex128(0.207, 0.887),
@@ -32,7 +32,7 @@ class CooCMatrixIsSymmTests {
         assertFalse(a.isSymmetric());
         assertFalse(a.isHermitian());
 
-        // -------------------- sub-case 2 --------------------
+        // -------------------- Sub-case 2 --------------------
         aShape = new Shape(51, 51);
         aData = new Complex128[]{new Complex128(0.315, 0.311), new Complex128(0.155, 0.236), new Complex128(0.345, 0.92), new Complex128(0.155, 0.236), new Complex128(0.347, 0.256), new Complex128(0.315, 0.311), new Complex128(0.345, 0.92), new Complex128(0.347, 0.256), new Complex128(0.119, 0.913)};
         aRowIndices = new int[]{0, 6, 10, 14, 28, 29, 40, 42, 49};
@@ -42,7 +42,7 @@ class CooCMatrixIsSymmTests {
         assertTrue(a.isSymmetric());
         assertFalse(a.isHermitian());
 
-        // -------------------- sub-case 3 --------------------
+        // -------------------- Sub-case 3 --------------------
         aShape = new Shape(51, 51);
         aData = new Complex128[]{new Complex128(0.38, -0.82), new Complex128(0.38, 0.82), new Complex128(0.456, -0.305), new Complex128(0.843, -0.768), new Complex128(0.839, -0.306), new Complex128(0.533, -0.878), new Complex128(0.718, -0.497), new Complex128(0.533, 0.878), new Complex128(0.456, 0.305), new Complex128(0.718, 0.497), new Complex128(0.839, 0.306), new Complex128(0.843, 0.768)};
         aRowIndices = new int[]{1, 8, 9, 17, 26, 29, 32, 34, 36, 38, 40, 44};
@@ -52,7 +52,7 @@ class CooCMatrixIsSymmTests {
         assertFalse(a.isSymmetric());
         assertTrue(a.isHermitian());
 
-        // -------------------- sub-case 4 --------------------
+        // -------------------- Sub-case 4 --------------------
         aShape = new Shape(12, 12);
         aData = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -62,7 +62,7 @@ class CooCMatrixIsSymmTests {
         assertTrue(a.isSymmetric());
         assertTrue(a.isHermitian());
 
-        // -------------------- sub-case 5 --------------------
+        // -------------------- Sub-case 5 --------------------
         aShape = new Shape(12, 17);
         aData = new Complex128[]{new Complex128(0.305, 0.406), new Complex128(0.599, 0.739), new Complex128(0.02, 0.945), new Complex128(0.549, 0.64), new Complex128(0.842, 0.842), new Complex128(0.48, 0.124), new Complex128(0.166, 0.889)};
         aRowIndices = new int[]{0, 0, 0, 0, 3, 3, 8};

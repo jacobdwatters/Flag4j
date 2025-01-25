@@ -18,19 +18,19 @@ class RealDenseMatMultTransposeTests {
         B = new Matrix(entriesB);
         exp = A.mult(B.T()).data;
 
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         act = RealDenseMatMultTranspose.multTranspose(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         act = RealDenseMatMultTranspose.multTransposeBlocked(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
-        // ------------ sub-case 3 ------------
+        // ------------ Sub-case 3 ------------
         act = RealDenseMatMultTranspose.multTransposeConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
-        // ------------ sub-case 4 ------------
+        // ------------ Sub-case 4 ------------
         act = RealDenseMatMultTranspose.multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
     }
@@ -51,19 +51,19 @@ class RealDenseMatMultTransposeTests {
         B = new Matrix(entriesB).T();
         exp = A.mult(B.T()).data;
 
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         act = RealDenseMatMultTranspose.multTranspose(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         act = RealDenseMatMultTranspose.multTransposeBlocked(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
-        // ------------ sub-case 3 ------------
+        // ------------ Sub-case 3 ------------
         act = RealDenseMatMultTranspose.multTransposeConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
 
-        // ------------ sub-case 4 ------------
+        // ------------ Sub-case 4 ------------
         act = RealDenseMatMultTranspose.multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape);
         assertArrayEquals(exp, act);
     }

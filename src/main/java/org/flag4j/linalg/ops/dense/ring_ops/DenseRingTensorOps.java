@@ -59,12 +59,12 @@ public final class DenseRingTensorOps {
 
 
     /**
-     * Checks if a complex dense matrix is Hermitian. That is, if the matrix is equal to its conjugate transpose.
+     * Checks if a complex dense matrix is hermitian. That is, if the matrix is equal to its conjugate transpose.
      *
      * @param shape Shape of the matrix.
      * @param src Entries of the matrix.
      *
-     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
+     * @return {@code true} if this matrix is hermitian; {@code false} otherwise.
      */
     public static <T extends Ring<T>> boolean isHermitian(Shape shape, T[] src) {
         if(shape.get(0)!=shape.get(1)) return false;

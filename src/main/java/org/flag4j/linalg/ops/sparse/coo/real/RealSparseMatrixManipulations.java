@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2024. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -160,7 +160,7 @@ public final class RealSparseMatrixManipulations {
      * @return A copy of the {@code src} sparse matrix with the specified columns removed.
      */
     public static CooMatrix removeCols(CooMatrix src, int... colIdxs) {
-        ValidateParameters.validateArrayIndices(src.numRows, colIdxs);
+        ValidateParameters.ensureValidArrayIndices(src.numRows, colIdxs);
 
         // Ensure the indices are sorted.
         Arrays.sort(colIdxs);

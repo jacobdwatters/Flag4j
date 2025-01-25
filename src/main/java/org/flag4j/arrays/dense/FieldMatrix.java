@@ -171,6 +171,20 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
+     * Constructs a vector of a similar type as this matrix.
+     *
+     * @param shape Shape of the vector to construct. Must be rank 1.
+     * @param entries Entries of the vector.
+     *
+     * @return A vector of a similar type as this matrix.
+     */
+    @Override
+    protected FieldVector<T> makeLikeVector(Shape shape, T[] entries) {
+        return new FieldVector<>(shape, entries);
+    }
+
+
+    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.

@@ -1,4 +1,4 @@
-package org.flag4j.complex_matrix;
+package org.flag4j.arrays.dense.complex_matrix;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;

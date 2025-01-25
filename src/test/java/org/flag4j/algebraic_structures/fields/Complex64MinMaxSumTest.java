@@ -13,7 +13,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void sumTestCase() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(93.13f, -6456.331f);
         n2 = new Complex64(1.3f, 7.5f);
         n3 = new Complex64(-4.2e-8f);
@@ -26,7 +26,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(sum, expSum);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         sum = Complex64.sum();
         expSum = Complex64.ZERO;
         Assertions.assertEquals(sum, expSum);
@@ -35,7 +35,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void minTestCase() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(93.13f, -6456.331f);
         n2 = new Complex64(1.3f, 7.5f);
         n3 = new Complex64(-4.2e-8f);
@@ -47,7 +47,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         min = Complex64.min();
         Assertions.assertNull(min);
     }
@@ -55,7 +55,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void minReal() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(93.13f, -6456.331f);
         n2 = new Complex64(1.3f, 7.5f);
         n3 = new Complex64(-4.2e-8f);
@@ -68,7 +68,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         min = Complex64.minRe();
         Assertions.assertTrue(Double.isNaN(min.re));
     }
@@ -76,7 +76,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void argminTestCase() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(93.13f, -6456.331f);
         n2 = new Complex64(1.3f, 7.5f);
         n3 = new Complex64(-4.2e-8f);
@@ -88,7 +88,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         arg = Complex64.argmin();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
@@ -97,7 +97,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void argminRealTestCase() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(93.13f, -6456.331f);
         n2 = new Complex64(1.3f, 7.5f);
         n3 = new Complex64(-4.2e-8f);
@@ -110,7 +110,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         arg = Complex64.argminReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
@@ -119,7 +119,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void maxTestCase() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(1.3f, 7.5f);
         n2 = new Complex64(93.13f, -6456.331f);
         n3 = new Complex64(-4.2e-8f);
@@ -131,7 +131,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMax, max);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         max = Complex64.max();
         Assertions.assertNull(max);
     }
@@ -139,7 +139,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void maxReal() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(93.13f, -6456.331f);
         n2 = new Complex64(1.3f, 7.5f);
         n3 = new Complex64(-4.2e-8f);
@@ -152,7 +152,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMax, max);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         max = Complex64.maxRe();
         Assertions.assertTrue(Double.isNaN(max.re));
     }
@@ -160,7 +160,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void argmaxTestCase() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(1.3f, 7.5f);
         n2 = new Complex64(93.13f, -6456.331f);
         n3 = new Complex64(-4.2e-8f);
@@ -172,7 +172,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         arg = Complex64.argmax();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
@@ -181,7 +181,7 @@ class Complex64MinMaxSumTest {
 
     @Test
     void argmaxRealTestCase() {
-        // ------------ sub-case 1 ------------
+        // ------------ Sub-case 1 ------------
         n1 = new Complex64(93.13f, -6456.331f);
         n2 = new Complex64(1e10f, 7.5f);
         n3 = new Complex64(-4.2e-8f);
@@ -194,7 +194,7 @@ class Complex64MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ sub-case 2 ------------
+        // ------------ Sub-case 2 ------------
         arg = Complex64.argmaxReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);

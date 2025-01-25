@@ -36,7 +36,7 @@ class CooVectorInnerProdTests {
         CooVector b;
         double exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{1.34, 55.15, -41.13};
         bIndices = new int[]{0, 2, 8};
         b = new CooVector(sparseSize, bEntries, bIndices);
@@ -45,7 +45,7 @@ class CooVectorInnerProdTests {
 
         assertEquals(exp, a.inner(b));
 
-        // ----------------------- sub-case 2 -----------------------
+        // ----------------------- Sub-case 2 -----------------------
         bEntries = new double[]{1.34, 55.15, -41.13};
         bIndices = new int[]{0, 2, 8};
         b = new CooVector(sparseSize+23, bEntries, bIndices);
@@ -61,7 +61,7 @@ class CooVectorInnerProdTests {
         Vector b;
         double exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{
                 1.34, 55.15, -41.13, 1, 3.45,
                 -99.14, 551.15, 51.5, 0, 0.134,
@@ -72,7 +72,7 @@ class CooVectorInnerProdTests {
 
         assertEquals(exp, RealDenseSparseVectorOps.inner(b.data, a.data, a.indices, a.size));
 
-        // ----------------------- sub-case 2 -----------------------
+        // ----------------------- Sub-case 2 -----------------------
         bEntries = new double[]{
                 1.34, 55.15, -41.13, 1, 3.45,
                 -99.14, 551.15, 51.5, 0, 0.134,
@@ -90,7 +90,7 @@ class CooVectorInnerProdTests {
         CooCVector b;
         Complex128 exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new Complex128[]{new Complex128(1.334, 9.4), new Complex128(-67,14), new Complex128(24,-56.134)};
         bIndices = new int[]{0, 2, 8};
         b = new CooCVector(sparseSize, bEntries, bIndices);
@@ -101,7 +101,7 @@ class CooVectorInnerProdTests {
 
         assertEquals(exp, RealComplexSparseVectorOps.inner(a, b));
 
-        // ----------------------- sub-case 2 -----------------------
+        // ----------------------- Sub-case 2 -----------------------
         bEntries = new Complex128[]{new Complex128(1.334, 9.4), new Complex128(-67,14), new Complex128(24,-56.134)};
         bIndices = new int[]{0, 2, 8};
         b = new CooCVector(sparseSize-1, bEntries, bIndices);
@@ -117,7 +117,7 @@ class CooVectorInnerProdTests {
         CVector b;
         Complex128 exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(24.1, 54.1), new Complex128(-9.245, 3.4), new Complex128(14.5),
                 new Complex128(0, 94.14), Complex128.ZERO, new Complex128(113, 55.62),
@@ -136,7 +136,7 @@ class CooVectorInnerProdTests {
 
         assertEquals(exp, RealFieldDenseCooVectorOps.inner(a.data, a.indices, a.size, b.data));
 
-        // ----------------------- sub-case 2 -----------------------
+        // ----------------------- Sub-case 2 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(24.1, 54.1), new Complex128(-9.245, 3.4), new Complex128(14.5),
                 new Complex128(0, 94.14), Complex128.ZERO, new Complex128(113, 55.62),
@@ -155,7 +155,7 @@ class CooVectorInnerProdTests {
 
     @Test
     void normalizeTestCase() {
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         double[] expEntries = {0.0046451435284722955, 0.026012803759444852, -0.043455317708858326, 0.9987058586215435};
         int[] expIndices = {1, 2, 8, 13};
         CooVector exp = new CooVector(sparseSize, expEntries, expIndices);

@@ -23,7 +23,7 @@ class CVectorNormTests {
 
     @Test
     void normTestCase() {
-        // ------------------ sub-case 1 ------------------
+        // ------------------ Sub-case 1 ------------------
         expNorm = 6126.638392078558;
         assertEquals(expNorm, a.norm());
     }
@@ -31,27 +31,27 @@ class CVectorNormTests {
 
     @Test
     void pNormTestCase() {
-        // ------------------ sub-case 1 ------------------
+        // ------------------ Sub-case 1 ------------------
         expNorm = 6208.346603991548;
         assertEquals(expNorm, a.norm(1));
 
-        // ------------------ sub-case 2 ------------------
+        // ------------------ Sub-case 2 ------------------
         expNorm = 6126.347178284364;
         assertEquals(expNorm, a.norm(4.15), 1.0e-12);
 
-        // ------------------ sub-case 3 ------------------
+        // ------------------ Sub-case 3 ------------------
         expNorm = 6126.347172780367;
         assertEquals(expNorm, a.norm(45), 1.0e-12);
 
-        // ------------------ sub-case 4 ------------------
+        // ------------------ Sub-case 4 ------------------
         expNorm = 6126.347172780367;
         assertEquals(expNorm, a.norm(Double.POSITIVE_INFINITY));
 
-        // ------------------ sub-case 5 ------------------
+        // ------------------ Sub-case 5 ------------------
         expNorm = 0.009241438243709998;
         assertEquals(expNorm, a.norm(-1), 1.0e-12);
 
-        // ------------------ sub-case 6 ------------------
+        // ------------------ Sub-case 6 ------------------
         expNorm = 0.009257;
         assertEquals(expNorm, a.norm(Double.NEGATIVE_INFINITY));
     }
@@ -59,7 +59,7 @@ class CVectorNormTests {
 
     @Test
     void infNormTestCase() {
-        // ------------------ sub-case 1 ------------------
+        // ------------------ Sub-case 1 ------------------
         expNorm = 6126.347172780367;
         assertEquals(expNorm, a.norm(Double.POSITIVE_INFINITY));
     }

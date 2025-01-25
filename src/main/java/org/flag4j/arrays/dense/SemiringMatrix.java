@@ -197,6 +197,19 @@ public class SemiringMatrix<T extends Semiring<T>> extends AbstractDenseSemiring
 
 
     /**
+     * Constructs a vector of a similar type as this matrix.
+     *
+     * @param entries Entries of the vector.
+     *
+     * @return A vector of a similar type as this matrix.
+     */
+    @Override
+    protected SemiringVector<T> makeLikeVector(T[] entries) {
+        return new SemiringVector<>(entries);
+    }
+
+
+    /**
      * Constructs a sparse COO matrix which is of a similar type as this dense matrix.
      *
      * @param shape Shape of the COO matrix.
@@ -223,7 +236,7 @@ public class SemiringMatrix<T extends Semiring<T>> extends AbstractDenseSemiring
      * @return A sparse CSR matrix which is of a similar type as this dense matrix.
      */
     @Override
-    protected CsrSemiringMatrix<T> makeLikeCsrMatrix(
+    public CsrSemiringMatrix<T> makeLikeCsrMatrix(
             Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrSemiringMatrix<T>(shape, entries, rowPointers, colIndices);
     }

@@ -45,7 +45,7 @@ public final class ErrorMessages {
     /**
      * Error message for matrices which do not have equal shape.
      */
-    private static final String EQ_SHAPE_MISMATCH_ERR = "Expecting tensors to have the same shape but got %s and %s.";
+    private static final String EQ_SHAPE_MISMATCH_ERR = "Expecting matrices to have the same shape but got %s and %s.";
     /**
      * Error message for matrices which do not have valid dimensions for matrix multiplication.
      */
@@ -90,20 +90,20 @@ public final class ErrorMessages {
     /**
      * Error message for arrays which were expected to be the same length.
      */
-    private static final String ARRAY_LENGTHS_MISMATCH_ERR = "All array lengths must match but got lengths: %s.";
+    private static final String ARRAY_LENGTHS_MISMATCH_ERR = "Arrays lengths must match but got lengths: %s.";
     /**
      * Error message for a number of indices which does not match the rank of the tensor being indexed.
      */
     private static final String INDICES_RANK_ERR = "Number of indices does not match the rank of the tensor." +
             " Got %s indices but expected %s";
     /**
-     * Error message for shapes which do not contain the same total number of entries.
+     * Error message for shapes which cannot be broadcast.
      */
-    private static final String SHAPE_EQ_ENTRIES_ERR = "Shapes %s and %s do not contain the same number of entries.";
+    private static final String SHAPE_BROADCAST_ERR = "Shapes %s and %s can not be broadcast.";
     /**
      * Error message for arrays which do not have the same total number of data.
      */
-    private static final String TOTAL_ENTRIES_ERR = "Arrays do not have the same total number of entries.";
+    private static final String TOTAL_ENTRIES_ERR = "Arrays do not have the same total number of data.";
     /**
      * Error message for parameters which are expected to be greater than or equal to some threshold.
      */
@@ -283,8 +283,8 @@ public final class ErrorMessages {
      * @param shape2 Second shape.
      * @return An error message for two shapes which cannot be broadcast together.
      */
-    public static String getShapeTotalEntriesErr(Shape shape1, Shape shape2) {
-        return String.format(SHAPE_EQ_ENTRIES_ERR, shape1, shape2);
+    public static String getShapeBroadcastErr(Shape shape1, Shape shape2) {
+        return String.format(SHAPE_BROADCAST_ERR, shape1, shape2);
     }
 
 

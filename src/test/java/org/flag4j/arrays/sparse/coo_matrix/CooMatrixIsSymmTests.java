@@ -16,7 +16,7 @@ class CooMatrixIsSymmTests {
         double[] aData;
         CooMatrix a;
 
-        // -------------------- sub-case 1 --------------------
+        // -------------------- Sub-case 1 --------------------
         aShape = new Shape(51, 51);
         aData = new double[]{0.711, 0.875, 0.057, 0.207,
                 0.885, 0.939, 0.869, 0.562,
@@ -28,7 +28,7 @@ class CooMatrixIsSymmTests {
         assertFalse(a.isSymmetric());
         assertFalse(a.isHermitian());
 
-        // -------------------- sub-case 2 --------------------
+        // -------------------- Sub-case 2 --------------------
         aShape = new Shape(51, 51);
         aData = new double[]{0.315, 0.155, 
                 0.345, 0.155, 
@@ -42,7 +42,7 @@ class CooMatrixIsSymmTests {
         assertTrue(a.isSymmetric());
         assertTrue(a.isHermitian());
 
-        // -------------------- sub-case 3 --------------------
+        // -------------------- Sub-case 3 --------------------
         aShape = new Shape(51, 51);
         aData = new double[]{0.38, 0.38, 
                 0.456, 0.843, 
@@ -57,7 +57,7 @@ class CooMatrixIsSymmTests {
         assertTrue(a.isSymmetric());
         assertTrue(a.isHermitian());
 
-        // -------------------- sub-case 4 --------------------
+        // -------------------- Sub-case 4 --------------------
         aShape = new Shape(12, 12);
         aData = new double[]{};
         aRowIndices = new int[]{};
@@ -67,7 +67,7 @@ class CooMatrixIsSymmTests {
         assertTrue(a.isSymmetric());
         assertTrue(a.isHermitian());
 
-        // -------------------- sub-case 5 --------------------
+        // -------------------- Sub-case 5 --------------------
         aShape = new Shape(12, 17);
         aData = new double[]{0.305, 0.599, 
                 0.02, 0.549, 

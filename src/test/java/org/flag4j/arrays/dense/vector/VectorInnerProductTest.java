@@ -25,7 +25,7 @@ class VectorInnerProductTest {
         Vector b;
         Double exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{-0.2344, 0.0, 1.4667, 712.45};
         b = new Vector(bEntries);
         exp = 153162.7946215;
@@ -40,7 +40,7 @@ class VectorInnerProductTest {
         CooVector b;
         Double exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new double[]{1.4667};
         indices = new int[]{2};
         sparseSize = 4;
@@ -57,7 +57,7 @@ class VectorInnerProductTest {
         CVector b;
         Complex128 exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new Complex128[]{new Complex128("1.45-9.8i"), new Complex128("0.0+98.234i"),
                 new Complex128("0.134"), new Complex128("-99.24+45.008i")};
         b = new CVector(bEntries);
@@ -73,7 +73,7 @@ class VectorInnerProductTest {
         CooCVector b;
         Complex128 exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         bEntries = new Complex128[]{new Complex128("1.45-9.8i"), new Complex128("-99.24+45.008i")};
         indices = new int[]{0, 3};
         sparseSize = 4;
@@ -89,7 +89,7 @@ class VectorInnerProductTest {
         double[] expEntries;
         Vector exp;
 
-        // ----------------------- sub-case 1 -----------------------
+        // ----------------------- Sub-case 1 -----------------------
         expEntries = new double[]{0.0046451435284722955, 0.026012803759444852, -0.043455317708858326, 0.9987058586215435};
         exp = new Vector(expEntries);
 
