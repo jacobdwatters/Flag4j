@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,14 +29,36 @@ package org.flag4j.util;
  * A simple utility class containing useful constants.
  */
 public final class Flag4jConstants {
+
+    // 32-bit single precision float constants.
     /**
      * The rounding error for 32-bit floating point numbers.
      */
     public static final float EPS_F32 = Math.ulp(1.0f);
     /**
+     * The smallest "safe" 32-bit floating point value. That is, the smallest possible float value
+     * such that {@code 1.0f / SAFE_MIN_F32} does not overflow.
+     */
+    public static final double SAFE_MIN_F32 = Float.MIN_NORMAL;
+    /**
+     * Overflow threshold for 42-bit floating point values. Equivalent to {@link Float#MAX_VALUE}.
+     */
+    public static final double OVERFLOW_THRESH_F32 = Float.MAX_VALUE;
+
+    // 64-bit double precision float constants.
+    /**
      * The rounding error for 64-bit double precision floating point numbers.
      */
     public static final double EPS_F64 = Math.ulp(1.0d);
+    /**
+     * The smallest "safe" 64-bit floating point value. That is, the smallest possible double value
+     * such that {@code 1.0d / SAFE_MIN_F64} does not overflow.
+     */
+    public static final double SAFE_MIN_F64 = Double.MIN_NORMAL;
+    /**
+     * Overflow threshold for 64-bit floating point values. Equivalent to {@link Double#MAX_VALUE}.
+     */
+    public static final double OVERFLOW_THRESH_F64 = Double.MAX_VALUE;
 
     private Flag4jConstants() {
         // Hide default constructor for utility class.

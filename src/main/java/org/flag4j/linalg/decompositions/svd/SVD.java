@@ -163,13 +163,24 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
         if(computeUV) initUV(src.getShape(), stopIdx); // Initialize the U and V matrices.
         S = new Matrix(stopIdx); // initialize the S matrix.
 
-        for(int j=0; j<stopIdx; j++) {
-            S.set(singularVals[j << 1], j, j);
+        int idx = 0;
+        int j = 0;
 
-            if(computeUV && singularVecs != null) {
-                // Extract left and right singular vectors and normalize.
-                extractNormalizedCols(singularVecs, j);
+        while(j < singularVals.length && idx < stopIdx) {
+            double sigma = singularVals[j];
+
+            if(sigma > 0) {
+                S.set(sigma, idx, idx);
+
+                if(computeUV && singularVecs != null) {
+                    // Extract left and right singular vectors and normalize.
+                    extractNormalizedCols(singularVecs, idx);
+                }
+
+                idx++;
             }
+
+            j++;
         }
 
         return this;

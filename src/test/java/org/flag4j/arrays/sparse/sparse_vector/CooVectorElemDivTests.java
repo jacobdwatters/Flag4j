@@ -99,7 +99,7 @@ class CooVectorElemDivTests {
         // -------------------- Sub-case 1 --------------------
         b = 24.56;
 
-        expValues = new double[]{1.34/b, 51.6/b, -0.00245/b, 99.2456/b, -1005.6/b};
+        expValues = new double[]{1.34*(1.0/b), 51.6*(1.0/b), -0.00245*(1.0/b), 99.2456*(1.0/b), -1005.6*(1.0/b)};
         expIndices = new int[]{2, 5, 81, 102, 104};
         exp = new CooVector(151, expValues, expIndices);
         assertEquals(exp, a.div(b));

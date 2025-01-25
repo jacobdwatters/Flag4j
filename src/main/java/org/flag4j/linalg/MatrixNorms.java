@@ -94,20 +94,21 @@ public final class MatrixNorms {
      * <p>Computes the Schatten p-norm of a real dense matrix. This is equivalent to the p-norm of the vector of singular values of the
      * matrix.
      *
+     * <p>This method accepts values of p which are negative. When {@code p < 0} the result is not a true norm but may still have
+     * numerical uses.
+     *
      * @param src The matrix to compute the norm of.
-     * @param p The p value in the Schatten p-norm. Must be greater than or equal to 1. Some common cases include:
+     * @param p The p value in the Schatten p-norm. Some common cases include:
      * <ul>
      *     <li>{@code p=1}: The nuclear (or trace) norm. Equivalent to the sum of singular values.</li>
      *     <li>{@code p=2}: Frobenius (or L<sub>2, 2</sub>) norm. Equivalent to the square root of the sum of the absolute squares
      *     of all entries in the matrix.</li>
-     *     <li>{@code p=Double.POSITIVE_INFINITY}: The spectral norm. Equivalent to the largest singular value.</li>
+     *     <li>{@code p=Double.POSITIVE_INFINITY}: The spectral norm. Equivalent to the maximum singular value.</li>
+     *     <li>{@code p=Double.NEGATIVE_INFINITY}: The minimum singular value.</li>
      * </ul>
      * @return The Schatten p-norm of {@code src}.
-     * @throws IllegalArgumentException If {@code p < 1}.
      */
     public static double schattenNorm(Matrix src,  double p) {
-        ValidateParameters.ensureGreaterEq(1, p, "p");
-
         if(p == 1.0) {
             return nuclearNorm(src); // Nuclear norm.
         } else if(p == 2.0) {
@@ -115,7 +116,7 @@ public final class MatrixNorms {
         } else if(p == Double.POSITIVE_INFINITY) {
             return svdBasedNorm(src, RealProperties::max); // Spectral norm.
         } else {
-            Vector sigmas = new RealSVD(false).decompose(src).getSingularValues();
+            Vector sigmas = new RealSVD(false, true).decompose(src).getSingularValues();
             return VectorNorms.norm(sigmas.data, p);
         }
     }
@@ -146,7 +147,7 @@ public final class MatrixNorms {
         } else if(p == Double.POSITIVE_INFINITY) {
             return svdBasedNorm(src, RealProperties::max); // Spectral norm.
         } else {
-            Vector sigmas = new ComplexSVD(false).decompose(src).getSingularValues();
+            Vector sigmas = new ComplexSVD(false, true).decompose(src).getSingularValues();
             return VectorNorms.norm(sigmas.data, p);
         }
     }
@@ -761,7 +762,7 @@ public final class MatrixNorms {
      * @return The result of applying the {@code aggregator} function to the singular values of {@code src}.
      */
     private static double svdBasedNorm(Matrix src, Function<double[], Double> aggregator) {
-        Vector sigmas = new RealSVD(false).decompose(src).getSingularValues();
+        Vector sigmas = new RealSVD(false, true).decompose(src).getSingularValues();
         return aggregator.apply(sigmas.data);
     }
 
@@ -775,7 +776,7 @@ public final class MatrixNorms {
      * @return The result of applying the {@code aggregator} function to the singular values of {@code src}.
      */
     private static double svdBasedNorm(CMatrix src, Function<double[], Double> aggregator) {
-        Vector sigmas = new ComplexSVD(false).decompose(src).getSingularValues();
+        Vector sigmas = new ComplexSVD(false, true).decompose(src).getSingularValues();
         return aggregator.apply(sigmas.data);
     }
 
@@ -834,7 +835,7 @@ public final class MatrixNorms {
      * @return The nuclear norm of {@code src}.
      */
     private static double nuclearNorm(Matrix src) {
-        return new RealSVD(false)
+        return new RealSVD(false, true)
                 .decompose(src)
                 .getSingularValues()
                 .sum();
@@ -847,7 +848,7 @@ public final class MatrixNorms {
      * @return The nuclear norm of {@code src}.
      */
     private static double nuclearNorm(CMatrix src) {
-        return new ComplexSVD(false)
+        return new ComplexSVD(false, true)
                 .decompose(src)
                 .getSingularValues()
                 .sum();

@@ -86,4 +86,5 @@ module flag4j {
     exports org.flag4j.util.exceptions;
     exports org.flag4j.linalg.ops.sparse.csr.ring_ops;
     exports org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops;
+    exports org.flag4j.linalg.decompositions.balance;
 }

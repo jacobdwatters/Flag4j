@@ -30,6 +30,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.linalg.ops.TransposeDispatcher;
+import org.flag4j.linalg.ops.dense.DenseOps;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMultDispatcher;
 import org.flag4j.util.ArrayUtils;
@@ -420,26 +421,11 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      *
      * @return A reference to this matrix.
      *
-     * @throws ArrayIndexOutOfBoundsException If either index is outside the matrix bounds.
+     * @throws IndexOutOfBoundsException If either index is outside the matrix bounds.
      */
     @Override
     public T swapRows(int rowIndex1, int rowIndex2) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowIndex1, rowIndex2);
-
-        int row1Offset = rowIndex1*numCols;
-        int row2Offset = rowIndex2*numCols;
-
-        if(rowIndex1 != rowIndex2) {
-            V temp;
-
-            for(int j=0; j<numCols; j++) {
-                // Swap elements.
-                temp = data[row1Offset + j];
-                data[row1Offset + j] = data[row2Offset + j];
-                data[row2Offset + j] = temp;
-            }
-        }
-
+        DenseOps.swapRows(shape, data, rowIndex1, rowIndex2);
         return (T) this;
     }
 

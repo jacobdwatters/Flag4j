@@ -45,6 +45,12 @@ import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
  */
 public final class VectorNorms {
 
+    // TODO: This class currently uses scaling to avoid potential over/underflow issues. This works for most
+    //  reasonable inputs. However, for very large (or small) values over/underflow may still occur.
+    //  To better combat this, multiple accumulators can be used with different scaling as is done by LAPACK/BLAS drnm2.
+    //  Specifically, a "big" accumulator which scales values down to ovoid overflow, a "small" accumulator which scales values up
+    //  to avoid underflow, and a "medium" accumulator which applies no scaling.
+
     private VectorNorms() {
         // Hide default constructor for utility class
     }
@@ -197,10 +203,12 @@ public final class VectorNorms {
 
         if (maxAbs == 0.0) return 0.0; // Quick return for zero vector.
 
+        double maxInv = 1.0 / maxAbs;
+
         // Compute the p-norm using scaled values.
         double sum = 0;
         for (double v : src)
-            sum += Math.pow(Math.abs(v) / maxAbs, p);
+            sum += Math.pow(Math.abs(v) * maxInv, p);
 
         // Ensure result is properly scaled back up.
         return maxAbs * Math.pow(sum, 1.0 / p);
@@ -221,10 +229,12 @@ public final class VectorNorms {
 
         if (maxAbs == 0.0) return 0.0; // Quick return for zero vector.
 
+        double maxInv = 1.0 / maxAbs;
+
         // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
         double sum = 0;
         for(double v : src) {
-            double vScaled = v/maxAbs;
+            double vScaled = v*maxInv;
             sum += vScaled*vScaled;
         }
 
@@ -248,10 +258,12 @@ public final class VectorNorms {
 
         if (maxAbs == 0.0) return 0.0; // Quick return for zero vector.
 
+        double maxInv = 1.0 / maxAbs;
+
         // Compute the p-norm using scaled values.
         double sum = 0;
         for (T v : src)
-            sum += Math.pow(v.abs() / maxAbs, p);
+            sum += Math.pow(v.abs() * maxInv, p);
 
         // Ensure result is properly scaled back up.
         return maxAbs * Math.pow(sum, 1.0 / p);
@@ -272,10 +284,105 @@ public final class VectorNorms {
 
         if (maxAbs == 0.0) return 0.0; // Quick return for zero vector.
 
+        double maxInv = 1.0 / maxAbs;
+
         // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
         double sum = 0;
         for(T v : src) {
-            double vScaled = v.mag() / maxAbs;
+            double vScaled = v.mag() * maxInv;
+            sum += vScaled*vScaled;
+        }
+
+        // Ensure result is properly scaled back up.
+        return Math.sqrt(sum)*maxAbs;
+    }
+
+
+    /**
+     * <p>Computes the &ell;<sup>2</sup> (Euclidean) norm of a sub-vector within {@code src},
+     * starting at index {@code start} and considering {@code n} elements spaced by {@code stride}.
+     *
+     * <p>More formally, this method examines and computes the norm of the elements at indices:
+     * {@code start}, {@code start + stride}, {@code start + 2*stride}, ..., {@code start + (n-1)*stride}.
+     *
+     * <p>This method may be used to compute the norm of a row or column in a
+     * {@link org.flag4j.arrays.dense.Matrix matrix} {@code a} as follows:
+     * <ul>
+     *     <li>Norm of row {@code i}:
+     *     <pre>{@code norm(a.data, i*a.numCols, a.numCols, 1);}</pre></li>
+     *     <li>Norm of column {@code j}:
+     *     <pre>{@code norm(a.data, j, a.numRows, a.numRows);}</pre></li>
+     * </ul>
+     *
+     * @param src The array to containing sub-vector elements to compute norm of.
+     * @param start The starting index in {@code src} to search. Must be positive but this is not explicitly enforced.
+     * @param n The number of elements to consider within {@code src1}. Must be positive but this is not explicitly enforced.
+     * @param stride The gap (in indices) between consecutive elements of the sub-vector within {@code src}.
+     * Must be positive but this is not explicitly enforced.
+     * @return The &ell;<sup>2</sup> (Euclidean) norm of the specified sub-vector of {@code src}.
+     *
+     * @throws IndexOutOfBoundsException If {@code start + (n-1)*stride} exceeds {@code src.length - 1}.
+     */
+    public static double norm(double[] src, final int start, final int n, final int stride) {
+        // Find the maximum absolute value in the vector.
+        double maxAbs = RealProperties.maxAbs(src, start, n, stride);
+
+        if (maxAbs == 0.0) return 0.0; // Quick return for zero vector.
+
+        double maxInv = 1.0 / maxAbs;
+
+        final int end = start + n*stride;
+
+        // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
+        double sum = 0;
+        for(int i=start; i<end; i+=stride) {
+            double vScaled = src[i]*maxInv;
+            sum += vScaled*vScaled;
+        }
+
+        // Ensure result is properly scaled back up.
+        return Math.sqrt(sum)*maxAbs;
+    }
+
+
+    /**
+     * <p>Computes the &ell;<sup>2</sup> (Euclidean) norm of a sub-vector within {@code src},
+     * starting at index {@code start} and considering {@code n} elements spaced by {@code stride}.
+     *
+     * <p>More formally, this method examines and computes the norm of the elements at indices:
+     * {@code start}, {@code start + stride}, {@code start + 2*stride}, ..., {@code start + (n-1)*stride}.
+     *
+     * <p>This method may be used to compute the norm of a row or column in a
+     * {@link org.flag4j.arrays.dense.Matrix matrix} {@code a} as follows:
+     * <ul>
+     *     <li>Norm of row {@code i}:
+     *     <pre>{@code norm(a.data, i*a.numCols, a.numCols, 1);}</pre></li>
+     *     <li>Norm of column {@code j}:
+     *     <pre>{@code norm(a.data, j, a.numRows, a.numRows);}</pre></li>
+     * </ul>
+     *
+     * @param src The array to containing sub-vector elements to compute norm of.
+     * @param start The starting index in {@code src} to search. Must be positive but this is not explicitly enforced.
+     * @param n The number of elements to consider within {@code src1}. Must be positive but this is not explicitly enforced.
+     * @param stride The gap (in indices) between consecutive elements of the sub-vector within {@code src}.
+     * Must be positive but this is not explicitly enforced.
+     * @return The &ell;<sup>2</sup> (Euclidean) norm of the specified sub-vector of {@code src}.
+     *
+     * @throws IndexOutOfBoundsException If {@code start + (n-1)*stride} exceeds {@code src.length - 1}.
+     */
+    public static <T extends Ring<T>> double norm(T[] src, final int start, final int n, final int stride) {
+        // Find the maximum absolute value in the vector.
+        double maxAbs = CompareRing.maxAbs(src, start, n, stride);
+
+        if (maxAbs == 0.0) return 0.0; // Quick return for zero vector.
+
+        double maxInv = 1.0 / maxAbs;
+        final int end = start + n*stride;
+
+        // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.
+        double sum = 0;
+        for(int i=start; i<end; i+=stride) {
+            double vScaled = src[i].mag() * maxInv;
             sum += vScaled*vScaled;
         }
 

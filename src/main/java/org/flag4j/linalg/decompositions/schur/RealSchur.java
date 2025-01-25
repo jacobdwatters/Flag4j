@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -142,7 +142,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      *
      * <p>By default, this is computed as
      * <pre>
-     *     {@code maxIterations = }{@link #DEFAULT_MAX_ITERS_FACTOR}{@code * src.numRows;}</pre>
+     *     {@code maxIterations = DEFAULT_MAX_ITERS_FACTOR * src.numRows;}</pre>
      *
      * where {@code src} is the matrix
      * being decomposed.

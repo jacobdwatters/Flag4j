@@ -90,7 +90,7 @@ class VectorInnerProductTest {
         Vector exp;
 
         // ----------------------- Sub-case 1 -----------------------
-        expEntries = new double[]{0.0046451435284722955, 0.026012803759444855, -0.043455317708858326, 0.9987058586215436};
+        expEntries = new double[]{0.0046451435284722955, 0.026012803759444852, -0.043455317708858326, 0.9987058586215435};
         exp = new Vector(expEntries);
 
         assertEquals(exp, a.normalize());

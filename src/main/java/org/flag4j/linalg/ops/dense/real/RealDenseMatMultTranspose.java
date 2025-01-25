@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,9 +33,9 @@ import org.flag4j.concurrency.ThreadManager;
  * two real dense matrices. <br>
  * <b>WARNING:</b> These methods do not perform any sanity checks.
  */
-public final class RealDenseMatrixMultTranspose {
+public final class RealDenseMatMultTranspose {
 
-    private RealDenseMatrixMultTranspose() {
+    private RealDenseMatMultTranspose() {
         // Hide default constructor.
 
     }

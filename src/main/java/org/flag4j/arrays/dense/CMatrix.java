@@ -357,8 +357,6 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     }
 
 
-    // TODO: Add schattenNorm(double p)
-
     /**
      * // TODO: Update javadoc.
      * Computes the p-norm of this vector.

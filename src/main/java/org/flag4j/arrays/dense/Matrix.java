@@ -1504,8 +1504,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         if(diagOffset > 0) {
             newSize = Math.min(newSize, numCols - diagOffset);
             idx = diagOffset;
-        }
-        else if(diagOffset < 0) {
+        } else if(diagOffset < 0) {
             newSize = Math.min(newSize, numRows + diagOffset);
             idx = -diagOffset*numCols;
         }

@@ -468,7 +468,7 @@ public final class ValidateParameters {
      */
     public static void ensurePermutation(int... axes) {
         if (axes == null)
-            throw new IllegalArgumentException("Array is not a permutation of v");
+            throw new IllegalArgumentException("Array is not a permutation.");
 
         ensurePermutation(axes, axes.length);
     }
