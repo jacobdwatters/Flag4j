@@ -43,7 +43,7 @@ import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -110,8 +110,8 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix(Shape shape, List<Complex128> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
                 entries.toArray(new Complex128[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
         ValidateParameters.ensureRank(shape, 2);
         if(entries.size() == 0 || entries.get(0) == null)
             setZeroElement(Complex128.ZERO);
@@ -156,8 +156,8 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix(int rows, int cols, List<Complex128> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
                 entries.toArray(new Complex128[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
         if(super.data.length == 0 || super.data[0] == null) setZeroElement(Complex128.ZERO);
     }
 
@@ -184,7 +184,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooCMatrix(Shape shape, double[] entries, int[] rowIndices, int[] colIndices) {
-        super(shape, ArrayUtils.wrapAsComplex128(entries, null), rowIndices, colIndices);
+        super(shape, ArrayConversions.toComplex128(entries, null), rowIndices, colIndices);
         setZeroElement(Complex128.ZERO);
     }
 

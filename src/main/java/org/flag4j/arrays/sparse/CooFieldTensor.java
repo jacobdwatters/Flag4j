@@ -198,13 +198,13 @@ public class CooFieldTensor<T extends Field<T>>
 
         if(idx > -1) {
             // Copy data and set new value.
-            dest = new CooFieldTensor<T>(shape, data.clone(), ArrayUtils.deepCopy(indices, null));
+            dest = new CooFieldTensor<T>(shape, data.clone(), ArrayUtils.deepCopy2D(indices, null));
             dest.data[idx] = value;
             dest.indices[idx] = index;
         } else {
             // Copy old indices and insert new one.
             int[][] newIndices = new int[indices.length + 1][getRank()];
-            ArrayUtils.deepCopy(indices, newIndices);
+            ArrayUtils.deepCopy2D(indices, newIndices);
             newIndices[indices.length] = index;
 
             // Copy old data and insert new one.
@@ -231,7 +231,7 @@ public class CooFieldTensor<T extends Field<T>>
      */
     @Override
     public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
-        return new CooFieldTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
+        return new CooFieldTensor(shape, entries, ArrayUtils.deepCopy2D(indices, null));
     }
 
 

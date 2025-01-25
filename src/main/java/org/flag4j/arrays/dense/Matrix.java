@@ -55,6 +55,7 @@ import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplicat
 import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -1623,7 +1624,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return A complex matrix with real components equal to the data of this matrix and imaginary components set to zero.
      */
     public CMatrix toComplex() {
-        return new CMatrix(shape, ArrayUtils.wrapAsComplex128(data, null));
+        return new CMatrix(shape, ArrayConversions.toComplex128(data, null));
     }
 
 

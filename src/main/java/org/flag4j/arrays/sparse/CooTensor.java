@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,7 @@ import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorDot;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooTensorOps;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooTensorOps;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -134,7 +135,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * @param indices
      */
     public CooTensor(Shape shape, List<Double> entries, List<int[]> indices) {
-        super(shape, ArrayUtils.fromDoubleList(entries));
+        super(shape, ArrayConversions.fromDoubleList(entries));
         ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
         if(indices.size() != 0)ValidateParameters.ensureArrayLengthsEq(getRank(), indices.get(0).length);
         ValidateParameters.ensureTrue(shape.totalEntries().compareTo(BigInteger.valueOf(entries.size())) >= 0,
@@ -162,7 +163,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      * @param indices Indices of the non-zero data in the sparse COO matrix.
      */
     public CooTensor(Shape shape, int[] entries, int[][] indices) {
-        super(shape, ArrayUtils.asDouble(entries, null));
+        super(shape, ArrayConversions.asDouble(entries, null));
         ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         if(indices.length != 0) ValidateParameters.ensureArrayLengthsEq(getRank(), indices[0].length);
         ValidateParameters.ensureTrue(shape.totalEntries().compareTo(BigInteger.valueOf(entries.length)) >= 0,
@@ -179,7 +180,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     public CooTensor(CooTensor b) {
         super(b.shape, b.data.clone());
-        this.indices = ArrayUtils.deepCopy(b.indices, null);
+        this.indices = ArrayUtils.deepCopy2D(b.indices, null);
         this.nnz = b.nnz;
     }
 
@@ -196,7 +197,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor makeLikeTensor(Shape shape, double[] entries) {
-        return new CooTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
+        return new CooTensor(shape, entries, ArrayUtils.deepCopy2D(indices, null));
     }
 
 
@@ -267,8 +268,8 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     public CooCTensor toComplex() {
         return new CooCTensor(shape,
-                ArrayUtils.wrapAsComplex128(data, null),
-                ArrayUtils.deepCopy(indices, null));
+                ArrayConversions.toComplex128(data, null),
+                ArrayUtils.deepCopy2D(indices, null));
     }
 
 
@@ -334,13 +335,13 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
 
         if(idx > -1) {
             // Copy data and set new value.
-            dest = new CooTensor(shape, data.clone(), ArrayUtils.deepCopy(indices, null));
+            dest = new CooTensor(shape, data.clone(), ArrayUtils.deepCopy2D(indices, null));
             dest.data[idx] = value;
             dest.indices[idx] = index;
         } else {
             // Copy old indices and insert new one.
             int[][] newIndices = new int[indices.length + 1][getRank()];
-            ArrayUtils.deepCopy(indices, newIndices);
+            ArrayUtils.deepCopy2D(indices, newIndices);
             newIndices[indices.length] = index;
 
             // Copy old data and insert new one.
@@ -825,7 +826,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor copy() {
-        return new CooTensor(shape, data.clone(), ArrayUtils.deepCopy(indices, null));
+        return new CooTensor(shape, data.clone(), ArrayUtils.deepCopy2D(indices, null));
     }
 
 

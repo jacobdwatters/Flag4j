@@ -33,6 +33,7 @@ import org.flag4j.linalg.ops.TransposeDispatcher;
 import org.flag4j.linalg.ops.dense.DenseOps;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMultDispatcher;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -1045,8 +1046,8 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
         SparseMatrixData<V> data = DenseSemiringConversions.toCoo(shape, this.data, estimatedSparsity);
         V[] cooEntries = makeEmptyDataArray(data.data().size());
         data.data().toArray(cooEntries);
-        int[] rowIndices = ArrayUtils.fromIntegerList(data.rowData());
-        int[] colIndices = ArrayUtils.fromIntegerList(data.colData());
+        int[] rowIndices = ArrayConversions.fromIntegerList(data.rowData());
+        int[] colIndices = ArrayConversions.fromIntegerList(data.colData());
 
         return makeLikeCooMatrix(data.shape(), cooEntries, rowIndices, colIndices);
     }
