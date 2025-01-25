@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -64,7 +65,7 @@ public final class RealComplexCsrDenseOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);  // Ensure both matrices are same shape.
 
         Complex128[] dest;
-        if(uOpp == null) dest = ArrayUtils.wrapAsComplex128(src2.data, null);
+        if(uOpp == null) dest = ArrayConversions.toComplex128(src2.data, null);
         else dest = ArrayUtils.applyTransform(src2.data.clone(), (Double a)->new Complex128(uOpp.apply(a)));
 
         for(int i=0; i<src1.rowPointers.length-1; i++) {
@@ -93,7 +94,7 @@ public final class RealComplexCsrDenseOps {
     public static CMatrix applyBinOpp(Matrix src1, CsrCMatrix src2, BiFunction<Double, Complex128, Complex128> opp) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape); // Ensure both matrices are same shape.
 
-        Complex128[] dest = ArrayUtils.wrapAsComplex128(src1.data, null);
+        Complex128[] dest = ArrayConversions.toComplex128(src1.data, null);
 
         for(int i=0; i<src2.rowPointers.length-1; i++) {
             int start = src2.rowPointers[i];

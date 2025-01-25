@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package org.flag4j.rng;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -332,7 +333,7 @@ public class RandomArray {
     public int[] randomUniqueIndices(int numIndices, int start, int end) {
         ValidateParameters.ensureIndicesInBounds(end, start);
 
-        int[] indices = ArrayUtils.intRange(start, end);
+        int[] indices = ArrayBuilder.intRange(start, end);
         shuffle(indices); // Shuffle indices.
 
         indices = Arrays.copyOfRange(indices, 0, numIndices); // Extract first 'numIndices' data.

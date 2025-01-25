@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayJoiner;
 import org.flag4j.util.ValidateParameters;
 
 import java.math.BigDecimal;
@@ -249,10 +249,10 @@ public class RandomSparseTensor {
         int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numEntries, 0, shape.get(0), 0, shape.get(1));
 
         // Mirror data across diagonal.
-        entries = ArrayUtils.join(entries, entries);
+        entries = ArrayJoiner.join(entries, entries);
         indices = new int[][]{
-                ArrayUtils.join(indices[0], indices[1]),
-                ArrayUtils.join(indices[1], indices[0])
+                ArrayJoiner.join(indices[0], indices[1]),
+                ArrayJoiner.join(indices[1], indices[0])
         };
 
         CooMatrix randMat = new CooMatrix(shape, entries, indices[0], indices[1]);

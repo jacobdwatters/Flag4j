@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -153,7 +153,7 @@ public final class TensorReader {
         if (matrixType == Matrix.class) {
             // Parse dense double matrix.
             Pair<Shape, List<Double>> data = fromCsv(fileName, delimiter, Double::parseDouble);
-            double[] arr = ArrayUtils.fromDoubleList(data.second());
+            double[] arr = ArrayConversions.fromDoubleList(data.second());
             Constructor<? extends MatrixMixin<?, ?, ?, ?>> constructor = null;
             try {
                 constructor = matrixType.getConstructor(Shape.class, double[].class);

@@ -36,7 +36,7 @@ import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -65,7 +65,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @param entries Entries of this vector.
      */
     public CVector(Complex64... entries) {
-        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        super(new Shape(entries.length), ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -76,7 +76,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @param entries Entries of this vector.
      */
     public CVector(double... entries) {
-        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        super(new Shape(entries.length), ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -87,7 +87,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @param entries Entries of this vector.
      */
     public CVector(int... entries) {
-        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        super(new Shape(entries.length), ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 

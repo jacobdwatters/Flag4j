@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,8 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.util.ArrayBuilder;
+import org.flag4j.util.ArrayJoiner;
 import org.flag4j.util.ArrayUtils;
 
 
@@ -661,8 +663,8 @@ public final class DirectSum {
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
-        int[] bRowIndices = ArrayUtils.intRange(0, B.numRows, B.numCols);
-        int[] bColIndices = ArrayUtils.repeat(B.numRows, ArrayUtils.intRange(A.numCols, A.numCols + B.numCols));
+        int[] bRowIndices = ArrayBuilder.intRange(0, B.numRows, B.numCols);
+        int[] bColIndices = ArrayJoiner.repeat(B.numRows, ArrayBuilder.intRange(A.numCols, A.numCols + B.numCols));
 
         // Copy shifted indices of both matrices.
         System.arraycopy(bRowIndices, 0, destRowIndices, 0, bRowIndices.length);
@@ -726,8 +728,8 @@ public final class DirectSum {
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
-        int[] bRowIndices = ArrayUtils.intRange(0, B.numRows, B.numCols);
-        int[] bColIndices = ArrayUtils.repeat(B.numRows, ArrayUtils.intRange(A.numCols, A.numCols + B.numCols));
+        int[] bRowIndices = ArrayBuilder.intRange(0, B.numRows, B.numCols);
+        int[] bColIndices = ArrayJoiner.repeat(B.numRows, ArrayBuilder.intRange(A.numCols, A.numCols + B.numCols));
 
         // Copy shifted indices of both matrices.
         System.arraycopy(bRowIndices, 0, destRowIndices, 0, bRowIndices.length);
@@ -933,8 +935,8 @@ public final class DirectSum {
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
-        int[] bRowIndices = ArrayUtils.intRange(0, B.numRows, B.numCols);
-        int[] bColIndices = ArrayUtils.repeat(B.numRows, ArrayUtils.intRange(A.numCols, A.numCols + B.numCols));
+        int[] bRowIndices = ArrayBuilder.intRange(0, B.numRows, B.numCols);
+        int[] bColIndices = ArrayJoiner.repeat(B.numRows, ArrayBuilder.intRange(A.numCols, A.numCols + B.numCols));
 
         // Copy shifted indices of both matrices.
         System.arraycopy(bRowIndices, 0, destRowIndices, 0, bRowIndices.length);
@@ -1030,8 +1032,8 @@ public final class DirectSum {
 
         // Compute shifted indices.
         int[] shiftedRowIndices = ArrayUtils.shift(B.numRows, A.rowIndices.clone());
-        int[] bRowIndices = ArrayUtils.intRange(0, B.numRows, B.numCols);
-        int[] bColIndices = ArrayUtils.repeat(B.numRows, ArrayUtils.intRange(A.numCols, A.numCols + B.numCols));
+        int[] bRowIndices = ArrayBuilder.intRange(0, B.numRows, B.numCols);
+        int[] bColIndices = ArrayJoiner.repeat(B.numRows, ArrayBuilder.intRange(A.numCols, A.numCols + B.numCols));
 
         // Copy shifted indices of both matrices.
         System.arraycopy(bRowIndices, 0, destRowIndices, 0, bRowIndices.length);

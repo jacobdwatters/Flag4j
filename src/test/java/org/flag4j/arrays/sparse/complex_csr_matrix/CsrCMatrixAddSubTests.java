@@ -10,7 +10,7 @@ import org.flag4j.linalg.ops.dense_sparse.csr.field_ops.DenseCsrFieldOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOps;
 import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOps;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -171,7 +171,7 @@ class CsrCMatrixAddSubTests {
                 {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bEntriesCmp = new Complex128[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bEntriesCmp, Complex128.ZERO);
+        ArrayBuilder.fill(bEntriesCmp, Complex128.ZERO);
         bEntriesCmp[0][0] = new Complex128(23, 1.34);
         bEntriesCmp[1][0] = new Complex128(0.133, -41.4);
         bEntriesCmp[1][3] = new Complex128(-4.1, -34.1);
@@ -201,7 +201,7 @@ class CsrCMatrixAddSubTests {
                 {new Complex128("0.030397833484514858+0.0339598081443111i"), Complex128.ZERO, Complex128.ZERO, new Complex128("0.8303067369813061+0.6672665799918752i"), Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.08364434412041977+0.4996667151892932i"), new Complex128("0.4271149460271625+0.6885614097388274i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO}};
         bEntriesCmp = new Complex128[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bEntriesCmp, Complex128.ZERO);
+        ArrayBuilder.fill(bEntriesCmp, Complex128.ZERO);
         bEntriesCmp[0][0] = new Complex128(23, 1.34);
         bEntriesCmp[1][0] = new Complex128(0.133, -41.4);
         bEntriesCmp[1][3] = new Complex128(-4.1, -34.1);

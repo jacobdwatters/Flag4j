@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public final class RealComplexSparseVectorOps {
      */
     public static CVector add(CooCVector src, double a) {
         Complex128[] dest = new Complex128[src.size];
-        ArrayUtils.fill(dest, a);
+        ArrayBuilder.fill(dest, a);
 
         for(int i = 0; i<src.data.length; i++) {
             int idx = src.indices[i];

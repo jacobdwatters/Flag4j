@@ -92,7 +92,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     public CooTensor abs() {
         double[] abs = new double[data.length];
         RingOps.abs(data, abs);
-        return new CooTensor(getShape(), abs, ArrayUtils.deepCopy(indices, null));
+        return new CooTensor(getShape(), abs, ArrayUtils.deepCopy2D(indices, null));
     }
 
 

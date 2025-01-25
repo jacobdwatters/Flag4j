@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.common.real.RealOps;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 
 
@@ -99,7 +99,7 @@ public final class RealComplexDenseSparseVectorOps {
     public static CVector sub(CooCVector src1, Vector src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        Complex128[] destEntries = ArrayUtils.wrapAsComplex128(
+        Complex128[] destEntries = ArrayConversions.toComplex128(
                 RealOps.scalMult(src2.data, -1, null), null);
         CVector dest = new CVector(destEntries);
 

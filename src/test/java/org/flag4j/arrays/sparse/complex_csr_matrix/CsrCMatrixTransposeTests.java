@@ -3,7 +3,7 @@ package org.flag4j.arrays.sparse.complex_csr_matrix;
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -86,9 +86,9 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 4 ---------------------
         aEntries = new Complex128[140][23];
-        ArrayUtils.fill(aEntries, Complex128.ZERO);
+        ArrayBuilder.fill(aEntries, Complex128.ZERO);
         expEntries = new Complex128[23][140];
-        ArrayUtils.fill(expEntries, Complex128.ZERO);
+        ArrayBuilder.fill(expEntries, Complex128.ZERO);
         buildFromDense();
 
         assertEquals(exp, A.T());
@@ -153,9 +153,9 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 4 ---------------------
         aEntries = new Complex128[140][23];
-        ArrayUtils.fill(aEntries, Complex128.ZERO);
+        ArrayBuilder.fill(aEntries, Complex128.ZERO);
         expEntries = new Complex128[23][140];
-        ArrayUtils.fill(expEntries, Complex128.ZERO);
+        ArrayBuilder.fill(expEntries, Complex128.ZERO);
         buildFromDense();
 
         assertEquals(exp, A.H());
@@ -166,7 +166,7 @@ class CsrCMatrixTransposeTests {
     void isHermitianTests() {
         // -------------------- Sub-case 1 ---------------------
         aEntries = new Complex128[5][5];
-        ArrayUtils.fill(aEntries, Complex128.ZERO);
+        ArrayBuilder.fill(aEntries, Complex128.ZERO);
         aEntries[0][0] = new Complex128(1.5);
         aEntries[2][1] = new Complex128(2.45, 85.12);
         aEntries[1][2] = new Complex128(2.45, -85.12);
@@ -179,7 +179,7 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 2 ---------------------
         aEntries = new Complex128[5][6];
-        ArrayUtils.fill(aEntries, Complex128.ZERO);
+        ArrayBuilder.fill(aEntries, Complex128.ZERO);
         aEntries[0][0] = new Complex128(1.5);
         aEntries[2][1] = new Complex128(2.45, 85.12);
         aEntries[1][2] = new Complex128(2.45, -85.12);
@@ -192,7 +192,7 @@ class CsrCMatrixTransposeTests {
 
         // -------------------- Sub-case 1 ---------------------
         aEntries = new Complex128[415][415];
-        ArrayUtils.fill(aEntries, Complex128.ZERO);
+        ArrayBuilder.fill(aEntries, Complex128.ZERO);
         aEntries[0][0] = new Complex128(87.35);
         aEntries[2][1] = new Complex128(9671.4, -774.1);
         aEntries[1][2] = new Complex128(9671.4, 774.1);

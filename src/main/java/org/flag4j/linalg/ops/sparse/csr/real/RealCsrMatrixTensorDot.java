@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package org.flag4j.linalg.ops.sparse.csr.real;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.util.ArrayJoiner;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -72,7 +73,7 @@ public final class RealCsrMatrixTensorDot {
 
         // ---- Compute new axes and shapes for first tensor. ----
         notin = ArrayUtils.notInAxes(src1Axes, src1.getRank());
-        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);
+        int[] src1NewAxes = ArrayJoiner.join(notin, src1Axes);
 
         n2 = 1;
         for(int axis : src1Axes) {
@@ -93,7 +94,7 @@ public final class RealCsrMatrixTensorDot {
 
         // ---- Compute new axes and shapes for second tensor. ----
         notin = ArrayUtils.notInAxes(src2Axes, src2.getRank());
-        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);
+        int[] src2NewAxes = ArrayJoiner.join(src2Axes, notin);
 
         n2 = 1;
         for(int axis : src2Axes) {
@@ -117,7 +118,7 @@ public final class RealCsrMatrixTensorDot {
         CsrMatrix bt = src2.T(src2NewAxes).reshape(src2NewShape);
         Matrix prod = at.mult(bt);
 
-        Shape destShape = new Shape(ArrayUtils.join(src1Dims, src2Dims));
+        Shape destShape = new Shape(ArrayJoiner.join(src1Dims, src2Dims));
 
         if(destShape.getRank() == 0) {
             destShape = new Shape(1, 1);

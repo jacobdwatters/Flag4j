@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays;
 
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 
 import java.util.List;
 
@@ -44,6 +44,6 @@ public record SparseVectorData<T>(Shape shape, List<T> data, List<Integer> indic
      * @return A primitive integer array containing the indices of this sparse vector data.
      */
     public int[] indicesToArray() {
-        return ArrayUtils.fromIntegerList(indices);
+        return ArrayConversions.fromIntegerList(indices);
     }
 }

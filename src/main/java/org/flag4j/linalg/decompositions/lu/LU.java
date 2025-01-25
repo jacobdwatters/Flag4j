@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ package org.flag4j.linalg.decompositions.lu;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.Decomposition;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 
 
 /**
@@ -117,11 +117,11 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
             rowSwaps = colSwaps = null;
             noPivot(); // Compute with no pivoting.
         } else if(pivotFlag == Pivoting.PARTIAL) {
-            rowSwaps = ArrayUtils.intRange(0, LU.numRows());
+            rowSwaps = ArrayBuilder.intRange(0, LU.numRows());
             partialPivot();
         } else {
-            rowSwaps = ArrayUtils.intRange(0, LU.numRows());
-            colSwaps = ArrayUtils.intRange(0, LU.numCols());
+            rowSwaps = ArrayBuilder.intRange(0, LU.numRows());
+            colSwaps = ArrayBuilder.intRange(0, LU.numCols());
             fullPivot();
         }
 

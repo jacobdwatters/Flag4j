@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays;
 
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public record SparseMatrixData<T>(Shape shape, List<T> data, List<Integer> rowDa
      * @return A primitive integer array containing the row indices of this sparse matrix data.
      */
     public int[] rowIndicesToArray() {
-        return ArrayUtils.fromIntegerList(rowData);
+        return ArrayConversions.fromIntegerList(rowData);
     }
 
 
@@ -55,6 +55,6 @@ public record SparseMatrixData<T>(Shape shape, List<T> data, List<Integer> rowDa
      * @return A primitive integer array containing the column indices of this sparse matrix data.
      */
     public int[] colIndicesToArray() {
-        return ArrayUtils.fromIntegerList(colData);
+        return ArrayConversions.fromIntegerList(colData);
     }
 }

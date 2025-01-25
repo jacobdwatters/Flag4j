@@ -10,7 +10,7 @@ import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrOps;
 import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrOps;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -153,7 +153,7 @@ class CsrMatrixAddSubTests {
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
         bCmpEntries = new Complex128[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bCmpEntries, Complex128.ZERO);
+        ArrayBuilder.fill(bCmpEntries, Complex128.ZERO);
         bCmpEntries[0][0] = new Complex128(23, 1.34);
         bCmpEntries[1][0] = new Complex128(0.133, -41.4);
         bCmpEntries[1][3] = new Complex128(-4.1, -34.1);
@@ -183,7 +183,7 @@ class CsrMatrixAddSubTests {
                 {0, 14.1, 0, 0, 0, 0},
                 {0, 0, 0, 9.143, 1.4, -2.1}};
         bCmpEntries = new Complex128[aEntries.length][aEntries[0].length];
-        ArrayUtils.fill(bCmpEntries, Complex128.ZERO);
+        ArrayBuilder.fill(bCmpEntries, Complex128.ZERO);
         bCmpEntries[0][0] = new Complex128(23, 1.34);
         bCmpEntries[1][0] = new Complex128(0.133, -41.4);
         bCmpEntries[1][3] = new Complex128(-4.1, -34.1);

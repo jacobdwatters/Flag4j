@@ -3,7 +3,7 @@ package org.flag4j.arrays.sparse.sparse_complex_tensor;
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ class CooCTensorConstructorTests {
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZeroD = new double[]{1, 2, 3, 4.023423, -9233.2};
         expNonZero = new Complex128[expNonZeroD.length];
-        ArrayUtils.wrapAsComplex128(expNonZeroD, expNonZero);
+        ArrayConversions.toComplex128(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 24, 2, 0, 10},
                 {0, 1, 26, 2, 0, 10}, {0, 1, 28, 3, 0, 10}};
         A = new CooCTensor(expShape, expNonZeroD, expIndices);
@@ -107,7 +107,7 @@ class CooCTensorConstructorTests {
         expShape = new Shape(5, 3);
         expNonZeroD = new double[]{1, 2, 3, 4.023423, -9233.2};
         expNonZero = new Complex128[expNonZeroD.length];
-        ArrayUtils.wrapAsComplex128(expNonZeroD, expNonZero);
+        ArrayConversions.toComplex128(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0}, {1, 1}, {2, 2}};
         assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
 
@@ -115,7 +115,7 @@ class CooCTensorConstructorTests {
         expShape = new Shape(5, 3);
         expNonZeroD = new double[]{1, 2};
         expNonZero = new Complex128[expNonZeroD.length];
-        ArrayUtils.wrapAsComplex128(expNonZeroD, expNonZero);
+        ArrayConversions.toComplex128(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
         assertThrows(LinearAlgebraException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
 
@@ -123,7 +123,7 @@ class CooCTensorConstructorTests {
         expShape = new Shape(2);
         expNonZeroD = new double[]{1, 2, 3, 4.023423, -9233.2};
         expNonZero = new Complex128[expNonZeroD.length];
-        ArrayUtils.wrapAsComplex128(expNonZeroD, expNonZero);
+        ArrayConversions.toComplex128(expNonZeroD, expNonZero);
         expIndices = new int[][]{{0}, {1}};
         assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
     }

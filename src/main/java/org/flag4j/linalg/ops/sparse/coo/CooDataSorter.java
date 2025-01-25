@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 
 import java.util.*;
 
@@ -91,7 +91,7 @@ public class CooDataSorter<T> {
                 throw new IllegalArgumentException("All lists must have the same length.");
             }
 
-            this.keys[i] = ArrayUtils.toArrayList(indicesT[i]);
+            this.keys[i] = ArrayConversions.toArrayList(indicesT[i]);
         }
     }
 

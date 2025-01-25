@@ -45,10 +45,10 @@ import java.math.RoundingMode;
  *
  * <h2>Usage Example:</h2>
  * <pre>{@code
- * Complex128 a = new Complex128(2.5, 3.2);   // Creates a complex number 2.5 + 3.2i
- * Complex128 b = new Complex128(1, -4);      // Creates a complex number 1 - 4i
- * Complex128 sum = a.add(b);                 // Sum of a and b
- * Complex128 product = a.mult(b);            // Product of a and b
+ * Complex128 a = new Complex128(2.5, 3.2);   // Creates a complex number 2.5 + 3.2i.
+ * Complex128 b = new Complex128(1, -4);      // Creates a complex number 1 - 4i.
+ * Complex128 sum = a.add(b);                 // Sum of a and b.
+ * Complex128 product = a.mult(b);            // Product of a and b.
  * }</pre>
  *
  * <h2>Special Values:</h2>

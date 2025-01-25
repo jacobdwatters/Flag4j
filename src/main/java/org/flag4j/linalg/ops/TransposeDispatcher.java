@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import org.flag4j.linalg.ops.dense.DenseTranspose;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingHermitianTranspose;
 
-import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+import static org.flag4j.util.ArrayBuilder.getOrCreateArray;
 
 
 /**
@@ -144,7 +144,7 @@ public final class TransposeDispatcher {
             throw new IllegalArgumentException("src and dest cannot be the same array.");
 
         TransposeAlgorithms algorithm = chooseAlgorithmComplex(shape); // TODO: Need an updated method for this. Or at least a name change.
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         final int numRows = shape.get(0);
         final int numCols = shape.get(1);
 
@@ -303,7 +303,7 @@ public final class TransposeDispatcher {
      */
     public static Object[] dispatchTensor(Object[] src, Shape shape, int[] axes, Object[] dest) {
         if(src == dest) throw new IllegalArgumentException("src and dest array cannot be the same array.");
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
 
         TransposeAlgorithms algorithm = chooseAlgorithmTensor(src.length);
 

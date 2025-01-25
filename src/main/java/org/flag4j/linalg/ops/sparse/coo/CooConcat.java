@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -226,7 +227,7 @@ public final class CooConcat {
                 Arrays.fill(destRows, i*nnz, (i+1)*nnz, i);
             }
         } else {
-            int[] colIndices = ArrayUtils.intRange(0, n);
+            int[] colIndices = ArrayBuilder.intRange(0, n);
             tiledShape = new Shape(size, n);
 
             for(int i=0; i<nnz; i++) {

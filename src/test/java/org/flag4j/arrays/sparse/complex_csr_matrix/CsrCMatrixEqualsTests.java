@@ -5,7 +5,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,9 +29,9 @@ public class CsrCMatrixEqualsTests {
     void realCsrEqualsTests() {
         // ---------------------- Sub-case 1 ----------------------
         aEntries = new Complex128[150][235];
-        ArrayUtils.fill(aEntries, Complex128.ZERO);
+        ArrayBuilder.fill(aEntries, Complex128.ZERO);
         bEntries = new Complex128[150][235];
-        ArrayUtils.fill(bEntries, Complex128.ZERO);
+        ArrayBuilder.fill(bEntries, Complex128.ZERO);
         aEntries[0][1] = new Complex128(134.4, -0.0234);
         aEntries[15][234] = new Complex128(-0.00024, 1.45);
         aEntries[49][1] = new Complex128(234.25000024, 234.5);

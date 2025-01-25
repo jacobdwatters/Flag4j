@@ -29,7 +29,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -97,8 +97,8 @@ public final class RealCsrOps {
         }
 
         // Convert lists to arrays.
-        int[] prodColIndices = ArrayUtils.fromIntegerList(colIndices);
-        double[] prodEntries = ArrayUtils.fromDoubleList(entries);
+        int[] prodColIndices = ArrayConversions.fromIntegerList(colIndices);
+        double[] prodEntries = ArrayConversions.fromDoubleList(entries);
 
         return new CsrMatrix(src1.shape, prodEntries, rowPointers, prodColIndices);
     }
@@ -180,9 +180,9 @@ public final class RealCsrOps {
         }
 
         return new CsrMatrix(src1.shape,
-                ArrayUtils.fromDoubleList(dest),
+                ArrayConversions.fromDoubleList(dest),
                 rowPointers,
-                ArrayUtils.fromIntegerList(colIndices)
+                ArrayConversions.fromIntegerList(colIndices)
         );
     }
 

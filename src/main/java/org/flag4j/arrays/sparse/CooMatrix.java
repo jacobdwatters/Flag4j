@@ -45,6 +45,7 @@ import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.*;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatrixMultiplication;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -182,15 +183,15 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooMatrix(Shape shape, List<Double> entries, List<Integer> rowIndices, List<Integer> colIndices) {
-        super(shape, ArrayUtils.fromDoubleList(entries));
+        super(shape, ArrayConversions.fromDoubleList(entries));
         ValidateParameters.ensureArrayLengthsEq(entries.size(), rowIndices.size(), colIndices.size());
         ValidateParameters.ensureTrue(
                 shape.totalEntries().compareTo(BigInteger.valueOf(entries.size())) >= 0,
                 "Shape " + shape + " cannot hold " + entries.size() + "data.");
         ValidateParameters.ensureRank(shape, 2);
 
-        this.rowIndices = ArrayUtils.fromIntegerList(rowIndices);
-        this.colIndices = ArrayUtils.fromIntegerList(colIndices);
+        this.rowIndices = ArrayConversions.fromIntegerList(rowIndices);
+        this.colIndices = ArrayConversions.fromIntegerList(colIndices);
         ValidateParameters.ensureArrayLengthsEq(super.data.length, this.rowIndices.length, this.colIndices.length);
 
         nnz = super.data.length;
@@ -279,7 +280,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
                 "Shape " + shape + " cannot hold " + entries.length + "data.");
         ValidateParameters.ensureRank(shape, 2);
 
-        ArrayUtils.asDouble(entries, super.data);
+        ArrayConversions.asDouble(entries, super.data);
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
         nnz = entries.length;
@@ -1541,8 +1542,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
 
         return new CooVector(
                 Math.min(numRows, numCols),
-                ArrayUtils.fromDoubleList(destEntries),
-                ArrayUtils.fromIntegerList(destIndices)
+                ArrayConversions.fromDoubleList(destEntries),
+                ArrayConversions.fromIntegerList(destIndices)
         );
     }
 

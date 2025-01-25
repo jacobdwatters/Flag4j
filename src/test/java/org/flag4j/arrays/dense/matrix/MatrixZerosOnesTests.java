@@ -1,7 +1,7 @@
 package org.flag4j.arrays.dense.matrix;
 
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +34,7 @@ class MatrixZerosOnesTests {
     void onesTestCase()  {
         // ----------------- Sub-case 1 -----------------
         aEntries = new double[46][101];
-        ArrayUtils.fill(aEntries, 1.0);
+        ArrayBuilder.fill(aEntries, 1.0);
         A = new Matrix(aEntries);
         exp = true;
 
@@ -42,7 +42,7 @@ class MatrixZerosOnesTests {
 
         // ----------------- Sub-case 2 -----------------
         aEntries = new double[46][101];
-        ArrayUtils.fill(aEntries, 1.0);
+        ArrayBuilder.fill(aEntries, 1.0);
         aEntries[21][9] = -1;
         A = new Matrix(aEntries);
         exp = false;

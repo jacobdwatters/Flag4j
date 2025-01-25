@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,8 +55,8 @@ public final class RealCooTensorOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
-        int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
-        int[][] src2Indices = ArrayUtils.deepCopy(src2.indices, null);
+        int[][] src1Indices = ArrayUtils.deepCopy2D(src1.indices, null);
+        int[][] src2Indices = ArrayUtils.deepCopy2D(src2.indices, null);
 
         // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1.nnz + src2.nnz;
@@ -105,8 +105,8 @@ public final class RealCooTensorOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         // Create deep copies of indices.
-        int[][] src1Indices = ArrayUtils.deepCopy(src1.indices, null);
-        int[][] src2Indices = ArrayUtils.deepCopy(src2.indices, null);
+        int[][] src1Indices = ArrayUtils.deepCopy2D(src1.indices, null);
+        int[][] src2Indices = ArrayUtils.deepCopy2D(src2.indices, null);
 
         // Roughly estimate the number of non-zero data in sum.
         int estimatedEntries = src1.nnz + src2.nnz;

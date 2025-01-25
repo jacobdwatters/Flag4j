@@ -30,7 +30,7 @@ import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCsrRingMatrix;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,8 +78,8 @@ public final class CsrRingProperties {
 
             close = Arrays.equals(src1RowPointers, src2RowPointers)
 
-                    && Arrays.equals(ArrayUtils.fromIntegerList(src1ColIndices),
-                    ArrayUtils.fromIntegerList(src2ColIndices))
+                    && Arrays.equals(ArrayConversions.fromIntegerList(src1ColIndices),
+                    ArrayConversions.fromIntegerList(src2ColIndices))
 
                     && RingProperties.allClose(src1Entries.toArray(new Ring[0]),
                     src2Entries.toArray(new Ring[0]), relTol, absTol);

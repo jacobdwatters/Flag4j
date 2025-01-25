@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,7 @@ import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldTensorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooOps;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -189,7 +190,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
      * @param entries Entries of this tensor.
      */
     public CTensor(Shape shape, double[] entries) {
-        super(shape, ArrayUtils.wrapAsComplex128(entries, null));
+        super(shape, ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -55,7 +56,7 @@ public final class RealComplexDenseCooOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         Complex128[] destEntries = new Complex128[src1.nnz];
         int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
-        ArrayUtils.deepCopy(src1.indices, destIndices);
+        ArrayUtils.deepCopy2D(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
@@ -81,7 +82,7 @@ public final class RealComplexDenseCooOps {
                            Shape shape2, Complex128[] src2, int[][] indices,
                            Complex128[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        ArrayUtils.wrapAsComplex128(src1, dest);
+        ArrayConversions.toComplex128(src1, dest);
 
         for(int i=0, size=src2.length; i<size; i++) {
             int idx = shape2.getFlatIndex(indices[i]);
@@ -99,7 +100,7 @@ public final class RealComplexDenseCooOps {
      */
     public static CTensor sub(Tensor src1, CooCTensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        Complex128[] entries = ArrayUtils.wrapAsComplex128(src1.data, null);
+        Complex128[] entries = ArrayConversions.toComplex128(src1.data, null);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             int idx = src2.shape.getFlatIndex(src2.indices[i]);
@@ -123,7 +124,7 @@ public final class RealComplexDenseCooOps {
         Complex128[] destEntries = new Complex128[src2.nnz];
 
         int[][] indices = new int[src2.indices.length][src2.indices[0].length];
-        ArrayUtils.deepCopy( src2.indices, indices);
+        ArrayUtils.deepCopy2D( src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             destEntries[i] = src1.data[src2.shape.getFlatIndex(src2.indices[i])].mult(src2.data[i]);
@@ -145,7 +146,7 @@ public final class RealComplexDenseCooOps {
         Complex128[] destEntries = new Complex128[src2.nnz];
 
         int[][] indices = new int[src2.indices.length][src2.indices[0].length];
-        ArrayUtils.deepCopy(src2.indices, indices);
+        ArrayUtils.deepCopy2D(src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++)
             destEntries[i] = src2.data[i].mult(src1.data[src2.shape.getFlatIndex(src2.indices[i])]);
@@ -164,7 +165,7 @@ public final class RealComplexDenseCooOps {
     public static CTensor sub(CooCTensor src1, Tensor src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        Complex128[] entries = ArrayUtils.wrapAsComplex128(
+        Complex128[] entries = ArrayConversions.toComplex128(
                 RealOps.scalMult(src2.data, -1.0, null), null);
 
         for(int i=0, size=src1.nnz; i<size; i++) {

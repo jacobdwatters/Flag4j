@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -323,7 +323,7 @@ public final class RealCooVectorOps {
                 Arrays.fill(tiledRows, i*nnz, (i+1)*nnz, i);
             }
         } else {
-            int[] colIndices = ArrayUtils.intRange(0, n);
+            int[] colIndices = ArrayBuilder.intRange(0, n);
             tiledShape = new Shape(src.size, n);
 
             for(int i=0; i<nnz; i++) {

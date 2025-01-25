@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.arrays.sparse.CsrMatrix;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
@@ -126,8 +126,8 @@ public final class RealCsrMatMult {
             resultRowPtr[i + 1] = resultList.size();
         }
 
-        double[] resultValues = ArrayUtils.fromDoubleList(resultList);
-        int[] resultColIndices = ArrayUtils.fromIntegerList(resultColIndexList);
+        double[] resultValues = ArrayConversions.fromDoubleList(resultList);
+        int[] resultColIndices = ArrayConversions.fromIntegerList(resultColIndexList);
 
         return new CsrMatrix(new Shape(src1.numRows, src2.numCols), resultValues, resultRowPtr, resultColIndices);
     }

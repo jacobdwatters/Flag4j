@@ -25,9 +25,8 @@
 package org.flag4j.linalg.ops.dense.real;
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
-
-import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
 /**
  * This class provides low level methods for computing ops on real dense tensors.
@@ -53,7 +52,7 @@ public final class RealDenseOps {
     public static double[] add(double[] src1, double[] src2, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
         int length = src1.length;
-        dest = makeNewIfNull(dest, length);
+        dest = ArrayBuilder.getOrCreateArray(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src1[i] + src2[i];
@@ -75,7 +74,7 @@ public final class RealDenseOps {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
 
         int length = src1.length;
-        dest = makeNewIfNull(dest, length);
+        dest = ArrayBuilder.getOrCreateArray(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src1[i] - src2[i];
@@ -94,7 +93,7 @@ public final class RealDenseOps {
      */
     public static double[] sub(double[] src, double b, double[] dest) {
         int length = src.length;
-        dest = makeNewIfNull(dest, length);
+        dest = ArrayBuilder.getOrCreateArray(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src[i] - b;
@@ -214,7 +213,7 @@ public final class RealDenseOps {
      */
     public static double[] add(double[] src, double b, double[] dest) {
         int length = src.length;
-        dest = makeNewIfNull(dest, length);
+        dest = ArrayBuilder.getOrCreateArray(dest, length);
 
         for(int i=0; i<length; i++)
             dest[i] = src[i] + b;
