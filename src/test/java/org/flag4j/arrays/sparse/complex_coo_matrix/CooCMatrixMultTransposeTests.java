@@ -1,4 +1,4 @@
-package org.flag4j.complex_sparse_matrix;
+package org.flag4j.arrays.sparse.complex_coo_matrix;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
@@ -47,6 +47,7 @@ class CooCMatrixMultTransposeTests {
         };
 
         exp = new CMatrix(expEntries);
+
         assertEquals(exp, a.multTranspose(b));
 
         // ---------------------  sub-case 2 ---------------------

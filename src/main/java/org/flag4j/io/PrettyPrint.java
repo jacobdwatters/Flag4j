@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -196,10 +196,12 @@ public final class PrettyPrint {
             result.append(String.format("%-" + width + "s", value));
         }
 
-        value = String.valueOf(arr[arr.length-1]);
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-        result.append(String.format("%-" + width + "s", value));
+        if(arr.length > 0) {
+            value = String.valueOf(arr[arr.length-1]);
+            width = PrintOptions.getPadding() + value.length();
+            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            result.append(String.format("%-" + width + "s", value));
+        }
 
         return result.append("]").toString();
     }

@@ -29,6 +29,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingTensor;
 import org.flag4j.arrays.sparse.CooRingTensor;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.DenseEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -206,6 +207,19 @@ public class RingTensor<T extends Ring<T>> extends AbstractDenseRingTensor<RingT
         ValidateParameters.ensureRank(matShape, 2);
 
         return new RingMatrix<T>(matShape, data.clone());
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public Tensor abs() {
+        double[] dest = new double[data.length];
+        RingOps.abs(data, dest);
+        return new Tensor(shape, dest);
     }
 
 

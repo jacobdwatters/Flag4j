@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -169,6 +169,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
+     * @throws TensorShapeException If {@code shape.getRank() != 2}.
      */
     public CsrMatrix(Shape shape, double[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
@@ -212,11 +213,29 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      */
     public CsrMatrix(int numRows, int numCols) {
         super(new Shape(numRows, numCols), new double[0]);
+
         this.rowPointers = new int[0];
         this.colIndices = new int[0];
         this.nnz = 0;
         this.numRows = numRows;
         this.numCols = numCols;
+    }
+
+
+    /**
+     * Constructs zero matrix with the specified {@code shape}.
+     * @param shape Shape of the zero matrix to construct. Must be rank 2.
+     * @throws TensorShapeException If {@code shape.getRank() != 2}.
+     */
+    public CsrMatrix(Shape shape) {
+        super(shape, new double[0]);
+        ValidateParameters.ensureRank(shape, 2);
+
+        this.rowPointers = new int[0];
+        this.colIndices = new int[0];
+        this.nnz = 0;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
     }
 
 

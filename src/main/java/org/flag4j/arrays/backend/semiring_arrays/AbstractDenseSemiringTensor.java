@@ -28,9 +28,11 @@ import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.arrays.backend.AbstractTensor;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.ops.TransposeDispatcher;
 import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
 import org.flag4j.linalg.ops.dense.DenseSemiringTensorDot;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringElemMult;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOps;
@@ -65,6 +67,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      * @param shape Shape of this tensor.
      * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
+     * @throws IllegalArgumentException If {@code shape.totalEntriesIntValueExact() != data.length}
      */
     protected AbstractDenseSemiringTensor(Shape shape, V[] data) {
         super(shape, data);
@@ -206,7 +209,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T add(T b) {
-        V[] sum = (V[]) new Semiring[data.length];
+        V[] sum = makeEmptyDataArray(data.length);
         DenseSemiringOps.add(data, shape, b.data, b.shape, sum);
         return makeLikeTensor(shape, sum);
     }
@@ -344,9 +347,10 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T T(int axis1, int axis2) {
+        ValidateParameters.ensureValidAxes(shape, axis1, axis2);
         V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensor(data, shape, axis1, axis2, dest);
-        return makeLikeTensor(shape, dest);
+        return makeLikeTensor(shape.swapAxes(axis1, axis2), dest);
     }
 
 
@@ -366,6 +370,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T T(int... axes) {
+        ValidateParameters.ensureValidAxes(shape, axes);
         V[] dest = makeEmptyDataArray(data.length);
         TransposeDispatcher.dispatchTensor(data, shape, axes, dest);
         return makeLikeTensor(shape.permuteAxes(axes), dest);
@@ -404,6 +409,15 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     public AbstractTensor<?, V[], V> toCoo(double estimatedSparsity) {
         SparseTensorData<V> data = DenseSemiringConversions.toCooTensor(shape, this.data, estimatedSparsity);
         V[] cooEntries = data.data().toArray(makeEmptyDataArray(data.data().size()));
-        return makeLikeCooTensor(data.shape(), cooEntries, data.indicesToArray());
+
+        // TODO: First check if this tensor is a vector then delegate to specialized toCooVector
+        //  or toCooTensor methods.
+        if(this instanceof VectorMixin<?,?,?,?>) {
+            return makeLikeCooTensor(
+                    data.shape(), cooEntries,
+                    RealDenseTranspose.standardIntMatrix(data.indicesToArray()));
+        } else {
+            return makeLikeCooTensor(data.shape(), cooEntries, data.indicesToArray());
+        }
     }
 }

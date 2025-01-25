@@ -1,4 +1,4 @@
-package org.flag4j.sparse_vector;
+package org.flag4j.arrays.sparse.sparse_vector;
 
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.io.PrintOptions;

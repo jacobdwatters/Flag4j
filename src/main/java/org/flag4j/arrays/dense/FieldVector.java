@@ -32,6 +32,7 @@ import org.flag4j.arrays.sparse.CooFieldVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.Arrays;
 
@@ -95,6 +96,18 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
     public FieldVector(int size, T fillValue) {
         super(new Shape(size), (T[]) new Field[size]);
         Arrays.fill(data, fillValue);
+    }
+
+
+    /**
+     * Constructs a dense complex vector with the given shape and entries.
+     * @param shape The shape of the vector. Must be rank-1 and satisfy {@code shape.totalEntriesIntValueExact() == data.length}.
+     * @param data The entries of the vector.
+     * @throws LinearAlgebraException If {@code shape.getRank() != 1}
+     * @throws IllegalArgumentException If {@code shape.totalEntriesIntValueExact() != data.length}
+     */
+    public FieldVector(Shape shape, T[] entries) {
+        super(shape, entries);
     }
 
 
