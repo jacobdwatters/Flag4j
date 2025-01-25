@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -350,7 +350,7 @@ public class Complex128 implements Field<Complex128> {
      */
     @Override
     public boolean isZero() {
-        return equals(ZERO);
+        return re == 0.0 && im == 0.0;
     }
 
 
@@ -363,7 +363,7 @@ public class Complex128 implements Field<Complex128> {
      */
     @Override
     public boolean isOne() {
-        return equals(ONE);
+        return re == 1.0 && im == 0.0;
     }
 
 
@@ -398,6 +398,7 @@ public class Complex128 implements Field<Complex128> {
      * @param b Second element in product.
      * @return The product of this field element and {@code b}.
      */
+    @Override
     public Complex128 mult(double b) {
         return new Complex128(re*b, im*b);
     }

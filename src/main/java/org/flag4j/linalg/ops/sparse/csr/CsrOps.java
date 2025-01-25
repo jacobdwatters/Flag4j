@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package org.flag4j.linalg.ops.sparse.csr;
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
+import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -354,8 +355,8 @@ public final class CsrOps {
 
         // Shift data in row to right.
         for(int j=currPos; j>newPos; j--) {
-            entries[j] = entries[j-1];
-            colIndices[j] = colIndices[j-1];
+            entries[j] = entries[j - 1];
+            colIndices[j] = colIndices[j - 1];
         }
 
         entries[newPos] = value;  // Move non-zero value to new location.
@@ -393,6 +394,7 @@ public final class CsrOps {
     /**
      * Gets a specified slice of a CSR matrix.
      *
+     * @param shape Shape of the CSR matrix.
      * @param entries Non-zero data of the CSR matrix.
      * @param rowPointers Non-zero row pointers of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
@@ -405,9 +407,10 @@ public final class CsrOps {
      * @throws IllegalArgumentException       If {@code rowEnd} is not greater than {@code rowStart}
      * or if {@code colEnd} is not greater than {@code colStart}.
      */
-    public static <T> SparseMatrixData<T> getSlice(T[] entries, int[] rowPointers, int[] colIndices,
+    public static <T> SparseMatrixData<T> getSlice(Shape shape, T[] entries, int[] rowPointers, int[] colIndices,
                                                    int rowStart, int rowEnd,
                                                    int colStart, int colEnd) {
+        SparseUtils.validateSlice(shape, rowStart, rowEnd, colStart, colEnd);
         List<T> slice = new ArrayList<>();
         List<Integer> sliceRowIndices = new ArrayList<>();
         List<Integer> sliceColIndices = new ArrayList<>();
@@ -425,13 +428,33 @@ public final class CsrOps {
                 // Add value if it is within the slice.
                 if(col >= colStart && col < colEnd) {
                     slice.add(entries[j]);
-                    sliceRowIndices.add(i);
-                    sliceColIndices.add(col);
+                    sliceRowIndices.add(i-rowStart);
+                    sliceColIndices.add(col-colStart);
                 }
             }
         }
 
+        // Matrix has been constructed as COO matrix. Now must be converted to CSR matrix.
+        int size = rowEnd-rowStart + 1;
+        List<Integer> sliceRowPointers = new ArrayList<>(size);
+        for(int i=0; i<size; i++)
+            sliceRowPointers.add(0);
+
+        // Copy row indices.
+        for(int i=0, stop=sliceRowIndices.size(); i<stop; i++) {
+            Integer curr = sliceRowPointers.get(sliceRowIndices.get(i) + 1);
+            sliceRowPointers.set(sliceRowIndices.get(i) + 1, ++curr);
+        }
+
+        Integer prev = sliceRowPointers.get(0);
+        //Accumulate row pointers.
+        for(int i=1; i<size; i++) {
+            Integer curr = sliceRowPointers.get(i);
+            sliceRowPointers.set(i, prev + curr);
+            prev += curr;
+        }
+
         return new SparseMatrixData<T>(new Shape(rowEnd-rowStart, colEnd-colStart),
-                slice, sliceRowIndices, sliceColIndices);
+                slice, sliceRowPointers, sliceColIndices);
     }
 }

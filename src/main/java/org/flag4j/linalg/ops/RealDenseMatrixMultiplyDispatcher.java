@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,8 @@ package org.flag4j.linalg.ops;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.linalg.ops.dense.real.RealDenseMatrixMultTranspose;
-import org.flag4j.linalg.ops.dense.real.RealDenseMatrixMultiplication;
+import org.flag4j.linalg.ops.dense.real.RealDenseMatMult;
+import org.flag4j.linalg.ops.dense.real.RealDenseMatMultTranspose;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
@@ -73,22 +73,22 @@ public final class RealDenseMatrixMultiplyDispatcher {
         algorithmMap = new HashMap<>();
 
         RealDenseTensorBinaryOperation[] algorithms = {
-                RealDenseMatrixMultiplication::standard,
-                RealDenseMatrixMultiplication::reordered,
-                RealDenseMatrixMultiplication::blocked,
-                RealDenseMatrixMultiplication::blockedReordered,
-                RealDenseMatrixMultiplication::concurrentStandard,
-                RealDenseMatrixMultiplication::concurrentReordered,
-                RealDenseMatrixMultiplication::concurrentBlocked,
-                RealDenseMatrixMultiplication::concurrentBlockedReordered,
-                RealDenseMatrixMultiplication::standardVector,
-                RealDenseMatrixMultiplication::blockedVector,
-                RealDenseMatrixMultiplication::concurrentStandardVector,
-                RealDenseMatrixMultiplication::concurrentBlockedVector,
-                RealDenseMatrixMultTranspose::multTranspose,
-                RealDenseMatrixMultTranspose::multTransposeBlocked,
-                RealDenseMatrixMultTranspose::multTransposeConcurrent,
-                RealDenseMatrixMultTranspose::multTransposeBlockedConcurrent,
+                RealDenseMatMult::standard,
+                RealDenseMatMult::reordered,
+                RealDenseMatMult::blocked,
+                RealDenseMatMult::blockedReordered,
+                RealDenseMatMult::concurrentStandard,
+                RealDenseMatMult::concurrentReordered,
+                RealDenseMatMult::concurrentBlocked,
+                RealDenseMatMult::concurrentBlockedReordered,
+                RealDenseMatMult::standardVector,
+                RealDenseMatMult::blockedVector,
+                RealDenseMatMult::concurrentStandardVector,
+                RealDenseMatMult::concurrentBlockedVector,
+                RealDenseMatMultTranspose::multTranspose,
+                RealDenseMatMultTranspose::multTransposeBlocked,
+                RealDenseMatMultTranspose::multTransposeConcurrent,
+                RealDenseMatMultTranspose::multTransposeBlockedConcurrent,
         };
 
         for(int i = 0; i< algorithms.length; i++) {

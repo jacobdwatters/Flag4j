@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -146,6 +146,30 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
     public CVector(CVector vector) {
         super(vector.shape, vector.data.clone());
         setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Constructs a dense complex vector with the given shape and entries.
+     * @param shape The shape of the vector. Must be rank-1 and satisfy {@code shape.totalEntriesIntValueExact() == data.length}.
+     * @param data The entries of the vector.
+     * @throws LinearAlgebraException If {@code shape.getRank() != 1}
+     * @throws IllegalArgumentException If {@code shape.totalEntriesIntValueExact() != data.length}
+     */
+    public CVector(Shape shape, Complex128[] data) {
+        super(shape, data);
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Constructs a zero vector with the specified shape.
+     * @param shape Shape of the zero vector to construct. Must be rank 1.
+     */
+    public CVector(Shape shape) {
+        super(shape, new Complex128[shape.get(0)]);
+        setZeroElement(Complex128.ZERO);
+        Arrays.fill(data, Complex128.ZERO);
     }
 
 

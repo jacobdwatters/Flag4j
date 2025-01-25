@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 package org.flag4j.arrays.backend.ring_arrays;
 
 import org.flag4j.algebraic_structures.Ring;
-import org.flag4j.arrays.dense.Tensor;
+import org.flag4j.arrays.backend.semiring_arrays.SemiringTensorMixin;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
@@ -45,7 +45,7 @@ import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
  */
 public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
         U extends RingTensorMixin<U, U, V>, V extends Ring<V>>
-        extends TensorOverRing<T, U, V[], V> {
+        extends TensorOverRing<T, U, V[], V>, SemiringTensorMixin<T, U, V> {
 
 
     /**
@@ -83,20 +83,6 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
     default void subEq(V b) {
         V[] data = getData();
         RingOps.sub(data, b, data);
-    }
-
-
-    /**
-     * Computes the element-wise absolute value of this tensor.
-     *
-     * @return The element-wise absolute value of this tensor.
-     */
-    @Override
-    default Tensor abs() {
-        V[] data = getData();
-        double[] abs = new double[data.length];
-        RingOps.abs(data, abs);
-        return new Tensor(getShape(), abs);
     }
 
 
@@ -319,7 +305,7 @@ public interface RingTensorMixin<T extends RingTensorMixin<T, U, V>,
      *
      * @return The Euclidean norm of this vector.
      */
-    default double norm(int p) {
+    default double norm(double p) {
         return VectorNorms.norm(getData(), p);
     }
 }

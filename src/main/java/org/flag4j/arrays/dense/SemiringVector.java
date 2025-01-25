@@ -103,7 +103,7 @@ public class SemiringVector<T extends Semiring<T>> extends AbstractDenseSemiring
      * @param entries Entries of the dense vector to construct.
      */
     @Override
-    protected SemiringVector<T> makeLikeTensor(T[] entries) {
+    public SemiringVector<T> makeLikeTensor(T[] entries) {
         return new SemiringVector<>(entries);
     }
 

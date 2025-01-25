@@ -26,7 +26,6 @@ package org.flag4j.arrays;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.RealFloat64;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.smart_visitors.*;
@@ -393,46 +392,5 @@ public class SmartMatrix {
      */
     public String toString() {
         return "SmartMatrix type: " + this.matrix.getClass().getSimpleName() + "\n" + matrix.toString();
-    }
-
-
-    // TODO: TESTING
-    public static void main(String[] args) {
-        var realDense = new Matrix(new double[][]{
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
-        });
-
-        var complexDense = new CMatrix(new Complex128[][]{
-                {new Complex128(1.46, 12.6), new Complex128(-2, 1),new Complex128(0, 4)},
-                {new Complex128(2), new Complex128(2.1, 3),new Complex128(-1, 3)},
-                {new Complex128(1, 1), new Complex128(12, 5),new Complex128(0, -2)}
-        });
-
-        var fieldDense = new FieldMatrix<>(new Complex128[][]{
-                {new Complex128(1.46, 12.6), new Complex128(-2, 1),new Complex128(0, 4)},
-                {new Complex128(2), new Complex128(2.1, 3),new Complex128(-1, 3)},
-                {new Complex128(1, 1), new Complex128(12, 5),new Complex128(0, -2)}
-        });
-
-        var fieldDense2 = new FieldMatrix<>(new RealFloat64[][]{
-                {new RealFloat64(1.5566), new RealFloat64(-9.3), new RealFloat64(0)},
-                {new RealFloat64(1), new RealFloat64(-2), new RealFloat64(400.1)},
-                {new RealFloat64(2), new RealFloat64(0.84), new RealFloat64(8e9)}
-        });
-
-        SmartMatrix a = new SmartMatrix(realDense);
-        SmartMatrix b = new SmartMatrix(complexDense);
-        SmartMatrix c = new SmartMatrix(fieldDense);
-        SmartMatrix d = new SmartMatrix(fieldDense2);
-
-        double trace = a.tr(Double.class);
-
-        System.out.println("a:\n" + a + "\n");
-        System.out.println("b:\n" + b + "\n");
-        System.out.println("a + b:\n" + a.add(b) + "\n");
-        System.out.println("c + c:\n" + d.add(d) + "\n");
-        System.out.println();
     }
 }

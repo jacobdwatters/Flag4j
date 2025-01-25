@@ -181,6 +181,15 @@ public class Complex64 implements Field<Complex64> {
 
 
     /**
+     * Checks if this complex has zero imaginary part and real part equal to a double.
+     * @return True if {@code this.re == b && this.im == 0}. False otherwise.
+     */
+    public boolean equals(float b) {
+        return this.re == b && this.im == 0;
+    }
+
+
+    /**
      * Checks if an object is equal to this Field element.
      * @param b Object to compare to this Field element.
      * @return True if the objects are the same or are both {@link Complex64}'s and have equal real and imaginary parts.
@@ -499,18 +508,6 @@ public class Complex64 implements Field<Complex64> {
     public Complex64 conj() {
         if(conjugate == null) conjugate = new Complex64(re, -im);
         return conjugate;
-    }
-
-
-    /**
-     * Compute a raised to the power of b. This method wraps {@link Math#pow(double, double)}
-     * and returns a {@link Complex64}.
-     * @param a The base.
-     * @param b The exponent.
-     * @return a raised to the power of b.
-     */
-    public static Complex64 pow(float a, float b) {
-        return new Complex64((float) Math.pow(a, b));
     }
 
 

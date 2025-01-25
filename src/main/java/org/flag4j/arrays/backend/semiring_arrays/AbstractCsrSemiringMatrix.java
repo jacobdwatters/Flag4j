@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.backend.semiring_arrays;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
@@ -41,6 +40,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 
@@ -88,7 +88,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     /**
      * The zero element for the semiring that this tensor's elements belong to.
      */
-    private W zeroElement;
+    protected W zeroElement;
     /**
      * <p>Pointers indicating starting index of each row within the {@link #colIndices} and {@link #data} arrays.
      * Has length {@link #numRows numRows + 1}.
@@ -120,7 +120,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     /**
      * The sparsity of this matrix.
      */
-    private final double sparsity;
+    protected final double sparsity;
 
 
     /**
@@ -138,16 +138,17 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
 
+
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
         this.nnz = entries.length;
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
 
-        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries())).doubleValue();
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
 
         // Attempt to set the zero element for the semiring.
-        this.zeroElement = (entries.length > 0) ? entries[0].getZero() : null;
+        this.zeroElement = (entries.length > 0 && entries[0] != null) ? entries[0].getZero() : null;
     }
 
 
@@ -375,7 +376,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public T T() {
-        W[] dest = (W[]) new Semiring[data.length];
+        W[] dest = makeEmptyDataArray(data.length);
         int[] destRowPointers = new int[numCols+1];
         int[] destColIndices = new int[data.length];
         CsrOps.transpose(data, rowPointers, colIndices, dest, destRowPointers, destColIndices);
@@ -526,6 +527,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public W get(int row, int col) {
+        ValidateParameters.validateTensorIndex(shape, row, col);
         int loc = Arrays.binarySearch(colIndices, rowPointers[row], rowPointers[row+1], col);
 
         if(loc >= 0) return (W) data[loc];
@@ -544,8 +546,8 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public W tr() {
+        ValidateParameters.ensureSquare(shape);
         W tr = (W) SemiringCsrOps.trace(data, rowPointers, colIndices);
-
         return (tr == null) ? (W) zeroElement : tr;
     }
 
@@ -606,14 +608,14 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     @Override
     public U mult(T b) {
         Shape destShape = new Shape(numRows, b.numCols);
-        W[] destArray = (W[]) new Semiring[numRows*b.numCols];
+        W[] destArray = makeEmptyDataArray(numRows*b.numCols);
 
         SemiringCsrMatMult.standard(
                 shape, data, rowPointers, colIndices, b.shape,
                 b.data, b.rowPointers, b.colIndices,
                 destArray, zeroElement);
 
-        return makeLikeDenseTensor(shape, destArray);
+        return makeLikeDenseTensor(destShape, destArray);
     }
 
 
@@ -769,7 +771,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isSymmetric() {
-        return CsrProperties.isSymmetric(shape, data, rowPointers, colIndices);
+        return CsrProperties.isSymmetric(shape, data, rowPointers, colIndices, zeroElement);
     }
 
 
@@ -780,7 +782,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public boolean isHermitian() {
-        // For a semiring matrix, same as isSymmetric.
+        // For a general semiring matrix, same as isSymmetric.
         return isSymmetric();
     }
 
@@ -885,7 +887,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
         SparseMatrixData<Semiring<W>> sliceData = CsrOps.getSlice(
-                data, rowPointers, colIndices,
+                shape, data, rowPointers, colIndices,
                 rowStart, rowEnd, colStart, colEnd);
         return makeLikeTensor(sliceData.shape(), (List<W>) sliceData.data(),
                 sliceData.rowData(), sliceData.colData());
@@ -926,7 +928,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
             newColIndices = colIndices.clone();
         } else {
             loc = -loc - 1; // Compute insertion index as specified by Arrays.binarySearch.
-            newEntries = (W[]) new Field[data.length + 1];
+            newEntries = makeEmptyDataArray(data.length + 1);
             newColIndices = new int[data.length + 1];
 
             CsrOps.insertNewValue(
@@ -1024,7 +1026,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      * @return A dense matrix which is equivalent to this sparse CSR matrix.
      */
     public U toDense() {
-        W[] dest = (W[]) new Semiring[shape.totalEntriesIntValueExact()];
+        W[] dest = makeEmptyDataArray(shape.totalEntriesIntValueExact());
         CsrConversions.toDense(shape, data, rowPointers, colIndices, dest, zeroElement);
         return makeLikeDenseTensor(shape, dest);
     }

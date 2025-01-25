@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ package org.flag4j.linalg.ops.sparse.csr.semiring_ops;
 
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.semiring_arrays.AbstractCsrSemiringMatrix;
 
 /**
  * Utility class containing methods useful for determining certain properties of a
@@ -115,5 +116,32 @@ public final class SemiringCsrProperties {
         }
 
         return diagCount == numCols;
+    }
+
+
+    /**
+     * Checks if the {@code src} matrix is the identity matrix.
+     * @param src The matrix to check if it is the identity matrix.
+     * @return True if the {@code src} matrix is the identity matrix. False otherwise.
+     */
+    public static <T extends Semiring<T>> boolean isIdentity(AbstractCsrSemiringMatrix<?, ?, ?, T> src) {
+        if(src.isSquare() && src.colIndices.length >= src.numCols) {
+            int diagCount = 0;
+
+            for(int i=0; i<src.rowPointers.length-1; i++) {
+                for(int j=src.rowPointers[i]; j<src.rowPointers[i+1]; j++) {
+                    if(src.data[j].isOne()) {
+                        if(src.colIndices[j] != i) return false;
+                        diagCount++;
+                    } else if(!src.data[j].isZero()) {
+                        return false;
+                    }
+                }
+            }
+
+            return diagCount == src.numCols;
+        } else {
+            return false;
+        }
     }
 }

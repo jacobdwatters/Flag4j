@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ package org.flag4j.linalg.decompositions.svd;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.Flag4jConstants;
 
@@ -106,6 +107,16 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
 
 
     /**
+     * Gets the singular values of the last matrix decomposed.
+     *
+     * @return The singular values of the last matrix decomposed.
+     */
+    public Vector getSingularValues() {
+        return S.getDiag();
+    }
+
+
+    /**
      * Gets the unitary matrix V corresponding to M=USV<sup>H</sup> in the SVD.
      * @return V corresponding to M=USV<sup>H</sup> in the SVD. Note that the hermitian transpose has
      * <b>not</b> been computed.
@@ -152,13 +163,24 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
         if(computeUV) initUV(src.getShape(), stopIdx); // Initialize the U and V matrices.
         S = new Matrix(stopIdx); // initialize the S matrix.
 
-        for(int j=0; j<stopIdx; j++) {
-            S.set(singularVals[j << 1], j, j);
+        int idx = 0;
+        int j = 0;
 
-            if(computeUV && singularVecs != null) {
-                // Extract left and right singular vectors and normalize.
-                extractNormalizedCols(singularVecs, j);
+        while(j < singularVals.length && idx < stopIdx) {
+            double sigma = singularVals[j];
+
+            if(sigma > 0) {
+                S.set(sigma, idx, idx);
+
+                if(computeUV && singularVecs != null) {
+                    // Extract left and right singular vectors and normalize.
+                    extractNormalizedCols(singularVecs, idx);
+                }
+
+                idx++;
             }
+
+            j++;
         }
 
         return this;

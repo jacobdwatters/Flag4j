@@ -32,9 +32,18 @@ import java.util.Random;
 
 
 /**
- * An instance of this class is used to generate a stream of random complex numbers.
+ * An instance of this class is used to generate a stream of random real or complex numbers.
  */
 public class RandomComplex extends Random {
+
+    // TODO: Add support for generating complex numbers uniformly distributed in a square in the complex plane.
+    //  e.g. new Complex128(nextDouble(), nextDouble()) would be a complex number uniformly distributed in the unit square of the
+    //  complex plane.
+
+    // TODO: the randn methods should generate samples from a 2D Gaussian on the complex plane.
+    //  e.g. new Complex128(nextGaussian(meanRe, stdRe), nextGaussian(meanIm, stdIm)) would represent sample from a
+    //  2D elliptical Gaussian centered at (meanRe, meanIm) with standard deviations stdRe and stdIm along the real and imaginary
+    //  axes of the complex plane respectively.
 
 
     /**

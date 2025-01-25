@@ -67,9 +67,9 @@ public final class DenseFieldVectorOps {
         double sum = 0.0;
 
         for (Complex128 c : src1) {
-            double real = ((Complex128) c).re;
-            double imag = ((Complex128) c).im;
-            sum += real * real + imag * imag;
+            double real = c.re;
+            double imag = c.im;
+            sum += real*real + imag*imag;
         }
 
         return sum;

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.*;
-import org.flag4j.linalg.ops.dense.real.RealDenseMatrixMultiplication;
+import org.flag4j.linalg.ops.dense.real.RealDenseMatMult;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseMatMult;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseMatMultTranspose;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMult;
@@ -82,16 +82,16 @@ public final class MatrixMultiplyDispatcher {
 
         switch(algorithm) {
             case STANDARD_VECTOR:
-                dest = RealDenseMatrixMultiplication.standardVector(A.data, A.shape, b.data, bMatShape);
+                dest = RealDenseMatMult.standardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case BLOCKED_VECTOR:
-                dest = RealDenseMatrixMultiplication.blockedVector(A.data, A.shape, b.data, bMatShape);
+                dest = RealDenseMatMult.blockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
             case CONCURRENT_STANDARD_VECTOR:
-                dest = RealDenseMatrixMultiplication.concurrentStandardVector(A.data, A.shape, b.data, bMatShape);
+                dest = RealDenseMatMult.concurrentStandardVector(A.data, A.shape, b.data, bMatShape);
                 break;
             default:
-                dest = RealDenseMatrixMultiplication.concurrentBlockedVector(A.data, A.shape, b.data, bMatShape);
+                dest = RealDenseMatMult.concurrentBlockedVector(A.data, A.shape, b.data, bMatShape);
                 break;
         }
 

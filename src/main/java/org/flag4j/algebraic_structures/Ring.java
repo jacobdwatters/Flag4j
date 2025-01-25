@@ -105,7 +105,7 @@ public interface Ring<T extends Ring<T>> extends Semiring<T> {
      * @param b Second ring element in difference.
      * @return The difference of this ring element and {@code b}.
      */
-    public T sub(T b);
+    T sub(T b);
 
 
     /**
@@ -115,7 +115,7 @@ public interface Ring<T extends Ring<T>> extends Semiring<T> {
      *
      * @return The additive inverse for this ring element.
      */
-    public T addInv();
+    T addInv();
 
 
     /**
@@ -133,8 +133,9 @@ public interface Ring<T extends Ring<T>> extends Semiring<T> {
      * Computes the magnitude of this ring element.
      * @return The magnitude of this ring element.
      */
-    default public double mag() {
-        throw new UnsupportedOperationException("Magnitude/absolute value is not defined for this ring: " + getClass() + ".");
+    default double mag() {
+        throw new UnsupportedOperationException("Magnitude/absolute value is not defined for this algebraic object: "
+                + getClass().getName() + ".");
     }
 
 
@@ -143,7 +144,8 @@ public interface Ring<T extends Ring<T>> extends Semiring<T> {
      * @return The conjugation of this ring's element.
      * @implNote The default implementation of this method simply returns this rings element.
      */
-    public default T conj() {
-        throw new UnsupportedOperationException("Magnitude/absolute value is not defined for this ring: " + getClass() + ".");
+    default T conj() {
+        throw new UnsupportedOperationException("Conjugation is not defined for this algebraic object: "
+                + getClass().getName() + ".");
     }
 }

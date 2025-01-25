@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,26 +39,18 @@ public final class ErrorMessages {
      * Hide default constructor.
      */
     private ErrorMessages() {
-        throw new UnsupportedOperationException(UTILITY_CLASS_ERR);
+        // Hide default constructor for utility class.
     }
 
     /**
      * Error message for matrices which do not have equal shape.
      */
-    private static final String EQ_SHAPE_MISMATCH_ERR = "Expecting matrices to have the same shape but got shapes %s and %s.";
+    private static final String EQ_SHAPE_MISMATCH_ERR = "Expecting matrices to have the same shape but got %s and %s.";
     /**
      * Error message for matrices which do not have valid dimensions for matrix multiplication.
      */
-    private static final String MAT_MULT_DIM_MISMATCH_ERR = "Expecting the number of columns in the first matrix to" +
-            " match the number rows/length in the second matrix/vector but got shapes %s and %s.";
-    /**
-     * Error message for vector which was expected to be row vector.
-     */
-    private static final String VEC_ROW_ORIENTATION_ERR = "Expecting vector to be a row vector but got a vector with shape %s.";
-    /**
-     * Error message for vector which was expected to be a column vector.
-     */
-    private static final String VEC_COL_ORIENTATION_ERR = "Expecting vector to be a column vector but got a row vector with shape %s.";
+    private static final String MAT_MULT_DIM_MISMATCH_ERR = "Cannot multiply matrices/vector with " +
+            "shapes %s and %s.";
     /**
      * Error message for the attempted construction of a tensor with a negative dimension value.
      */
@@ -107,8 +99,7 @@ public final class ErrorMessages {
     /**
      * Error message for shapes which cannot be broadcast.
      */
-    private static final String SHAPE_BROADCAST_ERR = "Shapes %s and %s can not be broadcast because they specify " +
-            "a different number of total data.";
+    private static final String SHAPE_BROADCAST_ERR = "Shapes %s and %s can not be broadcast.";
     /**
      * Error message for arrays which do not have the same total number of data.
      */
@@ -170,26 +161,6 @@ public final class ErrorMessages {
      */
     public static String matMultShapeErrMsg(Shape shape1, Shape shape2) {
         return String.format(MAT_MULT_DIM_MISMATCH_ERR, shape1, shape2);
-    }
-
-
-    /**
-     * Gets an error message for a vector which was expected to be a row vector but was a column vector.
-     * @param shape Shape of the vector.
-     * @return An error message for a vector which is not a row vector.
-     */
-    public static String vecRowOrientErrMsg(Shape shape) {
-        return String.format(VEC_ROW_ORIENTATION_ERR, shape);
-    }
-
-
-    /**
-     * Gets an error message for a vector which was expected to be a column vector but was a row vector.
-     * @param shape Shape of the vector.
-     * @return An error message for a vector which is not a row vector.
-     */
-    public static String vecColOrientErrMsg(Shape shape) {
-        return String.format(VEC_COL_ORIENTATION_ERR, shape);
     }
 
 

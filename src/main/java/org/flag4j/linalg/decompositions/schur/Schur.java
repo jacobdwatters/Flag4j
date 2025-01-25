@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -69,6 +69,12 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      *Decomposer to compute the Hessenburg decomposition as a setup step for the implicit double step QR algorithm.
      */
     protected UnitaryDecomposition<T, U> hess;
+//    /**
+//     * <p>Balancer to scale rows and columns of matrix to be decomposed so that all row and columns have roughly similar sized norms.
+//     * <p>This is done to attempt to improve the condition number and improve numerical stability when computing the Schur
+//     * decomposition.
+//     */
+//    protected RealMatrixBalancerOld balancer;
     /**
      *Stores the number of rows in the matrix being decomposed.
      */

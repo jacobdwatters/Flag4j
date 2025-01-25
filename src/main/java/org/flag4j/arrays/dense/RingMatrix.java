@@ -34,6 +34,7 @@ import org.flag4j.arrays.sparse.CooRingTensor;
 import org.flag4j.arrays.sparse.CsrRingMatrix;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -190,6 +191,19 @@ public class RingMatrix<T extends Ring<T>> extends AbstractDenseRingMatrix<
 
 
     /**
+     * Constructs a vector of a similar type as this matrix.
+     *
+     * @param entries Entries of the vector.
+     *
+     * @return A vector of a similar type as this matrix.
+     */
+    @Override
+    protected RingVector<T> makeLikeVector(T[] entries) {
+        return new RingVector<>(entries);
+    }
+
+
+    /**
      * Constructs a sparse COO matrix which is of a similar type as this dense matrix.
      *
      * @param shape Shape of the COO matrix.
@@ -216,7 +230,7 @@ public class RingMatrix<T extends Ring<T>> extends AbstractDenseRingMatrix<
      * @return A sparse CSR matrix which is of a similar type as this dense matrix.
      */
     @Override
-    protected CsrRingMatrix<T> makeLikeCsrMatrix(
+    public CsrRingMatrix<T> makeLikeCsrMatrix(
             Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrRingMatrix<T>(shape, entries, rowPointers, colIndices);
     }
@@ -452,6 +466,19 @@ public class RingMatrix<T extends Ring<T>> extends AbstractDenseRingMatrix<
     @Override
     public RingMatrix<T> sub(RingMatrix<T> b) {
         throw new UnsupportedOperationException("Cannot compute subtraction with matrix type: " + this.getClass().getName());
+    }
+
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public Matrix abs() {
+        double[] dest = new double[data.length];
+        RingOps.abs(data, dest);
+        return new Matrix(shape, dest);
     }
 
 

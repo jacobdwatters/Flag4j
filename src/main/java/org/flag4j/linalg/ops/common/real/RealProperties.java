@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ public final class RealProperties {
      * @param src2 Second array in comparison.
      * @return True if both arrays have the same length and all data are 'close' element-wise, i.e.
      * elements {@code a} and {@code b} at the same positions in the two arrays respectively and satisfy
-     * {@code |a-b| <= (1E-05 + 1E-08*|b|)}. Otherwise, returns false.
+     * {@code |a-b| <= (1E-08 + 1E-05*|b|)}. Otherwise, returns false.
      * @see #allClose(double[], double[], double, double)
      */
     public static boolean allClose(double[] src1, double[] src2) {
@@ -165,7 +165,7 @@ public final class RealProperties {
 
 
     /**
-     * Checks if <i>all</i> of the elements of a tensor are finite.
+     * Checks if <i>all</i> elements of a tensor are finite.
      * @param src Entries of the tensor.
      * @return {@code false} is any entry of {@code src} is not {@link Double#isFinite(double) finite}. Otherwise, returns {@code
      * true}.
@@ -262,11 +262,14 @@ public final class RealProperties {
      */
     public static int argmin(double... entries) {
         double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
+        double curr;
         int mindex = -1;
 
         for(int i=0, size=entries.length; i<size; i++) {
-            if (entries[i] < currMin) {
-                currMin = entries[i];
+            curr = Math.min(entries[i], currMin);
+
+            if (curr != currMin) {
+                currMin = curr;
                 mindex = i;
             }
         }
@@ -282,11 +285,14 @@ public final class RealProperties {
      */
     public static int argmax(double... entries) {
         double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
+        double curr;
         int maxdex = -1;
 
         for(int i=0, size=entries.length; i<size; i++) {
-            if (entries[i] > currMax) {
-                currMax = entries[i];
+            curr = Math.max(entries[i], currMax);
+
+            if (curr != currMax) {
+                currMax = curr;
                 maxdex = i;
             }
         }
@@ -303,11 +309,15 @@ public final class RealProperties {
      */
     public static int argminAbs(double... entries) {
         double currMin = (entries.length==0) ? 0 : Double.MAX_VALUE;
+        double curr;
         int mindex = -1;
 
         for(int i=0, size=entries.length; i<size; i++) {
-            if (Math.abs(entries[i]) < currMin) {
-                currMin = entries[i];
+            curr = Math.abs(entries[i]);
+            curr = Math.min(curr, currMin);
+
+            if (curr != currMin) {
+                currMin = curr;
                 mindex = i;
             }
         }
@@ -317,22 +327,111 @@ public final class RealProperties {
 
 
     /**
-     * Finds the index of the maximum absolute value within a tensor.
+     * Finds the first index of the maximum absolute value within a tensor.
      * @param entries The data of the tensor.
      * @return The index of the maximum absolute values within {@code data}. If {@code data.length == 0} then -1 will be
      * returned.
      */
     public static int argmaxAbs(double... entries) {
         double currMax = (entries.length==0) ? 0 : Double.MIN_NORMAL;
+        double curr;
         int maxdex = -1;
 
         for(int i=0, size=entries.length; i<size; i++) {
-            if (Math.abs(entries[i]) > currMax) {
-                currMax = entries[i];
+            curr = Math.abs(entries[i]);
+            curr = Math.max(curr, currMax);
+
+            if (curr != currMax) {
+                currMax = curr;
                 maxdex = i;
             }
         }
 
         return maxdex;
+    }
+
+
+    /**
+     * <p>Returns the maximum absolute value among {@code n} elements in the array {@code src},
+     * starting at index {@code start} and advancing by {@code stride} for each subsequent element.
+     *
+     * <p>More formally, this method examines the elements at indices:
+     * {@code start}, {@code start + stride}, {@code start + 2*stride}, ..., {@code start + (n-1)*stride}.
+     *
+     * <p>This method will propagate {@link Double#NaN} values meaning if at least one element considered is {@link Double#NaN}
+     * the result of this method will be {@link Double#NaN}.
+     *
+     * <p>This method may be used to find the maximum absolute value within the row or column of a
+     * {@link org.flag4j.arrays.dense.Matrix matrix} {@code a} as follows:
+     * <ul>
+     *     <li>Maximum absolute value within row {@code i}:
+     *     <pre>{@code maxAbs(a.data, factor, i*a.numCols, a.numCols, 1);}</pre></li>
+     *     <li>Maximum absolute value within column {@code j}:
+     *     <pre>{@code maxAbs(a.data, factor, j, a.numRows, a.numRows);}</pre></li>
+     * </ul>
+     *
+     * @param src The array to search for maximum absolute value within.
+     * @param start The starting index in {@code src} to search.
+     * @param n The number of elements to consider within {@code src1}.
+     * @param stride The gap (in indices) between consecutive elements to search within {@code src}.
+     * @return
+     * <ul>
+     *     <li>If any element of {@code src} is {@link Double#NaN} then the result will be {@link Double#NaN}.</li>
+     *     <li>Otherwise, the maximum absolute value found among all elements considered in {@code src}.</li>
+     * </ul>
+     *
+     * @throws IndexOutOfBoundsException If the specified range extends beyond the array bounds.
+     */
+    public static double maxAbs(double[] src, final int start, final int n, final int stride) {
+        double currMax = 0;
+        final int end = start + n*stride;
+
+        for(int i=start; i<end; i+=stride)
+            currMax = Math.max(Math.abs(src[i]), currMax);
+
+        return currMax;
+    }
+
+
+    /**
+     * <p>Returns the minimum absolute value among {@code n} elements in the array {@code src},
+     * starting at index {@code start} and advancing by {@code stride} for each subsequent element.
+     *
+     * <p>More formally, this method examines the elements at indices:
+     * {@code start}, {@code start + stride}, {@code start + 2*stride}, ..., {@code start + (n-1)*stride}.
+     *
+     * <p>This method will propagate {@link Double#NaN} values meaning if at least one element considered is {@link Double#NaN}
+     * the result of this method will be {@link Double#NaN}.
+     *
+     * <p>This method may be used to find the minimum absolute value within the row or column of a
+     * {@link org.flag4j.arrays.dense.Matrix matrix} {@code a} as follows:
+     * <ul>
+     *     <li>Minimum absolute value within row {@code i}:
+     *     <pre>{@code maxAbs(a.data, i*a.numCols, a.numCols, 1);}</pre></li>
+     *     <li>Minimum absolute value within column {@code j}:
+     *     <pre>{@code maxAbs(a.data, j, a.numRows, a.numRows);}</pre></li>
+     * </ul>
+     *
+     * @param src The array to search for Minimum absolute value within.
+     * @param start The starting index in {@code src} to search.
+     * @param n The number of elements to consider within {@code src1}.
+     * @param stride The gap (in indices) between consecutive elements to search within {@code src}.
+     * @return
+     * <ul>
+     *     <li>If {@code src.length  == 0} then {@link Double#POSITIVE_INFINITY} will be returned.</li>
+     *     <li>If any element of {@code src} is {@link Double#NaN} then the result will be {@link Double#NaN}.</li>
+     *     <li>Otherwise, the minimum absolute value found among all elements considered inn{@code src}.</li>
+     * </ul>
+     *
+     * @throws IndexOutOfBoundsException If the specified range extends beyond the array bounds.
+     */
+    public static double minAbs(double[] src, final int start, final int n, final int stride) {
+        double currMin = Double.POSITIVE_INFINITY;
+        final int end = start + n*stride;
+
+        for(int i=start; i<end; i+=stride)
+            currMin = Math.min(Math.abs(src[i]), currMin);
+
+        return currMin;
     }
 }

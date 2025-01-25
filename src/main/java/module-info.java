@@ -3,6 +3,7 @@
  */
 module flag4j {
     requires java.logging;
+    requires java.desktop;
 
     // Abstract algebra stuff.
     exports org.flag4j.algebraic_structures;
@@ -67,14 +68,12 @@ module flag4j {
     exports org.flag4j.linalg.ops.sparse;
 
     exports org.flag4j.linalg.ops.sparse.coo;
-    exports org.flag4j.linalg.ops.sparse.coo.field_ops;
     exports org.flag4j.linalg.ops.sparse.coo.real;
     exports org.flag4j.linalg.ops.sparse.coo.real_complex;
     exports org.flag4j.linalg.ops.sparse.coo.ring_ops;
     exports org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
     exports org.flag4j.linalg.ops.sparse.csr;
-    exports org.flag4j.linalg.ops.sparse.csr.field_ops;
     exports org.flag4j.linalg.ops.sparse.csr.real;
     exports org.flag4j.linalg.ops.sparse.csr.real_complex;
     // ------------------------------------------------------------------------
@@ -85,4 +84,7 @@ module flag4j {
     // Utilities
     exports org.flag4j.util;
     exports org.flag4j.util.exceptions;
+    exports org.flag4j.linalg.ops.sparse.csr.ring_ops;
+    exports org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops;
+    exports org.flag4j.linalg.decompositions.balance;
 }

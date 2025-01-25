@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.MatrixNorms;
 import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
@@ -38,8 +39,8 @@ import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
-import org.flag4j.linalg.ops.dense_sparse.csr.field_ops.DenseCsrFieldMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops.DenseCsrSemiringMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -310,9 +311,62 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     }
 
 
+    /**
+     * Constructs a vector of a similar type as this matrix.
+     *
+     * @param shape Shape of the vector to construct. Must be rank 1.
+     * @param entries Entries of the vector.
+     *
+     * @return A vector of a similar type as this matrix.
+     */
+    @Override
+    protected CVector makeLikeVector(Shape shape, Complex128[] entries) {
+        return new CVector(shape, entries);
+    }
+
+
     @Override
     public Complex128[] makeEmptyDataArray(int length) {
         return new Complex128[length];
+    }
+
+
+    /**
+     * // TODO: Update javadoc.
+     * Computes the Euclidean norm of this vector.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    @Override
+    public double norm() {
+        return MatrixNorms.norm(this);
+    }
+
+
+    /**
+     * // TODO: Update javadoc.
+     * Computes the p-norm of this vector.
+     *
+     * @param p {@code p} value in the p-norm.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    @Override
+    public double norm(double p) {
+        return MatrixNorms.inducedNorm(this, p);
+    }
+
+
+    /**
+     * // TODO: Update javadoc.
+     * Computes the p-norm of this vector.
+     *
+     * @param p {@code p} value in the p-norm.
+     *
+     * @return The Euclidean norm of this vector.
+     */
+    public double norm(double p, double q) {
+        return MatrixNorms.norm(this, p, q);
     }
 
 
@@ -804,7 +858,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @throws LinearAlgebraException If {@code this.numCols != b.numRows}.
      */
     public CMatrix mult(CsrCMatrix b) {
-        return (CMatrix) DenseCsrFieldMatMult .standard(this, b);
+        return (CMatrix) DenseCsrSemiringMatMult.standard(this, b);
     }
 
 
