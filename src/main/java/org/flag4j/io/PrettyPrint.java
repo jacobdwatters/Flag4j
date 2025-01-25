@@ -26,11 +26,12 @@ package org.flag4j.io;
 
 
 import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
-import org.flag4j.algebraic_structures.RealFloat32;
-import org.flag4j.algebraic_structures.RealFloat64;
+import org.flag4j.arrays.Shape;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class for formatting arrays as &#x2605;&#x2605;<i>pretty</i>&#x2605;&#x2605; human-readable strings.
@@ -208,113 +209,351 @@ public final class PrettyPrint {
 
 
     /**
-     * Computes the maximum length of the string representation of a double in an array of doubles.
-     * @param src Array for which to compute the max string representation length of a double in.
-     * @return The maximum length of the string representation of the doubles in the array.
-     */
-    public static int maxStringLength(double[] src) {
-        int maxLength = -1;
-        int currLength;
-
-        for(double value : src) {
-            currLength = Complex128.round(new Complex128(value), PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) // Then update the maximum length.
-                maxLength = currLength;
-        }
-
-        return maxLength;
-    }
-
-
-    /**
-     * Computes the maximum length of the string representation of individual values within an array.
-     * @param src Array for which to compute the max string representation length of a double in.
-     * @return The maximum length of the string representation of the individual values in the array.
-     */
-    public static <T> int maxStringLength(T[] src) {
-        int maxLength = -1;
-        int currLength;
-
-        for(T value : src) {
-            currLength = lengthRounded(value, PrintOptions.getPrecision());
-
-            if(currLength>maxLength) // Then update the maximum length.
-                maxLength = currLength;
-        }
-
-        return maxLength;
-    }
-
-
-    /**
      * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
      * The length of the last element is always considered.
      * @param src Array for which to compute the max string representation length of a double in.
      * @param stopIndex Stopping index for finding max length.
      * @return The maximum length of the string representation of the doubles in the array.
      */
-    public static int maxStringLength(double[] src, int stopIndex) {
+    public static int maxStringLengthRounded(double[] src, int stopIndex) {
+        return maxStringLengthRounded(src, 0, stopIndex, 1, src.length - 1);
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of an element in an array up until some stopping index.
+     * The length of the last element is always considered.
+     * @param src Array for which to compute the max string representation length of a double in.
+     * @param stopIndex Stopping index for finding max length.
+     * @return The maximum length of the string representation of the doubles in the array.
+     */
+    public static <T> int maxStringLengthRounded(T[] src, int stopIndex) {
+        return maxStringLengthRounded(src, 0, stopIndex, 1, src.length - 1);
+    }
+
+
+    /**
+     * Computes the maximum length of the string representation of an element in an array over a specified range with elements spaced
+     * by some specified {@code stride}.
+     * @param src Array to find maximum length string representation
+     * @param startIdx Staring index to search for maximum length string (inclusive).
+     * @param stopIdx Stopping index to search for maximum length string (exclusive).
+     * @param stride The gap between consecutive elements within {@code src} to check.
+     * @param finalIdx The final index to consider for the maximum length string. The length of the string representation of the
+     * element at this index in {@code src} is <i>always</i> considered.
+     * @return The maximum string representation length of elements within {@code src} between indices {@code startIdx} (inclusive)
+     * and {@code stopIdx} spaced by {@code stride} and a final element at index {@code finalIdx}.
+     * @param <T> Type of elements within the array.
+     */
+    public static <T> int maxStringLengthRounded(double[] src, int startIdx, int stopIdx, int stride, int finalIdx) {
         int maxLength = -1;
-        int currLength;
+        int precision = PrintOptions.getPrecision();
 
-        // Ensure no index out of bound exceptions.
-        stopIndex = Math.min(stopIndex, src.length);
+        if(startIdx != stopIdx) {
+            ValidateParameters.ensureValidArrayIndices(src.length, startIdx, stopIdx-1);
+            ValidateParameters.ensurePositive(stride);
+            ValidateParameters.ensureGreaterEq(startIdx, stopIdx);
 
-        for(int i=0; i<stopIndex; i++) {
-            currLength = Complex128.round(
-                    new Complex128(src[i]),
-                    PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) // Then update the maximum length.
-                maxLength = currLength;
+            for(int i=startIdx; i<stopIdx; i+=stride)
+                maxLength = Math.max(maxLength, lengthRounded(src[i], precision));
         }
 
-        // Always get last elements' length.
-        if(stopIndex < src.length) {
-            currLength = Complex128.round(
-                    new Complex128(src[src.length-1]),
-                    PrintOptions.getPrecision()).toString().length();
-
-            if(currLength>maxLength) // Then update the maximum length.
-                maxLength = currLength;
-        }
+        // Always consider the element at finalIdx.
+        maxLength = Math.max(maxLength, lengthRounded(src[finalIdx], precision));
 
         return maxLength;
     }
 
 
     /**
-     * Computes the maximum length of the string representation of a double in an array of doubles up until stopping index.
-     * The length of the last element is always considered.
-     * @param src Array for which to compute the max string representation length of a double in.
-     * @param stopIndex Stopping index for finding max length.
-     * @return The maximum length of the string representation of the doubles in the array.
+     * Computes the maximum length of the string representation of an element in an array over a specified range with elements spaced
+     * by some specified {@code stride}.
+     * @param src Array to find maximum length string representation
+     * @param startIdx Staring index to search for maximum length string (inclusive).
+     * @param stopIdx Stopping index to search for maximum length string (exclusive).
+     * @param stride The gap between consecutive elements within {@code src} to check.
+     * @param finalIdx The final index to consider for the maximum length string. The length of the string representation of the
+     * element at this index in {@code src} is <i>always</i> considered.
+     * @return The maximum string representation length of elements within {@code src} between indices {@code startIdx} (inclusive)
+     * and {@code stopIdx} spaced by {@code stride} and a final element at index {@code finalIdx}.
+     * @param <T> Type of elements within the array.
      */
-    public static <T> int maxStringLength(T[] src, int stopIndex) {
+    public static <T> int maxStringLengthRounded(T[] src, int startIdx, int stopIdx, int stride, int finalIdx) {
         int maxLength = -1;
-        int currLength;
+        int precision = PrintOptions.getPrecision();
 
-        // Ensure no index out of bound exceptions.
-        stopIndex = Math.min(stopIndex, src.length);
+        if(startIdx != stopIdx) {
+            ValidateParameters.ensureValidArrayIndices(src.length, startIdx, stopIdx-1);
+            ValidateParameters.ensurePositive(stride);
+            ValidateParameters.ensureGreaterEq(startIdx, stopIdx);
 
-        for(int i=0; i<stopIndex; i++) {
-            currLength = lengthRounded(src[i], PrintOptions.getPrecision());
-
-            if(currLength>maxLength) // Then update the maximum length.
-                maxLength = currLength;
+            for(int i=startIdx; i<stopIdx; i+=stride)
+                maxLength = Math.max(maxLength, lengthRounded(src[i], precision));
         }
 
-        // Always get last elements' length.
-        if(stopIndex < src.length) {
-            T value = src[src.length-1];
-            currLength = lengthRounded(value, PrintOptions.getPrecision());
-
-            if(currLength>maxLength) // Then update the maximum length.
-                maxLength = currLength;
-        }
+        // Always consider the element at finalIdx.
+        maxLength = Math.max(maxLength, lengthRounded(src[finalIdx], precision));
 
         return maxLength;
+    }
+
+
+    /**
+     * Converts a matrix into a "pretty" string using parameters set in the {@link PrintOptions} class.
+     * @param shape Shape of the matrix. Must be rank 2.
+     * @param data Entries of the matrix.
+     * @return This matrix represented as a "pretty" string.
+     * @param <T> Type of an individual entry of the matrix.
+     */
+    public static <T> String matrixToString(Shape shape, double[] data) {
+        ValidateParameters.ensureRank(shape, 2);
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
+
+        if (data.length == 0) {
+            result.append("[]"); // No data in this matrix.
+        } else {
+            int numRows = shape.get(0);
+            int numCols = shape.get(1);
+
+            int maxRows = PrintOptions.getMaxRows();
+            int maxCols = PrintOptions.getMaxColumns();
+
+            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
+            int rowStopOffset = rowStopIndex*numCols;
+            boolean truncatedRows = maxRows < numRows;
+
+            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
+            int lastIdxOffset = (numRows-1)*numCols;
+            boolean truncatedCols = maxCols < numCols;
+
+            // Build list of column indices to print
+            List<Integer> columnsToPrint = new ArrayList<>();
+            for (int j = 0; j < colStopIndex; j++)
+                columnsToPrint.add(j);
+
+            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
+            columnsToPrint.add(numCols - 1); // Always include the last column.
+
+            // Compute maximum widths for each column
+            List<Integer> maxWidths = new ArrayList<>();
+            for (Integer colIndex : columnsToPrint) {
+                int maxWidth;
+                if (colIndex == -1)
+                    maxWidth = 3; // Width for '...'.
+                else {
+                    maxWidth = PrettyPrint.maxStringLengthRounded(
+                            data, colIndex, rowStopOffset + colIndex, numCols,
+                            lastIdxOffset + colIndex);
+                }
+
+                maxWidths.add(maxWidth);
+            }
+
+            // Build the rows up to the stopping index.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(shape, data, i, columnsToPrint, maxWidths));
+                result.append("\n");
+            }
+
+            if (truncatedRows) {
+                // Print a '...' row to indicate truncated rows.
+                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
+                String value = "...";
+
+                if (PrintOptions.useCentering())
+                    value = StringUtils.center(value, totalWidth);
+
+                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+            }
+
+            // Append the last row.
+            result.append(rowToString(shape, data, numRows - 1, columnsToPrint, maxWidths));
+        }
+
+        result.append("]");
+
+        return result.toString();
+    }
+
+
+    /**
+     * Converts a matrix into a "pretty" string using parameters set in the {@link PrintOptions} class.
+     * @param shape Shape of the matrix. Must be rank 2.
+     * @param data Entries of the matrix.
+     * @return This matrix represented as a "pretty" string.
+     * @param <T> Type of an individual entry of the matrix.
+     */
+    public static <T> String matrixToString(Shape shape, T[] data) {
+        ValidateParameters.ensureRank(shape, 2);
+        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
+        result.append("[");
+
+        if (data.length == 0) {
+            result.append("[]"); // No data in this matrix.
+        } else {
+            int numRows = shape.get(0);
+            int numCols = shape.get(1);
+
+            int maxRows = PrintOptions.getMaxRows();
+            int maxCols = PrintOptions.getMaxColumns();
+
+            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
+            int rowStopOffset = rowStopIndex*numCols;
+            boolean truncatedRows = maxRows < numRows;
+
+            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
+            int lastIdxOffset = (numRows-1)*numCols;
+            boolean truncatedCols = maxCols < numCols;
+
+            // Build list of column indices to print
+            List<Integer> columnsToPrint = new ArrayList<>();
+            for (int j = 0; j < colStopIndex; j++)
+                columnsToPrint.add(j);
+
+            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
+            columnsToPrint.add(numCols - 1); // Always include the last column.
+
+            // Compute maximum widths for each column
+            List<Integer> maxWidths = new ArrayList<>();
+            for (Integer colIndex : columnsToPrint) {
+                int maxWidth;
+                if (colIndex == -1)
+                    maxWidth = 3; // Width for '...'.
+                else {
+                    maxWidth = PrettyPrint.maxStringLengthRounded(
+                            data, colIndex, rowStopOffset + colIndex, numCols,
+                            lastIdxOffset + colIndex);
+                }
+
+                maxWidths.add(maxWidth);
+            }
+
+            // Build the rows up to the stopping index.
+            for (int i = 0; i < rowStopIndex; i++) {
+                result.append(rowToString(shape, data, i, columnsToPrint, maxWidths));
+                result.append("\n");
+            }
+
+            if (truncatedRows) {
+                // Print a '...' row to indicate truncated rows.
+                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
+                String value = "...";
+
+                if (PrintOptions.useCentering())
+                    value = StringUtils.center(value, totalWidth);
+
+                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+            }
+
+            // Append the last row.
+            result.append(rowToString(shape, data, numRows - 1, columnsToPrint, maxWidths));
+        }
+
+        result.append("]");
+
+        return result.toString();
+    }
+
+
+    /**
+     * Converts a row of a matrix to a "pretty" string using the parameters set in the {@link PrettyPrint} class.
+     * @param shape Shape of the matrix.
+     * @param data Entries of the matrix.
+     * @param rowIndex Index of the row to convert to a "pretty" string.
+     * @param columnsToPrint A list of columns that should be pretend for this row.
+     * @param maxWidths A list of the maximum width for each column to print.
+     * @return The specified row of the matrix represented as a "pretty" string.
+     * @param <T> Type of an individual entry of the matrix.
+     */
+    private static <T> String rowToString(Shape shape, double[] data, int rowIndex, List<Integer> columnsToPrint,
+                                          List<Integer> maxWidths) {
+        StringBuilder sb = new StringBuilder();
+
+        // Start the row with appropriate bracket.
+        sb.append(rowIndex > 0 ? " [" : "[");
+        int rowOffset = rowIndex*shape.get(1);
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean useCentering = PrintOptions.useCentering();
+
+        // Loop over the columns to print.
+        for (int i = 0; i < columnsToPrint.size(); i++) {
+            int colIndex = columnsToPrint.get(i);
+            String value;
+            int width = padding + maxWidths.get(i);
+
+            if (colIndex == -1) // Placeholder for truncated columns.
+                value = "...";
+            else
+                value = StringUtils.ValueOfRound(data[rowOffset + colIndex], precision);
+
+            if (useCentering)
+                value = StringUtils.center(value, width);
+
+            sb.append(String.format("%-" + width + "s", value));
+        }
+
+        // Close the row.
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+
+    /**
+     * Converts a row of a matrix to a "pretty" string using the parameters set in the {@link PrettyPrint} class.
+     * @param shape Shape of the matrix.
+     * @param data Entries of the matrix.
+     * @param rowIndex Index of the row to convert to a "pretty" string.
+     * @param columnsToPrint A list of columns that should be pretend for this row.
+     * @param maxWidths A list of the maximum width for each column to print.
+     * @return The specified row of the matrix represented as a "pretty" string.
+     * @param <T> Type of an individual entry of the matrix.
+     */
+    private static <T> String rowToString(Shape shape, T[] data, int rowIndex, List<Integer> columnsToPrint, List<Integer> maxWidths) {
+        StringBuilder sb = new StringBuilder();
+
+        // Start the row with appropriate bracket.
+        sb.append(rowIndex > 0 ? " [" : "[");
+        int rowOffset = rowIndex*shape.get(1);
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean useCentering = PrintOptions.useCentering();
+
+        // Loop over the columns to print.
+        for (int i = 0; i < columnsToPrint.size(); i++) {
+            int colIndex = columnsToPrint.get(i);
+            String value;
+            int width = padding + maxWidths.get(i);
+
+            if (colIndex == -1) // Placeholder for truncated columns.
+                value = "...";
+            else
+                value = StringUtils.ValueOfRound(data[rowOffset + colIndex], precision);
+
+            if (useCentering)
+                value = StringUtils.center(value, width);
+
+            sb.append(String.format("%-" + width + "s", value));
+        }
+
+        // Close the row.
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+
+    /**
+     * Compute the length of the string representation of the specified field value rounded to {@code precision} if possible.
+     * @param value Field value to round. If the value cannot be rounded the length of the object unchanged will be returned.
+     * @param precision The precision to round {@code value} to.
+     * @return The length of the string representation of the specified field value rounded to {@code precision} if possible. If the
+     * {@code value} cannot be rounded, then the length of the full string is returned.
+     */
+    private static <T> int lengthRounded(double value, int precision) {
+        return StringUtils.ValueOfRound(value, precision).length();
     }
 
 
@@ -326,18 +565,6 @@ public final class PrettyPrint {
      * {@code value} cannot be rounded, then the length of the full string is returned.
      */
     private static <T> int lengthRounded(T value, int precision) {
-        int length;
-        if(value instanceof Complex128)
-            length = Complex128.round((Complex128) value, precision).toString().length();
-        else if(value instanceof Complex64)
-            length = Complex64.round((Complex64) value, precision).toString().length();
-        else if(value instanceof RealFloat64)
-            length = RealFloat64.round((RealFloat64) value, precision).toString().length();
-        else if(value instanceof RealFloat32)
-            length = RealFloat32.round((RealFloat32) value, precision).toString().length();
-        else
-            length = value.toString().length();
-
-        return length;
+        return StringUtils.ValueOfRound(value, precision).length();
     }
 }
