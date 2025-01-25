@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg.decompositions.balance;
 
-import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.PermutationMatrix;
@@ -32,8 +31,6 @@ import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
-
-import java.util.Arrays;
 
 
 /**
@@ -659,28 +656,5 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
      */
     public Matrix getT() {
         return getP().leftMult(getD(true));
-    }
-
-
-    public static void main(String[] args) {
-        Shape aShape = new Shape(8, 8);
-        double[] aData = new double[]{3.0, 1.0, 0.0, 1.0, 0.0, 5.0, 0.0, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                500000000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0, 0.0, 4.0, 1.0, 0.0, 1000145.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                999.0, 1499514.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 23456.0, 0.0, 0.0, 0.0, 2000000.0, 0.0, 0.0,
-                -1000000.0, 0.0, 4.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0};
-        Matrix a = new Matrix(aShape, aData);
-
-        Balancer<Matrix> balancer = new RealBalancer(true, true).decompose(a);
-        Matrix B = balancer.getB();
-        PermutationMatrix P = balancer.getP();
-
-        System.out.println("A:\n" + a + "\n");
-        System.out.println("B:\n" + B + "\n");
-        System.out.println("P:\n" + P.inv().toDense() + "\n");
-        System.out.println("perm:\n" + Arrays.toString(P.getPermutation()) + "\n");
-
-        System.out.println("lo: " + balancer.getILow());
-        System.out.println("hi: " + balancer.getIHigh());
-        System.out.println("ps: " + Arrays.toString(balancer.getScalePerm()));
     }
 }
