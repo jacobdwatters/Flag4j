@@ -643,7 +643,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
             if(size != value) {
                 temp = swapPointers[i];
                 swapPointers[i] = swapPointers[value];
-                swapPointers[i] = temp;
+                swapPointers[value] = temp;
             }
         }
 

@@ -184,9 +184,9 @@ public final class CooSemiringMatrixOps {
 
         for(int i = 0, size = src.data.length; i<size; i++) {
             // Ensure value is 1 and on the diagonal.
-            if(src.rowIndices[i] != i && src.rowIndices[i] != i && !src.data[i].isOne()) {
+            if(src.rowIndices[i] != i && src.colIndices[i] != i && !src.data[i].isOne()) {
                 return false;
-            } else if((src.rowIndices[i] != i || src.rowIndices[i] != i) && !src.data[i].isZero()) {
+            } else if((src.rowIndices[i] != i || src.colIndices[i] != i) && !src.data[i].isZero()) {
                 return false;
             }
         }

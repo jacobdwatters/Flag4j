@@ -110,9 +110,7 @@ public final class CooRingVectorOps {
             AbstractCooRingVector<?, ?, ?, ?, T> src2) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
-        T product = null;
-        if(src1.nnz > 0) product = src1.data[0].getZero();
-        else if(src2.nnz > 0) product = src2.data[0].getZero();
+        T product = src1.getZeroElement();
 
         int src1Counter = 0;
         int src2Counter = 0;
