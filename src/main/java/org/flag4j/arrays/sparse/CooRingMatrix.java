@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import org.flag4j.arrays.dense.RingVector;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.List;
@@ -134,8 +134,8 @@ public class CooRingMatrix<T extends Ring<T>> extends AbstractCooRingMatrix<
     public CooRingMatrix(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
                 (T[]) entries.toArray(new Ring[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
     }
 
 
@@ -165,8 +165,8 @@ public class CooRingMatrix<T extends Ring<T>> extends AbstractCooRingMatrix<
     public CooRingMatrix(int rows, int cols, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
                 (T[]) entries.toArray(new Ring[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
     }
 
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
@@ -82,8 +82,8 @@ public class CsrRingMatrix<T extends Ring<T>> extends AbstractCsrRingMatrix<
      */
     public CsrRingMatrix(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
         super(shape, (T[]) entries.toArray(new Field[entries.size()]),
-                ArrayUtils.fromIntegerList(rowPointers),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowPointers),
+                ArrayConversions.fromIntegerList(colIndices));
     }
 
 

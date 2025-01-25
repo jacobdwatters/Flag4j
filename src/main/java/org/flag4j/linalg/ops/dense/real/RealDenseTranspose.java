@@ -95,7 +95,7 @@ public final class RealDenseTranspose {
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getNdIndices(i);
-            ArrayUtils.swap(destIndices, axes); // Compute destination indices.
+            ArrayUtils.permute(destIndices, axes); // Compute destination indices.
             dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
@@ -128,7 +128,7 @@ public final class RealDenseTranspose {
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);
-                ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+                ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
                 dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
             }
         });

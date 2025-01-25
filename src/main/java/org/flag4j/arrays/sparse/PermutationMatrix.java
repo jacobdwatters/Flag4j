@@ -30,6 +30,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -106,7 +107,7 @@ public class PermutationMatrix implements Serializable {
     public PermutationMatrix(int size) {
         this.size = size;
         shape = new Shape(size, size);
-        permutation = ArrayUtils.intRange(0, size);
+        permutation = ArrayBuilder.intRange(0, size);
     }
 
 
@@ -119,7 +120,7 @@ public class PermutationMatrix implements Serializable {
         ValidateParameters.ensureSquareMatrix(shape);
         this.shape = shape;
         this.size = shape.get(0);
-        permutation = ArrayUtils.intRange(0, size);
+        permutation = ArrayBuilder.intRange(0, size);
     }
 
 

@@ -28,6 +28,7 @@ import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -191,7 +192,7 @@ public final class CsrOps {
         for(int i=1; i<rowPointers.length; i++)
             rowPointers[i] += rowPointers[i-1];
 
-        return new SparseMatrixData<T>(shape1, dest, ArrayUtils.toArrayList(rowPointers), colIndices);
+        return new SparseMatrixData<T>(shape1, dest, ArrayConversions.toArrayList(rowPointers), colIndices);
     }
 
 

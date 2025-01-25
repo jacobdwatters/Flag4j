@@ -185,7 +185,7 @@ public final class ArrayBuilder {
      * @throws IllegalArgumentException If {@code start} is less than zero.
      */
     public static void stridedFillZeros(Complex128[] dest, int start, int n, int stride) {
-        ValidateParameters.ensureAllGreaterEq(1, stride, n);
+        ValidateParameters.ensureGreaterEq(1, stride, n);
         ValidateParameters.ensureGreaterEq(0, start);
         int step = stride+n;
 
@@ -216,7 +216,7 @@ public final class ArrayBuilder {
      * @throws IllegalArgumentException If start is less than zero.
      */
     public static void stridedFillZeros(double[] dest, int start, int length, int stride) {
-        ValidateParameters.ensureAllGreaterEq(1, stride, length);
+        ValidateParameters.ensureGreaterEq(1, stride, length);
         ValidateParameters.ensureGreaterEq(0, start);
         int step = stride+length;
 

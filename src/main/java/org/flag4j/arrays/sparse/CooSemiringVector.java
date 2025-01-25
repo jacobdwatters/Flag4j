@@ -33,7 +33,7 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 
 import java.util.List;
@@ -142,7 +142,7 @@ public class CooSemiringVector<T extends Semiring<T>> extends AbstractCooSemirin
      * @param indices The indices of the non-zero values.
      */
     public CooSemiringVector(Shape shape, List<T> entries, List<Integer> indices) {
-        super(shape, (T[]) entries.toArray(Semiring[]::new), ArrayUtils.fromIntegerList(indices));
+        super(shape, (T[]) entries.toArray(Semiring[]::new), ArrayConversions.fromIntegerList(indices));
     }
 
 
@@ -162,7 +162,7 @@ public class CooSemiringVector<T extends Semiring<T>> extends AbstractCooSemirin
      * @param indices The indices of the non-zero values.
      */
     public CooSemiringVector(int size, List<T> entries, List<Integer> indices) {
-        super(new Shape(size), (T[]) entries.toArray(Semiring[]::new), ArrayUtils.fromIntegerList(indices));
+        super(new Shape(size), (T[]) entries.toArray(Semiring[]::new), ArrayConversions.fromIntegerList(indices));
     }
 
 

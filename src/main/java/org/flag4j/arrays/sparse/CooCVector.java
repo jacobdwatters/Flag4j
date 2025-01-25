@@ -35,7 +35,7 @@ import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -104,7 +104,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param indices The indices of the non-zero data.
      */
     public CooCVector(int size, List<Complex128> entries, List<Integer> indices) {
-        super(new Shape(size), entries.toArray(new Complex128[0]), ArrayUtils.fromIntegerList(indices));
+        super(new Shape(size), entries.toArray(new Complex128[0]), ArrayConversions.fromIntegerList(indices));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -116,7 +116,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param indices The indices of the non-zero data.
      */
     public CooCVector(Shape shape, List<Complex128> entries, List<Integer> indices) {
-        super(shape, entries.toArray(new Complex128[0]), ArrayUtils.fromIntegerList(indices));
+        super(shape, entries.toArray(new Complex128[0]), ArrayConversions.fromIntegerList(indices));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -138,7 +138,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @param indices Non-zero indices of the sparse vector.
      */
     public CooCVector(int size, double[] entries, int[] indices) {
-        super(new Shape(size), ArrayUtils.wrapAsComplex128(entries, null), indices);
+        super(new Shape(size), ArrayConversions.toComplex128(entries, null), indices);
         setZeroElement(Complex128.ZERO);
     }
 
