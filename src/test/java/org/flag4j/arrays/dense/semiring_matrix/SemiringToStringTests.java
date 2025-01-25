@@ -28,7 +28,7 @@ class SemiringToStringTests {
 
     @Test
     void complexToStringTests() {
-        // ------------------ sub-case 1 ------------------
+        // ------------------ Sub-case 1 ------------------
         data = new Complex128[]{new Complex128(1.3), new Complex128(1.4, -2),
                 new Complex128(1.5, 9), new Complex128(-1, 2)};
         shape = new Shape(2, 2);
@@ -46,7 +46,7 @@ class SemiringToStringTests {
                 " [1.5 + 9i     -1 + 2i      ]]";
         assertEquals(exp, matrix.toString());
 
-        // ------------------ sub-case 2 ------------------
+        // ------------------ Sub-case 2 ------------------
         PrintOptions.setCentering(true);
         PrintOptions.setPadding(3);
         shape = new Shape(22, 14);
