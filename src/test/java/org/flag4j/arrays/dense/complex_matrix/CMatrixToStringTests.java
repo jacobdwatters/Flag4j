@@ -3,6 +3,7 @@ package org.flag4j.arrays.dense.complex_matrix;
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.io.PrintOptions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +13,13 @@ class CMatrixToStringTests {
     Complex128[][] aEntries;
     CMatrix A;
     String exp;
+
+
+    @AfterEach
+    void tearDown() {
+        // Ensure all options get properly reset.
+        PrintOptions.resetAll();
+    }
 
 
     @Test
@@ -101,8 +109,8 @@ class CMatrixToStringTests {
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[ [                 ...                  ]\n" +
-                " [   56.25    0  -1.45i  -3.36 - 84.25i ]]";
+                "[ [               ...                ]\n" +
+                " [ 56.25  0  -1.45i  -3.36 - 84.25i ]]";
 
         assertEquals(exp, A.toString());
 
@@ -159,8 +167,5 @@ class CMatrixToStringTests {
                 " [56.25 - 0.002i   0   -1.455i   -3.356 - 84.253i   ]]";
 
         assertEquals(exp, A.toString());
-
-        // ------------------------ RESET PRINT OPTIONS ------------------------
-        PrintOptions.resetAll();
     }
 }

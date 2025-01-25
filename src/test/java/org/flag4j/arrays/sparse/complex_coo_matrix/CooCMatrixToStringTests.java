@@ -32,7 +32,6 @@ class CooCMatrixToStringTests {
                 Non-zero data: [ 0.39424 + 0.26881i  0.31325 + 0.34679i  0.30908 + 0.33655i ]
                 Row Indices: [ 2  3  4 ]
                 Col Indices: [ 2  0  0 ]""";
-
         assertEquals(exp, a.toString());
 
         // ---------------------  Sub-case 2 ---------------------

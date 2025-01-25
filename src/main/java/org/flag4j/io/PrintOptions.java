@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -127,6 +127,7 @@ public final class PrintOptions {
      * @param center Flag for centering values within its column.
      */
     public static void setCentering(boolean center) {
+        // TODO: Could take an enum and allow for left, right, and center justified.
         PrintOptions.center = center;
     }
 
@@ -145,9 +146,8 @@ public final class PrintOptions {
      * @param precision The precision to use.
      */
     public static void setPrecision(int precision) {
-        if(precision < 0) {
+        if(precision < 0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
-        }
 
         PrintOptions.precision = precision;
     }
@@ -176,9 +176,8 @@ public final class PrintOptions {
      * @param maxColumns Maximum number of columns to print.
      */
     public static void setMaxColumns(int maxColumns) {
-        if(maxColumns < 0) {
+        if(maxColumns < 0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(maxColumns));
-        }
 
         PrintOptions.maxColumns = maxColumns;
     }
@@ -198,9 +197,8 @@ public final class PrintOptions {
      * @param maxRows The new maximum number of rows to print.
      */
     public static void setMaxRows(int maxRows) {
-        if(maxRows < 0) {
+        if(maxRows < 0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(maxRows));
-        }
 
         PrintOptions.maxRows = maxRows;
     }
@@ -245,9 +243,8 @@ public final class PrintOptions {
      * @param padding New padding amount for the columns.
      */
     public static void setPadding(int padding) {
-        if(padding < 0) {
+        if(padding < 0)
             throw new IllegalArgumentException(ErrorMessages.getNegValueErr(padding));
-        }
 
         PrintOptions.padding = padding;
     }

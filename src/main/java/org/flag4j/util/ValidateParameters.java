@@ -294,6 +294,7 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If the values is less than the threshold.
      */
     public static void ensureGreaterEq(int threshold, int value) {
+        // TODO: This method (and similar) are VERY confusing. Need to implement them in a more clear manner.
         if(value<threshold)
             throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
     }
