@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -112,6 +112,8 @@ import java.util.List;
 public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         implements MatrixMixin<Matrix, Matrix, Vector, Double> {
     private static final long serialVersionUID = 1L;
+
+    // TODO: Add norm methods.
 
     /**
      * The number of rows in this matrix.
@@ -1171,6 +1173,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix setCol(Vector values, int colIndex) {
+        System.out.println("values: " + values);
         return setCol(values.data, colIndex);
     }
 
@@ -1501,8 +1504,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         if(diagOffset > 0) {
             newSize = Math.min(newSize, numCols - diagOffset);
             idx = diagOffset;
-        }
-        else if(diagOffset < 0) {
+        } else if(diagOffset < 0) {
             newSize = Math.min(newSize, numRows + diagOffset);
             idx = -diagOffset*numCols;
         }

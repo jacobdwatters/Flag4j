@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,9 @@ import org.flag4j.arrays.dense.RingTensor;
 import org.flag4j.arrays.dense.RingVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingEquals;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -263,6 +264,20 @@ public class CooRingTensor<T extends Ring<T>> extends AbstractCooRingTensor<CooR
         return mat;
     }
 
+
+    /**
+     * Computes the element-wise absolute value of this tensor.
+     *
+     * @return The element-wise absolute value of this tensor.
+     */
+    @Override
+    public CooTensor abs() {
+        double[] dest = new double[data.length];
+        RingOps.abs(data, dest);
+        return new CooTensor(shape, dest, ArrayUtils.deepCopy(indices, null));
+    }
+
+
     /**
      * Checks if an object is equal to this tensor object.
      * @param object Object to check equality with this tensor.
@@ -276,7 +291,7 @@ public class CooRingTensor<T extends Ring<T>> extends AbstractCooRingTensor<CooR
 
         CooRingTensor<T> src2 = (CooRingTensor<T>) object;
 
-        return CooRingEquals.cooTensorEquals(this, src2);
+        return CooSemiringEquals.cooTensorEquals(this, src2);
     }
 
 

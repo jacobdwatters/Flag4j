@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,9 +38,10 @@ import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooConcats;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
@@ -340,6 +341,17 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
+     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     *
+     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
+     */
+    @Override
+    public boolean isHermitian() {
+        return CooRingMatrixOps.isHermitian(shape, data, rowIndices, colIndices);
+    }
+
+
+    /**
      * Converts this sparse COO matrix to an equivalent sparse CSR matrix.
      *
      * @return A sparse CSR matrix equivalent to this sparse COO matrix.
@@ -567,9 +579,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public boolean equals(Object object) {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
-
-        return CooFieldEquals.cooMatrixEquals(this.dropZeros(),
-                ((CooCMatrix) object).dropZeros());
+        return CooSemiringEquals.cooMatrixEquals(this, ((CooCMatrix) object));
     }
 
 

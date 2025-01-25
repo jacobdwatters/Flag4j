@@ -33,7 +33,7 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ArrayConversions;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -140,7 +140,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @param indices The indices of the non-zero values.
      */
     public CooFieldVector(int size, List<T> entries, List<Integer> indices) {
-        super(new Shape(size), (T[]) entries.toArray(Field[]::new), ArrayConversions.fromIntegerList(indices));
+        super(new Shape(size), (T[]) entries.toArray(Field[]::new), ArrayUtils.fromIntegerList(indices));
     }
 
 
