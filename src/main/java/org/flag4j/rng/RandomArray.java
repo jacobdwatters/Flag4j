@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,9 @@
 
 package org.flag4j.rng;
 
-
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.rng.distributions.Distribution;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -34,13 +34,9 @@ import org.flag4j.util.ValidateParameters;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-/**
- * This class contains methods useful for generating arrays filled with random values or randomly shuffling an array. Random values
- * are generated using an instance of the {@link RandomComplex} class.
- */
-public class RandomArray {
-
+public final class RandomArray {
 
     /**
      * Random number generator to use when creating random arrays.
@@ -67,256 +63,46 @@ public class RandomArray {
 
 
     /**
-     * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [0.0, 1.0)}.
-     * To generate uniformly distributed values in a specified range see {@link #genUniformRealArray(int, double, double)}.
-     * @param length Length of pseudorandom array to generate.
-     * @return An array of doubles with specified length filled with uniformly distributed values in {@code [0.0, 1.0)}.
+     * Fills an array with pseudorandom values sampled from the specified {@code distribution}.
+     * @param arr The array to fill.
+     * @param distribution The distribution to sample from.
      */
-    public double[] genUniformRealArray(int length) {
-        double[] values = new double[length];
-        
-        for(int i=0; i<length; i++)
-            values[i] = rng.nextDouble();
-
-        return values;
+    public static void randomFill(int[] arr, Distribution<Integer, Random> distribution) {
+        for(int i=0, size=arr.length; i<size; i++)
+            arr[i] = distribution.sample();
     }
 
 
     /**
-     * Generates an array of doubles filled with uniformly distributed pseudorandom values in {@code [min, max)}.
-     * @param length Length of pseudorandom array to generate.
-     * @param min Lower bound of uniform range (inclusive).
-     * @param max Upper bound of uniform range (Exclusive).
-     * @return An array of doubles with specified length filled with uniformly distributed values in {@code [min, max)}.
+     * Fills an array with pseudorandom values sampled from the specified {@code distribution}.
+     * @param arr The array to fill.
+     * @param distribution The distribution to sample from.
      */
-    public double[] genUniformRealArray(int length, double min, double max) {
-        double[] values = new double[length];
-        double maxMin = max-min;
-
-        for(int i=0; i<length; i++) 
-            values[i] = rng.nextDouble()*maxMin + min;
-
-        return values;
+    public static void randomFill(double[] arr, Distribution<Double, Random> distribution) {
+        for(int i=0, size=arr.length; i<size; i++)
+            arr[i] = distribution.sample();;
     }
 
 
     /**
-     * Generates an array of integers filled with uniformly distributed pseudorandom int values in
-     * [{@link Integer#MAX_VALUE}, {@link Integer#MAX_VALUE}).
-     * To generate uniformly distributed values in a specified range see {@link #genUniformRealIntArray(int, int, int)}.
-     * @param length Length of pseudorandom array to generate.
-     * @return An array of integers with specified length filled with uniformly distributed values in
-     * [{@link Integer#MAX_VALUE}, {@link Integer#MAX_VALUE}).
+     * Fills an array with pseudorandom values sampled from the specified {@code distribution}.
+     * @param arr The array to fill.
+     * @param distribution The distribution to sample from.
      */
-    public double[] genUniformRealIntArray(int length) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.nextInt();
-
-        return values;
+    public static void randomFill(Complex128[] arr, Distribution<Complex128, RandomComplex> distribution) {
+        for(int i=0, size=arr.length; i<size; i++)
+            arr[i] = distribution.sample();
     }
 
 
     /**
-     * Generates an array of integers filled with uniformly distributed pseudorandom values in {@code [min, max)}.
-     * @param length Length of pseudorandom array to generate.
-     * @param min Lower bound of uniform range (inclusive).
-     * @param max Upper bound of uniform range (Exclusive).
-     * @return An array of integers with specified length filled with uniformly distributed values in {@code [min, max)}.
+     * Fills an array with pseudorandom values sampled from the specified {@code distribution}.
+     * @param arr The array to fill.
+     * @param distribution The distribution to sample from.
      */
-    public int[] genUniformRealIntArray(int length, int min, int max) {
-        int[] values = new int[length];
-        int maxMinDiff = max - min;
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.nextInt(maxMinDiff) + min;
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of doubles filled with normally pseudorandom values with a mean of 0 and standard deviation
-     * of 1.
-     * @param length Length of pseudorandom array to generate.
-     * @return An array of doubles with specified length filled with normally pseudorandom values with a mean of 0 and
-     * standard deviation of 1.
-     */
-    public double[] genNormalRealArray(int length) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.nextGaussian();
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of doubles filled with normally distributed pseudorandom values with a specified mean and standard deviation.
-     * @param length Length of pseudorandom array to generate.
-     * @param mean Mean of normal distribution.
-     * @param std Standard deviation of normal distribution.
-     * @return An array of doubles with specified length filled with normally pseudorandom values specified mean and
-     * standard deviation.
-     * @throws IllegalArgumentException If standard deviation is negative.
-     */
-    public double[] genNormalRealArray(int length, double mean, double std) {
-        double[] values = new double[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.nextGaussian()*mean + std;
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link Complex128 complex numbers} with pseudorandom uniformly distributed magnitudes
-     * in {@code [0.0, 1.0)}.
-     * @param length Length of the pseudorandom array to generate.
-     * @return An array of {@link Complex128 complex numbers} with pseudorandom uniformly distributed magnitudes
-     * in {@code [0.0, 1.0)}.
-     */
-    public Complex128[] genUniformComplex128Array(int length) {
-        Complex128[] values = new Complex128[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randomComplex128();
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of pseudorandom {@link Complex128 complex numbers} with uniformly distributed magnitudes
-     * in {@code [min, max)}.
-     * @param length Length of the pseudorandom array to generate.
-     * @param min Minimum value of uniform distribution from which the magnitudes are sampled (inclusive).
-     * @param max Maximum value of uniform distribution from which the magnitudes are sampled (exclusive).
-     * @return An array of {@link Complex128 complex numbers} with pseudorandom {@link Complex128 complex numbers} with
-     * uniformly distributed magnitudes in {@code [min, max)}.
-     * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
-     */
-    public Complex128[] genUniformComplex128Array(int length, double min, double max) {
-        Complex128[] values = new Complex128[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randomComplex128(min, max);
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link Complex128 complex numbers} with pseudorandom normally distributed magnitudes
-     * with a mean of 0.0 and a magnitude of 1.0.
-     * @param length Length of the pseudorandom array to generate.
-     * @return An array of {@link Complex128 complex numbers} with pseudorandom normally distributed magnitudes
-     * with a mean of 0.0 and a magnitude of 1.0.
-     */
-    public Complex128[] genNormalComplex128Array(int length) {
-        Complex128[] values = new Complex128[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randnComplex128();
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link Complex128 complex numbers} with pseudorandom normally distributed magnitudes
-     * with specified mean and standard deviation.
-     * @param length Length of the pseudorandom array to generate.
-     * @param mean Mean of the normal distribution from which to sample magnitudes.
-     * @param std Standard deviation of the normal distribution from which to sample magnitudes.
-     * @return An array of {@link Complex128 complex numbers} with pseudorandom normally distributed magnitudes
-     * with specified mean and standard deviation.
-     * @throws IllegalArgumentException If standard deviation is negative.
-     */
-    public Complex128[] genNormalComplex128Array(int length, double mean, double std) {
-        Complex128[] values = new Complex128[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randnComplex128(mean, std);
-
-        return values;
-    }
-    
-
-    /**
-     * Generates an array of {@link Complex64 complex numbers} with pseudorandom uniformly distributed magnitudes
-     * in {@code [0.0, 1.0)}.
-     * @param length Length of the pseudorandom array to generate.
-     * @return An array of {@link Complex64 complex numbers} with pseudorandom uniformly distributed magnitudes
-     * in {@code [0.0, 1.0)}.
-     */
-    public Complex64[] genUniformComplex64Array(int length) {
-        Complex64[] values = new Complex64[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randomComplex64();
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of pseudorandom {@link Complex64 complex numbers} with uniformly distributed magnitudes
-     * in {@code [min, max)}.
-     * @param length Length of the pseudorandom array to generate.
-     * @param min Minimum value of uniform distribution from which the magnitudes are sampled (inclusive).
-     * @param max Maximum value of uniform distribution from which the magnitudes are sampled (exclusive).
-     * @return An array of {@link Complex64 complex numbers} with pseudorandom {@link Complex64 complex numbers} with
-     * uniformly distributed magnitudes in {@code [min, max)}.
-     * @throws IllegalArgumentException If {@code min} is negative or if {@code max} is less than {@code min}.
-     */
-    public Complex64[] genUniformComplex64Array(int length, float min, float max) {
-        Complex64[] values = new Complex64[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randomComplex64(min, max);
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link Complex64 complex numbers} with pseudorandom normally distributed magnitudes
-     * with a mean of 0.0 and a magnitude of 1.0.
-     * @param length Length of the pseudorandom array to generate.
-     * @return An array of {@link Complex64 complex numbers} with pseudorandom normally distributed magnitudes
-     * with a mean of 0.0 and a magnitude of 1.0.
-     */
-    public Complex64[] genNormalComplex64Array(int length) {
-        Complex64[] values = new Complex64[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randnComplex64();
-
-        return values;
-    }
-
-
-    /**
-     * Generates an array of {@link Complex64 complex numbers} with pseudorandom normally distributed magnitudes
-     * with specified mean and standard deviation.
-     * @param length Length of the pseudorandom array to generate.
-     * @param mean Mean of the normal distribution from which to sample magnitudes.
-     * @param std Standard deviation of the normal distribution from which to sample magnitudes.
-     * @return An array of {@link Complex64 complex numbers} with pseudorandom normally distributed magnitudes
-     * with specified mean and standard deviation.
-     * @throws IllegalArgumentException If standard deviation is negative.
-     */
-    public Complex64[] genNormalComplex64Array(int length, float mean, float std) {
-        Complex64[] values = new Complex64[length];
-
-        for(int i=0; i<length; i++)
-            values[i] = rng.randnComplex64(mean, std);
-
-        return values;
+    public static void randomFill(Complex64[] arr, Distribution<Complex64, RandomComplex> distribution) {
+        for(int i=0, size=arr.length; i<size; i++)
+            arr[i] = distribution.sample();
     }
 
 
@@ -416,15 +202,13 @@ public class RandomArray {
      * @param arr Array to shuffle.
      * @return A reference to {@code arr}.
      */
-    public int[] shuffle(int[] arr) {
+    public void shuffle(int[] arr) {
         for (int i = arr.length-1; i>0; i--) {
             // Pick a random index from 0 to i
             int j = rng.nextInt(i+1);
-            // Swap arr[i] with the element at random index
+            // Swap arr[i] with the element at random index.
             ArrayUtils.swap(arr, i, j);
         }
-
-        return arr;
     }
 
 
@@ -435,9 +219,9 @@ public class RandomArray {
      */
     public void shuffle(double[] arr) {
         for (int i = arr.length-1; i>0; i--) {
-            // Pick a random index from 0 to i
+            // Pick a random index from 0 to i.
             int j = rng.nextInt(i+1);
-            // Swap arr[i] with the element at random index
+            // Swap arr[i] with the element at random index.
             ArrayUtils.swap(arr, i, j);
         }
     }
@@ -450,9 +234,9 @@ public class RandomArray {
      */
     public void shuffle(Object[] arr) {
         for (int i = arr.length-1; i>0; i--) {
-            // Pick a random index from 0 to i
+            // Pick a random index from 0 to i.
             int j = rng.nextInt(i+1);
-            // Swap arr[i] with the element at random index
+            // Swap arr[i] with the element at random index.
             ArrayUtils.swap(arr, i, j);
         }
     }

@@ -155,7 +155,7 @@ public final class RealDenseTranspose {
         double[] dest = new double[shape.totalEntries().intValue()];
         Shape destShape = shape.swapAxes(axis1, axis2);
 
-        // Compute transpose concurrently
+        // Compute transpose concurrently.
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);

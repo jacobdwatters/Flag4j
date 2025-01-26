@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -74,6 +74,10 @@ public class Shape implements Serializable {
      */
     private int[] strides;
     /**
+     * Flag indicating if strides have been computed for this shape instance or not.
+     */
+    private boolean hasStrides;
+    /**
      * Total data of this shape. This is only computed on demand by {@link #totalEntries()}.
      */
     private BigInteger totalEntries = null;
@@ -93,6 +97,8 @@ public class Shape implements Serializable {
         // Ensure all dimensions for the shape object are non-negative.
         ValidateParameters.ensureNonNegative(dims);
         this.dims = dims;
+        strides = new int[dims.length];  // Initialize. Will be filled lazily.
+        hasStrides = false; // Indicate strides have not been computed.
     }
 
 
@@ -110,7 +116,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
-        return this.dims.clone();
+        return dims.clone();
     }
 
 
@@ -120,7 +126,7 @@ public class Shape implements Serializable {
      * @return The strides of this shape as an integer array.
      */
     public int[] getStrides() {
-        makeStridesIfNull();
+        makeStrides();
         return strides.clone();
     }
 
@@ -176,25 +182,24 @@ public class Shape implements Serializable {
      * Strides will be a monotonically decreasing sequence with the last stride being 1.
      * @return The strides for all dimensions of a newly constructed tensor with this shape.
      */
-    private int[] createNewStrides() {
-        int[] strides = new int[dims.length];
-
+    private synchronized void createNewStrides() {
         if(strides.length>0) {
             strides[strides.length-1] = 1; // Set the last stride to 1.
 
             for(int i=strides.length-2; i>=0; i--)
-                strides[i] = dims[i+1]*strides[i+1];
+                strides[i] = dims[i + 1]*strides[i + 1];
         }
-
-        return strides;
     }
 
 
     /**
-     * If strides are null, create them. Otherwise, do nothing.
+     * If strides are have not already been computed for this shape, create them. Otherwise, do nothing.
      */
-    private void makeStridesIfNull() {
-        if(strides==null) strides = createNewStrides();
+    private void makeStrides() {
+        if(!hasStrides) {
+            createNewStrides();
+            hasStrides = true;
+        }
     }
 
 
@@ -210,7 +215,7 @@ public class Shape implements Serializable {
         if(indices.length != dims.length)
             throw new IllegalArgumentException("Indices rank " + indices.length + " does not match tensor rank " + dims.length);
 
-        makeStridesIfNull(); // Computes strides if not previously computed.
+        makeStrides(); // Computes strides if not previously computed.
 
         int index = 0;
         for(int i=0, stop=indices.length; i<stop; i++) {
@@ -238,7 +243,7 @@ public class Shape implements Serializable {
      * @see #getFlatIndex(int...)
      */
     public int unsafeGetFlatIndex(int... indices) {
-        makeStridesIfNull(); // Computes strides if not previously computed.
+        makeStrides(); // Computes strides if not previously computed.
 
         int index = 0;
         for(int i=0, stop=indices.length; i<stop; i++)
@@ -255,7 +260,7 @@ public class Shape implements Serializable {
      * with length equal to the {@link #getRank() rank} of this shape.
      */
     public int[] getNdIndices(int index) {
-        makeStridesIfNull(); // Ensure strides are initialized if not already.
+        makeStrides(); // Ensure strides are initialized if not already.
         int[] indices = new int[getRank()];
 
         for (int i = 0; i < strides.length; i++)
@@ -278,11 +283,8 @@ public class Shape implements Serializable {
     public Shape swapAxes(int axis1, int axis2) {
         int[] newDims = dims.clone();
         ArrayUtils.swap(newDims, axis1, axis2);
-        Shape newShape = new Shape(newDims);
 
-        if(strides!=null) newShape.strides = newShape.createNewStrides();
-
-        return newShape;
+        return new Shape(newDims);
     }
 
 
@@ -299,16 +301,13 @@ public class Shape implements Serializable {
         ValidateParameters.ensureAllEqual(getRank(), axes.length);
         ValidateParameters.ensurePermutation(axes);
 
-        int[] tempDims = new int[dims.length];
+        int[] permutedDims = new int[dims.length];
 
         int i=0;
         for(int axis : axes)  // Permute axes.
-            tempDims[i++] = dims[axis];
+            permutedDims[i++] = dims[axis];
 
-        Shape newShape = new Shape(tempDims);
-        if(strides!=null) newShape.strides = newShape.createNewStrides();
-
-        return newShape;
+        return new Shape(permutedDims);
     }
 
 
@@ -326,16 +325,13 @@ public class Shape implements Serializable {
      * @see #swapAxes(int, int) 
      */
     public Shape unsafePermuteAxes(int... axes) {
-        int[] tempDims = new int[dims.length];
+        int[] permutedDims = new int[dims.length];
 
         int i=0;
         for(int axis : axes)  // Permute axes.
-            tempDims[i++] = dims[axis];
+            permutedDims[i++] = dims[axis];
 
-        Shape newShape = new Shape(tempDims);
-        if(strides!=null) newShape.strides = newShape.createNewStrides();
-
-        return newShape;
+        return new Shape(permutedDims);
     }
 
 

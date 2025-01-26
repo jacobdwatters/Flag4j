@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,11 @@
 package org.flag4j.arrays;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 /**
  * <p>Data record to store an ordered list of integers (i.e., an n-tuple).
- * <p>Tuples immutable.
+ * <p>IntTuples are immutable.
  *
  * @param data The values of the integer tuple.
  * @see Tuple
@@ -58,5 +59,16 @@ public record IntTuple(int[] data) {
         if(obj.getClass() != getClass()) return false;
 
         return Arrays.equals(data, ((IntTuple)obj).data);
+    }
+
+
+    @Override
+    public String toString() {
+        StringJoiner joiner = new StringJoiner(", ", "(", ")");
+
+        for(int d : data)
+            joiner.add(String.valueOf(d));
+
+        return "Tuple[data=" + joiner.toString() + "]";
     }
 }

@@ -746,6 +746,25 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
+     * Constructs a diagonal matrix from an array specifying the diagonal elements of the matrix.
+     * @param data Diagonal elements of the matrix. All other values will be zero.
+     * @return A diagonal matrix whose diagonal elements are equal to {@code data}.
+     */
+    public static CMatrix diag(Complex128[] data) {
+        int size = data.length;
+        Complex128[] fullData = new Complex128[size*size];
+
+        int destIdx = 0;
+        for(int i=0; i<size; i++) {
+            fullData[destIdx] = data[i];
+            destIdx += size + 1;
+        }
+
+        return new CMatrix(size, size, fullData);
+    }
+
+
+    /**
      * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
      * <p>For large {@code n} values, this method <i>may</i> be significantly more efficient than calling
