@@ -35,7 +35,6 @@ public final class CooTranspose {
 
     private CooTranspose() {
         // Hide default constructor for utility class.
-        
     }
 
 

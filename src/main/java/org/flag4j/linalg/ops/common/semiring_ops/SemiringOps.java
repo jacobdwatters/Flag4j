@@ -27,7 +27,6 @@ package org.flag4j.linalg.ops.common.semiring_ops;
 
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.algebraic_structures.Semiring;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This utility class contains ops for tensors whose elements are members of a
@@ -38,7 +37,6 @@ public final class SemiringOps {
 
     private SemiringOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

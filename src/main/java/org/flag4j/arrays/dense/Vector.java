@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,14 +34,14 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
-import org.flag4j.linalg.ops.dense.real.RealDenseVectorOperations;
+import org.flag4j.linalg.ops.dense.real.RealDenseVectorOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemDiv;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemMult;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOperations;
-import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOperations;
+import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseVectorOps;
+import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseSparseVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -323,7 +323,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      */
     @Override
     public Matrix outer(Vector vector) {
-        return RealDenseVectorOperations.dispatchOuter(this, vector);
+        return RealDenseVectorOps.dispatchOuter(this, vector);
     }
 
 
@@ -375,7 +375,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      */
     @Override
     public Double inner(Vector b) {
-        return RealDenseVectorOperations.innerProduct(data, b.data);
+        return RealDenseVectorOps.innerProduct(data, b.data);
     }
 
 
@@ -615,7 +615,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return A complex dense vector equivalent to this vector.
      */
     public CVector toComplex() {
-        return new CVector(ArrayUtils.wrapAsComplex128(data, null));
+        return new CVector(ArrayConversions.toComplex128(data, null));
     }
 
 
@@ -749,7 +749,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The sum of this vector and {@code b}.
      */
     public Vector add(CooVector b) {
-        return RealDenseSparseVectorOperations.add(this, b);
+        return RealDenseSparseVectorOps.add(this, b);
     }
 
 
@@ -759,7 +759,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The sum of this vector and {@code b}.
      */
     public CVector add(CooCVector b) {
-        return RealComplexDenseSparseVectorOperations.add(this, b);
+        return RealComplexDenseSparseVectorOps.add(this, b);
     }
 
 
@@ -796,7 +796,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The difference of this vector and {@code b}.
      */
     public Vector sub(CooVector b) {
-        return RealDenseSparseVectorOperations.sub(this, b);
+        return RealDenseSparseVectorOps.sub(this, b);
     }
 
 
@@ -806,7 +806,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The difference of this vector and {@code b}.
      */
     public CVector sub(CooCVector b) {
-        return RealComplexDenseSparseVectorOperations.sub(this, b);
+        return RealComplexDenseSparseVectorOps.sub(this, b);
     }
 
 
@@ -866,7 +866,7 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
      * @return The element-wise product of this vector and {@code b}.
      */
     public CooVector elemMult(CooVector b) {
-        return RealDenseSparseVectorOperations.elemMult(this, b);
+        return RealDenseSparseVectorOps.elemMult(this, b);
     }
 
 
@@ -915,24 +915,28 @@ public class Vector extends AbstractDenseDoubleTensor<Vector>
         String value;
 
         // Get data up until the stopping point.
-        for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centering = PrintOptions.useCentering();
+
+        for(int i = 0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(data[i], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         if(stopIndex < size-1) {
-            width = PrintOptions.getPadding() + 3;
+            width = padding + 3;
             value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         // Get last entry now
         value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        width = padding + value.length();
+        value = centering ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));
 
         result.append("]");

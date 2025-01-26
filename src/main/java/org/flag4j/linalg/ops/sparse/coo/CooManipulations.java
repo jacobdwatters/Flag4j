@@ -34,7 +34,6 @@ public final class CooManipulations {
 
     private CooManipulations() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -75,10 +74,10 @@ public final class CooManipulations {
     public static void swapCols(Shape shape, Object[] entries, int[] rowIndices, int[] colIndices, int colIdx1, int colIdx2) {
         ValidateParameters.ensureValidArrayIndices(shape.get(1), colIdx1, colIdx2);
 
-        for(int i=0, size=entries.length; i<size; i++) {
+        for(int i=0, size=colIndices.length; i<size; i++) {
             // Swap column indices.
             if(colIndices[i]==colIdx1) colIndices[i] = colIdx2;
-            if(colIndices[i]==colIdx2) colIndices[i] = colIdx1;
+            else if(colIndices[i]==colIdx2) colIndices[i] = colIdx1;
         }
 
         // Ensure the values are properly sorted.

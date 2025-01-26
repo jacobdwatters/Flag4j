@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
+import org.flag4j.util.ArrayBuilder;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -43,7 +45,6 @@ public final class CooGetSet {
 
     private CooGetSet() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -74,8 +75,8 @@ public final class CooGetSet {
         Arrays.fill(rowArray, rowIdx);
 
         List<T> entries = new ArrayList<>(Arrays.asList(row));
-        List<Integer> destRowIndices = ArrayUtils.toArrayList(rowArray);
-        List<Integer> destColIndices = ArrayUtils.toArrayList(indices);
+        List<Integer> destRowIndices = ArrayConversions.toArrayList(rowArray);
+        List<Integer> destColIndices = ArrayConversions.toArrayList(indices);
 
         for(int i=0, nnz=srcEntries.length; i<nnz; i++) {
             int srcRow = rowIndices[i];
@@ -116,8 +117,8 @@ public final class CooGetSet {
 
         // Initialize destination arrays with the new column and the appropriate indices.
         List<T> destEntries = new ArrayList<>(Arrays.asList(col));
-        List<Integer> destRowIndices = ArrayUtils.toArrayList(indices);
-        List<Integer> destColIndices = ArrayUtils.toArrayList(ArrayUtils.filledArray(col.length, colIdx));
+        List<Integer> destRowIndices = ArrayConversions.toArrayList(indices);
+        List<Integer> destColIndices = ArrayConversions.toArrayList(ArrayBuilder.filledArray(col.length, colIdx));
 
         addNotInCol(destEntries, destRowIndices, destColIndices,
                 srcEntries, rowIndices, colIndices, colIdx);
@@ -456,11 +457,11 @@ public final class CooGetSet {
 
         // Initialize lists to new values for the specified slice.
         List<T> entries = new ArrayList<>(Arrays.asList(src2Entries));
-        List<Integer> rowIndices = ArrayUtils.toArrayList(ArrayUtils.shift(row, src2RowIndices));
-        List<Integer> colIndices = ArrayUtils.toArrayList(ArrayUtils.shift(col, src2ColIndices));
+        List<Integer> rowIndices = ArrayConversions.toArrayList(ArrayUtils.shift(row, src2RowIndices));
+        List<Integer> colIndices = ArrayConversions.toArrayList(ArrayUtils.shift(col, src2ColIndices));
 
-        int[] rowRange = ArrayUtils.intRange(row, shape2.get(0) + row);
-        int[] colRange = ArrayUtils.intRange(col, shape2.get(1) + col);
+        int[] rowRange = ArrayBuilder.intRange(row, shape2.get(0) + row);
+        int[] colRange = ArrayBuilder.intRange(col, shape2.get(1) + col);
         copyValuesNotInSlice(src1Entries, src1RowIndices, src1ColIndices, entries, rowIndices, colIndices, rowRange, colRange);
 
         // Ensure the data is sorted properly.

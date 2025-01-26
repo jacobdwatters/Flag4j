@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -65,7 +65,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @param entries Entries of this vector.
      */
     public CVector(Complex64... entries) {
-        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        super(new Shape(entries.length), ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -76,7 +76,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @param entries Entries of this vector.
      */
     public CVector(double... entries) {
-        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        super(new Shape(entries.length), ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -87,7 +87,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * @param entries Entries of this vector.
      */
     public CVector(int... entries) {
-        super(new Shape(entries.length), ArrayUtils.wrapAsComplex128(entries, null));
+        super(new Shape(entries.length), ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -146,6 +146,30 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
     public CVector(CVector vector) {
         super(vector.shape, vector.data.clone());
         setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Constructs a dense complex vector with the given shape and entries.
+     * @param shape The shape of the vector. Must be rank-1 and satisfy {@code shape.totalEntriesIntValueExact() == data.length}.
+     * @param data The entries of the vector.
+     * @throws LinearAlgebraException If {@code shape.getRank() != 1}
+     * @throws IllegalArgumentException If {@code shape.totalEntriesIntValueExact() != data.length}
+     */
+    public CVector(Shape shape, Complex128[] data) {
+        super(shape, data);
+        setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Constructs a zero vector with the specified shape.
+     * @param shape Shape of the zero vector to construct. Must be rank 1.
+     */
+    public CVector(Shape shape) {
+        super(shape, new Complex128[shape.get(0)]);
+        setZeroElement(Complex128.ZERO);
+        Arrays.fill(data, Complex128.ZERO);
     }
 
 
@@ -411,7 +435,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      */
     @Override
     protected CooCVector makeLikeCooTensor(Shape shape, Complex128[] entries, int[][] indices) {
-        // Check for case when vector contains no non-zero entries.
+        // Check for case when vector contains no non-zero data.
         return (indices.length == 0)
                 ? new CooCVector(shape, entries, new int[0])
                 : new CooCVector(shape, entries, indices[0]);
@@ -608,24 +632,28 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
         String value;
 
         // Get data up until the stopping point.
-        for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centering = PrintOptions.useCentering();
+
+        for(int i = 0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(data[i], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         if(stopIndex < size-1) {
-            width = PrintOptions.getPadding() + 3;
+            width = padding + 3;
             value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         // Get last entry now
-        value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        value = StringUtils.ValueOfRound(data[size-1], precision);
+        width = padding + value.length();
+        value = centering ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));
 
         result.append("]");

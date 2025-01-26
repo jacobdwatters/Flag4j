@@ -32,7 +32,6 @@ public final class AggregateDenseReal {
 
     private AggregateDenseReal() {
         // Hide default constructor for utility class.
-        
     }
 
 

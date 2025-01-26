@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.dense.semiring_ops;
 
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.concurrency.ThreadManager;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This utility class contains methods for computing ops on dense {@link Semiring}
@@ -36,7 +35,6 @@ public final class DenseSemiringVectorOps {
 
     private DenseSemiringVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

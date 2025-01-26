@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,43 +33,96 @@ import org.flag4j.arrays.dense.FieldVector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 
 
 /**
- * <p>Sparse tensor stored in coordinate list (COO) format. The data of this COO tensor are elements of a {@link Field}
+ * Represents a sparse tensor whose non-zero elements are stored in Coordinate List (COO) format, with all data elements
+ * belonging to a specified {@link Field} type.
  *
- * <p>The non-zero data and non-zero indices of a COO tensor are mutable but the shape and total number of non-zero data is
- * fixed.
- *
- * <p>Sparse tensors allow for the efficient storage of and ops on tensors that contain many zero values.
- *
- * <p>COO tensors are optimized for hyper-sparse tensors (i.e. tensors which contain almost all zeros relative to the size of the
- * tensor).
+ * <p>The COO format stores sparse data as a list of coordinates (indices) coupled with their corresponding non-zero values,
+ * rather than allocating memory for every element in the full tensor shape. This allows efficient representation and
+ * manipulation of high-dimensional tensors that contain a substantial number of zeros.
  *
  * <p>A sparse COO tensor is stored as:
  * <ul>
- *     <li>The full {@link #shape shape} of the tensor.</li>
- *     <li>The non-zero {@link #data} of the tensor. All other data in the tensor are
- *     assumed to be zero. Zero value can also explicitly be stored in {@link #data}.</li>
+ *     <li><b>Shape:</b> The full {@link #shape} of the tensor specifying its total dimensionality
+ *     and size along each dimension. Although the shape is fixed, it can represent tensors of any rank.</li>
+ *
+ *     <li><b>Data:</b> Non-zero values are stored in a one-dimensional array, {@link #data}. Any element not specified in
+ *     {@code data} is implicitly zero. It is also possible to explicitly store zero values
+ *     in this array. To remove any explicitly defined zeros in the tensor use {@link #dropZeros()}.</li>
+ *
  *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
- *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
- *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
- *     index of {@code data[i]}.
+ *     <li><b>Indices:</b> The {@link #indices} array, which has dimensions {@code (nnz, rank)}, associates each non-zero
+ *     value with its coordinates in the tensor. Here, {@link #nnz} is the count of non-zero elements and {@link #rank}
+ *     is the tensor’s number of dimensions. Each row in {@link #indices} corresponds to the multidimensional index of the
+ *     corresponding entry in {@link #data}.</li>
  *     </li>
  * </ul>
  *
- * @param <T> Type of the {@link #data} of this tensor.
+ * <p>The total number of non-zero elements ({@link #nnz}) and the shape are fixed for a given instance, but the specific
+ * values in {@link #data} and their corresponding {@link #indices} may be updated. Many operations assume the indices
+ * are sorted lexicographically in row-major order (i.e., the last dimension’s index varies fastest), although this is not explicitly
+ * enforced. All provided operations will preserve lexicographically row-major sorting of the indices.
+ * If there is any doubt that the indices of this tensor may not be sorted, use {@link #sortIndices()} to insure the indices are
+ * explicitly sorted. COO tensors may also store multiple entries for the same index (referred to as an uncoalesced tensor). To combine
+ * all duplicated entries use {@link #coalesce()} or {@link #coalesce(BinaryOperator)}.
+ *
+ * <p>COO tensors are optimized for "hyper-sparse" tensors where the proportion of non-zero elements
+ * is extremely low, offering significant memory savings and potentially more efficient computational operations than
+ * equivalent dense representations.
+ *
+ * <h3>Example Usage:</h3>
+ * <pre>{@code
+ * // Define shape, data, and indices.
+ * Shape shape = new Shape(15, 30, 45, 5)
+ * Complex128[] data = {
+ *      new Complex128(1, 2), new Complex128(3, 4), new Complex128(5, 6), new Complex128(7, 8)
+ * };
+ * int[][] indices = {
+ *     {0, 1, 2, 3},
+ *     {1, 2, 3, 4},
+ *     {12, 22, 40, 3},
+ *     {12, 22, 41, 0}
+ * };
+ *
+ * // Create COO tensor.
+ * CooFieldTensor<Complex128> tensor = new CooFieldTensor(shape, data, indices);
+ *
+ * // Compute element-wise sum.
+ * CooFieldTensor<Complex128> sum = tensor.add(tensor);
+ *
+ * // Sum of all non-zero entries.
+ * Complex128 = tensor.sum();
+ *
+ * // Reshape tensor.
+ * CooFieldTensor<Complex128> reshaped = tensor.reshape(15, 150, 45)
+ *
+ * // Compute tensor dot product (result is 5-by-5 dense tensor).
+ * FieldTensor<Complex128> dot = tensor.dot(tensor,
+ *      new int[]{0, 1, 2},
+ *      new int[]{0, 1, 2}
+ * );
+ *
+ * // Compute tensor transposes.
+ * CooFieldTensor<Complex128> transpose = tensor.T();
+ * transpose = tensor.T(0, 1);
+ * transpose = tensor.T(1, 3, 0, 2);
+ * }</pre>
+ *
+ * @param <T> The type of elements stored in this tensor, constrained by the {@link Field} interface.
+ * @see CooFieldVector
+ * @see CooFieldMatrix
+ * @see FieldTensor
+ * @see Field
  */
 public class CooFieldTensor<T extends Field<T>>
         extends AbstractCooFieldTensor<CooFieldTensor<T>, FieldTensor<T>, T> {
@@ -145,13 +198,13 @@ public class CooFieldTensor<T extends Field<T>>
 
         if(idx > -1) {
             // Copy data and set new value.
-            dest = new CooFieldTensor<T>(shape, data.clone(), ArrayUtils.deepCopy(indices, null));
+            dest = new CooFieldTensor<T>(shape, data.clone(), ArrayUtils.deepCopy2D(indices, null));
             dest.data[idx] = value;
             dest.indices[idx] = index;
         } else {
             // Copy old indices and insert new one.
             int[][] newIndices = new int[indices.length + 1][getRank()];
-            ArrayUtils.deepCopy(indices, newIndices);
+            ArrayUtils.deepCopy2D(indices, newIndices);
             newIndices[indices.length] = index;
 
             // Copy old data and insert new one.
@@ -178,7 +231,7 @@ public class CooFieldTensor<T extends Field<T>>
      */
     @Override
     public CooFieldTensor<T> makeLikeTensor(Shape shape, T[] entries) {
-        return new CooFieldTensor(shape, entries, ArrayUtils.deepCopy(indices, null));
+        return new CooFieldTensor(shape, entries, ArrayUtils.deepCopy2D(indices, null));
     }
 
 
@@ -212,44 +265,11 @@ public class CooFieldTensor<T extends Field<T>>
 
 
     /**
-     * The sparsity of this sparse tensor. That is, the percentage of elements in this tensor which are zero as a decimal.
-     *
-     * @return The density of this sparse tensor.
-     */
-    @Override
-    public double sparsity() {
-        if(nnz == 0) return 1.0;
-
-        BigInteger totalEntries = totalEntries();
-        BigDecimal sparsity = new BigDecimal(totalEntries).subtract(BigDecimal.valueOf(nnz));
-        sparsity = sparsity.divide(new BigDecimal(totalEntries), 50, RoundingMode.HALF_UP);
-
-        return sparsity.doubleValue();
-    }
-
-
-    /**
-     * Converts this sparse tensor to an equivalent dense tensor.
-     *
-     * @return A dense tensor equivalent to this sparse tensor.
-     */
-    @Override
-    public FieldTensor<T> toDense() {
-        T[] entries = (T[]) new Field[totalEntries().intValueExact()];
-
-        for(int i = 0; i< nnz; i++)
-            entries[shape.getFlatIndex(indices[i])] = this.data[i];
-
-        return new FieldTensor<T>(shape, entries);
-    }
-
-
-    /**
      * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
      * @return A vector equivalent of this tensor.
      */
     public FieldVector<T> toVector() {
-        return new FieldVector<T>(this.data.clone());
+        return new FieldVector<T>(data.clone());
     }
 
 
@@ -279,8 +299,8 @@ public class CooFieldTensor<T extends Field<T>>
     public CooFieldMatrix<T> toMatrix() {
         CooFieldMatrix<T> mat;
 
-        if(this.getRank()==2) {
-            int[][] tIndices = RealDenseTranspose.standardIntMatrix(this.indices);
+        if(getRank()==2) {
+            int[][] tIndices = RealDenseTranspose.standardIntMatrix(indices);
             mat = new CooFieldMatrix<T>(shape, data.clone(), tIndices[0], tIndices[1]);
         } else {
             CooFieldTensor<T> flat = reshape(new Shape(1, shape.totalEntriesIntValueExact()));
@@ -305,7 +325,7 @@ public class CooFieldTensor<T extends Field<T>>
 
         CooFieldTensor<T> src2 = (CooFieldTensor<T>) object;
 
-        return CooFieldEquals.cooTensorEquals(this, src2);
+        return CooSemiringEquals.cooTensorEquals(this, src2);
     }
 
 
@@ -336,14 +356,15 @@ public class CooFieldTensor<T extends Field<T>>
         int maxCols = PrintOptions.getMaxColumns();
         int padding = PrintOptions.getPadding();
         int precision = PrintOptions.getPrecision();
-        boolean centring = PrintOptions.useCentering();
+        boolean centering = PrintOptions.useCentering();
 
         StringBuilder sb = new StringBuilder();
 
         sb.append("Shape: " + shape + "\n");
-        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centring) + "\n");
+        sb.append("nnz: ").append(nnz).append("\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering) + "\n");
         sb.append("Non-zero Indices: " +
-                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centring));
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centering));
 
         return sb.toString();
     }

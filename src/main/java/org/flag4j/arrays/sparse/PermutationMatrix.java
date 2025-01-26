@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,41 +30,74 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
+import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * A permutation matrix is a square matrix containing only zeros and ones such that each row and column have exactly a single
- * one. The identity matrix is a special case of a permutation matrix. Permutation matrices are commonly used to
- * track or apply row/column swaps in a matrix.<br><br>
+ * <p>Represents a square permutation matrix with rows and columns equal to {@link #size}, where each row and column contains exactly
+ * one entry of {@code 1}, and all other entries are {@code 0}. Internally, this class stores a permutation array so that 
+ * {@code permutation[i] = j} indicates that there is a {@code 1} at row {@code i}, column {@code j}.
  *
- * All permutation matrices are {@link Matrix#isOrthogonal() orthogonal}/{@link CMatrix#isUnitary() unitary} meaning
- * their inverse is equal to their transpose.<br><br>
+ * <p>Permutation matrices are orthogonal (and unitary in the complex case), so their inverse is equal to their
+ * transpose.
  *
- * When a permutation matrix is left multiplied to a second matrix, it has the result of swapping rows
- * in the second matrix.<br><br>
+ * <p>Permutation matrices are useful for permuting rows or columns of another matrix.
+ * <ul>
+ *   <li>Left multiplying another matrix by a permutation matrix permutes the rows of that matrix.</li>
+ *   <li>Right multiplying another matrix by a permutation matrix permutes the columns of that matrix.</li>
+ * </ul>
+ * <p>
  *
- * Similarly, when a permutation matrix is right multiplied to another matrix, it has the result of swapping columns in
- * the other matrix.
+ * <p>The determinant of any permutation matrix is always {@code +1} or
+ * {@code -1}, depending on the parity of the permutation (i.e. the number of swaps in the matrix).
+ *
+ * <p>The identity matrix is a special case of a permutation matrix, corresponding to the identity permutation
+ * {@code {0, 1, ..., n-1}}.
+ *
+ * <p>
+ * <h3>Example usage:</h3>
+ * <pre>{@code
+ *         // Construct matrices to permute.
+ *         Matrix a = new Vector(ArrayUtils.range(0, 5)).repeat(5, 1);
+ *         Matrix b = a.T();
+ *
+ *         // Create matrix to permute rows according to (4, 2, 3, 0, 1)
+ *         PermutationMatrix p1 = new PermutationMatrix(4, 2, 3, 0, 1);
+ *
+ *         // Permute rows of a according to (0, 1, 2, 3, 4) -> (4, 2, 3, 0, 1)
+ *         Matrix aPerm = p1.leftMult(a);
+ *
+ *         // Permute columns of b according to (0, 1, 2, 3, 4) -> (4, 2, 3, 0, 1)
+ *         Matrix bPerm = p1.T().rightMult(b);
+ *
+ *         // Display original matrices are their permuted counterparts.
+ *         System.out.println("a:\n" + a + "\naPerm:\n" + aPerm + "\n");
+ *         System.out.println("b:\n" + b + "\nbPerm:\n" + bPerm);
+ * }</pre>
  */
 public class PermutationMatrix implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Tracks row/column swaps within the permutation matrix. For an {@code n-by-n} permutation matrix, this array will
-     * have size {@code n}. Each entry of the array represents a 1 in the permutation matrix. The index of an entry
-     * corresponds to the row index of the 1, and the value of this array corresponds to the column index of the 1.
+     * Describes the permutation represented by this permutation matrix.
+     * {@code permutation[i] = j} indicates that there is a {@code 1} at row {@code i}, column {@code j} with in permutation matrix.
      */
-    public final int[] swapPointers;
+    protected final int[] permutation;
     /**
      * Size of this permutation matrix.
      */
     public final int size;
+    /**
+     * Shape of this permutation matrix.
+     */
+    public final Shape shape;
 
 
     /**
@@ -73,7 +106,8 @@ public class PermutationMatrix implements Serializable {
      */
     public PermutationMatrix(int size) {
         this.size = size;
-        swapPointers = ArrayUtils.intRange(0, size);
+        shape = new Shape(size, size);
+        permutation = ArrayBuilder.intRange(0, size);
     }
 
 
@@ -84,52 +118,92 @@ public class PermutationMatrix implements Serializable {
      */
     public PermutationMatrix(Shape shape) {
         ValidateParameters.ensureSquareMatrix(shape);
+        this.shape = shape;
         this.size = shape.get(0);
-        swapPointers = ArrayUtils.intRange(0, size);
+        permutation = ArrayBuilder.intRange(0, size);
     }
 
 
     /**
-     * Copy constructor which creates a copy of the {@code src} permutation matrix.
+     * Copy constructor which creates a deep copy of the {@code src} permutation matrix.
      * @param src The permutation matrix to copy.
      */
     public PermutationMatrix(PermutationMatrix src) {
         this.size = src.size;
-        this.swapPointers = src.swapPointers.clone();
+        this.shape = src.shape;
+        this.permutation = src.permutation.clone();
     }
 
 
     /**
-     * Creates a permutation matrix where the position of its ones are specified by a {@link #swapPointers swap pointer}
-     * array.
-     * @param swapPointers An array which defines row/column swaps within the permutation matrix.
-     *                     For an {@code n-by-n} permutation matrix, this array will have size {@code n}.
-     *                     Each entry of the array represents a 1 in the permutation matrix. The index of an entry
-     *                     corresponds to the row index of the 1, and the value of this array corresponds to
-     *                     the column index of the 1. This must be a permutation matrix. However, the validity of this
-     *                     is not enforced by this constructor.
+     * <p>Constructs a permutation matrix from the specified {@code permutation}.
+     *
+     * <p>This constructor will explicitly verify that {@code permutation} is a valid permutation. It is <i>highly</i> recommended
+     * to do this. However, there is a
+     *
+     * @param permutation Array specifying the permutation. Must contain a permutation of {@code {0, 1, ..., permutation.length-1}}.
+     * {@code permutation[i] = j} indicates that there is a {@code 1} at row {@code i}, column {@code j}.
+     * @throws IllegalArgumentException {@code permutation} is <i>not</i> a permutation of
+     * {@code {0, 1, ..., permutation.length-1}.
      */
-    public PermutationMatrix(int[] swapPointers) {
-        this.size = swapPointers.length;
-        this.swapPointers = swapPointers.clone();
+    public PermutationMatrix(int... permutation) {
+        this(permutation, true);
     }
 
 
     /**
-     * Creates a permutation matrix with the specified column swaps.
-     * @param colSwaps Array specifying column swaps. The entry {@code x} at index {@code i} indicates that column
-     * {@code i} has been swapped with column {@code x}. Must be a
-     * {@link ValidateParameters#ensurePermutation(int...) permutation array}.
-     * @return A permutation matrix with the specified column swaps.
-     * @throws IllegalArgumentException If {@code colSwaps} is not a
-     * {@link ValidateParameters#ensurePermutation(int...) permutation array}.
+     * <p>Constructs a permutation matrix from the specified {@code permutation}. This constructor also accepts a flag indicating if an
+     * explicit check should be made to enforce that the {@code permutation} array is a valid permutation.
+     *
+     * <p> It is <i>highly</i> recommended to use {@link #PermutationMatrix(int[])} or set {@code ensurePermutation = true}. However,
+     * if there is absolute confidence in the validity of the {@code permutation} array, then setting
+     * {@code ensurePermutation = false} <i>may</i> yield very slight performance benefits.
+     *
+     * @param permutation Array specifying the permutation. Must contain a permutation of {@code {0, 1, ..., permutation.length-1}}.
+     * {@code permutation[i] = j} indicates that there is a {@code 1} at row {@code i}, column {@code j}.
+     * @param ensurePermutation Flag indicating if an explicit check should be made to verify that {@code permutation} is a valid
+     * permutation of {@code {0, 1, ..., permutation.length-1}}.
+     * <ul>
+     *     <li>If {@code true}: an explicit check will be made that {@code permutation} is a valid permutation.</li>
+     *     <li>If {@code false}: <i>NO</i> check will be made to ensure {@code permutation} is a valid permutation.</li>
+     * </ul>
+     *
+     * @throws IllegalArgumentException If {@code ensurePermutation == true} and {@code permutation} is <i>not</i> a permutation of
+     * {@code {0, 1, ..., permutation.length-1}.
      */
-    public static PermutationMatrix fromColSwaps(int[] colSwaps) {
-        int[] rowPerm = new int[colSwaps.length];
+    public PermutationMatrix(int[] permutation, boolean ensurePermutation) {
+        if(ensurePermutation) ValidateParameters.ensurePermutation(permutation);
+        this.size = permutation.length;
+        this.shape = new Shape(size, size);
+        this.permutation = permutation.clone();
+    }
 
-        for (int i=0; i<colSwaps.length; i++) {
-            rowPerm[colSwaps[i]] = i;
-        }
+
+    /**
+     * Returns the permutation represented by this permutation matrix.
+     * @return The permutation represented by this permutation matrix.
+     */
+    public int[] getPermutation() {
+        return permutation;
+    }
+
+
+    /**
+     * Creates a permutation matrix with the specified column permutation. That is, a permutation matrix such that
+     * right multiplying it with another matrix results in permuting th columns of that matrix according to {@code colPermutation}.
+     *
+     * @param colPermutation Array specifying column permutation. The entry {@code x} at index {@code i} indicates that column
+     * {@code i} has been swapped with column {@code x}.
+     * {@link ValidateParameters#ensurePermutation(int...) permutation array}.
+     * @return A permutation matrix that when right multiplied to a matrix results in permuting the columns of that matrix according
+     * to {@code colPermutation}.
+     * @throws IllegalArgumentException If {@code colPermutation} is not a valid permutation.
+     */
+    public static PermutationMatrix fromColSwaps(int[] colPermutation) {
+        int[] rowPerm = new int[colPermutation.length];
+
+        for (int i=0; i<colPermutation.length; i++)
+            rowPerm[colPermutation[i]] = i;
 
         return new PermutationMatrix(rowPerm);
     }
@@ -158,17 +232,37 @@ public class PermutationMatrix implements Serializable {
 
         PermutationMatrix src2 = (PermutationMatrix) object;
 
-        return Arrays.equals(swapPointers, src2.swapPointers);
+        return Arrays.equals(permutation, src2.permutation);
     }
 
 
     /**
-     * Returns a hashcode for this permutation matrix by calling {@link Arrays#hashCode(int[]) Arrays.hashCode(swapPointers)}.
+     * Returns a hashcode for this permutation matrix by calling {@link Arrays#hashCode(int[]) Arrays.hashCode(permutation)}.
      * @return The hashcode for this permutation matrix.
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(swapPointers);
+        return Arrays.hashCode(permutation);
+    }
+
+
+    /**
+     * Computes the matrix-matrix multiplication between two permutation matrices.
+     * @param b The matrix to multiply to this permutation matrix.
+     * @return The matrix=matrix product of this permutation matrix with {@code b}.
+     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.size != b.size}.
+     */
+    public PermutationMatrix mult(PermutationMatrix b) {
+        if(this.size != b.size) {
+            throw new TensorShapeException("Shapes not compatible with matrix multiplication: "
+                    + shape + " and " + b.shape + ".");
+        }
+
+        int[] prod = new int[size];
+        for(int i=0; i<size; i++)
+            prod[i] = b.permutation[permutation[i]];
+
+        return new PermutationMatrix(prod);
     }
 
 
@@ -187,7 +281,7 @@ public class PermutationMatrix implements Serializable {
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            colIdx = swapPointers[rowIdx];
+            colIdx = permutation[rowIdx];
             System.arraycopy(src.data, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
@@ -209,7 +303,7 @@ public class PermutationMatrix implements Serializable {
         double[] destEntries = new double[src.data.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++)
-            destEntries[rowIdx] = src.data[swapPointers[rowIdx]];
+            destEntries[rowIdx] = src.data[permutation[rowIdx]];
 
         return new Vector(destEntries);
     }
@@ -230,7 +324,7 @@ public class PermutationMatrix implements Serializable {
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            colIdx = swapPointers[rowIdx];
+            colIdx = permutation[rowIdx];
             System.arraycopy(src.data, colIdx*src.numCols, destEntries, rowIdx*src.numCols, src.numCols);
         }
 
@@ -252,7 +346,7 @@ public class PermutationMatrix implements Serializable {
         Complex128[] destEntries = new Complex128[src.data.length];
 
         for(int rowIdx=0; rowIdx<size; rowIdx++)
-            destEntries[rowIdx] = src.data[swapPointers[rowIdx]];
+            destEntries[rowIdx] = src.data[permutation[rowIdx]];
 
         return new CVector(destEntries);
     }
@@ -275,7 +369,7 @@ public class PermutationMatrix implements Serializable {
         int rowOffset;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            colIdx = swapPointers[rowIdx];
+            colIdx = permutation[rowIdx];
 
             for(int j=0; j<src.numRows; j++) {
                 rowOffset = j*src.numCols;
@@ -318,7 +412,7 @@ public class PermutationMatrix implements Serializable {
         final int rows = src.numRows;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            int colIdx = swapPointers[rowIdx];
+            int colIdx = permutation[rowIdx];
 
             for(int j=0; j<src.numRows; j++) {
                 int rowOffset = j*src.numCols;
@@ -354,7 +448,7 @@ public class PermutationMatrix implements Serializable {
      * matrix.
      */
     public void swapRows(int row1, int row2) {
-        ArrayUtils.swap(swapPointers, row1, row2);
+        ArrayUtils.swap(permutation, row1, row2);
     }
 
 
@@ -368,9 +462,9 @@ public class PermutationMatrix implements Serializable {
     public void swapCols(int col1, int col2) {
         ValidateParameters.ensureValidArrayIndices(size, col1, col2);
         // Find locations of data with the given columns.
-        int idx1 = ArrayUtils.indexOf(swapPointers, col1);
-        int idx2 = ArrayUtils.indexOf(swapPointers, col2);
-        ArrayUtils.swap(swapPointers, idx1, idx2); // Swap values.
+        int idx1 = ArrayUtils.indexOf(permutation, col1);
+        int idx2 = ArrayUtils.indexOf(permutation, col2);
+        ArrayUtils.swap(permutation, idx1, idx2); // Swap values.
     }
 
 
@@ -385,8 +479,8 @@ public class PermutationMatrix implements Serializable {
      */
     public void permuteRows(int[] swaps) {
         ValidateParameters.ensurePermutation(swaps);
-        ValidateParameters.ensureArrayLengthsEq(swaps.length, swapPointers.length);
-        System.arraycopy(swaps, 0, swapPointers, 0, swaps.length);
+        ValidateParameters.ensureArrayLengthsEq(swaps.length, permutation.length);
+        System.arraycopy(swaps, 0, permutation, 0, swaps.length);
     }
 
 
@@ -407,7 +501,7 @@ public class PermutationMatrix implements Serializable {
         int[] transpose = new int[size];
 
         for(int i=0; i<size; i++)
-            transpose[swapPointers[i]] = i;
+            transpose[permutation[i]] = i;
 
         return new PermutationMatrix(transpose);
     }
@@ -430,7 +524,7 @@ public class PermutationMatrix implements Serializable {
         int trace = 0;
 
         for(int i=0; i<size; i++)
-            if(swapPointers[i]==i) trace += 1;
+            if(permutation[i]==i) trace += 1;
 
         return trace;
     }
@@ -441,20 +535,20 @@ public class PermutationMatrix implements Serializable {
      * @return The total number of row/column swaps required to convert this permutation matrix to the identity matrix.
      */
     public int computeSwaps() {
-        boolean[] visited = new boolean[swapPointers.length];
+        boolean[] visited = new boolean[permutation.length];
         int totalSwaps = 0;
 
-        for (int i = 0; i < swapPointers.length; i++) {
+        for (int i = 0; i < permutation.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
 
-                if (swapPointers[i] != i) {
+                if (permutation[i] != i) {
                     int cycleSize = 1;
-                    int next = swapPointers[i];
+                    int next = permutation[i];
 
                     while (next != i) {
                         visited[next] = true;
-                        next = swapPointers[next];
+                        next = permutation[next];
                         cycleSize++;
                     }
 
@@ -480,19 +574,58 @@ public class PermutationMatrix implements Serializable {
     /**
      * Converts this permutation matrix to a {@link Matrix real dense matrix}.
      * @return A real dense matrix which is equivalent to this permutation matrix.
+     * @see #toCoo()
+     * @see #toCsr()
      */
     public Matrix toDense() {
-        double[] entries = new double[size*size];
+        // TODO: Once integer matrices are implemented, return that instead of a double matrix.
+        double[] data = new double[size*size];
         int rowOffset = 0;
         int colIdx;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++) {
-            colIdx = swapPointers[rowIdx];
-            entries[rowOffset + colIdx] = 1;
+            colIdx = permutation[rowIdx];
+            data[rowOffset + colIdx] = 1.0;
             rowOffset += size;
         }
 
-        return new Matrix(size, size, entries);
+        return new Matrix(shape, data);
+    }
+
+
+    /**
+     * Converts this permutation matrix to a {@link CooMatrix real sparse COO matrix}.
+     * @return real sparse COO matrix which is equivalent to this permutation matrix.
+     *
+     * @see #toDense()
+     * @see #toCsr()
+     */
+    public CooMatrix toCoo() {
+        // TODO: Once integer matrices are implemented, return that instead of a double matrix.
+        double[] data = new double[size];
+        int[] rowIndices = new int[size];
+        int[] colIndices = new int[size];
+
+        for(int rowIdx=0; rowIdx<size; rowIdx++) {
+            data[rowIdx] = 1.0;
+            rowIndices[rowIdx] = rowIdx;
+            colIndices[rowIdx] = permutation[rowIdx];
+        }
+
+        return new CooMatrix(shape, data, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Converts this permutation matrix to a {@link CooMatrix real sparse COO matrix}.
+     * @return real sparse COO matrix which is equivalent to this permutation matrix
+     *
+     * @see #toDense()
+     * @see #toCoo()
+     */
+    public CsrMatrix toCsr() {
+        // TODO: Once integer matrices are implemented, return that instead of a double matrix.
+        return toCoo().toCsr();
     }
 
 
@@ -501,7 +634,7 @@ public class PermutationMatrix implements Serializable {
      * @return This permutation matrix represented as a human-readable string.
      */
     public String toString() {
-        return "Full Shape=" + new Shape(size, size) + "\n" +
-                "swap pointers: " + Arrays.toString(swapPointers);
+        return "shape=" + new Shape(size, size) + "\n" +
+                "permutation: " + Arrays.toString(permutation);
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -45,10 +45,10 @@ import java.math.RoundingMode;
  *
  * <h2>Usage Example:</h2>
  * <pre>{@code
- * Complex128 a = new Complex128(2.5, 3.2);   // Creates a complex number 2.5 + 3.2i
- * Complex128 b = new Complex128(1, -4);      // Creates a complex number 1 - 4i
- * Complex128 sum = a.add(b);                 // Sum of a and b
- * Complex128 product = a.mult(b);            // Product of a and b
+ * Complex128 a = new Complex128(2.5, 3.2);   // Creates a complex number 2.5 + 3.2i.
+ * Complex128 b = new Complex128(1, -4);      // Creates a complex number 1 - 4i.
+ * Complex128 sum = a.add(b);                 // Sum of a and b.
+ * Complex128 product = a.mult(b);            // Product of a and b.
  * }</pre>
  *
  * <h2>Special Values:</h2>
@@ -203,8 +203,8 @@ public class Complex128 implements Field<Complex128> {
 
 
     /**
-     * Checks if an object is equal to this MMField element.
-     * @param b Object to compare to this MMField element.
+     * Checks if an object is equal to this Field element.
+     * @param b Object to compare to this Field element.
      * @return True if the objects are the same or are both {@link Complex128}'s and have equal real and imaginary parts.
      */
     @Override
@@ -350,7 +350,7 @@ public class Complex128 implements Field<Complex128> {
      */
     @Override
     public boolean isZero() {
-        return equals(ZERO);
+        return re == 0.0 && im == 0.0;
     }
 
 
@@ -363,7 +363,7 @@ public class Complex128 implements Field<Complex128> {
      */
     @Override
     public boolean isOne() {
-        return equals(ONE);
+        return re == 1.0 && im == 0.0;
     }
 
 
@@ -398,6 +398,7 @@ public class Complex128 implements Field<Complex128> {
      * @param b Second element in product.
      * @return The product of this field element and {@code b}.
      */
+    @Override
     public Complex128 mult(double b) {
         return new Complex128(re*b, im*b);
     }

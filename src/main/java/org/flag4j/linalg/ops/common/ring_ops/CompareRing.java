@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.common.ring_ops;
 
 import org.flag4j.algebraic_structures.Ring;
-import org.flag4j.util.ErrorMessages;
 
 
 /**
@@ -34,8 +33,7 @@ import org.flag4j.util.ErrorMessages;
 public final class CompareRing {
 
     private CompareRing() {
-        // Hide constructor for utility class.
-        throw new IllegalAccessError(ErrorMessages.getUtilityClassErrMsg());
+        // Hide constructor for utility class. for utility class.
     }
 
 
@@ -120,5 +118,80 @@ public final class CompareRing {
         }
 
         return mindex;
+    }
+
+
+    /**
+     * <p>Returns the maximum absolute value among {@code n} elements in the array {@code src},
+     * starting at index {@code start} and advancing by {@code stride} for each subsequent element.
+     *
+     * <p>More formally, this method examines the elements at indices:
+     * {@code start}, {@code start + stride}, {@code start + 2*stride}, ..., {@code start + (n-1)*stride}.
+     *
+     * <p>This method may be used to find the maximum absolute value within the row or column of a
+     * {@link org.flag4j.arrays.dense.RingMatrix matrix} {@code a} as follows:
+     * <ul>
+     *     <li>Maximum absolute value within row {@code i}:
+     *     <pre>{@code maxAbs(a.data, i*a.numCols, a.numCols, 1);}</pre></li>
+     *     <li>Maximum absolute value within column {@code j}:
+     *     <pre>{@code maxAbs(a.data, j, a.numRows, a.numRows);}</pre></li>
+     * </ul>
+     *
+     * @param src The array to search for maximum absolute value within.
+     * @param start The starting index in {@code src} to search.
+     * @param n The number of elements to consider within {@code src1}.
+     * @param stride The gap (in indices) between consecutive elements to search within {@code src}.
+     * @return The maximum absolute value found among all elements considered in {@code src}.</li>
+     * </ul>
+     *
+     * @throws IndexOutOfBoundsException If the specified range extends beyond the array bounds.
+     */
+    public static <T extends Ring<T>> double maxAbs(T[] src, final int start, final int n, final int stride) {
+        double currMax = 0;
+        final int end = start + n*stride;
+
+        for(int i=start; i<end; i+=stride)
+            currMax = Math.max(src[i].abs(), currMax);
+
+        return currMax;
+    }
+
+
+    /**
+     * <p>Returns the minimum absolute value among {@code n} elements in the array {@code src},
+     * starting at index {@code start} and advancing by {@code stride} for each subsequent element.
+     *
+     * <p>More formally, this method examines the elements at indices:
+     * {@code start}, {@code start + stride}, {@code start + 2*stride}, ..., {@code start + (n-1)*stride}.
+     *
+     * <p>This method may be used to find the minimum absolute value within the row or column of a
+     * {@link org.flag4j.arrays.dense.RingMatrix matrix} {@code a} as follows:
+     * <ul>
+     *     <li>Minimum absolute value within row {@code i}:
+     *     <pre>{@code maxAbs(a.data, i*a.numCols, a.numCols, 1);}</pre></li>
+     *     <li>Minimum absolute value within column {@code j}:
+     *     <pre>{@code maxAbs(a.data, j, a.numRows, a.numRows);}</pre></li>
+     * </ul>
+     *
+     * @param src The array to search for Minimum absolute value within.
+     * @param start The starting index in {@code src} to search.
+     * @param n The number of elements to consider within {@code src1}.
+     * @param stride The gap (in indices) between consecutive elements to search within {@code src}.
+     * @return
+     * <ul>
+     *     <li>If {@code src.length  == 0} then {@link Double#POSITIVE_INFINITY} will be returned.</li>
+     *     <li>Otherwise, the minimum absolute value found among all elements considered inn{@code src}.</li>
+     * </ul>
+     *
+     * @throws IndexOutOfBoundsException If the specified range extends beyond the array bounds.
+     */
+    public static <T extends Ring<T>> double minAbs(T[] src, final int start, final int n, final int stride) {
+        double currMin = Double.POSITIVE_INFINITY;
+        final int end = start + n*stride;
+
+        for(int i=start; i<end; i+=stride)
+            currMin = Math.min(src[i].abs(), currMin);
+
+        return currMin;
     }
 }

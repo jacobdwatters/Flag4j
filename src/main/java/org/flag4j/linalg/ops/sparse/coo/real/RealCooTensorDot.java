@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.util.ArrayJoiner;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -39,7 +40,6 @@ public final class RealCooTensorDot {
 
     private RealCooTensorDot() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -74,7 +74,7 @@ public final class RealCooTensorDot {
 
         // ---- Compute new axes and shapes for first tensor. ----
         notin = ArrayUtils.notInAxes(src1Axes, src1.getRank());
-        int[] src1NewAxes = ArrayUtils.join(notin, src1Axes);
+        int[] src1NewAxes = ArrayJoiner.join(notin, src1Axes);
 
         n2 = 1;
         for(int axis : src1Axes) {
@@ -95,7 +95,7 @@ public final class RealCooTensorDot {
 
         // ---- Compute new axes and shapes for second tensor. ----
         notin = ArrayUtils.notInAxes(src2Axes, src2.getRank());
-        int[] src2NewAxes = ArrayUtils.join(src2Axes, notin);
+        int[] src2NewAxes = ArrayJoiner.join(src2Axes, notin);
 
         n2 = 1;
         for(int axis : src2Axes) {
@@ -123,13 +123,13 @@ public final class RealCooTensorDot {
         int[][] btMatIndices = RealDenseTranspose.blockedIntMatrix(bt.indices);
 
         // Compute equivalent matrix multiplication problem.
-        double[] productEntries = RealSparseMatrixMultiplication.standard(
+        double[] productEntries = RealSparseMatMult.standard(
                 at.data, atMatIndices[0], atMatIndices[1], at.shape,
                 bt.data, btMatIndices[0], btMatIndices[1], bt.shape
         );
 
         // Reshape to proper N-dimensional shape.
-        Shape productShape = new Shape(ArrayUtils.join(src1Dims, src2Dims));
+        Shape productShape = new Shape(ArrayJoiner.join(src1Dims, src2Dims));
         return at.makeDenseTensor(productShape, productEntries);
     }
 }

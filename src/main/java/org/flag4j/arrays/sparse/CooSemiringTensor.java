@@ -1,0 +1,323 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024-2025. Jacob Watters
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package org.flag4j.arrays.sparse;
+
+import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringTensor;
+import org.flag4j.arrays.dense.SemiringTensor;
+import org.flag4j.arrays.dense.SemiringVector;
+import org.flag4j.io.PrettyPrint;
+import org.flag4j.io.PrintOptions;
+import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ValidateParameters;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BinaryOperator;
+
+
+/**
+ * Represents a sparse tensor whose non-zero elements are stored in Coordinate List (COO) format, with all data elements
+ * belonging to a specified {@link Semiring} type.
+ *
+ * <p>The COO format stores sparse data as a list of coordinates (indices) coupled with their corresponding non-zero values,
+ * rather than allocating memory for every element in the full tensor shape. This allows efficient representation and
+ * manipulation of high-dimensional tensors that contain a substantial number of zeros.
+ *
+ * <p>A sparse COO tensor is stored as:
+ * <ul>
+ *     <li><b>Shape:</b> The full {@link #shape} of the tensor specifying its total dimensionality
+ *     and size along each dimension. Although the shape is fixed, it can represent tensors of any rank.</li>
+ *
+ *     <li><b>Data:</b> Non-zero values are stored in a one-dimensional array, {@link #data}. Any element not specified in
+ *     {@code data} is implicitly zero. It is also possible to explicitly store zero values
+ *     in this array. To remove any explicitly defined zeros in the tensor use {@link #dropZeros()}.</li>
+ *
+ *     <li><p>The {@link #indices} of the non-zero value in the sparse tensor. Many ops assume indices to be sorted in a
+ *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
+ *
+ *     <li><b>Indices:</b> The {@link #indices} array, which has dimensions {@code (nnz, rank)}, associates each non-zero
+ *     value with its coordinates in the tensor. Here, {@link #nnz} is the count of non-zero elements and {@link #rank}
+ *     is the tensor’s number of dimensions. Each row in {@link #indices} corresponds to the multidimensional index of the
+ *     corresponding entry in {@link #data}.</li>
+ *     </li>
+ * </ul>
+ *
+ * <p>The total number of non-zero elements ({@link #nnz}) and the shape are fixed for a given instance, but the specific
+ * values in {@link #data} and their corresponding {@link #indices} may be updated. Many operations assume the indices
+ * are sorted lexicographically in row-major order (i.e., the last dimension’s index varies fastest), although this is not explicitly
+ * enforced. All provided operations will preserve lexicographically row-major sorting of the indices.
+ * If there is any doubt that the indices of this tensor may not be sorted, use {@link #sortIndices()} to insure the indices are
+ * explicitly sorted. COO tensors may also store multiple entries for the same index (referred to as an uncoalesced tensor). To combine
+ * all duplicated entries use {@link #coalesce()} or {@link #coalesce(BinaryOperator)}.
+ *
+ * <p>COO tensors are optimized for "hyper-sparse" tensors where the proportion of non-zero elements
+ * is extremely low, offering significant memory savings and potentially more efficient computational operations than
+ * equivalent dense representations.
+ *
+ * <h3>Example Usage:</h3>
+ * <pre>{@code
+ * // Define shape, data, and indices.
+ * Shape shape = new Shape(15, 30, 45, 5)
+ * BoolSemiring[] data = {
+ *      new BoolSemiring(true), new BoolSemiring(false), new BoolSemiring(false), new BoolSemiring(true)
+ * };
+ * int[][] indices = {
+ *     {0, 1, 2, 3},
+ *     {1, 2, 3, 4},
+ *     {12, 22, 40, 3},
+ *     {12, 22, 41, 0}
+ * };
+ *
+ * // Create COO tensor.
+ * CooSemiringTensor<BoolSemiring> tensor = new CooSemiringTensor(shape, data, indices);
+ *
+ * // Compute element-wise sum.
+ * CooSemiringTensor<BoolSemiring> sum = tensor.add(tensor);
+ *
+ * // Sum of all non-zero entries.
+ * RealInt32 = tensor.sum();
+ *
+ * // Reshape tensor.
+ * CooSemiringTensor<BoolSemiring> reshaped = tensor.reshape(15, 150, 45)
+ *
+ * // Compute tensor dot product (result is 5-by-5 dense tensor).
+ * SemiringTensor<BoolSemiring> dot = tensor.dot(tensor,
+ *      new int[]{0, 1, 2},
+ *      new int[]{0, 1, 2}
+ * );
+ *
+ * // Compute tensor transposes.
+ * CooSemiringTensor<RBoolSemiring> transpose = tensor.T();
+ * transpose = tensor.T(0, 1);
+ * transpose = tensor.T(1, 3, 0, 2);
+ * }</pre>
+ *
+ * @param <T> The type of elements stored in this tensor, constrained by the {@link Semiring} interface.
+ * @see CooSemiringVector
+ * @see CooSemiringMatrix
+ * @see SemiringTensor
+ * @see Semiring
+ */
+public class CooSemiringTensor<T extends Semiring<T>> extends AbstractCooSemiringTensor<CooSemiringTensor<T>, SemiringTensor<T>, T> {
+
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * Creates a tensor with the specified data and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param data Non-zero data of this tensor of this tensor. If this tensor is dense, this specifies all data within the
+     * tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
+     * @param indices
+     */
+    public CooSemiringTensor(Shape shape, T[] data, int[][] indices) {
+        super(shape, data, indices);
+    }
+
+
+    /**
+     * Creates a tensor with the specified data and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param data Non-zero data of this tensor of this tensor. If this tensor is dense, this specifies all data within the
+     * tensor.
+     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
+     * @param indices
+     */
+    public CooSemiringTensor(Shape shape, List<T> data, List<int[]> indices) {
+        super(shape, (T[]) data.toArray(), indices.toArray(new int[0][]));
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero data.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param data Non-zero data of the tensor to construct.
+     * @param indices Indices of the non-zero data of the tensor.
+     *
+     * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
+     */
+    @Override
+    public CooSemiringTensor<T> makeLikeTensor(Shape shape, T[] data, int[][] indices) {
+        return new CooSemiringTensor<>(shape, data, indices);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the specified shape and non-zero data.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param data Non-zero data of the tensor to construct.
+     * @param indices Indices of the non-zero data of the tensor.
+     *
+     * @return A tensor of the same type as this tensor with the specified shape and non-zero data.
+     */
+    @Override
+    public CooSemiringTensor<T> makeLikeTensor(Shape shape, List<T> data, List<int[]> indices) {
+        return new CooSemiringTensor<>(shape, data, indices);
+    }
+
+
+    /**
+     * Constructs a dense tensor that is a similar type as this sparse COO tensor.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries The data of the dense tensor to construct.
+     *
+     * @return A dense tensor that is a similar type as this sparse COO tensor.
+     */
+    @Override
+    public SemiringTensor<T> makeLikeDenseTensor(Shape shape, T[] entries) {
+        return new SemiringTensor<>(shape, entries);
+    }
+
+
+    /**
+     * Constructs a tensor of the same type as this tensor with the given the {@code shape} and
+     * {@code data}. The resulting tensor will also have
+     * the same non-zero indices as this tensor.
+     *
+     * @param shape Shape of the tensor to construct.
+     * @param entries Entries of the tensor to construct.
+     *
+     * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
+     * {@code data}.
+     */
+    @Override
+    public CooSemiringTensor<T> makeLikeTensor(Shape shape, T[] entries) {
+        return new CooSemiringTensor<>(shape, entries, ArrayUtils.deepCopy2D(indices, null));
+    }
+
+    /**
+     * Converts this tensor to an equivalent vector. If this tensor is not rank 1, then it will be flattened.
+     * @return A vector equivalent of this tensor.
+     */
+    public SemiringVector<T> toVector() {
+        return new SemiringVector<T>(data.clone());
+    }
+
+
+    /**
+     * Converts this tensor to a matrix with the specified shape.
+     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureBroadcastable(Shape, Shape) broadcastable}
+     * with the shape of this tensor.
+     * @return A matrix of shape {@code matShape} with the values of this tensor.
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
+     */
+    public CooSemiringMatrix<T> toMatrix(Shape matShape) {
+        ValidateParameters.ensureRank(matShape, 2);
+
+        CooSemiringTensor<T> t = reshape(matShape); // Reshape as rank 2 tensor. Broadcastable check is made here.
+        int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
+
+        return new CooSemiringMatrix<T>(matShape, t.data.clone(), tIndices[0], tIndices[1]);
+    }
+
+
+    /**
+     * Converts this tensor to an equivalent matrix.
+     * @return If this tensor is rank 2, then the equivalent matrix will be returned.
+     * If the tensor is rank 1, then a matrix with a single row will be returned. If the rank of this tensor is larger than 2, it will
+     * be flattened to a single row.
+     */
+    public CooSemiringMatrix<T> toMatrix() {
+        CooSemiringMatrix<T> mat;
+
+        if(getRank()==2) {
+            int[][] tIndices = RealDenseTranspose.standardIntMatrix(indices);
+            mat = new CooSemiringMatrix<T>(shape, data.clone(), tIndices[0], tIndices[1]);
+        } else {
+            CooSemiringTensor<T> flat = reshape(new Shape(1, shape.totalEntriesIntValueExact()));
+            int[][] tIndices = RealDenseTranspose.standardIntMatrix(flat.indices);
+            mat = new CooSemiringMatrix<T>(flat.shape, flat.data.clone(), tIndices[0], tIndices[0]);
+        }
+
+        return mat;
+    }
+
+    /**
+     * Checks if an object is equal to this tensor object.
+     * @param object Object to check equality with this tensor.
+     * @return True if the two tensors have the same shape, are numerically equivalent, and are of type {@link CooSemiringTensor}.
+     * False otherwise.
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) return true;
+        if(object == null || object.getClass() != getClass()) return false;
+
+        CooSemiringTensor<T> src2 = (CooSemiringTensor<T>) object;
+
+        return CooSemiringEquals.cooTensorEquals(this, src2);
+    }
+
+
+    @Override
+    public int hashCode() {
+        // Ignores explicit zeros to maintain contract with equals method.
+        int result = 17;
+        result = 31*result + shape.hashCode();
+
+        for(int i=0; i<nnz; i++) {
+            if (!data[i].isZero()) {
+                result = 31*result + data[i].hashCode();
+                result = 31*result + Arrays.hashCode(indices[i]);
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * <p>Formats this sparse COO tensor as a human-readable string specifying the full shape,
+     * non-zero data, and non-zero indices.
+     *
+     * @return A human-readable string specifying the full shape, non-zero data, and non-zero indices of this tensor.
+     */
+    public String toString() {
+        int maxCols = PrintOptions.getMaxColumns();
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+        boolean centering = PrintOptions.useCentering();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Shape: " + shape + "\n");
+        sb.append("nnz: ").append(nnz).append("\n");
+        sb.append("Non-zero Entries: " + PrettyPrint.abbreviatedArray(data, maxCols, padding, precision, centering) + "\n");
+        sb.append("Non-zero Indices: " +
+                PrettyPrint.abbreviatedArray(indices, PrintOptions.getMaxRows(), maxCols, padding, 20, centering));
+
+        return sb.toString();
+    }
+}

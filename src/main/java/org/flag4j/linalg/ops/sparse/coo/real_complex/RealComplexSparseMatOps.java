@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -44,7 +44,6 @@ public final class RealComplexSparseMatOps {
 
     private RealComplexSparseMatOps() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -130,7 +129,7 @@ public final class RealComplexSparseMatOps {
      */
     public static CMatrix add(CooCMatrix src, double a) {
         Complex128[] sum = new Complex128[src.totalEntries().intValueExact()];
-        ArrayUtils.fill(sum, a);
+        ArrayBuilder.fill(sum, a);
 
         int row;
         int col;

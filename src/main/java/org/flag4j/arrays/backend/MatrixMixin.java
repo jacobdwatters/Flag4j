@@ -25,20 +25,27 @@
 package org.flag4j.arrays.backend;
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
-
 /**
- * This interface specifies methods which all matrices should implement.
- * @param <T> The type of this matrix.
- * @param <U> The type of the dense matrix which is similar to {@code T}. If {@code T} is dense, then {@code T} and {@code U} should
- * be the same type.
- * @param <V> The type of the vector which is similar to {@code T}.
- * @param <W> The type (or wrapper of) an individual element of this matrix.
+ * <p>The {@code MatrixMixin} interface defines methods that any matrix implementation must support.
+ * This interface is designed to ensure a consistent API for various matrix operations, regardless of the underlying matrix
+ * type (dense or sparse). It includes methods for accessing matrix properties, performing mathematical operations,
+ * and manipulating matrix elements and substructures.
+ *
+ * <p>This interface is intended to be used as a mixin for a class which also extends {@link AbstractTensor}.
+ *
+ * @param <T> The type of the implementing matrix class.
+ * @param <U> The type of a dense matrix that is analogous to {@code T}.
+ * If {@code T} represents a dense matrix, then {@code T} and {@code U} should be the same type.
+ * @param <V> The type of vector analogous to {@code T}.
+ * @param <W> The type of an individual matrix element, which may be a primitive type, wrapper class, or a custom object.
  */
 public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
-        U extends MatrixMixin<U, U, ?, W>, V extends VectorMixin<V, ?, U, W>, W> {
+        U extends MatrixMixin<U, U, ?, W>,
+        V extends VectorMixin<V, ?, U, W>, W> {
 
     /**
      * Gets the number of rows in this matrix.
@@ -589,4 +596,49 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
      * @return A vector which
      */
     V toVector();
+
+
+    /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param <R> The return type of the visitor's operation.
+     * @param visitor The visitor implementing the operation to be performed.
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    <R> R accept(MatrixVisitor<R> visitor);
+
+
+    /**
+     * Computes the element-wise sum of two matrices.
+     * @param b Second matrix in the element-wise sum.
+     * @return The element-wise sum of this matrix and {@code b}.
+     */
+    T add(T b);
+
+
+    /**
+     * Computes the element-wise difference of two matrices.
+     * @param b Second matrix in the element-wise difference.
+     * @return The element-wise difference of this matrix and {@code b}.
+     */
+    T sub(T b);
+
+
+    /**
+     * Computes the element-wise product of two matrices.
+     * @param b Second matrix in the element-wise product.
+     * @return The element-wise product of this matrix and {@code b}.
+     */
+    T elemMult(T b);
+
+
+    /**
+     * Computes the element-wise quotient of two matrices.
+     * @param b Second matrix in the element-wise quotient.
+     * @return The element-wise quotient of this matrix and {@code b}.
+     */
+    T div(T b);
 }

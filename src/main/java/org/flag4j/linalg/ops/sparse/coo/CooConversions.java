@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,6 @@ public final class CooConversions {
 
     private CooConversions() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -70,7 +69,7 @@ public final class CooConversions {
                                  T[] destEntries, int[] destRowPointers, int[] destColIndices) {
         final int numRows = shape.get(0);
 
-        // Copy the non-zero data anc column indices. Count number of data per row.
+        // Copy the non-zero data and column indices. Count number of data per row.
         for(int i=0, size=entries.length; i<size; i++)
             destRowPointers[rowIndices[i] + 1]++;
 

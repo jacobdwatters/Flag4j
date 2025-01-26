@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package org.flag4j.linalg.ops.sparse.csr.real;
 
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.common.real.RealProperties;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +39,6 @@ public final class RealCsrEquals {
 
     private RealCsrEquals() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -70,11 +69,11 @@ public final class RealCsrEquals {
 
             close = Arrays.equals(src1RowPointers, src2RowPointers)
 
-                    && Arrays.equals(ArrayUtils.fromIntegerList(src1ColIndices),
-                    ArrayUtils.fromIntegerList(src2ColIndices))
+                    && Arrays.equals(ArrayConversions.fromIntegerList(src1ColIndices),
+                    ArrayConversions.fromIntegerList(src2ColIndices))
 
-                    && RealProperties.allClose(ArrayUtils.fromDoubleList(src1Entries),
-                    ArrayUtils.fromDoubleList(src2Entries), relTol, absTol);
+                    && RealProperties.allClose(ArrayConversions.fromDoubleList(src1Entries),
+                    ArrayConversions.fromDoubleList(src2Entries), relTol, absTol);
         }
 
         return close;

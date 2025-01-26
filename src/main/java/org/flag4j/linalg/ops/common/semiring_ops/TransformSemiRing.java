@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.common.semiring_ops;
 
 
 import org.flag4j.algebraic_structures.Semiring;
-import org.flag4j.util.ErrorMessages;
 
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -37,8 +36,7 @@ import java.util.function.Function;
 public final class TransformSemiRing {
 
     private TransformSemiRing() {
-        // Hide constructor for utility class.
-        throw new IllegalAccessError(ErrorMessages.getUtilityClassErrMsg());
+        // Hide constructor for utility class. for utility class.
     }
 
 

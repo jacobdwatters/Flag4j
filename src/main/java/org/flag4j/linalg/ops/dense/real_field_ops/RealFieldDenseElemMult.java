@@ -45,7 +45,6 @@ public final class RealFieldDenseElemMult {
 
     private RealFieldDenseElemMult() {
         // Hide default constructor for utility class.
-        
     }
 
 

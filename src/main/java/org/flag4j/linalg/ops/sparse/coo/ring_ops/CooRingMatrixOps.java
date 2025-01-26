@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,16 @@
 package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 
 import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.arrays.Pair;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
+import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingMatrix;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Utility class for computing ops on sparse COO {@link Ring} matrices.
@@ -39,7 +43,6 @@ public final class CooRingMatrixOps {
 
     private CooRingMatrixOps() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -115,5 +118,71 @@ public final class CooRingMatrixOps {
         }
 
         return new SparseMatrixData<V>(shape1, diff, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Checks if a real sparse matrix is close to the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
+     */
+    public static <T extends Ring<T>> boolean isCloseToIdentity(AbstractCooRingMatrix<?, ?, ?, T> src) {
+        // Ensure the matrix is square and there are the same number of non-zero data as data on the diagonal.
+        if(!src.isSquare() || src.data.length < src.numRows) return false;
+
+        // Tolerances corresponds to the allClose(...) methods.
+        double diagTol = 1.E-5;
+        double nonDiagTol = 1e-08;
+
+        final T ONE = src.data.length > 0 ? src.data[0].getOne() : null;
+
+        for(int i=0, size=src.data.length; i<size; i++) {
+            int row = src.rowIndices[i];
+            int col = src.colIndices[i];
+
+            if(row == col && src.data[i].sub(ONE).abs() > diagTol ) {
+                return false; // Diagonal value is not close to one.
+            } else if(row != col && src.data[i].mag() > nonDiagTol) {
+                return false; // Non-diagonal value is not close to zero.
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Checks if a sparse COO {@link Ring} matrix is Hermitian.
+     * @param shape The shape of the COO matrix.
+     * @param data Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @return {@code true} if the specified COO matrix is Hermitian
+     * (i.e. equal to its conjugate transpose); {@code false} otherwise.
+     * @param <T> The ring to which the data values of the COO matrix belong.
+     */
+    public static <T extends Ring<T>> boolean isHermitian(Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
+        if(shape.get(0) != shape.get(1)) return false; // Early return for non-square matrix.
+
+        Map<Pair<Integer, Integer>, T> dataMap = new HashMap<Pair<Integer, Integer>, T>();
+
+        for(int i = 0, size=data.length; i < size; i++) {
+            if(rowIndices[i] == colIndices[i] || data[i].isZero())
+                continue; // This value is zero or on the diagonal. No need to consider.
+
+            var p1 = new Pair<>(rowIndices[i], colIndices[i]);
+            var p2 = new Pair<>(colIndices[i], rowIndices[i]);
+
+            if(!dataMap.containsKey(p2)) {
+                dataMap.put(p1, data[i]);
+            } else if(!dataMap.get(p2).equals(data[i].conj())){
+                return false; // Not Hermitian.
+            } else {
+                dataMap.remove(p2);
+            }
+        }
+
+        // If there are any remaining values a value with the transposed indices was not found in the matrix.
+        return dataMap.isEmpty();
     }
 }

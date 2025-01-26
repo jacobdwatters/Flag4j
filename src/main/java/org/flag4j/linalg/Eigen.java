@@ -48,7 +48,6 @@ public final class Eigen {
 
     private Eigen() {
         // Hide default constructor for utility class.
-        
     }
 
 

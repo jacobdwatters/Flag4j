@@ -30,7 +30,8 @@ import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
 import org.flag4j.arrays.sparse.CooFieldTensor;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
-import org.flag4j.linalg.ops.dense.field_ops.DenseFieldEquals;
+import org.flag4j.linalg.ops.dense.DenseEquals;
+import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -38,11 +39,78 @@ import java.util.Arrays;
 
 
 /**
- * <p>A dense tensor whose data are {@code MMField} elements.
+ * <p>Instances of this class represent a dense tensor backed by a {@link Field} array. The {@code FieldTensor} class
+ * provides functionality for tensor operations whose elements are members of a field, supporting mutable data with a fixed shape.
  *
- * <p>The {@link #data} of a field tensor are mutable but the {@link #shape} is fixed.
+ * <p>A {@code FieldTensor} is a generalization of the {@link  FieldMatrix}, allowing for higher-dimensional data and operations
+ * while maintaining the benefits of field-based arithmetic and dense storage.
  *
- * @param <T> Type of the field element for the tensor.
+ * <h3>Key Features:</h3>
+ * <ul>
+ *   <li>Support for standard tensor operations like addition, subtraction, element-wise multiplication, and reshaping.</li>
+ *   <li>Conversion methods to other representations, including {@link FieldMatrix}, {@link FieldVector}, and COO
+ *   format.</li>
+ *   <li>Utility methods for computing properties like rank and shape</li>
+ * </ul>
+ *
+ * <h3>Example Usage:</h3>
+ *
+ * <ul>
+ *     <li>
+ * Constructing a tensor from a {@code Shape shape} and flat data array.
+ * This is generally the preferred and most efficient method of constructing a tensor.
+ * <pre>{@code
+ * // Constructing a complex tensor from a shape and flat data array.
+ * Complex128[] complexData = {
+ *     new Complex128(1, 2), new Complex128(3, 4),
+ *     new Complex128(5, 6), new Complex128(7, 8),
+ *     new Complex128(9, 10), new Complex128(11, 12),
+ *     new Complex128(13, 14), new Complex128(15, 16)
+ * };
+ *
+ * FieldTensor<Complex128> tensor = new FieldTensor<>(complexData);
+ * }</pre>
+ *     </li>
+ *
+ *     <li>
+ * Constructing a tensor from an nD array. This is provided for convenience but is generally much less efficient than
+ * {@link #FieldTensor(Shape, T[])}.
+ * <pre>{@code
+ * // Constructing a complex tensor from a 3D array of complex numbers
+ * Complex128[][][] complexData = {
+ *     {{ new Complex128(1, 2), new Complex128(3, 4) },
+ *     {  new Complex128(5, 6), new Complex128(7, 8) }},
+ *
+ *     {{ new Complex128(9, 10),  new Complex128(11, 12) },
+ *     {  new Complex128(13, 14), new Complex128(15, 16) }}
+ * };
+ * FieldTensor<Complex128> tensor = new FieldTensor<>(complexData);
+ * }</pre>
+ *     </li>
+ *     <li>
+ * Operations with/on tensors.
+ * <pre>{@code
+ * // Performing element-wise addition
+ * FieldTensor<Complex128> result = tensor.add(tensor);
+ *
+ * // Reshape tensor
+ * FieldTensor<Complex128> reshape = tensor.reshape(new Shape(4, 1, 2));
+ *
+ * // Converting the tensor to a matrix
+ * FieldMatrix<Complex128> matrix = tensor.toMatrix(new Shape(4, 2));
+ *
+ * // Computing the tensor dot product.
+ * FieldTensor<Complex128> dot = tensor.tensorDot(tensor, new int[]{0, 1}, new int[]{2, 0});
+ * }</pre>
+ *     </li>
+ * </ul>
+ *
+ * @param <T> Type of the {@link Field field} element for the tensor.
+ *
+ * @see Field
+ * @see FieldMatrix
+ * @see FieldVector
+ * @see AbstractDenseFieldTensor
  */
 public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<FieldTensor<T>, T> {
     private static final long serialVersionUID = 1L;
@@ -56,6 +124,18 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
      */
     public FieldTensor(Shape shape, T[] entries) {
         super(shape, entries);
+    }
+
+
+    /**
+     * Creates a tensor from an nD array. The tensors shape will be inferred from.
+     * @param nDArray Array to construct tensor from. Must be a rectangular array.
+     * @throws IllegalArgumentException If {@code nDArray} is not an array or not rectangular.
+     */
+    public FieldTensor(Object nDArray) {
+        super(ArrayUtils.nDArrayShape(nDArray),
+                (T[]) new Field[ArrayUtils.nDArrayShape(nDArray).totalEntriesIntValueExact()]);
+        ArrayUtils.nDFlatten(nDArray, shape, data, 0);
     }
 
 
@@ -145,14 +225,13 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
 
 
     /**
-     * Computes the element-wise absolute value of this tensor.
+     * <p>Computes the element-wise absolute value of this tensor.
+     * <p>Note: the absolute value may not be defined for all fields.
      *
      * @return The element-wise absolute value of this tensor.
      */
     @Override
     public Tensor abs() {
-        // TODO: Absolute value should not be defined for general field. Implement in real and complex classes only. Remove from
-        //  semiring interface as well.
         double[] abs = new double[data.length];
         RingOps.abs(data, abs);
         return new Tensor(shape, abs);
@@ -172,7 +251,7 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
 
         FieldTensor<T> src2 = (FieldTensor<T>) object;
 
-        return DenseFieldEquals.tensorEquals(this.data, this.shape, src2.data, src2.shape);
+        return DenseEquals.tensorEquals(this.data, this.shape, src2.data, src2.shape);
     }
 
 
@@ -201,24 +280,28 @@ public class FieldTensor<T extends Field<T>> extends AbstractDenseFieldTensor<Fi
         String value;
 
         // Get data up until the stopping point.
-        for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        int padding = PrintOptions.getPadding();
+        boolean centering = PrintOptions.useCentering();
+        int precision = PrintOptions.getPrecision();
+
+        for(int i = 0; i<stopIndex; i++) {
+            value = StringUtils.ValueOfRound(data[i], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         if(stopIndex < size-1) {
-            width = PrintOptions.getPadding() + 3;
+            width = padding + 3;
             value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         // Get last entry.
-        value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+        value = StringUtils.ValueOfRound(data[size-1], precision);
+        width = padding + value.length();
+        value = centering ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));
 
         result.append("]");

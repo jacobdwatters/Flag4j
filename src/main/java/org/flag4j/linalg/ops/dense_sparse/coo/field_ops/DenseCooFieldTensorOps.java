@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,6 @@ public final class DenseCooFieldTensorOps {
 
     private DenseCooFieldTensorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -153,7 +152,7 @@ public final class DenseCooFieldTensorOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         T[] destEntries = src1.makeEmptyDataArray(src2.nnz);
         int[][] indices = new int[src2.indices.length][src2.indices[0].length];
-        ArrayUtils.deepCopy(src2.indices, indices);
+        ArrayUtils.deepCopy2D(src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++)
             destEntries[i] = src1.data[src2.shape.getFlatIndex(src2.indices[i])].mult((T) src2.data[i]);
@@ -217,7 +216,7 @@ public final class DenseCooFieldTensorOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         T[] destEntries = src1.makeEmptyDataArray(src1.nnz);
         int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
-        ArrayUtils.deepCopy(src1.indices, destIndices);
+        ArrayUtils.deepCopy2D(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.

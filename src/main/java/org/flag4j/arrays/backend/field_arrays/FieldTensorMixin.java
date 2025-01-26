@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 package org.flag4j.arrays.backend.field_arrays;
 
 import org.flag4j.algebraic_structures.Field;
+import org.flag4j.arrays.backend.ring_arrays.RingTensorMixin;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
@@ -45,7 +46,7 @@ import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
  */
 public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
         U extends FieldTensorMixin<U, U, V>, V extends Field<V>>
-        extends TensorOverField<T, U, V[], V> {
+        extends TensorOverField<T, U, V[], V>, RingTensorMixin<T, U, V> {
 
     /**
      * Creates an empty array of the same type as the data array of this tensor.
@@ -432,6 +433,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
         return makeLikeTensor(getShape(), dest);
     }
 
+
     /**
      * Divides each element of this tensor by a primitive scalar value and stores the result in this tensor.
      *
@@ -448,6 +450,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
     }
 
 
+    // TODO: Remove norms. They need only be defined for vectors and matrices.
     /**
      * Computes the Euclidean norm of this vector.
      *
@@ -458,6 +461,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
     }
 
 
+    // TODO: Remove norms. They need only be defined for vectors and matrices.
     /**
      * Computes the p-norm of this vector.
      *
@@ -465,7 +469,7 @@ public interface FieldTensorMixin<T extends FieldTensorMixin<T, U, V>,
      *
      * @return The Euclidean norm of this vector.
      */
-    default double norm(int p) {
+    default double norm(double p) {
         return VectorNorms.norm(getData(), p);
     }
 }

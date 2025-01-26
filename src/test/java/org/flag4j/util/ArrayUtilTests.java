@@ -22,7 +22,7 @@ class ArrayUtilTests {
                 new Complex128(4), new Complex128(5), new Complex128(-1334),
                 new Complex128(14)};
         actArr = new Complex128[srcI.length];
-        ArrayUtils.wrapAsComplex128(srcI, actArr);
+        ArrayConversions.toComplex128(srcI, actArr);
         assertArrayEquals(expArr, actArr);
 
         // -------------- Sub-case 2 --------------
@@ -32,14 +32,14 @@ class ArrayUtilTests {
                 new Complex128(4.1), new Complex128(5223.334), new Complex128(-1334.0001),
                 new Complex128(14.)};
         actArr = new Complex128[srcD.length];
-        ArrayUtils.wrapAsComplex128(srcD, actArr);
+        ArrayConversions.toComplex128(srcD, actArr);
         assertArrayEquals(expArr, actArr);
 
         // -------------- Sub-case 3 --------------
         srcS = new String[]{"3+1i", "2.01334i", "-44.1-4i"};
         expArr = new Complex128[]{new Complex128("3+1i"), new Complex128("2.01334i"), new Complex128("-44.1-4i")};
         actArr = new Complex128[srcS.length];
-        ArrayUtils.wrapAsComplex128(srcS, actArr);
+        ArrayConversions.toComplex128(srcS, actArr);
         assertArrayEquals(expArr, actArr);
     }
 
@@ -79,13 +79,13 @@ class ArrayUtilTests {
     void rangeTestCase() {
         // -------------- Sub-case 1 --------------
         expRange = new double[]{-1, 0, 1, 2, 3, 4, 5, 6, 7};
-        assertArrayEquals(expRange, ArrayUtils.range(-1, 8));
+        assertArrayEquals(expRange, ArrayBuilder.range(-1, 8));
 
         // -------------- Sub-case 2 --------------
         expRange = new double[]{99, 100, 101, 102};
-        assertArrayEquals(expRange, ArrayUtils.range(99, 103));
+        assertArrayEquals(expRange, ArrayBuilder.range(99, 103));
 
         // -------------- Sub-case 3 --------------
-        assertThrows(IllegalArgumentException.class, ()->ArrayUtils.range(5, 1));
+        assertThrows(IllegalArgumentException.class, ()-> ArrayBuilder.range(5, 1));
     }
 }

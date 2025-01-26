@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,47 +29,79 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
-import java.util.Arrays;
 import java.util.List;
 
 
 /**
- * <p>A sparse vector stored in coordinate list (COO) format. The {@link #data} of this COO vector are
- * elements of a {@link Field}.
+ * Represents a sparse vector whose non-zero elements are stored in Coordinate List (COO) format, with all data elements
+ * belonging to a specified {@link Field} type.
  *
- * <p>The {@link #data non-zero data} and {@link #indices non-zero indices} of a COO vector are mutable but the {@link #shape}
- * and total number of non-zero data is fixed.
- *
- * <p>Sparse vectors allow for the efficient storage of and ops on vectors that contain many zero values.
- *
- * <p>COO vectors are optimized for hyper-sparse vectors (i.e. vectors which contain almost all zeros relative to the size of the
- * vector).
+ * <p>The COO format stores sparse vector data as a list of coordinates (indices) coupled with their
+ * corresponding non-zero values, rather than allocating memory for every element in the full vector shape. This
+ * allows efficient representation and manipulation of large vector containing a substantial number of zeros.
  *
  * <p>A sparse COO vector is stored as:
  * <ul>
- *     <li>The full {@link #shape}/{@link #size} of the vector.</li>
- *     <li>The non-zero {@link #data} of the vector. All other data in the vector are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
- *     <li>The {@link #indices} of the non-zero values in the sparse vector.</li>
+ *     <li><b>Shape:</b> The full {@link #shape}/{@link #size} of the vector specifying the total number of values (including zeros)
+ *     in the vector.</li>
+ *
+ *     <li><b>Data:</b> Non-zero values are stored in a one-dimensional array, {@link #data}. Any element not specified in
+ *     {@code data} is implicitly zero. It is also possible to explicitly store zero values in this array, although this
+ *     is generally not desirable. To remove explicitly defined zeros, use {@link #dropZeros()}.</li>
+ *
+ *     <li><b>Indices:</b> Non-zero values are associated with their coordinates in the vector via a single 1D array:
+ *     {@link #indices}. This array specifies the positions of each
+ *     non-zero entry in {@link #data}. The total number of non-zero elements is given by {@link #nnz}.</li>
  * </ul>
  *
- * <p>Some ops on sparse tensors behave differently than on dense tensors. For instance, {@link #add(Field)} will not
- * add the scalar to all data of the tensor since this would cause catastrophic loss of sparsity. Instead, such non-zero preserving
- * element-wise ops only act on the non-zero data of the sparse tensor as to not affect the sparsity.
+ * <p>The total number of non-zero elements ({@link #nnz}) and the shape/size is fixed for a given instance, but the values
+ * in {@link #data} and their corresponding {@link #indices} may be updated. Many operations
+ * assume that the indices are sorted lexicographically, but this is not strictly enforced.
+ * All provided operations preserve the lexicographical sorting of indices. If there is any doubt about the ordering of
+ * indices, use {@link #sortIndices()} to ensure they are sorted. COO tensors may also store multiple entries
+ * for the same index (referred to as an uncoalesced tensor). To combine all duplicated entries use {@link #coalesce()} or
+ * {@link #coalesce(BinaryOperator)}.
  *
- * <p>Note: many ops assume that the data of the COO vector are sorted lexicographically. However, this is not explicitly
- * verified. Every operation implemented in this class will preserve the lexicographical sorting.
+ * <p>COO vectors are optimized for "hyper-sparse" scenarios where the proportion of non-zero elements is extremely low,
+ * offering significant memory savings and potentially more efficient computational operations than equivalent dense
+ * representations.
  *
- * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
+ * <h3>Example Usage:</h3>
+ * <pre>{@code
+ * // shape, data, and indices for COO vector.
+ * Shape shape = new Shape(512);
+ * Complex128[] data = {
+ *      new Complex128(1, 2), new Complex128(3, 4), new Complex128(5, 6)
+ *      new Complex128(7, 8), new Complex128(9, 10), new Complex128(11, 12)
+ * };
+ * int[] indices = {0, 4, 128, 128, 128, 256};
  *
- * @param <T> Type of the field element in this vector.
+ * // Create COO vector.
+ * CooFieldVector<Complex128> vector = new CooFieldVector(shape, data, indices);
+ *
+ * // Sum vectors.
+ * CooFieldVector<Complex128> sum = vector.add(vector);
+ *
+ * // Compute vector inner product.
+ * Complex128 prod = vector.inner(vector);
+ *
+ * // Compute vector outer product.
+ * FieldMatrix<Complex128> prod = vector.outer(vector);
+ * }</pre>
+ *
+ * @param <T> The type of elements stored in this vector, constrained by the {@link Field} interface.
+ * @see CooFieldTensor
+ * @see CooFieldMatrix
+ * @see FieldMatrix
+ * @see Field
  */
 public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<CooFieldVector<T>,
         FieldVector<T>, CooFieldMatrix<T>, FieldMatrix<T>, T> {
@@ -108,7 +140,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
      * @param indices The indices of the non-zero values.
      */
     public CooFieldVector(int size, List<T> entries, List<Integer> indices) {
-        super(new Shape(size), (T[]) entries.toArray(Field[]::new), ArrayUtils.fromIntegerList(indices));
+        super(new Shape(size), (T[]) entries.toArray(Field[]::new), ArrayConversions.fromIntegerList(indices));
     }
 
 
@@ -225,7 +257,7 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
 
         CooFieldVector<T> src2 = (CooFieldVector<T>) object;
 
-        return CooFieldEquals.cooVectorEquals(this, src2);
+        return CooSemiringEquals.cooVectorEquals(this, src2);
     }
 
 
@@ -306,37 +338,44 @@ public class CooFieldVector<T extends Field<T>> extends AbstractCooFieldVector<C
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("nnz: ").append(nnz).append("\n");
         result.append("Non-zero data: [");
 
+        int maxCols = PrintOptions.getMaxColumns();
+        int padding = PrintOptions.getPadding();
+        boolean centering = PrintOptions.useCentering();
+        int precision = PrintOptions.getPrecision();
+
         if(size > 0) {
-            int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+            int stopIndex = Math.min(maxCols -1, size-1);
             int width;
             String value;
 
             // Get data up until the stopping point.
-            for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-                width = PrintOptions.getPadding() + value.length();
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            for(int i = 0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(data[i], precision);
+                width = padding + value.length();
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             if(stopIndex < size-1) {
-                width = PrintOptions.getPadding() + 3;
+                width = padding + 3;
                 value = "...";
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            value = StringUtils.ValueOfRound(data[size-1], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         result.append("]\n");
-        result.append("Indices: ").append(Arrays.toString(indices));
+        result.append("Indices: ")
+                .append(PrettyPrint.abbreviatedArray(indices, maxCols, padding, centering));
 
         return result.toString();
     }

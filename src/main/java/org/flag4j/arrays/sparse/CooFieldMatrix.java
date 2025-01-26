@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,50 +27,86 @@ package org.flag4j.arrays.sparse;
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.dense.FieldTensor;
 import org.flag4j.arrays.dense.FieldVector;
+import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
-import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
-import java.util.Arrays;
 import java.util.List;
-
+import java.util.function.BinaryOperator;
 
 /**
- * <p>A sparse matrix stored in coordinate list (COO) format. The {@link #data} of this COO tensor are
- * elements of a {@link Field}.
+ * <p>Instances of this class represent a sparse matrix whose non-zero elements are stored in Coordinate List (COO) format, with all
+ * data elements belonging to a specified {@link Field} type.
  *
- * <p>The {@link #data non-zero data} and non-zero indices of a COO matrix are mutable but the {@link #shape}
- * and total number of non-zero data is fixed.
+ * <p>The COO format stores sparse matrix data as a list of coordinates (row and column indices) coupled with their
+ * corresponding non-zero values, rather than allocating memory for every element in the full matrix shape. This
+ * allows efficient representation and manipulation of large matrices containing a substantial number of zeros.
  *
- * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.
- *
- * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
- * matrix).
- *
- * <p>A sparse COO matrix is stored as:
+ * <h3>COO Representation:</h3>
+ * A sparse COO matrix is stored as:
  * <ul>
- *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
- *     <li>The {@link #rowIndices row indices} of the non-zero values in the sparse matrix.</li>
- *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
+ *     <li><b>Shape:</b> The full {@link #shape} of the matrix specifying its number of rows and columns.</li>
+ *
+ *     <li><b>Data:</b> Non-zero values are stored in a one-dimensional array, {@link #data}. Any element not specified in
+ *     {@code data} is implicitly zero. It is also possible to explicitly store zero values in this array, although this
+ *     is generally not desirable. To remove explicitly defined zeros, use {@link #dropZeros()}.</li>
+ *
+ *     <li><b>Indices:</b> Non-zero values are associated with their coordinates in the matrix via two parallel 1D arrays:
+ *     {@link #rowIndices} and {@link #colIndices}. These arrays specify the row and column positions of each
+ *     non-zero entry in {@link #data}. The total number of non-zero elements is given by {@link #nnz}.
+ *     Each pair of indices corresponds directly to the position of a single non-zero value in {@link #data}.</li>
  * </ul>
  *
- * <p>Note: many ops assume that the data of the COO matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified but any ops implemented in this
- * class will preserve the lexicographical sorting.
+ * <p>The total number of non-zero elements ({@link #nnz}) and the shape are fixed for a given instance, but the values
+ * in {@link #data} and their corresponding {@link #rowIndices} and {@link #colIndices} may be updated. Many operations
+ * assume that the indices are sorted lexicographically by row, and then by column, but this is not strictly enforced.
+ * All provided operations preserve the lexicographical sorting of indices. If there is any doubt about the ordering of
+ * indices, use {@link #sortIndices()} to ensure they are explicitly sorted. COO tensors may also store multiple entries
+ * for the same index (referred to as an uncoalesced tensor). To combine all duplicated entries use {@link #coalesce()} or
+ * {@link #coalesce(BinaryOperator)}.
  *
- * <p>If indices need to be sorted, call {@link #sortIndices()}.
+ * <p>COO matrices are optimized for "hyper-sparse" scenarios where the proportion of non-zero elements is extremely low,
+ * offering significant memory savings and potentially more efficient computational operations than equivalent dense
+ * representations.
  *
- * @param <T> Type of the {@link Field field} element in this matrix.
+ * <h3>Example Usage:</h3>
+ * <pre>{@code
+ * // shape, data, and indices for COO matrix.
+ * Shape shape = new Shape(512, 1024);
+ * Complex128[] data = {
+ *      new Complex128(1, 2), new Complex128(3, 4), new Complex128(5, 6)
+ *      new Complex128(7, 8), new Complex128(9, 10), new Complex128(11, 12)
+ * };
+ * int[] rowIndices = {0, 4, 128, 128, 128, 256};
+ * int[] colIndices = {16, 2, 5, 512, 1000, 28};
+ *
+ * // Create COO matrix.
+ * CooFieldMatrix<Complex128> matrix = new CooFieldMatrix<>(
+ *      shape, data, rowIndices, colIndices
+ * );
+ *
+ * // Sum matrices.
+ * CooFieldMatrix<Complex128> sum = matrix.add(matrix);
+ *
+ * // Multiply matrix to it's Hermitian transpose.
+ * FieldMatrix<Complex128> prod = matrix.mult(matrix.H());
+ * prod = matrix.multTranspose(matrix);
+ * }</pre>
+ *
+ * @param <T> The type of elements stored in this matrix, constrained by the {@link Field} interface.
+ * @see CooFieldTensor
+ * @see CooFieldVector
+ * @see FieldMatrix
+ * @see Field
  */
 public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<CooFieldMatrix<T>,
         FieldMatrix<T>, CooFieldVector<T>, T> {
@@ -99,9 +135,8 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     public CooFieldMatrix(Shape shape, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
                 (T[]) entries.toArray(new Field[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
-        ValidateParameters.ensureRank(shape, 2);
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
     }
 
 
@@ -131,9 +166,8 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     public CooFieldMatrix(int rows, int cols, List<T> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
                 (T[]) entries.toArray(new Field[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
-        ValidateParameters.ensureRank(shape, 2);
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
     }
 
 
@@ -315,9 +349,26 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
      */
     @Override
     public FieldVector<T> mult(CooFieldVector<T> b) {
-        T[] dest = (T[]) new Field[b.size];
+        T[] dest = makeEmptyDataArray(numRows);
         CooSemiringMatMult.standardVector(data, rowIndices, colIndices, shape, b.data, b.indices, dest);
         return new FieldVector<T>(dest);
+    }
+
+
+    /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param visitor The visitor implementing the operation to be performed.
+     *
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     *
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    @Override
+    public <R> R accept(MatrixVisitor<R> visitor) {
+        return visitor.visit(this);
     }
 
 
@@ -334,7 +385,7 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
 
         CooFieldMatrix<T> src2 = (CooFieldMatrix<T>) object;
 
-        return CooFieldEquals.cooMatrixEquals(this, src2);
+        return CooSemiringEquals.cooMatrixEquals(this, src2);
     }
 
 
@@ -363,39 +414,49 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("nnz: ").append(nnz).append("\n");
         result.append("Non-zero data: [");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        boolean centering = PrintOptions.useCentering();
+        int precision = PrintOptions.getPrecision();
+        int padding = PrintOptions.getPadding();
+        int maxCols = PrintOptions.getMaxColumns();
+
+        int stopIndex = Math.min(maxCols -1, size-1);
         int width;
         String value;
 
         if(data.length > 0) {
             // Get data up until the stopping point.
-            for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-                width = PrintOptions.getPadding() + value.length();
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            for(int i = 0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(data[i], precision);
+                width = padding + value.length();
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             if(stopIndex < size-1) {
-                width = PrintOptions.getPadding() + 3;
+                width = padding + 3;
                 value = "...";
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            value = StringUtils.ValueOfRound(data[size-1], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         result.append("]\n");
 
-        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
-        result.append("Column Indices: ").append(Arrays.toString(colIndices));
+        result.append("Row Indices: ")
+                .append(PrettyPrint.abbreviatedArray(rowIndices, maxCols, padding, centering))
+                .append("\n");
+
+        result.append("Col Indices: ")
+                .append(PrettyPrint.abbreviatedArray(colIndices, maxCols, padding, centering));
 
         return result.toString();
     }

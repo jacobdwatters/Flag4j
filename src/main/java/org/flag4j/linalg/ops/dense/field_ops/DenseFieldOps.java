@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,8 +35,7 @@ import org.flag4j.util.ValidateParameters;
 public final class DenseFieldOps {
 
     private DenseFieldOps() {
-        // Hide constructor
-        
+        // Hide constructor for utility class.
     }
 
 

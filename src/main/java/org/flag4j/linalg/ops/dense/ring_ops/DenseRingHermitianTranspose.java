@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,6 @@ public final class DenseRingHermitianTranspose {
     
     private DenseRingHermitianTranspose() {
         // Hide default constructor for utility class.
-        
     }
 
     /**
@@ -62,7 +61,7 @@ public final class DenseRingHermitianTranspose {
 
         for(int i=0, size=src.length; i<size; i++) {
             int[] destIndices = shape.getNdIndices(i);
-            ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+            ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
             dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
         }
     }
@@ -146,7 +145,7 @@ public final class DenseRingHermitianTranspose {
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);
-                ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+                ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
                 dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
             }
         });

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,12 @@
 
 package org.flag4j.linalg.ops.sparse.coo.real;
 
+import org.flag4j.arrays.Pair;
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooMatrix;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class contains low level implementations for methods to evaluate certain properties of a real sparse matrix.
@@ -78,126 +78,88 @@ public final class RealSparseMatrixProperties {
         double diagTol = 1.001E-5;
         double nonDiagTol = 1e-08;
 
-        for(int i = 0; i<src.data.length; i++) {
-            if(src.rowIndices[i] == i && src.colIndices[i] == i && Math.abs(src.data[i]-1) > diagTol ) {
+        for(int i=0, size=src.data.length; i<size; i++) {
+            int row = src.rowIndices[i];
+            int col = src.colIndices[i];
+
+            if(row == col && Math.abs(src.data[i]-1) > diagTol ) {
                 return false; // Diagonal value is not close to one.
-            } else if((src.rowIndices[i] != i && src.colIndices[i] != i) && Math.abs(src.data[i]) > nonDiagTol) {
+            } else if(row != col && Math.abs(src.data[i]) > nonDiagTol) {
                 return false; // Non-diagonal value is not close to zero.
             }
         }
-
 
         return true;
     }
 
 
     /**
-     * Checks if a real sparse matrix is symmetric.
-     * @param src Matrix to check if it is the symmetric matrix.
-     * @return True if the {@code src} matrix is symmetric. False otherwise.
+     * Checks if a sparse COO matrix is symmetric.
+     * @param shape The shape of the COO matrix.
+     * @param data Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @return {@code true} if the specified COO matrix is symmetric
+     * (i.e. equal to its transpose); {@code false} otherwise.
      */
-    public static boolean isSymmetric(CooMatrix src) {
-        boolean result = src.isSquare();
+    public static boolean isSymmetric(Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
+        if(shape.get(0) != shape.get(1)) return false; // Early return for non-square matrix.
 
-        List<Double> entries = DoubleStream.of(src.data).boxed().collect(Collectors.toList());
-        List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
-        List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
+        Map<Pair<Integer, Integer>, Double> dataMap = new HashMap<Pair<Integer, Integer>, Double>();
 
-        double value;
-        int row;
-        int col;
+        for(int i = 0, size=data.length; i < size; i++) {
+            if(rowIndices[i] == colIndices[i] || data[i] == 0d)
+                continue; // This value is zero or on the diagonal. No need to consider.
 
-        while(result && !entries.isEmpty()) {
-            // Extract value of interest.
-            value = entries.remove(0);
-            row = rowIndices.remove(0);
-            col = colIndices.remove(0);
+            var p1 = new Pair<>(rowIndices[i], colIndices[i]);
+            var p2 = new Pair<>(colIndices[i], rowIndices[i]);
 
-            // Find indices of first and last value whose row index matched the value of interests column index.
-            int rowStart = rowIndices.indexOf(col);
-            int rowEnd = rowIndices.lastIndexOf(col);
-
-            if(rowStart == -1) {
-                // Then no non-zero value was found.
-                result = value == 0;
+            if(!dataMap.containsKey(p2)) {
+                dataMap.put(p1, data[i]);
+            } else if(dataMap.get(p2) != data[i]){
+                return false; // Not symmetric.
             } else {
-                // At least one entry has a row-index matching the specified column index.
-                List<Integer> colIdxRange = colIndices.subList(rowStart, rowEnd + 1);
-
-                // Search for element whose column index matches the specified row index
-                int idx = colIdxRange.indexOf(row);
-
-                if(idx == -1) {
-                    // Then no non-zero value was found.
-                    result = value == 0;
-                } else {
-                    // Check that value with opposite row/column indices is equal.
-                    result = value == entries.get(idx + rowStart);
-
-                    // Remove the value and the indices.
-                    entries.remove(idx + rowStart);
-                    rowIndices.remove(idx + rowStart);
-                    colIndices.remove(idx + rowStart);
-                }
+                dataMap.remove(p2);
             }
         }
 
-        return result;
+        // If there are any remaining values a value with the transposed indices was not found in the matrix.
+        return dataMap.isEmpty();
     }
 
 
     /**
-     * Checks if a real sparse matrix is anti-symmetric.
-     * @param src Matrix to check if it is the anti-symmetric matrix.
-     * @return True if the {@code src} matrix is anti-symmetric. False otherwise.
+     * Checks if a sparse COO matrix is symmetric.
+     * @param shape The shape of the COO matrix.
+     * @param data Non-zero entries of the COO matrix.
+     * @param rowIndices Non-zero row indices of the COO matrix.
+     * @param colIndices Non-zero column indices of the COO matrix.
+     * @return {@code true} if the specified COO matrix is symmetric
+     * (i.e. equal to its transpose); {@code false} otherwise.
      */
-    public static boolean isAntiSymmetric(CooMatrix src) {
-        boolean result = src.isSquare();
+    public static boolean isAntiSymmetric(Shape shape, double[] data, int[] rowIndices, int[] colIndices) {
+        if(shape.get(0) != shape.get(1)) return false; // Early return for non-square matrix.
 
-        List<Double> entries = DoubleStream.of(src.data).boxed().collect(Collectors.toList());
-        List<Integer> rowIndices = IntStream.of(src.rowIndices).boxed().collect(Collectors.toList());
-        List<Integer> colIndices = IntStream.of(src.colIndices).boxed().collect(Collectors.toList());
+        Map<Pair<Integer, Integer>, Double> dataMap = new HashMap<Pair<Integer, Integer>, Double>();
 
-        double value;
-        int row;
-        int col;
+        for(int i = 0, size=data.length; i < size; i++) {
+            if(rowIndices[i] == colIndices[i] || data[i] == 0d)
+                continue; // This value is zero or on the diagonal. No need to consider.
 
-        while(result && !entries.isEmpty()) {
-            // Extract value of interest.
-            value = entries.remove(0);
-            row = rowIndices.remove(0);
-            col = colIndices.remove(0);
+            var p1 = new Pair<>(rowIndices[i], colIndices[i]);
+            var p2 = new Pair<>(colIndices[i], rowIndices[i]);
 
-            // Find indices of first and last value whose row index matched the value of interests column index.
-            int rowStart = rowIndices.indexOf(col);
-            int rowEnd = rowIndices.lastIndexOf(col);
-
-            if(rowStart == -1) {
-                // Then no non-zero value was found.
-                result = value == 0;
+            if(!dataMap.containsKey(p2)) {
+                dataMap.put(p1, data[i]);
+            } else if(dataMap.get(p2) != -data[i]){
+                return false; // Not symmetric.
             } else {
-                // At least one entry has a row-index matching the specified column index.
-                List<Integer> colIdxRange = colIndices.subList(rowStart, rowEnd + 1);
-
-                // Search for element whose column index matches the specified row index
-                int idx = colIdxRange.indexOf(row);
-
-                if(idx == -1) {
-                    // Then no non-zero value was found.
-                    result = value == 0;
-                } else {
-                    // Check that value with opposite row/column indices is equal.
-                    result = value == -entries.get(idx + rowStart);
-
-                    // Remove the value and the indices.
-                    entries.remove(idx + rowStart);
-                    rowIndices.remove(idx + rowStart);
-                    colIndices.remove(idx + rowStart);
-                }
+                dataMap.remove(p2);
             }
         }
 
-        return result;
+        // If there are any remaining values a value with the transposed indices was not found in the matrix.
+        return dataMap.isEmpty();
     }
 }
 

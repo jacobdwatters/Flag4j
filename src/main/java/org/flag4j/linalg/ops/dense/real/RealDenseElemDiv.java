@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,8 @@
 package org.flag4j.linalg.ops.dense.real;
 
 import org.flag4j.concurrency.ThreadManager;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
-
-import static org.flag4j.util.ArrayUtils.makeNewIfNull;
 
 /**
  * This class contains low level implementations of element-wise division algorithms for real dense tensors.
@@ -41,7 +40,6 @@ public final class RealDenseElemDiv {
 
     private RealDenseElemDiv() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -57,7 +55,7 @@ public final class RealDenseElemDiv {
      */
     public static double[] elemDiv(double[] src1, double[] src2, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
-        dest = makeNewIfNull(dest, src1.length);
+        dest = ArrayBuilder.getOrCreateArray(dest, src1.length);
 
         for(int i=0, size= src1.length; i<size; i++)
             dest[i] = src1[i]/src2[i];
@@ -79,7 +77,7 @@ public final class RealDenseElemDiv {
      */
     public static double[] elemDivConcurrent(double[] src1, double[] src2, double[] dest) {
         ValidateParameters.ensureArrayLengthsEq(src1.length, src2.length);
-        dest = makeNewIfNull(dest, src1.length);
+        dest = ArrayBuilder.getOrCreateArray(dest, src1.length);
 
         double[] finalDest = dest;
         ThreadManager.concurrentOperation(src1.length, (startIdx, endIdx) -> {

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,25 +28,27 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
-import org.flag4j.linalg.ops.sparse.coo.field_ops.CooFieldEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexCooConcats;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
+import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
+import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -63,7 +65,8 @@ import java.util.List;
  * efficient
  * matrix ops.
  *
- * <p>A sparse COO matrix is stored as:
+ * <h3>COO Representation:</h3>
+ * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
@@ -81,8 +84,6 @@ import java.util.List;
 public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooCVector, Complex128> {
 
     private static final long serialVersionUID = 1L;
-
-    // TODO: add coalesce() which creates a new tensor checking to remove explicit zeros.
 
     /**
      * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
@@ -109,8 +110,8 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix(Shape shape, List<Complex128> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(shape,
                 entries.toArray(new Complex128[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
         ValidateParameters.ensureRank(shape, 2);
         if(entries.size() == 0 || entries.get(0) == null)
             setZeroElement(Complex128.ZERO);
@@ -155,8 +156,8 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix(int rows, int cols, List<Complex128> entries, List<Integer> rowIndices, List<Integer> colIndices) {
         super(new Shape(rows, cols),
                 entries.toArray(new Complex128[entries.size()]),
-                ArrayUtils.fromIntegerList(rowIndices),
-                ArrayUtils.fromIntegerList(colIndices));
+                ArrayConversions.fromIntegerList(rowIndices),
+                ArrayConversions.fromIntegerList(colIndices));
         if(super.data.length == 0 || super.data[0] == null) setZeroElement(Complex128.ZERO);
     }
 
@@ -183,7 +184,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
     public CooCMatrix(Shape shape, double[] entries, int[] rowIndices, int[] colIndices) {
-        super(shape, ArrayUtils.wrapAsComplex128(entries, null), rowIndices, colIndices);
+        super(shape, ArrayConversions.toComplex128(entries, null), rowIndices, colIndices);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -336,6 +337,17 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     @Override
     public CsrCMatrix makeLikeCsrMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Checks if a matrix is Hermitian. That is, if the matrix is square and equal to its conjugate transpose.
+     *
+     * @return {@code true} if this matrix is Hermitian; {@code false} otherwise.
+     */
+    @Override
+    public boolean isHermitian() {
+        return CooRingMatrixOps.isHermitian(shape, data, rowIndices, colIndices);
     }
 
 
@@ -541,6 +553,23 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
 
 
     /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param visitor The visitor implementing the operation to be performed.
+     *
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     *
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    @Override
+    public <R> R accept(MatrixVisitor<R> visitor) {
+        return visitor.visit(this);
+    }
+
+
+    /**
      * Checks if an object is equal to this matrix object.
      * @param object Object to check equality with this matrix.
      * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link CooCMatrix}.
@@ -550,8 +579,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public boolean equals(Object object) {
         if(this == object) return true;
         if(object == null || object.getClass() != getClass()) return false;
-
-        return CooFieldEquals.cooMatrixEquals(this, (CooCMatrix) object);
+        return CooSemiringEquals.cooMatrixEquals(this, ((CooCMatrix) object));
     }
 
 
@@ -580,39 +608,47 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public String toString() {
         int size = nnz;
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
+        result.append("nnz: ").append(nnz).append("\n");
         result.append("Non-zero data: [");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
+        int maxCols = PrintOptions.getMaxColumns();
+        boolean centering = PrintOptions.useCentering();
+        int padding = PrintOptions.getPadding();
+        int precision = PrintOptions.getPrecision();
+
+        int stopIndex = Math.min(maxCols -1, size-1);
         int width;
         String value;
 
         if(data.length > 0) {
             // Get data up until the stopping point.
-            for(int i=0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-                width = PrintOptions.getPadding() + value.length();
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            for(int i = 0; i<stopIndex; i++) {
+                value = StringUtils.ValueOfRound(data[i], precision);
+                width = padding + value.length();
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             if(stopIndex < size-1) {
-                width = PrintOptions.getPadding() + 3;
+                width = padding + 3;
                 value = "...";
-                value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+                value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
+            value = StringUtils.ValueOfRound(data[size-1], precision);
+            width = padding + value.length();
+            value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
         }
 
         result.append("]\n");
-
-        result.append("Row Indices: ").append(Arrays.toString(rowIndices)).append("\n");
-        result.append("Column Indices: ").append(Arrays.toString(colIndices));
+        result.append("Row Indices: ")
+                .append(PrettyPrint.abbreviatedArray(rowIndices, maxCols, padding, centering))
+                .append("\n");
+        result.append("Col Indices: ")
+                .append(PrettyPrint.abbreviatedArray(colIndices, maxCols, padding, centering));
 
         return result.toString();
     }

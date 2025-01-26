@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ package org.flag4j.linalg.ops.sparse.csr.semiring_ops;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
@@ -152,7 +152,7 @@ public final class SemiringCsrMatMult {
         }
 
         return new SparseMatrixData<T>(destShape, resultList,
-                ArrayUtils.toArrayList(resultRowPtr), resultColIndexList);
+                ArrayConversions.toArrayList(resultRowPtr), resultColIndexList);
     }
 
 

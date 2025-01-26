@@ -36,27 +36,27 @@ public class RealInt16 implements Ring<RealInt16> {
     /**
      * The numerical value -1.
      */
-    public final static RealInt16 NEGATIVE_ONE = new RealInt16(-1);
+    public final static RealInt16 NEGATIVE_ONE = new RealInt16((short) -1);
     /**
      * The numerical value 0.
      */
-    public final static RealInt16 ZERO = new RealInt16(0);
+    public final static RealInt16 ZERO = new RealInt16((short) 0);
     /**
      * The numerical value 1.
      */
-    public final static RealInt16 ONE = new RealInt16(1);
+    public final static RealInt16 ONE = new RealInt16((short) 1);
     /**
      * The numerical value 2.
      */
-    public final static RealInt16 TWO = new RealInt16(2);
+    public final static RealInt16 TWO = new RealInt16((short) 2);
     /**
      * The numerical value 3.
      */
-    public final static RealInt16 THREE = new RealInt16(3);
+    public final static RealInt16 THREE = new RealInt16((short) 3);
     /**
      * The numerical value 10.
      */
-    public final static RealInt16 TEN = new RealInt16(10);
+    public final static RealInt16 TEN = new RealInt16((short) 10);
 
 
     /**
@@ -75,17 +75,8 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
-     * Constructs a real 16-bit integer number by casting a 32-bit int. Precision will be lost.
-     * @param value Value of the 16-bit integer number.
-     */
-    public RealInt16(int value) {
-        this.value = (short) value;
-    }
-
-
-    /**
-     * Gets the value of this field element.
-     * @return The value of this field element.
+     * Gets the value of this ring element.
+     * @return The value of this ring element.
      */
     public short getValue() {
         return value;
@@ -93,41 +84,41 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
-     * Sums two elements of this field (associative and commutative).
+     * Sums two elements of this ring (associative and commutative).
      *
-     * @param b Second field element in sum.
+     * @param b Second ring element in sum.
      *
      * @return The sum of this element and {@code b}.
      */
     @Override
     public RealInt16 add(RealInt16 b) {
-        return new RealInt16(value + b.value);
+        return new RealInt16((short) (value + b.value));
     }
 
 
     /**
-     * Computes difference of two elements of this field.
+     * Computes difference of two elements of this ring.
      *
-     * @param b Second field element in difference.
+     * @param b Second ring element in difference.
      *
-     * @return The difference of this field element and {@code b}.
+     * @return The difference of this ring element and {@code b}.
      */
     @Override
     public RealInt16 sub(RealInt16 b) {
-        return new RealInt16(value - b.value);
+        return new RealInt16((short) (value - b.value));
     }
 
 
     /**
-     * Multiplies two elements of this field (associative and commutative).
+     * Multiplies two elements of this ring (associative and commutative).
      *
-     * @param b Second field element in product.
+     * @param b Second ring element in product.
      *
-     * @return The product of this field element and {@code b}.
+     * @return The product of this ring element and {@code b}.
      */
     @Override
     public RealInt16 mult(RealInt16 b) {
-        return new RealInt16(value * b.value);
+        return new RealInt16((short) (value * b.value));
     }
 
 
@@ -184,22 +175,22 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
-     * <p>Computes the additive inverse for an element of this field.
+     * <p>Computes the additive inverse for an element of this ring.
      *
      * <p>An element -x is an additive inverse for a filed element x if -x + x = 0 where 0 is the additive identity.
      *
-     * @return The additive inverse for this field element.
+     * @return The additive inverse for this ring element.
      */
     @Override
     public RealInt16 addInv() {
-        return new RealInt16(-value);
+        return new RealInt16((short) -value);
     }
 
 
     /**
-     * Computes the magnitude of this field element.
+     * Computes the magnitude of this ring element.
      *
-     * @return The magnitude of this field element.
+     * @return The magnitude of this ring element.
      */
     @Override
     public double mag() {
@@ -208,10 +199,15 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
-     * Evaluates the signum or sign function on a field element.
+     * Evaluates the signum or sign function on a ring element.
      *
      * @param a Value to evaluate signum function on.
-     * @return The output of the signum function evaluated on {@code a}.
+     * @return The output of the signum function evaluated on {@code a}:
+     * <ul>
+     *     <li>Returns {@code RealInt16.ZERO} if {@code a.getValue() == 0}.</li>
+     *     <li>Returns {@code RealInt16.ONE} if {@code a.getValue() > 0}.</li>
+     *     <li>Returns {@code RealInt16.NEGATIVE_ONE} if {@code a.getValue() < 0}.</li>
+     * </ul>
      */
     public static RealInt16 sgn(RealInt16 a) {
         if(a.value == 0) return a;
@@ -220,17 +216,17 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
-     * Compares this element of the ordered field with {@code b}.
+     * Compares this element of the ordered ring with {@code b}.
      *
-     * @param b Second element of the ordered field.
+     * @param b Second element of the ordered ring.
      *
      * @return An int value:
      * <ul>
-     *     <li>0 if this field element is equal to {@code b}.</li>
-     *     <li>< 0 if this field element is less than {@code b}.</li>
-     *     <li>> 0 if this field element is greater than {@code b}.</li>
-     *     Hence, this method returns zero if and only if the two field elements are equal, a negative value if and only the field
-     *     element it was called on is less than {@code b} and positive if and only if the field element it was called on is greater
+     *     <li>0 if this ring element is equal to {@code b}.</li>
+     *     <li>< 0 if this ring element is less than {@code b}.</li>
+     *     <li>> 0 if this ring element is greater than {@code b}.</li>
+     *     Hence, this method returns zero if and only if the two ring elements are equal, a negative value if and only the ring
+     *     element it was called on is less than {@code b} and positive if and only if the ring element it was called on is greater
      *     than {@code b}.
      * </ul>
      */
@@ -252,45 +248,8 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
-     * Computes the product of all entire of specified array.
-     * @param values Values to compute product of.
-     * @return The product of all values in {@code values}.
-     */
-    public static RealInt16 prod(RealInt16... values) {
-        if(values == null || values.length == 0) {
-            throw new IllegalArgumentException("Values cannot be null or empty");
-        }
-
-        short prod = values[0].value;
-
-        for(int i = 1, length=values.length; i < length; i++) {
-            prod *= values[i].value;
-        }
-
-        return new RealInt16(prod);
-    }
-
-
-    /**
-     * Computes the sum of all entire of specified array.
-     * @param values Values to compute product of.
-     * @return The sum of all values in {@code values}.
-     */
-    public static RealInt16 sum(RealInt16... values) {
-        if(values == null || values.length == 0)
-            throw new IllegalArgumentException("Values cannot be null or empty");
-
-        short sum = values[0].value;
-        for(int i = 1, length=values.length; i < length; i++)
-            sum += values[i].value;
-
-        return new RealInt16(sum);
-    }
-
-
-    /**
-     * Checks if an object is equal to this MMField element.
-     * @param b Object to compare to this MMField element.
+     * Checks if an object is equal to this ring element.
+     * @param b Object to compare to this ring element.
      * @return True if the objects are the same or are both {@link RealInt16}'s and have equal values.
      */
     @Override
@@ -311,8 +270,8 @@ public class RealInt16 implements Ring<RealInt16> {
 
 
     /**
-     * Converts this field element to a string representation.
-     * @return A string representation of this field element.
+     * Converts this ring element to a string representation.
+     * @return A string representation of this ring element.
      */
     public String toString() {
         return String.valueOf(value);

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
 import org.flag4j.arrays.backend.ring_arrays.TensorOverRing;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.io.parsing.ComplexNumberParser;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
@@ -38,8 +39,8 @@ import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldTensorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooOps;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.StringUtils;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.util.Arrays;
@@ -63,6 +64,18 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
     public CTensor(Shape shape, Complex128[] entries) {
         super(shape, entries);
         if(entries.length == 0 || entries[0] == null) setZeroElement(Complex128.ZERO);
+    }
+
+
+    /**
+     * Creates a tensor from an nD array. The tensors shape will be inferred from.
+     * @param nDArray Array to construct tensor from. Must be a rectangular array.
+     * @throws IllegalArgumentException If {@code nDArray} is not an array or not rectangular.
+     */
+    public CTensor(Object nDArray) {
+        super(ArrayUtils.nDArrayShape(nDArray),
+                new Complex128[ArrayUtils.nDArrayShape(nDArray).totalEntriesIntValueExact()]);
+        ArrayUtils.nDFlatten(nDArray, shape, data, 0);
     }
 
 
@@ -177,7 +190,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
      * @param entries Entries of this tensor.
      */
     public CTensor(Shape shape, double[] entries) {
-        super(shape, ArrayUtils.wrapAsComplex128(entries, null));
+        super(shape, ArrayConversions.toComplex128(entries, null));
         setZeroElement(Complex128.ZERO);
     }
 
@@ -542,34 +555,12 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
     public String toString() {
         int size = shape.totalEntries().intValueExact();
         StringBuilder result = new StringBuilder(String.format("shape: %s\n", shape));
-        result.append("[");
 
-        int stopIndex = Math.min(PrintOptions.getMaxColumns()-1, size-1);
-        int width;
-        String value;
-
-        // Get data up until the stopping point.
-        for(int i=0; i<stopIndex; i++) {
-            value = StringUtils.ValueOfRound(data[i], PrintOptions.getPrecision());
-            width = PrintOptions.getPadding() + value.length();
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        if(stopIndex < size-1) {
-            width = PrintOptions.getPadding() + 3;
-            value = "...";
-            value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-            result.append(String.format("%-" + width + "s", value));
-        }
-
-        // Get last entry now
-        value = StringUtils.ValueOfRound(data[size-1], PrintOptions.getPrecision());
-        width = PrintOptions.getPadding() + value.length();
-        value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
-        result.append(String.format("%-" + width + "s", value));
-
-        result.append("]");
+        result.append(PrettyPrint.abbreviatedArray(data,
+                PrintOptions.getMaxColumns(),
+                PrintOptions.getPadding(),
+                PrintOptions.getPrecision(),
+                PrintOptions.useCentering()));
 
         return result.toString();
     }

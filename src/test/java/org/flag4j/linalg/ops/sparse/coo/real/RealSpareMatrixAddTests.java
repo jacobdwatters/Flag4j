@@ -43,6 +43,6 @@ class RealSpareMatrixAddTests {
         exp = new CooMatrix(expShape, expEntries, expIndices[0], expIndices[1]);
 
 
-        assertEquals(exp, RealSparseMatrixOperations.add(A, B));
+        assertEquals(exp, RealSparseMatrixOps.add(A, B));
     }
 }

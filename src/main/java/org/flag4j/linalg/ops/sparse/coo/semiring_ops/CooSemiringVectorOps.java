@@ -41,7 +41,6 @@ public final class CooSemiringVectorOps {
 
     private CooSemiringVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 

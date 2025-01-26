@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +37,8 @@
  *   <li><b>Real Numbers:</b> Dense arrays of real numbers (double-precision floating-point).</li>
  *   <li><b>Complex Numbers:</b> Dense arrays of complex numbers ({@link org.flag4j.algebraic_structures.Complex64} or
  *   {@link org.flag4j.algebraic_structures.Complex128}).</li>
- *   <li><b>Generic MMField Elements:</b> Dense arrays parameterized over a generic
- *   {@link org.flag4j.algebraic_structures.Field MMField}.</li>
+ *   <li><b>Generic Field Elements:</b> Dense arrays parameterized over a generic
+ *   {@link org.flag4j.algebraic_structures.Field Field}.</li>
  *   <li><b>Ring and Semiring Elements:</b> Dense arrays parameterized over {@link org.flag4j.algebraic_structures.Ring Ring}
  *   and {@link org.flag4j.algebraic_structures.Semiring Semiring} elements.</li>
  * </ul>
@@ -58,11 +58,23 @@
  *   <li>{@link org.flag4j.arrays.dense.CTensor CTensor} - Dense tensor of complex numbers (backed by
  *   {@link org.flag4j.algebraic_structures.Complex128 Complex128} array).</li>
  *   <li>{@link org.flag4j.arrays.dense.FieldVector FieldVector&lt;T&gt;} - Dense vector parameterized over a field element
- *   {@code T extends MMField<T>}.</li>
+ *   {@code T extends Field<T>}.</li>
  *   <li>{@link org.flag4j.arrays.dense.FieldMatrix FieldMatrix&lt;T&gt;} - Dense matrix parameterized over a field element
- *   {@code T extends MMField<T>}.</li>
+ *   {@code T extends Field<T>}.</li>
  *   <li>{@link org.flag4j.arrays.dense.FieldTensor FieldTensor&lt;T&gt;} - Dense tensor parameterized over a field element
- *   {@code T extends MMField<T>}.</li>
+ *   {@code T extends Field<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.RingVector RingVector&lt;T&gt;} - Dense vector parameterized over a ring element
+ *   {@code T extends Ring<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.RingMatrix RingMatrix&lt;T&gt;} - Dense matrix parameterized over a ring element
+ *   {@code T extends Ring<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.RingTensor RingTensor&lt;T&gt;} - Dense tensor parameterized over a ring element
+ *   {@code T extends Ring<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.SemiringVector SemiringVector&lt;T&gt;} - Dense vector parameterized over a semiring element
+ *   {@code T extends semiring<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.SemiringMatrix SemiringMatrix&lt;T&gt;} - Dense matrix parameterized over a semiring element
+ *   {@code T extends semiring<T>}.</li>
+ *   <li>{@link org.flag4j.arrays.dense.SemiringTensor SemiringTensor&lt;T&gt;} - Dense tensor parameterized over a semiring element
+ *   {@code T extends semiring<T>}.</li>
  * </ul>
  *
  * @see org.flag4j.arrays.sparse

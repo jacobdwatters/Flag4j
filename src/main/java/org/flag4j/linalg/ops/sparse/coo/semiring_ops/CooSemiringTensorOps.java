@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,8 +39,7 @@ import java.util.*;
 public final class CooSemiringTensorOps {
 
     private CooSemiringTensorOps() {
-        // Hide constructor for utility class.
-        
+        // Hide constructor for utility class. for utility class.
     }
 
 
@@ -171,7 +170,7 @@ public final class CooSemiringTensorOps {
      * @return The generalized trace of the {@code src} tensor along {@code axis1} and {@code axis2}.
      *
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than the {@code src} tensors rank.
-     * @throws IllegalArgumentException  If {@code axis1 == @code axis2} or {@code src.shape.get(axis1) != src.shape.get(axis1)}
+     * @throws IllegalArgumentException  If {@code axis1 == axis2} or {@code src.shape.get(axis1) != src.shape.get(axis1)}
      *                                   (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     public static <T extends Semiring<T>> SparseTensorData<T> tensorTr(

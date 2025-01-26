@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,8 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.exceptions.Flag4jParsingException;
 
 import java.io.BufferedReader;
@@ -53,7 +54,7 @@ import java.util.function.Function;
  * <ul>
  *   <li>Object: matrix</li>
  *   <li>Format: coordinate, array</li>
- *   <li>MMField: real, integer, complex</li>
+ *   <li>Field: real, integer, complex</li>
  *   <li>MMSymmetry: general</li>
  * </ul>
  * <p>Headers must be of the form:
@@ -231,7 +232,7 @@ public class MatrixMarketReader {
     private void loadDenseRealMatrix() throws IOException {
         Pair<Shape, List<Double>> matData = loadDenseMatrix(Double::parseDouble);
         Shape shape = matData.first();
-        double[] data = ArrayUtils.fromDoubleList(matData.second());
+        double[] data = ArrayConversions.fromDoubleList(matData.second());
 
         // Transpose to account for column major ordering in Matrix Market Format.
         mat = new Matrix(shape.swapAxes(0, 1), data).T();
@@ -249,7 +250,7 @@ public class MatrixMarketReader {
             double im = Double.parseDouble(tokenizer.nextToken());
 
             if(tokenizer.hasMoreTokens())
-                throw new Flag4jParsingException("Expecting two values for complex entries.");
+                throw new Flag4jParsingException("Expecting two values for complex data.");
 
             return new Complex128(re, im);
         };
@@ -290,7 +291,7 @@ public class MatrixMarketReader {
     /**
      * Loads a dense matrix from a Matrix Market file.
      * @param parseFunction Function to parse string for a single entry to the field type {@link T}.
-     * @return A {@link Pair} containing the {@link Shape shape} of the matrix and a list containing the entries of the matrix in
+     * @return A {@link Pair} containing the {@link Shape shape} of the matrix and a list containing the data of the matrix in
      * colum-major ordering.
      * @param <T> Type corresponding to the field from the Matrix Market file header.
      * e.g. real -> {@code T} is type {@link Double}, complex -> {@code T} is type {@link Complex128}.
@@ -310,14 +311,14 @@ public class MatrixMarketReader {
             findNextNonemptyLine();
             if (currLine == null) {
                 throw new Flag4jParsingException("Expecting " + size +
-                        " entries in the Matrix Market file but found " + (i+1) + ".");
+                        " data in the Matrix Market file but found " + (i+1) + ".");
             }
 
             try{
                 data.add(parseFunction.apply(currLine));
             } catch(NullPointerException e) {
                 throw new Flag4jParsingException("Expecting " + size +
-                        " entries in the Matrix Market Format file but found " + (i+1) + ".");
+                        " data in the Matrix Market Format file but found " + (i+1) + ".");
             }
         }
 
@@ -334,7 +335,7 @@ public class MatrixMarketReader {
     /**
      * Loads a complex COO matrix from a Matrix Market Format file.
      * @param parseFunction Function to parse {@link StringTokenizer} for a single data entry to the field type {@link T}.
-     * @return A {@link SparseMatrixData} object storing the shape, non-zero entries, row indices, and column indices of the COO
+     * @return A {@link SparseMatrixData} object storing the shape, non-zero data, row indices, and column indices of the COO
      * matrix.
      * @throws IOException If an I/O error occurs.
      * @param <T> Type corresponding to the field from the Matrix Market file header.
@@ -355,7 +356,7 @@ public class MatrixMarketReader {
 
             if (currLine == null) {
                 throw new Flag4jParsingException("Expecting " + nnz +
-                        " non-zero entries for coordinate Format but found " + (i+1) + ".");
+                        " non-zero data for coordinate Format but found " + (i+1) + ".");
             }
 
             StringTokenizer tokenizer = new StringTokenizer(currLine);
@@ -378,9 +379,11 @@ public class MatrixMarketReader {
         findNextNonemptyLine();
         if(currLine != null) {
             throw new Flag4jParsingException("Found extra non-empty lines at the end of the Matrix Market Format file. " +
-                    "The number of  data lines does not match the number of non-zero entries specified: " + cols + ".");
+                    "The number of  data lines does not match the number of non-zero data specified: " + cols + ".");
         }
 
+        // Ensure that the data is sorted by indices lexicographically as this is not required by Matrix Market.
+        CooDataSorter<T> sorter = new CooDataSorter<>(data, rowIndices, colIndices).sparseSort();
         return new SparseMatrixData<T>(new Shape(rows, cols), data, rowIndices, colIndices);
     }
 }

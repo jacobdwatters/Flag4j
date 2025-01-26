@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,7 @@ public final class RealFieldDenseCooOps {
 
         T[] destEntries = (T[]) new Field[src2.nnz];
         int[][] destIndices = new int[src2.indices.length][src2.indices[0].length];
-        ArrayUtils.deepCopy(src2.indices, destIndices);
+        ArrayUtils.deepCopy2D(src2.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
@@ -81,7 +81,7 @@ public final class RealFieldDenseCooOps {
             AbstractDenseFieldTensor<?, T> src1, CooTensor src2,
             T[] destEntries, int[][] destIndices) {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
-        ArrayUtils.deepCopy(src2.indices, destIndices); // Copy over indices.
+        ArrayUtils.deepCopy2D(src2.indices, destIndices); // Copy over indices.
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
@@ -101,7 +101,7 @@ public final class RealFieldDenseCooOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
         T[] destEntries = (T[]) new Field[src1.nnz];
         int[][] destIndices = new int[src1.indices.length][src1.indices[0].length];
-        ArrayUtils.deepCopy(src1.indices, destIndices);
+        ArrayUtils.deepCopy2D(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
             int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.

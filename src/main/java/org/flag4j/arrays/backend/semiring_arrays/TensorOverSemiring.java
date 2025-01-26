@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ package org.flag4j.arrays.backend.semiring_arrays;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayBuilder;
 
 
 /**
@@ -163,8 +163,8 @@ public interface TensorOverSemiring<T extends TensorOverSemiring<T, U, V, W>,
      */
     default AbstractTensor<?, V, W> tensorDot(T src2, int axes){
         int rank2 = src2.getRank();
-        int[] src1Axes = ArrayUtils.intRange(0, axes);
-        int[] src2Axes = ArrayUtils.intRange(rank2-axes, rank2);
+        int[] src1Axes = ArrayBuilder.intRange(0, axes);
+        int[] src2Axes = ArrayBuilder.intRange(rank2-axes, rank2);
 
         return tensorDot(src2, src1Axes, src2Axes);
     }
@@ -241,7 +241,7 @@ public interface TensorOverSemiring<T extends TensorOverSemiring<T, U, V, W>,
      *
      * @return The generalized trace of this tensor along {@code axis1} and {@code axis2}.
      * @throws IndexOutOfBoundsException If the two axes are not both larger than zero and less than this tensors rank.
-     * @throws IllegalArgumentException If {@code axis1 == @code axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
+     * @throws IllegalArgumentException If {@code axis1 == axis2} or {@code this.shape.get(axis1) != this.shape.get(axis1)}
      * (i.e. the axes are equal or the tensor does not have the same length along the two axes.)
      */
     TensorOverSemiring<?, ?, ?, W> tensorTr(int axis1, int axis2);

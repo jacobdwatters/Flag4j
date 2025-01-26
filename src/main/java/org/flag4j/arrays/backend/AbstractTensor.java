@@ -31,22 +31,6 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
- * <p>The base class of all tensors. A tensor is a multidimensional array which consists of:
- * <ul>
- *     <li>The {@link #shape} of the tensor. This specified the dimension of the tensor along each axes.
- *     The number of axes in this tensor is referred to as the "{@link #rank}" of the tensor and corresponds to the number of
- *     indices required to uniquely identify an element within the </li>
- *     <li>A one-dimensional container for the {@link #data} of the tensor. If the tensor is dense, this will contain all
- *     data of the tensor. If the tensor is sparse this will only contains the non-zero elements of the tensor.</li>
- * </ul>
- * 
- *
- * @param <T> Type of this tensor.
- * @param <U> Storage for data of this tensor.
- * @param <V> Type (or wrapper) of an element of this tensor.
- */
-
-/**
  * <p>The base abstract class for all tensors, including matrices and vectors.
  *
  * <p>A tensor is a multidimensional array that consists of:
@@ -72,7 +56,7 @@ import java.math.BigInteger;
  * @see org.flag4j.arrays.sparse
  */
 public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
-        implements Serializable, TensorMixin<T, U, V> {
+        implements Serializable {
 
     /**
      * Entry data of this tensor. If this tensor is dense, then this specifies all data within this tensor. If this tensor is
@@ -107,7 +91,6 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
      * Gets the shape of this tensor.
      * @return The shape of this tensor.
      */
-    @Override
     public Shape getShape() {
         return shape;
     }
@@ -119,7 +102,6 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
      * @return The element of this tensor at the specified indices.
      * @throws ArrayIndexOutOfBoundsException If any indices are not within this tensor.
      */
-    @Override
     public abstract V get(int... indices);
 
 
@@ -142,7 +124,6 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
      *
      * @return The rank of this tensor.
      */
-    @Override
     public int getRank() {
         return rank;
     }
@@ -152,7 +133,6 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
      * Gets the entry data of this tensor as a 1D array.
      * @return The data of this tensor.
      */
-    @Override
     public U getData() {
         return data;
     }
@@ -227,4 +207,50 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
      * {@code data}.
      */
     public abstract T makeLikeTensor(Shape shape, U entries);
+
+
+    /**
+     * Computes the transpose of a tensor by exchanging the first and last axes of this tensor.
+     * @return The transpose of this tensor.
+     * @see #T(int, int)
+     * @see #T(int...)
+     */
+    public T T() {
+        return T(0, getRank()-1);
+    }
+
+
+    /**
+     * Computes the transpose of a tensor by exchanging {@code axis1} and {@code axis2}.
+     *
+     * @param axis1 First axis to exchange.
+     * @param axis2 Second axis to exchange.
+     * @return The transpose of this tensor according to the specified axes.
+     * @throws IndexOutOfBoundsException If either {@code axis1} or {@code axis2} are out of bounds for the rank of this tensor.
+     * @see #T()
+     * @see #T(int...)
+     */
+    public abstract T T(int axis1, int axis2);
+
+
+    /**
+     * Computes the transpose of this tensor. That is, permutes the axes of this tensor so that it matches
+     * the permutation specified by {@code axes}.
+     *
+     * @param axes Permutation of tensor axis. If the tensor has rank {@code N}, then this must be an array of length
+     *             {@code N} which is a permutation of {@code {0, 1, 2, ..., N-1}}.
+     * @return The transpose of this tensor with its axes permuted by the {@code axes} array.
+     * @throws IndexOutOfBoundsException If any element of {@code axes} is out of bounds for the rank of this tensor.
+     * @throws IllegalArgumentException If {@code axes} is not a permutation of {@code {1, 2, 3, ... N-1}}.
+     * @see #T(int, int)
+     * @see #T()
+     */
+    public abstract T T(int... axes);
+
+
+    /**
+     * Creates a deep copy of this tensor.
+     * @return A deep copy of this tensor.
+     */
+    public abstract T copy();
 }

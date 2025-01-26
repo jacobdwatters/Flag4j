@@ -35,7 +35,6 @@ import java.util.logging.Logger;
 public final class ThreadManager {
     private ThreadManager() {
         // Hide default constructor for utility class.
-        
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseVectorData;
+import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingVector;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -40,7 +41,6 @@ public final class CooRingVectorOps {
 
     private CooRingVectorOps() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -94,5 +94,38 @@ public final class CooRingVectorOps {
         }
 
         return new SparseVectorData<T>(shape1, values, indices);
+    }
+
+
+    /**
+     * Computes the inner product of two complex sparse vectors. Both sparse vectors are assumed
+     * to have their indices sorted lexicographically.
+     * @param src1 First sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @param src2 Second sparse vector in the inner product. Indices assumed to be sorted lexicographically.
+     * @return The result of the vector inner product.
+     * @throws IllegalArgumentException If the two vectors do not have the same size (full size including zeros).
+     */
+    public static <T extends Ring<T>> T inner(
+            AbstractCooRingVector<?, ?, ?, ?, T> src1,
+            AbstractCooRingVector<?, ?, ?, ?, T> src2) {
+        ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
+
+        T product = src1.getZeroElement();
+
+        int src1Counter = 0;
+        int src2Counter = 0;
+
+        while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
+            if(src1.indices[src1Counter]==src2.indices[src2Counter]) {
+                // Then indices match, add product of elements.
+                product = product.add(src1.data[src1Counter].mult(src2.data[src2Counter].conj()));
+            } else if(src1.indices[src1Counter] < src2.indices[src2Counter]) {
+                src1Counter++;
+            } else {
+                src2Counter++;
+            }
+        }
+
+        return product;
     }
 }

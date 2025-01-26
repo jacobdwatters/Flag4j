@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.sparse.coo;
 
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
-import org.flag4j.util.ArrayUtils;
+import org.flag4j.util.ArrayConversions;
 
 import java.util.*;
 
@@ -91,7 +91,7 @@ public class CooDataSorter<T> {
                 throw new IllegalArgumentException("All lists must have the same length.");
             }
 
-            this.keys[i] = ArrayUtils.toArrayList(indicesT[i]);
+            this.keys[i] = ArrayConversions.toArrayList(indicesT[i]);
         }
     }
 
@@ -199,9 +199,8 @@ public class CooDataSorter<T> {
 
         // Create a List of indices.
         List<Integer> indices = new ArrayList<>();
-        for(int i=0; i<key.size(); i++) {
+        for(int i=0; i<key.size(); i++)
             indices.add(i);
-        }
 
         // Sort the indices list based on the key list.
         indices.sort(Comparator.comparingInt(key::get));
@@ -214,9 +213,8 @@ public class CooDataSorter<T> {
         for(int i=0; i<key.size(); i++) {
             int k = indices.get(i);
 
-            while(i != k && swapMap.containsKey(k)) {
+            while(i != k && swapMap.containsKey(k))
                 k = swapMap.get(k);
-            }
 
             swapFrom.add(i);
             swapTo.add(k);
@@ -233,9 +231,8 @@ public class CooDataSorter<T> {
         for(List<Integer> list : keys) {
             List<Integer> subList = list.subList(start, stop);
 
-            for (int i = 0; i < key.size(); i++) {
+            for (int i = 0; i < key.size(); i++)
                 Collections.swap(subList, swapFrom.get(i), swapTo.get(i));
-            }
         }
 
         // Find ranges which have the same value in the sorted key list.
@@ -269,9 +266,8 @@ public class CooDataSorter<T> {
      */
     public void unwrap(Object[] values, int[][] indices) {
         // Copy over data values.
-        for(int i=0; i<this.values.size(); i++) {
+        for(int i=0; i<this.values.size(); i++)
             values[i] = this.values.get(i);
-        }
 
         // Copy over indices (must be transposed).
         for(int i=0; i<indices.length; i++) {
@@ -290,14 +286,12 @@ public class CooDataSorter<T> {
     @SuppressWarnings("unused")
     public void unwrap(Object[] values, int[] indices) {
         // Copy over data values.
-        for(int i=0; i<this.values.size(); i++) {
+        for(int i=0; i<this.values.size(); i++)
             values[i] = this.values.get(i);
-        }
 
         // Copy over indices (must be transposed).
-        for(int i=0; i<indices.length; i++) {
+        for(int i=0; i<indices.length; i++)
             indices[i] = this.keys[0].get(i);
-        }
     }
 
 
@@ -308,9 +302,8 @@ public class CooDataSorter<T> {
      */
     public void unwrap(double[] values, int[][] indices) {
         // Copy over data values.
-        for(int i=0; i<this.values.size(); i++) {
+        for(int i=0; i<this.values.size(); i++)
             values[i] = (double) this.values.get(i);
-        }
 
         // Copy over indices (must be transposed).
         for(int i=0; i<indices.length; i++) {

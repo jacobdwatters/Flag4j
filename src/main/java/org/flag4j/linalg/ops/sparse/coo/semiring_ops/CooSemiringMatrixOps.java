@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
+import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringMatrix;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -40,7 +41,6 @@ public final class CooSemiringMatrixOps {
 
     private CooSemiringMatrixOps() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -170,5 +170,27 @@ public final class CooSemiringMatrixOps {
         }
 
         return new SparseMatrixData<V>(shape1, product, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Checks if a complex sparse matrix is the identity matrix.
+     * @param src Matrix to check if it is the identity matrix.
+     * @return {@code true} if the {@code src} matrix is the identity matrix; {@code false} otherwise.
+     */
+    public static <T extends Semiring<T>> boolean isIdentity(AbstractCooSemiringMatrix<?, ?, ?, T> src) {
+        // Ensure the matrix is square and there are at least the same number of non-zero data as data on the diagonal.
+        if(!src.isSquare() || src.data.length<src.numRows) return false;
+
+        for(int i = 0, size = src.data.length; i<size; i++) {
+            // Ensure value is 1 and on the diagonal.
+            if(src.rowIndices[i] != i && src.colIndices[i] != i && !src.data[i].isOne()) {
+                return false;
+            } else if((src.rowIndices[i] != i || src.colIndices[i] != i) && !src.data[i].isZero()) {
+                return false;
+            }
+        }
+
+        return true; // If we make it to this point the matrix must be an identity matrix.
     }
 }

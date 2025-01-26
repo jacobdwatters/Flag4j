@@ -56,11 +56,13 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
 
 
     /**
-     * Creates a tensor with the specified data and shape.
+     * Constructs a dense semiring vector with the specified data and shape.
      *
      * @param shape Shape of this tensor.
      * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
+     *
+     * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code shape.getRank() != 1}.
      */
     protected AbstractDenseSemiringVector(Shape shape, V[] data) {
         super(shape, data);
@@ -73,7 +75,7 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      * Constructs a dense vector with the specified {@code data} of the same type as the vector.
      * @param entries Entries of the dense vector to construct.
      */
-    protected abstract T makeLikeTensor(V[] entries);
+    public abstract T makeLikeTensor(V[] entries);
 
 
     /**
@@ -95,7 +97,7 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      */
     @Override
     public T join(T b) {
-        V[] dest = (V[]) new Semiring[size + b.size];
+        V[] dest = makeEmptyDataArray(size + b.size);
         DenseConcat.concat(data, b.data, dest);
         return makeLikeTensor(dest);
     }
@@ -162,9 +164,9 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      */
     @Override
     public U repeat(int n, int axis) {
-        V[] dest = (V[]) new Semiring[size*n];
+        V[] dest = makeEmptyDataArray(size*n);
         DenseConcat.repeat(data, n, axis, dest); // n is verified to be 1 or 0 here.
-        Shape shape = (n==0) ? new Shape(n, size) : new Shape(size, n);
+        Shape shape = (axis==0) ? new Shape(n, size) : new Shape(size, n);
         return makeLikeMatrix(shape, dest);
     }
 
@@ -196,7 +198,7 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      */
     @Override
     public U stack(T b, int axis) {
-        V[] dest = (V[]) new Semiring[2*size];
+        V[] dest = makeEmptyDataArray(2*size);
         DenseConcat.stack(data, b.data, axis, dest);
         Shape shape = (axis==0) ? new Shape(2, size) : new Shape(size, 2);
         return makeLikeMatrix(shape, dest);
@@ -214,9 +216,9 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      */
     @Override
     public U outer(T b) {
-        V[] dest = (V[]) new Semiring[size*b.size];
+        V[] dest = makeEmptyDataArray(size*b.size);
         DenseSemiringVectorOps.outerProduct(data, b.data, dest);
-        return makeLikeMatrix(new Shape(size, size), dest);
+        return makeLikeMatrix(new Shape(size, b.size), dest);
     }
 
 

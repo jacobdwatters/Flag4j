@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,28 +27,54 @@ package org.flag4j.arrays.dense;
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.CooFieldMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.io.PrettyPrint;
-import org.flag4j.io.PrintOptions;
 import org.flag4j.util.ArrayUtils;
-import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 /**
- * <p>A dense matrix whose data are {@link Field} elements.
+ * <p>Instances of this class represents a dense matrix backed by a {@link Field} array. The {@code FieldMatrix} class
+ * provides functionality for matrix operations whose elements are members of a field, supporting mutable data with a fixed shape.
  *
- * <p>MMField matrices have mutable data but fixed shape.
+ * <p>A {@code FieldMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
+ * and may offer improved performance for certain operations compared to general rank-n tensors.
  *
- * <p>A matrix is essentially equivalent to a rank 2 tensor but has some extended functionality and may have improved performance
- * for some ops.
+ * <p><b>Key Features:</b>
+ * <ul>
+ *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
+ *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
+ *   <li>Utility methods for checking properties like being triangular.</li>
+ * </ul>
  *
- * @param <T> Type of the {@link Field field} element for the matrix.
+ * <p><b>Example Usage:</b>
+ * <pre>{@code
+ * // Constructing a complex matrix from a 2D array of complex numbers (could be any field).
+ * Complex128[][] complexData = {
+ *     { new Complex128(1, 2), new Complex128(3, 4) },
+ *     { new Complex128(5, 6), new Complex128(7, 8) }
+ * };
+ * FieldMatrix<Complex128> matrix = new FieldMatrix(complexData);
+ *
+ * // Performing matrix multiplication with the transpose of the matrix.
+ * FieldMatrix<Complex128> result = matrix.mult(matrix.T());
+ *
+ * // Performing matrix conjugate transpose (i.e. Hermitian transpose).
+ * FieldMatrix<Complex128> conjugateTranspose = matrix.H();  // May not be supported for all field types.
+ *
+ * // Checking if the matrix is upper triangular.
+ * boolean isTriU = matrix.isTriU();
+ * }</pre>
+ *
+ * @param <T> Type of the {@link Field field} for elements of the matrix.
+ *
+ * @see FieldVector
+ * @see FieldTensor
+ * @see AbstractDenseFieldMatrix
  */
 public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<FieldMatrix<T>, FieldVector<T>, T> {
     private static final long serialVersionUID = 1L;
@@ -141,6 +167,20 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
+     * Constructs a vector of a similar type as this matrix.
+     *
+     * @param shape Shape of the vector to construct. Must be rank 1.
+     * @param entries Entries of the vector.
+     *
+     * @return A vector of a similar type as this matrix.
+     */
+    @Override
+    protected FieldVector<T> makeLikeVector(Shape shape, T[] entries) {
+        return new FieldVector<>(shape, entries);
+    }
+
+
+    /**
      * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
@@ -200,44 +240,60 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
+     * Converts this matrix to an equivalent sparse COO matrix.
+     *
+     * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
+     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
+     *
+     * @return A sparse COO matrix that is equivalent to this dense matrix.
+     *
+     * @see #toCoo()
+     */
+    @Override
+    public CooFieldMatrix<T> toCoo(double estimatedSparsity) {
+        return (CooFieldMatrix<T>) super.toCoo(estimatedSparsity);
+    }
+
+
+    /**
      * Converts this dense tensor to an equivalent sparse COO tensor.
      *
      * @return A sparse COO tensor equivalent to this dense tensor.
      */
     @Override
     public CooFieldMatrix<T> toCoo() {
-        int rows = numRows;
-        int cols = numCols;
-        List<T> sparseEntries = new ArrayList<>();
-        List<Integer> rowIndices = new ArrayList<>();
-        List<Integer> colIndices = new ArrayList<>();
-
-        for(int i=0; i<rows; i++) {
-            int rowOffset = i*cols;
-
-            for(int j=0; j<cols; j++) {
-                T val = data[rowOffset + j];
-
-                if(!val.isZero()) {
-                    sparseEntries.add(val);
-                    rowIndices.add(i);
-                    colIndices.add(j);
-                }
-            }
-        }
-
-        return new CooFieldMatrix<T>(shape, sparseEntries, rowIndices, colIndices);
+        return (CooFieldMatrix<T>) super.toCoo();
     }
 
 
     /**
      * Converts this matrix to an equivalent sparse CSR matrix.
-     * @return A sparse coo matrix equivalent to this matrix.
-     * @see #toCoo()
+     *
+     * @return A sparse CSR matrix that is equivalent to this dense matrix.
+     *
+     * @see #toCsr(double)
      */
+    @Override
     public CsrFieldMatrix<T> toCsr() {
-        // For simplicity convert to a COO matrix as an intermediate.
-        return toCoo().toCsr();
+        return (CsrFieldMatrix<T>) super.toCsr();
+    }
+
+
+    /**
+     * Converts this matrix to an equivalent sparse CSR matrix.
+     *
+     * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
+     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
+     *
+     * @return A sparse CSR matrix that is equivalent to this dense matrix.
+     *
+     * @see #toCsr()
+     */
+    @Override
+    public CsrFieldMatrix<T> toCsr(double estimatedSparsity) {
+        return (CsrFieldMatrix<T>) super.toCsr(estimatedSparsity);
     }
 
 
@@ -275,7 +331,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      * @see #I(Shape, Field)
      * @see #I(int, int, Field)
      */
-    public static FieldMatrix I(int size, Field fieldValue) {
+    public static <T extends Field<T>> FieldMatrix<T> I(int size, T fieldValue) {
         return I(size, size, fieldValue);
     }
 
@@ -292,7 +348,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      * @see #I(int, Field)
      * @see #I(Shape, Field)
      */
-    public static FieldMatrix I(int numRows, int numCols, Field fieldValue) {
+    public static <T extends Field<T>> FieldMatrix<T> I(int numRows, int numCols, T fieldValue) {
         return I(new Shape(numRows, numCols), fieldValue);
     }
 
@@ -308,7 +364,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      * @see #I(int, Field)
      * @see #I(Shape, Field)
      */
-    public static FieldMatrix I(Shape shape, Field fieldValue) {
+    public static <T extends Field<T>> FieldMatrix<T> I(Shape shape, T fieldValue) {
         Field[] identityValues = new Field[shape.totalEntriesIntValueExact()];
         Arrays.fill(identityValues, (Field) fieldValue.getZero());
         Field one = (Field) fieldValue.getOne();
@@ -319,7 +375,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
         for(int i=0, stop=Math.min(rows, cols); i<stop; i++)
             identityValues[i*cols + i] = one;
 
-        return new FieldMatrix(shape, identityValues);
+        return new FieldMatrix(shape, identityValues); 
     }
 
 
@@ -327,7 +383,7 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
      * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
      * <p>For large {@code n} values, this method <i>may</i> significantly more efficient than calling
-     * {@code #mult(Matrix) this.mult(this)} {@code n} times.
+     * {@link #mult(FieldMatrix)  this.mult(this)} {@code n} times.
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity
      */
@@ -357,10 +413,27 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
+     * Accepts a visitor that implements the {@link MatrixVisitor} interface.
+     * This method is part of the "Visitor Pattern" and allows operations to be performed
+     * on the matrix without modifying the matrix's class directly.
+     *
+     * @param visitor The visitor implementing the operation to be performed.
+     *
+     * @return The result of the visitor's operation, typically another matrix or a scalar value.
+     *
+     * @throws NullPointerException if the visitor is {@code null}.
+     */
+    @Override
+    public <R> R accept(MatrixVisitor<R> visitor) {
+        return visitor.visit(this);
+    }
+
+
+    /**
      * Checks if an object is equal to this matrix object.
      * @param object Object to check equality with this matrix.
-     * @return True if the two matrices have the same shape, are numerically equivalent, and are of type {@link FieldMatrix}.
-     * False otherwise.
+     * @return {@code true} if the two matrices have the same shape, are numerically equivalent, and are of type
+     * {@link FieldMatrix} {@code false} otherwise.
      */
     @Override
     public boolean equals(Object object) {
@@ -384,109 +457,11 @@ public class FieldMatrix<T extends Field<T>> extends AbstractDenseFieldMatrix<Fi
 
 
     /**
-     * Gets a row of the matrix formatted as a human-readable string.
-     * @param rowIndex Index of the row to get.
-     * @param columnsToPrint List of column indices to print.
-     * @param maxWidths List of maximum string lengths for each column.
-     * @return A human-readable string representation of the specified row.
-     */
-    private String rowToString(int rowIndex, List<Integer> columnsToPrint, List<Integer> maxWidths) {
-        StringBuilder sb = new StringBuilder();
-
-        // Start the row with appropriate bracket.
-        sb.append(rowIndex > 0 ? " [" : "[");
-
-        // Loop over the columns to print.
-        for (int i = 0; i < columnsToPrint.size(); i++) {
-            int colIndex = columnsToPrint.get(i);
-            String value;
-            int width = PrintOptions.getPadding() + maxWidths.get(i);
-
-            if (colIndex == -1) // Placeholder for truncated columns.
-                value = "...";
-            else
-                value = StringUtils.ValueOfRound(this.get(rowIndex, colIndex), PrintOptions.getPrecision());
-
-            if (PrintOptions.useCentering())
-                value = StringUtils.center(value, width);
-
-            sb.append(String.format("%-" + width + "s", value));
-        }
-
-        // Close the row.
-        sb.append("]");
-
-        return sb.toString();
-    }
-
-
-    /**
      * Generates a human-readable string representing this matrix.
      * @return A human-readable string representing this matrix.
      */
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("shape: ").append(shape).append("\n");
-        result.append("[");
-
-        if (data.length == 0) {
-            result.append("[]"); // No data in this matrix.
-        } else {
-            int numRows = this.numRows;
-            int numCols = this.numCols;
-
-            int maxRows = PrintOptions.getMaxRows();
-            int maxCols = PrintOptions.getMaxColumns();
-
-            int rowStopIndex = Math.min(maxRows - 1, numRows - 1);
-            boolean truncatedRows = maxRows < numRows;
-
-            int colStopIndex = Math.min(maxCols - 1, numCols - 1);
-            boolean truncatedCols = maxCols < numCols;
-
-            // Build list of column indices to print
-            List<Integer> columnsToPrint = new ArrayList<>();
-            for (int j = 0; j < colStopIndex; j++)
-                columnsToPrint.add(j);
-
-            if (truncatedCols) columnsToPrint.add(-1); // Use -1 to indicate '...'.
-            columnsToPrint.add(numCols - 1); // Always include the last column.
-
-            // Compute maximum widths for each column
-            List<Integer> maxWidths = new ArrayList<>();
-            for (Integer colIndex : columnsToPrint) {
-                int maxWidth;
-                if (colIndex == -1)
-                    maxWidth = 3; // Width for '...'.
-                else
-                    maxWidth = PrettyPrint.maxStringLength(getCol(colIndex).data, rowStopIndex + 1);
-
-                maxWidths.add(maxWidth);
-            }
-
-            // Build the rows up to the stopping index.
-            for (int i = 0; i < rowStopIndex; i++) {
-                result.append(rowToString(i, columnsToPrint, maxWidths));
-                result.append("\n");
-            }
-
-            if (truncatedRows) {
-                // Print a '...' row to indicate truncated rows.
-                int totalWidth = maxWidths.stream().mapToInt(w -> w + PrintOptions.getPadding()).sum();
-                String value = "...";
-
-                if (PrintOptions.useCentering())
-                    value = StringUtils.center(value, totalWidth);
-
-                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
-            }
-
-            // Append the last row.
-            result.append(rowToString(numRows - 1, columnsToPrint, maxWidths));
-        }
-
-        result.append("]");
-
-        return result.toString();
+        return PrettyPrint.matrixToString(shape, data);
     }
 }

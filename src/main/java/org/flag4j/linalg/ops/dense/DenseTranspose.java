@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,10 @@ package org.flag4j.linalg.ops.dense;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
+import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 
-import static org.flag4j.util.ArrayUtils.makeNewIfNull;
+import static org.flag4j.util.ArrayBuilder.getOrCreateArray;
 
 /**
  * This utility class provides methods for computing the transpose of a dense tensor.
@@ -38,7 +39,6 @@ public final class DenseTranspose {
 
     private DenseTranspose() {
         // Hide default constructor for utility class.
-        
     }
 
 
@@ -60,7 +60,7 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         Shape destShape = shape.swapAxes(axis1, axis2);
         int[] destIndices;
 
@@ -92,7 +92,7 @@ public final class DenseTranspose {
                     + shape.getRank() + " tensor.");
         }
 
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         Shape destShape = shape.swapAxes(axis1, axis2);
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 
@@ -129,13 +129,13 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         Shape destShape = shape.permuteAxes(axes);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getNdIndices(i);
-            ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+            ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
             dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
@@ -163,13 +163,13 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        dest = makeNewIfNull(dest, src.length);
+        dest = ArrayBuilder.getOrCreateArray(dest, src.length);
         Shape destShape = shape.permuteAxes(axes);
         int[] destIndices;
 
         for(int i=0; i<src.length; i++) {
             destIndices = shape.getNdIndices(i);
-            ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+            ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
             dest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
         }
 
@@ -197,7 +197,7 @@ public final class DenseTranspose {
                     " tensor.");
         }
 
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         Shape destShape = shape.permuteAxes(axes);
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 
@@ -205,7 +205,7 @@ public final class DenseTranspose {
         ThreadManager.concurrentOperation(src.length, (startIdx, endIdx) -> {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);
-                ArrayUtils.swapUnsafe(destIndices, axes); // Compute destination indices.
+                ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
                 finalDest[destShape.getFlatIndex(destIndices)] = src[i]; // Apply transpose for the element
             }
         });
@@ -226,7 +226,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static <T extends Object> Object[] standardMatrix(Object[] src, int numRows, int numCols, Object[] dest) {
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
 
         int destIndex, srcIndex, end;
 
@@ -257,7 +257,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static Object[] blockedMatrix(Object[] src, int numRows, int numCols, Object[] dest) {
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         int blockSize = Configurations.getBlockSize();
         int blockRowEnd;
         int blockColEnd;
@@ -297,7 +297,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static Object[] standardMatrixConcurrent(Object[] src, int numRows, int numCols, Object[] dest) {
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 
         // Compute transpose concurrently
@@ -329,7 +329,7 @@ public final class DenseTranspose {
      * appropriate size will be constructed and returned.
      */
     public static Object[] blockedMatrixConcurrent(Object[] src, int numRows, int numCols, Object[] dest) {
-        dest = makeNewIfNull(dest, src.length);
+        dest = getOrCreateArray(dest, () -> new Object[src.length]);
         int blockSize = Configurations.getBlockSize();
         Object[] finalDest = dest; // Copy to an effectively final variable for lambda expression.
 

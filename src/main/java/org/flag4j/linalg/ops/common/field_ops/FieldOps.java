@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -207,6 +207,45 @@ public final class FieldOps {
     public static <V extends Field<V>> void scalMult(double[] entries, V factor, V[] dest) {
         for(int i=0, size=dest.length; i<size; i++)
             dest[i] = factor.mult(entries[i]);
+    }
+
+
+    /**
+     * <p>Scales entries by the specified {@code factor} within {@code src} starting at index {@code start}
+     * and scaling a total of {@code n} elements spaced by {@code stride}.
+     *
+     * <p>More formally, this method scales elements by the specified {@code factor} at indices:
+     * {@code start}, {@code start + stride}, {@code start + 2*stride}, ..., {@code start + (n-1)*stride}.
+     *
+     * <p>This method may be used to scale a row or column of a
+     * {@link org.flag4j.arrays.dense.Matrix matrix} {@code a} as follows:
+     * <ul>
+     *     <li>Maximum absolute value within row {@code i}:
+     *     <pre>{@code scale(a.data, i*a.numCols, a.numCols, 1, dest);}</pre></li>
+     *     <li>Maximum absolute value within column {@code j}:
+     *     <pre>{@code scale(a.data, j, a.numRows, a.numRows, dest);}</pre></li>
+     * </ul>
+     *
+     * @param src The array containing values to scale.
+     * @param factor Factor by which to scale elements.
+     * @param start The starting index in {@code src} to begin scaling.
+     * @param n The number of elements to scale within {@code src1}.
+     * @param stride The gap (in indices) between consecutive elements to scale within {@code src}.
+     * @param dest The array to store the result in. May be {@code null} or the same array as {@code src} to perform the operation
+     * in-place. Assumed to be at least as large as {@code src} but this is not explicitly enforced.
+     *
+     * @return If {@code dest == null} a new array containing all elements of {@code src} with the appropriate values scaled.
+     * Otherwise, A reference to the {@code dest} array.
+     */
+    public static <T extends Field<T>> T[] scalMult(
+            T[] src, double factor, int start, int n, int stride, T[] dest) {
+        if(dest==null) dest = src.clone();
+        int stop = start + n*stride;
+
+        for(int i=start; i<stop; i+=stride)
+            dest[i] = src[i].mult(factor);
+
+        return dest;
     }
 
 
