@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +22,7 @@
  * SOFTWARE.
  */
 
-package org.flag4j.arrays;
-
-import java.util.Arrays;
-import java.util.StringJoiner;
-
 /**
- * <p>Data record to store an ordered list of values (i.e., an n-tuple).
- * <p>Tuples are immutable.
- * @param data The values of the tuple.
- * @param <T> The type of the elements in the tuple.
- * @see IntTuple
- * @see Pair
- * @see Triple
+ * Distributions useful for repeated random sampling from the same distribution.
  */
-public record Tuple<T>(T... data) {
-
-    /**
-     * Gets the size of the tuple.
-     * @return The size of this tuple.
-     */
-    public int size() {
-        return data.length;
-    }
-
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(data);
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj == null) return false;
-        if(obj.getClass() != getClass()) return false;
-
-        return Arrays.equals(data, ((Tuple<?>)obj).data);
-    }
-
-
-    @Override
-    public String toString() {
-        StringJoiner joiner = new StringJoiner(", ", "(", ")");
-
-        for(T d : data)
-            joiner.add(d.toString());
-
-        return "Tuple[data=" + joiner.toString() + "]";
-    }
-}
+package org.flag4j.rng.distributions;

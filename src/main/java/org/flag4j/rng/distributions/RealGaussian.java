@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024-2025. Jacob Watters
+ * Copyright (c) 2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +22,52 @@
  * SOFTWARE.
  */
 
-package org.flag4j.arrays;
+package org.flag4j.rng.distributions;
 
-import java.util.Arrays;
-import java.util.StringJoiner;
+import org.flag4j.rng.RandomComplex;
+
+import java.util.Random;
+
 
 /**
- * <p>Data record to store an ordered list of values (i.e., an n-tuple).
- * <p>Tuples are immutable.
- * @param data The values of the tuple.
- * @param <T> The type of the elements in the tuple.
- * @see IntTuple
- * @see Pair
- * @see Triple
+ * A real Gaussian (e.g. normal) distribution.
  */
-public record Tuple<T>(T... data) {
+public class RealGaussian extends Distribution<Double, Random> {
+
 
     /**
-     * Gets the size of the tuple.
-     * @return The size of this tuple.
+     * Mean of the Gaussian distribution.
      */
-    public int size() {
-        return data.length;
+    public final double mean;
+    /**
+     * Standard deviation of the Gaussian distribution.
+     */
+    public final double std;
+
+
+    /**
+     * Constructs a real Gaussian distribution.
+     *
+     * @param rng Pseudorandom number generator to use when randomly sampling from this distribution.
+     * @param mean Mean of the Gaussian distribution.
+     * @param std Standard deviation of the Gaussian distribution.
+     */
+    public RealGaussian(RandomComplex rng, double mean, double std) {
+        super(rng);
+
+        this.mean = mean;
+        this.std = std;
     }
 
 
+    /**
+     * Randomly samples this Gaussian distribution.
+     *
+     * @return A pseudorandom value distributed according to a Gaussian distribution with specified {@link #mean} and {@link #std
+     * standard deviation}.
+     */
     @Override
-    public int hashCode() {
-        return Arrays.hashCode(data);
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj == null) return false;
-        if(obj.getClass() != getClass()) return false;
-
-        return Arrays.equals(data, ((Tuple<?>)obj).data);
-    }
-
-
-    @Override
-    public String toString() {
-        StringJoiner joiner = new StringJoiner(", ", "(", ")");
-
-        for(T d : data)
-            joiner.add(d.toString());
-
-        return "Tuple[data=" + joiner.toString() + "]";
+    public Double sample() {
+        return rng.nextGaussian();
     }
 }
