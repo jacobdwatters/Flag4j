@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,47 @@ package org.flag4j.rng;
 
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Complex64;
-import org.flag4j.util.ValidateParameters;
 
 import java.util.Random;
 
 
 /**
- * An instance of this class is used to generate a stream of random real or complex numbers.
+ * <p>The {@code RandomComplex} class provides methods to generate pseudorandom complex numbers under a variety of
+ * distributions and constraints. This class supports both {@link Complex128} and {@link Complex64}.
+ *
+ * <p>Distributions supported by this class include:
+ * <ul>
+ *     <li>Uniformly distributed random complex numbers on the unit disk, within annular regions, or rectangular regions
+ *         of the complex plane.</li>
+ *     <li>Gaussian distributed random complex numbers, including standard circular, elliptical, and
+ *         bivariate Gaussian distributions.</li>
+ * </ul>
+ *
+ * <h3>Example Usage:</h3>
+ * <pre>{@code
+ * RandomComplex randomComplex = new RandomComplex();
+ *
+ * // Generate a random complex number with a magnitude between 0 and 1.
+ * Complex128 randomOnDisk = randomComplex.randomComplex128();
+ *
+ * // Generate a random complex number with a magnitude between 1 and 2.
+ * Complex128 randomInAnnulus = randomComplex.randomComplex128(1, 2);
+ *
+ * // Generate a Gaussian-distributed random complex number centered at (0, 0)
+ * //   with standard distributions of 1 along both real and imaginary axis and
+ * //   a correlation coefficient between real and imaginary values of 0.5.
+ * Complex64 gaussianComplex = randomComplex.randnComplex64(0, 1, 0, 1, 0.5f);
+ * }</pre>
+ *
+ * <p>Note: This class extends {@link Random}. As such instances of {@code RandomComplex} are threadsafe.
+ * However, the concurrent use of the same {@code RandomComplex}
+ * instance across threads may encounter contention and consequent poor performance.
+ *
+ * @see java.util.Random
+ * @see Complex128
+ * @see Complex64
  */
 public class RandomComplex extends Random {
-
-    // TODO: Add support for generating complex numbers uniformly distributed in a square in the complex plane.
-    //  e.g. new Complex128(nextDouble(), nextDouble()) would be a complex number uniformly distributed in the unit square of the
-    //  complex plane.
-
-    // TODO: the randn methods should generate samples from a 2D Gaussian on the complex plane.
-    //  e.g. new Complex128(nextGaussian(meanRe, stdRe), nextGaussian(meanIm, stdIm)) would represent sample from a
-    //  2D elliptical Gaussian centered at (meanRe, meanIm) with standard deviations stdRe and stdIm along the real and imaginary
-    //  axes of the complex plane respectively.
 
 
     /**
@@ -119,29 +142,155 @@ public class RandomComplex extends Random {
 
 
     /**
-     * Generates a pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
-     * deviation of 1.0.
-     * @return A pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
-     * deviation of 1.0.
+     * Generates a pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
+     * @return A pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
+     * @see #randomRectComplex128(double, double, double, double)
      */
-    public Complex128 randnComplex128() {
-        return randomComplex128(Math.abs(nextGaussian()));
+    public Complex128 randomRectComplex128() {
+        return new Complex128(nextDouble(), nextDouble());
     }
 
 
     /**
-     * Generates a pseudorandom complex number with normally distributed magnitude with a specified mean and standard
-     * deviation.
-     * @param mean Mean of normal distribution to sample magnitude from.
-     * @param std Standard deviation of normal distribution to sample magnitude from.
-     * @return A pseudorandom complex number with normally distributed magnitude with a specified mean and
-     * standard deviation.
-     * @throws IllegalArgumentException If standard deviation is negative.
+     * <p>Generates a pseudorandom complex number distributed uniformly in a rectangle on the complex plane. The bounds of the
+     * rectangle along each axis are specified by {@code minRe}, {@code maxRe}, {@code minIm}, and {@code maxIm}.
+     *
+     * @param minRe Minimum value along the real axis (inclusive).
+     * @param maxRe Maximum value along the real axis (exclusive).
+     * @param minIm Minimum value along the imaginary axis (inclusive).
+     * @param maxIm Maximum value along the imaginary axis (exclusive).
+     * @return A pseudorandom complex number distributed uniformly in a rectangle on the complex plane.
+     */
+    public Complex128 randomRectComplex128(double minRe, double maxRe, double minIm, double maxIm) {
+        return new Complex128(nextDouble(minRe, maxRe) + minRe, nextDouble(minIm, maxIm));
+    }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a 2D circular standard Gaussian (normal) distribution on the complex
+     * plain. The distribution is centered at (0.0, 0.0) with standard deviation {@code 1.0} along both the real and imaginary axes
+     * of the complex plane.
+     *
+     * <p>The 2D circular standard Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
+     * axis, &sigma;, is defined as:
+     * <pre>
+     *     f(x, y) = 1/(2&pi;) exp[ -1/2 (x<sup>2</sup> + y<sup>2</sup>) ]</pre>
+     *
+     * @param mean Mean of distribution.
+     * @param std Standard deviation of distribution. Must be greater than zero.
+     * @return A pseudorandom complex number sampled from a 2D circular standard Gaussian (normal) distribution on the complex plain.
+     *
+     * @see #randnComplex128(double, double)
+     * @see #randnComplex128(double, double, double, double)
+     * @see #randnComplex128(double, double, double, double, double)
+     */
+    public Complex128 randnComplex128() {
+        return randnComplex128(0, 1, 0, 1);
+    }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a 2D circular Gaussian (normal) distribution on the complex plain.
+     * The distribution is centered at ({@code mean}, {@code mean}) with standard deviation {@code std} along
+     * both the real and imaginary axes of the complex plane.
+     *
+     * <p>The 2D circular Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
+     * axis, &sigma;, is defined as:
+     * <pre>
+     *     f(x, y) = 1/(2&pi;&sigma;<sup>2</sup>) exp[ -1/(2&sigma;<sup>2</sup>) ((x - x<sub>0</sub>)<sup>2</sup> + (y - x<sub>0</sub>)<sup>2</sup>) ]</pre>
+     *
+     * @param mean Mean of distribution.
+     * @param std Standard deviation of distribution. Must be greater than zero.
+     * @return A pseudorandom complex number sampled from a 2D circular Gaussian (normal) distribution on the complex plain.
+     *
+     * @see #randnComplex128()
+     * @see #randnComplex128(double, double, double, double)
+     * @see #randnComplex128(double, double, double, double, double)
      */
     public Complex128 randnComplex128(double mean, double std) {
-        ValidateParameters.ensureGreaterEq(std, 0);
-        return randomComplex128(nextGaussian()*std + mean);
+        return randnComplex128(mean, std, mean, std);
     }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a 2D elliptical Gaussian (normal) distribution on the complex plain.
+     * The distribution is centered at ({@code meanRe}, {@code meanIm}) with standard deviations {@code stdRe} and {@code stdIm} along
+     * the real and imaginary axes of the complex plane respectively.
+     *
+     * <p>The 2D Gaussian distribution centered at (x<sub>0</sub>, y<sub>0</sub>) with standard deviations along each
+     * axis, &sigma;<sub>X</sub> and &sigma;<sub>Y</sub>, is defined as:
+     * <pre>
+     *     f(x, y) = 1/(2&pi;&sigma;<sub>X</sub>&sigma;<sub>Y</sub>) * exp[ -(x - x<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>X</sub><sup>2</sup> - (y - y<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>Y</sub><sup>2</sup>]</pre>
+     *
+     * @param meanRe Mean of distribution along real axis.
+     * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
+     * @param meanIm Mean of distribution along imaginary axis.
+     * @param stdIm Standard deviation of distributions along imaginary axis. Must be greater than zero.
+     * @return A pseudorandom complex number sampled from a 2D elliptical Gaussian (normal) distribution on the complex plain.
+     *
+     * @see #randnComplex128(double, double)
+     * @see #randnComplex128()
+     * @see #randnComplex128(double, double, double, double, double)
+     */
+    public Complex128 randnComplex128(double meanRe, double stdRe, double meanIm, double stdIm) {
+        return new Complex128(nextGaussian(meanRe, stdRe), nextGaussian(meanIm, stdIm));
+    }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a bivariate Gaussian (normal) distribution on the complex plain.
+     * The distribution is centered at ({@code meanRe}, {@code meanIm}) with standard deviations {@code stdRe} and {@code stdIm} along
+     * the real and imaginary axes of the complex plane respectively. Further, {@code corrCoeff} is the correlation coefficient
+     * between the real and imaginary values.
+     *
+     * <p>The covariance matrix, <b>&Sigma;</b>,  of such a distribution is expressed as:
+     * <pre>
+     *   <b>&Sigma;</b> = [      stdRe*stdRe        corrCoeff*stdRe*stdIm ]
+     *       [ corrCoeff*stdRe*stdIm        stdIm*stdIm      ]</pre>
+     * Let &mu; = [x<sub>0</sub>  y<sub>0</sub>]<sup>T</sup> be the mean column vector and <b>z</b> = [x  y]<sup>T</sup> also be a
+     * column vector. Then, the bivariate Gaussian distribution may be expressed as:
+     * <pre>
+     *     f(<b>z</b>) = 1/(2 &pi; det(<b>&Sigma;</b>)<sup>1/2</sup>) exp[-1/2 (<b>z</b> - &mu;)<sup>T</sup> <b>&Sigma;</b><sup>-1</sup> (<b>z</b> - &mu;)]</pre>
+     *
+     * @param meanRe Mean of distribution along real axis.
+     * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
+     * @param meanIm Mean of distribution along imaginary axis.
+     * @param stdIm Standard deviation of distributions along imaginary axis. Must be greater than zero.
+     * @param corrCoeff Correlation coefficient between real and imaginary values in the distribution. Must satisfy
+     * {@code corrCoeff > -1 && corrCoeff < 1}
+     * @return A pseudorandom complex number sampled from a bivariate Gaussian (normal) distribution on the complex plain.
+     * @throws IllegalArgumentException If {@code corrCoeff <= -1 || corrCoeff >= 1} or {@code stdRe < 0.0 || stdIm < 0.0}.
+     *
+     * @see #randnComplex128(double, double)
+     * @see #randnComplex128(double, double, double, double)
+     * @see #randnComplex128()
+     */
+    public Complex128 randnComplex128(double meanRe, double stdRe, double meanIm, double stdIm, double corrCoeff) {
+        if (stdRe < 0.0 || stdIm < 0.0) {
+            throw new IllegalArgumentException("standard deviations must be non-negative " +
+                    "but got stdRe=" + stdRe + " and stdIm=" + stdIm + ".");
+        }
+        if(corrCoeff <= -1.0 || corrCoeff >= 1.0)
+            throw new IllegalArgumentException("Correlation coefficient must be in range (-1, 1) but got: " + corrCoeff + ".");
+
+        // Unrolled Cholesky decomposition of the 2-by-2 covariance matrix.
+        double l11 = Math.sqrt(stdRe*stdRe);
+        double l21 = corrCoeff*stdRe*stdIm / l11;
+        double l22 = Math.sqrt(stdIm*stdIm - l21 * l21);
+
+        // Generate two independent standard normal samples.
+        double z1 = nextGaussian();
+        double z2 = nextGaussian();
+
+        // Apply unrolled transformation: [x1, x2] = L * [z1, z2]
+        double re = meanRe + l11 * z1;
+        double im = meanIm + l21 * z1 + l22 * z2;
+
+        return new Complex128(re, im);
+    }
+    
+    
+    // --------------------------------------------------------------------------------------------------------------------------
 
 
     /**
@@ -162,12 +311,11 @@ public class RandomComplex extends Random {
      * @throws IllegalArgumentException If the magnitude is negative.
      */
     public Complex64 randomComplex64(float mag) {
-        if(mag < 0) {
+        if(mag < 0)
             throw new IllegalArgumentException("Magnitude must be non-negative but got " + mag);
-        }
 
         // Simply pick a uniformly random angle in [0, 2pi) radians.
-        float theta = (float) (2*Math.PI*nextFloat());
+        float theta = 2f*((float) Math.PI)*nextFloat();
 
         // Convert to rectangular coordinates.
         return Complex64.fromPolar(mag, theta);
@@ -198,27 +346,150 @@ public class RandomComplex extends Random {
 
 
     /**
-     * Generates a pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
-     * deviation of 1.0.
-     * @return A pseudorandom complex number with normally distributed magnitude with a mean of 0.0 and standard
-     * deviation of 1.0.
+     * Generates a pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
+     * @return A pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
+     * @see #randomCartComplex64(double, double, double, double)
      */
-    public Complex64 randnComplex64() {
-        return randomComplex64((float) Math.abs(nextGaussian()));
+    public Complex64 randomCartComplex64() {
+        return new Complex64(nextFloat(), nextFloat());
     }
 
 
     /**
-     * Generates a pseudorandom complex number with normally distributed magnitude with a specified mean and standard
-     * deviation.
-     * @param mean Mean of normal distribution to sample magnitude from.
-     * @param std Standard deviation of normal distribution to sample magnitude from.
-     * @return A pseudorandom complex number with normally distributed magnitude with a specified mean and
-     * standard deviation.
-     * @throws IllegalArgumentException If standard deviation is negative.
+     * <p>Generates a pseudorandom complex number distributed uniformly in a rectangle on the complex plane. The bounds of the
+     * rectangle along each axis are specified by {@code minRe}, {@code maxRe}, {@code minIm}, and {@code maxIm}.
+     *
+     * @param minRe Minimum value along the real axis (inclusive).
+     * @param maxRe Maximum value along the real axis (exclusive).
+     * @param minIm Minimum value along the imaginary axis (inclusive).
+     * @param maxIm Maximum value along the imaginary axis (exclusive).
+     * @return A pseudorandom complex number distributed uniformly in a rectangle on the complex plane.
+     */
+    public Complex64 randomCartComplex64(float minRe, float maxRe, float minIm, float maxIm) {
+        return new Complex64(nextFloat(minRe, maxRe) + minRe, nextFloat(minIm, maxIm));
+    }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a 2D circular standard Gaussian (normal) distribution on the complex
+     * plain. The distribution is centered at (0.0, 0.0) with standard deviation {@code 1.0} along both the real and imaginary axes
+     * of the complex plane.
+     *
+     * <p>The 2D circular standard Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
+     * axis, &sigma;, is defined as:
+     * <pre>
+     *     f(x, y) = 1/(2&pi;) exp[ -1/2 (x<sup>2</sup> + y<sup>2</sup>) ]</pre>
+     *
+     * @param mean Mean of distribution.
+     * @param std Standard deviation of distribution. Must be greater than zero.
+     * @return A pseudorandom complex number sampled from a 2D circular standard Gaussian (normal) distribution on the complex plain.
+     *
+     * @see #randnComplex64(double, double)
+     * @see #randnComplex64(double, double, double, double)
+     * @see #randnComplex64(double, double, double, double, double)
+     */
+    public Complex64 randnComplex64() {
+        return randnComplex64(0f, 1f, 0f, 1f);
+    }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a 2D circular Gaussian (normal) distribution on the complex plain.
+     * The distribution is centered at ({@code mean}, {@code mean}) with standard deviation {@code std} along
+     * both the real and imaginary axes of the complex plane.
+     *
+     * <p>The 2D circular Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
+     * axis, &sigma;, is defined as:
+     * <pre>
+     *     f(x, y) = 1/(2&pi;&sigma;<sup>2</sup>) exp[ -1/(2&sigma;<sup>2</sup>) ((x - x<sub>0</sub>)<sup>2</sup> + (y - x<sub>0</sub>)<sup>2</sup>) ]</pre>
+     *
+     * @param mean Mean of distribution.
+     * @param std Standard deviation of distribution. Must be greater than zero.
+     * @return A pseudorandom complex number sampled from a 2D circular Gaussian (normal) distribution on the complex plain.
+     *
+     * @see #randnComplex64()
+     * @see #randnComplex64(double, double, double, double)
+     * @see #randnComplex64(double, double, double, double, double)
      */
     public Complex64 randnComplex64(float mean, float std) {
-        ValidateParameters.ensureGreaterEq(std, 0);
-        return randomComplex64((float) nextGaussian()*std + mean);
+        return randnComplex64(mean, std, mean, std);
+    }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a 2D elliptical Gaussian (normal) distribution on the complex plain.
+     * The distribution is centered at ({@code meanRe}, {@code meanIm}) with standard deviations {@code stdRe} and {@code stdIm} along
+     * the real and imaginary axes of the complex plane respectively.
+     *
+     * <p>The 2D Gaussian distribution centered at (x<sub>0</sub>, y<sub>0</sub>) with standard deviations along each
+     * axis, &sigma;<sub>X</sub> and &sigma;<sub>Y</sub>, is defined as:
+     * <pre>
+     *     f(x, y) = 1/(2&pi;&sigma;<sub>X</sub>&sigma;<sub>Y</sub>) * exp[ -(x - x<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>X</sub><sup>2</sup> - (y - y<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>Y</sub><sup>2</sup>]</pre>
+     *
+     * @param meanRe Mean of distribution along real axis.
+     * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
+     * @param meanIm Mean of distribution along imaginary axis.
+     * @param stdIm Standard deviation of distributions along imaginary axis. Must be greater than zero.
+     * @return A pseudorandom complex number sampled from a 2D elliptical Gaussian (normal) distribution on the complex plain.
+     *
+     * @see #randnComplex64(double, double)
+     * @see #randnComplex64()
+     * @see #randnComplex64(double, double, double, double, double)
+     */
+    public Complex64 randnComplex64(float meanRe, float stdRe, float meanIm, float stdIm) {
+        return new Complex64((float) nextGaussian(meanRe, stdRe), (float) nextGaussian(meanIm, stdIm));
+    }
+
+
+    /**
+     * <p>Generates a pseudorandom complex number sampled from a bivariate Gaussian (normal) distribution on the complex plain.
+     * The distribution is centered at ({@code meanRe}, {@code meanIm}) with standard deviations {@code stdRe} and {@code stdIm} along
+     * the real and imaginary axes of the complex plane respectively. Further, {@code corrCoeff} is the correlation coefficient
+     * between the real and imaginary values.
+     *
+     * <p>The covariance matrix, <b>&Sigma;</b>,  of such a distribution is expressed as:
+     * <pre>
+     *   <b>&Sigma;</b> = [      stdRe*stdRe        corrCoeff*stdRe*stdIm ]
+     *       [ corrCoeff*stdRe*stdIm        stdIm*stdIm      ]</pre>
+     * Let &mu; = [x<sub>0</sub>  y<sub>0</sub>]<sup>T</sup> be the mean column vector and <b>z</b> = [x  y]<sup>T</sup> also be a
+     * column vector. Then, the bivariate Gaussian distribution may be expressed as:
+     * <pre>
+     *     f(<b>z</b>) = 1/(2 &pi; det(<b>&Sigma;</b>)<sup>1/2</sup>) exp[-1/2 (<b>z</b> - &mu;)<sup>T</sup> <b>&Sigma;</b><sup>-1</sup> (<b>z</b> - &mu;)]</pre>
+     *
+     * @param meanRe Mean of distribution along real axis.
+     * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
+     * @param meanIm Mean of distribution along imaginary axis.
+     * @param stdIm Standard deviation of distributions along imaginary axis. Must be greater than zero.
+     * @param corrCoeff Correlation coefficient between real and imaginary values in the distribution. Must satisfy
+     * {@code corrCoeff > -1 && corrCoeff < 1}
+     * @return A pseudorandom complex number sampled from a bivariate Gaussian (normal) distribution on the complex plain.
+     * @throws IllegalArgumentException If {@code corrCoeff <= -1 || corrCoeff >= 1} or {@code stdRe < 0.0 || stdIm < 0.0}.
+     *
+     * @see #randnComplex64(double, double)
+     * @see #randnComplex64(double, double, double, double)
+     * @see #randnComplex64()
+     */
+    public Complex64 randnComplex64(float meanRe, float stdRe, float meanIm, float stdIm, float corrCoeff) {
+        if (stdRe < 0.0 || stdIm < 0.0) {
+            throw new IllegalArgumentException("standard deviations must be non-negative " +
+                    "but got stdRe=" + stdRe + " and stdIm=" + stdIm + ".");
+        }
+        if(corrCoeff <= -1.0 || corrCoeff >= 1.0)
+            throw new IllegalArgumentException("Correlation coefficient must be in range (-1, 1) but got: " + corrCoeff + ".");
+
+        // Unrolled Cholesky decomposition of the 2-by-2 covariance matrix.
+        float l11 = (float) Math.sqrt(stdRe*stdRe);
+        float l21 = corrCoeff*stdRe*stdIm / l11;
+        float l22 = (float) Math.sqrt(stdIm*stdIm - l21 * l21);
+
+        // Generate two independent standard normal samples.
+        float z1 = (float) nextGaussian();
+        float z2 = (float) nextGaussian();
+
+        // Apply unrolled transformation: [x1, x2] = L * [z1, z2]
+        float re = meanRe + l11 * z1;
+        float im = meanIm + l21 * z1 + l22 * z2;
+
+        return new Complex64(re, im);
     }
 }

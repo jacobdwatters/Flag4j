@@ -130,7 +130,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @param entries Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
      * If this tensor is sparse, this specifies only the non-zero data of the tensor.
      */
-    public Matrix(Shape shape, double[] entries) {
+    public Matrix(Shape shape, double... entries) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 2);
 
@@ -314,6 +314,25 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         super(new Shape(numRows, numCols), data);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
+    }
+
+
+    /**
+     * Constructs a diagonal matrix from an array specifying the diagonal elements of the matrix.
+     * @param data Diagonal elements of the matrix. All other values will be zero.
+     * @return A diagonal matrix whose diagonal elements are equal to {@code data}.
+     */
+    public static Matrix diag(double[] data) {
+        int size = data.length;
+        double[] fullData = new double[size*size];
+
+        int destIdx = 0;
+        for(int i=0; i<size; i++) {
+            fullData[destIdx] = data[i];
+            destIdx += size + 1;
+        }
+
+        return new Matrix(size, size, fullData);
     }
 
 

@@ -77,7 +77,7 @@ import java.util.function.UnaryOperator;
  * <h3>Restrictions</h3>
  * <ul>
  *   <li>Multidimensional arrays are expected to be rectangular for all methods in this class.
- *   However, this is not explicitly enforced and Jagged arrays may cause unexpected behavior.</li>
+ *   However, this is not explicitly enforced and jagged arrays may cause unexpected behavior.</li>
  *   <li>Many methods assume that input arrays are non-null unless explicitly stated otherwise.</li>
  *   <li>Sorting is required, but not enforced, for some methods to function correctly, such as {@link #contains(int[], int)} and
  *   {@link #findFirstLast(int[], int)}. Passing non-sorted arrays to such method results in undefined behavior.</li>

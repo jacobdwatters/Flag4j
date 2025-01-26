@@ -29,7 +29,7 @@ import java.util.StringJoiner;
 
 /**
  * <p>Data record to store an ordered list of values (i.e., an n-tuple).
- * <p>Tuples immutable.
+ * <p>Tuples are immutable.
  * @param data The values of the tuple.
  * @param <T> The type of the elements in the tuple.
  * @see IntTuple
