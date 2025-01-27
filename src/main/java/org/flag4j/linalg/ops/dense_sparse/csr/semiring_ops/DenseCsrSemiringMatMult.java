@@ -140,7 +140,7 @@ public final class DenseCsrSemiringMatMult {
     public static <T extends Semiring<T>> AbstractDenseSemiringVector<?, ?, T> standardVector(
             AbstractCsrSemiringMatrix<?, ?, ?, T> src1, AbstractDenseSemiringVector<?, ?, T> src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
         
         T[] destEntries = src2.makeEmptyDataArray(src1.numRows);
         Arrays.fill(destEntries, Complex128.ZERO);

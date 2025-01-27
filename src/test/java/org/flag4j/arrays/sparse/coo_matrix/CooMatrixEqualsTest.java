@@ -36,11 +36,11 @@ class CooMatrixEqualsTest {
         int[][] bIndices;
         CooMatrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         B = A.copy();
         assertEquals(A, B);
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5, 24.5};
         bIndices = new int[][]{
                 {9, 13, 141, 141, 398, 400},
@@ -49,7 +49,7 @@ class CooMatrixEqualsTest {
         B = new CooMatrix(A.shape, bEntries, bIndices[0], bIndices[1]);
         assertNotEquals(A, B);
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         bEntries = new double[]{1.34, 100.14, -9.245, 0.00234, 52.5};
         bIndices = new int[][]{
                 {9, 13, 141, 141, 398},

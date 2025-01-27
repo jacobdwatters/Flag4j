@@ -38,30 +38,30 @@ class CVectorZeroOneTests {
 
     @Test
     void zerosTestCase() {
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         a = new CVector(34);
         assertTrue(a.isZeros());
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         a = new CVector(0);
         assertTrue(a.isZeros());
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, Complex128.ZERO};
         a = new CVector(aEntries);
         assertTrue(a.isZeros());
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         aEntries = new Complex128[]{Complex128.ZERO, new Complex128(1), Complex128.ZERO};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
 
-        // ------------------ Sub-case 5 ------------------
+        // ------------------ sub-case 5 ------------------
         aEntries = new Complex128[]{Complex128.ZERO, new Complex128(9.4, -6.233), Complex128.ZERO};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
 
-        // ------------------ Sub-case 6 ------------------
+        // ------------------ sub-case 6 ------------------
         aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, new Complex128(0, -8.234)};
         a = new CVector(aEntries);
         assertFalse(a.isZeros());
@@ -70,30 +70,30 @@ class CVectorZeroOneTests {
 
     @Test
     void onesTestCase() {
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         a = new CVector(34, 1);
         assertTrue(a.isOnes());
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         a = new CVector(0, 1);
         assertTrue(a.isOnes());
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         aEntries = new Complex128[]{new Complex128(1), new Complex128(1), new Complex128(1)};
         a = new CVector(aEntries);
         assertTrue(a.isOnes());
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         aEntries = new Complex128[]{new Complex128(1), new Complex128(1.2), new Complex128(1)};
         a = new CVector(aEntries);
         assertFalse(a.isOnes());
 
-        // ------------------ Sub-case 5 ------------------
+        // ------------------ sub-case 5 ------------------
         aEntries = new Complex128[]{new Complex128(1), new Complex128(5.3, 91.3), new Complex128(1)};
         a = new CVector(aEntries);
         assertFalse(a.isOnes());
 
-        // ------------------ Sub-case 6 ------------------
+        // ------------------ sub-case 6 ------------------
         aEntries = new Complex128[]{new Complex128(1), new Complex128(1), new Complex128(1, -1)};
         a = new CVector(aEntries);
         assertFalse(a.isOnes());

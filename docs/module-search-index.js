@@ -1,1 +1,1 @@
-moduleSearchIndex = [{"l":"flag4j"}];updateSearchResults();
+moduleSearchIndex = [];updateSearchResults();

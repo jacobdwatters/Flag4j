@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -121,7 +121,7 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
      * @param prod Product of all axis lengths in the output shape.
      */
     protected void checkSize(int aNumEntries, int prod) {
-        ValidateParameters.ensureEquals(aNumEntries, prod);
+        ValidateParameters.ensureAllEqual(aNumEntries, prod);
     }
 
 

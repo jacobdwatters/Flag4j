@@ -19,7 +19,7 @@ class CooCVectorRepeatTests {
 
     @Test
     void repeatRowTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[]{new Complex128(0.14, 9.2352), Complex128.ZERO, new Complex128(134.4, -51.00024), Complex128.ZERO,
                 Complex128.ZERO, new Complex128(0, -1.445), new Complex128(2.45), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO};
@@ -45,7 +45,7 @@ class CooCVectorRepeatTests {
 
         assertEquals(exp, a.repeat(5, 0));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, new Complex128(134.4, -51.00024), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, new Complex128(2.45), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, new Complex128(2.45),
@@ -65,7 +65,7 @@ class CooCVectorRepeatTests {
 
         assertEquals(exp, a.repeat(2, 0));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, new Complex128(134.4, -51.00024), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, new Complex128(2.45), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, new Complex128(2.45),
@@ -80,7 +80,7 @@ class CooCVectorRepeatTests {
 
     @Test
     void repeatColTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[]{new Complex128(0.14, 9.2352), Complex128.ZERO, new Complex128(134.4, -51.00024), Complex128.ZERO,
                 Complex128.ZERO, new Complex128(0, -1.445), new Complex128(2.45), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO};
@@ -106,7 +106,7 @@ class CooCVectorRepeatTests {
 
         assertEquals(exp, a.repeat(5, 1));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, new Complex128(134.4, -51.00024), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, new Complex128(2.45), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, new Complex128(2.45),
@@ -126,7 +126,7 @@ class CooCVectorRepeatTests {
 
         assertEquals(exp, a.repeat(2, 1));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[]{Complex128.ZERO, Complex128.ZERO, new Complex128(134.4, -51.00024), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, new Complex128(2.45), Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, new Complex128(2.45),

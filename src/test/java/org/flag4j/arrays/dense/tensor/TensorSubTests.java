@@ -36,7 +36,7 @@ class TensorSubTests {
         double[] bEntries, expEntries;
         Tensor B, exp;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
@@ -54,7 +54,7 @@ class TensorSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
@@ -65,7 +65,7 @@ class TensorSubTests {
         Tensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.sub(finalB));
 
-        // ----------------------- Sub-case 3 -----------------------
+        // ----------------------- sub-case 3 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0, 1.4, 5
@@ -84,7 +84,7 @@ class TensorSubTests {
         CooTensor B;
         Tensor exp;
 
-        // ------------------------- Sub-case 1 -------------------------
+        // ------------------------- sub-case 1 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
@@ -105,7 +105,7 @@ class TensorSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------------- Sub-case 2 -------------------------
+        // ------------------------- sub-case 2 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
@@ -125,7 +125,7 @@ class TensorSubTests {
         Complex128[] bEntries, expEntries;
         CTensor B, exp;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
                 new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),
@@ -145,7 +145,7 @@ class TensorSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
                 new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),
@@ -166,7 +166,7 @@ class TensorSubTests {
         CooCTensor B;
         CTensor exp;
 
-        // ------------------------- Sub-case 1 -------------------------
+        // ------------------------- sub-case 1 -------------------------
         bEntries = new Complex128[]{
                 new Complex128(1, -0.2045), new Complex128(-800.145, 3204.5)
         };
@@ -186,7 +186,7 @@ class TensorSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------------- Sub-case 2 -------------------------
+        // ------------------------- sub-case 2 -------------------------
         bEntries = new Complex128[]{
                 new Complex128(1, -0.2045), new Complex128(-800.145, 3204.5)
         };
@@ -207,7 +207,7 @@ class TensorSubTests {
         Tensor exp;
         double b;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         b = 234.25256;
         expEntries = new double[]{
                 aEntries[0]-b, aEntries[1]-b, aEntries[2]-b,
@@ -228,7 +228,7 @@ class TensorSubTests {
         CTensor exp;
         Complex128 b;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         b = new Complex128(234.5, -364.00);
         expEntries = new Complex128[]{
                 new Complex128(aEntries[0]).sub(b), new Complex128(aEntries[1]).sub(b), new Complex128(aEntries[2]).sub(b),
@@ -248,7 +248,7 @@ class TensorSubTests {
         double[] bEntries, expEntries;
         Tensor B, exp;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
@@ -267,7 +267,7 @@ class TensorSubTests {
         A.subEq(B);
         assertEquals(exp, A);
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
@@ -278,7 +278,7 @@ class TensorSubTests {
         Tensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.subEq(finalB));
 
-        // ----------------------- Sub-case 3 -----------------------
+        // ----------------------- sub-case 3 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0, 1.4, 5
@@ -297,7 +297,7 @@ class TensorSubTests {
         CooTensor B;
         Tensor exp;
 
-        // ------------------------- Sub-case 1 -------------------------
+        // ------------------------- sub-case 1 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
@@ -319,7 +319,7 @@ class TensorSubTests {
         RealDenseCooTensorOps.subEq(A, B);
         assertEquals(exp, A);
 
-        // ------------------------- Sub-case 2 -------------------------
+        // ------------------------- sub-case 2 -------------------------
         bEntries = new double[]{
                 1.34, -0.0245, 8001.1
         };
@@ -340,7 +340,7 @@ class TensorSubTests {
         Tensor exp;
         double b;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         b = 234.25256;
         expEntries = new double[]{
                 aEntries[0]-b, aEntries[1]-b, aEntries[2]-b,

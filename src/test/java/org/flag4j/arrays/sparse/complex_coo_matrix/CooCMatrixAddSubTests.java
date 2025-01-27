@@ -28,7 +28,7 @@ class CooCMatrixAddSubTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new Complex128[]{new Complex128("0.16907660311363415+0.6444051570772598i"), new Complex128("0.2685636944700537+0.277720286141387i"), new Complex128("0.5371330041634212+0.8363534476695493i"), new Complex128("0.7584479587013249+0.1811320912553298i"), new Complex128("0.24728154455051643+0.8252113996910411i")};
         aRowIndices = new int[]{0, 1, 2, 3, 4};
@@ -49,7 +49,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.04597036221184858+0.27569095742387373i"), new Complex128("0.5253705770713939+0.8652830858877205i"), new Complex128("0.22466851327235537+0.48755081428740665i")};
         aRowIndices = new int[]{1, 1, 2};
@@ -70,7 +70,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new Complex128[]{new Complex128("0.7773495524901912+0.9670609434569698i"), new Complex128("0.8143837489702114+0.6264702725849607i"), new Complex128("0.8703120541209147+0.3764970320612634i"), new Complex128("0.10844960651850521+0.10089333349129115i"), new Complex128("0.030157519141515654+0.049893464833488554i"), new Complex128("0.9105679984224888+0.8197605473728841i"), new Complex128("0.4716928344990372+0.14839364769347763i"), new Complex128("0.060272082265836135+0.6869053336232293i"), new Complex128("0.8562050927896339+0.9202699550583396i")};
         aRowIndices = new int[]{0, 1, 3, 3, 3, 4, 6, 7, 8};
@@ -95,7 +95,7 @@ class CooCMatrixAddSubTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new Complex128[]{new Complex128("0.6910245510195184+0.9077474303843585i"), new Complex128("0.6823193196673835+0.9686934950350857i"), new Complex128("0.7016095528990995+0.003958926929736095i"), new Complex128("0.7245077304133463+0.5737158012835359i"), new Complex128("0.2691984171075853+0.67074179839617i")};
         aRowIndices = new int[]{1, 1, 4, 4, 4};
@@ -116,7 +116,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.16309615141403278+0.2516389353539852i"), new Complex128("0.5450934022190043+0.8214327358769891i"), new Complex128("0.9755707249007003+0.24732294705340552i")};
         aRowIndices = new int[]{0, 0, 1};
@@ -137,7 +137,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new Complex128[]{new Complex128("0.37615963269009955+0.46648638371680784i"), new Complex128("0.4389228048293522+0.49919855367244914i"), new Complex128("0.3641970005860071+0.21364944579375622i"), new Complex128("0.6768728860174499+0.11293844550895626i"), new Complex128("0.10555547511624319+0.9974250471254223i"), new Complex128("0.48695465079671685+0.22713039083257602i"), new Complex128("0.24233326574055303+0.6509670389804286i"), new Complex128("0.8285754970538919+0.6734183712117148i"), new Complex128("0.9793874081511778+0.9016976212187522i")};
         aRowIndices = new int[]{0, 1, 2, 3, 5, 5, 8, 8, 8};
@@ -162,7 +162,7 @@ class CooCMatrixAddSubTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new Complex128[]{new Complex128("0.8424268253354057+0.21146667805661112i"), new Complex128("0.2304861070248274+0.10979159677958883i"), new Complex128("0.3056659052818361+0.6921336614085905i"), new Complex128("0.5195959873475188+0.41206170034352796i"), new Complex128("0.03582224948045554+0.17683330297161015i")};
         aRowIndices = new int[]{0, 0, 0, 2, 4};
@@ -187,7 +187,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, RealComplexDenseCooMatOps.sub(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.3159084198324813+0.7906484152681891i"), new Complex128("0.942719674202597+0.961516632226317i"), new Complex128("0.39271189079390745+0.011647415847762632i")};
         aRowIndices = new int[]{0, 1, 2};
@@ -208,7 +208,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, RealComplexDenseCooMatOps.sub(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new Complex128[]{new Complex128("0.9952829598305839+0.8050493064451766i"), new Complex128("0.709025797231945+0.5951590091259715i"), new Complex128("0.06758149251369971+0.08300547071660325i"), new Complex128("0.7448367789778203+0.9129414768429843i"), new Complex128("0.8328088447829204+0.17370844362000515i"), new Complex128("0.7298735049313018+0.5143837509697955i"), new Complex128("0.9841202093082072+0.8351781796300937i"), new Complex128("0.8865663154413503+0.40606422345406057i"), new Complex128("0.9921185011384177+0.332737970659427i")};
         aRowIndices = new int[]{2, 3, 4, 5, 5, 5, 6, 8, 8};
@@ -233,7 +233,7 @@ class CooCMatrixAddSubTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new Complex128[]{new Complex128("0.21432657368028107+0.02285719095217109i"), new Complex128("0.5121521258714489+0.06946412645312638i"), new Complex128("0.7335832759673879+0.8072923006459559i"), new Complex128("0.9995745132631427+0.8601025880139203i"), new Complex128("0.7433339540509724+0.991526108868919i")};
         aRowIndices = new int[]{0, 1, 2, 2, 2};
@@ -258,7 +258,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, DenseCooFieldMatrixOps.sub(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.8641201436785124+0.464077542772543i"), new Complex128("0.051767898713606764+0.8739906137569583i"), new Complex128("0.3479464354902717+0.5164113253872332i")};
         aRowIndices = new int[]{0, 1, 2};
@@ -279,7 +279,7 @@ class CooCMatrixAddSubTests {
 
         assertEquals(exp, DenseCooFieldMatrixOps.sub(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new Complex128[]{new Complex128("0.6907434894473184+0.5031295442002623i"), new Complex128("0.03229906329481269+0.17744734837949105i"), new Complex128("0.628911680222165+0.6716533189511541i"), new Complex128("0.8176512894236148+0.06108845413688435i"), new Complex128("0.3694547169018447+0.08400778038547219i"), new Complex128("0.34659776908318607+0.13962028870070875i"), new Complex128("0.7411889157136219+0.6236878630390096i"), new Complex128("0.6082841811530453+0.7702079661274945i"), new Complex128("0.9176201416728813+0.7402652203934886i")};
         aRowIndices = new int[]{0, 0, 2, 4, 5, 5, 6, 7, 7};

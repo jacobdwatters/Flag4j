@@ -23,7 +23,7 @@ class VectorEqualsTests {
         double[] bEntries;
         Vector B;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
         A = new Vector(aEntries);
         bEntries = new double[]{1.234, 543.354, -0.3456};
@@ -31,7 +31,7 @@ class VectorEqualsTests {
 
         assertEquals(A, B);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
         A = new Vector(aEntries);
         bEntries = new double[]{1.234, 123.5, -0.3456};
@@ -40,7 +40,7 @@ class VectorEqualsTests {
         assertNotEquals(A, B);
 
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
         A = new Vector(aEntries);
         bEntries = new double[]{1.234, 543.354, -0.3456, 0};
@@ -55,7 +55,7 @@ class VectorEqualsTests {
         Complex128[] bEntries;
         CVector B;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(1.234), new Complex128(543.354), new Complex128(-0.3456)};
@@ -63,7 +63,7 @@ class VectorEqualsTests {
 
         assertEquals(A.toComplex(), B);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(1.234, 13.4), new Complex128(543.354), new Complex128(-0.3456)};
@@ -72,7 +72,7 @@ class VectorEqualsTests {
         assertNotEquals(A.toComplex(), B);
 
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new double[]{1.234, 543.354, -0.3456};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(1.234), new Complex128(543.354), new Complex128(-0.3456), new Complex128(0, 123.5)};
@@ -87,7 +87,7 @@ class VectorEqualsTests {
         double[] bEntries;
         CooVector B;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         bEntries = new double[]{543.354};
@@ -97,7 +97,7 @@ class VectorEqualsTests {
 
         assertEquals(A.toCoo(), B);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         bEntries = new double[]{543.354};
@@ -107,7 +107,7 @@ class VectorEqualsTests {
 
         assertNotEquals(A.toCoo(), B);
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         bEntries = new double[]{543.354};
@@ -124,7 +124,7 @@ class VectorEqualsTests {
         Complex128[] bEntries;
         CooCVector B;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(543.354)};
@@ -134,7 +134,7 @@ class VectorEqualsTests {
 
         assertEquals(A.toCoo().toComplex(), B);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(543.354, -9.34)};
@@ -144,7 +144,7 @@ class VectorEqualsTests {
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(543.354)};
@@ -158,14 +158,14 @@ class VectorEqualsTests {
 
     @Test
     void objectTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{123.4};
         A = new Vector(aEntries);
         Double B = 123.4;
 
         assertNotEquals(A, B);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{0, 543.354, 0};
         A = new Vector(aEntries);
         String BString = "hello";

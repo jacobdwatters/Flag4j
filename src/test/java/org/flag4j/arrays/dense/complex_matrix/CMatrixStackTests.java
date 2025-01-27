@@ -20,7 +20,7 @@ class CMatrixStackTests {
         Complex128[][] bEntries;
         CMatrix B;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}};
@@ -34,7 +34,7 @@ class CMatrixStackTests {
 
         assertEquals(exp, A.stack(B, 0));
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}};
@@ -45,7 +45,7 @@ class CMatrixStackTests {
         CMatrix finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB, 0));
 
-        // ----------------------- Sub-case 3 -----------------------
+        // ----------------------- sub-case 3 -----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}};
@@ -60,7 +60,7 @@ class CMatrixStackTests {
 
         assertEquals(exp, A.stack(B, 1));
 
-        // ----------------------- Sub-case 4 -----------------------
+        // ----------------------- sub-case 4 -----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}};
@@ -71,7 +71,7 @@ class CMatrixStackTests {
         CMatrix finalB1 = B;
         assertThrows(IllegalArgumentException.class, ()->A.stack(finalB1, 1));
 
-        // ----------------------- Sub-case 5 -----------------------
+        // ----------------------- sub-case 5 -----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}};

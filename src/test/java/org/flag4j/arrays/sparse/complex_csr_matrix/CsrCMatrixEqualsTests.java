@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class CsrCMatrixEqualsTests {
+class CsrCMatrixEqualsTests {
     CsrCMatrix A;
     CsrCMatrix B;
 
@@ -27,7 +27,7 @@ public class CsrCMatrixEqualsTests {
 
     @Test
     void realCsrEqualsTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[150][235];
         ArrayBuilder.fill(aEntries, Complex128.ZERO);
         bEntries = new Complex128[150][235];
@@ -51,7 +51,7 @@ public class CsrCMatrixEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aNnz = new Complex128[]{new Complex128(1.34507518, -352), new Complex128(0.235, 2), new Complex128(0, 72735),
                 new Complex128(94.1, -1), new Complex128(1, 3), new Complex128(-1, 0.002345), new Complex128(15)};
         bNnz = new Complex128[]{new Complex128(1.34507518, -352), new Complex128(0.235, 2), new Complex128(0, 72735),
@@ -69,7 +69,7 @@ public class CsrCMatrixEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aNnz = new Complex128[]{new Complex128(234.5, -0.2), Complex128.ZERO, new Complex128(345.1, 2.5), new Complex128(9.4, -1),
                 new Complex128(235.1, 94.2), new Complex128(3.12, 4), Complex128.ZERO,
                 new Complex128(0, 1), new Complex128(2,9733)};
@@ -93,7 +93,7 @@ public class CsrCMatrixEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aNnz = new Complex128[]{new Complex128(234.5, -0.2), new Complex128(4.23, 9), new Complex128(345.1, 2.5), new Complex128(9.4, -1),
                 new Complex128(235.1, 94.2), new Complex128(3.12, 4), Complex128.ZERO,
                 new Complex128(0, 1), new Complex128(2,9733)};
@@ -114,7 +114,7 @@ public class CsrCMatrixEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 5 ----------------------
+        // ---------------------- sub-case 5 ----------------------
         aNnz = new Complex128[]{new Complex128(234.5, -0.2), Complex128.ZERO, new Complex128(345.1, 2.5), new Complex128(9.4, -1),
                 new Complex128(235.1, 94.2), new Complex128(3.12, 4), Complex128.ZERO,
                 new Complex128(0, 1), new Complex128(2,9733)};
@@ -135,7 +135,7 @@ public class CsrCMatrixEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 6 ----------------------
+        // ---------------------- sub-case 6 ----------------------
         aNnz = new Complex128[]{new Complex128(234.5, -0.2), Complex128.ZERO, new Complex128(345.1, 2.5), new Complex128(9.4, -1),
                 new Complex128(235.1, 94.2), new Complex128(3.12, 4), Complex128.ZERO,
                 new Complex128(0, 1), new Complex128(2,9733)};
@@ -156,7 +156,7 @@ public class CsrCMatrixEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 7 ----------------------
+        // ---------------------- sub-case 7 ----------------------
         aNnz = new Complex128[]{new Complex128(1.34507518, -352), new Complex128(0.235, 2), new Complex128(0, 72735),
                 new Complex128(94.1, -1), new Complex128(1, 3), new Complex128(-1, 0.002345), new Complex128(15)};
         bNnz = new Complex128[]{new Complex128(1.34507518, -352), new Complex128(0.235, 2), new Complex128(0, 72735),

@@ -22,7 +22,7 @@ class RealForwardSolverTest {
         double[] bEntries, expEntries;
         Vector b, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new double[][]{
                 {1.4, 0, 0, 0, 0, 0},
                 {-924.5561, 1.5, 0, 0, 0, 0},
@@ -39,7 +39,7 @@ class RealForwardSolverTest {
 
         Assertions.assertEquals(exp, solver.solve(L, b));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         lEntries = new double[][]{
                 {1.4, 0, 0, 0, 0, 0},
                 {-924.5561, 1.5, 0, 0, 0, 0},
@@ -55,7 +55,7 @@ class RealForwardSolverTest {
         Vector finalB = b;
         assertThrows(SingularMatrixException.class, ()->solver.solve(L, finalB));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         lEntries = new double[][]{
                 {1.4, 0, 0, 0, 0, 0},
                 {-924.5561, 1.5, 0, 0, 0, 0},
@@ -71,7 +71,7 @@ class RealForwardSolverTest {
         Vector finalB1 = b;
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB1));
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         lEntries = new double[][]{
                 {1.4, 0, 0, 0, 0},
                 {-924.5561, 1.5, 0, 0, 0},
@@ -87,7 +87,7 @@ class RealForwardSolverTest {
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB2));
 
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         lEntries = new double[][]{
                 {1.4, 0, 0, 0, 0},
                 {-924.5561, 1.5, 0, 0, 0},
@@ -109,7 +109,7 @@ class RealForwardSolverTest {
         double[][] bEntries, expEntries;
         Matrix B, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new double[][]{
                 {1.4, 0, 0, 0, 0, 0},
                 {-924.5561, 1.5, 0, 0, 0, 0},
@@ -148,7 +148,7 @@ class RealForwardSolverTest {
         double[] bEntries, expEntries;
         Vector b, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new double[][]{
                 {1, 0, 0, 0, 0, 0},
                 {-924.5561, 1, 0, 0, 0, 0},
@@ -165,7 +165,7 @@ class RealForwardSolverTest {
 
         Assertions.assertEquals(exp, solver.solve(L, b));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         lEntries = new double[][]{
                 {1, 0, 0, 0, 0, 0},
                 {-924.5561, 1, 0, 0, 0, 0},
@@ -181,7 +181,7 @@ class RealForwardSolverTest {
         Vector finalB1 = b;
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB1));
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         lEntries = new double[][]{
                 {1, 0, 0, 0, 0},
                 {-924.5561, 1, 0, 0, 0},
@@ -197,7 +197,7 @@ class RealForwardSolverTest {
         assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB2));
 
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         lEntries = new double[][]{
                 {1, 0, 0, 0, 0},
                 {-924.5561, 1, 0, 0, 0},
@@ -219,7 +219,7 @@ class RealForwardSolverTest {
         double[][] bEntries, expEntries;
         Matrix B, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new double[][]{
                 {1, 0, 0, 0, 0, 0},
                 {-924.5561, 1, 0, 0, 0, 0},

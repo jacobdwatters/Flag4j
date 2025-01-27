@@ -19,7 +19,7 @@ class CooMatrixToStringTests {
         double[] aEntries;
         CooMatrix a;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.8161, 0.77635, 0.73286};
         aRowIndices = new int[]{0, 0, 1};
@@ -34,7 +34,7 @@ class CooMatrixToStringTests {
 
         assertEquals(exp, a.toString());
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.5243, 0.28762, 0.17566, 0.32968, 0.44542};
         aRowIndices = new int[]{2, 4, 4, 7, 8};
@@ -49,7 +49,7 @@ class CooMatrixToStringTests {
 
         assertEquals(exp, a.toString());
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(5, 1000);
         aEntries = new double[]{0.06813, 0.43027, 0.27489, 0.94196, 0.30043, 0.4879, 0.99068, 0.50667, 0.91951};
         aRowIndices = new int[]{0, 0, 1, 1, 3, 3, 4, 4, 4};
@@ -64,7 +64,7 @@ class CooMatrixToStringTests {
 
         assertEquals(exp, a.toString());
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.23804, 0.38857, 0.94397, 0.61889};
         aRowIndices = new int[]{0, 0, 1, 2};
@@ -79,7 +79,7 @@ class CooMatrixToStringTests {
 
         assertEquals(exp, a.toString());
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.52615, 0.5363, 0.51364, 0.25336};
         aRowIndices = new int[]{0, 0, 2, 2};
@@ -94,7 +94,7 @@ class CooMatrixToStringTests {
 
         assertEquals(exp, a.toString());
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.27709, 0.88769, 0.5211, 0.37339};
         aRowIndices = new int[]{0, 0, 2, 2};
@@ -109,7 +109,7 @@ class CooMatrixToStringTests {
 
         assertEquals(exp, a.toString());
 
-        // ---------------------  Sub-case 7 ---------------------
+        // ---------------------  sub-case 7 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.29006, 0.13548, 0.05222, 0.94335};
         aRowIndices = new int[]{0, 0, 1, 2};

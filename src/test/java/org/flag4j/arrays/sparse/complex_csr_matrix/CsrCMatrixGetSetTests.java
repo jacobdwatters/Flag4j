@@ -18,7 +18,7 @@ class CsrCMatrixGetSetTests {
 
     @Test
     void getTests() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(1, -72.1), new Complex128(0), new Complex128(0), new Complex128(4), new Complex128(0),
                         new Complex128(0)},
@@ -61,7 +61,7 @@ class CsrCMatrixGetSetTests {
         assertEquals(new Complex128(801.4, 15), A.get(3, 5));
         assertEquals(new Complex128(-15, 1), A.get(3, 6));
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(-1, 0));
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, -1));
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(4, 0));
@@ -82,7 +82,7 @@ class CsrCMatrixGetSetTests {
                         new Complex128(-15, 1)}};
         A = new CMatrix(aEntries).toCsr();
 
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         expEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(1, -72.1), new Complex128(0), new Complex128(0),
                         new Complex128(4), new Complex128(0), new Complex128(0)},
@@ -95,7 +95,7 @@ class CsrCMatrixGetSetTests {
         exp = new CMatrix(expEntries).toCsr();
         assertEquals(exp, A.set(new Complex128(9,-1.25), 1, 4));
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         expEntries = new Complex128[][]{
                 {new Complex128(6, -2), new Complex128(1, -72.1), new Complex128(0), new Complex128(0),
                         new Complex128(4), new Complex128(0), new Complex128(0)},
@@ -108,7 +108,7 @@ class CsrCMatrixGetSetTests {
         exp = new CMatrix(expEntries).toCsr();
         assertEquals(exp, A.set(new Complex128(6, -2), 0, 0));
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         expEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(1, -72.1), new Complex128(0), new Complex128(0),
                         new Complex128(4), new Complex128(0), new Complex128(5)},
@@ -121,7 +121,7 @@ class CsrCMatrixGetSetTests {
         exp = new CMatrix(expEntries).toCsr();
         assertEquals(exp, A.set(5.0, 0, 6));
 
-        // -------------------------- Sub-case 4 --------------------------
+        // -------------------------- sub-case 4 --------------------------
         expEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(1, -72.1), new Complex128(0), new Complex128(0),
                         new Complex128(4), new Complex128(0), new Complex128(0)},
@@ -134,7 +134,7 @@ class CsrCMatrixGetSetTests {
         exp = new CMatrix(expEntries).toCsr();
         assertEquals(exp, A.set(new Complex128(-5900.1, 2352.26221), 3, 4));
 
-        // -------------------------- Sub-case 5 --------------------------
+        // -------------------------- sub-case 5 --------------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(1.3, -1, 0));
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(1.3, 0, -1));
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(1.3, 4, 0));

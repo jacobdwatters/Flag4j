@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -146,7 +146,7 @@ public class FieldVector<T extends Field<T>> extends AbstractDenseFieldVector<Fi
      */
     @Override
     public FieldVector<T> makeLikeTensor(Shape shape, T[] entries) {
-        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
+        ValidateParameters.ensureAllEqual(shape.totalEntriesIntValueExact(), entries.length);
         ValidateParameters.ensureRank(shape, 1);
         return new FieldVector<T>(entries);
     }

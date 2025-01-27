@@ -1,12 +1,17 @@
 package org.flag4j;
 
 import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CTensor;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
+import org.junit.jupiter.api.Assertions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class CustomAssertions {
 
@@ -17,12 +22,12 @@ public final class CustomAssertions {
      * @param act Actual Matrix.
      */
     public static void assertEqualsNaN(Matrix exp, Matrix act) {
-        assertEquals(exp.shape, act.shape);
+        Assertions.assertEquals(exp.shape, act.shape);
         for(int i = 0; i<exp.data.length; i++) {
             if(Double.isNaN(exp.data[i])) {
                 assertTrue(Double.isNaN(act.data[i]));
             } else {
-                assertEquals(exp.data[i], act.data[i], 0);
+                Assertions.assertEquals(exp.data[i], act.data[i], 0);
             }
         }
     }
@@ -34,22 +39,22 @@ public final class CustomAssertions {
      * @param act Actual Matrix.
      */
     public static void assertEqualsNaN(CMatrix exp, CMatrix act) {
-        assertEquals(exp.shape, act.shape);
+        Assertions.assertEquals(exp.shape, act.shape);
         for(int i = 0; i<exp.data.length; i++) {
             if(exp.data[i].isNaN()) {
                 if(Double.isNaN(((Complex128) exp.data[i]).re)) {
                     assertTrue(Double.isNaN(((Complex128) act.data[i]).re));
                 } else {
-                    assertEquals(((Complex128) exp.data[i]).re, ((Complex128) act.data[i]).re, 0);
+                    Assertions.assertEquals(((Complex128) exp.data[i]).re, ((Complex128) act.data[i]).re, 0);
                 }
 
                 if(Double.isNaN(((Complex128) exp.data[i]).im)) {
                     assertTrue(Double.isNaN(((Complex128) act.data[i]).im));
                 } else {
-                    assertEquals(((Complex128) exp.data[i]).im, ((Complex128) act.data[i]).im, 0);
+                    Assertions.assertEquals(((Complex128) exp.data[i]).im, ((Complex128) act.data[i]).im, 0);
                 }
             } else {
-                assertEquals(exp.data[i], act.data[i]);
+                Assertions.assertEquals(exp.data[i], act.data[i]);
             }
         }
     }
@@ -61,13 +66,13 @@ public final class CustomAssertions {
      * @param act Actual Matrix.
      */
     public static void assertEqualsNaN(CooMatrix exp, CooMatrix act) {
-        assertEquals(exp.shape, act.shape);
+        Assertions.assertEquals(exp.shape, act.shape);
         assertArrayEquals(exp.rowIndices, act.colIndices);
         for(int i = 0; i<exp.data.length; i++) {
             if(Double.isNaN(exp.data[i])) {
                 assertTrue(Double.isNaN(act.data[i]));
             } else {
-                assertEquals(exp.data[i], act.data[i], 0);
+                Assertions.assertEquals(exp.data[i], act.data[i], 0);
             }
         }
     }
@@ -79,14 +84,48 @@ public final class CustomAssertions {
      * @param act Actual vector.
      */
     public static void assertEqualsNaN(CooVector exp, CooVector act) {
-        assertEquals(exp.shape, act.shape);
+        Assertions.assertEquals(exp.shape, act.shape);
         assertArrayEquals(exp.indices, act.indices);
         for(int i = 0; i<exp.data.length; i++) {
             if(Double.isNaN(exp.data[i])) {
                 assertTrue(Double.isNaN(act.data[i]));
             } else {
-                assertEquals(exp.data[i], act.data[i], 0);
+                Assertions.assertEquals(exp.data[i], act.data[i], 0);
             }
+        }
+    }
+
+
+    public static void assertEquals(AbstractDenseDoubleTensor<?> exp, AbstractDenseDoubleTensor<?> act, double delta) {
+        Assertions.assertEquals(exp.shape, act.shape);
+        assertArrayEquals(exp.data, act.data, delta);
+    }
+
+
+    public static void assertEquals(CVector exp, CVector act, double delta) {
+        Assertions.assertEquals(exp.shape, act.shape);
+        assertEquals(exp.data, act.data, delta);
+    }
+
+
+    public static void assertEquals(CMatrix exp, CMatrix act, double delta) {
+        Assertions.assertEquals(exp.shape, act.shape);
+        assertEquals(exp.data, act.data, delta);
+    }
+
+
+    public static void assertEquals(CTensor exp, CTensor act, double delta) {
+        Assertions.assertEquals(exp.shape, act.shape);
+        assertEquals(exp.data, act.data, delta);
+    }
+
+
+    private static void assertEquals(Complex128[] exp, Complex128[] act, double delta) {
+        for(int i = 0; i<exp.length; i++) {
+            Assertions.assertEquals(exp[i].re, act[i].re,
+                    delta, "real not equal at index " + i);
+            Assertions.assertEquals(exp[i].im, act[i].im,
+                    delta, "imaginary not equal at index " + i);
         }
     }
 }

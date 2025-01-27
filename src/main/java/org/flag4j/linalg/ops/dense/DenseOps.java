@@ -49,7 +49,7 @@ public final class DenseOps {
         ValidateParameters.ensureRank(shape, 2);
         int numRows = shape.get(0);
         int numCols = shape.get(1);
-        ValidateParameters.ensureValidArrayIndices(numRows, rowIdx1, rowIdx2);
+        ValidateParameters.validateArrayIndices(numRows, rowIdx1, rowIdx2);
 
         swapRowsUnsafe(shape, data, rowIdx1, rowIdx2, 0, numCols);
     }
@@ -103,7 +103,7 @@ public final class DenseOps {
         ValidateParameters.ensureRank(shape, 2);
         int numRows = shape.get(0);
         int numCols = shape.get(1);
-        ValidateParameters.ensureValidArrayIndices(numCols, colIdx1, colIdx2);
+        ValidateParameters.validateArrayIndices(numCols, colIdx1, colIdx2);
 
         swapColsUnsafe(shape, data, colIdx1, colIdx2, 0, numRows);
     }

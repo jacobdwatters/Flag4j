@@ -24,7 +24,7 @@ class CMatrixDirectSumTests {
         double[][] bEntries;
         Matrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}
@@ -51,7 +51,7 @@ class CMatrixDirectSumTests {
         double[] bEntries;
         CooMatrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}
@@ -78,7 +78,7 @@ class CMatrixDirectSumTests {
         Complex128[][] bEntries;
         CMatrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}
@@ -104,7 +104,7 @@ class CMatrixDirectSumTests {
         Complex128[] bEntries;
         CooCMatrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}
@@ -131,7 +131,7 @@ class CMatrixDirectSumTests {
         double[][] bEntries;
         Matrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}
@@ -159,7 +159,7 @@ class CMatrixDirectSumTests {
         double[] bEntries;
         CooMatrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}
@@ -187,7 +187,7 @@ class CMatrixDirectSumTests {
         Complex128[][] bEntries;
         CMatrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}
@@ -215,7 +215,7 @@ class CMatrixDirectSumTests {
         Complex128[] bEntries;
         CooCMatrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(9.234, -0.864), new Complex128(58.1, 3), new Complex128(-984, -72.3)},
                 {new Complex128(1), Complex128.ZERO, new Complex128(0, 87.3)}

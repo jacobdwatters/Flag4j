@@ -42,13 +42,13 @@ class CTensorToStringTests {
     @Test
     void toStringTestCase() {
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         exp = "shape: (2, 3, 1, 2)\n" +
                 "[ 1.4415 - 0.0245i  235.61 + 1.45i  -2.4E-4i  1  -85.1 + 9.234i  1.345 - 781.2i  " +
                 "0.014 - 2.45i  -140  1.5i  ...  -1.4E-4 + 1.34i ]";
         assertEquals(exp, A.toString());
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         PrintOptions.setMaxColumns(15);
         PrintOptions.setPrecision(2);
         PrintOptions.setCentering(false);

@@ -12,7 +12,7 @@ class MatrixTriangularTests {
 
     @Test
     void triangularTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[][]{{1, 3, 4}, {4, 5, 6}};
         A = new Matrix(aEntries);
         assertFalse(A.isTri());
@@ -20,7 +20,7 @@ class MatrixTriangularTests {
         assertFalse(A.isTriU());
         assertFalse(A.isDiag());
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[][]{
                 {1, 3, 4},
                 {4, 5, 6},
@@ -31,7 +31,7 @@ class MatrixTriangularTests {
         assertFalse(A.isTriU());
         assertFalse(A.isDiag());
 
-        // ----------------- Sub-case 3 -----------------
+        // ----------------- sub-case 3 -----------------
         aEntries = new double[][]{
                 {1, 0, 0},
                 {4, 5, 0},
@@ -42,7 +42,7 @@ class MatrixTriangularTests {
         assertFalse(A.isTriU());
         assertFalse(A.isDiag());
 
-        // ----------------- Sub-case 4 -----------------
+        // ----------------- sub-case 4 -----------------
         aEntries = new double[][]{
                 {1, 3, 4},
                 {0, 5, 6},
@@ -53,7 +53,7 @@ class MatrixTriangularTests {
         assertTrue(A.isTriU());
         assertFalse(A.isDiag());
 
-        // ----------------- Sub-case 5 -----------------
+        // ----------------- sub-case 5 -----------------
         aEntries = new double[][]{
                 {1, 0, 0},
                 {0, 5, 0},

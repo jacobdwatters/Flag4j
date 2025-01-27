@@ -480,9 +480,9 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public Double get(int... indices) {
-        ValidateParameters.ensureEquals(indices.length, 2);
-        ValidateParameters.ensureIndicesInBounds(numRows, indices[0]);
-        ValidateParameters.ensureIndicesInBounds(numCols, indices[1]);
+        ValidateParameters.ensureAllEqual(indices.length, 2);
+        ValidateParameters.validateArrayIndices(numRows, indices[0]);
+        ValidateParameters.validateArrayIndices(numCols, indices[1]);
 
         return get(indices[0], indices[1]);
     }
@@ -501,8 +501,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
     @Override
     public CooMatrix set(Double value, int... indices) {
         ValidateParameters.ensureArrayLengthsEq(2, indices.length);
-        ValidateParameters.ensureIndicesInBounds(numRows, indices[0]);
-        ValidateParameters.ensureIndicesInBounds(numCols, indices[1]);
+        ValidateParameters.validateArrayIndices(numRows, indices[0]);
+        ValidateParameters.validateArrayIndices(numCols, indices[1]);
 
         return RealCooMatrixGetSet.matrixSet(this, indices[0], indices[1], value);
     }
@@ -558,7 +558,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix reshape(Shape newShape) {
-        ValidateParameters.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
         int oldColCount = shape.get(1);
         int newColCount = newShape.get(1);
 
@@ -1016,7 +1016,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @return The result of multiplying this matrix with the transpose of {@code b}.
      */
     public Matrix multTranspose(CooMatrix b) {
-        ValidateParameters.ensureEquals(numCols, b.numCols);
+        ValidateParameters.ensureAllEqual(numCols, b.numCols);
         return mult(b.T());
     }
 
@@ -1047,7 +1047,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      * @see #augment(CooMatrix)
      */
     public CooMatrix stack(CooMatrix b) {
-        ValidateParameters.ensureEquals(numCols, b.numCols);
+        ValidateParameters.ensureAllEqual(numCols, b.numCols);
 
         Shape destShape = new Shape(numRows+b.numRows, numCols);
         double[] destEntries = new double[data.length + b.data.length];
@@ -1084,7 +1084,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix augment(CooMatrix b) {
-        ValidateParameters.ensureEquals(numRows, b.numRows);
+        ValidateParameters.ensureAllEqual(numRows, b.numRows);
 
         Shape destShape = new Shape(numRows, numCols + b.numCols);
         double[] destEntries = new double[data.length + b.data.length];
@@ -1121,7 +1121,7 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix augment(CooVector b) {
-        ValidateParameters.ensureEquals(numRows, b.size);
+        ValidateParameters.ensureAllEqual(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
         double[] destEntries = new double[data.length + b.data.length];
@@ -1327,8 +1327,8 @@ public class CooMatrix extends AbstractDoubleTensor<CooMatrix>
      */
     @Override
     public CooMatrix set(Double value, int row, int col) {
-        ValidateParameters.ensureValidArrayIndices(numRows, row);
-        ValidateParameters.ensureValidArrayIndices(numCols, col);
+        ValidateParameters.validateArrayIndices(numRows, row);
+        ValidateParameters.validateArrayIndices(numCols, col);
         return RealCooMatrixGetSet.matrixSet(this, row, col, value);
     }
 

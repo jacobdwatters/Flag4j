@@ -30,7 +30,7 @@ class CooCVectorAddTests {
         int[] bIndices = {1, 5, 11, 67, 200};
         b = new CooVector(size, bValues, bIndices);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {new Complex128(32.5, 98), new Complex128(44), new Complex128(-8.2, 55.1).add(-5.66),
                 new Complex128(22.445), new Complex128(-0.994), new Complex128(0, 14.5), new Complex128(10.50)};
         int[] expIndices = {0, 1, 5, 11, 67, 103, 200};
@@ -38,7 +38,7 @@ class CooCVectorAddTests {
 
         assertEquals(exp, a.add(b));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new double[]{44, -5.66, 22.445, -0.994, 10.5};
         bIndices = new int[]{1, 5, 11, 67, 200};
         b = new CooVector(size+13, bValues, bIndices);
@@ -62,7 +62,7 @@ class CooCVectorAddTests {
         int[] bIndices = {1, 5, 6};
         b = new CooCVector(size, bValues, bIndices);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {new Complex128(32.5, 98), new Complex128(1, -0.024),
                 new Complex128(-8.2, 55.1).add(new Complex128(99.24, 1.5)), new Complex128(0, 1.4),
                 new Complex128(0, 14.5)
@@ -72,7 +72,7 @@ class CooCVectorAddTests {
 
         assertEquals(exp, a.add(b));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new Complex128[]{new Complex128(1, -0.024),
                 new Complex128(99.24, 1.5), new Complex128(0, 1.4)};
         bIndices = new int[]{1, 5, 6};
@@ -96,7 +96,7 @@ class CooCVectorAddTests {
         double[] bValues = {1, 5, -0.0024, 1, 2001.256, 61, -99.24, 1.5};
         b = new Vector(bValues);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {
                 new Complex128(1).add(aValues[0]), new Complex128(5),
                 new Complex128(-0.0024).add(aValues[1]), new Complex128(1),
@@ -106,7 +106,7 @@ class CooCVectorAddTests {
 
         assertEquals(exp, RealComplexDenseSparseVectorOps.add(b, a));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new double[]{1, 5, -0.0024, 1, 2001.256, 61};
         b = new Vector(bValues);
 
@@ -128,14 +128,14 @@ class CooCVectorAddTests {
                 new Complex128(0, -99.145), new Complex128(4.51, 8.456), new Complex128(11.34, -0.00245)};
         b = new CVector(bValues);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {new Complex128(1.445, -9.24).add(new Complex128(32.5, 98)), new Complex128(1.45),
                 new Complex128(0, -99.145).add(new Complex128(-8.2, 55.1)), new Complex128(4.51, 8.456), new Complex128(11.34, -0.00245)};
         exp = new CVector(expValues);
 
         assertEquals(exp, DenseCooFieldVectorOps.add(b, a));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new Complex128[]{new Complex128(1.445, -9.24), new Complex128(1.45),
                 new Complex128(0, -99.145), new Complex128(4.51, 8.456),
                 new Complex128(11.34, -0.00245), new Complex128(34.5, 0.0014)};
@@ -158,7 +158,7 @@ class CooCVectorAddTests {
 
         b = 2.345;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {aValues[0].add(new Complex128(b)), Complex128.ZERO, aValues[1].add(new Complex128(b)), Complex128.ZERO,
                 Complex128.ZERO, aValues[2].add(new Complex128(b)), Complex128.ZERO, Complex128.ZERO};
         exp = new CVector(expValues);
@@ -178,7 +178,7 @@ class CooCVectorAddTests {
         a = new CooCVector(size, aValues, aIndices);
         b = new Complex128(13.455, -1459.4521);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {new Complex128(32.5, 98).add(b), Complex128.ZERO, new Complex128(-8.2, 55.1).add(b),
                 new Complex128(0, 14.5).add(b), Complex128.ZERO};
         exp = new CVector(expValues);

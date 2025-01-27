@@ -19,13 +19,13 @@ class VectorShapeTests {
 
     @Test
     void sizeTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[]{1.43543, 8.144, -9.234};
         A = new Vector(aEntries);
 
         assertEquals(aEntries.length, A.length());
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new double[]{1.43543, 8.144, -9.234, 20243234.235, 1119.234, 5.14, -8.234};
         A = new Vector(aEntries);
 
@@ -37,7 +37,7 @@ class VectorShapeTests {
         double[] bEntries;
         Vector B;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new double[]{0, -924.34, 5, 1.34545};
@@ -46,7 +46,7 @@ class VectorShapeTests {
         assertTrue(A.sameShape(B));
         assertTrue(A.sameShape(B));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new double[]{0, -924.34, 5, 1.34545, 34.4};
@@ -62,7 +62,7 @@ class VectorShapeTests {
         Complex128[] bEntries;
         CVector B;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(34, -0.34), new Complex128(0.445, 15.5), new Complex128(0.455), new Complex128(0, -8.435)};
@@ -71,7 +71,7 @@ class VectorShapeTests {
         assertTrue(A.sameShape(B));
         assertTrue(A.sameShape(B));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(0.455), new Complex128(0, -8.435)};
@@ -87,7 +87,7 @@ class VectorShapeTests {
         double[] bEntries;
         CooVector B;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new double[]{1.34545};
@@ -98,7 +98,7 @@ class VectorShapeTests {
         assertTrue(A.sameShape(B));
         assertTrue(A.sameShape(B));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new double[]{1.45, 768.2, -1.55, 0.0234};
@@ -116,7 +116,7 @@ class VectorShapeTests {
         Complex128[] bEntries;
         CooCVector B;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(34.5, -9.632)};
@@ -127,7 +127,7 @@ class VectorShapeTests {
         assertTrue(A.sameShape(B));
         assertTrue(A.sameShape(B));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         aEntries = new double[]{1.23, 45, -0.435, 22.15};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(34, -0.34), new Complex128(0.445, 15.5), new Complex128(0.455), new Complex128(0, -8.435)};

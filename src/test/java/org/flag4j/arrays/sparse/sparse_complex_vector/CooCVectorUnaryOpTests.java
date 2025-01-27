@@ -32,7 +32,7 @@ class CooCVectorUnaryOpTests {
 
     @Test
     void hermTConjTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, 83.6), new Complex128(0, -24.56),
                 new Complex128(24.56), new Complex128(-9356.1, -35)
@@ -47,7 +47,7 @@ class CooCVectorUnaryOpTests {
 
     @Test
     void transposeCopyTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6), new Complex128(0, 24.56),
                 new Complex128(24.56), new Complex128(-9356.1, 35)
@@ -62,7 +62,7 @@ class CooCVectorUnaryOpTests {
 
     @Test
     void recipTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6).multInv(), new Complex128(0, 24.56).multInv(),
                 new Complex128(24.56).multInv(), new Complex128(-9356.1, 35).multInv()
@@ -76,7 +76,7 @@ class CooCVectorUnaryOpTests {
 
     @Test
     void absTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntriesRe = new double[]{
                 new Complex128(2.455, -83.6).mag(), new Complex128(0, 24.56).mag(),
                 new Complex128(24.56).mag(), new Complex128(-9356.1, 35).mag()
@@ -90,7 +90,7 @@ class CooCVectorUnaryOpTests {
 
     @Test
     void sqrtTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6).sqrt(), new Complex128(0, 24.56).sqrt(),
                 new Complex128(24.56).sqrt(), new Complex128(-9356.1, 35).sqrt()

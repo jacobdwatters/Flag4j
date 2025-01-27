@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestHelpers {
+public final class TestHelpers {
 
     public static void printAsNumpyArray(Object... args) {
         for(Object arg : args) {

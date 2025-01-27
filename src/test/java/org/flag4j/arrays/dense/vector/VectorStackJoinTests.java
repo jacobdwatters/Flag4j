@@ -20,7 +20,7 @@ class VectorStackJoinTests {
         double[] bEntries, expEntries;
         Vector b, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         bEntries = new double[]{0.9345, 1.5};
         b = new Vector(bEntries);
         expEntries = new double[]{1.5, 6.2546, -0.24, 0.9345, 1.5};
@@ -37,7 +37,7 @@ class VectorStackJoinTests {
         double[][] expEntries;
         Matrix exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         bEntries = new double[]{0.9345, 1.5,-9.234};
         b = new Vector(bEntries);
         expEntries = new double[][]{{1.5, 6.2546, -0.24}, {0.9345, 1.5,-9.234}};
@@ -45,14 +45,14 @@ class VectorStackJoinTests {
 
         assertEquals(exp, a.stack(b));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         bEntries = new double[]{0.9345, 1.5 };
         b = new Vector(bEntries);
 
         Vector finalB = b;
         assertThrows(TensorShapeException.class, ()->a.stack(finalB));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         bEntries = new double[]{0.9345, 1.5,-9.234};
         b = new Vector(bEntries);
         expEntries = new double[][]{{1.5, 6.2546, -0.24}, {0.9345, 1.5,-9.234}};
@@ -60,14 +60,14 @@ class VectorStackJoinTests {
 
         assertEquals(exp, a.stack(b, 0));
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         bEntries = new double[]{0.9345, 1.5 };
         b = new Vector(bEntries);
 
         Vector finalB2 = b;
         assertThrows(TensorShapeException.class, ()->a.stack(finalB2, 0));
 
-        // ---------------------- Sub-case 5 ----------------------
+        // ---------------------- sub-case 5 ----------------------
         bEntries = new double[]{0.9345, 1.5,-9.234};
         b = new Vector(bEntries);
         expEntries = new double[][]{{1.5, 0.9345}, {6.2546, 1.5}, {-0.24, -9.234}};
@@ -75,7 +75,7 @@ class VectorStackJoinTests {
 
         assertEquals(exp, a.stack(b, 1));
 
-        // ---------------------- Sub-case 6 ----------------------
+        // ---------------------- sub-case 6 ----------------------
         bEntries = new double[]{0.9345, 1.5};
         b = new Vector(bEntries);
 

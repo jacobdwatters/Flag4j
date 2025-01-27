@@ -44,7 +44,7 @@ class CVectorEqualsTests {
         Complex128[] bEntries;
         CVector b;
 
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
                 new Complex128(1.3), Complex128.ZERO};
         a = new CVector(aEntries);
@@ -53,7 +53,7 @@ class CVectorEqualsTests {
         b = new CVector(bEntries);
         assertEquals(a, b);
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new Complex128[]{new Complex128(8.124, 9.4), new Complex128(1.55),
                 new Complex128(0, -85.215), new Complex128(0.000013, 14.5),
                 new Complex128(1.335676, -89345)};
@@ -64,7 +64,7 @@ class CVectorEqualsTests {
         b = new CVector(bEntries);
         assertEquals(a, b);
 
-        // ----------------- Sub-case 3 -----------------
+        // ----------------- sub-case 3 -----------------
         aEntries = new Complex128[]{new Complex128(8.124, 9.4), new Complex128(1.55),
                 new Complex128(0, -85.215), new Complex128(0.000013, 14.5),
                 new Complex128(1.335676, -89345)};
@@ -74,27 +74,27 @@ class CVectorEqualsTests {
         b = new CVector(bEntries);
         assertNotEquals(a, b);
 
-        // ----------------- Sub-case 4 -----------------
+        // ----------------- sub-case 4 -----------------
         a = new CVector(45, -92341.566);
         b = new CVector(45, -92341.566);
         assertEquals(a, b);
 
-        // ----------------- Sub-case 5 -----------------
+        // ----------------- sub-case 5 -----------------
         a = new CVector(45, -92341.566);
         b = new CVector(41, -92341.566);
         assertNotEquals(a, b);
 
-        // ----------------- Sub-case 6 -----------------
+        // ----------------- sub-case 6 -----------------
         a = new CVector(45, new Complex128("92.1465+879234.9999324i"));
         b = new CVector(45, new Complex128("92.1465+879234.9999324i"));
         assertEquals(a, b);
 
-        // ----------------- Sub-case 7 -----------------
+        // ----------------- sub-case 7 -----------------
         a = new CVector(45, new Complex128("92.1465+879234.9999324i"));
         b = new CVector(41, new Complex128("92.1465+879234.9999324i"));
         assertNotEquals(a, b);
 
-        // ----------------- Sub-case 8 -----------------
+        // ----------------- sub-case 8 -----------------
         aEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
                 new Complex128(1.3), Complex128.ZERO};
         a = new CVector(aEntries);
@@ -103,7 +103,7 @@ class CVectorEqualsTests {
         b = new CVector(bEntries);
         assertNotEquals(a, b);
 
-        // ----------------- Sub-case 9 -----------------
+        // ----------------- sub-case 9 -----------------
         aEntries = new Complex128[]{new Complex128(1, -9.234), new Complex128(0, 8.245),
                 new Complex128(1.3), Complex128.ZERO};
         a = new CVector(aEntries);
@@ -116,21 +116,21 @@ class CVectorEqualsTests {
 
     @Test
     void objectTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new Complex128[]{new Complex128(0), new Complex128(8.245, 9.2165),
                 new Complex128(1.3, -0.000023465), Complex128.ZERO};
         a = new CVector(aEntries);
         String bString = "Hello World!";
         assertNotEquals(a, bString);
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new Complex128[]{new Complex128(0), new Complex128(8.245, 9.2165),
                 new Complex128(1.3, -0.000023465), Complex128.ZERO};
         a = new CVector(aEntries);
         Double num = 123.4;
         assertNotEquals(a, num);
 
-        // ----------------- Sub-case 3 -----------------
+        // ----------------- sub-case 3 -----------------
         aEntries = new Complex128[]{new Complex128(0), new Complex128(8.245, 9.2165),
                 new Complex128(1.3, -0.000023465), Complex128.ZERO};
         a = new CVector(aEntries);

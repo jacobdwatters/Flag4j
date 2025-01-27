@@ -14,7 +14,7 @@ class RealHessenburgTests {
 
     @Test
     void hessDecompTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 1},
                 {0, 0, -1, 0},
@@ -30,7 +30,7 @@ class RealHessenburgTests {
 
         Assertions.assertEquals(new Matrix(A.shape).round(), A.sub(A_hat).round());
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         aEntries = new double[][]{
                 {1.44, 5.26, -35, 1.9},
                 {0.00024, 16.7, 0, 13.56},
@@ -46,7 +46,7 @@ class RealHessenburgTests {
 
         Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).roundToZero(1.0e-10));
 
-        // ----------------------- Sub-case 2.1 -----------------------
+        // ----------------------- sub-case 2.1 -----------------------
         hess = new RealHess();
         hess.decompose(A);
 

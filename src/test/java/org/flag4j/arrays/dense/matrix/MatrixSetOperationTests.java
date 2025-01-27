@@ -16,7 +16,7 @@ class MatrixSetOperationTests {
     void setValuesDTestCase() {
         Double[][] values;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Double[][]{{1.345, 1.5455}, {-0.44, Math.PI}, {13., -9.4}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0}, {1, 4}, {1331.14, -1334.5}};
@@ -25,7 +25,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Double[][]{{1.345, 1.5455}, {-0.44, Math.PI}, {13., -9.4}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -40,7 +40,7 @@ class MatrixSetOperationTests {
     void setValuesdTestCase() {
         double[][] values;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new double[][]{{1.345, 1.5455}, {-0.44, Math.PI}, {13., -9.4}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0}, {1, 4}, {1331.14, -1334.5}};
@@ -49,7 +49,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new double[][]{{1.345, 1.5455}, {-0.44, Math.PI}, {13., -9.4}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -64,7 +64,7 @@ class MatrixSetOperationTests {
     void setValuesITestCase() {
         Integer[][] values;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Integer[][]{{1, 55}, {-44, 0}, {13, -9}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0}, {1, 4}, {1331.14, -1334.5}};
@@ -72,7 +72,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A.setValues(values));
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Integer[][]{{1, 55}, {-44, 0}, {13, -9}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -87,7 +87,7 @@ class MatrixSetOperationTests {
     void setValuesintTestCase() {
         int[][] values;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new int[][]{{1, 55}, {-44, 0}, {13, -9}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0}, {1, 4}, {1331.14, -1334.5}};
@@ -96,7 +96,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new int[][]{{1, 55}, {-44, 0}, {13, -9}};
         exp = new Matrix(values);
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -112,7 +112,7 @@ class MatrixSetOperationTests {
         Double[] values;
         int col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Double[]{1.345, 1.5455, 1.445};
         col = 0;
         entriesExp = new double[][]{{1.345, 0}, {1.5455, 4}, {1.445, -1334.5}};
@@ -123,7 +123,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Double[]{1.345, 1.5455, 1.445};
         col = 0;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -133,7 +133,7 @@ class MatrixSetOperationTests {
         int finalCol = col;
         assertThrows(IllegalArgumentException.class, () -> A.setCol(finalValues, finalCol));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Double[]{1.345, 1.5455, 1.445};
         col = 1;
         entriesExp = new double[][]{{0, 1.345}, {1, 1.5455}, {1331.14, 1.445}};
@@ -144,7 +144,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Double[]{1.345, 1.5455};
         col = -1;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -154,7 +154,7 @@ class MatrixSetOperationTests {
         int finalCol1 = col;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setCol(finalValues1, finalCol1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Double[]{1.345, 1.5455};
         col = 3;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -171,7 +171,7 @@ class MatrixSetOperationTests {
         double[] values;
         int col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new double[]{1.345, 1.5455, 1.445};
         col = 0;
         entriesExp = new double[][]{{1.345, 0}, {1.5455, 4}, {1.445, -1334.5}};
@@ -182,7 +182,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new double[]{1.345, 1.5455, 1.445};
         col = 0;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -192,7 +192,7 @@ class MatrixSetOperationTests {
         int finalCol = col;
         assertThrows(IllegalArgumentException.class, () -> A.setCol(finalValues, finalCol));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new double[]{1.345, 1.5455, 1.445};
         col = 1;
         entriesExp = new double[][]{{0, 1.345}, {1, 1.5455}, {1331.14, 1.445}};
@@ -203,7 +203,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new double[]{1.345, 1.5455};
         col = -1;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -213,7 +213,7 @@ class MatrixSetOperationTests {
         int finalCol1 = col;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setCol(finalValues1, finalCol1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new double[]{1.345, 1.5455};
         col = 3;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -230,7 +230,7 @@ class MatrixSetOperationTests {
         Double[] values;
         int row;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Double[]{1.345, 1.5455};
         row = 0;
         entriesExp = new double[][]{{1.345, 1.5455}, {1, 4}, {1331.14, -1334.5}};
@@ -241,7 +241,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Double[]{1.345, 1.5455};
         row = 0;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -251,7 +251,7 @@ class MatrixSetOperationTests {
         int finalRow = row;
         assertThrows(IllegalArgumentException.class, () -> A.setRow(finalValues, finalRow));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Double[]{1.345, 1.5455};
         row = 1;
         entriesExp = new double[][]{{0, 0}, {1.345, 1.5455}, {1331.14, -1334.5}};
@@ -262,7 +262,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Double[]{1.345, 1.5455};
         row = -1;
         entriesA = new double[][]{{0, 0}, {1, 4}};
@@ -272,7 +272,7 @@ class MatrixSetOperationTests {
         int finalRow1 = row;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Double[]{1.345, 1.5455, 9.45};
         row = 3;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -289,7 +289,7 @@ class MatrixSetOperationTests {
         double[] values;
         int row;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new double[]{1.345, 1.5455};
         row = 0;
         entriesExp = new double[][]{{1.345, 1.5455}, {1, 4}, {1331.14, -1334.5}};
@@ -300,7 +300,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new double[]{1.345, 1.5455};
         row = 0;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -310,7 +310,7 @@ class MatrixSetOperationTests {
         int finalRow = row;
         assertThrows(IllegalArgumentException.class, () -> A.setRow(finalValues, finalRow));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new double[]{1.345, 1.5455};
         row = 1;
         entriesExp = new double[][]{{0, 0}, {1.345, 1.5455}, {1331.14, -1334.5}};
@@ -321,7 +321,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new double[]{1.345, 1.5455};
         row = -1;
         entriesA = new double[][]{{0, 0}, {1, 4}};
@@ -331,7 +331,7 @@ class MatrixSetOperationTests {
         int finalRow1 = row;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new double[]{1.345, 1.5455, 9.45};
         row = 3;
         entriesA = new double[][]{{0, 0, 1}, {1, 4, 2}};
@@ -349,7 +349,7 @@ class MatrixSetOperationTests {
         Matrix values;
         int row, col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         valueEntries = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         values = new Matrix(valueEntries);
         row = 0;
@@ -362,7 +362,7 @@ class MatrixSetOperationTests {
         A.setSlice(values, row, col);
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         valueEntries = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         values = new Matrix(valueEntries);
         row = 0;
@@ -376,7 +376,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         valueEntries = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         values = new Matrix(valueEntries);
         entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};
@@ -395,7 +395,7 @@ class MatrixSetOperationTests {
         Matrix values;
         int row, col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         valueEntries = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         values = new Matrix(valueEntries);
         row = 0;
@@ -407,7 +407,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A.setSliceCopy(values, row, col));
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         valueEntries = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         values = new Matrix(valueEntries);
         row = 0;
@@ -419,7 +419,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A.setSliceCopy(values, row, col));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         valueEntries = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         values = new Matrix(valueEntries);
         entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};
@@ -436,7 +436,7 @@ class MatrixSetOperationTests {
         Double[][] values;
         int row, col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         row = 0;
         col = 0;
@@ -448,7 +448,7 @@ class MatrixSetOperationTests {
         A.setSlice(values, row, col);
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         row = 0;
         col = 2;
@@ -461,7 +461,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};
         A = new Matrix(entriesA);
@@ -478,7 +478,7 @@ class MatrixSetOperationTests {
         double[][] values;
         int row, col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         row = 0;
         col = 0;
@@ -490,7 +490,7 @@ class MatrixSetOperationTests {
         A.setSlice(values, row, col);
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         row = 0;
         col = 2;
@@ -503,7 +503,7 @@ class MatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new double[][]{{-71.33, 34.61}, {-99.24, -13.4}};
         entriesA = new double[][]{{-99.234, 132, 2.2, 83.1}, {11.346, 124.6, -7.13, 0.00013}};
         A = new Matrix(entriesA);

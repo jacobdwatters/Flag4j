@@ -43,7 +43,7 @@ class CooCVectorConversionTests {
         Shape expShape;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6), new Complex128(0, 24.56),
                 new Complex128(24.56), new Complex128(-9356.1, 35)
@@ -54,7 +54,7 @@ class CooCVectorConversionTests {
 
         assertEquals(exp, a.toMatrix());
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6), new Complex128(0, 24.56),
                 new Complex128(24.56), new Complex128(-9356.1, 35)
@@ -65,7 +65,7 @@ class CooCVectorConversionTests {
 
         assertEquals(exp, a.toMatrix(true));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6), new Complex128(0, 24.56),
                 new Complex128(24.56), new Complex128(-9356.1, 35)
@@ -85,7 +85,7 @@ class CooCVectorConversionTests {
         int expSize;
         CooVector exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         expEntries = new double[]{2.455, 0, 24.56, -9356.1};
         expIndices = new int[]{4, 56, 9903, 14643};
         expSize = sparseSize;
@@ -102,7 +102,7 @@ class CooCVectorConversionTests {
         Shape expShape;
         CooCTensor exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6), new Complex128(0, 24.56),
                 new Complex128(24.56), new Complex128(-9356.1, 35)
@@ -120,7 +120,7 @@ class CooCVectorConversionTests {
         Complex128[] expEntries;
         CVector exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         expEntries = new Complex128[sparseSize];
         Arrays.fill(expEntries, Complex128.ZERO);       
         expEntries[aIndices[0]] = aEntries[0];
@@ -138,7 +138,7 @@ class CooCVectorConversionTests {
         Complex128[] denseEntries;
         CVector denseVector;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         denseEntries = new Complex128[sparseSize];
         Arrays.fill(denseEntries, Complex128.ZERO);
         denseEntries[aIndices[0]] = aEntries[0];

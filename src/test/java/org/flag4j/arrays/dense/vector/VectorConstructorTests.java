@@ -20,7 +20,7 @@ class VectorConstructorTests {
 
     @Test
     void sizeTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
@@ -31,7 +31,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expSize = 0;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
@@ -42,14 +42,14 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         expSize = -1;
         assertThrows(IllegalArgumentException.class, () -> new Vector(expSize));
     }
 
     @Test
     void sizeFillTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expSize = 5;
         fillValue = -10.23423;
         expShape = new Shape(expSize);
@@ -62,7 +62,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expSize = 0;
         fillValue = -10.23423;
         expShape = new Shape(expSize);
@@ -75,7 +75,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         expSize = -1;
         fillValue = -10.23423;
         assertThrows(IllegalArgumentException.class, () -> new Vector(expSize, fillValue));
@@ -84,7 +84,7 @@ class VectorConstructorTests {
 
     @Test
     void entriesTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expEntries = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = expEntries.length;
         expShape = new Shape(expSize);
@@ -95,7 +95,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expEntries = new double[]{-0.234974};
         expSize = expEntries.length;
         expShape = new Shape(expSize);
@@ -110,7 +110,7 @@ class VectorConstructorTests {
 
     @Test
     void entriesITestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -125,7 +125,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -144,7 +144,7 @@ class VectorConstructorTests {
 
     @Test
     void copyTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -160,7 +160,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -176,7 +176,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -192,7 +192,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 4 ------------
+        // ----------- sub-case 4 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -212,7 +212,7 @@ class VectorConstructorTests {
 
     @Test
     void shapeTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
@@ -223,7 +223,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expSize = 0;
         expShape = new Shape(expSize);
         expEntries = new double[expSize];
@@ -234,14 +234,14 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         expShape = new Shape(1, 4);
         assertThrows(IllegalArgumentException.class, () -> new Vector(expShape));
     }
 
     @Test
     void shapeFillTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expSize = 5;
         fillValue = -10.23423;
         expShape = new Shape(expSize);
@@ -254,7 +254,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expSize = 0;
         fillValue = -10.23423;
         expShape = new Shape(expSize);
@@ -267,7 +267,7 @@ class VectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         fillValue = -10.23423;
         expShape = new Shape(1, 14, 6);
         assertThrows(IllegalArgumentException.class, () -> new Vector(expShape, fillValue));

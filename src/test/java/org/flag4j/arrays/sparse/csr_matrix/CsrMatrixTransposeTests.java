@@ -23,7 +23,7 @@ class CsrMatrixTransposeTests {
 
     @Test
     void transposeTest() {
-        // --------------------- Sub-case 1 ----------------------
+        // --------------------- sub-case 1 ----------------------
         aDenseEntries = new double[][]{
                 {0.245, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 9, 0, 0, 0},
@@ -34,7 +34,7 @@ class CsrMatrixTransposeTests {
         makeMatrices();
         assertEquals(exp, A.T());
 
-        // --------------------- Sub-case 2 ----------------------
+        // --------------------- sub-case 2 ----------------------
         aDenseEntries = new double[][]{
                 {0, 0, 1, 0},
                 {0, -25, 0, 0},
@@ -53,7 +53,7 @@ class CsrMatrixTransposeTests {
 
     @Test
     void isSymmetricTests() {
-        // -------------------- Sub-case 1 ---------------------
+        // -------------------- sub-case 1 ---------------------
         aDenseEntries = new double[5][5];
         aDenseEntries[0][0] = 1;
         aDenseEntries[2][1] = -491.3;
@@ -65,7 +65,7 @@ class CsrMatrixTransposeTests {
 
         assertTrue(A.isSymmetric());
 
-        // -------------------- Sub-case 2 ---------------------
+        // -------------------- sub-case 2 ---------------------
         aDenseEntries = new double[5][6];
         aDenseEntries[0][0] = 1;
         aDenseEntries[2][1] = -491.3;
@@ -77,7 +77,7 @@ class CsrMatrixTransposeTests {
 
         assertFalse(A.isSymmetric());
 
-        // -------------------- Sub-case 1 ---------------------
+        // -------------------- sub-case 1 ---------------------
         aDenseEntries = new double[415][415];
         aDenseEntries[0][0] = 1;
         aDenseEntries[2][1] = -491.3;

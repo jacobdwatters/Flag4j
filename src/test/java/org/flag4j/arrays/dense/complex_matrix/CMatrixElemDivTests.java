@@ -18,7 +18,7 @@ class CMatrixElemDivTests {
         double[][] bEntries;
         Matrix B;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.0)},
@@ -39,7 +39,7 @@ class CMatrixElemDivTests {
 
         CustomAssertions.assertEqualsNaN(exp, A.div(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -62,7 +62,7 @@ class CMatrixElemDivTests {
         Complex128[][] bEntries;
         CMatrix B;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -83,7 +83,7 @@ class CMatrixElemDivTests {
 
         CustomAssertions.assertEqualsNaN(exp, A.div(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},

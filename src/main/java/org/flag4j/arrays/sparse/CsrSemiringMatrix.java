@@ -323,8 +323,8 @@ public class CsrSemiringMatrix<T extends Semiring<T>> extends AbstractCsrSemirin
      */
     @Override
     public CooSemiringVector<T> getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndicesInBounds(numRows, rowIdx);
-        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.validateArrayIndices(numRows, rowIdx);
+        ValidateParameters.validateArrayIndices(numCols, colStart, colEnd-1);
         int start = rowPointers[rowIdx];
         int end = rowPointers[rowIdx+1];
 
@@ -358,8 +358,8 @@ public class CsrSemiringMatrix<T extends Semiring<T>> extends AbstractCsrSemirin
      */
     @Override
     public CooSemiringVector<T> getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureIndicesInBounds(numCols, colIdx);
-        ValidateParameters.ensureIndicesInBounds(numRows, rowStart, rowEnd-1);
+        ValidateParameters.validateArrayIndices(numCols, colIdx);
+        ValidateParameters.validateArrayIndices(numRows, rowStart, rowEnd-1);
 
         List<T> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();

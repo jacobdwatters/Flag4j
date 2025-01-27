@@ -21,7 +21,7 @@ class RealComplexDenseOpsTests {
 
     @Test
     void addTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1.1345, 2, -3, 4.13};
@@ -34,7 +34,7 @@ class RealComplexDenseOpsTests {
         add(shape1, src1, shape2, src2, act);
         assertArrayEquals(expResult, act);
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1, 2, 3, 4, 5};
@@ -44,7 +44,7 @@ class RealComplexDenseOpsTests {
         act = new Complex128[5];
         assertThrows(LinearAlgebraException.class, () -> add(shape1, src1, shape2, src2, act));
 
-        // ---------- Sub-case 3 -----------------
+        // ---------- sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1, 2};
@@ -56,7 +56,7 @@ class RealComplexDenseOpsTests {
 
     @Test
     void addScaleComplex() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src2 = new double[]{1.1345, 2, -3, 4.13};
         aC = new Complex128(10.34, -9.331);
         expResult = new Complex128[]{new Complex128(10.34+1.1345, -9.331), new Complex128(10.34+2, -9.331),
@@ -70,7 +70,7 @@ class RealComplexDenseOpsTests {
 
     @Test
     void subTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1.1345, 2, -3, 4.13};
@@ -83,7 +83,7 @@ class RealComplexDenseOpsTests {
         sub(shape1, src1, shape2, src2, act);
         assertArrayEquals(expResult, act);
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1, 2, 3, 4, 5};
@@ -93,7 +93,7 @@ class RealComplexDenseOpsTests {
         act = new Complex128[4];
         assertThrows(LinearAlgebraException.class, () -> sub(shape1, src1, shape2, src2, act));
 
-        // ---------- Sub-case 3 -----------------
+        // ---------- sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1, 2};
@@ -106,7 +106,7 @@ class RealComplexDenseOpsTests {
 
     @Test
     void subReverseTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1.1345, 2, -3, 4.13};
@@ -119,7 +119,7 @@ class RealComplexDenseOpsTests {
         sub(shape2, src2, shape1, src1, act);
         assertArrayEquals(expResult, act);
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1, 2, 3, 4, 5};
@@ -129,7 +129,7 @@ class RealComplexDenseOpsTests {
         act = new Complex128[4];
         assertThrows(LinearAlgebraException.class, () -> sub(shape2, src2, shape1, src1, act));
 
-        // ---------- Sub-case 3 -----------------
+        // ---------- sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new double[]{1, 2};
@@ -143,7 +143,7 @@ class RealComplexDenseOpsTests {
 
     @Test
     void subScaleComplex() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src2 = new double[]{1.1345, 2, -3, 4.13};
         aC = new Complex128(10.34, -9.331);
         expResult = new Complex128[]{new Complex128(1.1345-10.34, 9.331), new Complex128(2-10.34, 9.331),
@@ -157,7 +157,7 @@ class RealComplexDenseOpsTests {
 
     @Test
     void scaleMultComplex() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src2 = new double[]{1.1345, 2, -3, 4.13};
         aC = new Complex128(10.34, -9.331);
         expResult = new Complex128[]{aC.mult(1.1345), aC.mult(2),

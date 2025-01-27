@@ -36,7 +36,7 @@ class RealComplexCsrCsrMatMultTests {
 
     @Test
     void multTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         bEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(80.1, 2.5)},
                 {new Complex128(0), new Complex128(1.41, -92.2), new Complex128(0), new Complex128(0, 15.5), new Complex128(0), new Complex128(0)},
@@ -53,7 +53,7 @@ class RealComplexCsrCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         bEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
@@ -75,7 +75,7 @@ class RealComplexCsrCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         bEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
@@ -100,7 +100,7 @@ class RealComplexCsrCsrMatMultTests {
 
     @Test
     void mult2CsrTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         bEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(80.1, 2.5)},
                 {new Complex128(0), new Complex128(1.41, -92.2), new Complex128(0), new Complex128(0, 15.5), new Complex128(0), new Complex128(0)},
@@ -117,7 +117,7 @@ class RealComplexCsrCsrMatMultTests {
 
         assertEquals(expCsr, A.mult2Csr(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         bEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
@@ -139,7 +139,7 @@ class RealComplexCsrCsrMatMultTests {
 
         assertEquals(expCsr, A.mult2Csr(B));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         bEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},

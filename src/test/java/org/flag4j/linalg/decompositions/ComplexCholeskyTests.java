@@ -20,7 +20,7 @@ class ComplexCholeskyTests {
     void choleskyTestCase() {
         ComplexCholesky cholesky = new ComplexCholesky();
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new String[][]{
                 {"1", "-2i"},
                 {"2i", "5"}};
@@ -31,7 +31,7 @@ class ComplexCholeskyTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new String[][]{
                 {"2", "i"},
                 {"-i", "2"}};

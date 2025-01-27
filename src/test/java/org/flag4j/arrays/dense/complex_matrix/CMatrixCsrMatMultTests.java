@@ -31,7 +31,7 @@ class CMatrixCsrMatMultTests {
 
     @Test
     void standardRealTests() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.1013+0.5667i"), new Complex128("0.56204+0.08795i"), new Complex128("0.26919+0.74589i"), new Complex128("0.40605+0.37181i"), new Complex128("0.41665+0.56373i")},
                 {new Complex128("0.88631+0.70806i"), new Complex128("0.94873+0.70971i"), new Complex128("0.73508+0.92932i"), new Complex128("0.32551+0.08181i"), new Complex128("0.80165+0.87963i")},
@@ -53,7 +53,7 @@ class CMatrixCsrMatMultTests {
         exp = new CMatrix(expEntries);
         assertEquals(exp, A.mult(Breal));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.66805+0.1356i"), new Complex128("0.02304+0.45698i"), new Complex128("0.21488+0.42425i")},
                 {new Complex128("0.41083+0.05417i"), new Complex128("0.73696+0.55199i"), new Complex128("0.14116+0.82652i")},
@@ -90,7 +90,7 @@ class CMatrixCsrMatMultTests {
 
         assertEquals(exp, A.mult(Breal));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         A = new CMatrix(24, 516);
         Breal = new CsrMatrix(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(Breal));
@@ -99,7 +99,7 @@ class CMatrixCsrMatMultTests {
 
     @Test
     void standardTests() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0.2259, 0.42103), new Complex128(0.28846, 0.02369), new Complex128(0.01058, 0.56772), new Complex128(0.95379, 0.05841), new Complex128(0.74607, 0.44243)},
                 {new Complex128(0.54801, 0.91401), new Complex128(0.14567, 0.17494), new Complex128(0.57924, 0.7371), new Complex128(0.12672, 0.1154), new Complex128(0.6019, 0.78311)},
@@ -118,7 +118,7 @@ class CMatrixCsrMatMultTests {
         exp = new CMatrix(expEntries);
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0.296, 0.48224), new Complex128(0.21107, 0.36182), new Complex128(0.54805, 0.07346)},
                 {new Complex128(0.16943, 0.1518), new Complex128(0.45495, 0.5998), new Complex128(0.31595, 0.12229)},
@@ -155,7 +155,7 @@ class CMatrixCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         A = new CMatrix(24, 516);
         B = new CsrCMatrix(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
@@ -175,7 +175,7 @@ class CMatrixCsrMatMultTests {
         CVector exp;
 
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aShape = new Shape(11, 3);
         aData = new Complex128[]{new Complex128(0.66236, 0.99511), new Complex128(0.64644, 0.38726), new Complex128(0.74006, 0.0656)};
         aRowPointers = new int[]{0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3};
@@ -195,7 +195,7 @@ class CMatrixCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aShape = new Shape(25, 12);
         aData = new Complex128[]{new Complex128(0.93957, 0.74939), new Complex128(0.85329, 0.4632), new Complex128(0.74275, 0.36821)};
         aRowPointers = new int[]{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
@@ -212,7 +212,7 @@ class CMatrixCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aShape = new Shape(8, 12);
         aData = new Complex128[]{new Complex128(0.49723, 0.92929), new Complex128(0.97348, 0.99936), new Complex128(0.446, 0.17502), new Complex128(0.70681, 0.54578), new Complex128(0.87631, 0.11464), new Complex128(0.8615, 0.34637), new Complex128(0.31813, 0.74686), new Complex128(0.58007, 0.62119)};
         aRowPointers = new int[]{0, 1, 1, 3, 3, 5, 6, 7, 8};
@@ -229,7 +229,7 @@ class CMatrixCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aShape = new Shape(12, 12);
         aData = new Complex128[]{};
         aRowPointers = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -247,7 +247,7 @@ class CMatrixCsrMatMultTests {
         exp = new CVector(expShape, expData);
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 5 ------------------------
+        // ------------------------ sub-case 5 ------------------------
         aShape = new Shape(10, 10);
         A = new CsrCMatrix(aShape);
         bShape = new Shape(6);

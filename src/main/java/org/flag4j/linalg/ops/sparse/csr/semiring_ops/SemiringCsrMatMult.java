@@ -177,8 +177,8 @@ public final class SemiringCsrMatMult {
             T[] dest, T zero) {
         // Ensure the matrix and vector have shapes conducive to matrix-vector multiplication.
         int rows1 = shape.get(0);
-        ValidateParameters.ensureEquals(shape.get(1), size);
-        ValidateParameters.ensureEquals(dest.length, size);
+        ValidateParameters.ensureAllEqual(shape.get(1), size);
+        ValidateParameters.ensureAllEqual(dest.length, size);
         zero = (zero == null && src1.length > 0) ? src1[0].getZero() : zero;
         Arrays.fill(dest, zero);
 

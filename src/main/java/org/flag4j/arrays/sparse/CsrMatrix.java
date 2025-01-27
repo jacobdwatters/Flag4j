@@ -1185,7 +1185,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *                                        the number of rows in this matrix.
      */
     public CooVector getRow(int rowIdx) {
-        ValidateParameters.ensureIndicesInBounds(numRows, rowIdx);
+        ValidateParameters.validateArrayIndices(numRows, rowIdx);
         int start = rowPointers[rowIdx];
 
         double[] destEntries = new double[rowPointers[rowIdx + 1]-start];
@@ -1212,8 +1212,8 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @throws IllegalArgumentException  If {@code colEnd} is less than {@code colStart}.
      */
     public CooVector getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndicesInBounds(numRows, rowIdx);
-        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.validateArrayIndices(numRows, rowIdx);
+        ValidateParameters.validateArrayIndices(numCols, colStart, colEnd-1);
         int start = rowPointers[rowIdx];
         int end = rowPointers[rowIdx+1];
 
@@ -1263,8 +1263,8 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @throws IllegalArgumentException If {@code rowEnd} is less than {@code rowStart}.
      */
     public CooVector getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureIndicesInBounds(numCols, colIdx);
-        ValidateParameters.ensureIndicesInBounds(numRows, rowStart, rowEnd-1);
+        ValidateParameters.validateArrayIndices(numCols, colIdx);
+        ValidateParameters.validateArrayIndices(numRows, rowStart, rowEnd-1);
 
         List<Double> destEntries = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();

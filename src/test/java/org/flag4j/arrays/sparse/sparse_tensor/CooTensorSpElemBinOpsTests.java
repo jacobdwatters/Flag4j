@@ -27,7 +27,7 @@ class CooTensorSpElemBinOpsTests {
 
     @Test
     void elemMultTest() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         aEntries = new double[]{-0.16684361210076226, -0.5052399843372454, -1.1124588299404807, -0.022660648601335445};
         aIndices = new int[][]{
@@ -57,7 +57,7 @@ class CooTensorSpElemBinOpsTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         aEntries = new double[]{1.620948207485194, -0.6318752045782683};
         aIndices = new int[][]{
@@ -79,7 +79,7 @@ class CooTensorSpElemBinOpsTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooTensor(aShape);
 
@@ -88,7 +88,7 @@ class CooTensorSpElemBinOpsTests {
 
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(B));
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooTensor(aShape);
 
@@ -444,7 +444,7 @@ class CooTensorSpElemBinOpsTests {
 
         assertEquals(exp, A.add(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooTensor(aShape);
 
@@ -453,7 +453,7 @@ class CooTensorSpElemBinOpsTests {
 
         assertThrows(LinearAlgebraException.class, ()->A.add(B));
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooTensor(aShape);
 
@@ -466,7 +466,7 @@ class CooTensorSpElemBinOpsTests {
 
     @Test
     void subTests() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aShape = new Shape(3, 4, 6, 1, 5);
         aEntries = new double[]{-0.5712449609116215, -0.49004395314295557, 1.5715008978339873, -0.21667718838818686, 0.1745431703984849, -1.1004498342966045, -0.676995637130515, -1.7320614784970159, 1.5586547564195028, 0.611153895691038, -0.11208629951030782, 0.1444101865940601, -1.4335819402326644, 0.39041521163262366, 0.8106806718394286, 1.0422855257722368, 1.4272121513673586, -0.15504834834306788, -1.448099724471449, 0.24695194385889596, 1.1330513492380099, 0.66168304985216, -0.16203755702244307, 0.8040919212753633, 0.9578074577602911, -0.5750889348437798, -1.0000201229925485, 0.4770867265534327, -1.44133976954641, -0.20458485556356368, 0.6309627756447167, -0.08803380901022782, -0.43872137489317253, -0.11012183817754316, 0.8961589435738292, -0.8456141086004313, 2.8686395931180426, -0.40191741376948503, 0.4858071825781344, -0.5943075013972965, 0.2942967344752604, -1.0826431548972546, -0.4707149930209947, 0.3952349674229234, 0.22624625058757672, -1.129416696902452, 0.004551844692751868, 0.9556659511444416, 1.358027713041654, 0.49197835259702577, -1.8175067468344335, 0.4868379358144251, -0.3410350665089444, 0.716654948250773};
         aIndices = new int[][]{
@@ -658,7 +658,7 @@ class CooTensorSpElemBinOpsTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aShape = new Shape(3, 4, 6, 1, 5);
         aEntries = new double[]{-1.083066215874416};
         aIndices = new int[][]{
@@ -683,7 +683,7 @@ class CooTensorSpElemBinOpsTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.sub(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooTensor(aShape);
 
@@ -692,7 +692,7 @@ class CooTensorSpElemBinOpsTests {
 
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooTensor(aShape);
 

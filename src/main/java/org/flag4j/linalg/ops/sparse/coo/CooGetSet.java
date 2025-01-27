@@ -112,8 +112,8 @@ public final class CooGetSet {
     public static <T> SparseMatrixData<T> setCol(Shape srcShape, T[] srcEntries, int[] rowIndices, int[] colIndices,
                                                  int colIdx,
                                                  int size, T[] col, int[] indices) {
-        ValidateParameters.ensureIndicesInBounds(srcShape.get(1), colIdx);
-        ValidateParameters.ensureEquals(srcShape.get(0), size);
+        ValidateParameters.validateArrayIndices(srcShape.get(1), colIdx);
+        ValidateParameters.ensureAllEqual(srcShape.get(0), size);
 
         // Initialize destination arrays with the new column and the appropriate indices.
         List<T> destEntries = new ArrayList<>(Arrays.asList(col));
@@ -486,8 +486,8 @@ public final class CooGetSet {
      */
     public static <T> SparseMatrixData<T> getSlice(Shape shape, T[] entries, int[] rowIndices, int[] colIndices,
                                                    int rowStart, int rowEnd, int colStart, int colEnd) {
-        ValidateParameters.ensureIndicesInBounds(shape.get(0), rowStart, rowEnd-1);
-        ValidateParameters.ensureIndicesInBounds(shape.get(1), colStart, colEnd-1);
+        ValidateParameters.validateArrayIndices(shape.get(0), rowStart, rowEnd-1);
+        ValidateParameters.validateArrayIndices(shape.get(1), colStart, colEnd-1);
 
         List<T> destEntries = new ArrayList<>();
         List<Integer> destRowIndices = new ArrayList<>();
@@ -593,7 +593,7 @@ public final class CooGetSet {
     public static <T> SparseVectorData<T> getRow(Shape shape, T[] entries,
                                                  int[] rowIndices, int[] colIndices,
                                                  int rowIdx, int start, int end) {
-        ValidateParameters.ensureValidArrayIndices(shape.get(0), rowIdx);
+        ValidateParameters.validateArrayIndices(shape.get(0), rowIdx);
         ValidateParameters.ensureInRange(start, 0, shape.get(1), "start");
         ValidateParameters.ensureInRange(end, start, shape.get(1), "end");
 
@@ -644,7 +644,7 @@ public final class CooGetSet {
                                                  int[] rowIndices, int[] colIndices,
                                                  int colIdx, int start, int end) {
         // Validate parameters.
-        ValidateParameters.ensureValidArrayIndices(shape.get(1), colIdx);
+        ValidateParameters.validateArrayIndices(shape.get(1), colIdx);
         ValidateParameters.ensureInRange(start, 0, shape.get(0), "start");
         ValidateParameters.ensureInRange(end, start, shape.get(0), "end");
 
@@ -672,8 +672,8 @@ public final class CooGetSet {
      */
     private static void setSliceParamCheck(
             Shape srcShape, Shape valuesShape, int row, int col) {
-        ValidateParameters.ensureIndicesInBounds(srcShape.get(0), row);
-        ValidateParameters.ensureIndicesInBounds(srcShape.get(0), col);
+        ValidateParameters.validateArrayIndices(srcShape.get(0), row);
+        ValidateParameters.validateArrayIndices(srcShape.get(0), col);
 
         if(valuesShape.get(0) + row > srcShape.get(0) || valuesShape.get(1) + col > srcShape.get(1)) {
             throw new IndexOutOfBoundsException(

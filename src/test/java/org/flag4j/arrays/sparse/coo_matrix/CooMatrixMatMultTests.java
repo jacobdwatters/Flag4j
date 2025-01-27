@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CooMatrixMatMultTests {
+class CooMatrixMatMultTests {
 
     @Test
     void multSparseTest() {
@@ -30,7 +30,7 @@ public class CooMatrixMatMultTests {
         double[][] expEntries;
         Matrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.25182, 0.60999, 0.9924};
         aRowIndices = new int[]{0, 1, 2};
@@ -51,7 +51,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.77547, 0.71339, 0.98072, 0.24965, 0.7238, 0.16365, 0.3075, 0.74171, 0.12391, 0.15652, 0.76702, 0.85707, 0.87356, 0.21696, 0.88303};
         aRowIndices = new int[]{1, 3, 3, 3, 5, 5, 5, 5, 5, 6, 6, 7, 9, 10, 10};
@@ -80,7 +80,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.1748, 0.1456, 0.25279, 0.97145};
         aRowIndices = new int[]{0, 1, 3, 4};
@@ -103,7 +103,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.35419, 0.91318, 0.69528, 0.14512};
         aRowIndices = new int[]{0, 2, 3, 4};
@@ -126,7 +126,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.607, 0.14284, 0.45743, 0.77819};
         aRowIndices = new int[]{1, 2, 3, 3};
@@ -143,7 +143,7 @@ public class CooMatrixMatMultTests {
         CooMatrix final0b = b;
         assertThrows(Exception.class, ()->final0a.mult(final0b));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.14191, 0.02704, 0.38007, 0.80064};
         aRowIndices = new int[]{1, 2, 3, 4};
@@ -179,7 +179,7 @@ public class CooMatrixMatMultTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.33137, 0.18814, 0.95844};
         aRowIndices = new int[]{0, 2, 2};
@@ -200,7 +200,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.68187, 0.32014, 0.79403, 0.88781, 0.93595, 0.13241, 0.68188, 0.79228, 0.51634, 0.2253, 0.72079, 0.91121, 0.15124, 0.39048, 0.25872};
         aRowIndices = new int[]{1, 1, 1, 3, 3, 3, 3, 5, 5, 5, 6, 6, 9, 10, 10};
@@ -229,7 +229,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.07754, 0.56599, 0.12724, 0.88643};
         aRowIndices = new int[]{0, 1, 1, 1};
@@ -252,7 +252,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.68362, 0.30186, 0.79635, 0.33173};
         aRowIndices = new int[]{0, 3, 3, 4};
@@ -275,7 +275,7 @@ public class CooMatrixMatMultTests {
 
         assertEquals(exp, a.mult(b));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.7739, 0.85143, 0.0054, 0.88411};
         aRowIndices = new int[]{0, 0, 1, 4};
@@ -292,7 +292,7 @@ public class CooMatrixMatMultTests {
         CooCMatrix final0b = b;
         assertThrows(Exception.class, ()->final0a.mult(final0b));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.11658, 0.17026, 0.57168, 0.11777};
         aRowIndices = new int[]{1, 2, 3, 4};

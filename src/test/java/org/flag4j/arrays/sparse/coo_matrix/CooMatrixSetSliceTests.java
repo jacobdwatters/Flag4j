@@ -31,7 +31,7 @@ class CooMatrixSetSliceTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.26601, 0.19614, 0.44447};
         aRowIndices = new int[]{0, 0, 3};
@@ -52,7 +52,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 2, 0));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(23, 11);
         aEntries = new double[]{0.8099, 0.98458, 0.86365, 0.22484, 0.12245};
         aRowIndices = new int[]{4, 7, 13, 21, 22};
@@ -73,7 +73,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 18, 1));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
         aEntries = new double[]{0.66147, 0.39264, 0.46927, 0.54339, 0.8033, 0.4519, 0.39398, 0.46898, 0.78049};
         aRowIndices = new int[]{41, 45, 141, 341, 376, 480, 522, 644, 828};
@@ -94,7 +94,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 0, 0));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.00945, 0.0801, 0.88807, 0.02644};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -111,7 +111,7 @@ class CooMatrixSetSliceTests {
         CooMatrix final0b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.59692, 0.47247, 0.26357, 0.74655};
         aRowIndices = new int[]{1, 1, 2, 2};
@@ -128,7 +128,7 @@ class CooMatrixSetSliceTests {
         CooMatrix final1b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.15919, 0.18619, 0.9727, 0.67348};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -145,7 +145,7 @@ class CooMatrixSetSliceTests {
         CooMatrix final2b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
-        // ---------------------  Sub-case 7 ---------------------
+        // ---------------------  sub-case 7 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.11608, 0.45899, 0.18176, 0.52675};
         aRowIndices = new int[]{0, 1, 1, 2};
@@ -181,7 +181,7 @@ class CooMatrixSetSliceTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.27021, 0.29417, 0.06904};
         aRowIndices = new int[]{1, 2, 3};
@@ -201,7 +201,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 2, 0));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(23, 11);
         aEntries = new double[]{0.64914, 0.66932, 0.40628, 0.37954, 0.08519};
         aRowIndices = new int[]{0, 5, 6, 16, 22};
@@ -224,7 +224,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 18, 1));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
         aEntries = new double[]{0.09033, 0.75299, 0.78946, 0.91141, 0.66149, 0.23721, 0.78215, 0.14658, 0.48493};
         aRowIndices = new int[]{31, 88, 174, 224, 258, 291, 562, 595, 854};
@@ -245,7 +245,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 0, 0));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.62672, 0.72454, 0.03301, 0.05962};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -260,7 +260,7 @@ class CooMatrixSetSliceTests {
         Matrix final0b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.36772, 0.68086, 0.78025, 0.7059};
         aRowIndices = new int[]{0, 0, 1, 1};
@@ -277,7 +277,7 @@ class CooMatrixSetSliceTests {
         Matrix final1b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.08019, 0.07101, 0.62705, 0.60587};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -293,7 +293,7 @@ class CooMatrixSetSliceTests {
         Matrix final2b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
-        // ---------------------  Sub-case 7 ---------------------
+        // ---------------------  sub-case 7 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.63961, 0.47008, 0.91095, 0.36202};
         aRowIndices = new int[]{0, 2, 2, 2};
@@ -326,7 +326,7 @@ class CooMatrixSetSliceTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.27021, 0.29417, 0.06904};
         aRowIndices = new int[]{1, 2, 3};
@@ -345,7 +345,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 2, 0));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(23, 11);
         aEntries = new double[]{0.64914, 0.66932, 0.40628, 0.37954, 0.08519};
         aRowIndices = new int[]{0, 5, 6, 16, 22};
@@ -367,7 +367,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 18, 1));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
         aEntries = new double[]{0.09033, 0.75299, 0.78946, 0.91141, 0.66149, 0.23721, 0.78215, 0.14658, 0.48493};
         aRowIndices = new int[]{31, 88, 174, 224, 258, 291, 562, 595, 854};
@@ -387,7 +387,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 0, 0));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.62672, 0.72454, 0.03301, 0.05962};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -401,7 +401,7 @@ class CooMatrixSetSliceTests {
         double[][] final0b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.36772, 0.68086, 0.78025, 0.7059};
         aRowIndices = new int[]{0, 0, 1, 1};
@@ -417,7 +417,7 @@ class CooMatrixSetSliceTests {
         double[][] final1b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.08019, 0.07101, 0.62705, 0.60587};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -432,7 +432,7 @@ class CooMatrixSetSliceTests {
         double[][] final2b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
-        // ---------------------  Sub-case 7 ---------------------
+        // ---------------------  sub-case 7 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.63961, 0.47008, 0.91095, 0.36202};
         aRowIndices = new int[]{0, 2, 2, 2};
@@ -464,7 +464,7 @@ class CooMatrixSetSliceTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.27021, 0.29417, 0.06904};
         aRowIndices = new int[]{1, 2, 3};
@@ -483,7 +483,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 2, 0));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(23, 11);
         aEntries = new double[]{0.64914, 0.66932, 0.40628, 0.37954, 0.08519};
         aRowIndices = new int[]{0, 5, 6, 16, 22};
@@ -505,7 +505,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 18, 1));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(1000, 5);
         aEntries = new double[]{0.09033, 0.75299, 0.78946, 0.91141, 0.66149, 0.23721, 0.78215, 0.14658, 0.48493};
         aRowIndices = new int[]{31, 88, 174, 224, 258, 291, 562, 595, 854};
@@ -525,7 +525,7 @@ class CooMatrixSetSliceTests {
 
         assertEquals(exp, RealCooMatrixGetSet.setSlice(a, b, 0, 0));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.62672, 0.72454, 0.03301, 0.05962};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -539,7 +539,7 @@ class CooMatrixSetSliceTests {
         int[][] final0b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final0a, final0b, -1, 2));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.36772, 0.68086, 0.78025, 0.7059};
         aRowIndices = new int[]{0, 0, 1, 1};
@@ -555,7 +555,7 @@ class CooMatrixSetSliceTests {
         int[][] final1b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final1a, final1b, 0, 16));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.08019, 0.07101, 0.62705, 0.60587};
         aRowIndices = new int[]{0, 1, 2, 2};
@@ -570,7 +570,7 @@ class CooMatrixSetSliceTests {
         int[][] final2b = b;
         assertThrows(Exception.class, ()-> RealCooMatrixGetSet.setSlice(final2a, final2b, 2, 0));
 
-        // ---------------------  Sub-case 7 ---------------------
+        // ---------------------  sub-case 7 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.63961, 0.47008, 0.91095, 0.36202};
         aRowIndices = new int[]{0, 2, 2, 2};

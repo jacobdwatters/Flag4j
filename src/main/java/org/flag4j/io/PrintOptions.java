@@ -210,7 +210,7 @@ public final class PrintOptions {
      * @param maxCols The maximum number of columns to print.
      */
     public static void setMaxRowsCols(int maxRows, int maxCols) {
-        ValidateParameters.ensureGreaterEq(1, maxRows, maxCols);
+        ValidateParameters.ensureAllGreaterEq(1, maxRows, maxCols);
 
         PrintOptions.maxRows = maxRows;
         PrintOptions.maxColumns = maxCols;

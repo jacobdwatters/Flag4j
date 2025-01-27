@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -98,7 +98,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
     @Override
     public Vector solve(Matrix L, Vector b) {
         ValidateParameters.ensureSquareMatrix(L.shape);
-        ValidateParameters.ensureEquals(L.numRows, b.size);
+        ValidateParameters.ensureAllEqual(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -116,7 +116,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
     @Override
     public Matrix solve(Matrix L, Matrix B) {
         ValidateParameters.ensureSquareMatrix(L.shape);
-        ValidateParameters.ensureEquals(L.numRows, B.numRows);
+        ValidateParameters.ensureAllEqual(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 

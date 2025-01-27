@@ -26,7 +26,7 @@ class CMatrixMatVecMultTests {
         double[][] bEntries;
         Vector B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -46,7 +46,7 @@ class CMatrixMatVecMultTests {
         assertEquals(exp, A.mult(B));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -69,7 +69,7 @@ class CMatrixMatVecMultTests {
         Complex128[][] bEntries;
         CVector B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -90,7 +90,7 @@ class CMatrixMatVecMultTests {
         assertEquals(exp, A.mult(B));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -112,7 +112,7 @@ class CMatrixMatVecMultTests {
         int[] rowIndices;
         CooVector B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -131,7 +131,7 @@ class CMatrixMatVecMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -154,7 +154,7 @@ class CMatrixMatVecMultTests {
         CooCVector B;
         Shape bShape;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -174,7 +174,7 @@ class CMatrixMatVecMultTests {
         assertEquals(exp, A.mult(B));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},

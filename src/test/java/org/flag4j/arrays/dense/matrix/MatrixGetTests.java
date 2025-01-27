@@ -31,22 +31,22 @@ class MatrixGetTests {
     void getRowTestCase() {
         Vector exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         exp = new Vector(-8234.5, 15.22, -84.12);
         assertEquals(exp, A.getRow(1));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         exp = new Vector(1.123, 5525, 66.74);
         assertEquals(exp, A.getRow(0));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         exp = new Vector(-9.451, -45.6, 111.345);
         assertEquals(exp, A.getRow(3));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(13));
 
-        // ------------------- Sub-case 5 -------------------
+        // ------------------- sub-case 5 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-1));
     }
 
@@ -55,42 +55,42 @@ class MatrixGetTests {
     void getRowAfterTestCase() {
         Vector exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         exp = new Vector(15.22, -84.12);
         assertEquals(exp, A.getRow(1, 1, A.numCols));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         exp = new Vector(66.74);
         assertEquals(exp, A.getRow(0, 2, A.numCols));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         exp = new Vector(-9.451, -45.6, 111.345);
         assertEquals(exp, A.getRow(3, 0, A.numCols));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(13));
 
-        // ------------------- Sub-case 5 -------------------
+        // ------------------- sub-case 5 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-1));
 
-        // ------------------- Sub-case 6 -------------------
+        // ------------------- sub-case 6 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(1, -1, 2));
 
-        // ------------------- Sub-case 7 -------------------
+        // ------------------- sub-case 7 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(1, 4, 5));
     }
 
 
     @Test
     void getSliceTestCase() {
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         expEntries = new double[][]{{-8234.5, 15.22}, {234, 8}, {-9.451, -45.6}};
         exp = new Matrix(expEntries);
 
         assertEquals(exp, A.getSlice(1, 4, 0, 2));
 
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         expEntries = new double[][]{{15.22}, {8}};
         exp = new Matrix(expEntries);
 
@@ -102,22 +102,22 @@ class MatrixGetTests {
     void getColTestCase() {
         Vector exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         exp = new Vector(5525, 15.22, 8, -45.6);
         assertEquals(exp, A.getCol(1));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         exp = new Vector(1.123, -8234.5, 234, -9.451);
         assertEquals(exp, A.getCol(0));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         exp = new Vector(66.74, -84.12, 1, 111.345);
         assertEquals(exp, A.getCol(2));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getCol(13));
 
-        // ------------------- Sub-case 5 -------------------
+        // ------------------- sub-case 5 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.getCol(-1));
     }
 }

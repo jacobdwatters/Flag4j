@@ -31,7 +31,7 @@ class CooCMatrixAugmentVectorTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.09868+0.62735i"), new Complex128("0.67488+0.96181i"), new Complex128("0.36458+0.34928i"), new Complex128("0.00493+0.29436i"), new Complex128("0.02579+0.55809i")};
         aRowIndices = new int[]{0, 0, 1, 1, 2};
@@ -51,7 +51,7 @@ class CooCMatrixAugmentVectorTests {
 
         assertEquals(exp, a.augment(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(2, 1);
         aEntries = new Complex128[]{new Complex128("0.65883+0.21666i")};
         aRowIndices = new int[]{1};
@@ -71,7 +71,7 @@ class CooCMatrixAugmentVectorTests {
 
         assertEquals(exp, a.augment(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(2, 4);
         aEntries = new Complex128[]{new Complex128("0.10575+0.33618i"), new Complex128("0.10586+0.13023i"), new Complex128("0.75827+0.28989i")};
         aRowIndices = new int[]{0, 1, 1};
@@ -108,7 +108,7 @@ class CooCMatrixAugmentVectorTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.25755+0.03656i"), new Complex128("0.0597+0.3623i"), new Complex128("0.55296+0.62671i"), new Complex128("0.86631+0.03059i"), new Complex128("0.68804+0.52549i")};
         aRowIndices = new int[]{0, 0, 1, 1, 1};
@@ -128,7 +128,7 @@ class CooCMatrixAugmentVectorTests {
 
         assertEquals(exp, a.augment(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(2, 1);
         aEntries = new Complex128[]{new Complex128("0.26302+0.62028i")};
         aRowIndices = new int[]{0};
@@ -148,7 +148,7 @@ class CooCMatrixAugmentVectorTests {
 
         assertEquals(exp, a.augment(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(2, 4);
         aEntries = new Complex128[]{new Complex128("0.5785+0.45686i"), new Complex128("0.17044+0.73657i"), new Complex128("0.48501+0.29552i")};
         aRowIndices = new int[]{0, 1, 1};

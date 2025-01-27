@@ -18,7 +18,7 @@ class CooVectorRepeatTests {
 
     @Test
     void repeatRowTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[]{0, 0, 0, -15.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2.45};
         a = new Vector(aEntries).toCoo();
         expEntries = new double[][]{
@@ -31,7 +31,7 @@ class CooVectorRepeatTests {
 
         assertEquals(exp, a.repeat(4, 0));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[]{0, 0, 1.324, -15.2, 0, 0, 0, 0, 0, 1400.245, -.241, 0.0024, 0, 0, 0, 2.45};
         a = new Vector(aEntries).toCoo();
         expEntries = new double[][]{
@@ -42,7 +42,7 @@ class CooVectorRepeatTests {
 
         assertEquals(exp, a.repeat(2, 0));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new double[]{0, 0, 1.324, -15.2, 0, 0, 0, 0, 0, 1400.245, -.241, 0.0024, 0, 0, 0, 2.45};
         a = new Vector(aEntries).toCoo();
 
@@ -54,7 +54,7 @@ class CooVectorRepeatTests {
 
     @Test
     void repeatColTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[]{0, 0, 0, -15.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2.45};
         a = new Vector(aEntries).toCoo();
         expEntries = new double[][]{
@@ -67,7 +67,7 @@ class CooVectorRepeatTests {
 
         assertEquals(exp, a.repeat(4, 1));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[]{0, 0, 1.324, -15.2, 0, 0, 0, 0, 0, 1400.245, -.241, 0.0024, 0, 0, 0, 2.45};
         a = new Vector(aEntries).toCoo();
         expEntries = new double[][]{
@@ -78,7 +78,7 @@ class CooVectorRepeatTests {
 
         assertEquals(exp, a.repeat(2, 1));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new double[]{0, 0, 1.324, -15.2, 0, 0, 0, 0, 0, 1400.245, -.241, 0.0024, 0, 0, 0, 2.45};
         a = new Vector(aEntries).T().toCoo();
 

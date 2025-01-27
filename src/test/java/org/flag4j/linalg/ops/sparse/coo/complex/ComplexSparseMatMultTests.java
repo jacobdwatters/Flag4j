@@ -25,7 +25,7 @@ class ComplexSparseMatMultTests {
 
     @Test
     void matMultTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         aEntries = new Complex128[]{new Complex128("1+3.45i"), new Complex128("9.43-8j")};
         aRowIndices = new int[]{0, 2};
         aColIndices = new int[]{2, 1};
@@ -58,7 +58,7 @@ class ComplexSparseMatMultTests {
 
     @Test
     void matVecMultTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         aEntries = new Complex128[]{new Complex128("1+3.45i"), new Complex128("7.9-105j"), new Complex128("9.43-8j")};
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{2, 0, 1};

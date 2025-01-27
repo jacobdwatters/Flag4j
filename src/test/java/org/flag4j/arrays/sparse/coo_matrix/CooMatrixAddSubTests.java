@@ -30,7 +30,7 @@ class CooMatrixAddSubTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.7197167862026044, 0.8274741025737611, 0.44635157987459506, 0.9106722384653576, 0.11927378948791945};
         aRowIndices = new int[]{0, 1, 1, 2, 3};
@@ -51,7 +51,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.7234897223335167, 0.4569611853869002, 0.17516090675041163};
         aRowIndices = new int[]{2, 2, 2};
@@ -72,7 +72,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new double[]{0.9180438547915879, 0.07235711960675528, 0.2657856824106707, 0.47790644045925923, 0.003070610781322758, 0.34202224059852215, 0.27031789435156306, 0.9499530477799731, 0.08321871287149174};
         aRowIndices = new int[]{0, 1, 3, 4, 6, 6, 6, 8, 8};
@@ -97,7 +97,7 @@ class CooMatrixAddSubTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.7540312001068363, 0.9428223651945967, 0.4650843608728411, 0.5206860140992323, 0.38382860306767685};
         aRowIndices = new int[]{0, 0, 1, 2, 3};
@@ -118,7 +118,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, RealComplexSparseMatOps.sub(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.4602784916680196, 0.6975585135512675, 0.2503474806442201};
         aRowIndices = new int[]{0, 0, 2};
@@ -139,7 +139,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, RealComplexSparseMatOps.sub(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new double[]{0.6270128869218086, 0.16240110664574325, 0.45932672845870137, 0.7474735763620591, 0.538473104946311, 0.7052133339436125, 0.2592123105328553, 0.3787513850108264, 0.6772122005094601};
         aRowIndices = new int[]{1, 2, 3, 3, 4, 4, 5, 5, 8};
@@ -164,7 +164,7 @@ class CooMatrixAddSubTests {
         double[][] expEntries;
         Matrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.6121384636921453, 0.8740186531145545, 0.029381038939396142, 0.018338236585478507, 0.8225690346245645};
         aRowIndices = new int[]{1, 1, 2, 3, 3};
@@ -189,7 +189,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, RealDenseSparseMatrixOps.sub(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.6453030157220373, 0.046510654054616074, 0.26315624640775137};
         aRowIndices = new int[]{1, 1, 2};
@@ -210,7 +210,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, RealDenseSparseMatrixOps.sub(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new double[]{0.5155800494513947, 0.546713180697451, 0.7643616937716915, 0.5419056469988012, 0.4939928805261391, 0.8767329019553655, 0.7469740304018805, 0.7002667865676956, 0.2988567558850965};
         aRowIndices = new int[]{0, 1, 1, 2, 4, 6, 8, 8, 8};
@@ -235,7 +235,7 @@ class CooMatrixAddSubTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.5179066536182447, 0.29699462002610133, 0.1384083495187035, 0.8642135522873594, 0.38365259331915025};
         aRowIndices = new int[]{2, 3, 3, 4, 4};
@@ -260,7 +260,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, RealFieldDenseCooMatrixOps.sub(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.11496605515101443, 0.781677500733315, 0.8839774286026595};
         aRowIndices = new int[]{0, 0, 1};
@@ -281,7 +281,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp, RealFieldDenseCooMatrixOps.sub(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(9, 5);
         aEntries = new double[]{0.12806056946267386, 0.3115401448576318, 0.22374771721866793, 0.17735659189845965, 0.3894332597306345, 0.6439604056373636, 0.843316756247472, 0.4266067850722429, 0.9094096898230055};
         aRowIndices = new int[]{0, 3, 3, 4, 4, 4, 5, 6, 7};
@@ -312,7 +312,7 @@ class CooMatrixAddSubTests {
         double[][] expEntries;
         Matrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.07877, 0.56112, 0.45943};
         aRowIndices = new int[]{0, 1, 2};
@@ -329,7 +329,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.09339, 0.45538, 0.19015, 0.99002, 0.36725};
         aRowIndices = new int[]{0, 1, 6, 7, 7};
@@ -354,7 +354,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.9748, 0.11903, 0.49796, 0.49884};
         aRowIndices = new int[]{0, 1, 4, 4};
@@ -373,7 +373,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.04699, 0.05726, 0.65267, 0.8001};
         aRowIndices = new int[]{2, 2, 3, 4};
@@ -392,7 +392,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.47584, 0.91786, 0.12886, 0.75403};
         aRowIndices = new int[]{0, 2, 3, 4};
@@ -411,7 +411,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 7 ---------------------
+        // ---------------------  sub-case 7 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.70614, 0.09468, 0.58868, 0.48552};
         aRowIndices = new int[]{1, 2, 2, 4};
@@ -445,7 +445,7 @@ class CooMatrixAddSubTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.41845, 0.24416, 0.94638};
         aRowIndices = new int[]{0, 1, 2};
@@ -462,7 +462,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.7284, 0.05728, 0.19851, 0.37527, 0.38768};
         aRowIndices = new int[]{5, 8, 9, 10, 10};
@@ -487,7 +487,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.98254, 0.02491, 0.0166, 0.07118};
         aRowIndices = new int[]{1, 3, 4, 4};
@@ -506,7 +506,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.92351, 0.33742, 0.87826, 0.25944};
         aRowIndices = new int[]{1, 2, 3, 4};
@@ -525,7 +525,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.69952, 0.51199, 0.67603, 0.90057};
         aRowIndices = new int[]{0, 2, 4, 4};
@@ -544,7 +544,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.add(b));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.8617, 0.47043, 0.35871, 0.76007};
         aRowIndices = new int[]{0, 1, 2, 4};
@@ -578,7 +578,7 @@ class CooMatrixAddSubTests {
         double[][] expEntries;
         Matrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.57509, 0.1909, 0.18736};
         aRowIndices = new int[]{1, 2, 2};
@@ -595,7 +595,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.02362, 0.20739, 0.42558, 0.12155, 0.39385};
         aRowIndices = new int[]{2, 3, 7, 9, 10};
@@ -620,7 +620,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.85959, 0.17781, 0.40395, 0.31349};
         aRowIndices = new int[]{0, 1, 3, 4};
@@ -639,7 +639,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.70185, 0.91872, 0.23836, 0.88307};
         aRowIndices = new int[]{2, 2, 3, 4};
@@ -658,7 +658,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.58303, 0.1641, 0.96525, 0.256};
         aRowIndices = new int[]{0, 1, 4, 4};
@@ -677,7 +677,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.21466, 0.80583, 0.62783, 0.79117};
         aRowIndices = new int[]{0, 1, 1, 3};
@@ -711,7 +711,7 @@ class CooMatrixAddSubTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.79786, 0.90141, 0.10994};
         aRowIndices = new int[]{0, 1, 2};
@@ -728,7 +728,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.0756, 0.86767, 0.6857, 0.82702, 0.20509};
         aRowIndices = new int[]{1, 1, 3, 5, 8};
@@ -753,7 +753,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.44113, 0.46052, 0.36516, 0.85082};
         aRowIndices = new int[]{0, 3, 3, 3};
@@ -772,7 +772,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.1362, 0.90253, 0.94696, 0.26031};
         aRowIndices = new int[]{0, 2, 3, 4};
@@ -791,7 +791,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.86481, 0.70241, 0.38859, 0.88652};
         aRowIndices = new int[]{0, 3, 3, 4};
@@ -810,7 +810,7 @@ class CooMatrixAddSubTests {
 
         assertEquals(exp.toCoo(), a.sub(b));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.54717, 0.71262, 0.7463, 0.11747};
         aRowIndices = new int[]{2, 2, 3, 4};

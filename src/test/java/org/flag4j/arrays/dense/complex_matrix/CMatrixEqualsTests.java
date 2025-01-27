@@ -28,7 +28,7 @@ class CMatrixEqualsTests {
 
     @Test
     void complexTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -42,7 +42,7 @@ class CMatrixEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -55,7 +55,7 @@ class CMatrixEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -73,7 +73,7 @@ class CMatrixEqualsTests {
 
     @Test
     void realTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56), new Complex128(4)},
                 {new Complex128(67.1), new Complex128(8.4554)},
@@ -87,7 +87,7 @@ class CMatrixEqualsTests {
 
         assertEquals(A, BReal.toComplex());
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56), new Complex128(4)},
                 {new Complex128(67.1), new Complex128(8.4554)},
@@ -100,7 +100,7 @@ class CMatrixEqualsTests {
 
         assertNotEquals(A, BReal.toComplex());
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, 1.35), new Complex128(4)},
                 {new Complex128(67.1), new Complex128(8.4554)},
@@ -114,7 +114,7 @@ class CMatrixEqualsTests {
 
         assertNotEquals(A, BReal.toComplex());
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56), new Complex128(4)},
                 {new Complex128(67.1), new Complex128(8.454)},
@@ -132,7 +132,7 @@ class CMatrixEqualsTests {
 
     @Test
     void complexSparseTestCase() {
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(67.1, 1.556), new Complex128(1)},
@@ -146,7 +146,7 @@ class CMatrixEqualsTests {
 
         assertNotEquals(A, BComplexSparse);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(67.1, 1.556), Complex128.ZERO},
@@ -160,7 +160,7 @@ class CMatrixEqualsTests {
 
         assertNotEquals(A, BComplexSparse);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(67.1), Complex128.ZERO},
@@ -178,7 +178,7 @@ class CMatrixEqualsTests {
 
     @Test
     void otherObjectTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(67.1, 1.556), Complex128.ZERO},

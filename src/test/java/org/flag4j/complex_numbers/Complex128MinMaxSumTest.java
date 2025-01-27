@@ -13,7 +13,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void sumTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(93.13, -6456.331);
         n2 = new Complex128(1.3, 7.5);
         n3 = new Complex128(-4.2e-8);
@@ -26,7 +26,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(sum, expSum);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         sum = Complex128.sum();
         expSum = Complex128.ZERO;
         Assertions.assertEquals(sum, expSum);
@@ -35,7 +35,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void minTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(93.13, -6456.331);
         n2 = new Complex128(1.3, 7.5);
         n3 = new Complex128(-4.2e-8);
@@ -47,7 +47,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         min = Complex128.min();
         Assertions.assertNull(min);
     }
@@ -55,7 +55,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void minReal() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(93.13, -6456.331);
         n2 = new Complex128(1.3, 7.5);
         n3 = new Complex128(-4.2e-8);
@@ -68,7 +68,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         min = Complex128.minRe();
         Assertions.assertTrue(Double.isNaN(min.re));
     }
@@ -76,7 +76,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void argminTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(93.13, -6456.331);
         n2 = new Complex128(1.3, 7.5);
         n3 = new Complex128(-4.2e-8);
@@ -88,7 +88,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         arg = Complex128.argmin();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
@@ -97,7 +97,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void argminRealTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(93.13, -6456.331);
         n2 = new Complex128(1.3, 7.5);
         n3 = new Complex128(-4.2e-8);
@@ -110,7 +110,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         arg = Complex128.argminReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
@@ -119,7 +119,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void maxTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(1.3, 7.5);
         n2 = new Complex128(93.13, -6456.331);
         n3 = new Complex128(-4.2e-8);
@@ -131,7 +131,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMax, max);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         max = Complex128.max();
         Assertions.assertNull(max);
     }
@@ -139,7 +139,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void maxReal() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(93.13, -6456.331);
         n2 = new Complex128(1.3, 7.5);
         n3 = new Complex128(-4.2e-8);
@@ -152,7 +152,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMax, max);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         max = Complex128.maxRe();
         Assertions.assertTrue(Double.isNaN(max.re));
     }
@@ -160,7 +160,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void argmaxTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(1.3, 7.5);
         n2 = new Complex128(93.13, -6456.331);
         n3 = new Complex128(-4.2e-8);
@@ -172,7 +172,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         arg = Complex128.argmax();
         expArg = -1;
         Assertions.assertEquals(expMin, min);
@@ -181,7 +181,7 @@ class Complex128MinMaxSumTest {
 
     @Test
     void argmaxRealTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         n1 = new Complex128(93.13, -6456.331);
         n2 = new Complex128(1e10, 7.5);
         n3 = new Complex128(-4.2e-8);
@@ -194,7 +194,7 @@ class Complex128MinMaxSumTest {
 
         Assertions.assertEquals(expMin, min);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         arg = Complex128.argmaxReal();
         expArg = -1;
         Assertions.assertEquals(expMin, min);

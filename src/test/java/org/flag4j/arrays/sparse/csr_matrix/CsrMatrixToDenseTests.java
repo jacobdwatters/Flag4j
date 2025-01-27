@@ -20,7 +20,7 @@ class CsrMatrixToDenseTests {
 
     @Test
     void toDenseTests() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[][]{
                 {0.0, 0.0, 0.0, 0.67525},
                 {0.77089, 0.0, 0.0, 0.0},
@@ -33,7 +33,7 @@ class CsrMatrixToDenseTests {
 
         assertEquals(exp, A.toDense());
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new double[][]{
                 {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
                 {0.0, 0.35447, 0.0, 0.44042, 0.0, 0.86769, 0.38842},

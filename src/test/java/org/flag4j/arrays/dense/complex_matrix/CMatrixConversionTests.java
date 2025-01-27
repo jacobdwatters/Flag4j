@@ -26,7 +26,7 @@ class CMatrixConversionTests {
 
     @Test
     void toRealTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 7.233), new Complex128(-0.34436, 13)},
                 {new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224)},
@@ -46,7 +46,7 @@ class CMatrixConversionTests {
 
     @Test
     void toTensorTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 7.233), new Complex128(-0.34436, 13)},
                 {new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224)},
@@ -68,7 +68,7 @@ class CMatrixConversionTests {
 
     @Test
     void toVectorTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 7.233), new Complex128(-0.34436, 13)},
                 {new Complex128(80.234, -9), new Complex128(Double.POSITIVE_INFINITY, 885.224)},

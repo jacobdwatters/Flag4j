@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class VectorScaleMultDivTests {
+class VectorScaleMultDivTests {
 
     double[] aEntries;
     Vector a;
@@ -18,7 +18,7 @@ public class VectorScaleMultDivTests {
         double[] expEntries;
         Vector exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         b = -34.5;
@@ -35,7 +35,7 @@ public class VectorScaleMultDivTests {
         Complex128[] expEntries;
         CVector exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         b = new Complex128(-0.99234, 1.56);
@@ -54,7 +54,7 @@ public class VectorScaleMultDivTests {
         double[] expEntries;
         Vector exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         b = -34.5;
@@ -71,7 +71,7 @@ public class VectorScaleMultDivTests {
         Complex128[] expEntries;
         CVector exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         b = new Complex128(-0.99234, 1.56);

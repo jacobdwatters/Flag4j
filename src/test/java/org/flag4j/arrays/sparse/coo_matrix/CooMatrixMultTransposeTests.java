@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CooMatrixMultTransposeTests {
+class CooMatrixMultTransposeTests {
 
     @Test
     void realSparseMultTransposeTest() {
@@ -27,7 +27,7 @@ public class CooMatrixMultTransposeTests {
         double[][] expEntries;
         Matrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.78156, 0.09594, 0.7923};
         aRowIndices = new int[]{0, 1, 2};
@@ -48,7 +48,7 @@ public class CooMatrixMultTransposeTests {
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(11, 23);
         aEntries = new double[]{0.99702, 0.04209, 0.43944, 0.33732, 0.37757, 0.05866, 0.89726, 0.68715, 0.32244, 0.352, 0.47304, 0.41871, 0.49412, 0.88239, 0.77977};
         aRowIndices = new int[]{0, 2, 2, 3, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 10};
@@ -78,7 +78,7 @@ public class CooMatrixMultTransposeTests {
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.6657, 0.789, 0.34576, 0.67106};
         aRowIndices = new int[]{1, 2, 3, 4};
@@ -101,7 +101,7 @@ public class CooMatrixMultTransposeTests {
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
-        // ---------------------  Sub-case 4 ---------------------
+        // ---------------------  sub-case 4 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.63359, 0.98973, 0.65753, 0.27274};
         aRowIndices = new int[]{1, 2, 3, 4};
@@ -124,7 +124,7 @@ public class CooMatrixMultTransposeTests {
 
         assertTrue(exp.allClose(a.multTranspose(b)));
 
-        // ---------------------  Sub-case 5 ---------------------
+        // ---------------------  sub-case 5 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.43181, 0.80241, 0.7987, 0.961};
         aRowIndices = new int[]{1, 2, 4, 4};
@@ -141,7 +141,7 @@ public class CooMatrixMultTransposeTests {
         CooMatrix final0b = b;
         assertThrows(Exception.class, ()->final0a.multTranspose(final0b));
 
-        // ---------------------  Sub-case 6 ---------------------
+        // ---------------------  sub-case 6 ---------------------
         aShape = new Shape(5, 3);
         aEntries = new double[]{0.28394, 0.65788, 0.63941, 0.47642};
         aRowIndices = new int[]{0, 2, 4, 4};

@@ -16,7 +16,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void addRealTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(2);
         b = new Complex128(5);
         expResult = new Complex128(2+5);
@@ -25,7 +25,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(102.31);
         b = new Complex128(1.3435e3);
         expResult = new Complex128(102.31+1.3435e3);
@@ -34,7 +34,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(-123.45);
         b = new Complex128(234.09264001);
         expResult = new Complex128(-123.45 + 234.09264001);
@@ -43,7 +43,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY);
         b = new Complex128(1);
         expResult = new Complex128(Double.POSITIVE_INFINITY+1);
@@ -52,7 +52,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY);
         expResult = new Complex128(Double.POSITIVE_INFINITY+Double.NEGATIVE_INFINITY);
@@ -62,7 +62,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertEquals(0, result.im);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.NaN);
         b = new Complex128(-1234.123);
         expResult = new Complex128(Double.NaN + -1234.123);
@@ -72,7 +72,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertEquals(0, result.im);
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex128(1.234);
         b = new Complex128(Double.NaN);
         expResult = new Complex128(1.234 + Double.NaN);
@@ -86,7 +86,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void addComplexTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(2, 10);
         b = new Complex128(5, 345);
         expResult = new Complex128(2+5, 10+345);
@@ -95,7 +95,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(4589.12398, 1.35);
         b = new Complex128(0, 124.5);
         expResult = new Complex128(4589.12398+0, 1.35+124.5);
@@ -104,7 +104,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(-45, 62759.2);
         b = new Complex128(-1.34e-15, 1.3);
         expResult = new Complex128(-45 + -1.34e-15, 62759.2 + 1.3);
@@ -113,7 +113,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, 6);
         b = new Complex128(1, Double.NEGATIVE_INFINITY);
         expResult = new Complex128(Double.POSITIVE_INFINITY+1, 6+Double.NEGATIVE_INFINITY);
@@ -122,7 +122,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         expResult = new Complex128(Double.POSITIVE_INFINITY+Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY+Double.POSITIVE_INFINITY);
@@ -132,7 +132,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertTrue(Double.isNaN(result.im));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.NaN, 1);
         b = new Complex128(-1234.123, Double.NaN);
         expResult = new Complex128(Double.NaN + -1234.123, 1+Double.NaN);
@@ -142,7 +142,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertTrue(Double.isNaN(result.im));
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex128(Double.NaN, Double.NaN);
         b = new Complex128(Double.NaN, Double.NaN);
         expResult = new Complex128(1.234 + Double.NaN);
@@ -156,7 +156,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void addDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(34);
         bDouble = 435.234;
         expResult = new Complex128(34 + 435.234);
@@ -164,7 +164,7 @@ class Complex128BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(-123.34);
         bDouble = 94.9492;
         expResult = new Complex128(-123.34 + 94.9492);
@@ -172,7 +172,7 @@ class Complex128BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(50.3, -34.98165);
         bDouble = 10.5;
         expResult = new Complex128(50.3 + 10.5, -34.98165);
@@ -180,7 +180,7 @@ class Complex128BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(50.3, Double.NEGATIVE_INFINITY);
         bDouble = 10.5;
         expResult = new Complex128(50.3 + 10.5, Double.NEGATIVE_INFINITY);
@@ -188,7 +188,7 @@ class Complex128BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.NaN, 5.4);
         bDouble = 234.435;
         expResult = new Complex128(234.435 + Double.NaN, 5.4);
@@ -201,7 +201,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void subRealTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(2);
         b = new Complex128(5);
         expResult = new Complex128(2-5);
@@ -210,7 +210,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(102.31);
         b = new Complex128(1.3435e3);
         expResult = new Complex128(102.31-1.3435e3);
@@ -219,7 +219,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(-123.45);
         b = new Complex128(234.09264001);
         expResult = new Complex128(-123.45 - 234.09264001);
@@ -228,7 +228,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY);
         b = new Complex128(1);
         expResult = new Complex128(Double.POSITIVE_INFINITY-1);
@@ -237,7 +237,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY);
         expResult = new Complex128(Double.POSITIVE_INFINITY-Double.NEGATIVE_INFINITY);
@@ -246,7 +246,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.NaN);
         b = new Complex128(-1234.123);
         expResult = new Complex128(Double.NaN - -1234.123);
@@ -256,7 +256,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertEquals(0, result.im);
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex128(1.234);
         b = new Complex128(Double.NaN);
         expResult = new Complex128(1.234 - Double.NaN);
@@ -270,7 +270,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void subComplexTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(2, 10);
         b = new Complex128(5, 345);
         expResult = new Complex128(2-5, 10-345);
@@ -279,7 +279,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(4589.12398, 1.35);
         b = new Complex128(0, 124.5);
         expResult = new Complex128(4589.12398-0, 1.35-124.5);
@@ -288,7 +288,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(-45, 62759.2);
         b = new Complex128(-1.34e-15, 1.3);
         expResult = new Complex128(-45 - -1.34e-15, 62759.2 - 1.3);
@@ -297,7 +297,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, 6);
         b = new Complex128(1, Double.NEGATIVE_INFINITY);
         expResult = new Complex128(Double.POSITIVE_INFINITY-1, 6-Double.NEGATIVE_INFINITY);
@@ -306,7 +306,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         expResult = new Complex128(Double.POSITIVE_INFINITY-Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY-Double.POSITIVE_INFINITY);
@@ -315,7 +315,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.NaN, 1);
         b = new Complex128(-1234.123, Double.NaN);
         expResult = new Complex128(Double.NaN - -1234.123, 1-Double.NaN);
@@ -325,7 +325,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertTrue(Double.isNaN(result.im));
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex128(Double.NaN, Double.NaN);
         b = new Complex128(Double.NaN, Double.NaN);
         expResult = new Complex128(1.234 - Double.NaN);
@@ -339,7 +339,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void subDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(34);
         bDouble = 435.234;
         expResult = new Complex128(34 - 435.234);
@@ -347,7 +347,7 @@ class Complex128BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(-123.34);
         bDouble = 94.9492;
         expResult = new Complex128(-123.34 - 94.9492);
@@ -355,7 +355,7 @@ class Complex128BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(50.3, -34.98165);
         bDouble = 10.5;
         expResult = new Complex128(50.3 - 10.5, -34.98165);
@@ -363,7 +363,7 @@ class Complex128BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(50.3, Double.NEGATIVE_INFINITY);
         bDouble = 10.5;
         expResult = new Complex128(50.3 - 10.5, Double.NEGATIVE_INFINITY);
@@ -371,7 +371,7 @@ class Complex128BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.NaN, 5.4);
         bDouble = 234.435;
         expResult = new Complex128(234.435 - Double.NaN, 5.4);
@@ -384,7 +384,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void multTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(09.3241, -93.13);
         b = new Complex128(1.355, 297e4);
         expResult = new Complex128(9.3241*1.355-(-93.13)*297e4, 9.3241*297e4-93.13*1.355);
@@ -394,7 +394,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(0, -93.13);
         b = new Complex128(1.355, 0);
         expResult = new Complex128(0, -93.13*1.355);
@@ -403,7 +403,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(1.345, -93.13);
         b = new Complex128(0, 0);
         expResult = Complex128.ZERO;
@@ -413,7 +413,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(0, 0);
         b = new Complex128(1.345, -93.13);
         expResult = Complex128.ZERO;
@@ -423,7 +423,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
@@ -433,7 +433,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(Double.POSITIVE_INFINITY, result.im);
 
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
@@ -446,7 +446,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void multDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(09.3241, -93.13);
         bDouble = 1.355;
         expResult = new Complex128(09.3241*1.355, -93.13*1.355);
@@ -456,7 +456,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(0, 0);
         bDouble = 9.234e10;
 
@@ -466,7 +466,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(1.345, -93.13);
         bDouble = 0;
         expResult = Complex128.ZERO;
@@ -475,7 +475,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         bDouble = 9.234e10;
         expResult = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
@@ -485,7 +485,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         bDouble = Double.POSITIVE_INFINITY;
 
@@ -499,7 +499,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void divTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(09.3241, -93.13);
         b = new Complex128(1.355, 297e4);
         expResult = new Complex128(-3.135690092459805e-5, -3.139441915353789e-6);
@@ -509,7 +509,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(0, -93.13);
         b = new Complex128(1.355, 0);
         expResult = new Complex128(0, -68.73062730627306);
@@ -518,7 +518,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(1.345, -93.13);
         b = new Complex128(0, 0);
         expResult = Complex128.NaN;
@@ -529,7 +529,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.im));
 
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(0, 0);
         b = new Complex128(1.345, -93.13);
         expResult = Complex128.ZERO;
@@ -539,7 +539,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
@@ -548,7 +548,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertTrue(Double.isNaN(result.im));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
         b = new Complex128(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
@@ -561,7 +561,7 @@ class Complex128BinaryOpsTest {
 
     @Test
     void divDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex128(09.3241, -93.13);
         bDouble = 1.3452;
         expResult = new Complex128(09.3241/1.3452, -93.13/1.3452);
@@ -571,7 +571,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex128(0, -93.13);
         bDouble = 0;
 
@@ -580,7 +580,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertEquals(Double.NEGATIVE_INFINITY, result.im);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex128(1.345, -93.13);
         b = new Complex128(0, 0);
         expResult = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
@@ -589,7 +589,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(0, 0);
         bDouble = 24.134;
         expResult = Complex128.ZERO;
@@ -598,7 +598,7 @@ class Complex128BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         bDouble = Double.POSITIVE_INFINITY;
 
@@ -607,7 +607,7 @@ class Complex128BinaryOpsTest {
         Assertions.assertTrue(Double.isNaN(result.re));
         Assertions.assertTrue(Double.isNaN(result.im));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex128(Double.POSITIVE_INFINITY, 2);
         bDouble = Double.NEGATIVE_INFINITY;
 

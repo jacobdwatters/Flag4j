@@ -20,7 +20,7 @@ class RealEigenTests {
 
     @Test
     void get2x2EigenValuesTests() {
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         entries = new double[][]{
                 {1, 2}, {3, 4}};
         A = new Matrix(entries);
@@ -28,7 +28,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         entries = new double[][]{
                 {10.5, 2.4},
                 {-0.0024, 215.66}};
@@ -37,7 +37,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         entries = new double[][]{
                 {0, 1},
                 {-1, 0}};
@@ -46,7 +46,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.get2x2EigenValues(A));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         entries = new double[][]{
                 {0, 0},
                 {0, 0}};
@@ -59,7 +59,7 @@ class RealEigenTests {
 
     @Test
     void getEigenValuesTests() {
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         entries = new double[][]{
                 {1, 2}, {3, 4}};
         A = new Matrix(entries);
@@ -67,7 +67,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         entries = new double[][]{
                 {0, 1},
                 {-1, 0}};
@@ -76,7 +76,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         entries = new double[][]{
                 {0.4864, 0.85113, 0.96095},
                 {0.87509, 0.41948, 0.73852},
@@ -88,7 +88,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         entries = new double[][]{
                 {1, 0, 0},
                 {0, 2, 0},
@@ -100,7 +100,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
-        // ------------------- Sub-case 5 -------------------
+        // ------------------- sub-case 5 -------------------
         entries = new double[][]{
                 {2, -3, 0},
                 {3,  2, 0},
@@ -113,7 +113,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
-        // ------------------- Sub-case 6 -------------------
+        // ------------------- sub-case 6 -------------------
         entries = new double[][]{
                 {0.75988, 0.86932, 0.95331, 0.60455, 0.46308, 0.58296, 0.76133, 0.19523, 0.65878, 0.76903, 0.65807, 0.95184},
                 {0.03246, 0.11275, 0.2476, 0.61116, 0.5048, 0.2674, 0.22478, 0.90103, 0.78827, 0.81668, 0.13316, 0.81351},
@@ -139,7 +139,7 @@ class RealEigenTests {
 
         assertEquals(exp, Eigen.getEigenValues(A, seed));
 
-        // ------------------- Sub-case 7 -------------------
+        // ------------------- sub-case 7 -------------------
         entries = new double[][]{
                 {0, 0, 0, 1},
                 {0, 0, -1, 0},
@@ -154,7 +154,7 @@ class RealEigenTests {
         exp = new CVector(expEntries);
         assertEquals(exp, Eigen.getEigenValues(A, seed, 40));
 
-        // ------------------- Sub-case 8 -------------------
+        // ------------------- sub-case 8 -------------------
         entries = new double[][]{
                 {0, 0, 0, 1},
                 {0, 0, -1, 0},
@@ -162,7 +162,7 @@ class RealEigenTests {
         A = new Matrix(entries);
         assertThrows(IllegalArgumentException.class, ()-> Eigen.getEigenValues(A));
 
-        // ------------------- Sub-case 9 -------------------
+        // ------------------- sub-case 9 -------------------
         entries = new double[][]{
                 {0, 0},
                 {0, 0},
@@ -174,7 +174,7 @@ class RealEigenTests {
 
     @Test
     void getEigenVectorsTest() {
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         entries = new double[][]{
                 {1, 2}, {3, 4}};
         A = new Matrix(entries);
@@ -185,7 +185,7 @@ class RealEigenTests {
 
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         entries = new double[][]{
                 {0, 1},
                 {-1, 0}};
@@ -197,7 +197,7 @@ class RealEigenTests {
         expV = new CMatrix(expVEntries);
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         entries = new double[][]{
                 {0.4864, 0.85113, 0.96095},
                 {0.87509, 0.41948, 0.73852},
@@ -212,7 +212,7 @@ class RealEigenTests {
 
         assertEquals(expV, Eigen.getEigenVectors(A, seed));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         entries = new double[][]{
                 {0, 0, 0, 1},
                 {0, 0, -1, 0},

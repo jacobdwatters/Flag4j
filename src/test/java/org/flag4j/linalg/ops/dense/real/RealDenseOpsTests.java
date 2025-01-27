@@ -18,7 +18,7 @@ class RealDenseOpsTests {
 
     @Test
     void addTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234, -88.1, 13.4};
         expResult = new double[]{1+9.1233, 0.98332+22, 134.556+0.00009234,
@@ -30,7 +30,7 @@ class RealDenseOpsTests {
         add(src1, src2, act);
         assertArrayEquals(expResult, act);
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234, -88.1, 13.4, 1, 1};
         shape1 = new Shape(src1.length);
@@ -38,7 +38,7 @@ class RealDenseOpsTests {
 
         assertThrows(IllegalArgumentException.class, () -> add(src1, src2, null));
 
-        // ---------- Sub-case 3 -----------------
+        // ---------- sub-case 3 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234};
         shape1 = new Shape(src1.length);
@@ -50,7 +50,7 @@ class RealDenseOpsTests {
 
     @Test
     void addScalarTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         a = 11.93;
         expResult = new double[]{1+a, 0.98332+a, 134.556+a,
@@ -62,7 +62,7 @@ class RealDenseOpsTests {
 
     @Test
     void subTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234, -88.1, 13.4};
         expResult = new double[]{1-9.1233, 0.98332-22, 134.556-0.00009234,
@@ -71,14 +71,14 @@ class RealDenseOpsTests {
         shape2 = new Shape(src2.length);
         assertArrayEquals(expResult, sub(src1, src2, null));
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234, -88.1, 13.4, 1, 1};
         shape1 = new Shape(src1.length);
         shape2 = new Shape(src2.length);
         assertThrows(IllegalArgumentException.class, () -> sub(src1, src2, act));
 
-        // ---------- Sub-case 3 -----------------
+        // ---------- sub-case 3 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         src2 = new double[]{9.1233, 22, 0.00009234, 11.234};
         shape1 = new Shape(src1.length);
@@ -89,7 +89,7 @@ class RealDenseOpsTests {
 
     @Test
     void subScalarTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         a = 11.93;
         expResult = new double[]{1-a, 0.98332-a, 134.556-a,
@@ -101,12 +101,12 @@ class RealDenseOpsTests {
 
     @Test
     void prodTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.8000000004};
         expResultD = 1*0.98332*134.556*-9.13*-100.234*0.8000000004;
         assertEquals(expResultD, prod(src1));
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new double[]{};
         expResultD = 0;
         assertEquals(expResultD, prod(src1));
@@ -115,7 +115,7 @@ class RealDenseOpsTests {
 
     @Test
     void scaleMultTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new double[]{1, 0.98332, 134.556, -9.13, -100.234, 0.0000000004};
         a = 11.93;
         expResult = new double[]{1*a, 0.98332*a, 134.556*a,

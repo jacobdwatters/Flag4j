@@ -410,7 +410,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static Complex128[] dispatchTranspose(CMatrix A, Matrix B) {
-        ValidateParameters.ensureEquals(A.numCols, B.numCols);
+        ValidateParameters.ensureAllEqual(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         Complex128[] dest = new Complex128[A.numRows*B.numRows];
 
@@ -445,7 +445,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static Complex128[] dispatchTranspose(Matrix A, CMatrix B) {
-        ValidateParameters.ensureEquals(A.numCols, B.numCols);
+        ValidateParameters.ensureAllEqual(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         Complex128[] dest = new Complex128[A.numRows*B.numRows];
 
@@ -479,7 +479,7 @@ public final class MatrixMultiplyDispatcher {
      * @throws IllegalArgumentException If the shapes of the two matrices are not conducive to matrix multiplication-transpose.
      */
     public static Complex128[] dispatchTranspose(CMatrix A, CMatrix B) {
-        ValidateParameters.ensureEquals(A.numCols, B.numCols);
+        ValidateParameters.ensureAllEqual(A.numCols, B.numCols);
         AlgorithmName algorithm = chooseAlgorithmRealComplexTranspose(A.shape);
         Complex128[] dest = new Complex128[A.numRows*A.numCols];
 

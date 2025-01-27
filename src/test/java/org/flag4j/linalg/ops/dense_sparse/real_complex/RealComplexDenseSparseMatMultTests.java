@@ -33,7 +33,7 @@ class RealComplexDenseSparseMatMultTests {
 
     @Test
     void matMultTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -60,7 +60,7 @@ class RealComplexDenseSparseMatMultTests {
                 BSparseComplex.data, BSparseComplex.rowIndices, BSparseComplex.colIndices, BSparseComplex.shape, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -86,7 +86,7 @@ class RealComplexDenseSparseMatMultTests {
                 A.data, A.shape, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aSparseEntries = new double[]{1, 9.43};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{2, 1};
@@ -112,7 +112,7 @@ class RealComplexDenseSparseMatMultTests {
                 BComplex.data, BComplex.shape, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aSparseEntries = new double[]{1, 9.43};
         rowIndices = new int[]{0, 1};
         colIndices = new int[]{2, 1};
@@ -142,7 +142,7 @@ class RealComplexDenseSparseMatMultTests {
 
     @Test
     void matVecMultTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -175,7 +175,7 @@ class RealComplexDenseSparseMatMultTests {
         concurrentBlockedVector(A.data, A.shape, BSparseComplex.data, BSparseComplex.rowIndices, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234},
                 {-932.45},
                 {123.445},
@@ -201,7 +201,7 @@ class RealComplexDenseSparseMatMultTests {
                 A.data, A.shape, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aSparseEntries = new double[]{1, 9.43};
         rowIndices = new int[]{0, 2};
         colIndices = new int[]{2, 1};
@@ -228,7 +228,7 @@ class RealComplexDenseSparseMatMultTests {
                 BComplex.data, BComplex.shape, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aSparseEntries = new double[]{9.43};
         rowIndices = new int[]{1};
         ACooVector = new CooVector(2, aSparseEntries, rowIndices);

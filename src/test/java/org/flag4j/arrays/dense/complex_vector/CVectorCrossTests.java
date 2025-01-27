@@ -31,7 +31,7 @@ class CVectorCrossTests {
         Complex128[] bEntries;
         CVector b;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         bEntries = new Complex128[]{
                 new Complex128(993.356, 1.6),
                 new Complex128(-0.9935, 8.56),
@@ -46,7 +46,7 @@ class CVectorCrossTests {
 
         assertEquals(exp, a.cross(b));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bEntries = new Complex128[]{
                 new Complex128(993.356, 1.6),
                 new Complex128(-0.9935, 8.56),
@@ -56,7 +56,7 @@ class CVectorCrossTests {
         CVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.cross(finalB));
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aEntries = new Complex128[]{new Complex128(1.455, 6126.347),
                 new Complex128(-9.234, 5.0)};
         a = new CVector(aEntries);

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -62,7 +62,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} or {@code j} is greater than or equal to {@code size}.
      */
     public static Matrix getGeneralRotator(int size, int i, int j, double theta) {
-        ValidateParameters.ensureIndicesInBounds(size, i, j);
+        ValidateParameters.validateArrayIndices(size, i, j);
         if(i==j) throw new IllegalArgumentException("The indices i and j cannot be equal.");
 
         // Initialize rotator as identity matrix.
@@ -107,7 +107,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static Matrix getRotator(double[] v, int i) {
-        ValidateParameters.ensureIndicesInBounds(v.length, i);
+        ValidateParameters.validateArrayIndices(v.length, i);
 
         double[] cs = stableTrigVals(v[0], v[i]);
 
@@ -134,7 +134,7 @@ public final class Givens {
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static CMatrix getRotator(CVector v, int i) {
-        ValidateParameters.ensureIndicesInBounds(v.size, i);
+        ValidateParameters.validateArrayIndices(v.size, i);
 
         double r = VectorNorms.norm(v.data);
         Complex128 c = v.data[0].div(r);

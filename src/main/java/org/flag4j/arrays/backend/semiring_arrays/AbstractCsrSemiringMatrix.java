@@ -648,7 +648,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     @Override
     public U multTranspose(T b) {
-        ValidateParameters.ensureEquals(numCols, b.numCols);
+        ValidateParameters.ensureAllEqual(numCols, b.numCols);
         return mult(b.T());
     }
 

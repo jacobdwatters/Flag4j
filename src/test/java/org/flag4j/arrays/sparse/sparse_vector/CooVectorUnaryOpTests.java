@@ -26,7 +26,7 @@ class CooVectorUnaryOpTests {
 
     @Test
     void absTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new double[]{1.34, 8781.5, 145.4, 6.26, 234.5666, 7.35};
         expIndices = new int[]{0, 1, 6, 44, 78, 80};
         exp = new CooVector(sparseSize, expEntries, expIndices);
@@ -37,7 +37,7 @@ class CooVectorUnaryOpTests {
 
     @Test
     void sqrtTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new double[]{Math.sqrt(1.34), Double.NaN, Math.sqrt(145.4),
                 Math.sqrt(6.26), Double.NaN, Math.sqrt(7.35)};
         expIndices = new int[]{0, 1, 6, 44, 78, 80};
@@ -49,7 +49,7 @@ class CooVectorUnaryOpTests {
 
     @Test
     void transposeTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new double[]{1.34, -8781.5, 145.4, 6.26, -234.5666, 7.35};
         expIndices = new int[]{0, 1, 6, 44, 78, 80};
         exp = new CooVector(sparseSize, expEntries, expIndices);
@@ -60,7 +60,7 @@ class CooVectorUnaryOpTests {
 
     @Test
     void recipTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new double[]{1.0/1.34, 1.0/-8781.5, 1.0/145.4, 1.0/6.26, 1.0/-234.5666, 1.0/7.35};
         expIndices = new int[]{0, 1, 6, 44, 78, 80};
         exp = new CooVector(sparseSize, expEntries, expIndices);

@@ -22,7 +22,7 @@ class VectorAddSubEqTests {
         double[] bEntries, expEntries;
         Vector B, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7};
@@ -34,7 +34,7 @@ class VectorAddSubEqTests {
 
         assertEquals(exp, A);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7, 1.34};
@@ -51,7 +51,7 @@ class VectorAddSubEqTests {
         CooVector B;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -64,7 +64,7 @@ class VectorAddSubEqTests {
         RealDenseSparseVectorOps.addEq(A, B);
         assertEquals(exp, A);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -83,7 +83,7 @@ class VectorAddSubEqTests {
         double B = 1.5;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         expEntries = new double[]{1.34+B, 6.266+B, -90.45+B};
@@ -101,7 +101,7 @@ class VectorAddSubEqTests {
         double[] bEntries, expEntries;
         Vector B, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7};
@@ -112,7 +112,7 @@ class VectorAddSubEqTests {
         A.subEq(B);
         assertEquals(exp, A);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7, 1.34};
@@ -129,7 +129,7 @@ class VectorAddSubEqTests {
         CooVector B;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -142,7 +142,7 @@ class VectorAddSubEqTests {
         RealDenseSparseVectorOps.subEq(A, B);
         assertEquals(exp, A);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -161,7 +161,7 @@ class VectorAddSubEqTests {
         double B = 1.5;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         expEntries = new double[]{1.34-B, 6.266-B, -90.45-B};

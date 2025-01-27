@@ -32,7 +32,7 @@ class CooVectorJoinTests {
         double[] bEntries, expEntries;
         CooVector b, exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5};
         bIndices = new int[]{0, 3, 4};
         bSize = 5;
@@ -54,7 +54,7 @@ class CooVectorJoinTests {
         CooVector b;
         CooMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 1.3};
         bIndices = new int[]{0, 5, 6, 7};
         bSize = 8;
@@ -69,7 +69,7 @@ class CooVectorJoinTests {
         assertEquals(exp, a.stack(b, 0));
         assertEquals(exp.T(), a.stack(b, 1));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         bEntries = new double[]{24.53, 66.1, -234.5, 1.3};
         bIndices = new int[]{0, 5, 6, 7};
         bSize = 25;
@@ -89,7 +89,7 @@ class CooVectorJoinTests {
         Shape shape;
         CooMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         expEntries = new double[]{1.34, -8781.5, 145.4,
                 1.34, -8781.5, 145.4,
                 1.34, -8781.5, 145.4,
@@ -102,7 +102,7 @@ class CooVectorJoinTests {
         assertEquals(exp, a.repeat(4, 0));
         assertEquals(exp.T(), a.repeat(4, 1));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         assertThrows(IllegalArgumentException.class, ()->a.repeat(4, -1));
         assertThrows(IllegalArgumentException.class, ()->a.repeat(4, 235));
         assertThrows(IllegalArgumentException.class, ()->a.repeat(-1, 0));

@@ -29,7 +29,7 @@ class CsrCMatrixTransposeTests {
 
     @Test
     void transposeTests() {
-        // -------------------- Sub-case 1 ---------------------
+        // -------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.89855+0.38209i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
                 {new Complex128("0.86937+0.81929i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.16951+0.68135i"), new Complex128("0.0")},
@@ -52,7 +52,7 @@ class CsrCMatrixTransposeTests {
 
         assertEquals(exp, A.T());
 
-        // -------------------- Sub-case 2 ---------------------
+        // -------------------- sub-case 2 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.98031+0.659i")},
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.55568+0.08748i"), new Complex128("0.0"), new Complex128("0.0")},
@@ -68,7 +68,7 @@ class CsrCMatrixTransposeTests {
 
         assertEquals(exp, A.T());
 
-        // -------------------- Sub-case 3 ---------------------
+        // -------------------- sub-case 3 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.35993+0.77312i"), new Complex128("0.0"), new Complex128("0.0")},
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
@@ -84,7 +84,7 @@ class CsrCMatrixTransposeTests {
 
         assertEquals(exp, A.T());
 
-        // -------------------- Sub-case 4 ---------------------
+        // -------------------- sub-case 4 ---------------------
         aEntries = new Complex128[140][23];
         ArrayBuilder.fill(aEntries, Complex128.ZERO);
         expEntries = new Complex128[23][140];
@@ -97,7 +97,7 @@ class CsrCMatrixTransposeTests {
 
     @Test
     void hermitianTransposeTests() {
-        // -------------------- Sub-case 1 ---------------------
+        // -------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.89855+0.38209i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
                 {new Complex128("0.86937+0.81929i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.16951+0.68135i"), new Complex128("0.0")},
@@ -117,7 +117,7 @@ class CsrCMatrixTransposeTests {
 
         assertEquals(exp, A.H());
 
-        // -------------------- Sub-case 2 ---------------------
+        // -------------------- sub-case 2 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.98031+0.659i")},
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.55568+0.08748i"), new Complex128("0.0"), new Complex128("0.0")},
@@ -133,7 +133,7 @@ class CsrCMatrixTransposeTests {
 
         assertEquals(exp, A.H());
 
-        // -------------------- Sub-case 3 ---------------------
+        // -------------------- sub-case 3 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.35993+0.77312i"), new Complex128("0.0"), new Complex128("0.0")},
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
@@ -151,7 +151,7 @@ class CsrCMatrixTransposeTests {
 
         assertEquals(exp, A.H());
 
-        // -------------------- Sub-case 4 ---------------------
+        // -------------------- sub-case 4 ---------------------
         aEntries = new Complex128[140][23];
         ArrayBuilder.fill(aEntries, Complex128.ZERO);
         expEntries = new Complex128[23][140];
@@ -164,7 +164,7 @@ class CsrCMatrixTransposeTests {
 
     @Test
     void isHermitianTests() {
-        // -------------------- Sub-case 1 ---------------------
+        // -------------------- sub-case 1 ---------------------
         aEntries = new Complex128[5][5];
         ArrayBuilder.fill(aEntries, Complex128.ZERO);
         aEntries[0][0] = new Complex128(1.5);
@@ -177,7 +177,7 @@ class CsrCMatrixTransposeTests {
 
         assertTrue(A.isHermitian());
 
-        // -------------------- Sub-case 2 ---------------------
+        // -------------------- sub-case 2 ---------------------
         aEntries = new Complex128[5][6];
         ArrayBuilder.fill(aEntries, Complex128.ZERO);
         aEntries[0][0] = new Complex128(1.5);
@@ -190,7 +190,7 @@ class CsrCMatrixTransposeTests {
 
         assertFalse(A.isHermitian());
 
-        // -------------------- Sub-case 1 ---------------------
+        // -------------------- sub-case 1 ---------------------
         aEntries = new Complex128[415][415];
         ArrayBuilder.fill(aEntries, Complex128.ZERO);
         aEntries[0][0] = new Complex128(87.35);

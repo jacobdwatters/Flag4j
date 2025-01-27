@@ -3,6 +3,7 @@ package org.flag4j.arrays.dense.matrix;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.MatrixNorms;
+import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class NormTests {
 
     @Test
     void schattenNormTests() {
-        // ---------------- Sub-case 1 ----------------
+        // ---------------- sub-case 1 ----------------
         aShape = new Shape(5, 5);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295, 0.89629, 0.12559, 0.20724, 0.05147, 0.44081, 0.02988, 0.45683, 0.64914, 0.27849, 0.67625, 0.59086, 0.02398, 0.55885, 0.25925, 0.4151, 0.28353, 0.69314, 0.44045, 0.15687, 0.54465};
         a = new Matrix(aShape, aData);
@@ -27,9 +28,9 @@ class NormTests {
 
         exp = 4.003647020302842;
 
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
-        // ---------------- Sub-case 2 ----------------
+        // ---------------- sub-case 2 ----------------
         aShape = new Shape(3, 2);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295, 0.89629};
         a = new Matrix(aShape, aData);
@@ -37,9 +38,9 @@ class NormTests {
         p = 1;
         exp = 1.803745292776371;
 
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
-        // ---------------- Sub-case 3 ----------------
+        // ---------------- sub-case 3 ----------------
         aShape = new Shape(2, 3);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295, 0.89629};
         a = new Matrix(aShape, aData);
@@ -47,9 +48,9 @@ class NormTests {
         p = 1;
         exp = 1.9501167666102215;
 
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
-        // ---------------- Sub-case 4 ----------------
+        // ---------------- sub-case 4 ----------------
         aShape = new Shape(9, 9);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295, 0.89629, 0.12559, 0.20724, 0.05147, 0.44081,
                 0.02988, 0.45683, 0.64914, 0.27849, 0.67625, 0.59086, 0.02398, 0.55885, 0.25925, 0.4151, 0.28353,
@@ -63,27 +64,27 @@ class NormTests {
 
         p = 2;
         exp = 4.622437431215267;
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
-        // ---------------- Sub-case 5 ----------------
+        // ---------------- sub-case 5 ----------------
         aShape = new Shape(9, 9);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295, 0.89629, 0.12559, 0.20724, 0.05147, 0.44081, 0.02988, 0.45683, 0.64914, 0.27849, 0.67625, 0.59086, 0.02398, 0.55885, 0.25925, 0.4151, 0.28353, 0.69314, 0.44045, 0.15687, 0.54465, 0.78031, 0.30636, 0.22196, 0.38797, 0.93638, 0.976, 0.67238, 0.90283, 0.84575, 0.37799, 0.09222, 0.65341, 0.55784, 0.36156, 0.22505, 0.40652, 0.46894, 0.26924, 0.29179, 0.45769, 0.86053, 0.58625, 0.28349, 0.27798, 0.45462, 0.20541, 0.20138, 0.51404, 0.08723, 0.48359, 0.36218, 0.70769, 0.74675, 0.69109, 0.68918, 0.3736, 0.66813, 0.33985, 0.57279, 0.32581, 0.44515, 0.06153, 0.24268, 0.9716, 0.23058, 0.69148, 0.65048, 0.72394, 0.47509, 0.59666, 0.06697, 0.07256, 0.19898, 0.15186, 0.1001, 0.12929};
         a = new Matrix(aShape, aData);
 
         p = Double.POSITIVE_INFINITY;
         exp = 4.169634097557557;
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
-        // ---------------- Sub-case 6 ----------------
+        // ---------------- sub-case 6 ----------------
         aShape = new Shape(9, 9);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295, 0.89629, 0.12559, 0.20724, 0.05147, 0.44081, 0.02988, 0.45683, 0.64914, 0.27849, 0.67625, 0.59086, 0.02398, 0.55885, 0.25925, 0.4151, 0.28353, 0.69314, 0.44045, 0.15687, 0.54465, 0.78031, 0.30636, 0.22196, 0.38797, 0.93638, 0.976, 0.67238, 0.90283, 0.84575, 0.37799, 0.09222, 0.65341, 0.55784, 0.36156, 0.22505, 0.40652, 0.46894, 0.26924, 0.29179, 0.45769, 0.86053, 0.58625, 0.28349, 0.27798, 0.45462, 0.20541, 0.20138, 0.51404, 0.08723, 0.48359, 0.36218, 0.70769, 0.74675, 0.69109, 0.68918, 0.3736, 0.66813, 0.33985, 0.57279, 0.32581, 0.44515, 0.06153, 0.24268, 0.9716, 0.23058, 0.69148, 0.65048, 0.72394, 0.47509, 0.59666, 0.06697, 0.07256, 0.19898, 0.15186, 0.1001, 0.12929};
         a = new Matrix(aShape, aData);
 
         p = 3.25621;
         exp = 4.215513043537819;
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
-        // ---------------- Sub-case 7 ----------------
+        // ---------------- sub-case 7 ----------------
         aShape = new Shape(4, 4);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295,
                 0.89629, 0.12559, 0.20724, 0.05147, 0.44081,
@@ -92,9 +93,9 @@ class NormTests {
 
         p = -1;
         exp = 0.026667736708101627;
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
-        // ---------------- Sub-case 8 ----------------
+        // ---------------- sub-case 8 ----------------
         aShape = new Shape(4, 4);
         aData = new double[]{0.5508, 0.70815, 0.2909, 0.51083, 0.89295, 0.89629, 0.12559, 0.20724, 0.05147, 0.44081, 0.02988, 0.45683, 0.64914, 0.27849, 0.67625, 0.59086};
         a = new Matrix(aShape, aData);
@@ -102,13 +103,13 @@ class NormTests {
         p = Double.NEGATIVE_INFINITY;
         exp = 0.029990005262000484;
 
-        assertEquals(exp, MatrixNorms.schattenNorm(a, p));
+        assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
     }
 
 
     @Test
     void entryWiseNormTests() {
-        // ---------------- Sub-case 1 ----------------
+        // ---------------- sub-case 1 ----------------
         aShape = new Shape(4, 4);
         aData = new double[]{0.03766, 0.53811, 0.6172, 0.83172, 0.46543, 0.06995, 0.05425, 0.57504, 0.33034, 0.42442, 0.29937, 0.92909, 0.40243, 0.48919, 0.89897, 0.2998};
         a = new Matrix(aShape, aData);
@@ -117,7 +118,7 @@ class NormTests {
         exp = 7.26297;
         assertEquals(exp, MatrixNorms.entryWiseNorm(a, p));
 
-        // ---------------- Sub-case 2 ----------------
+        // ---------------- sub-case 2 ----------------
         aShape = new Shape(7, 2);
         aData = new double[]{0.52663, 0.10295, 0.80074, 0.70444, 0.50312, 0.94987, 0.65969, 0.4173, 0.09431, 0.36203, 0.77842, 0.06282, 0.2784, 0.40589};
         a = new Matrix(aShape, aData);
@@ -126,7 +127,7 @@ class NormTests {
         exp = 0.017283789037010208;
         assertEquals(exp, MatrixNorms.entryWiseNorm(a, p));
 
-        // ---------------- Sub-case 3 ----------------
+        // ---------------- sub-case 3 ----------------
         aShape = new Shape(3, 5);
         aData = new double[]{0.58006, 1.53305, -0.16158, -0.87468, 0.35272, -1.96337, 1.03996, -0.03287, -1.32042, -0.95082, -0.18674, -0.74043, 1.61446, 0.3053, 1.06991};
         a = new Matrix(aShape, aData);
@@ -135,7 +136,7 @@ class NormTests {
         exp = 3.9515551558468727;
         assertEquals(exp, MatrixNorms.entryWiseNorm(a, p));
 
-        // ---------------- Sub-case 4 ----------------
+        // ---------------- sub-case 4 ----------------
         aShape = new Shape(3, 3);
         aData = new double[]{1.30776, -0.03747, -1.68686, -0.46246, 0.99453, 1.47121, 1.18819, -0.04004, -0.09288};
         a = new Matrix(aShape, aData);
@@ -144,7 +145,7 @@ class NormTests {
         exp = 0.026173754083315442;
         assertEquals(exp, MatrixNorms.entryWiseNorm(a, p));
 
-        // ---------------- Sub-case 5 ----------------
+        // ---------------- sub-case 5 ----------------
         aShape = new Shape(3, 3);
         aData = new double[]{-0.57719, 0.76596, -0.78453, -0.33543, 1.861, -0.38476, -0.84035, -1.7351, 0.90212};
         a = new Matrix(aShape, aData);
@@ -153,7 +154,7 @@ class NormTests {
         exp = 2.1303977251997614;
         assertEquals(exp, MatrixNorms.entryWiseNorm(a, p));
 
-        // ---------------- Sub-case 6 ----------------
+        // ---------------- sub-case 6 ----------------
         aShape = new Shape(3, 3);
         aData = new double[]{-0.79318, 1.54067, -0.5029, 0.67312, -0.24927, -0.97936, 0.61532, 0.61237, 0.00226};
         a = new Matrix(aShape, aData);
@@ -162,7 +163,7 @@ class NormTests {
         exp = 1.54067;
         assertEquals(exp, MatrixNorms.entryWiseNorm(a, p));
 
-        // ---------------- Sub-case 7 ----------------
+        // ---------------- sub-case 7 ----------------
         aShape = new Shape(3, 3);
         aData = new double[]{0.87487, -0.41412, 1.05809, 1.97711, -1.33573, -1.05693, 0.92927, -1.43141, -0.71267};
         a = new Matrix(aShape, aData);
@@ -174,7 +175,7 @@ class NormTests {
 
     @Test
     void inducedNormTests() {
-        // ---------------- Sub-case 1 ----------------
+        // ---------------- sub-case 1 ----------------
         aShape = new Shape(6, 8);
         aData = new double[]{0.87001, -0.53075, 1.80658, -0.36132, -0.86666, 2.14868, -1.48927, 1.7104, -0.24429,
                 0.00475, 0.00986, -1.52087, 0.01851, -0.91805, -0.68661,
@@ -189,7 +190,7 @@ class NormTests {
         exp = 6.008729999999999;
         assertEquals(exp, MatrixNorms.inducedNorm(a, p));
 
-        // ---------------- Sub-case 2 ----------------
+        // ---------------- sub-case 2 ----------------
         aShape = new Shape(6, 8);
         aData = new double[]{-1.11826, -1.09012, -0.42251, -0.24597, 1.71915, 1.59003, 0.15207, -0.14672, 0.11485, 1.41536, 0.72123, 1.22943, -2.11986, 0.02405, 0.0345, 0.86933, 0.39555, -0.49977, 0.27804, -1.24306, -0.74671, -0.25535, -0.06707, 0.2038, -0.78898, -0.1462, -0.39705, -0.60432, 0.84509, -2.39218, -0.58742, 1.2572, 1.21936, 0.23098, 0.99622, -1.49354, 0.44016, 1.76301, -0.93744, -0.24744, 1.37773, 0.92328, 0.90134, -0.10557, 0.40794, -1.60648, 0.58006, 0.33817};
         a = new Matrix(aShape, aData);
@@ -198,7 +199,7 @@ class NormTests {
         exp = 2.35856;
         assertEquals(exp, MatrixNorms.inducedNorm(a, p));
 
-        // ---------------- Sub-case 3 ----------------
+        // ---------------- sub-case 3 ----------------
         aShape = new Shape(14, 14);
         aData = new double[]{0.72041, 1.89717, 1.94906, 0.27556, -1.1979, -0.53392, -0.21621, -0.04478, 0.35898, -0.0922, 1.3103,
                 -0.21821, 0.22011, 0.3564, 0.72875, -1.29384, -0.13304, -1.66793, 0.50722, -1.38537, -0.42744, 0.79773, 0.4184,
@@ -223,7 +224,7 @@ class NormTests {
         exp = 6.764801864669105;
         assertEquals(exp, MatrixNorms.inducedNorm(a, p));
 
-        // ---------------- Sub-case 4 ----------------
+        // ---------------- sub-case 4 ----------------
         aShape = new Shape(5, 5);
         aData = new double[]{0.58539, -2.14589, -2.27855, -0.80679, -1.05446, -0.35289, -0.43887, -1.46231, 0.43138, -0.19616,
                 0.05008, 1.85505, -0.7718, -0.11618, -0.60505, 0.3251, -1.93755, 0.41506, -1.2915, -1.2645, 0.33895, 2.39226,
@@ -234,7 +235,7 @@ class NormTests {
         exp = 0.4970402772750497;
         assertEquals(exp, MatrixNorms.inducedNorm(a, p));
 
-        // ---------------- Sub-case 5 ----------------
+        // ---------------- sub-case 5 ----------------
         aShape = new Shape(5, 5);
         aData = new double[]{-0.9525, 1.27424, 0.98569, -0.27018, 0.82013, -0.17059, 0.57118, 0.50879, 1.08135, -1.05082, -0.56911,
                 0.17297, 0.21703, 0.57278, 0.15335, -2.26664, -1.46254, 0.70572, 0.29167, 0.8563, -1.05627, 0.01729,
@@ -245,7 +246,7 @@ class NormTests {
         exp = 5.582870000000001;
         assertEquals(exp, MatrixNorms.inducedNorm(a, p));
 
-        // ---------------- Sub-case 6 ----------------
+        // ---------------- sub-case 6 ----------------
         aShape = new Shape(5, 5);
         aData = new double[]{-0.32281, 2.19241, -0.56914, 0.69786, 0.35078, 0.28429, 0.4643, -0.13171, -0.23963, 0.89503, -0.61056,
                 -1.26108, -0.72803, -1.38127, 0.8772, 0.88868, 0.57504, -0.45355, 0.23406, 3.34191, -0.07215, 0.1964,
@@ -256,7 +257,7 @@ class NormTests {
         exp = 2.0149600000000003;
         assertEquals(exp, MatrixNorms.inducedNorm(a, p));
 
-        // ---------------- Sub-case 7 ----------------
+        // ---------------- sub-case 7 ----------------
         a = new Matrix(5, 5);
         assertEquals(0, MatrixNorms.inducedNorm(a, 1), 1e-16);
         assertEquals(0, MatrixNorms.inducedNorm(a, -1), 1e-16);
@@ -267,7 +268,7 @@ class NormTests {
         assertEquals(0, MatrixNorms.inducedNorm(a, Double.POSITIVE_INFINITY), 1e-16);
         assertEquals(0, MatrixNorms.inducedNorm(a, Double.NEGATIVE_INFINITY), 1e-16);
 
-        // ---------------- Sub-case 8 ----------------
+        // ---------------- sub-case 8 ----------------
         assertThrows(LinearAlgebraException.class, () -> MatrixNorms.inducedNorm(a, 2.2));
         assertThrows(LinearAlgebraException.class, () -> MatrixNorms.inducedNorm(a, 15.332));
     }

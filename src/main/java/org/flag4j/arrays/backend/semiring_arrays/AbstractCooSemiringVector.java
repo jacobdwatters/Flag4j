@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -119,7 +119,7 @@ public abstract class AbstractCooSemiringVector<
     protected AbstractCooSemiringVector(Shape shape, Y[] entries, int[] indices) {
         super(shape, entries);
         ValidateParameters.ensureRank(shape, 1);
-        ValidateParameters.ensureIndicesInBounds(shape.get(0), indices);
+        ValidateParameters.validateArrayIndices(shape.get(0), indices);
         if(entries.length != indices.length) {
             throw new IllegalArgumentException("data and indices arrays of a COO vector must have the same length but got " +
                     "lengths" + entries.length + " and " + indices.length + ".");
@@ -364,7 +364,7 @@ public abstract class AbstractCooSemiringVector<
     @Override
     public T reshape(Shape newShape) {
         ValidateParameters.ensureRank(newShape, 1);
-        ValidateParameters.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
         return copy();
     }
 
@@ -488,7 +488,7 @@ public abstract class AbstractCooSemiringVector<
      */
     @Override
     public V stack(T b, int axis) {
-        ValidateParameters.ensureEquals(size, b.size);
+        ValidateParameters.ensureAllEqual(size, b.size);
         Y[] destEntries = makeEmptyDataArray(data.length + b.data.length);
         int[][] destIndices = new int[2][indices.length + b.indices.length]; // Row and column indices.
 

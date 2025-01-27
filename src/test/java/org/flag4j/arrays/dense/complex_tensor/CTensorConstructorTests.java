@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CTensorConstructorTests {
+class CTensorConstructorTests {
 
     double[] entriesD;
     int[] entriesI;
@@ -23,7 +23,7 @@ public class CTensorConstructorTests {
 
     @Test
     void shapeConstructorTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new Complex128[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
@@ -35,7 +35,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         expShape = new Shape();
         expEntries = new Complex128[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
@@ -47,7 +47,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         expShape = new Shape(1003);
         expEntries = new Complex128[expShape.totalEntries().intValue()];
         for(int i=0; i<expEntries.length; i++) {
@@ -63,7 +63,7 @@ public class CTensorConstructorTests {
 
     @Test
     void shapeValueConstructorTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         value = 3.1345;
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new Complex128[expShape.totalEntries().intValue()];
@@ -76,7 +76,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         value = 11.4;
         expShape = new Shape();
         expEntries = new Complex128[expShape.totalEntries().intValue()];
@@ -89,7 +89,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         value = 8;
         expShape = new Shape(1003);
         expEntries = new Complex128[expShape.totalEntries().intValue()];
@@ -106,7 +106,7 @@ public class CTensorConstructorTests {
 
     @Test
     void shapeCValueConstructorTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         valueC = new Complex128(3.1345);
         expShape = new Shape(4, 5, 6, 7, 1, 2, 4);
         expEntries = new Complex128[expShape.totalEntries().intValue()];
@@ -120,7 +120,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         valueC = new Complex128(11.4, -0.3313);
         expShape = new Shape();
         expEntries = new Complex128[expShape.totalEntries().intValue()];
@@ -133,7 +133,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         valueC = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         expShape = new Shape(1003);
         expEntries = new Complex128[expShape.totalEntries().intValue()];
@@ -150,7 +150,7 @@ public class CTensorConstructorTests {
 
     @Test
     void shapeEntriesDouble() {
-        // ---------- Sub-case 1 ----------
+        // ---------- sub-case 1 ----------
         expShape = new Shape(1, 3, 2, 5);
         entriesD = new double[]{1, 2, 3, 4, 5, 6, 7, -221.233, 11.33, 11,
                 2, -11334, 11.33434, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, 3.14159, 4, 8, 100, 2343,
@@ -166,7 +166,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 2 ----------
+        // ---------- sub-case 2 ----------
         expShape = new Shape(3, 2, 5);
         entriesD = new double[]{1, 2, 3, 4, 5, 6, 7, -221.233, 11.33, 11,
                 2, -11334, 11.33434, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, 3.14159, 4, 8, 100, 2343,
@@ -182,7 +182,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 3 ----------
+        // ---------- sub-case 3 ----------
         expShape = new Shape(3, 10);
         entriesD = new double[]{1, 2, 3, 4, 5, 6, 7, -221.233, 11.33, 11,
                 2, -11334, 11.33434, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, 3.14159, 4, 8, 100, 2343,
@@ -198,7 +198,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 4 ----------
+        // ---------- sub-case 4 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
         entriesD = new double[]{1, 2, 3, 4, 5, 6, 7, -221.233, 11.33, 11,
                 2, -11334, 11.33434, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, 3.14159, 4, 8, 100, 2343,
@@ -214,7 +214,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 5 ----------
+        // ---------- sub-case 5 ----------
         expShape = new Shape(6, 1, 1, 1, 5, 1, 1, 1, 1, 1);
         entriesD = new double[]{1, 2, 3, 4, 5, 6, 7, -221.233, 11.33, 11,
                 2, -11334, 11.33434, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, 3.14159, 4, 8, 100, 2343,
@@ -224,7 +224,7 @@ public class CTensorConstructorTests {
         assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, entriesD));
 
 
-        // ---------- Sub-case 6 ----------
+        // ---------- sub-case 6 ----------
         expShape = new Shape(5, 6);
         entriesD = new double[]{1, 2, 3, 4, 5, 6, 7, -221.233, 11.33, 11,
                 2, -11334, 11.33434, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, 3.14159, 4, 8, 100, 2343,
@@ -237,7 +237,7 @@ public class CTensorConstructorTests {
 
     @Test
     void shapeEntries() {
-        // ---------- Sub-case 1 ----------
+        // ---------- sub-case 1 ----------
         expShape = new Shape(1, 3, 2, 2);
         expEntries = new Complex128[] {
                 new Complex128(1, 0.32), new Complex128(11.2334, -94.45), new Complex128(94), new Complex128(0, 445.2),
@@ -250,7 +250,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 2 ----------
+        // ---------- sub-case 2 ----------
         expShape = new Shape(1, 3, 2, 2);
         expEntries = new Complex128[] {
                 new Complex128(1, 0.32), new Complex128(11.2334, -94.45), new Complex128(94), new Complex128(0, 445.2),
@@ -263,7 +263,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 3 ----------
+        // ---------- sub-case 3 ----------
         expShape = new Shape(1, 3, 2, 2);
         expEntries = new Complex128[] {
                 new Complex128(1, 0.32), new Complex128(11.2334, -94.45), new Complex128(94), new Complex128(0, 445.2),
@@ -276,7 +276,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 4 ----------
+        // ---------- sub-case 4 ----------
         expShape = new Shape(1, 3, 2, 2);
         expEntries = new Complex128[] {
                 new Complex128(1, 0.32), new Complex128(11.2334, -94.45), new Complex128(94), new Complex128(0, 445.2),
@@ -289,7 +289,7 @@ public class CTensorConstructorTests {
         assertEquals(expRank, A.getRank());
         assertArrayEquals(expEntries, A.data);
 
-        // ---------- Sub-case 5 ----------
+        // ---------- sub-case 5 ----------
         expShape = new Shape(1, 3, 2, 2);
         expEntries = new Complex128[] {
                 new Complex128(1, 0.32), new Complex128(11.2334, -94.45), new Complex128(94), new Complex128(0, 445.2),
@@ -299,7 +299,7 @@ public class CTensorConstructorTests {
 
         assertThrows(IllegalArgumentException.class, () -> new CTensor(expShape, expEntries));
 
-        // ---------- Sub-case 6 ----------
+        // ---------- sub-case 6 ----------
         expShape = new Shape(1, 3, 2, 2);
         expEntries = new Complex128[] {
                 new Complex128(1, 0.32), new Complex128(11.2334, -94.45), new Complex128(94), new Complex128(0, 445.2),

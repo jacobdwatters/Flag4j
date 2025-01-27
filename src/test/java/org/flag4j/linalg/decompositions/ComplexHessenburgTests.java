@@ -38,7 +38,7 @@ class ComplexHessenburgTests {
 
     @Test
     void hessDecompTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         aEntries = new String[][]{
                 {"1.55-2i", "0", "i"},
                 {"25.66-90.25i", "34.5", "3.4+2i"},
@@ -53,13 +53,13 @@ class ComplexHessenburgTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // ----------------------- Sub-case 1.1 -----------------------
+        // ----------------------- sub-case 1.1 -----------------------
         hess = new ComplexHess();
         hess.decompose(A);
 
         assertEquals(H, hess.getH());
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         aEntries = new String[][]{
                 {"1-2i", "0", "-16i", "6-9i"},
                 {"4i", "6", "0", "4+3i"},
@@ -75,7 +75,7 @@ class ComplexHessenburgTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // ----------------------- Sub-case 2.1 -----------------------
+        // ----------------------- sub-case 2.1 -----------------------
         hess = new ComplexHess();
         hess.decompose(A);
 

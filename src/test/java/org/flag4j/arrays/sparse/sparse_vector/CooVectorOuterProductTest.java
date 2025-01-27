@@ -39,7 +39,7 @@ class CooVectorOuterProductTest {
         CooVector b;
         Matrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new double[]{1.34, -99.4};
         bIndices = new int[]{0, 2};
         b = new CooVector(sparseSize, bEntries, bIndices);
@@ -53,7 +53,7 @@ class CooVectorOuterProductTest {
 
         assertEquals(exp, a.outer(b));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new double[]{1.34, -99.4};
         bIndices = new int[]{0, 2};
         b = new CooVector(sparseSize+1445, bEntries, bIndices);
@@ -70,7 +70,7 @@ class CooVectorOuterProductTest {
         CooCVector b;
         CMatrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new Complex128[]{new Complex128(1.34, 0.0244), new Complex128(-99, 815.66)};
         bIndices = new int[]{0, 2};
         b = new CooCVector(sparseSize, bEntries, bIndices);
@@ -84,7 +84,7 @@ class CooVectorOuterProductTest {
 
         assertEquals(exp, RealComplexSparseVectorOps.outerProduct(a, b));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(1.34, 0.0244), new Complex128(-99, 815.66)};
         bIndices = new int[]{0, 2};
         b = new CooCVector(sparseSize+103, bEntries, bIndices);
@@ -101,7 +101,7 @@ class CooVectorOuterProductTest {
         Vector b;
         Matrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new double[]{1.34, -0.0013, 11.56, 0.0, -13.5};
         b = new Vector(bEntries);
         expEntries = new double[][]{{0.0, 0.0, 0.0, 0.0, 0.0},
@@ -115,7 +115,7 @@ class CooVectorOuterProductTest {
 
         assertEquals(exp, act);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new double[]{1.34, -0.0013, 11.56, 0.0, -13.5, 1.305, 1.556, -1.3413, 772.24};
         b = new Vector(bEntries);
 
@@ -132,7 +132,7 @@ class CooVectorOuterProductTest {
         CVector b;
         CMatrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new Complex128[]{new Complex128(24.1, 54.1), new Complex128(-9.245, 3.4), new Complex128(14.5),
                 new Complex128(0, 94.14), new Complex128(113, 55.62)};
         b = new CVector(bEntries);
@@ -149,7 +149,7 @@ class CooVectorOuterProductTest {
 
         assertEquals(exp, act);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(24.1, 54.1), new Complex128(-9.245, 3.4)};
         b = new CVector(bEntries);
 

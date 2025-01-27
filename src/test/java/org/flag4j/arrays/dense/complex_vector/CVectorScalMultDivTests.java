@@ -28,14 +28,14 @@ class CVectorScalMultDivTests {
     void realScalMultTestCase() {
         double b;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         b = 129.12354;
         expEntries = new Complex128[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.mult(b));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         b = -9.12354;
         expEntries = new Complex128[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
@@ -48,14 +48,14 @@ class CVectorScalMultDivTests {
     void complexScalMultTestCase() {
         Complex128 b;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         b = new Complex128(-99.234, 56.1);
         expEntries = new Complex128[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.mult(b));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         b = new Complex128(9.234000014, -56.1);
         expEntries = new Complex128[]{aEntries[0].mult(b), aEntries[1].mult(b), aEntries[2].mult(b), aEntries[3].mult(b)};
         exp = new CVector(expEntries);
@@ -68,14 +68,14 @@ class CVectorScalMultDivTests {
     void realScalDivTestCase() {
         double b;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         b = 129.12354;
         expEntries = new Complex128[]{aEntries[0].div(b), aEntries[1].div(b), aEntries[2].div(b), aEntries[3].div(b)};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.div(b));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         b = -9.12354;
         expEntries = new Complex128[]{aEntries[0].div(b), aEntries[1].div(b), aEntries[2].div(b), aEntries[3].div(b)};
         exp = new CVector(expEntries);
@@ -88,14 +88,14 @@ class CVectorScalMultDivTests {
     void complexScalDivTestCase() {
         Complex128 b;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         b = new Complex128(-99.234, 56.1);
         expEntries = new Complex128[]{aEntries[0].div(b), aEntries[1].div(b), aEntries[2].div(b), aEntries[3].div(b)};
         exp = new CVector(expEntries);
 
         assertEquals(exp, a.div(b));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         b = new Complex128(9.234000014, -56.1);
         expEntries = new Complex128[]{aEntries[0].div(b), aEntries[1].div(b), aEntries[2].div(b), aEntries[3].div(b)};
         exp = new CVector(expEntries);

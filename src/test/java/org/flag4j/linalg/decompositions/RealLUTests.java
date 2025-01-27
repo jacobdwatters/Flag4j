@@ -17,7 +17,7 @@ class RealLUTests {
     void noPivotTestCase() {
         RealLU lu = new RealLU(LU.Pivoting.NONE);
 
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aEntries = new double[][]
                 {{1.4, 5.67, -9.23},
                 {899.23, 7.2, 0.0},
@@ -41,7 +41,7 @@ class RealLUTests {
         assertEquals(expL, L);
         assertEquals(expU, U);
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         aEntries = new double[][]
                 {{1.4, 5.67, -9.23},
                 {899.23, 7.2, 0.0},
@@ -67,7 +67,7 @@ class RealLUTests {
         assertEquals(expL, L);
         assertEquals(expU, U);
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         aEntries = new double[][]
                 {{1.4, 5.67, -9.23},
                 {899.23, 7.2, 0.0}};
@@ -94,7 +94,7 @@ class RealLUTests {
     void partialPivotTestCase() {
         RealLU lu = new RealLU(LU.Pivoting.PARTIAL);
 
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aEntries = new double[][]
                 {{1.4, 5.67, -9.23},
                 {899.23, 7.2, 0.0},
@@ -125,7 +125,7 @@ class RealLUTests {
         assertEquals(expL, L);
         assertEquals(expU, U);
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         aEntries = new double[][]
                 {{1.4, 5.67, -9.23},
                 {899.23, 7.2, 0.0},
@@ -159,7 +159,7 @@ class RealLUTests {
         assertEquals(expL, L);
         assertEquals(expU, U);
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         aEntries = new double[][]
                 {{1.4, 5.67, -9.23},
                 {899.23, 7.2, 0.0}};
@@ -192,7 +192,7 @@ class RealLUTests {
     void completePivotTestCase() {
         RealLU lu = new RealLU(LU.Pivoting.FULL);
 
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aEntries = new double[][]
                 {{1, 4, 7},
                 {7, 8, 2},

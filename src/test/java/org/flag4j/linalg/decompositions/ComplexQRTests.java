@@ -18,7 +18,7 @@ class ComplexQRTests {
         // Tests account for numerical loss of precision.
         qr = new ComplexQR();
 
-        // --------------------------- Sub-case 1 ---------------------------
+        // --------------------------- sub-case 1 ---------------------------
         aEntriesReal = new double[][]
                 {{0, 1, 0, 0},
                 {0, 0, 1, 0},
@@ -33,7 +33,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-10));
 
-        // --------------------------- Sub-case 2 ---------------------------
+        // --------------------------- sub-case 2 ---------------------------
         aEntriesReal = new double[][]{
                 {0, 0, 0},
                 {0, 0, -1},
@@ -48,7 +48,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-8));
 
-        // --------------------------- Sub-case 3 ---------------------------
+        // --------------------------- sub-case 3 ---------------------------
         aEntries = new String[][]{
                 {"2+i", "-i"},
                 {"3-2i", "4i"}};
@@ -61,7 +61,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // --------------------------- Sub-case 4 ---------------------------
+        // --------------------------- sub-case 4 ---------------------------
         aEntries = new String[][]{
                 {"2.45-8.4i", "34.5i", "-i"},
                 {"-21.1255-4i", "14.0045-0.99835i", "24.5"},
@@ -76,7 +76,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // --------------------------- Sub-case 4 ---------------------------
+        // --------------------------- sub-case 4 ---------------------------
         aEntries = new String[][]{
                 {"2.45-8.4i", "34.5i", "-i", "9.35+0.936i"},
                 {"-21.1255-4i", "14.0045-0.99835i", "24.5", "48i"},
@@ -96,7 +96,7 @@ class ComplexQRTests {
         // Tests account for numerical loss of precision.
         qr = new ComplexQR(false);
 
-        // --------------------------- Sub-case 1 ---------------------------
+        // --------------------------- sub-case 1 ---------------------------
         aEntriesReal = new double[][]
                 {{0, 1, 0, 0},
                 {0, 0, 1, 0},
@@ -111,7 +111,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // --------------------------- Sub-case 2 ---------------------------
+        // --------------------------- sub-case 2 ---------------------------
         aEntriesReal = new double[][]{
                 {0, 0, 0},
                 {0, 0, -1},
@@ -126,7 +126,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // --------------------------- Sub-case 3 ---------------------------
+        // --------------------------- sub-case 3 ---------------------------
         aEntries = new String[][]{
                 {"2+i", "-i"},
                 {"3-2i", "4i"}};
@@ -139,7 +139,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // --------------------------- Sub-case 4 ---------------------------
+        // --------------------------- sub-case 4 ---------------------------
         aEntries = new String[][]{
                 {"2.45-8.4i", "34.5i", "-i"},
                 {"-21.1255-4i", "14.0045-0.99835i", "24.5"},
@@ -154,7 +154,7 @@ class ComplexQRTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1e-12));
 
-        // --------------------------- Sub-case 4 ---------------------------
+        // --------------------------- sub-case 4 ---------------------------
         aEntries = new String[][]{
                 {"2.45-8.4i", "34.5i", "-i", "9.35+0.936i"},
                 {"-21.1255-4i", "14.0045-0.99835i", "24.5", "48i"},

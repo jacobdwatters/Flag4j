@@ -16,7 +16,7 @@ class CMatrixInversionTests {
 
     @Test
     void invTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2.4, 1), new Complex128(9), new Complex128(0, 4)},
                 {new Complex128(34), new Complex128(6, 2), new Complex128(24, 7)},
@@ -31,7 +31,7 @@ class CMatrixInversionTests {
         exp = new CMatrix(expEntries);
         assertEquals(exp, Invert.inv(A));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1), new Complex128(2)},
                 {new Complex128(-2), new Complex128(-4)}
@@ -41,7 +41,7 @@ class CMatrixInversionTests {
         assertThrows(RuntimeException.class, ()-> Invert.inv(A));
 
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2.4, 1), new Complex128(9), new Complex128(0, 4)},
                 {new Complex128(34), new Complex128(6, 2), new Complex128(24, 7)}

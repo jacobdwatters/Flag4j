@@ -20,7 +20,7 @@ class MatrixConversionTests {
     void toComplexTestCase() {
         CMatrix exp;
 
-        // --------------------- Sub-case 1  ---------------------
+        // --------------------- sub-case 1  ---------------------
         aEntries = new double[][]{{1, 2, 3, 0.0000245}, {452.745, -8234, -2.234, 345.324}};
         A = new Matrix(aEntries);
         exp = new CMatrix(aEntries);
@@ -33,7 +33,7 @@ class MatrixConversionTests {
     void toVectorTestCase() {
         Vector exp;
 
-        // --------------------- Sub-case 1  ---------------------
+        // --------------------- sub-case 1  ---------------------
         aEntries = new double[][]{{1, 2, 3, 0.0000245}, {452.745, -8234, -2.234, 345.324}};
         A = new Matrix(aEntries);
         exp = new Vector(ArrayUtils.flatten(aEntries));
@@ -46,7 +46,7 @@ class MatrixConversionTests {
     void toTensorTestCase() {
         Tensor exp;
 
-        // --------------------- Sub-case 1  ---------------------
+        // --------------------- sub-case 1  ---------------------
         aEntries = new double[][]{{1, 2, 3, 0.0000245}, {452.745, -8234, -2.234, 345.324}};
         A = new Matrix(aEntries);
         exp = new Tensor(A.shape, ArrayUtils.flatten(aEntries));

@@ -22,7 +22,7 @@ class CMatrixMultTests {
         double[][] bEntries;
         Matrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -42,7 +42,7 @@ class CMatrixMultTests {
         assertEquals(exp, A.mult(B));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -65,7 +65,7 @@ class CMatrixMultTests {
         Complex128[][] bEntries;
         CMatrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -86,7 +86,7 @@ class CMatrixMultTests {
         assertEquals(exp, A.mult(B));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -109,7 +109,7 @@ class CMatrixMultTests {
         CooMatrix B;
         Shape bShape;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -130,7 +130,7 @@ class CMatrixMultTests {
         assertEquals(exp, A.mult(B));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -155,7 +155,7 @@ class CMatrixMultTests {
         CooCMatrix B;
         Shape bShape;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -176,7 +176,7 @@ class CMatrixMultTests {
         assertEquals(exp, A.mult(B));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -196,7 +196,7 @@ class CMatrixMultTests {
 
     @Test
     void powTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -210,7 +210,7 @@ class CMatrixMultTests {
         exp = new CMatrix(expEntries);
         assertEquals(exp, A.pow(3));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -224,7 +224,7 @@ class CMatrixMultTests {
         assertEquals(exp, A.pow(0));
 
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},
@@ -238,7 +238,7 @@ class CMatrixMultTests {
 
         assertEquals(exp, A.pow(1));
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)}};
@@ -246,7 +246,7 @@ class CMatrixMultTests {
 
         assertThrows(IllegalArgumentException.class, ()->A.pow(2));
 
-        // ---------------------- Sub-case 5 ----------------------
+        // ---------------------- sub-case 5 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(123.5, -9.3), new Complex128(45.2, -0.0333), new Complex128(5.4)},
                 {new Complex128(1), new Complex128(0, -743.1), new Complex128(-34.5, -93.)},

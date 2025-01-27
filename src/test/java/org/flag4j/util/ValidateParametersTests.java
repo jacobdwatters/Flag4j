@@ -11,32 +11,32 @@ class ValidateParametersTests {
 
     @Test
     void matMultTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         shape1 = new Shape(5, 5);
         shape2 = new Shape(5, 5);
 
         ValidateParameters.ensureMatMultShapes(shape1, shape2);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         shape1 = new Shape(5, 1);
         shape2 = new Shape(1, 5);
 
         ValidateParameters.ensureMatMultShapes(shape1, shape2);
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         shape1 = new Shape(1, 5);
         shape2 = new Shape(1, 5);
 
         assertThrows(LinearAlgebraException.class,
                 ()-> ValidateParameters.ensureMatMultShapes(shape1, shape2));
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         shape1 = new Shape(6, 114);
         shape2 = new Shape(114, 6);
 
         ValidateParameters.ensureMatMultShapes(shape1, shape2);
 
-        // ------------ Sub-case 5 ------------
+        // ------------ sub-case 5 ------------
         shape1 = new Shape(112, 1, 1);
         shape2 = new Shape(113);
         assertThrows(LinearAlgebraException.class,

@@ -22,7 +22,7 @@ class CMatrixSetOperationTests {
     void setValuesComplex128TestCase() {
         Complex128[][] values;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Complex128[][]{{new Complex128(23.4, -9.433), new Complex128(-9431, 0.23)},
                 {new Complex128(9.23, 55.6), new Complex128(0, -78)},
                 {new Complex128(5.1114, -5821.23), new Complex128(754.1, -823.1)}};
@@ -35,7 +35,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Complex128[][]{{new Complex128(23.4, -9.433), new Complex128(-9431, 0.23)},
                 {new Complex128(9.23, 55.6), new Complex128(0, -78)},
                 {new Complex128(5.1114, -5821.23), new Complex128(754.1, -823.1)}};
@@ -53,7 +53,7 @@ class CMatrixSetOperationTests {
         Complex128[] values;
         int col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32), new Complex128(94.1)};
         col = 0;
         entriesExp = new Complex128[][]
@@ -67,7 +67,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32), new Complex128(94.1)};
         col = 0;
         entriesA = new Complex128[][]{{new Complex128(2.345, 5.15), new Complex128(0), new Complex128(1)},
@@ -78,7 +78,7 @@ class CMatrixSetOperationTests {
         int finalCol = col;
         assertThrows(IllegalArgumentException.class, () -> A.setCol(finalValues, finalCol));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32), new Complex128(94.1)};
         col = 1;
         entriesExp = new Complex128[][]{{new Complex128(0), new Complex128(2.345, 5.15)},
@@ -91,7 +91,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32)};
         col = -1;
         entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0), new Complex128(1)}, {new Complex128(1), new Complex128(4), new Complex128(2)}};
@@ -101,7 +101,7 @@ class CMatrixSetOperationTests {
         int finalCol1 = col;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setCol(finalValues1, finalCol1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32)};
         col = 3;
         entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0), new Complex128(1)}, {new Complex128(1), new Complex128(4), new Complex128(2)}};
@@ -119,7 +119,7 @@ class CMatrixSetOperationTests {
         CVector valuesVec;
         int col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32), new Complex128(94.1)};
         valuesVec = new CVector(values);
         col = 0;
@@ -137,7 +137,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32), new Complex128(94.1)};
         valuesVec = new CVector(values);
         col = 0;
@@ -149,7 +149,7 @@ class CMatrixSetOperationTests {
         int finalCol = col;
         assertThrows(IllegalArgumentException.class, () -> A.setCol(finalValuesVec, finalCol));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32), new Complex128(94.1)};
         valuesVec = new CVector(values);
         col = 1;
@@ -163,7 +163,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32)};
         valuesVec = new CVector(values);
         col = -1;
@@ -174,7 +174,7 @@ class CMatrixSetOperationTests {
         int finalCol1 = col;
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> A.setCol(finalValuesVec1, finalCol1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(2.345, 5.15), new Complex128(-445, 0.32)};
         valuesVec = new CVector(values);
         col = 3;
@@ -192,7 +192,7 @@ class CMatrixSetOperationTests {
         Complex128[] values;
         int row;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         row = 0;
         entriesExp = new Complex128[][]{
@@ -206,7 +206,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         row = 0;
         entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0), new Complex128(1)}, {new Complex128(1), new Complex128(4), new Complex128(2)}};
@@ -216,7 +216,7 @@ class CMatrixSetOperationTests {
         int finalRow = row;
         assertThrows(IllegalArgumentException.class, () -> A.setRow(finalValues, finalRow));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         row = 1;
         entriesExp = new Complex128[][]{
@@ -230,7 +230,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         row = -1;
         entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0)}, {new Complex128(1), new Complex128(4)}};
@@ -240,7 +240,7 @@ class CMatrixSetOperationTests {
         int finalRow1 = row;
         assertThrows(IndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23), new Complex128(9.234, -0.2334)};
         row = 3;
         entriesA = new Complex128[][]{{new Complex128(0), new Complex128(0), new Complex128(1)}, {new Complex128(1), new Complex128(4), new Complex128(2)}};
@@ -258,7 +258,7 @@ class CMatrixSetOperationTests {
         CVector valuesVec;
         int row;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         valuesVec = new CVector(values);
         row = 0;
@@ -273,7 +273,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         valuesVec = new CVector(values);
         row = 0;
@@ -286,7 +286,7 @@ class CMatrixSetOperationTests {
         int finalRow = row;
         assertThrows(IllegalArgumentException.class, () -> A.setRow(finalValues, finalRow));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         valuesVec = new CVector(values);
         row = 1;
@@ -304,7 +304,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23)};
         valuesVec = new CVector(values);
         row = -1;
@@ -315,7 +315,7 @@ class CMatrixSetOperationTests {
         int finalRow1 = row;
         assertThrows(IndexOutOfBoundsException.class, () -> A.setRow(finalValues1, finalRow1));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         values = new Complex128[]{new Complex128(34, -55.6), new Complex128(0.44, -0.23), new Complex128(9.234, -0.2334)};
         valuesVec = new CVector(values);
         row = 3;
@@ -334,7 +334,7 @@ class CMatrixSetOperationTests {
         CMatrix values;
         int row, col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         valueEntries = new Complex128[][]{{new Complex128(-71.33), new Complex128(34.61)}, {new Complex128(-99.24), new Complex128(-13.4)}};
         values = new CMatrix(valueEntries);
         row = 0;
@@ -346,7 +346,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A.setSliceCopy(values, row, col));
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         valueEntries = new Complex128[][]{{new Complex128(-71.33), new Complex128(34.61)}, {new Complex128(-99.24), new Complex128(-13.4)}};
         values = new CMatrix(valueEntries);
         row = 0;
@@ -358,7 +358,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A.setSliceCopy(values, row, col));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         valueEntries = new Complex128[][]{{new Complex128(-71.33), new Complex128(34.61)}, {new Complex128(-99.24), new Complex128(-13.4)}};
         values = new CMatrix(valueEntries);
         entriesA = new Complex128[][]{{new Complex128(-99.234), new Complex128(132), new Complex128(2.2), new Complex128(83.1)}, {new Complex128(11.346), new Complex128(124.6), new Complex128(-7.13), new Complex128(0.00013)}};
@@ -377,7 +377,7 @@ class CMatrixSetOperationTests {
         CMatrix mat;
         int row, col;
 
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         values = new Complex128[][]{
                 {new Complex128(0.234, -84.12), new Complex128(33, 441.435)},
                 {new Complex128(0, 442.4), new Complex128(24.88)}};
@@ -396,7 +396,7 @@ class CMatrixSetOperationTests {
         A.setSlice(mat, row, col);
         assertEquals(exp, A);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         values = new Complex128[][]{
                 {new Complex128(0.234, -84.12), new Complex128(33, 441.435)},
                 {new Complex128(0, 442.4), new Complex128(24.88)}};
@@ -416,7 +416,7 @@ class CMatrixSetOperationTests {
 
         assertEquals(exp, A);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         values = new Complex128[][]{
                 {new Complex128(0.234, -84.12), new Complex128(33, 441.435)},
                 {new Complex128(0, 442.4), new Complex128(24.88)}};

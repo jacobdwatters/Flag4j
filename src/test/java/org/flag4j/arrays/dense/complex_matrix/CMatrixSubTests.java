@@ -25,7 +25,7 @@ class CMatrixSubTests {
         double[][] bEntries;
         Matrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -44,7 +44,7 @@ class CMatrixSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -59,7 +59,7 @@ class CMatrixSubTests {
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23)},
                 {new Complex128(67.1, 0.0003443993)},
@@ -81,7 +81,7 @@ class CMatrixSubTests {
         Complex128[][] bEntries;
         CMatrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -100,7 +100,7 @@ class CMatrixSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -114,7 +114,7 @@ class CMatrixSubTests {
         CMatrix finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23)},
                 {new Complex128(67.1, 0.0003443993)},
@@ -136,7 +136,7 @@ class CMatrixSubTests {
         double[] bEntries;
         CooMatrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -155,7 +155,7 @@ class CMatrixSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -170,7 +170,7 @@ class CMatrixSubTests {
         CooMatrix finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23)},
                 {new Complex128(67.1, 0.0003443993)},
@@ -192,7 +192,7 @@ class CMatrixSubTests {
         Complex128[] bEntries;
         CooCMatrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -212,7 +212,7 @@ class CMatrixSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -227,7 +227,7 @@ class CMatrixSubTests {
         CooCMatrix finalB = B;
         assertThrows(LinearAlgebraException.class,()->A.sub(finalB));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23)},
                 {new Complex128(67.1, 0.0003443993)},
@@ -248,7 +248,7 @@ class CMatrixSubTests {
     void doubleTestCase() {
         double b;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
@@ -269,7 +269,7 @@ class CMatrixSubTests {
     void complexNumberTestCase() {
         Complex128 b;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.56, -0.23), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},

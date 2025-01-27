@@ -397,7 +397,7 @@ public final class RealComplexSparseMatOps {
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
     public static CMatrix addToEachCol(CooMatrix src, CooCVector col) {
-        ValidateParameters.ensureEquals(src.numRows, col.size);
+        ValidateParameters.ensureAllEqual(src.numRows, col.size);
         Complex128[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
@@ -427,7 +427,7 @@ public final class RealComplexSparseMatOps {
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
     public static CMatrix addToEachRow(CooMatrix src, CooCVector row) {
-        ValidateParameters.ensureEquals(src.numCols, row.size);
+        ValidateParameters.ensureAllEqual(src.numCols, row.size);
         Complex128[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
@@ -458,7 +458,7 @@ public final class RealComplexSparseMatOps {
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
     public static CMatrix addToEachCol(CooCMatrix src, CooVector col) {
-        ValidateParameters.ensureEquals(src.numRows, col.size);
+        ValidateParameters.ensureAllEqual(src.numRows, col.size);
         Complex128[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
@@ -488,7 +488,7 @@ public final class RealComplexSparseMatOps {
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
     public static CMatrix addToEachRow(CooCMatrix src, CooVector row) {
-        ValidateParameters.ensureEquals(src.numCols, row.size);
+        ValidateParameters.ensureAllEqual(src.numCols, row.size);
         Complex128[] destEntries = new Complex128[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.

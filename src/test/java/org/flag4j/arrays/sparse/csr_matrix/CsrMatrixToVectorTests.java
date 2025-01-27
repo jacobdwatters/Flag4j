@@ -17,7 +17,7 @@ class CsrMatrixToVectorTests {
 
     @Test
     void toVectorTests() {
-        // ------------------------- Sub-case 1 -------------------------
+        // ------------------------- sub-case 1 -------------------------
         aEntries = new double[][]{{-9.2512, 0, 0,
                 0, 0, 2.2516,
                 0, 0, 6.2}};
@@ -29,7 +29,7 @@ class CsrMatrixToVectorTests {
 
         assertEquals(exp, A.toVector());
 
-        // ------------------------- Sub-case 2 -------------------------
+        // ------------------------- sub-case 2 -------------------------
         aEntries = new double[][]{{-9.2512}, {0}, {0},
                 {0}, {0}, {2.2516},
                 {0}, {0}, {6.2}};
@@ -41,7 +41,7 @@ class CsrMatrixToVectorTests {
 
         assertEquals(exp, A.toVector());
 
-        // ------------------------- Sub-case 3 -------------------------
+        // ------------------------- sub-case 3 -------------------------
         aEntries = new double[][]{
                 {-9.2512, 0},
                 {0, 0},

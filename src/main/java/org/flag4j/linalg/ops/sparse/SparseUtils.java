@@ -33,7 +33,6 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
@@ -50,7 +49,6 @@ public final class SparseUtils {
 
     public SparseUtils() {
         // Utility class cannot be instanced.
-        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -98,7 +96,7 @@ public final class SparseUtils {
      * @return The non-zero indices corresponding to the reshaped tensor.
      */
     public static int[][] cooReshape(Shape oldShape, Shape newShape, int[][] indices) {
-        ValidateParameters.ensureBroadcastable(oldShape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(oldShape, newShape);
 
         int rank = indices[0].length;
         int newRank = newShape.getRank();
