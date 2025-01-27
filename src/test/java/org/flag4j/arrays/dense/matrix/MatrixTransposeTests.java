@@ -13,7 +13,7 @@ class MatrixTransposeTests {
 
     @Test
     void transposeTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{
                 {1, 2, 3},
                 {4, 5, 6}};

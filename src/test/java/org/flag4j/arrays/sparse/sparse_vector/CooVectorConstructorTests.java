@@ -19,7 +19,7 @@ class CooVectorConstructorTests {
 
     @Test
     void sizeTestCase() {
-        // ------------- Sub-case 1 -------------
+        // ------------- sub-case 1 -------------
         expSize = 114;
         expShape = new Shape(expSize);
         expEntries = new double[0];
@@ -31,7 +31,7 @@ class CooVectorConstructorTests {
         assertArrayEquals(expEntries, a.data);
         assertArrayEquals(expIndices, a.indices);
 
-        // ------------- Sub-case 2 -------------
+        // ------------- sub-case 2 -------------
         expSize = -1;
         assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize));
     }
@@ -39,7 +39,7 @@ class CooVectorConstructorTests {
 
     @Test
     void sizeEntriesIndicesTestCase() {
-        // ------------- Sub-case 1 -------------
+        // ------------- sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
@@ -50,11 +50,11 @@ class CooVectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ------------- Sub-case 2 -------------
+        // ------------- sub-case 2 -------------
         expSize = -1;
         assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
 
-        // ------------- Sub-case 3 -------------
+        // ------------- sub-case 3 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
@@ -63,7 +63,7 @@ class CooVectorConstructorTests {
         assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntries, expIndices));
 
 
-        // ------------- Sub-case 4 -------------
+        // ------------- sub-case 4 -------------
         expSize = 3;
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
@@ -75,7 +75,7 @@ class CooVectorConstructorTests {
 
     @Test
     void sizeEntriesIntIndicesTestCase() {
-        // ------------- Sub-case 1 -------------
+        // ------------- sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
@@ -87,13 +87,13 @@ class CooVectorConstructorTests {
         assertEquals(expShape, a.shape);
         assertArrayEquals(expEntries, a.data);
 
-        // ------------- Sub-case 2 -------------
+        // ------------- sub-case 2 -------------
         expSize = -1;
         expEntries = new double[]{1, 4, 5, 1001, -11.234};
         expIndices = new int[]{0, 11, 10003, 20034};
         assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
 
-        // ------------- Sub-case 3 -------------
+        // ------------- sub-case 3 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
@@ -103,7 +103,7 @@ class CooVectorConstructorTests {
         assertThrows(IllegalArgumentException.class, () -> new CooVector(expSize, expEntriesI, expIndices));
 
 
-        // ------------- Sub-case 4 -------------
+        // ------------- sub-case 4 -------------
         expSize = 3;
         expShape = new Shape(expSize);
         expEntriesI = new int[]{1, 4, 5, 1001, -11};
@@ -116,7 +116,7 @@ class CooVectorConstructorTests {
 
     @Test
     void copyTestCase() {
-        // ------------- Sub-case 1 -------------
+        // ------------- sub-case 1 -------------
         expSize = 1001234;
         expShape = new Shape(expSize);
         expEntries = new double[]{1, 4, 5, 1001, -11.234};

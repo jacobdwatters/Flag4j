@@ -298,7 +298,7 @@ public class Shape implements Serializable {
      * @see #unsafePermuteAxes(int...) 
      */
     public Shape permuteAxes(int... axes) {
-        ValidateParameters.ensureEquals(getRank(), axes.length);
+        ValidateParameters.ensureAllEqual(getRank(), axes.length);
         ValidateParameters.ensurePermutation(axes);
 
         int[] permutedDims = new int[dims.length];

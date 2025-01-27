@@ -20,7 +20,7 @@ class MatrixFibTests {
 
     @Test
     void matrixFibTestCase() {
-        // ------------------------- Sub-case 1 -------------------------
+        // ------------------------- sub-case 1 -------------------------
         aEntries = new double[][]{{1, -212, 3.123},
                 {100.9, 80.1, 7.934},
                 {12.3, 0, 1.3},
@@ -35,7 +35,7 @@ class MatrixFibTests {
 
         assertEquals(exp, A.fib(B));
 
-        // ------------------------- Sub-case 2 -------------------------
+        // ------------------------- sub-case 2 -------------------------
         aEntries = new double[][]{{1, -212, 3.123},
                 {100.9, 80.1, 7.934},
                 {12.3, 0, 1.3},
@@ -49,7 +49,7 @@ class MatrixFibTests {
         assertThrows(LinearAlgebraException.class, ()->A.fib(B));
 
 
-        // ------------------------- Sub-case 3 -------------------------
+        // ------------------------- sub-case 3 -------------------------
         aEntries = new double[][]{{1, -212},
                 {100.9, 80.1},
                 {12.3, 0},

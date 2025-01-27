@@ -33,7 +33,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.82995+0.51127i")};
         aRowIndices = new int[]{0};
@@ -54,7 +54,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -75,7 +75,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.70661+0.51154i"), new Complex128("0.327+0.72145i"), new Complex128("0.61639+0.58788i"), new Complex128("0.62248+0.43954i"), new Complex128("0.4152+0.75629i"), new Complex128("0.9972+0.47859i"), new Complex128("0.79032+0.31024i"), new Complex128("0.67413+0.62249i"), new Complex128("0.79157+0.41042i"), new Complex128("0.85885+0.02278i"), new Complex128("0.18961+0.82326i"), new Complex128("0.22331+0.54411i"), new Complex128("0.3942+0.44593i"), new Complex128("0.00387+0.70256i")};
         aRowIndices = new int[]{0, 0, 1, 3, 5, 6, 7, 9, 11, 11, 11, 12, 13, 13};
@@ -118,7 +118,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.08806+0.0553i")};
         aRowIndices = new int[]{0};
@@ -139,7 +139,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -160,7 +160,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.05752+0.87101i"), new Complex128("0.5312+0.44755i"), new Complex128("0.67819+0.50842i"), new Complex128("0.65475+0.47186i"), new Complex128("0.36484+0.79259i"), new Complex128("0.74912+0.24418i"), new Complex128("0.89577+0.84938i"), new Complex128("0.24992+0.05502i"), new Complex128("0.85454+0.04111i"), new Complex128("0.06607+0.70307i"), new Complex128("0.66633+0.53082i"), new Complex128("0.04777+0.6303i"), new Complex128("0.74899+0.22239i"), new Complex128("0.99873+0.13431i")};
         aRowIndices = new int[]{1, 2, 3, 3, 5, 6, 6, 6, 9, 11, 11, 12, 13, 13};
@@ -200,7 +200,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.75308+0.91095i")};
         aRowIndices = new int[]{1};
@@ -222,7 +222,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -245,7 +245,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.30839+0.40829i"), new Complex128("0.39726+0.35016i"), new Complex128("0.8527+0.62435i"), new Complex128("0.98366+0.35628i"), new Complex128("0.88925+0.67872i"), new Complex128("0.32378+0.81966i"), new Complex128("0.3507+0.84697i"), new Complex128("0.8837+0.93694i"), new Complex128("0.26869+0.33957i"), new Complex128("0.27441+0.37573i"), new Complex128("0.61453+0.26505i"), new Complex128("0.77154+0.88759i"), new Complex128("0.18096+0.31388i"), new Complex128("0.07751+0.22487i")};
         aRowIndices = new int[]{0, 0, 1, 4, 5, 7, 8, 8, 8, 9, 9, 10, 10, 13};
@@ -296,7 +296,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.44357+0.56089i")};
         aRowIndices = new int[]{0};
@@ -318,7 +318,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -341,7 +341,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.40337+0.18358i"), new Complex128("0.23201+0.12493i"), new Complex128("0.80599+0.36797i"), new Complex128("0.6291+0.04377i"), new Complex128("0.61211+0.512i"), new Complex128("0.30291+0.94184i"), new Complex128("0.5474+0.10516i"), new Complex128("0.66737+0.36392i"), new Complex128("0.4509+0.38233i"), new Complex128("0.79195+0.53952i"), new Complex128("0.2584+0.99285i"), new Complex128("0.45507+0.29298i"), new Complex128("0.95008+0.59176i"), new Complex128("0.907+0.21149i")};
         aRowIndices = new int[]{0, 2, 3, 5, 6, 6, 7, 7, 8, 9, 9, 9, 11, 12};
@@ -395,7 +395,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.1553+0.01646i")};
         aRowIndices = new int[]{0};
@@ -416,7 +416,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -437,7 +437,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.98694+0.59681i"), new Complex128("0.22165+0.57898i"), new Complex128("0.25137+0.81555i"), new Complex128("0.01859+0.32605i"), new Complex128("0.52322+0.82209i"), new Complex128("0.4839+0.20329i"), new Complex128("0.12876+0.35791i"), new Complex128("0.42228+0.02274i"), new Complex128("0.60988+0.12416i"), new Complex128("0.88629+0.59152i"), new Complex128("0.74891+0.04819i"), new Complex128("0.85096+0.22109i"), new Complex128("0.79085+0.84112i"), new Complex128("0.84963+0.87431i")};
         aRowIndices = new int[]{4, 4, 5, 6, 6, 6, 7, 8, 9, 11, 11, 12, 12, 13};
@@ -480,7 +480,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.98992+0.87766i")};
         aRowIndices = new int[]{0};
@@ -501,7 +501,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -522,7 +522,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.76075+0.0571i"), new Complex128("0.33837+0.76502i"), new Complex128("0.94177+0.83892i"), new Complex128("0.20583+0.94384i"), new Complex128("0.91332+0.56232i"), new Complex128("0.51064+0.51166i"), new Complex128("0.94406+0.05894i"), new Complex128("0.82868+0.13105i"), new Complex128("0.78945+0.98172i"), new Complex128("0.8299+0.80277i"), new Complex128("0.66449+0.09316i"), new Complex128("0.20635+0.05798i"), new Complex128("0.53974+0.68971i"), new Complex128("0.63979+0.21648i")};
         aRowIndices = new int[]{0, 0, 1, 2, 3, 4, 5, 9, 9, 10, 10, 13, 13, 13};
@@ -562,7 +562,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.70966+0.15842i")};
         aRowIndices = new int[]{0};
@@ -584,7 +584,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -607,7 +607,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.47183+0.10623i"), new Complex128("0.61911+0.36706i"), new Complex128("0.67903+0.7145i"), new Complex128("0.07196+0.84351i"), new Complex128("0.33506+0.85722i"), new Complex128("0.09925+0.02582i"), new Complex128("0.91219+0.08732i"), new Complex128("0.40247+0.03899i"), new Complex128("0.59776+0.27702i"), new Complex128("0.67777+0.95102i"), new Complex128("0.16611+0.84191i"), new Complex128("0.13517+0.59676i"), new Complex128("0.2599+0.34769i"), new Complex128("0.20792+0.93642i")};
         aRowIndices = new int[]{0, 1, 2, 2, 5, 6, 7, 7, 7, 8, 8, 9, 12, 13};
@@ -658,7 +658,7 @@ class CooCMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.01371+0.45798i")};
         aRowIndices = new int[]{1};
@@ -680,7 +680,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -703,7 +703,7 @@ class CooCMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.46962+0.17868i"), new Complex128("0.33693+0.93647i"), new Complex128("0.50236+0.59781i"), new Complex128("0.73101+0.07755i"), new Complex128("0.96895+0.00506i"), new Complex128("0.37699+0.07088i"), new Complex128("0.72397+0.49475i"), new Complex128("0.98482+0.0973i"), new Complex128("0.18821+0.13868i"), new Complex128("0.47866+0.10774i"), new Complex128("0.03012+0.57197i"), new Complex128("0.73759+0.60487i"), new Complex128("0.1654+0.27707i"), new Complex128("0.99406+0.83751i")};
         aRowIndices = new int[]{1, 2, 4, 4, 6, 8, 8, 9, 10, 10, 11, 11, 12, 13};

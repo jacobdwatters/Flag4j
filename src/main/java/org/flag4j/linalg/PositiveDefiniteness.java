@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
@@ -39,7 +38,6 @@ public final class PositiveDefiniteness {
 
     private PositiveDefiniteness() {
         // Hide default constructor for utility class.
-        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 

@@ -133,7 +133,7 @@ public final class RealCsrDenseMatrixMultiplication {
      */
     public static Matrix standardTranspose(CsrMatrix src1, Matrix src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.numCols);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.numCols);
 
         double[] destEntries = new double[src1.numRows*src2.numRows];
         int rows1 = src1.numRows;
@@ -171,7 +171,7 @@ public final class RealCsrDenseMatrixMultiplication {
      */
     public static Vector standardVector(CsrMatrix src1, Vector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
 
         double[] destEntries = new double[src1.numRows];
         int rows1 = src1.numRows;

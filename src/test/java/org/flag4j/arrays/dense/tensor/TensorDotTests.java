@@ -45,7 +45,7 @@ class TensorDotTests {
 
     @Test
     void multiAxesTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aAxes = new int[]{0};
         bAxes = new int[]{1};
         expEntries = new double[]{
@@ -62,7 +62,7 @@ class TensorDotTests {
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aAxes = new int[]{0, 1};
         bAxes = new int[]{1, 2};
         expEntries = new double[]{
@@ -73,25 +73,25 @@ class TensorDotTests {
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aAxes = new int[]{1};
         bAxes = new int[]{0};
 
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 4 ---------------------
+        // --------------------- sub-case 4 ---------------------
         aAxes = new int[]{0, 1};
         bAxes = new int[]{1};
 
         assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 5 ---------------------
+        // --------------------- sub-case 5 ---------------------
         aAxes = new int[]{0, 1};
         bAxes = new int[]{1, 0};
 
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 5 ---------------------
+        // --------------------- sub-case 5 ---------------------
         aAxes = new int[]{0, 1, 2, 3};
         bAxes = new int[]{1, 0, 3, 2};
 
@@ -101,7 +101,7 @@ class TensorDotTests {
 
     @Test
     void singleAxesTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new double[]{
                 -1170.1944849999998, -0.35089449999998124, 897.425634, 210.09214049999997,
                 96.83975000000001, 1597.9541000000002, 463.85175, -12373.892167499998,
@@ -117,14 +117,14 @@ class TensorDotTests {
         assertEquals(exp, A.tensorDot(B, 0, 1));
 
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, 1, 1));
     }
 
 
     @Test
     void noAxesTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         expEntries = new double[]{
                 3317.870215, -143.00515415, 1130.2016104176003, 24.65903145,
@@ -142,7 +142,7 @@ class TensorDotTests {
         assertEquals(exp, A.tensorDot(B));
 
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         B = B.reshape(4, 2, 3);
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B));

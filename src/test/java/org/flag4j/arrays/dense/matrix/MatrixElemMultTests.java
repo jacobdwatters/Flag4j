@@ -50,7 +50,7 @@ class MatrixElemMultTests {
 
     @Test
     void elemMultTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesB = new double[][]{{4.344, 555.6, 94, -0.4442}, {0.0000234, 1333.4, 44.5, 134.3}};
         A = new Matrix(entriesA);
@@ -62,7 +62,7 @@ class MatrixElemMultTests {
         assertArrayEquals(expResult.data, result.data);
         assertEquals(expResult.shape, result.shape);
 
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesB = new double[][]{{4.344, 555.6, 94}, {0.0000234, 1333.4, 44.5}};
         A = new Matrix(entriesA);
@@ -74,7 +74,7 @@ class MatrixElemMultTests {
 
     @Test
     void elemMultComplexTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesBC = new Complex128[][]{{new Complex128(1.4, 5), new Complex128(0, -1), new Complex128(1.3), Complex128.ZERO},
                 {new Complex128(4.55, -93.2), new Complex128(-2, -13), new Complex128(8.9), new Complex128(0, 13)}};
@@ -87,7 +87,7 @@ class MatrixElemMultTests {
         assertArrayEquals(expResultC.data, resultC.data);
         assertEquals(expResultC.shape, resultC.shape);
 
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         entriesBC = new Complex128[][]{{new Complex128(1.4, 5), new Complex128(0, -1), new Complex128(1.3)},
                 {new Complex128(4.55, -93.2), new Complex128(-2, -13), new Complex128(8.9)}};
@@ -100,7 +100,7 @@ class MatrixElemMultTests {
 
     @Test
     void elemMultSparseTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         A = new Matrix(entriesA);
         bEntriesSparse = new double[]{1.45, 31.13, 7.1};
@@ -117,7 +117,7 @@ class MatrixElemMultTests {
         assertArrayEquals(expSparse.data, sparseResult.data);
         assertEquals(expSparse.shape, sparseResult.shape);
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         A = new Matrix(entriesA);
         bEntriesSparse = new double[]{1.45, 31.13, 7.1};
@@ -132,7 +132,7 @@ class MatrixElemMultTests {
 
     @Test
     void elemMultSparseComplexTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         A = new Matrix(entriesA);
         bEntriesSparseComplex = new Complex128[]{new Complex128(1000234, -8.312), new Complex128(19.334, -96.23), new Complex128(0, 1.56)};
@@ -149,7 +149,7 @@ class MatrixElemMultTests {
         assertArrayEquals(expSparseComplex.data, sparseComplexResult.data);
         assertEquals(expSparseComplex.shape, sparseComplexResult.shape);
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         entriesA = new double[][]{{1, 2, -3.324, 13.44}, {4, 5, -6, 0}};
         A = new Matrix(entriesA);
         bEntriesSparseComplex = new Complex128[]{new Complex128(1000234, -8.312), new Complex128(19.334, -96.23), new Complex128(0, 1.56)};

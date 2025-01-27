@@ -16,7 +16,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void addRealTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(2);
         b = new Complex64(5);
         expResult = new Complex64(2+5);
@@ -25,7 +25,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(102.31f);
         b = new Complex64(1.3435e3f);
         expResult = new Complex64(102.31f+1.3435e3f);
@@ -34,7 +34,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(-123.45f);
         b = new Complex64(234.09264001f);
         expResult = new Complex64(-123.45f + 234.09264001f);
@@ -43,7 +43,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY);
         b = new Complex64(1);
         expResult = new Complex64(Float.POSITIVE_INFINITY+1);
@@ -52,7 +52,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY);
         expResult = new Complex64(Float.POSITIVE_INFINITY+Float.NEGATIVE_INFINITY);
@@ -62,7 +62,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertEquals(0, result.im);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.NaN);
         b = new Complex64(-1234.123f);
         expResult = new Complex64(Float.NaN + -1234.123f);
@@ -72,7 +72,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertEquals(0, result.im);
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex64(1.234f);
         b = new Complex64(Float.NaN);
         expResult = new Complex64(1.234f + Float.NaN);
@@ -86,7 +86,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void addComplexTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(2, 10);
         b = new Complex64(5, 345);
         expResult = new Complex64(2+5, 10+345);
@@ -95,7 +95,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(4589.12398f, 1.35f);
         b = new Complex64(0, 124.5f);
         expResult = new Complex64(4589.12398f+0, 1.35f+124.5f);
@@ -104,7 +104,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(-45, 62759.2f);
         b = new Complex64(-1.34e-15f, 1.3f);
         expResult = new Complex64(-45f + -1.34e-15f, 62759.2f + 1.3f);
@@ -113,7 +113,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, 6);
         b = new Complex64(1, Float.NEGATIVE_INFINITY);
         expResult = new Complex64(Float.POSITIVE_INFINITY+1, 6+Float.NEGATIVE_INFINITY);
@@ -122,7 +122,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
         expResult = new Complex64(Float.POSITIVE_INFINITY+Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY+Float.POSITIVE_INFINITY);
@@ -132,7 +132,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertTrue(Float.isNaN(result.im));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.NaN, 1);
         b = new Complex64(-1234.123f, Float.NaN);
         expResult = new Complex64(Float.NaN + -1234.123f, 1+Float.NaN);
@@ -142,7 +142,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertTrue(Float.isNaN(result.im));
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex64(Float.NaN, Float.NaN);
         b = new Complex64(Float.NaN, Float.NaN);
         expResult = new Complex64(1.234f + Float.NaN);
@@ -156,7 +156,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void addDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(34);
         bDouble = 435.234f;
         expResult = new Complex64(34 + 435.234f);
@@ -164,7 +164,7 @@ class Complex64BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(-123.34f);
         bDouble = 94.9492f;
         expResult = new Complex64(-123.34f + 94.9492f);
@@ -172,7 +172,7 @@ class Complex64BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(50.3f, -34.98165f);
         bDouble = 10.5f;
         expResult = new Complex64(50.3f + 10.5f, -34.98165f);
@@ -180,7 +180,7 @@ class Complex64BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(50.3f, Float.NEGATIVE_INFINITY);
         bDouble = 10.5f;
         expResult = new Complex64(50.3f + 10.5f, Float.NEGATIVE_INFINITY);
@@ -188,7 +188,7 @@ class Complex64BinaryOpsTest {
         result = a.add(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.NaN, 5.4f);
         bDouble = 234.435f;
         expResult = new Complex64(234.435f + Float.NaN, 5.4f);
@@ -201,7 +201,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void subRealTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(2);
         b = new Complex64(5);
         expResult = new Complex64(2-5);
@@ -210,7 +210,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(102.31f);
         b = new Complex64(1.3435e3f);
         expResult = new Complex64(102.31f-1.3435e3f);
@@ -219,7 +219,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(-123.45f);
         b = new Complex64(234.09264001f);
         expResult = new Complex64(-123.45f - 234.09264001f);
@@ -228,7 +228,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY);
         b = new Complex64(1);
         expResult = new Complex64(Float.POSITIVE_INFINITY-1);
@@ -237,7 +237,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY);
         expResult = new Complex64(Float.POSITIVE_INFINITY-Float.NEGATIVE_INFINITY);
@@ -246,7 +246,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.NaN);
         b = new Complex64(-1234.123f);
         expResult = new Complex64(Float.NaN - -1234.123f);
@@ -256,7 +256,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertEquals(0, result.im);
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex64(1.234f);
         b = new Complex64(Float.NaN);
         expResult = new Complex64(1.234f - Float.NaN);
@@ -270,7 +270,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void subComplexTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(2, 10);
         b = new Complex64(5, 345);
         expResult = new Complex64(2-5, 10-345);
@@ -279,7 +279,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(4589.12398f, 1.35f);
         b = new Complex64(0, 124.5f);
         expResult = new Complex64(4589.12398f-0, 1.35f-124.5f);
@@ -288,7 +288,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(-45, 62759.2f);
         b = new Complex64(-1.34e-15f, 1.3f);
         expResult = new Complex64(-45 - -1.34e-15f, 62759.2f - 1.3f);
@@ -297,7 +297,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, 6);
         b = new Complex64(1, Float.NEGATIVE_INFINITY);
         expResult = new Complex64(Float.POSITIVE_INFINITY-1, 6-Float.NEGATIVE_INFINITY);
@@ -306,7 +306,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
         expResult = new Complex64(Float.POSITIVE_INFINITY-Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY-Float.POSITIVE_INFINITY);
@@ -315,7 +315,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.NaN, 1);
         b = new Complex64(-1234.123f, Float.NaN);
         expResult = new Complex64(Float.NaN - -1234.123f, 1-Float.NaN);
@@ -325,7 +325,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertTrue(Float.isNaN(result.im));
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex64(Float.NaN, Float.NaN);
         b = new Complex64(Float.NaN, Float.NaN);
         expResult = new Complex64(1.234f - Float.NaN);
@@ -339,7 +339,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void subDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(34);
         bDouble = 435.234f;
         expResult = new Complex64(34 - 435.234f);
@@ -347,7 +347,7 @@ class Complex64BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(-123.34f);
         bDouble = 94.9492f;
         expResult = new Complex64(-123.34f - 94.9492f);
@@ -355,7 +355,7 @@ class Complex64BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(50.3f, -34.98165f);
         bDouble = 10.5f;
         expResult = new Complex64(50.3f - 10.5f, -34.98165f);
@@ -363,7 +363,7 @@ class Complex64BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(50.3f, Float.NEGATIVE_INFINITY);
         bDouble = 10.5f;
         expResult = new Complex64(50.3f - 10.5f, Float.NEGATIVE_INFINITY);
@@ -371,7 +371,7 @@ class Complex64BinaryOpsTest {
         result = a.sub(bDouble);
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.NaN, 5.4f);
         bDouble = 234.435f;
         expResult = new Complex64(234.435f - Float.NaN, 5.4f);
@@ -384,7 +384,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void multTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(09.3241f, -93.13f);
         b = new Complex64(1.355f, 297e4f);
         expResult = new Complex64(9.3241f*1.355f-(-93.13f)*297e4f, 9.3241f*297e4f-93.13f*1.355f);
@@ -394,7 +394,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(0, -93.13f);
         b = new Complex64(1.355f, 0);
         expResult = new Complex64(0, -93.13f*1.355f);
@@ -403,7 +403,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(1.345f, -93.13f);
         b = new Complex64(0, 0);
         expResult = Complex64.ZERO;
@@ -413,7 +413,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(0, 0);
         b = new Complex64(1.345f, -93.13f);
         expResult = Complex64.ZERO;
@@ -423,7 +423,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
 
@@ -433,7 +433,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(Float.POSITIVE_INFINITY, result.im);
 
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
 
@@ -446,7 +446,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void multDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(09.3241f, -93.13f);
         bDouble = 1.355f;
         expResult = new Complex64(09.3241f*1.355f, -93.13f*1.355f);
@@ -456,7 +456,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(0, 0);
         bDouble = 9.234e10f;
 
@@ -466,7 +466,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(1.345f, -93.13f);
         bDouble = 0;
         expResult = Complex64.ZERO;
@@ -475,7 +475,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
         bDouble = 9.234e10f;
         expResult = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
@@ -485,7 +485,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
         bDouble = Float.POSITIVE_INFINITY;
 
@@ -499,7 +499,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void divTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(09.3241f, -93.13f);
         b = new Complex64(1.355f, 297e4f);
         expResult = new Complex64(-3.135690092459805e-5f, -3.1394417874253122e-6f);
@@ -509,7 +509,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(0, -93.13f);
         b = new Complex64(1.355f, 0);
         expResult = new Complex64(0, -68.73062133789062f);
@@ -518,7 +518,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(1.345f, -93.13f);
         b = new Complex64(0, 0);
         expResult = Complex64.NaN;
@@ -529,7 +529,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.im));
 
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(0, 0);
         b = new Complex64(1.345f, -93.13f);
         expResult = Complex64.ZERO;
@@ -539,7 +539,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
 
@@ -548,7 +548,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertTrue(Float.isNaN(result.im));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
         b = new Complex64(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
 
@@ -561,7 +561,7 @@ class Complex64BinaryOpsTest {
 
     @Test
     void divDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         a = new Complex64(09.3241f, -93.13f);
         bDouble = 1.3452f;
         expResult = new Complex64(09.3241f/1.3452f, -93.13f/1.3452f);
@@ -571,7 +571,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertEquals(expResult, result);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         a = new Complex64(0, -93.13f);
         bDouble = 0;
 
@@ -580,7 +580,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertEquals(Float.NEGATIVE_INFINITY, result.im);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         a = new Complex64(1.345f, -93.13f);
         b = new Complex64(0, 0);
         expResult = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
@@ -589,7 +589,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(0, 0);
         bDouble = 24.134f;
         expResult = Complex64.ZERO;
@@ -598,7 +598,7 @@ class Complex64BinaryOpsTest {
 
         Assertions.assertEquals(expResult, result);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY);
         bDouble = Float.POSITIVE_INFINITY;
 
@@ -607,7 +607,7 @@ class Complex64BinaryOpsTest {
         Assertions.assertTrue(Float.isNaN(result.re));
         Assertions.assertTrue(Float.isNaN(result.im));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         a = new Complex64(Float.POSITIVE_INFINITY, 2);
         bDouble = Float.NEGATIVE_INFINITY;
 

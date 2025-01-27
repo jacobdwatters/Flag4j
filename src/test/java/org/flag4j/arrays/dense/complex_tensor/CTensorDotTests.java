@@ -53,7 +53,7 @@ class CTensorDotTests {
 
     @Test
     void multiAxesTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aAxes = new int[]{0};
         bAxes = new int[]{1};
         expEntries = new Complex128[]{
@@ -73,7 +73,7 @@ class CTensorDotTests {
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aAxes = new int[]{0, 1};
         bAxes = new int[]{1, 2};
         expEntries = new Complex128[]{
@@ -86,25 +86,25 @@ class CTensorDotTests {
 
         assertEquals(exp, A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aAxes = new int[]{1};
         bAxes = new int[]{0};
 
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 4 ---------------------
+        // --------------------- sub-case 4 ---------------------
         aAxes = new int[]{0, 1};
         bAxes = new int[]{1};
 
         assertThrows(IllegalArgumentException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 5 ---------------------
+        // --------------------- sub-case 5 ---------------------
         aAxes = new int[]{0, 1};
         bAxes = new int[]{1, 0};
 
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, aAxes, bAxes));
 
-        // --------------------- Sub-case 5 ---------------------
+        // --------------------- sub-case 5 ---------------------
         aAxes = new int[]{0, 1, 2, 3};
         bAxes = new int[]{1, 0, 3, 2};
 
@@ -114,7 +114,7 @@ class CTensorDotTests {
 
     @Test
     void singleAxesTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new Complex128[]{
                 new Complex128("-15.296085 - 1062.0565i"), new Complex128("-766.2300449999999 - 27.88944950000007i"), new Complex128("-4756.0876776000005 + 2106.5110014i"),
                 new Complex128("-84193.35660000001 + 14614.0086405i"), new Complex128("-874.30975 + 1194.74685i"), new Complex128("-2245.9741000000004 - 14751.813000000002i"),
@@ -132,14 +132,14 @@ class CTensorDotTests {
 
         assertEquals(exp, A.tensorDot(B, 0, 1));
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B, 1, 1));
     }
 
 
     @Test
     void noAxesTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         expEntries = new Complex128[]{
                 new Complex128("3281.284325 + 11.505539999999993i"), new Complex128("-231.79015415 - 2537.483616925i"), new Complex128("-4647.2793130824 + 1577.1883254424001i"),
@@ -158,7 +158,7 @@ class CTensorDotTests {
 
         assertEquals(exp, A.tensorDot(B));
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         A = A.reshape(2, 2, 3);
         B = B.reshape(4, 2, 3);
         assertThrows(LinearAlgebraException.class, ()->A.tensorDot(B));

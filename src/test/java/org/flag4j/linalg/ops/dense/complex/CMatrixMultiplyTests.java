@@ -31,42 +31,42 @@ class CMatrixMultiplyTests {
         A = new CMatrix(entriesA);
         B = new CMatrix(entriesB);
 
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.standard(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.reordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.blocked(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.blockedReordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 5 ------------
+        // ------------ sub-case 5 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentStandard(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 6 ------------
+        // ------------ sub-case 6 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentReordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 7 ------------
+        // ------------ sub-case 7 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentBlocked(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 8 ------------
+        // ------------ sub-case 8 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentBlockedReordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
@@ -89,42 +89,42 @@ class CMatrixMultiplyTests {
         A = new CMatrix(entriesA);
         B = new CMatrix(entriesB);
 
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.standard(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.reordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.blocked(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.blockedReordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 5 ------------
+        // ------------ sub-case 5 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentStandard(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 6 ------------
+        // ------------ sub-case 6 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentReordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 7 ------------
+        // ------------ sub-case 7 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentBlocked(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 8 ------------
+        // ------------ sub-case 8 ------------
         act = new Complex128[A.numRows*B.numCols];
         DenseSemiringMatMult.concurrentBlockedReordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
@@ -147,22 +147,22 @@ class CMatrixMultiplyTests {
         A = new CMatrix(entriesA);
         B = new CMatrix(entriesB);
 
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         act = new Complex128[A.numRows];
         DenseSemiringMatMult.standardVector(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         act = new Complex128[A.numRows];
         DenseSemiringMatMult.blockedVector(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         act = new Complex128[A.numRows];
         DenseSemiringMatMult.concurrentStandardVector(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         act = new Complex128[A.numRows];
         DenseSemiringMatMult.concurrentBlockedVector(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);

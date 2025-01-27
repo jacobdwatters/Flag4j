@@ -41,7 +41,7 @@ class CVectorOuterProductTests {
         double[] bEntries;
         Vector b;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new double[]{245.6, -99.35};
         b = new Vector(bEntries);
         expEntries = new Complex128[][]{
@@ -56,7 +56,7 @@ class CVectorOuterProductTests {
 
         assertEquals(exp, act);
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new double[]{245.6, -99.35, 1.55, 626.7};
         b = new Vector(bEntries);
         expEntries = new Complex128[][]{
@@ -78,7 +78,7 @@ class CVectorOuterProductTests {
         double[] bEntries;
         CooVector b;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new double[]{245.6};
         sparseSize = 2;
         sparseIndices = new int[]{0};
@@ -95,7 +95,7 @@ class CVectorOuterProductTests {
 
         assertEquals(exp, act);
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new double[]{245.6, -99.35};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
@@ -119,7 +119,7 @@ class CVectorOuterProductTests {
         Complex128[] bEntries;
         CVector b;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new Complex128[]{new Complex128("24.566+8.56i"), new Complex128("-9.56-0.0035i")};
         b = new CVector(bEntries);
         expEntries = new Complex128[][]{
@@ -130,7 +130,7 @@ class CVectorOuterProductTests {
 
         assertEquals(exp, a.outer(b));
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new Complex128[]{new Complex128("24.566+8.56i"), new Complex128("-9.56-0.0035i"), new Complex128("9.35"), new Complex128("-0.001+2.6i")};
         b = new CVector(bEntries);
         expEntries = new Complex128[][]{
@@ -148,7 +148,7 @@ class CVectorOuterProductTests {
         Complex128[] bEntries;
         CooCVector b;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new Complex128[]{new Complex128("993.356 + 1.6i")};
         sparseSize = 2;
         sparseIndices = new int[]{0};
@@ -165,7 +165,7 @@ class CVectorOuterProductTests {
 
         assertEquals(exp, act);
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new Complex128[]{new Complex128("993.356+1.6i"), new Complex128("0.0+8.35i")};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};

@@ -49,7 +49,7 @@ class RealCsrEqualsTests {
 
     @Test
     void realCsrEqualsTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[150][235];
         bEntries = new double[150][235];
 
@@ -72,7 +72,7 @@ class RealCsrEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         bNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         aIndices = new int[][]{
@@ -88,7 +88,7 @@ class RealCsrEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aNnz = new double[]{1, 0, 1.334, -0.0014, 23592.1, -992934.1, 0, 235.235, 5};
         bNnz = new double[]{1, 0, 0, 0, 1.334, -0.0014, 0, 23592.1, -992934.1, 235.235, 5};
         aIndices = new int[][]{
@@ -104,7 +104,7 @@ class RealCsrEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aNnz = new double[]{1, 0, 1.334, -0.0014, 23592.1, -992934.1, 0, 235.235, 5};
         bNnz = new double[]{1, -1.4, 0, 0, 1.334, -0.0014, 0, 23592.1, -992934.1, 235.235, 5};
         aIndices = new int[][]{
@@ -120,7 +120,7 @@ class RealCsrEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 5 ----------------------
+        // ---------------------- sub-case 5 ----------------------
         aNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         bNnz = new double[]{1, 2, -0.0014, 23592.1, -992934.1, 235.235, 5};
         aIndices = new int[][]{
@@ -136,7 +136,7 @@ class RealCsrEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 6 ----------------------
+        // ---------------------- sub-case 6 ----------------------
         aNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         bNnz = new double[]{1, -992934.1, 235.235, 5};
         aIndices = new int[][]{
@@ -152,7 +152,7 @@ class RealCsrEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 7 ----------------------
+        // ---------------------- sub-case 7 ----------------------
         aNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         bNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         aIndices = new int[][]{
@@ -168,7 +168,7 @@ class RealCsrEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 7 ----------------------
+        // ---------------------- sub-case 7 ----------------------
         aNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         bNnz = new double[]{1, 1.334, -0.0014, 23592.1, -992934.1, 235.235, 5};
         aIndices = new int[][]{

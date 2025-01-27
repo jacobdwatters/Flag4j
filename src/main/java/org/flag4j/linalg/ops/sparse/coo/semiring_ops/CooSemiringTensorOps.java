@@ -178,8 +178,8 @@ public final class CooSemiringTensorOps {
             int axis1, int axis2) {
         // Validate parameters.
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.ensureValidArrayIndices(shape.getRank(), axis1, axis2);
-        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.validateArrayIndices(shape.getRank(), axis1, axis2);
+        ValidateParameters.ensureAllEqual(shape.get(axis1), shape.get(axis2));
 
         int rank = shape.getRank();
         final int nnz = entries.length;

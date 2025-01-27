@@ -19,7 +19,7 @@ class RealDenseSparseMatMultTests {
 
     @Test
     void matMultTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -39,7 +39,7 @@ class RealDenseSparseMatMultTests {
         assertArrayEquals(exp.data, standard(A.data, A.shape, B.data, B.rowIndices, B.colIndices, B.shape));
         assertArrayEquals(exp.data, concurrentStandard(A.data, A.shape, B.data, B.rowIndices, B.colIndices, B.shape));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -63,7 +63,7 @@ class RealDenseSparseMatMultTests {
 
     @Test
     void matVecMultTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -85,7 +85,7 @@ class RealDenseSparseMatMultTests {
         assertArrayEquals(exp.data, blockedVector(A.data, A.shape, B.data, B.rowIndices));
         assertArrayEquals(exp.data, concurrentBlockedVector(A.data, A.shape, B.data, B.rowIndices));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234},
                 {-932.45},
                 {123.445},

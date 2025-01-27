@@ -24,7 +24,7 @@ class CMatrixToStringTests {
 
     @Test
     void toStringTestCase() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},
@@ -42,7 +42,7 @@ class CMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},
@@ -60,7 +60,7 @@ class CMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},
@@ -78,7 +78,7 @@ class CMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},
@@ -96,7 +96,7 @@ class CMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------------ Sub-case 5 ------------------------
+        // ------------------------ sub-case 5 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},
@@ -114,7 +114,7 @@ class CMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------------ Sub-case 6 ------------------------
+        // ------------------------ sub-case 6 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},
@@ -132,7 +132,7 @@ class CMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------------ Sub-case 6 ------------------------
+        // ------------------------ sub-case 6 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},
@@ -150,7 +150,7 @@ class CMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------------ Sub-case 6 ------------------------
+        // ------------------------ sub-case 6 ------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(2, 4.25), new Complex128(-0.0002345),
                         new Complex128(0, 9.4), new Complex128(1.2598)},

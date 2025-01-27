@@ -142,7 +142,7 @@ public final class RealCsrMatMult {
      */
     public static org.flag4j.arrays.dense.Vector standardVector(CsrMatrix src1, CooVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
 
         double[] destEntries = new double[src1.numRows];
         int rows1 = src1.numRows;

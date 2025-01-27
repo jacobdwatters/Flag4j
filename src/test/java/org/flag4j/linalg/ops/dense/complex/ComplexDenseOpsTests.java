@@ -24,7 +24,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void addTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new Complex128[]{new Complex128(-9234.23), new Complex128(109.2234, 1.435),
@@ -35,7 +35,7 @@ class ComplexDenseOpsTests {
         shape2 = new Shape(src2.length);
         assertArrayEquals(expResult, DenseSemiringOps.add(src1, shape1, src2, shape2, null));
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new Complex128[]{new Complex128(9-9234.23, -1), new Complex128(-0.99+109.2234, 13.445+1.435),
@@ -44,7 +44,7 @@ class ComplexDenseOpsTests {
         shape2 = new Shape(src2.length);
         assertThrows(LinearAlgebraException.class, () -> DenseSemiringOps.add(src1, shape1, src2, shape2, null));
 
-        // ---------- Sub-case 3 -----------------
+        // ---------- sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new Complex128[]{new Complex128(9-9234.23, -1), new Complex128(-0.99+109.2234, 13.445+1.435)};
@@ -56,7 +56,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void addDoubleTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         a = 933.1334;
@@ -71,7 +71,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void addComplex128TestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         aC = new Complex128(10.34, -1.334);
@@ -85,7 +85,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void subTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new Complex128[]{new Complex128(-9234.23), new Complex128(109.2234, 1.435),
@@ -97,7 +97,7 @@ class ComplexDenseOpsTests {
         shape2 = new Shape(src2.length);
 //        assertArrayEquals(expResult, DenseFieldOps.sub(src1, shape1, src2, shape2));
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new Complex128[]{new Complex128(9-9234.23, -1), new Complex128(-0.99+109.2234, 13.445+1.435),
@@ -106,7 +106,7 @@ class ComplexDenseOpsTests {
         shape2 = new Shape(src2.length);
 //        assertThrows(LinearAlgebraException.class, () -> DenseFieldOps.sub(src1, shape1, src2, shape2));
 
-        // ---------- Sub-case 3 -----------------
+        // ---------- sub-case 3 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         src2 = new Complex128[]{new Complex128(9-9234.23, -1), new Complex128(-0.99+109.2234, 13.445+1.435)};
@@ -118,7 +118,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void subDoubleTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         a = 933.1334;
@@ -133,7 +133,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void subComplex128TestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         aC = new Complex128(10.34, -1.334);
@@ -156,14 +156,14 @@ class ComplexDenseOpsTests {
 
     @Test
     void prodTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
 
         expResultC = new Complex128(-1147.60574505, 42.660699650000005);
         assertEquals(expResultC, AggregateSemiring.prod(src1));
 
-        // ---------- Sub-case 2 -----------------
+        // ---------- sub-case 2 -----------------
         src1 = new Complex128[]{};
         assertNull(AggregateSemiring.prod(src1));
     }
@@ -171,7 +171,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void scalMultDoubleTestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         a = 933.1334;
@@ -183,7 +183,7 @@ class ComplexDenseOpsTests {
 
     @Test
     void scalMultComplex128TestCase() {
-        // ---------- Sub-case 1 -----------------
+        // ---------- sub-case 1 -----------------
         src1 = new Complex128[]{new Complex128(9, -1), new Complex128(-0.99, 13.445),
                 new Complex128(0.9133), new Complex128(0, 10.3)};
         aC = new Complex128(10.34, -1.334);

@@ -27,7 +27,7 @@ class RealComplexCsrDenseMatMultTests {
 
     @Test
     void standardTests() {
-        // ------------------------ Sub-case 1  ------------------------
+        // ------------------------ sub-case 1  ------------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.40775, 0.00066, 0.90251, 0.83958, 0.50831, 0.33647, 0.04011, 0.62236};
         aRowPointers = new int[]{0, 3, 5, 5, 7, 8};
@@ -52,7 +52,7 @@ class RealComplexCsrDenseMatMultTests {
 
         Assertions.assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 2  ------------------------
+        // ------------------------ sub-case 2  ------------------------
         aShape = new Shape(15, 15);
         aEntries = new double[]{0.70914, 0.90578, 0.75517, 0.20707, 0.85522, 0.70478, 0.77122, 0.4555, 0.84988, 0.98193, 0.96398, 0.28262, 0.51808, 0.07491, 0.34441, 0.65752, 0.12087, 0.75863, 0.9398, 0.32988, 0.03278, 0.99643};
         aRowPointers = new int[]{0, 1, 3, 3, 3, 3, 6, 9, 12, 14, 15, 17, 18, 19, 20, 22};
@@ -97,7 +97,7 @@ class RealComplexCsrDenseMatMultTests {
 
         Assertions.assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         A = new CsrMatrix(24, 516);
         B = new CMatrix(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
@@ -106,7 +106,7 @@ class RealComplexCsrDenseMatMultTests {
 
     @Test
     void standardTransposeTests() {
-        // ------------------------ Sub-case 1  ------------------------
+        // ------------------------ sub-case 1  ------------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.40775, 0.00066, 0.90251, 0.83958, 0.50831, 0.33647, 0.04011, 0.62236};
         aRowPointers = new int[]{0, 3, 5, 5, 7, 8};
@@ -131,7 +131,7 @@ class RealComplexCsrDenseMatMultTests {
 
         Assertions.assertEquals(exp, RealFieldDenseCsrMatMult.standardTranspose(A, B));
 
-        // ------------------------ Sub-case 2  ------------------------
+        // ------------------------ sub-case 2  ------------------------
         aShape = new Shape(15, 15);
         aEntries = new double[]{0.70914, 0.90578, 0.75517, 0.20707, 0.85522, 0.70478, 0.77122, 0.4555, 0.84988, 0.98193, 0.96398, 0.28262, 0.51808, 0.07491, 0.34441, 0.65752, 0.12087, 0.75863, 0.9398, 0.32988, 0.03278, 0.99643};
         aRowPointers = new int[]{0, 1, 3, 3, 3, 3, 6, 9, 12, 14, 15, 17, 18, 19, 20, 22};
@@ -176,7 +176,7 @@ class RealComplexCsrDenseMatMultTests {
 
         Assertions.assertEquals(exp, RealFieldDenseCsrMatMult.standardTranspose(A, B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         A = new CsrMatrix(24, 516);
         B = new CMatrix(15, 12).T();
         assertThrows(IllegalArgumentException.class, ()->RealFieldDenseCsrMatMult.standardTranspose(A, B));

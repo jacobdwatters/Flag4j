@@ -18,7 +18,7 @@ class CsrCMatrixToVectorTests {
 
     @Test
     void toVectorTests() {
-        // ------------------------- Sub-case 1 -------------------------
+        // ------------------------- sub-case 1 -------------------------
         aEntries = new Complex128[][]{{new Complex128(1.23, -9.25), Complex128.ZERO, Complex128.ZERO,
                 Complex128.ZERO, Complex128.ZERO, new Complex128(1.526, -3.1),
                 Complex128.ZERO, Complex128.ZERO, new Complex128(0, 1.2)}};
@@ -30,7 +30,7 @@ class CsrCMatrixToVectorTests {
 
         assertEquals(exp, A.toVector());
 
-        // ------------------------- Sub-case 2 -------------------------
+        // ------------------------- sub-case 2 -------------------------
         aEntries = new Complex128[][]{{new Complex128(1.23, -9.25)}, {Complex128.ZERO}, {Complex128.ZERO},
                 {Complex128.ZERO}, {Complex128.ZERO}, {new Complex128(1.526, -3.1)},
                 {Complex128.ZERO}, {Complex128.ZERO}, {new Complex128(0, 1.2)}};
@@ -42,7 +42,7 @@ class CsrCMatrixToVectorTests {
 
         assertEquals(exp, A.toVector());
 
-        // ------------------------- Sub-case 3 -------------------------
+        // ------------------------- sub-case 3 -------------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1.23, -9.25), Complex128.ZERO},
                 {Complex128.ZERO, Complex128.ZERO},

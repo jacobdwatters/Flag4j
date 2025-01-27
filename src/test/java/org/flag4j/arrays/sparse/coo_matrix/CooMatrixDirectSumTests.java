@@ -33,7 +33,7 @@ class CooMatrixDirectSumTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.36314};
         aRowIndices = new int[]{1};
@@ -54,7 +54,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -75,7 +75,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.57548, 0.04127, 0.84891, 0.95484, 0.91981, 0.76013, 0.98434, 0.95096, 0.83673, 0.84207, 0.36798, 0.25599, 0.43903, 0.5061};
         aRowIndices = new int[]{0, 1, 1, 2, 3, 3, 3, 4, 6, 7, 9, 10, 11, 13};
@@ -118,7 +118,7 @@ class CooMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.12576};
         aRowIndices = new int[]{1};
@@ -139,7 +139,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -160,7 +160,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.4423, 0.27239, 0.56716, 0.40177, 0.09355, 0.6171, 0.75503, 0.84551, 0.56827, 0.84476, 0.52399, 0.04809, 0.53526, 0.29315};
         aRowIndices = new int[]{0, 0, 1, 1, 3, 4, 6, 6, 8, 10, 10, 12, 12, 13};
@@ -200,7 +200,7 @@ class CooMatrixDirectSumTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.9471};
         aRowIndices = new int[]{0};
@@ -222,7 +222,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -245,7 +245,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.53133, 0.69632, 0.10432, 0.45471, 0.8554, 0.70034, 0.00942, 0.82027, 0.03932, 0.47388, 0.97456, 0.33064, 0.24773, 0.19777};
         aRowIndices = new int[]{1, 1, 1, 2, 4, 5, 6, 7, 7, 7, 8, 10, 11, 12};
@@ -296,7 +296,7 @@ class CooMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.4884};
         aRowIndices = new int[]{1};
@@ -318,7 +318,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -341,7 +341,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.directSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.18246, 0.62977, 0.54024, 0.1938, 0.72261, 0.03498, 0.10563, 0.66627, 0.25401, 0.49059, 0.54795, 0.89787, 0.79596, 0.56759};
         aRowIndices = new int[]{0, 0, 1, 2, 3, 6, 7, 8, 9, 9, 10, 11, 12, 12};
@@ -395,7 +395,7 @@ class CooMatrixDirectSumTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.06509};
         aRowIndices = new int[]{1};
@@ -416,7 +416,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -437,7 +437,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.40097, 0.89822, 0.14835, 0.98776, 0.36868, 0.71529, 0.42539, 0.72885, 0.57388, 0.51657, 0.51903, 0.41499, 0.29246, 0.07744};
         aRowIndices = new int[]{2, 2, 3, 3, 4, 5, 6, 7, 8, 9, 11, 12, 12, 13};
@@ -480,7 +480,7 @@ class CooMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.95463};
         aRowIndices = new int[]{1};
@@ -501,7 +501,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -522,7 +522,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.45761, 0.59949, 0.93871, 0.69319, 0.86086, 0.07661, 0.05989, 0.42798, 0.2897, 0.71213, 0.26142, 0.5184, 0.37619, 0.56648};
         aRowIndices = new int[]{1, 1, 2, 3, 3, 4, 4, 6, 7, 8, 11, 13, 13, 13};
@@ -562,7 +562,7 @@ class CooMatrixDirectSumTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.0778};
         aRowIndices = new int[]{0};
@@ -584,7 +584,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -607,7 +607,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.75921, 0.23954, 0.45291, 0.30381, 0.14104, 0.99878, 0.34272, 0.06406, 0.14733, 0.75918, 0.79406, 0.68084, 0.10748, 0.19839};
         aRowIndices = new int[]{0, 2, 2, 3, 5, 6, 6, 8, 8, 9, 10, 10, 11, 12};
@@ -658,7 +658,7 @@ class CooMatrixDirectSumTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.24679};
         aRowIndices = new int[]{0};
@@ -680,7 +680,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -703,7 +703,7 @@ class CooMatrixDirectSumTests {
 
         assertEquals(exp, DirectSum.invDirectSum(a, b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.79976, 0.76613, 0.17925, 0.18628, 0.19477, 0.71918, 0.43503, 0.89331, 0.27575, 0.81762, 0.00097, 0.56518, 0.01486, 0.3944};
         aRowIndices = new int[]{0, 0, 1, 2, 2, 3, 5, 7, 7, 8, 10, 11, 11, 13};

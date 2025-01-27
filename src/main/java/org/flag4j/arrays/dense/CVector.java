@@ -486,7 +486,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
     @Override
     public CVector makeLikeTensor(Shape shape, Complex128[] entries) {
         ValidateParameters.ensureRank(shape, 1);
-        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
+        ValidateParameters.ensureAllEqual(shape.totalEntriesIntValueExact(), entries.length);
         return new CVector(entries);
     }
 

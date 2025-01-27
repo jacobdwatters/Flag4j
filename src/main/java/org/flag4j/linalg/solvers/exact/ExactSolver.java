@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -111,7 +111,7 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
     @Override
     public U solve(T A, U b) {
         ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
-        ValidateParameters.ensureEquals(A.numCols(), b.length()); // b must have the same number of data as columns in A.
+        ValidateParameters.ensureAllEqual(A.numCols(), b.length()); // b must have the same number of data as columns in A.
 
         decompose(A); // Compute LU decomposition.
 
@@ -134,7 +134,7 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
     @Override
     public T solve(T A, T B) {
         ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
-        ValidateParameters.ensureEquals(A.numCols(), B.numRows()); // b must have the same number of data as columns in A.
+        ValidateParameters.ensureAllEqual(A.numCols(), B.numRows()); // b must have the same number of data as columns in A.
 
         decompose(A); // Compute LU decomposition.
 

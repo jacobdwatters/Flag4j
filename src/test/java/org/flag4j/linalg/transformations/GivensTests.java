@@ -7,8 +7,8 @@ import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GivensTests {
 
@@ -30,7 +30,7 @@ class GivensTests {
         int size, i, j;
         double theta;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         size = 105;
         j = 4;
         i = 91;
@@ -43,7 +43,7 @@ class GivensTests {
 
         assertEquals(expReal, Givens.getGeneralRotator(size, i, j, theta));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         size = 3;
         j = 1;
         i = 2;
@@ -56,7 +56,7 @@ class GivensTests {
 
         assertEquals(expReal, Givens.getGeneralRotator(size, i, j, theta));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         assertThrows(IllegalArgumentException.class, ()-> Givens.getGeneralRotator(5, 3, 3, 2));
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getGeneralRotator(5, 1, 6, 2));
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getGeneralRotator(5, 6, 0, 2));
@@ -69,7 +69,7 @@ class GivensTests {
     void realRotatorTestCase() {
         int i;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         i = 4;
         vEntriesReal = new double[]{1.56, 1.3567, -0.02456, 103.6, -992.255, 88.156};
         vReal = new Vector(vEntriesReal);
@@ -86,7 +86,7 @@ class GivensTests {
 
         assertEquals(expReal, Givens.getRotator(vReal, i));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getRotator(vReal, -1));
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getRotator(vReal, vReal.size));
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getRotator(vReal, vReal.size + 3));
@@ -97,7 +97,7 @@ class GivensTests {
     void complexRotatorTestCase() {
         int i;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         i = 1;
         vEntriesComplex = new Complex128[]{new Complex128(1.456), new Complex128(-2, 15.6),
                 new Complex128(2.6, -0.2), Complex128.ZERO};
@@ -113,7 +113,7 @@ class GivensTests {
 
         assertEquals(expComplex, Givens.getRotator(vComplex, i));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getRotator(vComplex, -1));
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getRotator(vComplex, vComplex.size));
         assertThrows(IndexOutOfBoundsException.class, ()-> Givens.getRotator(vComplex, vComplex.size + 3));
@@ -122,7 +122,7 @@ class GivensTests {
 
     @Test
     void real2x2RotatorTestCase() {
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         vEntriesReal = new double[]{1.56, 1.3567};
         vReal = new Vector(vEntriesReal);
 
@@ -134,7 +134,7 @@ class GivensTests {
 
         assertEquals(expReal, Givens.get2x2Rotator(vReal));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         vEntriesReal = new double[]{1.56, 0};
         vReal = new Vector(vEntriesReal);
 
@@ -146,7 +146,7 @@ class GivensTests {
         
         assertEquals(expReal, Givens.get2x2Rotator(vReal));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         vEntriesReal = new double[]{0, -9.3};
         vReal = new Vector(vEntriesReal);
 
@@ -158,7 +158,7 @@ class GivensTests {
 
         assertEquals(expReal, Givens.get2x2Rotator(vReal));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         vEntriesReal = new double[]{0, 0};
         vReal = new Vector(vEntriesReal);
 
@@ -170,7 +170,7 @@ class GivensTests {
 
         assertEquals(expReal, Givens.get2x2Rotator(vReal));
 
-        // ------------------- Sub-case 5 -------------------
+        // ------------------- sub-case 5 -------------------
         assertThrows(IllegalArgumentException.class, ()-> Givens.get2x2Rotator(new Vector(1)));
         assertThrows(IllegalArgumentException.class, ()-> Givens.get2x2Rotator(new Vector(5)));
     }
@@ -178,7 +178,7 @@ class GivensTests {
 
     @Test
     void complex2x2RotatorTestCase() {
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         vEntriesComplex = new Complex128[]{new Complex128(2.56, -9.53), new Complex128(3.6, 0.00134)};
         vComplex = new CVector(vEntriesComplex);
 
@@ -190,7 +190,7 @@ class GivensTests {
 
         assertEquals(expComplex, Givens.get2x2Rotator(vComplex));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         assertThrows(IllegalArgumentException.class, ()-> Givens.get2x2Rotator(new CVector(1)));
         assertThrows(IllegalArgumentException.class, ()-> Givens.get2x2Rotator(new CVector(5)));
     }

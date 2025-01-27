@@ -20,7 +20,7 @@ class MatrixElementScalarTests {
 
     @Test
     void scalDivTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         scalar = 1.44;
@@ -31,7 +31,7 @@ class MatrixElementScalarTests {
         assertArrayEquals(expResult.data, A.div(scalar).data);
         assertEquals(expResult.shape, A.div(scalar).shape);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         scalarC = new Complex128(1.3245, -42.5);
@@ -50,7 +50,7 @@ class MatrixElementScalarTests {
 
     @Test
     void recipTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         aEntries = new double[][]{{1.334, -2.3112, 334.3}, {4.13, -35.33, 6}};
         A = new Matrix(aEntries);
         scalar = 1.44;

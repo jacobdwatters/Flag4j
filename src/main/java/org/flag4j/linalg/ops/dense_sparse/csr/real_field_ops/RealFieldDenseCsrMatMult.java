@@ -103,7 +103,7 @@ public final class RealFieldDenseCsrMatMult {
     public static <T extends Field<T>> AbstractDenseFieldMatrix<?, ?, T> standardTranspose(
             CsrMatrix src1, AbstractDenseFieldMatrix<?, ?, T> src2) {
         // Ensure matrices have shapes conducive to matrix multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.numCols);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.numCols);
 
         T[] destEntries = src2.makeEmptyDataArray(src1.numRows*src2.numRows);
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -229,7 +229,7 @@ public final class RealFieldDenseCsrMatMult {
     public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> standardVector(
             CsrMatrix src1, AbstractDenseFieldVector<?, ?, T> src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
 
         T[] destEntries = src2.makeEmptyDataArray(src1.numRows);
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -300,7 +300,7 @@ public final class RealFieldDenseCsrMatMult {
     public static <T extends Field<T>> AbstractDenseFieldVector<?, ?, T> standardVector(
             AbstractCsrFieldMatrix<?, ?, ?, T> src1, Vector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
         
         T[] destEntries = (T[]) new Field[src1.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);

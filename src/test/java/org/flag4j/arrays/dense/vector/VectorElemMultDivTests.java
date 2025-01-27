@@ -22,7 +22,7 @@ class VectorElemMultDivTests {
         double[] bEntries, expEntries;
         Vector b, exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new double[]{8.55, -9.133, -8.34};
@@ -32,7 +32,7 @@ class VectorElemMultDivTests {
 
         assertEquals(exp, a.elemMult(b));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new double[]{8.55, -9.133, -8.34, 23.4};
@@ -48,7 +48,7 @@ class VectorElemMultDivTests {
         Complex128[] bEntries, expEntries;
         CVector b, exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(23.456, -9234), new Complex128(0, 8.234), new Complex128(-9234.5, 0.24)};
@@ -58,7 +58,7 @@ class VectorElemMultDivTests {
 
         assertEquals(exp, a.elemMult(b));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(23.456, -9234), new Complex128(0, 8.234)};
@@ -75,7 +75,7 @@ class VectorElemMultDivTests {
         double[] bEntries, expEntries;
         CooVector b, exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new double[]{8.55};
@@ -91,7 +91,7 @@ class VectorElemMultDivTests {
         assertArrayEquals(exp.data, act.data);
         assertArrayEquals(exp.indices, act.indices);
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new double[]{8.55};
@@ -109,7 +109,7 @@ class VectorElemMultDivTests {
         Complex128[] bEntries, expEntries;
         CooCVector b, exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(-9.234, 1.5)};
@@ -125,7 +125,7 @@ class VectorElemMultDivTests {
         assertArrayEquals(exp.data, act.data);
         assertArrayEquals(exp.indices, act.indices);
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(-9.234, 1.5)};
@@ -142,7 +142,7 @@ class VectorElemMultDivTests {
         double[] bEntries, expEntries;
         Vector b, exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new double[]{8.55, -9.133, -8.34};
@@ -152,7 +152,7 @@ class VectorElemMultDivTests {
 
         assertEquals(exp, a.div(b));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new double[]{8.55, -9.133, -8.34, 23.4};
@@ -168,7 +168,7 @@ class VectorElemMultDivTests {
         Complex128[] bEntries, expEntries;
         CVector b, exp;
 
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(23.456, -9234), new Complex128(0, 8.234), new Complex128(-9234.5, 0.24)};
@@ -179,7 +179,7 @@ class VectorElemMultDivTests {
 
         assertEquals(exp, a.div(b));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aEntries = new double[]{1.234, -9.4, 8.45};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(23.456, -9234), new Complex128(0, 8.234)};

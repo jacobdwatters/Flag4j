@@ -26,7 +26,7 @@ class CooCMatrixElemDivTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new Complex128[]{new Complex128("0.0766368471796478+0.9492280625872803i"), new Complex128("0.1930391038649386+0.7617047445283123i"), new Complex128("0.9067549010330563+0.31336061871125553i"), new Complex128("0.21893877466645717+0.5152634601707257i"), new Complex128("0.5764595328602934+0.39285513632570546i")};
         aRowIndices = new int[]{1, 1, 2, 2, 4};
@@ -49,7 +49,7 @@ class CooCMatrixElemDivTests {
 
         assertEquals(exp, RealFieldDenseCooMatrixOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.9720212972219383+0.18426402442963263i"), new Complex128("0.5764899656357376+0.31327386474221364i"), new Complex128("0.7410673521266785+0.11934630071637853i")};
         aRowIndices = new int[]{1, 1, 2};
@@ -70,7 +70,7 @@ class CooCMatrixElemDivTests {
 
         assertEquals(exp, RealFieldDenseCooMatrixOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.2167893175598996+0.2996212001672518i"), new Complex128("0.1511818245619858+0.20927498440208603i"), new Complex128("0.20209823912923397+0.8997366291135686i")};
         aRowIndices = new int[]{0, 1, 1};
@@ -97,7 +97,7 @@ class CooCMatrixElemDivTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new Complex128[]{new Complex128("0.3713399183921321+0.2732583086126841i"), new Complex128("0.8097640641001572+0.47645109131560925i"), new Complex128("0.08879023807148412+0.9698316824688531i"), new Complex128("0.7172788370662367+0.08708074327944348i"), new Complex128("0.7462626232525152+0.9494035470157722i")};
         aRowIndices = new int[]{0, 0, 2, 2, 3};
@@ -120,7 +120,7 @@ class CooCMatrixElemDivTests {
 
         assertEquals(exp, DenseCooFieldMatrixOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.43891010689776977+0.8643182182497601i"), new Complex128("0.2344331678075624+0.1339568190472047i"), new Complex128("0.2972763774902456+0.49046124106584676i")};
         aRowIndices = new int[]{1, 2, 2};
@@ -141,7 +141,7 @@ class CooCMatrixElemDivTests {
 
         assertEquals(exp, DenseCooFieldMatrixOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new Complex128[]{new Complex128("0.5864427355413825+0.6325572833610345i"), new Complex128("0.015557949933594273+0.3938021787260496i"), new Complex128("0.04797168412999786+0.8363898618137131i")};
         aRowIndices = new int[]{0, 0, 1};

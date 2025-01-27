@@ -18,7 +18,7 @@ class MatrixScalMultTests {
 
     @Test
     void realTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);
         a = -1.66623;
@@ -28,7 +28,7 @@ class MatrixScalMultTests {
 
         assertEquals(exp, A.mult(a));
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);
         a = 0;
@@ -42,7 +42,7 @@ class MatrixScalMultTests {
 
     @Test
     void complexTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);
         aC = new Complex128(-9.123, 19.23);
@@ -53,7 +53,7 @@ class MatrixScalMultTests {
 
         assertEquals(expC, A.mult(aC));
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[][]{{1, 2, 3.3434}, {-0.221, 81.346, 90.234}};
         A = new Matrix(aEntries);
         aC = new Complex128(0);

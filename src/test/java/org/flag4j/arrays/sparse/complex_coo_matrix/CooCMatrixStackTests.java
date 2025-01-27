@@ -30,7 +30,7 @@ class CooCMatrixStackTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new Complex128[]{new Complex128("0.25394+0.43087i")};
         aRowIndices = new int[]{0};
@@ -51,7 +51,7 @@ class CooCMatrixStackTests {
 
         assertEquals(exp, a.stack(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new Complex128[]{};
         aRowIndices = new int[]{};
@@ -72,7 +72,7 @@ class CooCMatrixStackTests {
 
         assertEquals(exp, a.stack(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new Complex128[]{new Complex128("0.28989+0.09294i"), new Complex128("0.14286+0.13982i"), new Complex128("0.08978+0.69954i"), new Complex128("0.25905+0.81205i"), new Complex128("0.74641+0.0583i"), new Complex128("0.59938+0.46717i"), new Complex128("0.26599+0.76388i"), new Complex128("0.27019+0.47096i"), new Complex128("0.91115+0.20502i"), new Complex128("0.01355+0.83376i"), new Complex128("0.26981+0.89026i"), new Complex128("0.99982+0.06107i"), new Complex128("0.89229+0.62325i"), new Complex128("0.44728+0.68547i")};
         aRowIndices = new int[]{0, 1, 1, 2, 2, 3, 3, 5, 6, 6, 7, 10, 10, 13};

@@ -32,7 +32,7 @@ class RealExactSolverTests {
     void solveTestCase() {
         RealExactSolver solver = new RealExactSolver();
 
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[][]{
                 {1.234, -0.024, 0.0},
                 {100.4, 5.14, -1.444},
@@ -43,7 +43,7 @@ class RealExactSolverTests {
 
         Assertions.assertEquals(exp, solver.solve(A, b));
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[][]{
                 {1.234, -0.024, 0.0, 10.5},
                 {100.4, 5.14, -1.444, 2.566},
@@ -55,7 +55,7 @@ class RealExactSolverTests {
 
         Assertions.assertEquals(exp, solver.solve(A, b));
 
-        // ----------------- Sub-case 3 -----------------
+        // ----------------- sub-case 3 -----------------
         aEntries = new double[][]{
                 {1.234, -0.024, 0.0, 10.5},
                 {100.4, 5.14, -1.444, 2.566},
@@ -66,7 +66,7 @@ class RealExactSolverTests {
 
         assertThrows(LinearAlgebraException.class, ()->solver.solve(A, b));
 
-        // ----------------- Sub-case 4 -----------------
+        // ----------------- sub-case 4 -----------------
         aEntries = new double[][]{
                 {1.234, -0.024, 0.0},
                 {100.4, 5.14, -1.444},
@@ -77,7 +77,7 @@ class RealExactSolverTests {
 
         assertThrows(IllegalArgumentException.class, ()->solver.solve(A, b));
 
-        // ----------------- Sub-case 5 -----------------
+        // ----------------- sub-case 5 -----------------
         aEntries = new double[][]{
                 {1, 2, 0.0},
                 {1, 2, -1.444},

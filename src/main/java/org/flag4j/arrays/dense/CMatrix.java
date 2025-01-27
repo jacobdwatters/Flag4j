@@ -686,7 +686,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      */
     @Override
     public CTensor toTensor(Shape newShape) {
-        ValidateParameters.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
         return new CTensor(newShape, data.clone());
     }
 
@@ -749,10 +749,12 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * Constructs a diagonal matrix from an array specifying the diagonal elements of the matrix.
      * @param data Diagonal elements of the matrix. All other values will be zero.
      * @return A diagonal matrix whose diagonal elements are equal to {@code data}.
+     * @see #diag(CVector)
      */
-    public static CMatrix diag(Complex128[] data) {
+    public static CMatrix diag(Complex128... data) {
         int size = data.length;
         Complex128[] fullData = new Complex128[size*size];
+        Arrays.fill(fullData, Complex128.ZERO);
 
         int destIdx = 0;
         for(int i=0; i<size; i++) {
@@ -761,6 +763,17 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
         }
 
         return new CMatrix(size, size, fullData);
+    }
+
+
+    /**
+     * Constructs a diagonal matrix from a vector specifying the diagonal elements of the matrix.
+     * @param vec Diagonal elements of the matrix. All other values will be zero.
+     * @return A diagonal matrix whose diagonal elements are equal to the entries of {@code vec}.
+     * @see #diag(Complex128...)
+     */
+    public static CMatrix diag(CVector vec) {
+        return diag(vec.data);
     }
 
 

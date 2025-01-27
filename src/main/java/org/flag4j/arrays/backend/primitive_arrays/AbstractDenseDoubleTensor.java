@@ -55,7 +55,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     protected AbstractDenseDoubleTensor(Shape shape, double[] entries) {
         super(shape, entries);
-        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
+        ValidateParameters.ensureAllEqual(shape.totalEntriesIntValueExact(), entries.length);
     }
 
 
@@ -355,7 +355,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
      */
     @Override
     public T reshape(Shape newShape) {
-        ValidateParameters.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
         return makeLikeTensor(newShape, data.clone());
     }
 

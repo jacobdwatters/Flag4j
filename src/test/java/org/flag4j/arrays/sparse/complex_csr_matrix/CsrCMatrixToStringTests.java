@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CsrCMatrixToStringTests {
+class CsrCMatrixToStringTests {
     static CsrCMatrix A;
     static Shape aShape;
     static Complex128[] nnz;
@@ -23,7 +23,7 @@ public class CsrCMatrixToStringTests {
 
     @Test
     void toStringTests() {
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         aShape = new Shape(150, 2256);
         nnz = new Complex128[]{new Complex128(1.325, 9.2), new Complex128(-6, 1), new Complex128(23),
                 new Complex128(0, 34615), new Complex128(0, -1), new Complex128(25, 1)};
@@ -39,7 +39,7 @@ public class CsrCMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         aShape = new Shape(12, 12);
         nnz = new Complex128[]{
                 new Complex128(1), new Complex128(2), new Complex128(3), new Complex128(4), new Complex128(5),

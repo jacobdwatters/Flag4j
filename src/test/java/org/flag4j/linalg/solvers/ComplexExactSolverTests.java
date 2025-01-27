@@ -31,7 +31,7 @@ class ComplexExactSolverTests {
     void solveTestCase() {
         ComplexExactSolver solver = new ComplexExactSolver();
 
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new Complex128[][]{
                 {new Complex128(24.5, -0.35), new Complex128(25.6, -22.04), new Complex128(9.52, 2.3)},
                 {new Complex128(-2.04), Complex128.ZERO, new Complex128(5.662)},
@@ -46,7 +46,7 @@ class ComplexExactSolverTests {
 
         assertEquals(exp, solver.solve(A, b));
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new Complex128[][]{
                 {new Complex128(24.5, -0.35), new Complex128(25.6, -22.04), new Complex128(9.52, 2.3)},
                 {new Complex128(-2.04), Complex128.ZERO, new Complex128(5.662)},
@@ -58,7 +58,7 @@ class ComplexExactSolverTests {
 
         assertThrows(IllegalArgumentException.class, ()->solver.solve(A, b));
 
-        // ----------------- Sub-case 3 -----------------
+        // ----------------- sub-case 3 -----------------
         // TODO: This is not actually considered singular within the threshold. Its determinant is very small but not small enough.
 //        aEntries = new Complex128[][]{
 //                {new Complex128(24.5, -9.351), new Complex128(-2.56, 99.52)},

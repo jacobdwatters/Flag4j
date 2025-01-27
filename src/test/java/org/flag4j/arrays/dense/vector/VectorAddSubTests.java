@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class VectorAddSubTests {
+class VectorAddSubTests {
 
     int[] indices;
     int size;
@@ -24,7 +24,7 @@ public class VectorAddSubTests {
         double[] bEntries, expEntries;
         Vector B, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7};
@@ -34,7 +34,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.add(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7, 1.34};
@@ -50,7 +50,7 @@ public class VectorAddSubTests {
         Complex128[] bEntries, expEntries;
         CVector B, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(34.56, -0.9345), new Complex128(4.666, 1), new Complex128(0, 8.4)};
@@ -60,7 +60,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.add(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(34.56, -0.9345), new Complex128(4.666, 1)};
@@ -77,7 +77,7 @@ public class VectorAddSubTests {
         CooVector B;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -89,7 +89,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.add(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -108,7 +108,7 @@ public class VectorAddSubTests {
         CooCVector B;
         CVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(345.66, -1.44559)};
@@ -120,7 +120,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.add(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(345.66, -1.44559)};
@@ -139,7 +139,7 @@ public class VectorAddSubTests {
         double B = 1.5;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         expEntries = new double[]{1.34+B, 6.266+B, -90.45+B};
@@ -155,7 +155,7 @@ public class VectorAddSubTests {
         Complex128 B = new Complex128(5.666, 0.975);
         CVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         expEntries = new Complex128[]{B.add(1.34), B.add(6.266), B.add(-90.45)};
@@ -170,7 +170,7 @@ public class VectorAddSubTests {
         double[] bEntries, expEntries;
         Vector B, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7};
@@ -180,7 +180,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677, -8.51, 56.7, 1.34};
@@ -196,7 +196,7 @@ public class VectorAddSubTests {
         Complex128[] bEntries, expEntries;
         CVector B, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(34.56, -0.9345), new Complex128(4.666, 1), new Complex128(0, 8.4)};
@@ -206,7 +206,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(34.56, -0.9345), new Complex128(4.666, 1)};
@@ -223,7 +223,7 @@ public class VectorAddSubTests {
         CooVector B;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -235,7 +235,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new double[]{34.677};
@@ -254,7 +254,7 @@ public class VectorAddSubTests {
         CooCVector B;
         CVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(345.66, -1.44559)};
@@ -266,7 +266,7 @@ public class VectorAddSubTests {
 
         assertEquals(exp, A.sub(B));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128(345.66, -1.44559)};
@@ -285,7 +285,7 @@ public class VectorAddSubTests {
         double B = 1.5;
         Vector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         expEntries = new double[]{1.34-B, 6.266-B, -90.45-B};
@@ -301,7 +301,7 @@ public class VectorAddSubTests {
         Complex128 B = new Complex128(5.666, 0.975);
         CVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.34, 6.266, -90.45};
         A = new Vector(aEntries);
         expEntries = new Complex128[]{new Complex128(aEntries[0]).sub(B), new Complex128(aEntries[1]).sub(B), new Complex128(aEntries[2]).sub(B)};

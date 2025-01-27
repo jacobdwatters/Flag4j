@@ -21,7 +21,7 @@ class CsrCMatrixToDenseTests {
 
     @Test
     void toDenseTests() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},
                 {new Complex128("0.62854+0.22343i"), new Complex128("0.44136+0.15692i"), new Complex128("0.69915+0.87818i"), new Complex128("0.74834+0.32125i")},
@@ -34,7 +34,7 @@ class CsrCMatrixToDenseTests {
 
         assertEquals(exp, A.toDense());
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0"),
                         new Complex128("0.0"), new Complex128("0.0")},

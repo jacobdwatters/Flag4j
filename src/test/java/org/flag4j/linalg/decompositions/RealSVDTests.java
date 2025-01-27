@@ -18,7 +18,7 @@ class RealSVDTests {
 
 //    @Test
 //    void svdTestCase() {
-//        // -------------------- Sub-case 1 --------------------
+//        // -------------------- sub-case 1 --------------------
 //        aEntries = new double[][]{
 //                {1, 2, 3},
 //                {4, 5, 6},
@@ -54,7 +54,7 @@ class RealSVDTests {
 //        Matrix Ahat = svd.getU().mult(svd.getS()).mult(svd.getV().H());
 //        assertEquals(new Matrix(A.shape), A.sub(Ahat).round(10));
 //
-//        // -------------------- Sub-case 2 --------------------
+//        // -------------------- sub-case 2 --------------------
 //        aEntries = new double[][]{
 //                {3.45, -99.34, 14.5, 24.5},
 //                {-0.0024, 0, 25.1, 1.5},
@@ -66,7 +66,7 @@ class RealSVDTests {
 //        Ahat = svd.getU().mult(svd.getS()).mult(svd.getV().H());
 //        assertEquals(new Matrix(A.shape), A.sub(Ahat).round(10));
 //
-//        // -------------------- Sub-case 3 --------------------
+//        // -------------------- sub-case 3 --------------------
 //        aEntries = new double[][]{
 //                {34.5, 100.34},
 //                {-9.245, 0.13},
@@ -79,7 +79,7 @@ class RealSVDTests {
 //        Ahat = svd.getU().mult(svd.getS()).mult(svd.getV().H());
 //        assertEquals(new Matrix(A.shape), A.sub(Ahat).round(10));
 //
-//        // -------------------- Sub-case 4 --------------------
+//        // -------------------- sub-case 4 --------------------
 //        // This Toeplitz matrix is known to be difficult to compute eigenvalues of. As such, it is a good test matrix.
 //        aEntries = new double[][]{
 //                {2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

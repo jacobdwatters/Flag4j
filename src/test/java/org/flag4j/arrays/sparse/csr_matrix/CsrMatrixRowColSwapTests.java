@@ -17,7 +17,7 @@ class CsrMatrixRowColSwapTests {
 
     @Test
     void rowSwapTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0, 0, 0, 0},
                 {0, 30, 0, 40, 0, 0},
@@ -33,7 +33,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(1, 2));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0, 0, 0, 0},
                 {0, 30, 0, 40, 0, 0},
@@ -49,7 +49,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(2, 1));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0, 0, 0, 0},
                 {0, 30, 0, 40, 0, 0},
@@ -65,7 +65,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(2, 0));
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0, 0, 0, 0},
                 {0, 30, 0, 40, 0, 0},
@@ -81,7 +81,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(0, 3));
 
-        // ---------------------- Sub-case 5 ----------------------
+        // ---------------------- sub-case 5 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0, 0, 0, 0},
                 {0, 30, 0, 40, 0, 0},
@@ -97,7 +97,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(3, 2));
 
-        // ---------------------- Sub-case 6 ----------------------
+        // ---------------------- sub-case 6 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0, 0, 0, 0},
                 {0, 30, 0, 40, 0, 0},
@@ -113,7 +113,7 @@ class CsrMatrixRowColSwapTests {
 
     @Test
     void colSwapTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0,  0,  0,  0},
                 {0,  30, 0,  40, 0,  0},
@@ -129,7 +129,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(0, 3));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0,  0,  0,  0},
                 {0,  30, 0,  40, 0,  0},
@@ -145,7 +145,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(3, 0));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0,  0,  0,  0},
                 {0,  30, 0,  40, 0,  0},
@@ -161,7 +161,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(1, 3));
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0,  0,  0,  0 },
                 {0,  30, 0,  40, 0,  0 },
@@ -177,7 +177,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(0, 5));
 
-        // ---------------------- Sub-case 5 ----------------------
+        // ---------------------- sub-case 5 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0,  0,  0,  0 },
                 {0,  30, 0,  0,  0,  0 },
@@ -193,7 +193,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(1, 3));
 
-        // ---------------------- Sub-case 6 ----------------------
+        // ---------------------- sub-case 6 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0,  0,  0,  0 },
                 {0,  30, 0,  0,  0,  0 },
@@ -209,7 +209,7 @@ class CsrMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(3, 5));
 
-        // ---------------------- Sub-case 7 ----------------------
+        // ---------------------- sub-case 7 ----------------------
         aEntries = new double[][]{
                 {10, 20, 0,  0,  0,  0 },
                 {0,  30, 0,  0,  0,  0 },

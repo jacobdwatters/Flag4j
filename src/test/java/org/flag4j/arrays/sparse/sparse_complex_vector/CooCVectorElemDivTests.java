@@ -33,7 +33,7 @@ class CooCVectorElemDivTests {
         Complex128[] expValues;
         CooCVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51, 0.14};
         b = new Vector(bValues);
 
@@ -43,7 +43,7 @@ class CooCVectorElemDivTests {
         exp = new CooCVector(size, expValues, expIndices);
         assertEquals(exp, RealFieldDenseCooVectorOps.elemDiv(a, b));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51};
         b = new Vector(bValues);
 
@@ -66,7 +66,7 @@ class CooCVectorElemDivTests {
         CVector b;
         CooCVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6),
                 new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4),
                 new Complex128(9924.515, 51.5), new Complex128(24.56, -88.351)};
@@ -80,7 +80,7 @@ class CooCVectorElemDivTests {
         exp = new CooCVector(size, expValues, expIndices);
         assertEquals(exp, DenseCooFieldVectorOps.elemDiv(a, b));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6), new Complex128(24),
                 new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4)};
         b = new CVector(bValues);
@@ -104,7 +104,7 @@ class CooCVectorElemDivTests {
         Complex128 b;
         CooCVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         b = new Complex128(23.55, -984.2);
 
         expValues = new Complex128[]{
@@ -131,7 +131,7 @@ class CooCVectorElemDivTests {
         double b;
         CooCVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         b = 24.5;
 
         expValues = new Complex128[]{

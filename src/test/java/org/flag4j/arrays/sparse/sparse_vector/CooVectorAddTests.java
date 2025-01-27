@@ -30,14 +30,14 @@ class CooVectorAddTests {
         int[] bIndices = {1, 5, 11, 67, 200};
         b = new CooVector(size, bValues, bIndices);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         double[] expValues = {1.34, 44, 51.6-5.66, 22.445, -0.994, -0.00245, 10.5};
         int[] expIndices = {0, 1, 5, 11, 67, 103, 200};
         exp = new CooVector(size, expValues, expIndices);
 
         assertEquals(exp, a.add(b));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new double[]{44, -5.66, 22.445, -0.994, 10.5};
         bIndices = new int[]{1, 5, 11, 67, 200};
         b = new CooVector(size+13, bValues, bIndices);
@@ -61,7 +61,7 @@ class CooVectorAddTests {
         int[] bIndices = {1, 5, 6};
         b = new CooCVector(size, bValues, bIndices);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {new Complex128(1.34), new Complex128(1, -0.024),
                 new Complex128(99.24+51.6, 1.5), new Complex128(0, 1.4), new Complex128(-0.00245)};
         int[] expIndices = {0, 1, 5, 6, 103};
@@ -69,7 +69,7 @@ class CooVectorAddTests {
 
         assertEquals(exp, a.add(b));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new Complex128[]{new Complex128(1, -0.024),
                 new Complex128(99.24, 1.5), new Complex128(0, 1.4)};
         bIndices = new int[]{1, 5, 6};
@@ -92,13 +92,13 @@ class CooVectorAddTests {
         double[] bValues = {1, 5, -0.0024, 1, 2001.256, 61, -99.24, 1.5};
         b = new Vector(bValues);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         double[] expValues = {1+1.34, 5, -0.0024+51.6, 1, 2001.256, 61-0.00245, -99.24, 1.5};
         exp = new Vector(expValues);
 
         assertEquals(exp, RealDenseSparseVectorOps.add(b, a));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new double[]{1, 5, -0.0024, 1, 2001.256, 61};
         b = new Vector(bValues);
 
@@ -120,14 +120,14 @@ class CooVectorAddTests {
         new Complex128(0, -99.145), new Complex128(4.51, 8.456), new Complex128(11.34, -0.00245)};
         b = new CVector(bValues);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {new Complex128(1.445+1.34, -9.24), new Complex128(1.45),
                 new Complex128(51.6, -99.145), new Complex128(4.51, 8.456), new Complex128(11.34, -0.00245)};
         exp = new CVector(expValues);
 
         assertEquals(exp, RealFieldDenseCooVectorOps.add(b, a));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         bValues = new Complex128[]{new Complex128(1.445, -9.24), new Complex128(1.45),
                 new Complex128(0, -99.145), new Complex128(4.51, 8.456),
                 new Complex128(11.34, -0.00245), new Complex128(34.5, 0.0014)};
@@ -150,7 +150,7 @@ class CooVectorAddTests {
 
         b = 2.345;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         double[] expValues = {1.34+2.345, 0, 51.6+2.345, 0, 0, -0.00245+2.345, 0, 0};
         exp = new Vector(expValues);
 
@@ -170,7 +170,7 @@ class CooVectorAddTests {
 
         b = new Complex128(13.455, -1459.4521);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         Complex128[] expValues = {new Complex128(13.455+1.34, -1459.4521), new Complex128(0),
                 new Complex128(13.455+51.6, -1459.4521), new Complex128(13.455-0.00245, -1459.4521),
                 new Complex128(0)};

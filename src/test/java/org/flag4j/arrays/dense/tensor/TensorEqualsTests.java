@@ -47,7 +47,7 @@ class TensorEqualsTests {
         double[] bEntries;
         Tensor B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
@@ -57,7 +57,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         bEntries = new double[]{
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
@@ -67,7 +67,7 @@ class TensorEqualsTests {
 
         assertEquals(A, B);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         bEntries = new double[]{
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
@@ -77,7 +77,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A, B);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         bEntries = new double[]{
                 1.23, 2.556, -121.5, 15.61, 14.15, -99.23425,
                 0.001345, 2.677, 8.14, -0.000194, 1, 234
@@ -96,7 +96,7 @@ class TensorEqualsTests {
         double[] bEntries;
         CooTensor B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
@@ -109,7 +109,7 @@ class TensorEqualsTests {
 
         assertEquals(A.toCoo(), B);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
         bShape = new Shape(2, 3, 2);
         sparseIndices = new int[][]{
@@ -122,7 +122,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A.toCoo(), B);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         bEntries = new double[]{1.23, -99.23425, 2.677, -0.000194};
         bShape = new Shape(21, 31, 2, 10005);
         sparseIndices = new int[][]{
@@ -135,7 +135,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A.toCoo(), B);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         bEntries = new double[]{1.23, -99.25, 2.677, -0.000194};
         bShape = new Shape(21, 3, 24);
         sparseIndices = new int[][]{
@@ -157,7 +157,7 @@ class TensorEqualsTests {
         Complex128[] bEntries;
         CTensor B;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
                 new Complex128(15.61), new Complex128(14.15), new Complex128(-99.23425),
@@ -169,7 +169,7 @@ class TensorEqualsTests {
 
         assertEquals(A.toComplex(), B);
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
                 new Complex128(15.61, 1.4), new Complex128(14.15), new Complex128(-99.23425),
@@ -181,7 +181,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A.toComplex(), B);
 
-        // ----------------------- Sub-case 3 -----------------------
+        // ----------------------- sub-case 3 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
                 new Complex128(15.61), new Complex128(14.15), new Complex128(-99.23425),
@@ -193,7 +193,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A.toComplex(), B);
 
-        // ----------------------- Sub-case 4 -----------------------
+        // ----------------------- sub-case 4 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
                 new Complex128(15.61), new Complex128(14.15), new Complex128(-99.23425),
@@ -214,7 +214,7 @@ class TensorEqualsTests {
         Complex128[] bEntries;
         CooCTensor B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(-99.23425),
                 new Complex128(2.677), new Complex128(-0.000194)};
@@ -229,7 +229,7 @@ class TensorEqualsTests {
 
         assertEquals(A.toCoo().toComplex(), B);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(-99.23425, 1.34235),
                 new Complex128(2.677), new Complex128(-0.000194)};
@@ -244,7 +244,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(-99.23425),
                 new Complex128(2.677), new Complex128(-0.000194)};
@@ -259,7 +259,7 @@ class TensorEqualsTests {
 
         assertNotEquals(A.toCoo().toComplex(), B);
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         bEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(-99.23425),
                 new Complex128(2.677), new Complex128(-0.000194)};
@@ -280,13 +280,13 @@ class TensorEqualsTests {
     void objectTestCase() {
         denseSetup();
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         assertNotEquals(A, new Shape(1, 14));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         assertNotEquals(A, Double.valueOf(2.245));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         assertNotEquals(A, "Hello Flag4j");
     }
 }

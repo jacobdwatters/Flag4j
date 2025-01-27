@@ -16,7 +16,7 @@ class MatrixInversionTests {
 
     @Test
     void invTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[][]{
                 {2, 55, 8},
                 {3, 1, 1},
@@ -33,7 +33,7 @@ class MatrixInversionTests {
         assertEquals(exp, Invert.inv(A));
 
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new double[][]{
                 {1, 2},
                 {-2, -4}
@@ -43,7 +43,7 @@ class MatrixInversionTests {
         assertThrows(RuntimeException.class, ()-> Invert.inv(A));
 
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aEntries = new double[][]{
                 {2, 55, 8},
                 {3, 1, 1}

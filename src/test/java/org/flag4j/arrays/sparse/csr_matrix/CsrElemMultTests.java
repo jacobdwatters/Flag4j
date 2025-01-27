@@ -18,7 +18,7 @@ class CsrElemMultTests {
         int[] aColIndices, bColIndices, expColIndices;
         CsrMatrix a, b, exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(12, 12);
         aData = new double[]{0.02234, 0.43189, 0.87963, 0.79995, 0.72224, 0.74126, 0.44675, 0.44917, 0.69626, 0.81694, 0.32876, 0.02551, 0.75703, 0.58045, 0.64317, 0.23147, 0.52038, 0.37257, 0.88039, 0.48479, 0.02311, 0.72269, 0.80202, 0.0231, 0.12105, 0.47067, 0.2849, 0.3631, 0.70669};
         aRowPointers = new int[]{0, 4, 4, 6, 12, 14, 15, 17, 18, 24, 25, 28, 29};
@@ -39,7 +39,7 @@ class CsrElemMultTests {
 
         assertEquals(exp, a.elemMult(b));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(14, 16);
         aData = new double[]{0.70348, 0.43878, 0.5199, 0.78916, 0.634, 0.24166, 0.14356, 0.99185, 0.90768};
         aRowPointers = new int[]{0, 0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8, 9};
@@ -60,7 +60,7 @@ class CsrElemMultTests {
 
         assertEquals(exp, a.elemMult(b));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(16, 5);
         aData = new double[]{};
         aRowPointers = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -81,7 +81,7 @@ class CsrElemMultTests {
 
         assertEquals(exp, a.elemMult(b));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         aShape = new Shape(16, 5);
         a = new CsrMatrix(aShape);
         bShape = new Shape(16, 4);

@@ -21,7 +21,7 @@ class CooTensorReshapeTests {
 
     @Test
     void reshapeTests() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aShape = new Shape(5, 4, 2, 1);
         aEntries = new double[]{-0.2594625644447393, -0.11800739013805872, -1.8499182919471657};
         aIndices = new int[][]{
@@ -39,7 +39,7 @@ class CooTensorReshapeTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(2, 5, 2, 2));
 
-        // ----------------------------- Sub-case 2 -----------------------------
+        // ----------------------------- sub-case 2 -----------------------------
         aShape = new Shape(5, 4, 2, 3, 15);
         aEntries = new double[]{-1.1499856217218563, -0.33276615768221923, -1.7712698524382784, 0.45988194186997083, -1.0000258840502727, -1.2896045900552038, -1.0495292341142137, 0.5653540034076624, 0.09844833075965526, 1.389726418783007, -0.03253455760212258, 0.8128434562240154, -0.5805363805458708, -0.9687145707590211, 0.005130776492485523, -1.1693463926292427, -0.18736097719279932, -0.588774063376806};
         aIndices = new int[][]{
@@ -87,7 +87,7 @@ class CooTensorReshapeTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(15, 2, 4, 15));
 
-        // ----------------------------- Sub-case 3 -----------------------------
+        // ----------------------------- sub-case 3 -----------------------------
         aShape = new Shape(3, 16);
         aEntries = new double[]{-0.5564583772612858, 1.3880160320768695, -0.041746799108138805, 0.22670438356409295};
         aIndices = new int[][]{
@@ -107,7 +107,7 @@ class CooTensorReshapeTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(2, 4, 3, 2));
 
-        // ----------------------------- Sub-case 4 -----------------------------
+        // ----------------------------- sub-case 4 -----------------------------
         aShape = new Shape(3, 16);
         aEntries = new double[]{-0.5564583772612858, 1.3880160320768695, -0.041746799108138805, 0.22670438356409295};
         aIndices = new int[][]{
@@ -122,7 +122,7 @@ class CooTensorReshapeTests {
 
     @Test
     void flattenTests() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aShape = new Shape(3, 16);
         aEntries = new double[]{-0.4396095255063526, -0.008544443239199374, 1.6354416874939133, -0.7535470743266395};
         aIndices = new int[][]{
@@ -142,7 +142,7 @@ class CooTensorReshapeTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten());
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new double[]{0.8809801303815625, 1.2884192212811383, 0.6540684159095426};
         aIndices = new int[][]{
@@ -160,7 +160,7 @@ class CooTensorReshapeTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten());
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new double[]{-0.2100281314624281, 1.4401356481011265, -0.1396976427551165};
         aIndices = new int[][]{
@@ -178,7 +178,7 @@ class CooTensorReshapeTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten(1));
 
-        // -------------------------- Sub-case 4 --------------------------
+        // -------------------------- sub-case 4 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new double[]{-0.2100281314624281, 1.4401356481011265, -0.1396976427551165};
         aIndices = new int[][]{
@@ -196,7 +196,7 @@ class CooTensorReshapeTests {
         exp = new CooTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten(2));
 
-        // -------------------------- Sub-case 5 --------------------------
+        // -------------------------- sub-case 5 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new double[]{-0.2100281314624281, 1.4401356481011265, -0.1396976427551165};
         aIndices = new int[][]{

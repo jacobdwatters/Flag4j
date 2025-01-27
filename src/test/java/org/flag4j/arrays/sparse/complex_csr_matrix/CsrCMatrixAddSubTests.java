@@ -102,7 +102,7 @@ class CsrCMatrixAddSubTests {
 
     @Test
     void addSubSpTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -121,7 +121,7 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAsubB, RealComplexCsrOps.sub(A, B));
         assertEquals(expBsubA, RealComplexCsrOps.sub(B, A));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         A = new CsrCMatrix(new Shape(2, 3), new Complex128[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()-> RealComplexCsrOps.add(A, B));
@@ -132,7 +132,7 @@ class CsrCMatrixAddSubTests {
 
     @Test
     void addSubDeTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -151,7 +151,7 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAsubBDense, RealComplexCsrDenseOps.sub(A, denseB));
         assertEquals(expBsubADense, RealFieldDenseCsrOps.sub(B, denseA));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         A = new CsrCMatrix(new Shape(2, 3), new Complex128[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->RealComplexCsrDenseOps.add(A, denseB));
@@ -163,7 +163,7 @@ class CsrCMatrixAddSubTests {
 
     @Test
     void addSubSpCmpTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -183,7 +183,7 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAdd, A.add(BCmp));
         assertEquals(expAsubB, A.sub(BCmp));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         A = new CsrCMatrix(new Shape(2, 3), new Complex128[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->A.add(BCmp));
@@ -193,7 +193,7 @@ class CsrCMatrixAddSubTests {
 
     @Test
     void addSubDeCmpTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -212,7 +212,7 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAddDense, DenseCsrFieldOps.add(A, denseBCmp));
         assertEquals(expAsubBDense, DenseCsrFieldOps.sub(A, denseBCmp));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         A = new CsrCMatrix(new Shape(2, 3), new Complex128[0], new int[3], new int[0]);
         B = new CsrMatrix(new Shape(5, 1), new double[0], new int[6], new int[0]);
         assertThrows(LinearAlgebraException.class, ()->DenseCsrFieldOps.add(A, denseBCmp));
@@ -227,7 +227,7 @@ class CsrCMatrixAddSubTests {
         CsrCMatrix expAdd;
         CsrCMatrix expSub;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -264,7 +264,7 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAdd, A.add(b));
         assertEquals(expSub, A.sub(b));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -310,7 +310,7 @@ class CsrCMatrixAddSubTests {
         CsrCMatrix expAdd;
         CsrCMatrix expSub;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -339,7 +339,7 @@ class CsrCMatrixAddSubTests {
         assertEquals(expAdd, A.add(bCmp));
         assertEquals(expSub, A.sub(bCmp));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128("0.6947844604184964+0.12617739377846993i"), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},

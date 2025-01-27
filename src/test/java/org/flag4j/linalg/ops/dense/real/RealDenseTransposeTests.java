@@ -18,7 +18,7 @@ class RealDenseTransposeTests {
 
     @Test
     void standardTestCase() {
-        // ------------- Sub-case 1 ---------------
+        // ------------- sub-case 1 ---------------
         axis1 = 0;
         axis2 = 1;
         shape = new Shape(3, 4);
@@ -28,7 +28,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standard(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standard(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 2 ---------------
+        // ------------- sub-case 2 ---------------
         axis1 = 0;
         axis2 = 1;
         shape = new Shape(3, 2, 4);
@@ -38,7 +38,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standard(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standard(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         axis1 = 0;
         axis2 = 2;
         shape = new Shape(3, 2, 4);
@@ -47,7 +47,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standard(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standard(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 4 ---------------
+        // ------------- sub-case 4 ---------------
         axis1 = 1;
         axis2 = 2;
         shape = new Shape(3, 2, 4);
@@ -56,7 +56,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standard(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standard(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 5 ---------------
+        // ------------- sub-case 5 ---------------
         axis1 = 1;
         axis2 = 1;
         shape = new Shape(3, 2, 4);
@@ -64,7 +64,7 @@ class RealDenseTransposeTests {
         expTranspose = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
         assertArrayEquals(expTranspose, standard(A, shape, axis1, axis2));
 
-        // ------------- Sub-case 6 ---------------
+        // ------------- sub-case 6 ---------------
         axis1 = 0;
         axis2 = 1;
         shape = new Shape(3);
@@ -75,7 +75,7 @@ class RealDenseTransposeTests {
 
     @Test
     void standardConcurrentTestCase() {
-        // ------------- Sub-case 1 ---------------
+        // ------------- sub-case 1 ---------------
         axis1 = 0;
         axis2 = 1;
         shape = new Shape(3, 4);
@@ -85,7 +85,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 2 ---------------
+        // ------------- sub-case 2 ---------------
         axis1 = 0;
         axis2 = 1;
         shape = new Shape(3, 2, 4);
@@ -95,7 +95,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         axis1 = 0;
         axis2 = 2;
         shape = new Shape(3, 2, 4);
@@ -104,7 +104,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 4 ---------------
+        // ------------- sub-case 4 ---------------
         axis1 = 1;
         axis2 = 2;
         shape = new Shape(3, 2, 4);
@@ -113,7 +113,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis1, axis2));
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis2, axis1));
 
-        // ------------- Sub-case 5 ---------------
+        // ------------- sub-case 5 ---------------
         axis1 = 1;
         axis2 = 1;
         shape = new Shape(3, 2, 4);
@@ -121,7 +121,7 @@ class RealDenseTransposeTests {
         expTranspose = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
         assertArrayEquals(expTranspose, standardConcurrent(A, shape, axis1, axis2));
 
-        // ------------- Sub-case 6 ---------------
+        // ------------- sub-case 6 ---------------
         axis1 = 0;
         axis2 = 1;
         shape = new Shape(3);
@@ -132,7 +132,7 @@ class RealDenseTransposeTests {
 
     @Test
     void standardMatrixTestCase() {
-        // ------------- Sub-case 1 ---------------
+        // ------------- sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -141,7 +141,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
 
 
-        // ------------- Sub-case 2 ---------------
+        // ------------- sub-case 2 ---------------
         numRows = 6;
         numCols = 2;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -150,7 +150,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 12;
         numCols = 1;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -158,7 +158,7 @@ class RealDenseTransposeTests {
 
         assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 3;
         numCols = 3;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -167,7 +167,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardMatrix(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 1;
         numCols = 1;
         A = new double[]{1.13};
@@ -179,7 +179,7 @@ class RealDenseTransposeTests {
 
     @Test
     void blockedMatrixTestCase() {
-        // ------------- Sub-case 1 ---------------
+        // ------------- sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -188,7 +188,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
 
 
-        // ------------- Sub-case 2 ---------------
+        // ------------- sub-case 2 ---------------
         numRows = 6;
         numCols = 2;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -197,7 +197,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 12;
         numCols = 1;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -205,7 +205,7 @@ class RealDenseTransposeTests {
 
         assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 3;
         numCols = 3;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -214,7 +214,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, blockedMatrix(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 1;
         numCols = 1;
         A = new double[]{1.13};
@@ -226,7 +226,7 @@ class RealDenseTransposeTests {
 
     @Test
     void standardMatrixConcurrentTestCase() {
-        // ------------- Sub-case 1 ---------------
+        // ------------- sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -235,7 +235,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
 
 
-        // ------------- Sub-case 2 ---------------
+        // ------------- sub-case 2 ---------------
         numRows = 6;
         numCols = 2;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -244,7 +244,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 12;
         numCols = 1;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -252,7 +252,7 @@ class RealDenseTransposeTests {
 
         assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 3;
         numCols = 3;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -261,7 +261,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, standardMatrixConcurrent(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 1;
         numCols = 1;
         A = new double[]{1.13};
@@ -273,7 +273,7 @@ class RealDenseTransposeTests {
 
     @Test
     void blockedMatrixConcurrentTestCase() {
-        // ------------- Sub-case 1 ---------------
+        // ------------- sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -282,7 +282,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
 
 
-        // ------------- Sub-case 2 ---------------
+        // ------------- sub-case 2 ---------------
         numRows = 6;
         numCols = 2;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -291,7 +291,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 12;
         numCols = 1;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -299,7 +299,7 @@ class RealDenseTransposeTests {
 
         assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 3;
         numCols = 3;
         A = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -308,7 +308,7 @@ class RealDenseTransposeTests {
         assertArrayEquals(expTranspose, blockedMatrixConcurrent(A, numRows, numCols));
 
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 1;
         numCols = 1;
         A = new double[]{1.13};

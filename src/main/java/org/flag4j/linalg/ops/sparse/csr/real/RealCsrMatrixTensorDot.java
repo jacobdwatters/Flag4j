@@ -58,13 +58,13 @@ public final class RealCsrMatrixTensorDot {
     public static Matrix tensorDot(CsrMatrix src1, CsrMatrix src2,
                                    int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ValidateParameters.ensureEquals(src1Axes.length, src2Axes.length);
+        ValidateParameters.ensureAllEqual(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative
         ValidateParameters.ensureLessEq(src1.getRank()-1, src1Axes);
-        ValidateParameters.ensureGreaterEq(0, src1Axes);
+        ValidateParameters.ensureAllGreaterEq(0, src1Axes);
         ValidateParameters.ensureLessEq(src2.getRank()-1, src2Axes);
-        ValidateParameters.ensureGreaterEq(0, src2Axes);
+        ValidateParameters.ensureAllGreaterEq(0, src2Axes);
 
         int[] notin;
         int n1;

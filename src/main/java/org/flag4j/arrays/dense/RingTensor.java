@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -197,13 +197,13 @@ public class RingTensor<T extends Ring<T>> extends AbstractDenseRingTensor<RingT
 
     /**
      * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureBroadcastable(Shape, Shape) broadcastable}
+     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureTotalEntriesEqual(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
      * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.
      */
     public RingMatrix<T> toMatrix(Shape matShape) {
-        ValidateParameters.ensureBroadcastable(shape, matShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, matShape);
         ValidateParameters.ensureRank(matShape, 2);
 
         return new RingMatrix<T>(matShape, data.clone());

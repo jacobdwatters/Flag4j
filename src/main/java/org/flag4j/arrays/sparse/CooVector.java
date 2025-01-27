@@ -674,7 +674,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     @Override
     public CooVector reshape(Shape newShape) {
         ValidateParameters.ensureRank(newShape, 1);
-        ValidateParameters.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
         return copy();
     }
 

@@ -18,7 +18,7 @@ class CVectorRepeatTests {
 
     @Test
     void repeatRowTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[]{new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
                 new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)};
         a = new CVector(aEntries);
@@ -38,7 +38,7 @@ class CVectorRepeatTests {
 
         assertEquals(exp, a.repeat(5, 0));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[]{new Complex128(1), new Complex128(0, 1)};
         a = new CVector(aEntries);
         expEntries = new Complex128[][]{
@@ -49,7 +49,7 @@ class CVectorRepeatTests {
 
         assertEquals(exp, a.repeat(2, 0));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         assertThrows(NegativeArraySizeException.class, ()-> a.repeat(-1, 0));
         assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, -2));
         assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, 2));
@@ -58,7 +58,7 @@ class CVectorRepeatTests {
 
     @Test
     void repeatColTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[]{new Complex128(20.24, 1), new Complex128(-0.1451), new Complex128(93.1, 515.3),
                 new Complex128(0, -9.245), new Complex128(234.1), new Complex128(1800.24, -9923001.4)};
         a = new CVector(aEntries);
@@ -78,7 +78,7 @@ class CVectorRepeatTests {
 
         assertEquals(exp, a.repeat(5, 1));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[]{new Complex128(1), new Complex128(0, 1)};
         a = new CVector(aEntries);
         expEntries = new Complex128[][]{

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -298,7 +298,7 @@ public final class RealSparseMatrixOps {
      * @return A dense copy of the {@code src} matrix with the {@code col} vector added to each row of the matrix.
      */
     public static Matrix addToEachCol(CooMatrix src, CooVector col) {
-        ValidateParameters.ensureEquals(src.numRows, col.size);
+        ValidateParameters.ensureAllEqual(src.numRows, col.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.
@@ -328,7 +328,7 @@ public final class RealSparseMatrixOps {
      * @return A dense copy of the {@code src} matrix with the {@code row} vector added to each row of the matrix.
      */
     public static Matrix addToEachRow(CooMatrix src, CooVector row) {
-        ValidateParameters.ensureEquals(src.numCols, row.size);
+        ValidateParameters.ensureAllEqual(src.numCols, row.size);
         double[] destEntries = new double[src.totalEntries().intValueExact()];
 
         // Add values from sparse matrix.

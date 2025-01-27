@@ -24,7 +24,7 @@ class RealCholeskyTests {
     void choleskyTestCase() {
         RealCholesky cholesky = new RealCholesky();
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[][]{
                 {2.0, -1.0, 0.0},
                 {-1.0, 2.0, -1.0},

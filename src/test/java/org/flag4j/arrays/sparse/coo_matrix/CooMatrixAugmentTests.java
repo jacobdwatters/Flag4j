@@ -29,7 +29,7 @@ class CooMatrixAugmentTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.93474, 0.28545, 0.33318};
         aRowIndices = new int[]{1, 2, 2};
@@ -50,7 +50,7 @@ class CooMatrixAugmentTests {
 
         assertEquals(exp, a.augment(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(2, 1);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -71,7 +71,7 @@ class CooMatrixAugmentTests {
 
         assertEquals(exp, a.augment(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(2, 4);
         aEntries = new double[]{0.74244, 0.32181};
         aRowIndices = new int[]{0, 0};

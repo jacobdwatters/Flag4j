@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CooCTensorGetSetTests {
+class CooCTensorGetSetTests {
     static CooCTensor A;
     static Shape aShape;
     static Complex128[] aEntries;
@@ -29,7 +29,7 @@ public class CooCTensorGetSetTests {
         aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         A = new CooCTensor(aShape, aEntries, aIndices);
 
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new Complex128[]{
                 new Complex128(1, 2), new Complex128(2.41, -23.23),
@@ -39,7 +39,7 @@ public class CooCTensorGetSetTests {
 
         assertEquals(exp, A.set(new Complex128(2.41, -23.23), 1, 2, 0, 0));
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new Complex128[]{
                 new Complex128(1, 2), new Complex128(0.2324, -239.1), new Complex128(0, -9.2),
@@ -49,7 +49,7 @@ public class CooCTensorGetSetTests {
 
         assertEquals(exp, A.set(new Complex128(0, -9.2), 1, 2, 4, 0));
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new Complex128[]{
                 new Complex128(0.001), new Complex128(1, 2), new Complex128(0.2324, -239.1),
@@ -59,7 +59,7 @@ public class CooCTensorGetSetTests {
 
         assertEquals(exp, A.set(0.001, 0, 0, 0, 0));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         assertThrows(IndexOutOfBoundsException.class, () -> A.set(5, -1, 0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.set(5, 0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.set(5, 0, 0, 0, 0, 0));
@@ -76,22 +76,22 @@ public class CooCTensorGetSetTests {
         aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         A = new CooCTensor(aShape, aEntries, aIndices);
 
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         assertEquals(new Complex128(0.2324, -239.1), A.get(1, 2, 0, 0));
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         assertEquals(Complex128.ZERO, A.get(1, 2, 4, 0));
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         assertEquals(Complex128.ZERO, A.get(0, 0, 0, 0));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         assertEquals(new Complex128(1, 2), A.get(0, 1, 0, 0));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         assertEquals(new Complex128(5.1), A.get(2, 3, 2, 0));
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         assertThrows(IndexOutOfBoundsException.class, () -> A.get(-1, 0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.get(0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.get(0, 0, 0, 0, 0));

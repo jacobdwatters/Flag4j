@@ -28,7 +28,7 @@ class VectorOuterProductTests {
         double[][] expEntries;
         Matrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.0, 5.6, -9.355};
         a = new Vector(aEntries);
         bEntries = new double[]{16.345, -9.234, 0.000154};
@@ -50,7 +50,7 @@ class VectorOuterProductTests {
         double[][] expEntries;
         Matrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.0, 5.6, -9.355};
         a = new Vector(aEntries);
         bEntries = new double[]{16.345};
@@ -74,7 +74,7 @@ class VectorOuterProductTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.0, 5.6, -9.355};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128("0.0+45.0i"), new Complex128("-9.345+2.111105i"), new Complex128("71.5-8.0i")};
@@ -99,7 +99,7 @@ class VectorOuterProductTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[]{1.0, 5.6, -9.355};
         a = new Vector(aEntries);
         bEntries = new Complex128[]{new Complex128("71.5-8.0i")};

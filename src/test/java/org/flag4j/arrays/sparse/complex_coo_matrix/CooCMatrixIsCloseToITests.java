@@ -18,7 +18,7 @@ class CooCMatrixIsCloseToITests {
         Complex128[] aData;
         CooCMatrix a;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aShape = new Shape(50, 12);
         aRowIndices = new int[]{0, 5, 14, 23, 49};
         aColIndices = new int[]{1, 3, 3,  1,  2};
@@ -28,7 +28,7 @@ class CooCMatrixIsCloseToITests {
 
         assertFalse(a.isCloseToI());
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aShape = new Shape(20, 20);
         aRowIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
         aColIndices = new int[]{0, 1, 2, 3, 4, 5, 12, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
@@ -39,7 +39,7 @@ class CooCMatrixIsCloseToITests {
 
         assertFalse(a.isCloseToI());
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aShape = new Shape(20, 20);
         aRowIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
         aColIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
@@ -51,7 +51,7 @@ class CooCMatrixIsCloseToITests {
 
         assertFalse(a.isCloseToI());
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aShape = new Shape(20, 20);
         aRowIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
         aColIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
@@ -62,7 +62,7 @@ class CooCMatrixIsCloseToITests {
 
         assertTrue(a.isCloseToI());
 
-        // ---------------------- Sub-case 5 ----------------------
+        // ---------------------- sub-case 5 ----------------------
         aShape = new Shape(20, 20);
         aRowIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
         aColIndices = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
@@ -75,7 +75,7 @@ class CooCMatrixIsCloseToITests {
 
         assertTrue(a.isCloseToI());
 
-        // ---------------------- Sub-case 6 ----------------------
+        // ---------------------- sub-case 6 ----------------------
         aShape = new Shape(20, 20);
         aRowIndices = new int[]{0, 1, 2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
         aColIndices = new int[]{0, 1, 2, 0, 3, 4, 5, 6, 7, 8, 9, 10, 13, 11, 12, 13, 14, 15, 16, 17, 18, 19};

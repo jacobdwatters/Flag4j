@@ -18,7 +18,7 @@ class CooTensorConstructorTests {
 
     @Test
     void shapeTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expNonZero = new double[0];
         expIndices = new int[0][0];
@@ -29,7 +29,7 @@ class CooTensorConstructorTests {
         assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         expShape = new Shape(100, 2);
         expNonZero = new double[0];
         expIndices = new int[0][0];
@@ -44,7 +44,7 @@ class CooTensorConstructorTests {
 
     @Test
     void shapeEntriesIndicesTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expNonZero = new double[]{1, 223.1333, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
@@ -55,7 +55,7 @@ class CooTensorConstructorTests {
         assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         expShape = new Shape(100, 2);
         expNonZero = new double[]{1, 223.1333};
         expIndices = new int[][]{{98, 0}, {99, 1}};
@@ -67,21 +67,21 @@ class CooTensorConstructorTests {
         assertArrayEquals(expIndices, A.indices);
 
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         expShape = new Shape(2, 2);
         expNonZero = new double[]{1, 223.1333, 50, 133, 1335.34};
         expIndices = new int[][]{{95, 1}, {96, 0}, {97, 1}, {98, 0}, {99, 1}};
 
         assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZero, expIndices));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZero = new double[]{1, 223.1333, 50, 133};
         expIndices = new int[][]{{98, 0}, {99, 1}};
 
         assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZero, expIndices));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZero = new double[]{1, 223.1333};
         expIndices = new int[][]{{98, 0, 1}, {99, 1, 8}};
@@ -92,7 +92,7 @@ class CooTensorConstructorTests {
 
     @Test
     void shapeEntriesIntIndicesTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expNonZeroI = new int[]{1, 223, -19, 2};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
@@ -104,7 +104,7 @@ class CooTensorConstructorTests {
         assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         expShape = new Shape(100, 2);
         expNonZeroI = new int[]{1, 223};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
@@ -116,21 +116,21 @@ class CooTensorConstructorTests {
         assertArrayEquals(expNonZero, A.data);
         assertArrayEquals(expIndices, A.indices);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         expShape = new Shape(2, 2);
         expNonZeroI = new int[]{1, 223, 50, 133, 1335};
         expIndices = new int[][]{{95, 1}, {96, 0}, {97, 1}, {98, 0}, {99, 1}};
 
         assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZeroI, expIndices));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZeroI = new int[]{1, 223, 50, 133};
         expIndices = new int[][]{{98, 0}, {99, 1}};
 
         assertThrows(IllegalArgumentException.class, () -> new CooTensor(expShape, expNonZeroI, expIndices));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         expShape = new Shape(2, 2);
         expNonZeroI = new int[]{1, 223};
         expIndices = new int[][]{{98, 0, 1}, {99, 1, 8}};

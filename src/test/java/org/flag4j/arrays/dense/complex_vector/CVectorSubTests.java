@@ -38,7 +38,7 @@ class CVectorSubTests {
     void scalDoubleTestCase() {
         double b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         b = 45.15;
         expEntries = new Complex128[]{
                 new Complex128(2.566-b, -9.24), new Complex128(-24.565-b, 9.3),
@@ -47,7 +47,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         b = -2384.526;
         expEntries = new Complex128[]{
                 new Complex128(2.566-b, -9.24), new Complex128(-24.565-b, 9.3),
@@ -56,7 +56,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         b = Double.POSITIVE_INFINITY;
         expEntries = new Complex128[]{
                 new Complex128(2.566-b, -9.24), new Complex128(-24.565-b, 9.3),
@@ -65,7 +65,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         b = Double.NaN;
         expEntries = new Complex128[]{
                 new Complex128(2.566-b, -9.24), new Complex128(-24.565-b, 9.3),
@@ -85,7 +85,7 @@ class CVectorSubTests {
     void scalComplex128TestCase() {
         Complex128 b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         b = new Complex128(9.145, -523923.15965);
         expEntries = new Complex128[]{
                 new Complex128(2.566, -9.24).sub(b), new Complex128(-24.565, 9.3).sub(b),
@@ -94,7 +94,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         b = new Complex128(0, -14.36);
         expEntries = new Complex128[]{
                 new Complex128(2.566, -9.24).sub(b), new Complex128(-24.565, 9.3).sub(b),
@@ -103,7 +103,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         b = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         expEntries = new Complex128[]{
                 new Complex128(2.566, -9.24).sub(b), new Complex128(-24.565, 9.3).sub(b),
@@ -112,7 +112,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         b = new Complex128(6.24, Double.POSITIVE_INFINITY);
         expEntries = new Complex128[]{
                 new Complex128(2.566, -9.24).sub(b), new Complex128(-24.565, 9.3).sub(b),
@@ -121,7 +121,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 5 ------------------
+        // ------------------ sub-case 5 ------------------
         b = new Complex128(Double.NEGATIVE_INFINITY, 135.5);
         expEntries = new Complex128[]{
                 new Complex128(2.566, -9.24).sub(b), new Complex128(-24.565, 9.3).sub(b),
@@ -130,7 +130,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 6 ------------------
+        // ------------------ sub-case 6 ------------------
         b = new Complex128(Double.NaN, Double.NaN);
         expEntries = new Complex128[]{
                 new Complex128(2.566, -9.24).sub(b), new Complex128(-24.565, 9.3).sub(b),
@@ -151,7 +151,7 @@ class CVectorSubTests {
         double[] bEntries;
         Vector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         bEntries = new double[]{54.1354, -99.2344, 0, 0.023};
         b = new Vector(bEntries);
         expEntries  = new Complex128[]{
@@ -161,7 +161,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         bEntries = new double[]{-54.1354, -99.2344, 0, Double.NEGATIVE_INFINITY};
         b = new Vector(bEntries);
         expEntries  = new Complex128[]{
@@ -171,14 +171,14 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         bEntries = new double[]{-54.1354, -99.2344, 0, 14, 1.5};
         b = new Vector(bEntries);
 
         Vector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         bEntries = new double[]{-54.1354, -99.2344};
         b = new Vector(bEntries);
 
@@ -192,7 +192,7 @@ class CVectorSubTests {
         double[] bEntries;
         CooVector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         bEntries = new double[]{54.1354, -1.4};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
@@ -204,7 +204,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         bEntries = new double[]{-1.4};
         sparseSize = 4;
         sparseIndices = new int[]{3};
@@ -217,7 +217,7 @@ class CVectorSubTests {
         CVector act = a.sub(b);
         assertEquals(exp, act);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         bEntries = new double[]{-1.4};
         sparseSize = 4234;
         sparseIndices = new int[]{3};
@@ -226,7 +226,7 @@ class CVectorSubTests {
         CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         bEntries = new double[]{-1.4};
         sparseSize = 3;
         sparseIndices = new int[]{3};
@@ -242,7 +242,7 @@ class CVectorSubTests {
         Complex128[] bEntries;
         CVector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         bEntries = new Complex128[]{new Complex128(2.45, -99.24), new Complex128(9),
                 new Complex128(0, -8.35), new Complex128(-9924.5, 24.656)};
         b = new CVector(bEntries);
@@ -253,7 +253,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         bEntries = new Complex128[]{new Complex128(2455, 0.0001424), new Complex128(-9),
                 new Complex128(-0.0, Double.NEGATIVE_INFINITY), new Complex128(Double.POSITIVE_INFINITY, 24.656)};
         b = new CVector(bEntries);
@@ -264,7 +264,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         bEntries = new Complex128[]{new Complex128(2.45, -99.24), new Complex128(9),
                 new Complex128(0, -8.35), new Complex128(-9924.5, 24.656),
                 new Complex128(9.345, 1344)};
@@ -273,7 +273,7 @@ class CVectorSubTests {
         CVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         bEntries = new Complex128[]{new Complex128(2.45, -99.24), new Complex128(9),
                 new Complex128(0, -8.35)};
         b = new CVector(bEntries);
@@ -288,7 +288,7 @@ class CVectorSubTests {
         Complex128[] bEntries;
         CooCVector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         bEntries = new Complex128[]{new Complex128(-9.24, 8.14), new Complex128(0, 22455.6126)};
         sparseSize = 4;
         sparseIndices = new int[]{0, 2};
@@ -300,7 +300,7 @@ class CVectorSubTests {
 
         assertEquals(exp, a.sub(b));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         bEntries = new Complex128[]{new Complex128(4.5, 0.00245)};
         sparseSize = 4;
         sparseIndices = new int[]{3};
@@ -314,7 +314,7 @@ class CVectorSubTests {
 
         assertEquals(exp, act);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         bEntries = new Complex128[]{new Complex128(9.3455, 15.6)};
         sparseSize = 4234;
         sparseIndices = new int[]{3};
@@ -323,7 +323,7 @@ class CVectorSubTests {
         CooCVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.sub(finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         bEntries = new Complex128[]{new Complex128(9.3455, 15.6)};
         sparseSize = 3;
         sparseIndices = new int[]{2};
@@ -339,7 +339,7 @@ class CVectorSubTests {
     void scalDoubleEqTestCase() {
         double b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         setup();
         b = 45.15;
         expEntries = new Complex128[]{
@@ -350,7 +350,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         setup();
         b = -2384.526;
         expEntries = new Complex128[]{
@@ -361,7 +361,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         setup();
         b = Double.POSITIVE_INFINITY;
         expEntries = new Complex128[]{
@@ -372,7 +372,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         setup();
         b = Double.NaN;
         expEntries = new Complex128[]{
@@ -393,7 +393,7 @@ class CVectorSubTests {
     void scalComplex128EqTestCase() {
         Complex128 b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         setup();
         b = new Complex128(9.145, -523923.15965);
         expEntries = new Complex128[]{
@@ -404,7 +404,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         setup();
         b = new Complex128(0, -14.36);
         expEntries = new Complex128[]{
@@ -415,7 +415,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         setup();
         b = new Complex128(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         expEntries = new Complex128[]{
@@ -426,7 +426,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         setup();
         b = new Complex128(6.24, Double.POSITIVE_INFINITY);
         expEntries = new Complex128[]{
@@ -437,7 +437,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 5 ------------------
+        // ------------------ sub-case 5 ------------------
         setup();
         b = new Complex128(Double.NEGATIVE_INFINITY, 135.5);
         expEntries = new Complex128[]{
@@ -448,7 +448,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 6 ------------------
+        // ------------------ sub-case 6 ------------------
         setup();
         b = new Complex128(Double.NaN, Double.NaN);
         expEntries = new Complex128[]{
@@ -470,7 +470,7 @@ class CVectorSubTests {
         double[] bEntries;
         Vector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         setup();
         bEntries = new double[]{54.1354, -99.2344, 0, 0.023};
         b = new Vector(bEntries);
@@ -482,7 +482,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         setup();
         bEntries = new double[]{-54.1354, -99.2344, 0, Double.NEGATIVE_INFINITY};
         b = new Vector(bEntries);
@@ -494,7 +494,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         setup();
         bEntries = new double[]{-54.1354, -99.2344, 0, 14, 1.5};
         b = new Vector(bEntries);
@@ -502,7 +502,7 @@ class CVectorSubTests {
         Vector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         setup();
         bEntries = new double[]{-54.1354, -99.2344};
         b = new Vector(bEntries);
@@ -517,7 +517,7 @@ class CVectorSubTests {
         double[] bEntries;
         CooVector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         setup();
         bEntries = new double[]{54.1354, -1.4};
         sparseSize = 4;
@@ -531,7 +531,7 @@ class CVectorSubTests {
         RealFieldDenseCooVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         setup();
         bEntries = new double[]{-1.4};
         sparseSize = 4;
@@ -545,7 +545,7 @@ class CVectorSubTests {
         RealFieldDenseCooVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         setup();
         bEntries = new double[]{-1.4};
         sparseSize = 4234;
@@ -555,7 +555,7 @@ class CVectorSubTests {
         final CooVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()-> RealFieldDenseCooVectorOps.subEq(a, finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         setup();
         bEntries = new double[]{-1.4};
         sparseSize = 3;
@@ -572,7 +572,7 @@ class CVectorSubTests {
         Complex128[] bEntries;
         CVector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(2.45, -99.24), new Complex128(9),
                 new Complex128(0, -8.35), new Complex128(-9924.5, 24.656)};
@@ -585,7 +585,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(2455, 0.0001424), new Complex128(-9),
                 new Complex128(-0.0, Double.NEGATIVE_INFINITY), new Complex128(Double.POSITIVE_INFINITY, 24.656)};
@@ -598,7 +598,7 @@ class CVectorSubTests {
         a.subEq(b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(2.45, -99.24), new Complex128(9),
                 new Complex128(0, -8.35), new Complex128(-9924.5, 24.656),
@@ -608,7 +608,7 @@ class CVectorSubTests {
         CVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()->a.subEq(finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(2.45, -99.24), new Complex128(9),
                 new Complex128(0, -8.35)};
@@ -624,7 +624,7 @@ class CVectorSubTests {
         Complex128[] bEntries;
         CooCVector b;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(-9.24, 8.14), new Complex128(0, 22455.6126)};
         sparseSize = 4;
@@ -638,7 +638,7 @@ class CVectorSubTests {
         DenseCooFieldVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(4.5, 0.00245)};
         sparseSize = 4;
@@ -652,7 +652,7 @@ class CVectorSubTests {
         DenseCooFieldVectorOps.subEq(a, b);
         assertEquals(exp, a);
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(9.3455, 15.6)};
         sparseSize = 4234;
@@ -662,7 +662,7 @@ class CVectorSubTests {
         final CooCVector finalB = b;
         assertThrows(LinearAlgebraException.class, ()-> DenseCooFieldVectorOps.subEq(a, finalB));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         setup();
         bEntries = new Complex128[]{new Complex128(9.3455, 15.6)};
         sparseSize = 3;

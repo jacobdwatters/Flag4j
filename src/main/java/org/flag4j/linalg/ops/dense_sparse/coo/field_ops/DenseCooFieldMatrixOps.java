@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -159,7 +159,7 @@ public final class DenseCooFieldMatrixOps {
             Shape shape2, T[] data2, int[] rowIndices2, int[] colIndices2,
             T[] dest) {
         ValidateParameters.ensureEqualShape(shape1, shape2);
-        ValidateParameters.ensureArrayHasLength(dest.length, data2.length, "dest");
+        ValidateParameters.ensureArrayLengthsEq(dest.length, data2.length);
 
         int src1NumCols = shape1.get(1);
 

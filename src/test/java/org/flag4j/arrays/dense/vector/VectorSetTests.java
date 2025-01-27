@@ -12,7 +12,7 @@ class VectorSetTests {
 
     @Test
     void setTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         entries = new double[]{1.34, -99.345, 1345.255, 1.5};
         a = new Vector(entries);
         expEntries = new double[]{-0.0009843, -99.345, -14.5, 1.5};

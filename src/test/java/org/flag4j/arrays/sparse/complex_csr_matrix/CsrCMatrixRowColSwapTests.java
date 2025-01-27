@@ -17,7 +17,7 @@ class CsrCMatrixRowColSwapTests {
 
     @Test
     void rowSwapTests() {
-        // ---------------------- Sub-case new Complex128(1) ----------------------
+        // ---------------------- sub-case new Complex128(1) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(30, 7.2), new Complex128(0), new Complex128(40), new Complex128(0), new Complex128(0)},
@@ -35,7 +35,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(1, 2));
 
-        // ---------------------- Sub-case new Complex128(2) ----------------------
+        // ---------------------- sub-case new Complex128(2) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(30, 7.2), new Complex128(0), new Complex128(40), new Complex128(0), new Complex128(0)},
@@ -51,7 +51,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(2, 1));
 
-        // ---------------------- Sub-case new Complex128(3) ----------------------
+        // ---------------------- sub-case new Complex128(3) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(30, 7.2), new Complex128(0), new Complex128(40), new Complex128(0), new Complex128(0)},
@@ -67,7 +67,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(2, 0));
 
-        // ---------------------- Sub-case new Complex128(4) ----------------------
+        // ---------------------- sub-case new Complex128(4) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(30, 7.2), new Complex128(0), new Complex128(40), new Complex128(0), new Complex128(0)},
@@ -83,7 +83,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(0, 3));
 
-        // ---------------------- Sub-case new Complex128(5) ----------------------
+        // ---------------------- sub-case new Complex128(5) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(30, 7.2), new Complex128(0), new Complex128(40), new Complex128(0), new Complex128(0)},
@@ -99,7 +99,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapRows(3, 2));
 
-        // ---------------------- Sub-case new Complex128(6) ----------------------
+        // ---------------------- sub-case new Complex128(6) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(30, 7.2), new Complex128(0), new Complex128(40), new Complex128(0), new Complex128(0)},
@@ -115,7 +115,7 @@ class CsrCMatrixRowColSwapTests {
 
     @Test
     void colSwapTests() {
-        // ---------------------- Sub-case new Complex128(1) ----------------------
+        // ---------------------- sub-case new Complex128(1) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0)},
                 {new Complex128(0),  new Complex128(30, 7.2), new Complex128(0),  new Complex128(40), new Complex128(0),  new Complex128(0)},
@@ -131,7 +131,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(0, 3));
 
-        // ---------------------- Sub-case new Complex128(2) ----------------------
+        // ---------------------- sub-case new Complex128(2) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0)},
                 {new Complex128(0),  new Complex128(30, 7.2), new Complex128(0),  new Complex128(40), new Complex128(0),  new Complex128(0)},
@@ -147,7 +147,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(3, 0));
 
-        // ---------------------- Sub-case new Complex128(3) ----------------------
+        // ---------------------- sub-case new Complex128(3) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0)},
                 {new Complex128(0),  new Complex128(30, 7.2), new Complex128(0),  new Complex128(40), new Complex128(0),  new Complex128(0)},
@@ -163,7 +163,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(1, 3));
 
-        // ---------------------- Sub-case new Complex128(4) ----------------------
+        // ---------------------- sub-case new Complex128(4) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0) },
                 {new Complex128(0),  new Complex128(30, 7.2), new Complex128(0),  new Complex128(40), new Complex128(0),  new Complex128(0) },
@@ -179,7 +179,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(0, 5));
 
-        // ---------------------- Sub-case new Complex128(5) ----------------------
+        // ---------------------- sub-case new Complex128(5) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0) },
                 {new Complex128(0),  new Complex128(30, 7.2), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0) },
@@ -195,7 +195,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(1, 3));
 
-        // ---------------------- Sub-case new Complex128(6) ----------------------
+        // ---------------------- sub-case new Complex128(6) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0) },
                 {new Complex128(0),  new Complex128(30, 7.2), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0) },
@@ -211,7 +211,7 @@ class CsrCMatrixRowColSwapTests {
 
         assertEquals(exp, A.swapCols(3, 5));
 
-        // ---------------------- Sub-case new Complex128(7) ----------------------
+        // ---------------------- sub-case new Complex128(7) ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(10, -9.1), new Complex128(20, 1.5), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0) },
                 {new Complex128(0),  new Complex128(30, 7.2), new Complex128(0),  new Complex128(0),  new Complex128(0),  new Complex128(0) },

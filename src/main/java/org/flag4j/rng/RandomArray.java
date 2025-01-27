@@ -117,7 +117,7 @@ public final class RandomArray {
      * @throws IllegalArgumentException If {@code start} is not in {@code [0, end)}
      */
     public int[] randomUniqueIndices(int numIndices, int start, int end) {
-        ValidateParameters.ensureIndicesInBounds(end, start);
+        ValidateParameters.validateArrayIndices(end, start);
 
         int[] indices = ArrayBuilder.intRange(start, end);
         shuffle(indices); // Shuffle indices.

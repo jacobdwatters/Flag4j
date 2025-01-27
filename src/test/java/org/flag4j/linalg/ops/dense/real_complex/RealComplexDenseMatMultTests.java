@@ -20,7 +20,7 @@ class RealComplexDenseMatMultTests {
         Complex128[][] bEntries;
         CMatrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -69,7 +69,7 @@ class RealComplexDenseMatMultTests {
         concurrentBlockedReordered(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342}};
         A = new Matrix(aEntries);
@@ -122,7 +122,7 @@ class RealComplexDenseMatMultTests {
         Complex128[] act;
         CMatrix B;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123},
                 {-932.45, 551.35, -0.92342},
                 {123.445, 0.00013, 0.0},
@@ -154,7 +154,7 @@ class RealComplexDenseMatMultTests {
         concurrentBlockedVector(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(expC.data, act);
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{{1.1234},
                 {-932.45}};
         A = new Matrix(aEntries);

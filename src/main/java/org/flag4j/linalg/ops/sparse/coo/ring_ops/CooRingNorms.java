@@ -77,7 +77,7 @@ public final class CooRingNorms {
      * @return The L<sub>p, q</sub> of the {@code src} matrix.
      */
     public static <T extends Ring<T>> double matrixNormLpq(AbstractCooRingMatrix<?, ?, ?, T> src, double p, double q) {
-        ValidateParameters.ensureGreaterEq(1, p, q);
+        ValidateParameters.ensureAllGreaterEq(1, p, q);
 
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];

@@ -24,7 +24,7 @@ class CooMatrixElemMultTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.866448287823294, 0.30737293330910287, 0.06271913235416882, 0.9462772376882058, 0.5531203613914151};
         aRowIndices = new int[]{0, 1, 2, 3, 3};
@@ -45,7 +45,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.28882178224257016, 0.49765654175915963, 0.280286313350515};
         aRowIndices = new int[]{1, 2, 2};
@@ -66,7 +66,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.5126288650472578, 0.5012195332635256, 0.678674045250447};
         aRowIndices = new int[]{0, 0, 1};
@@ -91,7 +91,7 @@ class CooMatrixElemMultTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.4774939644223758, 0.7246896629788531, 0.3839537072633754, 0.651469248100361, 0.9812531920891868};
         aRowIndices = new int[]{0, 1, 2, 2, 4};
@@ -112,7 +112,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.14966329052090532, 0.07461663082197267, 0.9978836866960403};
         aRowIndices = new int[]{0, 1, 1};
@@ -133,7 +133,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.1322731985701755, 0.9085559526923129, 0.5431039394927907};
         aRowIndices = new int[]{0, 0, 1};
@@ -158,7 +158,7 @@ class CooMatrixElemMultTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.9266615654453623, 0.9955743042782697, 0.35786926201846503, 0.5855592205067941, 0.7318504682591063};
         aRowIndices = new int[]{1, 2, 3, 4, 4};
@@ -181,7 +181,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.18977752443207252, 0.8975104457922927, 0.6221398237590096};
         aRowIndices = new int[]{0, 1, 2};
@@ -202,7 +202,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.4687563393386337, 0.7171208360117912, 0.29932279969931574};
         aRowIndices = new int[]{0, 1, 1};
@@ -229,7 +229,7 @@ class CooMatrixElemMultTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.8675343800623778, 0.9418895620171525, 0.4483662521734234, 0.955802004625131, 0.35124297521347314};
         aRowIndices = new int[]{0, 0, 2, 3, 4};
@@ -252,7 +252,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.8256031726855145, 0.7269797668376734, 0.29324283281791996};
         aRowIndices = new int[]{0, 1, 2};
@@ -273,7 +273,7 @@ class CooMatrixElemMultTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.7994673821482825, 0.3451259014862351, 0.7124467804540862};
         aRowIndices = new int[]{0, 1, 2};

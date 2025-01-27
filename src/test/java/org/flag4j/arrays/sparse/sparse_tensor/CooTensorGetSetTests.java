@@ -28,7 +28,7 @@ class CooTensorGetSetTests {
         aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
         A = new CooTensor(aShape, aEntries, aIndices);
 
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{1, -451.2, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
@@ -36,7 +36,7 @@ class CooTensorGetSetTests {
 
         assertEquals(exp, A.set(-451.2, 1, 2, 0, 0));
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{1, 223.1333, 32.1, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {1, 2, 4, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
@@ -44,7 +44,7 @@ class CooTensorGetSetTests {
 
         assertEquals(exp, A.set(32.1, 1, 2, 4, 0));
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{0.001, 1, 223.1333, -0.991233, 100.1234};
         expIndices = new int[][]{{0, 0, 0, 0}, {0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
@@ -52,7 +52,7 @@ class CooTensorGetSetTests {
 
         assertEquals(exp, A.set(0.001, 0, 0, 0, 0));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         assertThrows(IndexOutOfBoundsException.class, () -> A.set(5d, -1, 0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.set(5d, 0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.set(5d, 0, 0, 0, 0, 0));
@@ -67,22 +67,22 @@ class CooTensorGetSetTests {
         aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
         A = new CooTensor(aShape, aEntries, aIndices);
 
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         assertEquals(223.1333, A.get(1, 2, 0, 0));
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         assertEquals(0, A.get(1, 2, 4, 0));
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         assertEquals(0, A.get(0, 0, 0, 0));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         assertEquals(1, A.get(0, 1, 0, 0));
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         assertEquals(-0.991233, A.get(2, 3, 2, 0));
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         assertThrows(IndexOutOfBoundsException.class, () -> A.get(-1, 0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.get(0, 0, 0));
         assertThrows(IndexOutOfBoundsException.class, () -> A.get(0, 0, 0, 0, 0));

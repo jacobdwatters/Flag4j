@@ -16,7 +16,7 @@ class RealSpareMatrixAddTests {
 
     @Test
     void addTestCase() {
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(2025, 10005);
         aEntries = new double[]{1.144, -99.25, 1.566, 0.00356, 100.36, 9954.256, 345.2};
         aIndices = new int[][]{

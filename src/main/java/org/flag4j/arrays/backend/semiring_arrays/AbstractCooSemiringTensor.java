@@ -35,6 +35,7 @@ import org.flag4j.linalg.ops.sparse.coo.*;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringTensorOps;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
@@ -109,7 +110,12 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     protected AbstractCooSemiringTensor(Shape shape, V[] data, int[][] indices) {
         super(shape, data);
-        if(indices.length != 0) ValidateParameters.ensureLengthEqualsRank(shape, indices[0].length);
+        if(indices.length != 0 && shape.getRank() != indices[0].length) {
+            throw new LinearAlgebraException(
+                    "Invalid indices array: expecting array shape [nnz]["
+                            + shape.getRank() + "] but got [nnz][" + indices[0].length + "].");
+        }
+
         ValidateParameters.ensureArrayLengthsEq(data.length, indices.length);
         ValidateParameters.validateTensorIndices(shape, indices);
         this.indices = indices;

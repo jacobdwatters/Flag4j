@@ -33,7 +33,7 @@ class TensorTransposeTests {
 
     @Test
     void transposeTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         expEntries = new double[]{
                 1.4415, -85.1, 1.5, -0.00024, 0.014, 6.1,
                 235.61, 1.345, 51.0, 1.0, -140.0, -0.00014};
@@ -42,7 +42,7 @@ class TensorTransposeTests {
 
         assertEquals(exp, A.T());
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aAxes = new int[]{0, 2, 3, 1};
         expEntries = new double[]{
                 1.4415, -0.00024, 235.61, 1.0, -85.1, 0.014,
@@ -53,7 +53,7 @@ class TensorTransposeTests {
 
         assertEquals(exp, A.T(aAxes));
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aAxes = new int[]{3, 2, 1, 0};
         expEntries = new double[]{
                 1.4415, -85.1, 1.5, -0.00024, 0.014, 6.1,
@@ -64,7 +64,7 @@ class TensorTransposeTests {
 
         assertEquals(exp, A.T(aAxes));
 
-        // -------------------- Sub-case 4 --------------------
+        // -------------------- sub-case 4 --------------------
         expEntries = new double[]{
                 1.4415, -0.00024, 235.61, 1.0, -85.1,
                 0.014, 1.345, -140.0, 1.5, 6.1, 51.0, -0.00014
@@ -74,22 +74,22 @@ class TensorTransposeTests {
 
         assertEquals(exp, A.T(3, 1));
 
-        // -------------------- Sub-case 5 --------------------
+        // -------------------- sub-case 5 --------------------
         aAxes = new int[]{3, 2, 1, 2};
         assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
-        // -------------------- Sub-case 6 --------------------
+        // -------------------- sub-case 6 --------------------
         aAxes = new int[]{3, 2, 1};
         assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
-        // -------------------- Sub-case 7 --------------------
+        // -------------------- sub-case 7 --------------------
         aAxes = new int[]{0, 1, 3, 2, 4};
         assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
-        // -------------------- Sub-case 8 --------------------
+        // -------------------- sub-case 8 --------------------
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.T(-1, 0));
 
-        // -------------------- Sub-case 9 --------------------
+        // -------------------- sub-case 9 --------------------
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.T(1, 6));
     }
 }

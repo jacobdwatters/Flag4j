@@ -22,7 +22,7 @@ class CsrMatrixToStringTests {
 
     @Test
     void toStringTests() {
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         aShape = new Shape(150, 2256);
         nnz = new double[]{1, 14.235, 239034, -882334.348, 15.235, 1.5342};
         rowIndices = new int[]{0, 0, 1, 121, 141, 149};
@@ -37,7 +37,7 @@ class CsrMatrixToStringTests {
 
         assertEquals(exp, A.toString());
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         aShape = new Shape(12, 12);
         nnz = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
         rowIndices = new int[]{0, 0, 0, 0, 1, 1, 1,  2, 2, 2, 2, 2, 2,  2,  3, 5, 5, 5,  8, 8, 8, 8, 9, 9, 9};

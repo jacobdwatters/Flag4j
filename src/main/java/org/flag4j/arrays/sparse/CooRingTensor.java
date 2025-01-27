@@ -228,7 +228,7 @@ public class CooRingTensor<T extends Ring<T>> extends AbstractCooRingTensor<CooR
 
     /**
      * Converts this tensor to a matrix with the specified shape.
-     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureBroadcastable(Shape, Shape) broadcastable}
+     * @param matShape Shape of the resulting matrix. Must be {@link ValidateParameters#ensureTotalEntriesEqual(Shape, Shape) broadcastable}
      * with the shape of this tensor.
      * @return A matrix of shape {@code matShape} with the values of this tensor.
      * @throws org.flag4j.util.exceptions.LinearAlgebraException If {@code matShape} is not of rank 2.

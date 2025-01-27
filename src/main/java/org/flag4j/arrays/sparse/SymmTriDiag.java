@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -99,7 +99,7 @@ public class SymmTriDiag implements Serializable {
      */
     public double get(int rowIdx, int colIdx) {
         // Ensure indices are in range for this matrix.
-        ValidateParameters.ensureValidArrayIndices(size, rowIdx, colIdx);
+        ValidateParameters.validateArrayIndices(size, rowIdx, colIdx);
         int absDiff = Math.abs(rowIdx-colIdx);
 
         if(absDiff == 0) {

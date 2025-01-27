@@ -68,7 +68,7 @@ public abstract class TensorDot<T> {
                         Shape shape2, T src2,
                         int[] src1Axes, int[] src2Axes) {
         // Each array must specify the same number of axes.
-        ValidateParameters.ensureEquals(src1Axes.length, src2Axes.length);
+        ValidateParameters.ensureAllEqual(src1Axes.length, src2Axes.length);
 
         // Axis values must be less than the rank of the tensor and non-negative.
         ValidateParameters.ensureValidAxes(shape1, src1Axes);

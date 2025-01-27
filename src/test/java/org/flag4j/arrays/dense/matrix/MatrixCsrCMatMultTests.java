@@ -28,7 +28,7 @@ class MatrixCsrCMatMultTests {
 
     @Test
     void standardTests() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aEntries = new double[][]{
                 {0.7604, 0.3083, 0.62095, 0.80536, 0.99013},
                 {0.79418, 0.0794, 0.01267, 0.19388, 0.25461},
@@ -53,7 +53,7 @@ class MatrixCsrCMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         bShape = new Shape(3, 10);
         bEntries = new Complex128[]{new Complex128(0.8369, 0.15486), new Complex128(0.62217, 0.32219), new Complex128(0.66049, 0.96046)};
         bRowPointers = new int[]{0, 1, 3, 3};
@@ -112,7 +112,7 @@ class MatrixCsrCMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         A = new Matrix(24, 516);
         B = new CsrCMatrix(15, 12);
         assertThrows(LinearAlgebraException.class, ()->A.mult(B));
