@@ -34,7 +34,7 @@ class SubSpaceTests {
     // TODO: There are some issues with SVD. Bring back these tests once the SVD has been fixed.
 //    @Test
 //    void colSpaceTestCase() {
-//        // -------------------- Sub-case 1 --------------------
+//        // -------------------- sub-case 1 --------------------
 //        expAEntries = new double[][]{
 //                {-0.002536286923471442, 0.2528788760188392},
 //                {-0.03778044483704439, -0.9668312284180349},
@@ -44,7 +44,7 @@ class SubSpaceTests {
 //
 //        assertEquals(expA, SubSpace.getColSpace(A));
 //
-//        // -------------------- Sub-case 2 --------------------
+//        // -------------------- sub-case 2 --------------------
 //        expBEntries = new Complex128[][]{
 //                {new Complex128(-0.005034449960744143, 0.9999829442968625)},
 //                {new Complex128(-5.042897264281646E-5, 0.0029602172030675465)}
@@ -57,7 +57,7 @@ class SubSpaceTests {
 //
 //    @Test
 //    void rowSpaceTestCase() {
-//        // -------------------- Sub-case 1 --------------------
+//        // -------------------- sub-case 1 --------------------
 //        expAEntries = new double[][]{
 //                {-0.9994883094236742, -0.020218901157440943},
 //                {0.016390769560750296, 0.2333428640994128},
@@ -67,7 +67,7 @@ class SubSpaceTests {
 //
 //        assertEquals(expA, SubSpace.getRowSpace(A));
 //
-//        // -------------------- Sub-case 2 --------------------
+//        // -------------------- sub-case 2 --------------------
 //        expBEntries = new Complex128[][]{
 //                {new Complex128(-0.21192004255855398, 0.975797068015846)},
 //                {new Complex128(0.05394352470531291, 2.7158060783330235E-4)}
@@ -80,7 +80,7 @@ class SubSpaceTests {
 //
 //    @Test
 //    void nullSpaceTestCase() {
-//        // -------------------- Sub-case 1 --------------------
+//        // -------------------- sub-case 1 --------------------
 //        expAEntries = new double[][]{
 //                {0.006867348168070286},
 //                {0.7309485843076149},
@@ -91,7 +91,7 @@ class SubSpaceTests {
 //
 //        assertEquals(expA, SubSpace.getNullSpace(A));
 //
-//        // -------------------- Sub-case 2 --------------------
+//        // -------------------- sub-case 2 --------------------
 //        expBEntries = new Complex128[][]{
 //                {new Complex128(0.021880100969376936, -0.04930759368727217)},
 //                {new Complex128(0.976851607231742, 0.2070047338470861)}
@@ -104,7 +104,7 @@ class SubSpaceTests {
 //
 //    @Test
 //    void leftNullSpaceTestCase() {
-//        // -------------------- Sub-case 1 --------------------
+//        // -------------------- sub-case 1 --------------------
 //        expAEntries = new double[][]{
 //                {-0.9674946208181681},
 //                {-0.2526064404238114},
@@ -114,7 +114,7 @@ class SubSpaceTests {
 //
 //        assertEquals(expA, SubSpace.getLeftNullSpace(A));
 //
-//        // -------------------- Sub-case 2 --------------------
+//        // -------------------- sub-case 2 --------------------
 //        expBEntries = new Complex128[][]{
 //                {new Complex128(6.830867186744245E-4, 0.0028807675201914145)},
 //                {new Complex128(-0.21902916510606682, -0.9757138204432532)}
@@ -127,13 +127,13 @@ class SubSpaceTests {
 //
 //    @Test
 //    void hasEqualSpan() {
-//        // -------------------- Sub-case 1 --------------------
+//        // -------------------- sub-case 1 --------------------
 //        assertTrue(
 //                SubSpace.hasEqualSpan(A.getSlice(0, A.numRows, 0, A.numRows),
 //                        SubSpace.getColSpace(A))
 //        );
 //
-//        // -------------------- Sub-case 2 --------------------
+//        // -------------------- sub-case 2 --------------------
 //        assertTrue(
 //                SubSpace.hasEqualSpan(B.getSlice(0, B.numRows, 0, B.numRows),
 //                        SubSpace.getColSpace(B))

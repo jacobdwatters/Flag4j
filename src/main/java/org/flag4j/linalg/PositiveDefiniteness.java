@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.decompositions.chol.ComplexCholesky;
 import org.flag4j.linalg.decompositions.chol.RealCholesky;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
@@ -39,8 +38,9 @@ public final class PositiveDefiniteness {
 
     private PositiveDefiniteness() {
         // Hide default constructor for utility class.
-        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
+
+    // TODO: Improve javadoc in this class.
 
 
     /**
@@ -66,30 +66,8 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is symmetric positive definite. A matrix {@code M} is positive definite iff
-     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
-     * greater than zero.
-     *
-     * @param src Matrix to check if it is positive definite.
-     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
-     * @see #isPosSemiDef(Matrix)
-     */
-    public static boolean isSymmPosDef(Matrix src) {
-        boolean result = true;
-
-        try {
-            new RealCholesky(true).decompose(src);
-        } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
-        }
-
-        return result;
-    }
-
-
-    /**
      * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
-     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is Hermitian and
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive definite.
@@ -118,13 +96,35 @@ public final class PositiveDefiniteness {
      * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
-    public static boolean isSymmPosDef(CMatrix src) {
+    public static boolean isHermPosDef(Matrix src) {
+        boolean result = true;
+
+        try {
+            new RealCholesky(true).decompose(src);
+        } catch(LinearAlgebraException | IllegalArgumentException e) {
+            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Checks if the matrix is symmetric positive definite. A matrix {@code M} is positive definite iff
+     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
+     * greater than zero.
+     *
+     * @param src Matrix to check if it is positive definite.
+     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
+     * @see #isPosSemiDef(Matrix)
+     */
+    public static boolean isHermPosDef(CMatrix src) {
         boolean result = true;
 
         try {
             new ComplexCholesky(true).decompose(src);
         } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
+            result = false; // Could not compute Cholesky decomposition. Matrix is not Hermitian positive definite.
         }
 
         return result;
@@ -155,7 +155,7 @@ public final class PositiveDefiniteness {
 
     /**
      * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is hermitian and
+     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is Hermitian and
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.

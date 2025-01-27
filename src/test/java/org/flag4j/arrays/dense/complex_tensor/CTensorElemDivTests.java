@@ -33,7 +33,7 @@ class CTensorElemDivTests {
         double[] bEntries;
         Tensor B;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
@@ -51,7 +51,7 @@ class CTensorElemDivTests {
 
         assertEquals(exp, A.div(B));
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0
@@ -62,7 +62,7 @@ class CTensorElemDivTests {
         Tensor finalB = B;
         assertThrows(LinearAlgebraException.class, ()->A.div(finalB));
 
-        // ----------------------- Sub-case 3 -----------------------
+        // ----------------------- sub-case 3 -----------------------
         bEntries = new double[]{
                 -0.00234, 15.6, 99.2442, 100.252, -78.2556, 0.111134,
                 671.455, -0.00024, 515.667, 14.515, 100.135, 0, 1.4, 5
@@ -80,7 +80,7 @@ class CTensorElemDivTests {
         Complex128[] bEntries;
         CTensor B;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
                 new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),
@@ -100,7 +100,7 @@ class CTensorElemDivTests {
 
         assertEquals(exp, A.div(B));
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         bEntries = new Complex128[]{
                 new Complex128(-0.00234, 2.452), new Complex128(15.6), new Complex128(99.2442, 9.1),
                 new Complex128(100.252, 1235), new Complex128(-78.2556, -99.1441), new Complex128(0.111134, -772.4),

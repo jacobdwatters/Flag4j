@@ -25,7 +25,7 @@ class CooVectorSetTests {
         int[] indices;
         int size;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         values = new double[]{1.34, 51.6, 22.34, -0.00245};
         indices = new int[]{0, 5, 78, 103};
         size = 304;
@@ -33,7 +33,7 @@ class CooVectorSetTests {
 
         assertEquals(exp, a.set(22.34, 78));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         values = new double[]{44.5, 51.6, -0.00245};
         indices = new int[]{0, 5, 103};
         size = 304;

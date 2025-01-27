@@ -29,7 +29,7 @@ class CooMatrixStackTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ---------------------  Sub-case 1 ---------------------
+        // ---------------------  sub-case 1 ---------------------
         aShape = new Shape(2, 3);
         aEntries = new double[]{0.6994};
         aRowIndices = new int[]{0};
@@ -50,7 +50,7 @@ class CooMatrixStackTests {
 
         assertEquals(exp, a.stack(b));
 
-        // ---------------------  Sub-case 2 ---------------------
+        // ---------------------  sub-case 2 ---------------------
         aShape = new Shape(1, 2);
         aEntries = new double[]{};
         aRowIndices = new int[]{};
@@ -71,7 +71,7 @@ class CooMatrixStackTests {
 
         assertEquals(exp, a.stack(b));
 
-        // ---------------------  Sub-case 3 ---------------------
+        // ---------------------  sub-case 3 ---------------------
         aShape = new Shape(14, 5);
         aEntries = new double[]{0.95223, 0.17095, 0.32156, 0.9396, 0.3762, 0.10813, 0.08055, 0.31545, 0.15498, 0.91676, 0.83886, 0.94144, 0.30784, 0.49851};
         aRowIndices = new int[]{0, 0, 1, 4, 4, 4, 5, 5, 6, 6, 6, 9, 10, 11};

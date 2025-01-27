@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ public final class CooManipulations {
      * @param rowIdx2 Index of the second row in the swap.
      */
     public static void swapRows(Shape shape, Object[] entries, int[] rowIndices, int[] colIndices, int rowIdx1, int rowIdx2) {
-        ValidateParameters.ensureValidArrayIndices(shape.get(0), rowIdx1, rowIdx2);
+        ValidateParameters.validateArrayIndices(shape.get(0), rowIdx1, rowIdx2);
 
         for(int i=0, size=entries.length; i<size; i++) {
             // Swap row indices.
@@ -72,7 +72,7 @@ public final class CooManipulations {
      * @param colIdx2 Index of the second column in the swap.
      */
     public static void swapCols(Shape shape, Object[] entries, int[] rowIndices, int[] colIndices, int colIdx1, int colIdx2) {
-        ValidateParameters.ensureValidArrayIndices(shape.get(1), colIdx1, colIdx2);
+        ValidateParameters.validateArrayIndices(shape.get(1), colIdx1, colIdx2);
 
         for(int i=0, size=colIndices.length; i<size; i++) {
             // Swap column indices.

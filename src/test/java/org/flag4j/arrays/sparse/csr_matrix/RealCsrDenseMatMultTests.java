@@ -26,7 +26,7 @@ class RealCsrDenseMatMultTests {
 
     @Test
     void multTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0, 0, 80.1},
                 {0, 1.41, 0, 15.5, 0, 0},
@@ -43,7 +43,7 @@ class RealCsrDenseMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0},
                 {-77.3, 0, 0, 0},
@@ -65,7 +65,7 @@ class RealCsrDenseMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0},
                 {-77.3, 0, 0, 0},

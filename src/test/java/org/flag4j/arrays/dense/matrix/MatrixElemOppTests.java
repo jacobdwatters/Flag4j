@@ -28,7 +28,7 @@ class MatrixElemOppTests {
         Complex128[][] expEntries;
         CMatrix exp;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new Complex128[][]{
                 {Complex128.sqrt(1.123), Complex128.sqrt(2), Complex128.sqrt(-0.01), Complex128.sqrt(0.0), Complex128.sqrt(-0.0), Complex128.sqrt(15)},
                 {Complex128.sqrt(104.51), Complex128.sqrt(-64), Complex128.sqrt(54), Complex128.sqrt(100.455), Complex128.sqrt(0.00024), Complex128.sqrt(1024)},

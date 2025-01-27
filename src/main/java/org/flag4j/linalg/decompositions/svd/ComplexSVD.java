@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -82,11 +82,11 @@ public class ComplexSVD extends SVD<CMatrix> {
 
 
     /**
-     * Computes the inverse direct sum of a matrix and its hermitian transpose.
+     * Computes the inverse direct sum of a matrix and its Hermitian transpose.
      *
-     * @param src Matrix to inverse direct add with its hermitian transpose.
+     * @param src Matrix to inverse direct add with its Hermitian transpose.
      *
-     * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
+     * @return The inverse direct sum of the {@code src} matrix with its Hermitian transpose.
      */
     @Override
     protected CMatrix invDirectSum(CMatrix src) {

@@ -15,7 +15,7 @@ class CMatrixPropertiesTests {
 
     @Test
     void isIdentityTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2, 123.45), new Complex128(3, -4.551)},
                 {new Complex128(-0.442, 12.34), new Complex128(13.5), new Complex128(35.6)},
@@ -24,7 +24,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2, 123.45), new Complex128(3, -4.551)},
                 {new Complex128(-0.442, 12.34), new Complex128(13.5), new Complex128(35.6)}};
@@ -32,7 +32,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1, 3.1335), new Complex128(2, 566.72)},
                 {new Complex128(-0.442, 67.105), new Complex128(13.5, -78.431)}};
@@ -40,7 +40,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(0)},
                 {new Complex128(0), new Complex128(1)}};
@@ -48,7 +48,7 @@ class CMatrixPropertiesTests {
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(1), new Complex128(0)},
@@ -57,7 +57,7 @@ class CMatrixPropertiesTests {
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(1), new Complex128(0), new Complex128(0)},
@@ -67,7 +67,7 @@ class CMatrixPropertiesTests {
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(1), new Complex128(0), new Complex128(0)},
@@ -77,7 +77,7 @@ class CMatrixPropertiesTests {
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 7 ---------------
+        // --------------- sub-case 7 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(1), new Complex128(0), new Complex128(0)},
@@ -87,7 +87,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 8 ---------------
+        // --------------- sub-case 8 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(0)}};
@@ -95,7 +95,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 9 ---------------
+        // --------------- sub-case 9 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(0, 0.3232), new Complex128(0)},
                 {new Complex128(0), new Complex128(1), new Complex128(0)},
@@ -104,7 +104,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 10 ---------------
+        // --------------- sub-case 10 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(0), new Complex128(0)},
                 {new Complex128(0), new Complex128(1, -5), new Complex128(0)},
@@ -117,7 +117,7 @@ class CMatrixPropertiesTests {
 
     @Test
     void isRealTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2, 123.45), new Complex128(3, -4.551)},
                 {new Complex128(-0.442, 12.34), new Complex128(13.5), new Complex128(35.6)},
@@ -127,7 +127,7 @@ class CMatrixPropertiesTests {
         assertFalse(A.isReal());
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
                 {new Complex128(-0.442), new Complex128(13.5), new Complex128(35.6)},
@@ -136,7 +136,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertTrue(A.isReal());
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
                 {new Complex128(-0.442), new Complex128(13.5, 1.4), new Complex128(35.6)},
@@ -145,7 +145,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertFalse(A.isReal());
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
                 {new Complex128(-0.442), new Complex128(-13.5), new Complex128(35.6)},
@@ -158,7 +158,7 @@ class CMatrixPropertiesTests {
 
     @Test
     void isComplexTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2, 123.45)},
                 {new Complex128(-0.442, 12.34), new Complex128(13.5)},
@@ -168,7 +168,7 @@ class CMatrixPropertiesTests {
         assertTrue(A.isComplex());
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
                 {new Complex128(-0.442), new Complex128(13.5), new Complex128(35.6)},
@@ -177,7 +177,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertFalse(A.isComplex());
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
                 {new Complex128(-0.442), new Complex128(13.5, 1.4), new Complex128(35.6)}};
@@ -185,7 +185,7 @@ class CMatrixPropertiesTests {
         expBoolResult = false;
         assertTrue(A.isComplex());
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         entriesA = new Complex128[][]{
                 {new Complex128(1), new Complex128(2), new Complex128(3)},
                 {new Complex128(-0.442), new Complex128(-13.5), new Complex128(35.6)},

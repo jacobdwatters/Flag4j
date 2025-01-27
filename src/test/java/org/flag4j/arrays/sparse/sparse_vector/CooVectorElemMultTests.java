@@ -29,7 +29,7 @@ class CooVectorElemMultTests {
         int[] bIndices, expIndices;
         CooVector b, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bValues = new double[]{1.223, 44.51, 3.4};
         bIndices = new int[]{2, 81, 103};
         b = new CooVector(size, bValues, bIndices);
@@ -39,7 +39,7 @@ class CooVectorElemMultTests {
         exp = new CooVector(151, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bValues = new double[]{1.223, 44.51, 3.4};
         bIndices = new int[]{2, 81, 103};
         b = new CooVector(size-23, bValues, bIndices);
@@ -61,7 +61,7 @@ class CooVectorElemMultTests {
         Vector b;
         CooVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51, 0.14};
         b = new Vector(bValues);
 
@@ -70,7 +70,7 @@ class CooVectorElemMultTests {
         exp = new CooVector(size, expValues, expIndices);
         assertEquals(exp, a.elemMult(b));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bValues = new double[]{1.223, -44.51, 3.4, 2.3, 14.5, -14.51};
         b = new Vector(bValues);
 
@@ -90,7 +90,7 @@ class CooVectorElemMultTests {
         int[] bIndices, expIndices;
         CooCVector b, exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bValues = new Complex128[]{new Complex128(2.441, -9.245), new Complex128(0, 4.51), new Complex128(24.5)};
         bIndices = new int[]{2, 81, 103};
         b = new CooCVector(size, bValues, bIndices);
@@ -102,7 +102,7 @@ class CooVectorElemMultTests {
         exp = new CooCVector(151, expValues, expIndices);
         assertEquals(exp, RealComplexSparseVectorOps.elemMult(b, a));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bValues = new Complex128[]{new Complex128(2.441, -9.245), new Complex128(0, 4.51), new Complex128(24.5)};
         bIndices = new int[]{2, 81, 103};
         b = new CooCVector(size+134, bValues, bIndices);
@@ -124,7 +124,7 @@ class CooVectorElemMultTests {
         CVector b;
         CooCVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6),
                 new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4)};
         b = new CVector(bValues);
@@ -135,7 +135,7 @@ class CooVectorElemMultTests {
         exp = new CooCVector(size, expValues, expIndices);
         assertEquals(exp, RealComplexDenseSparseVectorOps.elemMult(b, a));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bValues = new Complex128[]{new Complex128(24.3, -0.013), new Complex128(0, 13.6), new Complex128(24),
                 new Complex128(2.4), new Complex128(-994.1 ,1.45), new Complex128(1495, 13.4)};
         b = new CVector(bValues);
@@ -158,7 +158,7 @@ class CooVectorElemMultTests {
         int[] expIndices;
         CooVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         b = 24.56;
 
         expValues = new double[]{1.34*b, 51.6*b, -0.00245*b, 99.2456*b, -1005.6*b};
@@ -181,7 +181,7 @@ class CooVectorElemMultTests {
         int[] expIndices;
         CooCVector exp;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         b = new Complex128(234.6677, -9.35);
 
         expValues = new Complex128[]{b.mult(1.34), b.mult(51.6), b.mult(-0.00245), b.mult(99.2456), b.mult(-1005.6)};

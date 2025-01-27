@@ -242,7 +242,7 @@ public final class RealComplexCsrMatMult {
      */
     public static CVector standardVector(CsrMatrix src1, CooCVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
 
         Complex128[] destEntries = new Complex128[src1.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);
@@ -282,7 +282,7 @@ public final class RealComplexCsrMatMult {
      */
     public static CVector standardVector(CsrCMatrix src1, CooVector src2) {
         // Ensure the matrix and vector have shapes conducive to multiplication.
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
 
         Complex128[] destEntries = new Complex128[src1.numRows];
         Arrays.fill(destEntries, Complex128.ZERO);

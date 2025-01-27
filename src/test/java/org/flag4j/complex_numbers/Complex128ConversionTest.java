@@ -16,31 +16,31 @@ class Complex128ConversionTest {
 
     @Test
     void toPolarTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         n = new Complex128(0);
         expPolar = new double[]{0, 0};
         actPolar = n.toPolar();
         Assertions.assertArrayEquals(expPolar, actPolar);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         n = new Complex128(1, 3);
         expPolar = new double[]{Math.sqrt(10), Math.atan(3)};
         actPolar = n.toPolar();
         Assertions.assertArrayEquals(expPolar, actPolar);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         n = new Complex128(2.42, -1.35);
         expPolar = new double[]{2.771082820848197, -0.5088510437828061};
         actPolar = n.toPolar();
         Assertions.assertArrayEquals(expPolar, actPolar);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         n = new Complex128(1, 1);
         expPolar = new double[]{Math.sqrt(2), Math.PI/4.0};
         actPolar = n.toPolar();
         Assertions.assertArrayEquals(expPolar, actPolar);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         n = new Complex128(-Math.sqrt(3.0)/2.0, -1.0/2.0);
         expPolar = new double[]{0.9999999999999999, -5.0*Math.PI/6.0};
         actPolar = n.toPolar();
@@ -50,31 +50,31 @@ class Complex128ConversionTest {
 
     @Test
     void fromPolarTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         expRect = new Complex128(0);
         polar = new double[]{0, 0};
         actRect = Complex128.fromPolar(polar[0], polar[1]);
         Assertions.assertEquals(expRect, actRect);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         expRect = new Complex128(1, 3);
         polar = new double[]{Math.sqrt(10), Math.atan(3)};
         actRect = Complex128.fromPolar(polar[0], polar[1]);
         Assertions.assertEquals(expRect, actRect);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         expRect = new Complex128(2.42, -1.3499999999999999);
         polar = new double[]{2.771082820848197, -0.5088510437828061};
         actRect = Complex128.fromPolar(polar[0], polar[1]);
         Assertions.assertEquals(expRect, actRect);
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         expRect = new Complex128(1.0000000000000002, 1);
         polar = new double[]{Math.sqrt(2), Math.PI/4.0};
         actRect = Complex128.fromPolar(polar[0], polar[1]);
         Assertions.assertEquals(expRect, actRect);
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         expRect = new Complex128(-0.8660254037844387, -0.49999999999999994);
         polar = new double[]{1, -5.0*Math.PI/6.0};
         actRect = Complex128.fromPolar(polar[0], polar[1]);

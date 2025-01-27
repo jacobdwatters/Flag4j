@@ -32,7 +32,7 @@ class CooCVectorJoinTests {
         Complex128[] bEntries, expEntries;
         CooCVector b, exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         bEntries = new Complex128[]{new Complex128(24.53), new Complex128(66.1), new Complex128(-234.5)};
         bIndices = new int[]{0, 3, 4};
         bSize = 5;
@@ -55,7 +55,7 @@ class CooCVectorJoinTests {
         CooCVector b;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         bEntries = new Complex128[]{new Complex128(24.5, -0.12), new Complex128(24.5, 3.4),
                 new Complex128(-0.20015), new Complex128(9825.4, -85.126)};
         bIndices = new int[]{0, 5, 6, 7};
@@ -74,7 +74,7 @@ class CooCVectorJoinTests {
         assertEquals(exp, a.stack(b, 0));
         assertEquals(exp.T(), a.stack(b, 1));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         bEntries = new Complex128[]{new Complex128(24.5, -0.12), new Complex128(24.5, 3.4),
                 new Complex128(-0.20015), new Complex128(9825.4, -85.126)};
         bIndices = new int[]{0, 5, 68, 995};

@@ -22,7 +22,7 @@ class ComplexForwardSolverTests {
         Complex128[] bEntries, expEntries;
         CVector b, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1.25, -9.25), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(2.45, 15.5), Complex128.ZERO},
@@ -42,7 +42,7 @@ class ComplexForwardSolverTests {
 
         assertEquals(exp, solver.solve(L, b));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1.25, -9.25), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), Complex128.ZERO, Complex128.ZERO},
@@ -57,7 +57,7 @@ class ComplexForwardSolverTests {
         CVector finalB = b;
         assertThrows(SingularMatrixException.class, ()->solver.solve(L, finalB));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1.25, -9.25), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), Complex128.ZERO, Complex128.ZERO},
@@ -81,7 +81,7 @@ class ComplexForwardSolverTests {
         Complex128[][] bEntries, expEntries;
         CMatrix b, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1.25, -9.25), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(2.45, 15.5), Complex128.ZERO},
@@ -104,7 +104,7 @@ class ComplexForwardSolverTests {
 
         assertEquals(exp, solver.solve(L, b));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1.25, -9.25), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(2.45, 15.5), Complex128.ZERO},
@@ -121,7 +121,7 @@ class ComplexForwardSolverTests {
         CMatrix finalB = b;
         assertThrows(SingularMatrixException.class, ()->solver.solve(L, finalB));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1.25, -9.25), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(2.45, 15.5), Complex128.ZERO},
@@ -145,7 +145,7 @@ class ComplexForwardSolverTests {
         Complex128[] bEntries, expEntries;
         CVector b, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(1), Complex128.ZERO},
@@ -165,7 +165,7 @@ class ComplexForwardSolverTests {
 
         assertEquals(exp, solver.solve(L, b));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(1), Complex128.ZERO},
@@ -189,7 +189,7 @@ class ComplexForwardSolverTests {
         Complex128[][] bEntries, expEntries;
         CMatrix b, exp;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(1), Complex128.ZERO},
@@ -211,7 +211,7 @@ class ComplexForwardSolverTests {
         exp = new CMatrix(expEntries);
         assertEquals(exp, solver.solve(L, b));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         lEntries = new Complex128[][]{
                 {new Complex128(1), Complex128.ZERO, Complex128.ZERO},
                 {new Complex128(-815.5, 1.444), new Complex128(1), Complex128.ZERO},

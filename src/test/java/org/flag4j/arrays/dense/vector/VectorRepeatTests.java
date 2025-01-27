@@ -17,7 +17,7 @@ class VectorRepeatTests {
 
     @Test
     void repeatRowTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[]{1.123, 415.125, -0.242424, 150.6, 902.4, 0, 13.3};
         a = new Vector(aEntries);
         expEntries = new double[][]{
@@ -30,7 +30,7 @@ class VectorRepeatTests {
 
         assertEquals(exp, a.repeat(4, 0));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[]{1.123};
         a = new Vector(aEntries);
         expEntries = new double[][]{
@@ -41,7 +41,7 @@ class VectorRepeatTests {
 
         assertEquals(exp, a.repeat(2, 0));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         assertThrows(IllegalArgumentException.class, ()-> a.repeat(-1, 0));
         assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, -2));
         assertThrows(LinearAlgebraException.class, ()-> a.repeat(13, 2));
@@ -50,7 +50,7 @@ class VectorRepeatTests {
 
     @Test
     void repeatColTest() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[]{1.123, 415.125, -0.242424, 150.6, 902.4, 0, 13.3};
         a = new Vector(aEntries);
         expEntries = new double[][]{
@@ -63,7 +63,7 @@ class VectorRepeatTests {
 
         assertEquals(exp, a.repeat(4, 1));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[]{1.123};
         a = new Vector(aEntries);
         expEntries = new double[][]{

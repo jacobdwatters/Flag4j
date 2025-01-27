@@ -24,26 +24,22 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
- * This utility class contains several methods for ensuring a parameter has certain properties.
+ * This utility class contains several methods for ensuring parameters satisfy some condition.
  */
 public final class ValidateParameters {
 
-    // Hide constructor for utility class.
     private ValidateParameters() {
+        // Hide default constructor for utility class.
     }
 
-    // TODO: This class needs to be cleaned up. Are all of these methods necessary? Do some need to be renamed?
 
     /**
      * Checks if two {@link Shape} objects are equivalent.
@@ -52,20 +48,8 @@ public final class ValidateParameters {
      * @throws org.flag4j.util.exceptions.TensorShapeException If shapes are not equivalent.
      */
     public static void ensureEqualShape(Shape shape1, Shape shape2) {
-        if(!shape1.equals(shape2)) {
+        if(!shape1.equals(shape2))
             throw new TensorShapeException(ErrorMessages.equalShapeErrMsg(shape1, shape2));
-        }
-    }
-
-
-    /**
-     * Checks if two tensors have the same shape.
-     * @param a First tensor to consider.
-     * @param shape2 Second tensor to consider.
-     * @throws org.flag4j.util.exceptions.TensorShapeException If {@code !a.shape.equals(b.shape)}.
-     */
-    public static void ensureEqualShape(AbstractTensor<?, ?, ?> a, AbstractTensor<?, ?, ?> b) {
-        ensureEqualShape(a.shape, b.shape);
     }
 
 
@@ -79,10 +63,7 @@ public final class ValidateParameters {
         boolean valid = shape1.getRank() == 2 && (shape2.getRank() == 1 || shape2.getRank() == 2);
         valid &= shape1.get(1) == shape2.get(0);
 
-        if(!valid) {
-            throw new LinearAlgebraException(
-                    ErrorMessages.matMultShapeErrMsg(shape1, shape2));
-        }
+        if(!valid) throw new LinearAlgebraException(ErrorMessages.matMultShapeErrMsg(shape1, shape2));
     }
 
 
@@ -99,29 +80,14 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks that an array has the specified length.
-     * @param arr Array to check length of.
-     * @param length Desired length of the array.
-     * @param arrayName Name of the array. May be {@code null} to provide no name.
-     * @throws IllegalArgumentException If {@code arr.length != length}
-     *
-     */
-    public static void ensureArrayHasLength(int actLength, int expLength, String arrayName) {
-        if(actLength != expLength)
-            throw new IllegalArgumentException(ErrorMessages.getArrayHasLengthErr(actLength, expLength, arrayName));
-    }
-
-
-    /**
-     * Checks that two shapes can be broadcast, i.e. have the same total number of data.
+     * Checks that two shapes have the same total number of data.
      * @param shape1 First shape to compare.
      * @param shape2 Second shape to compare.
      * @throws TensorShapeException If the two shapes do not have the same total number of data.
      */
-    public static void ensureBroadcastable(Shape shape1, Shape shape2) {
-        // TODO: This isn't really how numpy or PyTorch define broadcastable so it may be confusing. Need a different name for this.
+    public static void ensureTotalEntriesEqual(Shape shape1, Shape shape2) {
         if(!shape1.totalEntries().equals(shape2.totalEntries()))
-            throw new TensorShapeException(ErrorMessages.getShapeBroadcastErr(shape1, shape2));
+            throw new TensorShapeException(ErrorMessages.getShapeTotalEntriesErr(shape1, shape2));
     }
 
 
@@ -132,18 +98,6 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If arrays do not have the same number of total data.
      */
     public static void ensureTotalEntriesEq(Object[][] arr1, double[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length)
-            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-    }
-
-
-    /**
-     * Checks if arrays have the same number of total data.
-     * @param arr1 First array.
-     * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total data.
-     */
-    public static void ensureTotalEntriesEq(Object[][] arr1, Object[] arr2) {
         if(arr1.length*arr1[0].length != arr2.length)
             throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
     }
@@ -174,66 +128,14 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if arrays have the same number of total data.
-     * @param arr1 First array.
-     * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total data.
-     */
-    public static void ensureTotalEntriesEq(Object[][] arr1, Complex128[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length)
-            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-    }
-
-
-    /**
-     * Checks if arrays have the same number of total data.
-     * @param arr1 First array.
-     * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total data.
-     */
-    public static void ensureTotalEntriesEq(double[][] arr1, Complex128[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length)
-            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-    }
-
-
-    /**
-     * Checks if arrays have the same number of total data.
-     * @param arr1 First array.
-     * @param arr2 Second array.
-     * @throws IllegalArgumentException If arrays do not have the same number of total data.
-     */
-    public static void ensureTotalEntriesEq(int[][] arr1, Complex128[] arr2) {
-        if(arr1.length*arr1[0].length != arr2.length)
-            throw new IllegalArgumentException(ErrorMessages.getTotalEntriesErr());
-    }
-
-
-    /**
      * Checks if a set of values are all equal.
      * @param values Values to check if they are equal.
      * @throws IllegalArgumentException If any of the specified values are not equal.
      */
-    public static void ensureEquals(double... values) {
-        boolean equal = allEqual(values);
-
-        if(!equal) {
-            throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
-        }
-    }
-
-
-    /**
-     * Checks if a set of values are all equal.
-     * @param values Values to check if they are equal.
-     * @throws IllegalArgumentException If any of the specified values are not equal.
-     */
-    public static void ensureEquals(int... values) {
-        boolean equal = allEqual(values);
-
-        if(!equal) {
-            throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
-        }
+    public static void ensureAllEqual(int... values) {
+        for(int i=0, size=values.length-1; i<size; i++)
+            if(values[i] != values[i+1])
+                throw new IllegalArgumentException("Expecting values to be equal but got: " + Arrays.toString(values));
     }
 
 
@@ -254,8 +156,8 @@ public final class ValidateParameters {
      * @throws IllegalArgumentException If {@code a==b}.
      */
     public static void ensureNotEquals(double a, double b) {
-        if(a==b)
-            throw new IllegalArgumentException("Expecting values to not be equal but got: " + a + ", " + b + ".");
+        if(a == b)
+            throw new IllegalArgumentException("Expecting values to NOT be equal but got: " + a + ", " + b + ".");
     }
 
 
@@ -265,9 +167,9 @@ public final class ValidateParameters {
      * @param values Values to compare against threshold.
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
-    public static void ensureGreaterEq(double threshold, double... values) {
+    public static void ensureAllGreaterEq(double threshold, double... values) {
         for(double value : values) {
-            if(value<threshold)
+            if(value < threshold)
                 throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
         }
     }
@@ -279,7 +181,7 @@ public final class ValidateParameters {
      * @param values Values to compare against threshold.
      * @throws IllegalArgumentException If any of the values are less than the threshold.
      */
-    public static void ensureGreaterEq(int threshold, int... values) {
+    public static void ensureAllGreaterEq(int threshold, int... values) {
         for(double value : values) {
             if(value<threshold)
                 throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
@@ -288,77 +190,76 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if a single value is greater than or equal to a specified threshold.
+     * Checks if {@code values[i] >= threshold} for all {@code i = 0, 1, ..., values.length}.
      * @param threshold Threshold value.
      * @param value Value to compare against threshold.
-     * @throws IllegalArgumentException If the values is less than the threshold.
+     * @throws IllegalArgumentException If {@code values[i] < threshold} for <b>any</b> {@code i = 0, 1, ..., values.length}.
      */
     public static void ensureGreaterEq(int threshold, int value) {
-        // TODO: This method (and similar) are VERY confusing. Need to implement them in a more clear manner.
-        if(value<threshold)
+        if(value < threshold)
             throw new IllegalArgumentException(ErrorMessages.getGreaterEqErr(threshold, value));
     }
 
 
     /**
-     * Checks if a set of values is greater than or equal to a specified threshold.
+     * Checks if {@code value >= threshold}.
      * @param threshold Threshold value.
      * @param value Values to compare against threshold.
      * @param name Name of parameter.
-     * @throws IllegalArgumentException If any of the values are less than the threshold.
+     * @throws IllegalArgumentException If {@code value < threshold}.
      */
     public static void ensureGreaterEq(double threshold, double value, String name) {
-        if(value<threshold)
+        if(value < threshold)
             throw new IllegalArgumentException(ErrorMessages.getNamedGreaterEqErr(threshold, value, name));
     }
 
 
     /**
-     * Checks if a set of values is less than or equal to a specified threshold.
+     * Checks if {@code values[i] <= threshold} for all {@code i = 0, 1, ..., values.length}.
      * @param threshold Threshold value.
      * @param values Values to compare against threshold.
-     * @throws IllegalArgumentException If any of the values are greater than the threshold.
+     * @throws IllegalArgumentException If {@code values[i] > threshold} for <b>any</b> {@code i = 0, 1, ..., values.length}.
      */
     public static void ensureLessEq(double threshold, double... values) {
         for(double value : values) {
-            if(value>threshold)
+            if(value > threshold)
                 throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
         }
     }
 
 
     /**
-     * Checks if a set of values is less than or equal to a specified threshold.
+     * Checks if {@code values[i] <= threshold} for all {@code i = 0, 1, ..., values.length}.
      * @param threshold Threshold value.
      * @param values Values to compare against threshold.
-     * @throws IllegalArgumentException If any of the values are greater than the threshold.
+     * @throws IllegalArgumentException {@code values[i] > threshold} for <b>any</b> {@code i = 0, 1, ..., values.length}.
      */
     public static void ensureLessEq(int threshold, int... values) {
         for(double value : values) {
-            if(value>threshold)
+            if(value > threshold)
                 throw new IllegalArgumentException(ErrorMessages.getLessEqErr(threshold, value));
         }
     }
 
 
     /**
-     * Checks if a value is less than or equal to a specified threshold.
+     * Checks if {@code values <= threshold}.
      * @param threshold Threshold value.
      * @param value Value to compare against threshold.
      * @param name Name of parameter.
-     * @throws IllegalArgumentException If the value is greater than the threshold.
+     * @throws IllegalArgumentException If {@code values > threshold}.
      */
     public static void ensureLessEq(double threshold, double value, String name) {
-        if(value>threshold) throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));
+        if(value > threshold) throw new IllegalArgumentException(ErrorMessages.getNamedLessEqErr(threshold, value, name));
     }
 
 
     /**
-     * Checks if a value is less than or equal to a specified threshold.
+     * Checks if {@code values <= threshold}.
      * @param threshold Threshold value.
      * @param value Value to compare against threshold.
      * @param name Name of parameter.
-     * @throws IllegalArgumentException If the value is greater than the threshold.
+     * @throws IllegalArgumentException If {@code values > threshold}.
      */
     public static void ensureLessEq(BigInteger threshold, int value, String name) {
         if(threshold.compareTo(BigInteger.valueOf(value)) < 0)
@@ -367,9 +268,9 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if a value is positive.
+     * Checks if {@code value > 0}.
      * @param value Value of interest.
-     * @throws IllegalArgumentException If {@code value} is not positive.
+     * @throws IllegalArgumentException If {@code value <= 0}.
      * @see #ensureNonNegative(int)
      */
     public static void ensurePositive(int value) {
@@ -378,11 +279,9 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if a value is non-negative. Note, this method differs from {@link #ensurePositive(int)} as it
-     * allows zero values where {@link #ensurePositive(int)} does not.
-     * value
+     * Checks if {@code value >= 0}.
      * @param value Value of interest.
-     * @throws IllegalArgumentException If {@code value} is negative.
+     * @throws IllegalArgumentException If {@code value < 0}.
      * @see #ensurePositive(int)
      */
     public static void ensureNonNegative(int value) {
@@ -391,7 +290,7 @@ public final class ValidateParameters {
 
 
     /**
-     * Checks if values are all non-negative according to {@link #ensureNonNegative(int)}.
+     * Checks if {@code values} contains only non-negative values.
      * @param values Values of interest.
      * @throws IllegalArgumentException If any element of {@code values} is negative.
      * @see #ensurePositive(int)
@@ -408,19 +307,18 @@ public final class ValidateParameters {
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
     public static void ensureSquareMatrix(Shape shape) {
-        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1)) {
+        if(shape.getRank()!=2 || shape.get(0)!=shape.get(1))
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(shape));
-        }
     }
 
 
     /**
      * Checks if a shape represents a square tensor.
      * @param shape Shape to check.
-     * @throws TensorShapeException If all axis of the shape are not the same length.
+     * @throws TensorShapeException If all axes of the shape are not the same length.
      */
     public static void ensureSquare(Shape shape) {
-        ValidateParameters.ensureEquals(shape.getDims());
+        ValidateParameters.ensureAllEqual(shape.getDims());
     }
 
 
@@ -431,9 +329,8 @@ public final class ValidateParameters {
      * @throws LinearAlgebraException If the shape is not of rank 2 with equal rows and columns.
      */
     public static void ensureSquareMatrix(int numRows, int numCols) {
-        if(numRows!=numCols) {
+        if(numRows != numCols)
             throw new LinearAlgebraException(ErrorMessages.getSquareShapeErr(new Shape(numRows, numCols)));
-        }
     }
 
 
@@ -469,7 +366,7 @@ public final class ValidateParameters {
      */
     public static void ensurePermutation(int... axes) {
         if (axes == null)
-            throw new IllegalArgumentException("Array is not a permutation.");
+            throw new IllegalArgumentException("Array is not a valid permutation.");
 
         ensurePermutation(axes, axes.length);
     }
@@ -520,7 +417,7 @@ public final class ValidateParameters {
      * @param indices Array of indices to check.
      * @throws IndexOutOfBoundsException If any {@code indices} are not within {@code [0, upperBound)}.
      */
-    public static void ensureIndicesInBounds(int upperBound, int... indices) {
+    public static void validateArrayIndices(int upperBound, int... indices) {
         for(int i : indices) {
             if(i < 0 || i >= upperBound) {
                 String errMsg = i<0 ?
@@ -551,26 +448,6 @@ public final class ValidateParameters {
                 String errMsg = index[i]<0 ?
                         "dimension " + i + " is out of bounds for lower bound of 0" :
                         "dimension " + i + " is out of bounds for upper bound of " + shape.get(i) + ".";
-
-                throw new IndexOutOfBoundsException(errMsg);
-            }
-        }
-    }
-
-
-    /**
-     * Checks if the provided indices are contained in an iterable with the given {@code length}.
-     * @param length length of iterable.
-     * @param indices Indices to check.
-     * @throws IndexOutOfBoundsException If {@code indices} is not a valid index into an iterable
-     * of the specified {@code length}.
-     */
-    public static void ensureValidArrayIndices(int length, int... indices) {
-        for(int i=0, size=indices.length; i<size; i++) {
-            if(indices[i] < 0 || indices[i] >= length) {
-                String errMsg = indices[i]<0 ?
-                        "Index " + indices[i] + " is out of bounds for lower bound of 0" :
-                        "Index " + indices[i] + " is out of bounds for upper bound of " + length + ".";
 
                 throw new IndexOutOfBoundsException(errMsg);
             }
@@ -620,57 +497,5 @@ public final class ValidateParameters {
             if(axis < 0 || axis >= rank)
                 throw new LinearAlgebraException(String.format("Axis %d is out of bounds for rank %d.", axis, rank));
         }
-    }
-
-
-    /**
-     * Checks if an array's length is equal to the rank of a {@code shape}.
-     * @param shape Shape of interest.
-     * @param size Size of the array.
-     * @throws LinearAlgebraException If {@code size != shape.getShape()}.
-     */
-    public static void ensureLengthEqualsRank(Shape shape, int size) {
-        if(shape.getRank() != size)
-            throw new LinearAlgebraException("Array length of " + size + " does not match rank of " + shape.getRank());
-    }
-
-
-    /**
-     * Checks that all values in an array are equal.
-     * @param values Values of interest.
-     * @return {@code ture} if all entries in {@code values} are equal; {@code false} otherwise.
-     */
-    private static boolean allEqual(int... values) {
-        for(int i=0, size=values.length-1; i<size; i++)
-            if(values[i] != values[i+1]) return false;
-
-        return true;
-    }
-
-
-    /**
-     * Checks that all values in an array are equal.
-     * @param values Values of interest.
-     * @return {@code ture} if all entries in {@code values} are equal; {@code false} otherwise.
-     */
-    private static boolean allEqual(double... values) {
-        for(int i=0, size=values.length-1; i<size; i++)
-            if(values[i] != values[i+1]) return false;
-
-        return true;
-    }
-
-
-    /**
-     * Checks that all values in an array are equal.
-     * @param values Values of interest.
-     * @return {@code ture} if all entries in {@code values} are equal (as specified by {@link Objects#equals(Object, Object)});
-     * {@code false} otherwise.
-     */
-    private static <T> boolean allEqual(T[] values) {
-        for(int i=0, size=values.length-1; i<size; i++)
-            if(!Objects.equals(values[i], values[i+1])) return false;
-
-        return true;
     }
 }

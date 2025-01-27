@@ -31,7 +31,7 @@ import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ArrayUtils;
 
 /**
- * Utility class for computing the hermitian transpose of a dense {@link Ring} tensor or matrix.
+ * Utility class for computing the Hermitian transpose of a dense {@link Ring} tensor or matrix.
  */
 public final class DenseRingHermitianTranspose {
     

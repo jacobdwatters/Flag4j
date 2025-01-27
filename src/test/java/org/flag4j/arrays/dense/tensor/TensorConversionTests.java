@@ -30,7 +30,7 @@ class TensorConversionTests {
 
     @Test
     void toComplexTestCase() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new Complex128[]{
                 new Complex128(1.23), new Complex128(2.556), new Complex128(-121.5),
                 new Complex128(15.61), new Complex128(14.15), new Complex128(-99.23425),
@@ -50,14 +50,14 @@ class TensorConversionTests {
         Shape expShape;
         Matrix exp;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = aEntries.clone();
         expShape = new Shape(1, aEntries.length);
         exp = new Matrix(expShape, expEntries);
 
         assertEquals(exp, A.toMatrix());
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         expEntries = aEntries.clone();
         expShape = new Shape(4, 3);
         B = A.reshape(expShape);
@@ -72,7 +72,7 @@ class TensorConversionTests {
         double[] expEntries;
         Vector exp;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = aEntries.clone();
         exp = new Vector(expEntries);
 

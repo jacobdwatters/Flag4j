@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +73,7 @@ public final class RealSparseNorms {
      * @return The L<sub>p</sub> of the {@code src} matrix.
      */
     public static double matrixNormLp(CooMatrix src, double p) {
-        ValidateParameters.ensureGreaterEq(1, p);
+        ValidateParameters.ensureAllGreaterEq(1, p);
 
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];
@@ -102,7 +102,7 @@ public final class RealSparseNorms {
      * @return The L<sub>p, q</sub> of the {@code src} matrix.
      */
     public static double matrixNormLpq(CooMatrix src, double p, double q) {
-        ValidateParameters.ensureGreaterEq(1, p, q);
+        ValidateParameters.ensureAllGreaterEq(1, p, q);
 
         double norm = 0;
         double[] colSums = new double[ArrayUtils.numUnique(src.colIndices)];

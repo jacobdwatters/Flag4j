@@ -33,7 +33,7 @@ class RealCsrCsrMatMultTests {
 
     @Test
     void multTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0, 0, 80.1},
                 {0, 1.41, 0, 15.5, 0, 0},
@@ -50,7 +50,7 @@ class RealCsrCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0},
                 {-77.3, 0, 0, 0},
@@ -72,7 +72,7 @@ class RealCsrCsrMatMultTests {
 
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0},
                 {-77.3, 0, 0, 0},
@@ -96,7 +96,7 @@ class RealCsrCsrMatMultTests {
 
     @Test
     void multAsCsrTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new double[][]{
                 {0, 0, 0, 0, 0, 0, 0, 94.0149, 0, 0},
                 {0, 1.4, 0, 1.3, 0, 0, 0, 0, 0, 0},
@@ -118,7 +118,7 @@ class RealCsrCsrMatMultTests {
 
         assertEquals(expCsr, A.mult2Csr(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new double[][]{
                 {-9.31, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0},
@@ -141,7 +141,7 @@ class RealCsrCsrMatMultTests {
 
         assertEquals(expCsr, A.mult2Csr(B));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new double[][]{
                 {-9.31, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0},
@@ -163,7 +163,7 @@ class RealCsrCsrMatMultTests {
 
         assertThrows(LinearAlgebraException.class, ()->A.mult2Csr(B));
 
-        // ---------------------- Sub-case 4 ----------------------
+        // ---------------------- sub-case 4 ----------------------
         aEntries = new double[][]{
                 {-9.31, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0},

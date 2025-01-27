@@ -48,22 +48,22 @@ class ComplexDenseMatMultTransposeTests {
         B = new CMatrix(entriesB);
         exp = A.mult(B.T()).data;
 
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTranspose(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTransposeBlocked(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTransposeConcurrent(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
@@ -85,22 +85,22 @@ class ComplexDenseMatMultTransposeTests {
         B = new CMatrix(entriesB).T();
         exp = A.mult(B.T()).data;
 
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTranspose(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTransposeBlocked(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTransposeConcurrent(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         act = new Complex128[A.numRows*B.numRows];
         DenseSemiringMatMultTranspose.multTransposeBlockedConcurrent(A.data, A.shape, B.data, B.shape, act);
         assertArrayEquals(exp, act);

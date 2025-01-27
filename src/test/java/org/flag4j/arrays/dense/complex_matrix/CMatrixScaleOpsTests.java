@@ -15,7 +15,7 @@ class CMatrixScaleOpsTests {
     void realScaleMultTestCase() {
         double scal;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         scal = 79.3419;
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
@@ -28,7 +28,7 @@ class CMatrixScaleOpsTests {
 
         assertEquals(exp, A.mult(scal));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         scal = -2179.3419;
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
@@ -47,7 +47,7 @@ class CMatrixScaleOpsTests {
     void complexScaleMultTestCase() {
         Complex128 scal;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         scal = new Complex128(9234.1, -923.1);
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
@@ -60,7 +60,7 @@ class CMatrixScaleOpsTests {
 
         assertEquals(exp, A.mult(scal));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         scal = new Complex128(-0.000234, -923.1);
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
@@ -79,7 +79,7 @@ class CMatrixScaleOpsTests {
     void realScaleDivTestCase() {
         double scal;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         scal = 79.3419;
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
@@ -92,7 +92,7 @@ class CMatrixScaleOpsTests {
 
         assertEquals(exp, A.div(scal));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         scal = -2179.3419;
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
@@ -111,7 +111,7 @@ class CMatrixScaleOpsTests {
     void complexScaleDivTestCase() {
         Complex128 scal;
 
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         scal = new Complex128(9234.1, -923.1);
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
@@ -124,7 +124,7 @@ class CMatrixScaleOpsTests {
 
         assertEquals(exp, A.div(scal));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         scal = new Complex128(-0.000234, -923.1);
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},

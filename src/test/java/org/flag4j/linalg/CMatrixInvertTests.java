@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CMatrixInvertTests {
+class CMatrixInvertTests {
 
     static CMatrix A;
     static CMatrix exp;
@@ -16,7 +16,7 @@ public class CMatrixInvertTests {
 
     @Test
     void invTriUTests() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         entries = new Complex128[][]{
                 {new Complex128("0.72964+0.77161i"), new Complex128("0.04017+0.35861i")},
                 {new Complex128("0.0"), new Complex128("0.02885+0.61375i")}};
@@ -28,7 +28,7 @@ public class CMatrixInvertTests {
 
         assertEquals(exp, Invert.invTriU(A));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         entries = new Complex128[][]{
                 {new Complex128("0.88984+0.74576i"), new Complex128("0.35899+0.67567i"), new Complex128("0.67057+0.03486i"), new Complex128("0.27239+0.14667i")},
                 {new Complex128("0.0"), new Complex128("0.29455+0.74263i"), new Complex128("0.99331+0.19522i"), new Complex128("0.89592+0.76741i")},
@@ -48,7 +48,7 @@ public class CMatrixInvertTests {
 
     @Test
     void invTriLTests() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         entries = new Complex128[][]{
                 {new Complex128("0.72964+0.77161i"), new Complex128("0.04017+0.35861i")},
                 {new Complex128("0.0"), new Complex128("0.02885+0.61375i")}};
@@ -60,7 +60,7 @@ public class CMatrixInvertTests {
 
         assertEquals(exp, Invert.invTriL(A));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         entries = new Complex128[][]{
                 {new Complex128("0.88984+0.74576i"), new Complex128("0.35899+0.67567i"), new Complex128("0.67057+0.03486i"), new Complex128("0.27239+0.14667i")},
                 {new Complex128("0.0"), new Complex128("0.29455+0.74263i"), new Complex128("0.99331+0.19522i"), new Complex128("0.89592+0.76741i")},
@@ -80,7 +80,7 @@ public class CMatrixInvertTests {
 
     @Test
     void invDiagTests() {
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         entries = new Complex128[][]{
                 {new Complex128(-14.43, 95.1), Complex128.ZERO},
                 {Complex128.ZERO, new Complex128(0, 1.45)}};
@@ -92,7 +92,7 @@ public class CMatrixInvertTests {
 
         assertEquals(exp, Invert.invDiag(A));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         entries = new Complex128[][]{
                 {new Complex128(-14.43, 95.1), Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, new Complex128(0, 1.45), Complex128.ZERO},

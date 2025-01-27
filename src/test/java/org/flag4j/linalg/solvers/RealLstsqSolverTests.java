@@ -21,7 +21,7 @@ class RealLstsqSolverTests {
         Vector b;
         Vector exp;
 
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[][]{
                 {1, 2, 1.55},
                 {1, 2.3, -1.444},
@@ -34,7 +34,7 @@ class RealLstsqSolverTests {
 
         assertEquals(exp, solver.solve(A, b));
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[][]{
                 {1.415, 35.6, 111.56},
                 {1.14, -2.145, -1.444},
@@ -54,7 +54,7 @@ class RealLstsqSolverTests {
         double[][] bEntries, expEntries;
         Matrix B, exp;
 
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[][]{
                 {1, 2, 1.55},
                 {1, 2.3, -1.444},
@@ -73,7 +73,7 @@ class RealLstsqSolverTests {
 
         assertEquals(exp, solver.solve(A, B));
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[][]{
                 {1.415, 35.6, 111.56},
                 {1.14, -2.145, -1.444},

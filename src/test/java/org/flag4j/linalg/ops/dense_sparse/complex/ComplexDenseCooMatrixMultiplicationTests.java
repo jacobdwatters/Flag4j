@@ -55,7 +55,7 @@ class ComplexDenseCooMatrixMultiplicationTests {
 
     @Test
     void matMatMultTestCase()  {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         sparseShape = new Shape(2, 5);
         sparseIndices = new int[][]{
                 {0, 1},
@@ -77,7 +77,7 @@ class ComplexDenseCooMatrixMultiplicationTests {
                 B.data, B.rowIndices, B.colIndices, B.shape, act);
         assertArrayEquals(ArrayUtils.flatten(expEntries), act);
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         sparseShape = new Shape(2, 3);
         sparseIndices = new int[][]{
                 {0, 1},
@@ -103,7 +103,7 @@ class ComplexDenseCooMatrixMultiplicationTests {
 
     @Test
     void matVecMultTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         sparseShape = new Shape(2, 4);
         sparseIndices = new int[][]{
                 {0, 1},
@@ -127,7 +127,7 @@ class ComplexDenseCooMatrixMultiplicationTests {
                 bvec.data, bvec.shape, act);
         assertArrayEquals(ArrayUtils.flatten(expEntries), act);
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         sparseSize = 2;
         sparseVecIndices = new int[]{1};
         bVecSparseEntries = new Complex128[]{new Complex128("1.334+0.00824i")};

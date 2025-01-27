@@ -21,7 +21,7 @@ class MatrixConstructorTests {
      */
     @Test
     void sizeConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         int size = 0;
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
@@ -32,7 +32,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         size = 1;
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
@@ -43,7 +43,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         size = 145;
         expEntriesA = new double[size*size];
         expNumColsA = expNumRowsA = size;
@@ -54,10 +54,10 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-1));
 
-        // ------------ Sub-case 5 ------------
+        // ------------ sub-case 5 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-5));
     }
 
@@ -67,7 +67,7 @@ class MatrixConstructorTests {
      */
     @Test
     void sizeFillConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         int size = 0;
         double fillValue = -1231.012;
         expEntriesA = new double[size*size];
@@ -80,7 +80,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         size = 15;
         fillValue = 13231.12321;
         expEntriesA = new double[size*size];
@@ -93,7 +93,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         size = 145;
         fillValue = 0;
         expEntriesA = new double[size*size];
@@ -106,7 +106,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         size = 13;
         fillValue = -1231;
         expEntriesA = new double[size*size];
@@ -119,10 +119,10 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 5 ------------
+        // ------------ sub-case 5 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-1));
 
-        // ------------ Sub-case 6 ------------
+        // ------------ sub-case 6 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-5));
     }
 
@@ -132,7 +132,7 @@ class MatrixConstructorTests {
      */
     @Test
     void rowColConstructorTestCase() {
-        // ------------- Sub-case 1 ------------------
+        // ------------- sub-case 1 ------------------
         expNumRowsA = 0;
         expNumColsA = 0;
         expEntriesA = new double[expNumRowsA*expNumColsA];
@@ -143,7 +143,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------- Sub-case 2 ------------------
+        // ------------- sub-case 2 ------------------
         expNumRowsA = 1;
         expNumColsA = 0;
         expEntriesA = new double[expNumRowsA*expNumColsA];
@@ -154,7 +154,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------- Sub-case 3 ------------------
+        // ------------- sub-case 3 ------------------
         expNumRowsA = 0;
         expNumColsA = 1;
         expEntriesA = new double[expNumRowsA*expNumColsA];
@@ -165,7 +165,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------- Sub-case 4 ------------------
+        // ------------- sub-case 4 ------------------
         expNumRowsA = 12;
         expNumColsA = 51;
         expEntriesA = new double[expNumRowsA*expNumColsA];
@@ -176,7 +176,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------- Sub-case 5 ------------------
+        // ------------- sub-case 5 ------------------
         expNumRowsA = 15;
         expNumColsA = 1;
         expEntriesA = new double[expNumRowsA*expNumColsA];
@@ -188,20 +188,20 @@ class MatrixConstructorTests {
         assertEquals(expNumColsA, A.numCols());
 
 
-        // ------------ Sub-case 6 ------------
+        // ------------ sub-case 6 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, 2));
 
-        // ------------ Sub-case 7 ------------
+        // ------------ sub-case 7 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(2, -2));
 
-        // ------------ Sub-case 8 ------------
+        // ------------ sub-case 8 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, -2));
     }
 
 
     @Test
     void rowColFillConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expNumRowsA = 0;
         expNumColsA = 1;
         double fillValue = -1231.012;
@@ -214,7 +214,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         expNumRowsA = 1;
         expNumColsA = 0;
         fillValue = 13231.12321;
@@ -227,7 +227,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         expNumRowsA = 12;
         expNumColsA = 14;
         fillValue = 0;
@@ -240,7 +240,7 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         expNumRowsA = 1;
         expNumColsA = 19;
         fillValue = -144;
@@ -253,20 +253,20 @@ class MatrixConstructorTests {
         assertEquals(expNumRowsA, A.numRows());
         assertEquals(expNumColsA, A.numCols());
 
-        // ------------ Sub-case 5 ------------
+        // ------------ sub-case 5 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, 2, 45));
 
-        // ------------ Sub-case 6 ------------
+        // ------------ sub-case 6 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(2, -2, 45));
 
-        // ------------ Sub-case 7 ------------
+        // ------------ sub-case 7 ------------
         assertThrows(IllegalArgumentException.class, () -> new Matrix(-2, -2, 45));
     }
 
 
     @Test
     void doubleEntriesConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expEntriesA2d = new double[][]
                 {{1, 5.2234, 1231.2344, -112, 3.3, 0, 2.3e-4},
                 {0.4, 12, -44.3, Double.NEGATIVE_INFINITY, Math.PI, Double.NaN, Double.POSITIVE_INFINITY}};
@@ -287,7 +287,7 @@ class MatrixConstructorTests {
 
     @Test
     void intEntriesConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expEntriesA2d = new double[][]
                 {{1, 2, 3},
                 {0, -1, -3},
@@ -312,7 +312,7 @@ class MatrixConstructorTests {
 
 
     @Test void matConstructorTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expEntriesA2d = new double[][]
                 {{1, 5.2234, 1231.2344, -112, 3.3, 0, 2.3e-4},
                         {0.4, 12, -44.3, Double.NEGATIVE_INFINITY, Math.PI, Double.NaN, Double.POSITIVE_INFINITY}};

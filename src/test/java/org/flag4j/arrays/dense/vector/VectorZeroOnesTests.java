@@ -15,17 +15,17 @@ class VectorZeroOnesTests {
 
     @Test
     void zerosTestCase(){
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[34];
         A = new Vector(aEntries);
         assertTrue(A.isZeros());
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{0.0, 0, -0.0};
         A = new Vector(aEntries);
         assertTrue(A.isZeros());
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new double[2345];
         aEntries[123] = 3.324;
         A = new Vector(aEntries);
@@ -35,18 +35,18 @@ class VectorZeroOnesTests {
 
     @Test
     void onesTestCase(){
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new double[34];
         Arrays.fill(aEntries, 1);
         A = new Vector(aEntries);
         assertTrue(A.isOnes());
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new double[]{1.0, 1, 1.0};
         A = new Vector(aEntries);
         assertTrue(A.isOnes());
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new double[2345];
         Arrays.fill(aEntries, 1);
         aEntries[123] = 3.324;

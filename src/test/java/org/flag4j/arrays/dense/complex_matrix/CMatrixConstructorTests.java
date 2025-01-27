@@ -27,7 +27,7 @@ class CMatrixConstructorTests {
 
     @Test
     void sizeConstructorTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         size = 5;
         expEntries = new Complex128[size*size];
 
@@ -44,7 +44,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         size = 2;
         expEntries = new Complex128[size*size];
 
@@ -60,7 +60,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         size = -2;
 
         assertThrows(IllegalArgumentException.class, () -> new CMatrix(size));
@@ -69,7 +69,7 @@ class CMatrixConstructorTests {
 
     @Test
     void valueSizeTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         size = 5;
         value = new Complex128(-23.13, 100.442);
         expEntries = new Complex128[size*size];
@@ -87,7 +87,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         size = 5;
         value = new Complex128(0, 5);
         expEntries = new Complex128[size*size];
@@ -105,7 +105,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         value = new Complex128(0, 5);
         size = -2;
 
@@ -115,7 +115,7 @@ class CMatrixConstructorTests {
 
     @Test
     void valueSizeDoubleTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         size = 5;
         valueD = 9.1;
         expEntries = new Complex128[size*size];
@@ -133,7 +133,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         size = 5;
         valueD = -0.000013;
         expEntries = new Complex128[size*size];
@@ -150,7 +150,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         valueD = 5;
         size = -100;
 
@@ -160,7 +160,7 @@ class CMatrixConstructorTests {
 
     @Test
     void rowsColsTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
         expEntries = new Complex128[expNumRows*expNumCols];
@@ -176,7 +176,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         expNumRows = 1;
         expNumCols = 16;
         expEntries = new Complex128[expNumRows*expNumCols];
@@ -192,19 +192,19 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         expNumRows = -1;
         expNumCols = 2;
 
         assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         expNumRows = 1;
         expNumCols = -2;
 
         assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols));
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         expNumRows = -1;
         expNumCols = -2;
 
@@ -213,7 +213,7 @@ class CMatrixConstructorTests {
 
     @Test
     void rowColValueTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
         expEntries = new Complex128[expNumRows*expNumCols];
@@ -230,7 +230,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         expNumRows = 1;
         expNumCols = 16;
         expEntries = new Complex128[expNumRows*expNumCols];
@@ -247,21 +247,21 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         expNumRows = -1;
         expNumCols = 2;
         value = new Complex128(1, 1);
 
         assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, value));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         expNumRows = 1;
         expNumCols = -2;
         value = new Complex128(1, 1);
 
         assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, value));
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         expNumRows = -1;
         expNumCols = -2;
         value = new Complex128(1, 1);
@@ -271,7 +271,7 @@ class CMatrixConstructorTests {
 
     @Test
     void rowColValueDoubleTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
         expEntries = new Complex128[expNumRows*expNumCols];
@@ -287,7 +287,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         expNumRows = 1;
         expNumCols = 16;
         expEntries = new Complex128[expNumRows*expNumCols];
@@ -303,21 +303,21 @@ class CMatrixConstructorTests {
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         expNumRows = -1;
         expNumCols = 2;
         valueD = 1;
 
         assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, valueD));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         expNumRows = 1;
         expNumCols = -2;
         valueD = 1;
 
         assertThrows(IllegalArgumentException.class, () -> new CMatrix(expNumRows, expNumCols, valueD));
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         expNumRows = -1;
         expNumCols = -2;
         valueD = 1;
@@ -328,7 +328,7 @@ class CMatrixConstructorTests {
 
     @Test
     void shapeTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
         shape = new Shape(expNumRows, expNumCols);
@@ -345,7 +345,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         expNumRows = 1;
         expNumCols = 16;
         shape = new Shape(expNumRows, expNumCols);
@@ -365,7 +365,7 @@ class CMatrixConstructorTests {
 
     @Test
     void shapeValueTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
         shape = new Shape(expNumRows, expNumCols);
@@ -383,7 +383,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumCols, A.numCols);
 
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         expNumRows = 1;
         expNumCols = 16;
         shape = new Shape(expNumRows, expNumCols);
@@ -404,7 +404,7 @@ class CMatrixConstructorTests {
 
     @Test
     void shapeValueDoubleTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         expNumRows = 5;
         expNumCols = 2;
         shape = new Shape(expNumRows, expNumCols);
@@ -421,7 +421,7 @@ class CMatrixConstructorTests {
         assertEquals(expNumRows, A.numRows);
         assertEquals(expNumCols, A.numCols);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         expNumRows = 1;
         expNumCols = 16;
         shape = new Shape(expNumRows, expNumCols);

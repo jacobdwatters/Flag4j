@@ -118,7 +118,7 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
 
     /**
      * Gets the unitary matrix V corresponding to M=USV<sup>H</sup> in the SVD.
-     * @return V corresponding to M=USV<sup>H</sup> in the SVD. Note that the hermitian transpose has
+     * @return V corresponding to M=USV<sup>H</sup> in the SVD. Note that the Hermitian transpose has
      * <b>not</b> been computed.
      */
     public T getV() {
@@ -188,9 +188,9 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
 
 
     /**
-     * Computes the inverse direct sum of a matrix and its hermitian transpose.
-     * @param src Matrix to inverse direct add with its hermitian transpose.
-     * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
+     * Computes the inverse direct sum of a matrix and its Hermitian transpose.
+     * @param src Matrix to inverse direct add with its Hermitian transpose.
+     * @return The inverse direct sum of the {@code src} matrix with its Hermitian transpose.
      */
     protected abstract T invDirectSum(T src);
 

@@ -306,7 +306,7 @@ public final class RealComplexCsrOps {
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static CMatrix addToEachCol(CsrCMatrix src1, Vector src2) {
-        ValidateParameters.ensureEquals(src1.numRows, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numRows, src2.size);
         CMatrix sum = src2.repeat(src1.numCols, 1).toComplex();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -333,7 +333,7 @@ public final class RealComplexCsrOps {
      * @return The result of adding the vector src2 to each column of this matrix.
      */
     public static CMatrix addToEachCol(CsrCMatrix src1, CooVector src2) {
-        ValidateParameters.ensureEquals(src1.numRows, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numRows, src2.size);
         CMatrix sum = src2.repeat(src1.numCols, 1).toComplex().toDense();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -360,7 +360,7 @@ public final class RealComplexCsrOps {
      * @return The result of adding the vector src2 to each row of this matrix.
      */
     public static CMatrix addToEachRow(CsrCMatrix src1, Vector src2) {
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
         CMatrix sum = src2.repeat(src1.numRows, 0).toComplex();
 
         for(int i=0; i<src1.numRows; i++) {
@@ -386,7 +386,7 @@ public final class RealComplexCsrOps {
      * @return The result of adding the vector src2 to each row of this matrix.
      */
     public static CMatrix addToEachRow(CsrCMatrix src1, CooVector src2) {
-        ValidateParameters.ensureEquals(src1.numCols, src2.size);
+        ValidateParameters.ensureAllEqual(src1.numCols, src2.size);
         CMatrix sum = src2.repeat(src1.numRows, 0).toComplex().toDense();
 
         for(int i=0; i<src1.numRows; i++) {

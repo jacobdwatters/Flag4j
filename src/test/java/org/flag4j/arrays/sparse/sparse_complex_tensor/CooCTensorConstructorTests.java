@@ -22,7 +22,7 @@ class CooCTensorConstructorTests {
 
     @Test
     void shapeTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new Complex128[0];
         expIndices = new int[0][0];
@@ -35,7 +35,7 @@ class CooCTensorConstructorTests {
             Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         expShape = new Shape(12);
         expNonZero = new Complex128[0];
         expIndices = new int[0][0];
@@ -52,7 +52,7 @@ class CooCTensorConstructorTests {
 
     @Test
     void shapeEntriesIndicesTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new Complex128[]{new Complex128(1, -0.92342), new Complex128(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
@@ -65,19 +65,19 @@ class CooCTensorConstructorTests {
             Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new Complex128[]{new Complex128(1, -0.92342), new Complex128(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}, {0, 1, 22, 3, 0, 10}};
         assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new Complex128[]{new Complex128(1, -0.92342), new Complex128(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
         assertThrows(LinearAlgebraException.class, () -> new CooCTensor(expShape, expNonZero, expIndices));
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         expShape = new Shape(2);
         expNonZero = new Complex128[]{new Complex128(1, -0.92342), new Complex128(-100, 123.44), new Complex128(0, 1)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};
@@ -87,7 +87,7 @@ class CooCTensorConstructorTests {
 
     @Test
     void shapeEntriesIndicesDTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZeroD = new double[]{1, 2, 3, 4.023423, -9233.2};
         expNonZero = new Complex128[expNonZeroD.length];
@@ -103,7 +103,7 @@ class CooCTensorConstructorTests {
             Assertions.assertEquals(expNonZero[i], A.data[i]);
         }
 
-        // ------------ Sub-case 2 ------------
+        // ------------ sub-case 2 ------------
         expShape = new Shape(5, 3);
         expNonZeroD = new double[]{1, 2, 3, 4.023423, -9233.2};
         expNonZero = new Complex128[expNonZeroD.length];
@@ -111,7 +111,7 @@ class CooCTensorConstructorTests {
         expIndices = new int[][]{{0, 0}, {1, 1}, {2, 2}};
         assertThrows(IllegalArgumentException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
 
-        // ------------ Sub-case 3 ------------
+        // ------------ sub-case 3 ------------
         expShape = new Shape(5, 3);
         expNonZeroD = new double[]{1, 2};
         expNonZero = new Complex128[expNonZeroD.length];
@@ -119,7 +119,7 @@ class CooCTensorConstructorTests {
         expIndices = new int[][]{{0, 0, 10, 1, 0}, {0, 1, 22, 2, 0}};
         assertThrows(LinearAlgebraException.class, () -> new CooCTensor(expShape, expNonZeroD, expIndices));
 
-        // ------------ Sub-case 4 ------------
+        // ------------ sub-case 4 ------------
         expShape = new Shape(2);
         expNonZeroD = new double[]{1, 2, 3, 4.023423, -9233.2};
         expNonZero = new Complex128[expNonZeroD.length];
@@ -131,7 +131,7 @@ class CooCTensorConstructorTests {
 
     @Test
     void copyTestCase() {
-        // ------------ Sub-case 1 ------------
+        // ------------ sub-case 1 ------------
         expShape = new Shape(1, 2, 31, 4, 1, 11);
         expNonZero = new Complex128[]{new Complex128(1, -0.92342), new Complex128(-100, 123.44)};
         expIndices = new int[][]{{0, 0, 10, 1, 0, 9}, {0, 1, 22, 2, 0, 10}};

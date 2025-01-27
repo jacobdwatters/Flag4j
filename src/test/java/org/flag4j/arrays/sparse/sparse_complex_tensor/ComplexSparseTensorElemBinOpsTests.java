@@ -28,7 +28,7 @@ class ComplexSparseTensorElemBinOpsTests {
 
     @Test
     void elemMultTest() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aShape = new Shape(3, 4, 5);
         aEntries = new Complex128[]{new Complex128(0.3554027346190748, 0.17814806338585254), new Complex128(0.4679008020105414, 0.552234592711959), new Complex128(0.8023911579050015, 0.9369773311398271), new Complex128(0.5361245107886304, 0.8426048494330756), new Complex128(0.5116663669327101, 0.14226079103124079), new Complex128(0.6031886469745519, 0.5507006336519896), new Complex128(0.30173187058465345, 0.44768758628894023), new Complex128(0.47089846293340487, 0.12372049483112735), new Complex128(0.8332812297009098, 0.14164829949927782)};
         aIndices = new int[][]{
@@ -74,7 +74,7 @@ class ComplexSparseTensorElemBinOpsTests {
 
         assertEquals(exp, A.elemMult(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aShape = new Shape(3, 4, 5);
         aEntries = new Complex128[]{new Complex128(0.8090733448617681, 0.4514905847217746), new Complex128(0.5139505427121954, 0.1480659883061629), new Complex128(0.5538830826585828, 0.39096787547155687), new Complex128(0.01148067313092116, 0.3414711394381831), new Complex128(0.8287843463670005, 0.09420330954836731), new Complex128(0.34229624969929295, 0.986859223440192), new Complex128(0.5049744445088055, 0.305164515526821), new Complex128(0.8313739736384473, 0.24290072013606512), new Complex128(0.5498472829959157, 0.8566546560473144)};
         aIndices = new int[][]{
@@ -103,7 +103,7 @@ class ComplexSparseTensorElemBinOpsTests {
         };
         exp = new CooCTensor(expShape, expEntries, expIndices);
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooCTensor(aShape);
 
@@ -112,7 +112,7 @@ class ComplexSparseTensorElemBinOpsTests {
 
         assertThrows(LinearAlgebraException.class, ()->A.elemMult(B));
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooCTensor(aShape);
 
@@ -164,7 +164,7 @@ class ComplexSparseTensorElemBinOpsTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.add(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aShape = new Shape(3, 2, 1, 2, 3);
         aEntries = new Complex128[]{new Complex128(0.6160738463715426, 0.1968914050559546), new Complex128(0.18076095086893407, 0.6136186390756889), new Complex128(0.772159908547494, 0.35655250177408504), new Complex128(0.4591634888667765, 0.6382625477088578), new Complex128(0.7179540532210842, 0.9920449208502049)};
         aIndices = new int[][]{
@@ -193,7 +193,7 @@ class ComplexSparseTensorElemBinOpsTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.add(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooCTensor(aShape);
 
@@ -202,7 +202,7 @@ class ComplexSparseTensorElemBinOpsTests {
 
         assertThrows(LinearAlgebraException.class, ()->A.add(B));
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooCTensor(aShape);
 
@@ -215,7 +215,7 @@ class ComplexSparseTensorElemBinOpsTests {
 
     @Test
     void subTests() {
-        // ------------------------ Sub-case 1 ------------------------
+        // ------------------------ sub-case 1 ------------------------
         aShape = new Shape(3, 4, 5);
         aEntries = new Complex128[]{new Complex128(0.17614198390401192, 0.9506050536197737), new Complex128(0.31444950275574934, 0.7698169544040158), new Complex128(0.6367546698696576, 0.41787425228492703), new Complex128(0.7815522736625252, 0.7719692133463149), new Complex128(0.2944302437797989, 0.9771280639457677), new Complex128(0.3918838885588891, 0.9684349409321966), new Complex128(0.7006607124763364, 0.693548623559356), new Complex128(0.6655396902912524, 0.5003215039870123), new Complex128(0.21520203030603913, 0.6556408883606212)};
         aIndices = new int[][]{
@@ -256,7 +256,7 @@ class ComplexSparseTensorElemBinOpsTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.sub(B));
 
-        // ------------------------ Sub-case 2 ------------------------
+        // ------------------------ sub-case 2 ------------------------
         aShape = new Shape(3, 4, 2, 1, 5);
         aEntries = new Complex128[]{new Complex128(0.03099867357042463, 0.16406141241826533),
                 new Complex128(0.40025480480395215, 0.3573176589499272),
@@ -328,7 +328,7 @@ class ComplexSparseTensorElemBinOpsTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.sub(B));
 
-        // ------------------------ Sub-case 3 ------------------------
+        // ------------------------ sub-case 3 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooCTensor(aShape);
 
@@ -337,7 +337,7 @@ class ComplexSparseTensorElemBinOpsTests {
 
         assertThrows(LinearAlgebraException.class, ()->A.sub(B));
 
-        // ------------------------ Sub-case 4 ------------------------
+        // ------------------------ sub-case 4 ------------------------
         aShape = new Shape(3, 4, 1, 2);
         A = new CooCTensor(aShape);
 

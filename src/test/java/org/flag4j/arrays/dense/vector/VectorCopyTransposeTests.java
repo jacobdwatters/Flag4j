@@ -18,7 +18,7 @@ class VectorCopyTransposeTests {
         expEntries = new double[]{234.45, -0.0234, Double.POSITIVE_INFINITY, Double.NaN, -0.0, 1};
         exp = new Vector(expEntries);
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         act = a.copy();
 
         for(int i=0; i<exp.size; i++) {
@@ -30,7 +30,7 @@ class VectorCopyTransposeTests {
         }
 
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         act = a.T();
 
         for(int i=0; i<exp.size; i++) {
@@ -42,7 +42,7 @@ class VectorCopyTransposeTests {
         }
 
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         act = a.T();
 
         for(int i=0; i<exp.size; i++) {

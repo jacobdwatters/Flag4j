@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ComplexLUTests {
+class ComplexLUTests {
 
     static Complex128[][] aEntries;
     static CMatrix A;
@@ -33,7 +33,7 @@ public class ComplexLUTests {
     void noPivotTestCase() {
         lu = new ComplexLU(LU.Pivoting.NONE);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")},
@@ -47,7 +47,7 @@ public class ComplexLUTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i")},
@@ -61,7 +61,7 @@ public class ComplexLUTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")}};
@@ -81,7 +81,7 @@ public class ComplexLUTests {
     void partialPivotTestCase() {
         lu = new ComplexLU();
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")},
@@ -96,7 +96,7 @@ public class ComplexLUTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i")},
@@ -111,7 +111,7 @@ public class ComplexLUTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")}};
@@ -131,7 +131,7 @@ public class ComplexLUTests {
     void partialFullTestCase() {
         lu = new ComplexLU(LU.Pivoting.FULL);
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")},
@@ -147,7 +147,7 @@ public class ComplexLUTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i")},
@@ -163,7 +163,7 @@ public class ComplexLUTests {
 
         assertEquals(new CMatrix(A.shape), A.sub(A_hat).roundToZero(1.0e-12));
 
-        // --------------------- Sub-case 3 ---------------------
+        // --------------------- sub-case 3 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("1.255+45.1i"), new Complex128("-99.24+0.024i"), new Complex128("9.5-8.6i")},
                 {new Complex128("6.466"), new Complex128("8.4-2.45i"), new Complex128("0.0+34.5i")}};

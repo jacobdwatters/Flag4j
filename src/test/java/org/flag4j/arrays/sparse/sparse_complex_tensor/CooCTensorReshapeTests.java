@@ -22,7 +22,7 @@ class CooCTensorReshapeTests {
 
     @Test
     void reshapeTests() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aShape = new Shape(5, 4, 2, 1);
         aEntries = new Complex128[]{new Complex128(0.2856, 0.1775), new Complex128(0.2455, 0.6139), new Complex128(0.9386, 0.8602), new Complex128(0.194, 0.921), new Complex128(0.8078, 0.4986), new Complex128(0.359, 0.5673)};
         aIndices = new int[][]{
@@ -46,7 +46,7 @@ class CooCTensorReshapeTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(2, 5, 2, 2));
 
-        // ----------------------------- Sub-case 2 -----------------------------
+        // ----------------------------- sub-case 2 -----------------------------
         aShape = new Shape(5, 4, 2, 3, 15);
         aEntries = new Complex128[]{new Complex128(0.8103, 0.0203), new Complex128(0.5684, 0.4151), new Complex128(0.9044, 0.8734), new Complex128(0.201, 0.7032), new Complex128(0.9682, 0.2723), new Complex128(0.4699, 0.8203), new Complex128(0.3871, 0.3395), new Complex128(0.7851, 0.3768), new Complex128(0.2315, 0.7695), new Complex128(0.8333, 0.8837), new Complex128(0.0398, 0.559), new Complex128(0.0405, 0.9707), new Complex128(0.488, 0.8343), new Complex128(0.2441, 0.7806), new Complex128(0.3995, 0.6793), new Complex128(0.3689, 0.6126), new Complex128(0.0767, 0.9631), new Complex128(0.8007, 0.4023)};
         aIndices = new int[][]{
@@ -94,7 +94,7 @@ class CooCTensorReshapeTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(15, 2, 4, 15));
 
-        // ----------------------------- Sub-case 3 -----------------------------
+        // ----------------------------- sub-case 3 -----------------------------
         aShape = new Shape(3, 16);
         aShape = new Shape(3, 16);
         aEntries = new Complex128[]{new Complex128(0.5938, 0.762), new Complex128(0.4295, 0.7988), new Complex128(0.0332, 0.3233), new Complex128(0.7022, 0.1686), new Complex128(0.7114, 0.6353), new Complex128(0.5935, 0.0851), new Complex128(0.7148, 0.5695)};
@@ -121,14 +121,14 @@ class CooCTensorReshapeTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.reshape(2, 4, 3, 2));
 
-        // ----------------------------- Sub-case 4 -----------------------------
+        // ----------------------------- sub-case 4 -----------------------------
         assertThrows(TensorShapeException.class, ()->A.reshape(150, 12));
     }
 
 
     @Test
     void flattenTests() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aShape = new Shape(3, 16);
         aEntries = new Complex128[]{
                 new Complex128(1, -2), new Complex128(9.145, 0.00013),
@@ -151,7 +151,7 @@ class CooCTensorReshapeTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten());
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new Complex128[]{new Complex128(0, 15), new Complex128(0), new Complex128(-9, 154)};
         aIndices = new int[][]{
@@ -169,7 +169,7 @@ class CooCTensorReshapeTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten());
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new Complex128[]{new Complex128(0, 15), new Complex128(2), new Complex128(-9, 154)};
         aIndices = new int[][]{
@@ -187,7 +187,7 @@ class CooCTensorReshapeTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten(1));
 
-        // -------------------------- Sub-case 4 --------------------------
+        // -------------------------- sub-case 4 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new Complex128[]{new Complex128(0, 15), new Complex128(234), new Complex128(-9, 154)};
         aIndices = new int[][]{
@@ -205,7 +205,7 @@ class CooCTensorReshapeTests {
         exp = new CooCTensor(expShape, expEntries, expIndices);
         assertEquals(exp, A.flatten(2));
 
-        // -------------------------- Sub-case 5 --------------------------
+        // -------------------------- sub-case 5 --------------------------
         aShape = new Shape(3, 2, 4);
         aEntries = new Complex128[]{new Complex128(0, 15), new Complex128(234), new Complex128(-9, 154)};
         aIndices = new int[][]{

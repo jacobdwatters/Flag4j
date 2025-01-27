@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,8 +52,8 @@ public abstract class Cholesky<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
     protected static final double DEFAULT_POS_DEF_TOLERANCE = 1.0e-10;
 
     /**
-     * Flag indicating if the matrix to be decomposed should be explicitly checked to be hermitian (true). If false, no check
-     * will be made and the matrix will be treated as if it were hermitian and only the lower half of the matrix will be accessed.
+     * Flag indicating if the matrix to be decomposed should be explicitly checked to be Hermitian (true). If false, no check
+     * will be made and the matrix will be treated as if it were Hermitian and only the lower half of the matrix will be accessed.
      */
     final boolean enforceHermitian;
 

@@ -1,4 +1,3 @@
-module:flag4j
 org.flag4j.algebraic_structures
 org.flag4j.arrays
 org.flag4j.arrays.backend
@@ -23,7 +22,6 @@ org.flag4j.linalg.decompositions.schur
 org.flag4j.linalg.decompositions.svd
 org.flag4j.linalg.decompositions.unitary
 org.flag4j.linalg.ops
-org.flag4j.linalg.ops.common
 org.flag4j.linalg.ops.common.complex
 org.flag4j.linalg.ops.common.field_ops
 org.flag4j.linalg.ops.common.real
@@ -62,5 +60,6 @@ org.flag4j.linalg.solvers.exact.triangular
 org.flag4j.linalg.solvers.lstsq
 org.flag4j.linalg.transformations
 org.flag4j.rng
+org.flag4j.rng.distributions
 org.flag4j.util
 org.flag4j.util.exceptions

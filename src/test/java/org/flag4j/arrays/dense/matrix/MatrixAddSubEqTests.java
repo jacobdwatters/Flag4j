@@ -22,7 +22,7 @@ class MatrixAddSubEqTests {
         double[][] bEntries;
         Matrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
         A = new Matrix(aEntries);
         bEntries = new double[][]{{23.46, -9346346.34634, 14.466}, {Double.POSITIVE_INFINITY, 345.6, 8.346}};
@@ -33,7 +33,7 @@ class MatrixAddSubEqTests {
 
         assertEquals(exp, A);
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
         A = new Matrix(aEntries);
         bEntries = new double[][]{{23.46, -9346346.34634}, {Double.POSITIVE_INFINITY, 345.6}};
@@ -48,7 +48,7 @@ class MatrixAddSubEqTests {
     void addEqDoubleTestCase() {
         double b;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
         A = new Matrix(aEntries);
         b = 316.455;
@@ -65,7 +65,7 @@ class MatrixAddSubEqTests {
         double[][] bEntries;
         Matrix B;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
         A = new Matrix(aEntries);
         bEntries = new double[][]{{23.46, -9346346.34634, 14.466}, {Double.POSITIVE_INFINITY, 345.6, 8.346}};
@@ -76,7 +76,7 @@ class MatrixAddSubEqTests {
 
         assertEquals(exp, A);
 
-        // --------------------- Sub-case 2 ---------------------
+        // --------------------- sub-case 2 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
         A = new Matrix(aEntries);
         bEntries = new double[][]{{23.46, -9346346.34634}, {Double.POSITIVE_INFINITY, 345.6}};
@@ -91,7 +91,7 @@ class MatrixAddSubEqTests {
     void subEqDoubleTestCase() {
         double b;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         aEntries = new double[][]{{1, 2.435, -843.5}, {34.56, 8.52, 0.000345}};
         A = new Matrix(aEntries);
         b = 316.455;

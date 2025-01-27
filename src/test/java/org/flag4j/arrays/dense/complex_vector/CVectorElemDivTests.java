@@ -53,7 +53,7 @@ class CVectorElemDivTests {
         double[] bEntries;
         Vector b;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         bEntries = new double[]{2.455, -9.24, 0, 24.50001};
         b = new Vector(bEntries);
         expEntries = new Complex128[]{aEntries[0].div(bEntries[0]), aEntries[1].div(bEntries[1]),
@@ -62,7 +62,7 @@ class CVectorElemDivTests {
 
         assertEqualsNaN(exp, a.div(b));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         bEntries = new double[]{2.455, -9.24};
         b = new Vector(bEntries);
 
@@ -76,7 +76,7 @@ class CVectorElemDivTests {
         Complex128[] bEntries;
         CVector b;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         bEntries = new Complex128[]{new Complex128(-0.00024), new Complex128(0, 85.234),
                 new Complex128(0.00234, 15.6), new Complex128(-0.24, 662.115)};
         b = new CVector(bEntries);
@@ -86,7 +86,7 @@ class CVectorElemDivTests {
 
         assertEqualsNaN(exp, a.div(b));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         bEntries = new Complex128[]{new Complex128(0, 85.234),
                 new Complex128(0.00234, 15.6), new Complex128(-0.24, 662.115)};
         b = new CVector(bEntries);

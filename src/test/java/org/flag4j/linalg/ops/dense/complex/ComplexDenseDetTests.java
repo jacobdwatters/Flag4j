@@ -18,35 +18,35 @@ class ComplexDenseDetTests {
 
     @Test
     void det1Test() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         entries = new Complex128[][]{{new Complex128(9.5, -14.5)}};
         A = new CMatrix(entries);
         exp = new Complex128(9.5, -14.5);
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         entries = new Complex128[][]{{new Complex128(1.4)}};
         A = new CMatrix(entries);
         exp = new Complex128(1.4);
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         entries = new Complex128[][]{{new Complex128(-9)}};
         A = new CMatrix(entries);
         exp = new Complex128(-9);
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         entries = new Complex128[][]{{new Complex128(0, 9765.134523400202002)}};
         A = new CMatrix(entries);
         exp = new Complex128(0, 9765.134523400202002);
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         entries = new Complex128[][]{{Complex128.ZERO, Complex128.ZERO}, {Complex128.ZERO, Complex128.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()-> DenseFieldDeterminant.det1(A));
@@ -55,7 +55,7 @@ class ComplexDenseDetTests {
 
     @Test
     void det2Test() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         entries = new Complex128[][]{
                 {new Complex128("-1.0"), new Complex128("5.0")},
                 {new Complex128("133.5"), new Complex128("25.0")}};
@@ -64,7 +64,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         entries = new Complex128[][]{
                 {new Complex128("-1.0+0.345i"), new Complex128("5.0+2.0i")},
                 {new Complex128("133.5+0.00014i"), new Complex128("-0.0-25.0i")}};
@@ -73,7 +73,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         entries = new Complex128[][]{
                 {new Complex128("0.0+8.0i"), new Complex128("-3.0+2.0i")},
                 {new Complex128("-3.0+2.0i"), new Complex128("-0.0-25.0i")}};
@@ -82,7 +82,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         entries = new Complex128[][]{
                 {new Complex128("1.0"), new Complex128("6.0-2.0i")},
                 {new Complex128("6.0+2.0i"), new Complex128("5.0")}};
@@ -91,12 +91,12 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         entries = new Complex128[][]{{Complex128.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->DenseFieldDeterminant.det2(A));
 
-        // -------------- Sub-case 6 --------------
+        // -------------- sub-case 6 --------------
         entries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -108,7 +108,7 @@ class ComplexDenseDetTests {
 
     @Test
     void det3Test() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         entries = new Complex128[][]{
                 {new Complex128("1"), new Complex128("2"), new Complex128("3")},
                 {new Complex128("4"), new Complex128("5"), new Complex128("6")},
@@ -118,7 +118,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         entries = new Complex128[][]{
                 {new Complex128("19.45"), new Complex128("-0.0035"), new Complex128("125.6")},
                 {new Complex128("1.000035"), new Complex128("5.6"), new Complex128("1556.78679")},
@@ -128,7 +128,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         entries = new Complex128[][]{
                 {new Complex128("19.45+0.02026i"), new Complex128("-0.0035+8.0i"), new Complex128("125.6")},
                 {new Complex128("1.000035"), new Complex128("5.6+30.49856i"), new Complex128("1556.78679-985.355i")},
@@ -138,12 +138,12 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         entries = new Complex128[][]{{Complex128.ZERO, Complex128.ZERO}, {Complex128.ZERO, Complex128.ZERO}};
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->DenseFieldDeterminant.det3(A));
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         entries = new Complex128[][]{
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
                 {Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO},
@@ -155,7 +155,7 @@ class ComplexDenseDetTests {
 
     @Test
     void detLUTest() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         entries = new Complex128[][]{
                 {new Complex128("1.0"), new Complex128("-53.0"), new Complex128("611.5"), new Complex128("234.6")},
                 {new Complex128("-0.00351"), new Complex128("0.0"), new Complex128("24.56"), new Complex128("14.6")},
@@ -166,7 +166,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         entries = new Complex128[][]{
                 {new Complex128("0.41059+0.9284i"), new Complex128("0.13828+0.91072i"), new Complex128("0.70458+0.9232i"), new Complex128("0.6675+0.94988i")},
                 {new Complex128("0.46771+0.6101i"), new Complex128("0.82633+0.28485i"), new Complex128("0.22087+0.69659i"), new Complex128("0.97234+0.36372i")},
@@ -177,7 +177,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         entries = new Complex128[][]{
                 {new Complex128("0.00399+0.99393i"), new Complex128("0.5602+0.87092i"), new Complex128("0.94279+0.72353i"), new Complex128("0.26672+0.89313i"), new Complex128("0.93043+0.36442i"), new Complex128("0.56652+0.75951i"), new Complex128("0.38806+0.72435i"), new Complex128("0.34656+0.05705i"), new Complex128("0.98495+0.98219i"), new Complex128("0.19058+0.99072i"), new Complex128("0.71766+0.87942i"), new Complex128("0.67899+0.64893i"), new Complex128("0.57014+0.89789i"), new Complex128("0.35228+0.72217i"), new Complex128("0.91898+0.55195i")},
                 {new Complex128("0.83284+0.56167i"), new Complex128("0.72028+0.14505i"), new Complex128("0.84075+0.29224i"), new Complex128("0.93349+0.37263i"), new Complex128("0.97302+0.3842i"), new Complex128("0.881+0.79757i"), new Complex128("0.83075+0.93624i"), new Complex128("0.92814+0.47567i"), new Complex128("0.26395+0.93256i"), new Complex128("0.01236+0.38783i"), new Complex128("0.1645+0.91338i"), new Complex128("0.5939+0.55956i"), new Complex128("0.41956+0.05676i"), new Complex128("0.16001+0.19826i"), new Complex128("0.65655+0.63476i")},
@@ -199,7 +199,7 @@ class ComplexDenseDetTests {
         act = ComplexDenseDeterminant.det(A);
         assertEquals(exp, act);
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         entries = new Complex128[][]{
                 {new Complex128("1.0"), new Complex128("-53.0"), new Complex128("611.5"), new Complex128("234.6")},
                 {new Complex128("-0.00351"), new Complex128("0.0"), new Complex128("24.56"), new Complex128("14.6")},
@@ -207,7 +207,7 @@ class ComplexDenseDetTests {
         A = new CMatrix(entries);
         assertThrows(LinearAlgebraException.class, ()->ComplexDenseDeterminant.det(A));
 
-        // -------------- Sub-case 6 --------------
+        // -------------- sub-case 6 --------------
         entries = new Complex128[][]{
                 {new Complex128("1.0"), new Complex128("-53.0"), new Complex128("611.5")},
                 {new Complex128("-0.00351"), new Complex128("0.0"), new Complex128("24.56")},

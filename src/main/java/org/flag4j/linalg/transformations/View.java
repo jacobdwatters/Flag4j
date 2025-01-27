@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ public final class View {
      * @throws IllegalArgumentException If any of the argument vectors do not have length 3.
      */
     public static Matrix lookAt(Vector cameraPos, Vector center, Vector up) {
-        ValidateParameters.ensureEquals(3, cameraPos.size, center.size, up.size);
+        ValidateParameters.ensureAllEqual(3, cameraPos.size, center.size, up.size);
 
         Vector f = center.sub(cameraPos).normalize();
         Vector u = up.normalize();

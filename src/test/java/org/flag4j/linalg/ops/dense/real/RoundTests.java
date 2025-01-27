@@ -14,7 +14,7 @@ class RoundTests {
 
     @Test
     void simpleRoundTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.556}};
         A = new Matrix(aEntries);
 
@@ -27,7 +27,7 @@ class RoundTests {
 
     @Test
     void roundPrecisionTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.556}};
         A = new Matrix(aEntries);
 
@@ -36,7 +36,7 @@ class RoundTests {
 
         assertEquals(exp, A.round(0));
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.556}};
         A = new Matrix(aEntries);
 
@@ -45,7 +45,7 @@ class RoundTests {
 
         assertEquals(exp, A.round(0));
 
-        // ----------------- Sub-case 3 -----------------
+        // ----------------- sub-case 3 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.556}};
         A = new Matrix(aEntries);
 
@@ -54,7 +54,7 @@ class RoundTests {
 
         assertEquals(exp, A.round(2));
 
-        // ----------------- Sub-case 4 -----------------
+        // ----------------- sub-case 4 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.99989}};
         A = new Matrix(aEntries);
 
@@ -63,7 +63,7 @@ class RoundTests {
 
         assertEquals(exp, A.round(2));
 
-        // ----------------- Sub-case 5 -----------------
+        // ----------------- sub-case 5 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.99989}};
         A = new Matrix(aEntries);
 
@@ -72,7 +72,7 @@ class RoundTests {
 
         assertEquals(exp, A.round(25));
 
-        // ----------------- Sub-case 5 -----------------
+        // ----------------- sub-case 5 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.99989}};
         A = new Matrix(aEntries);
 
@@ -82,7 +82,7 @@ class RoundTests {
 
     @Test
     void simpleRoundToZeroTestCase() {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[][]{{-0.0008915, 1256.55, -9991.133}, {115, 0.000014, -6612354.556},
                 {0.00000000000000008765, 0.013, 133.45}};
         A = new Matrix(aEntries);
@@ -92,7 +92,7 @@ class RoundTests {
         exp = new Matrix(expEntries);
         assertEquals(exp, A.roundToZero());
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[][]{{-0.0008915, 1256.55, -9991.133}, {115, 0.000014, -6612354.556},
                 {0.00000000000008765, 0.013, 133.45}};
         A = new Matrix(aEntries);
@@ -103,7 +103,7 @@ class RoundTests {
 
         assertEquals(exp, A.roundToZero(0.0005));
 
-        // ----------------- Sub-case 3 -----------------
+        // ----------------- sub-case 3 -----------------
         aEntries = new double[][]{{-0.0008915, 1256.55, -9991.133}, {115, 0.000014, -6612354.556},
                 {0.00000000000008765, 0.013, 133.45}};
         A = new Matrix(aEntries);
@@ -114,7 +114,7 @@ class RoundTests {
 
         assertEquals(exp, A.roundToZero(135));
 
-        // ----------------- Sub-case 4 -----------------
+        // ----------------- sub-case 4 -----------------
         aEntries = new double[][]{{1.234234, 1256.55, -9991.133}, {115, 0.000014, -6612354.99989}};
         A = new Matrix(aEntries);
 

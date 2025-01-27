@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -165,7 +165,7 @@ public final class RealFieldDenseCooVectorOps {
      * Must have length {@code src2.length*sparseSize}.
      */
     public static <T extends Field<T>> void outerProduct(double[] src1, int[] indices, int sparseSize, T[] src2, T[] dest) {
-        ValidateParameters.ensureEquals(sparseSize, src2.length);
+        ValidateParameters.ensureAllEqual(sparseSize, src2.length);
         T zero = (src2.length > 0) ? src2[0].getZero() : null;
         Arrays.fill(dest, zero);
         int destIndex;

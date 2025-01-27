@@ -31,12 +31,12 @@ class VectorToStringTest {
     @Test
     void toStringTestCase() {
         PrintOptions.resetAll();
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         exp = "shape: (12)\n" +
                 "[ 1  -1.4133  113.4  0.4  11.3  445  133.445  9.8  13384  ...  12 ]";
         assertEquals(exp, A.toString());
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         PrintOptions.setMaxColumns(15);
         PrintOptions.setPrecision(2);
         PrintOptions.setCentering(false);

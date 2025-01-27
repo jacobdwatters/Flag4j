@@ -19,7 +19,7 @@ class CMatrixUnaryOpsTests {
 
     @Test
     void sumTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)}};
@@ -33,7 +33,7 @@ class CMatrixUnaryOpsTests {
 
     @Test
     void sqrtTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)}};
@@ -49,7 +49,7 @@ class CMatrixUnaryOpsTests {
 
     @Test
     void absTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)}};
@@ -65,7 +65,7 @@ class CMatrixUnaryOpsTests {
 
     @Test
     void transposeTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)}};
@@ -79,7 +79,7 @@ class CMatrixUnaryOpsTests {
         assertEquals(exp, A.T());
 
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)},
@@ -93,7 +93,7 @@ class CMatrixUnaryOpsTests {
 
         assertEquals(exp, A.T());
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1)},
@@ -109,8 +109,8 @@ class CMatrixUnaryOpsTests {
 
 
     @Test
-    void hermitianTransposeTestCase() {
-        // -------------------- Sub-case 1 --------------------
+    void HermitianTransposeTestCase() {
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)}};
@@ -123,7 +123,7 @@ class CMatrixUnaryOpsTests {
 
         assertEquals(exp, A.H());
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)},
@@ -137,7 +137,7 @@ class CMatrixUnaryOpsTests {
 
         assertEquals(exp, A.H());
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1)},
@@ -154,7 +154,7 @@ class CMatrixUnaryOpsTests {
 
     @Test
     void recipTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)}};
@@ -170,7 +170,7 @@ class CMatrixUnaryOpsTests {
 
     @Test
     void conjTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},
                 {new Complex128(-9841, -85.13), new Complex128(0, 84.1), new Complex128(-5.234, 234)}};
@@ -182,7 +182,7 @@ class CMatrixUnaryOpsTests {
 
         assertEquals(exp, A.conj());
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, 9923.1), new Complex128(-9841, 85.13)},
                 {new Complex128(32.4), new Complex128(0, -84.1)},

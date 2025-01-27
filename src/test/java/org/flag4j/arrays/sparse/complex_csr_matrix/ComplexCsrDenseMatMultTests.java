@@ -37,7 +37,7 @@ class ComplexCsrDenseMatMultTests {
 
     @Test
     void multRealDenseTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(80.1, 2.5)},
                 {new Complex128(0), new Complex128(1.41, -92.2), new Complex128(0), new Complex128(0, 15.5), new Complex128(0), new Complex128(0)},
@@ -54,7 +54,7 @@ class ComplexCsrDenseMatMultTests {
 
         assertEquals(exp, A.mult(Breal));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
@@ -76,7 +76,7 @@ class ComplexCsrDenseMatMultTests {
 
         assertEquals(exp, A.mult(Breal));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
@@ -101,7 +101,7 @@ class ComplexCsrDenseMatMultTests {
 
     @Test
     void multComplexDenseTests() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(80.1, 2.5)},
                 {new Complex128(0), new Complex128(1.41, -92.2), new Complex128(0), new Complex128(0, 15.5), new Complex128(0), new Complex128(0)},
@@ -117,7 +117,7 @@ class ComplexCsrDenseMatMultTests {
         buildComplex();
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 2 ----------------------
+        // ---------------------- sub-case 2 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},
@@ -138,7 +138,7 @@ class ComplexCsrDenseMatMultTests {
         buildComplex();
         assertEquals(exp, A.mult(B));
 
-        // ---------------------- Sub-case 3 ----------------------
+        // ---------------------- sub-case 3 ----------------------
         aEntries = new Complex128[][]{
                 {new Complex128(0), new Complex128(0), new Complex128(0), new Complex128(0)},
                 {new Complex128(-77.3, -15122.1), new Complex128(0), new Complex128(0), new Complex128(0)},

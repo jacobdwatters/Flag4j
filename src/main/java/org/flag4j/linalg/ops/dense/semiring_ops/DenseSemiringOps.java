@@ -113,8 +113,8 @@ public final class DenseSemiringOps {
                                                          Shape destShape, T[] dest) {
         ValidateParameters.ensureArrayLengthsEq(destShape.totalEntriesIntValueExact(), dest.length);
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.ensureValidArrayIndices(shape.getRank(), axis1, axis2);
-        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.validateArrayIndices(shape.getRank(), axis1, axis2);
+        ValidateParameters.ensureAllEqual(shape.get(axis1), shape.get(axis2));
 
         int[] strides = shape.getStrides();
         int rank = strides.length;

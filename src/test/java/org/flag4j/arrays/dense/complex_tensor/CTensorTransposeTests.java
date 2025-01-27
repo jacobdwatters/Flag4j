@@ -37,7 +37,7 @@ class CTensorTransposeTests {
 
     @Test
     void transposeTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(-85.1, 9.234),  new Complex128(0, 1.5),
                 new Complex128(0, -0.00024), new Complex128(0.014, -2.45),  new Complex128(6.1, -0.03),
@@ -48,7 +48,7 @@ class CTensorTransposeTests {
 
         assertEquals(exp, A.T());
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aAxes = new int[]{0, 2, 3, 1};
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(0, -0.00024), new Complex128(235.61, 1.45),
@@ -61,7 +61,7 @@ class CTensorTransposeTests {
 
         assertEquals(exp, A.T(aAxes));
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aAxes = new int[]{3, 2, 1, 0};
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(-85.1, 9.234),  new Complex128(0, 1.5),
@@ -74,7 +74,7 @@ class CTensorTransposeTests {
 
         assertEquals(exp, A.T(aAxes));
 
-        // -------------------- Sub-case 4 --------------------
+        // -------------------- sub-case 4 --------------------
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(0, -0.00024), new Complex128(235.61, 1.45),
                 new Complex128(1.0), new Complex128(-85.1, 9.234), new Complex128(0.014, -2.45),
@@ -86,29 +86,29 @@ class CTensorTransposeTests {
 
         assertEquals(exp, A.T(3, 1));
 
-        // -------------------- Sub-case 5 --------------------
+        // -------------------- sub-case 5 --------------------
         aAxes = new int[]{3, 2, 1, 2};
         assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
-        // -------------------- Sub-case 6 --------------------
+        // -------------------- sub-case 6 --------------------
         aAxes = new int[]{3, 2, 1};
         assertThrows(IllegalArgumentException.class, ()->A.T(aAxes));
 
-        // -------------------- Sub-case 7 --------------------
+        // -------------------- sub-case 7 --------------------
         aAxes = new int[]{0, 1, 3, 2, 4};
         assertThrows(LinearAlgebraException.class, ()->A.T(aAxes));
 
-        // -------------------- Sub-case 8 --------------------
+        // -------------------- sub-case 8 --------------------
         assertThrows(LinearAlgebraException.class, ()->A.T(-1, 0));
 
-        // -------------------- Sub-case 9 --------------------
+        // -------------------- sub-case 9 --------------------
         assertThrows(LinearAlgebraException.class, ()->A.T(1, 6));
     }
 
 
     @Test
     void hermTransposeTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(-85.1, 9.234),  new Complex128(0, 1.5),
                 new Complex128(0, -0.00024), new Complex128(0.014, -2.45),  new Complex128(6.1, -0.03),
@@ -119,7 +119,7 @@ class CTensorTransposeTests {
 
         assertEquals(exp.conj(), A.H());
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aAxes = new int[]{0, 2, 3, 1};
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(0, -0.00024), new Complex128(235.61, 1.45),
@@ -132,7 +132,7 @@ class CTensorTransposeTests {
 
         assertEquals(exp.conj(), A.H(aAxes));
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aAxes = new int[]{3, 2, 1, 0};
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(-85.1, 9.234),  new Complex128(0, 1.5),
@@ -145,7 +145,7 @@ class CTensorTransposeTests {
 
         assertEquals(exp.conj(), A.H(aAxes));
 
-        // -------------------- Sub-case 4 --------------------
+        // -------------------- sub-case 4 --------------------
         expEntries = new Complex128[]{
                 new Complex128(1.4415, -0.0245), new Complex128(0, -0.00024), new Complex128(235.61, 1.45),
                 new Complex128(1.0), new Complex128(-85.1, 9.234), new Complex128(0.014, -2.45),
@@ -157,22 +157,22 @@ class CTensorTransposeTests {
 
         assertEquals(exp.conj(), A.H(3, 1));
 
-        // -------------------- Sub-case 5 --------------------
+        // -------------------- sub-case 5 --------------------
         aAxes = new int[]{3, 2, 1, 2};
         assertThrows(IllegalArgumentException.class, ()->A.H(aAxes));
 
-        // -------------------- Sub-case 6 --------------------
+        // -------------------- sub-case 6 --------------------
         aAxes = new int[]{3, 2, 1};
         assertThrows(IllegalArgumentException.class, ()->A.H(aAxes));
 
-        // -------------------- Sub-case 7 --------------------
+        // -------------------- sub-case 7 --------------------
         aAxes = new int[]{0, 1, 3, 2, 4};
         assertThrows(IllegalArgumentException.class, ()->A.H(aAxes));
 
-        // -------------------- Sub-case 8 --------------------
+        // -------------------- sub-case 8 --------------------
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.H(-1, 0));
 
-        // -------------------- Sub-case 9 --------------------
+        // -------------------- sub-case 9 --------------------
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.H(1, 6));
     }
 }

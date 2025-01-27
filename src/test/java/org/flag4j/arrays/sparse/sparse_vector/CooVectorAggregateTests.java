@@ -27,7 +27,7 @@ class CooVectorAggregateTests {
     void sumTestCase() {
         double exp;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         exp = 1.34+51.6-0.00245;
         assertEquals(exp, a.sum());
     }
@@ -37,7 +37,7 @@ class CooVectorAggregateTests {
 //    void argminMaxTestCase() {
 //        int[] exp;
 //
-//        // --------------------- Sub-case 1 ---------------------
+//        // --------------------- sub-case 1 ---------------------
 //        exp = new int[]{5};
 //        assertArrayEquals(exp, a.argmax());
 //
@@ -50,27 +50,27 @@ class CooVectorAggregateTests {
 //    void normTestCase() {
 //        double exp;
 //
-//        // --------------------- Sub-case 1 ---------------------
+//        // --------------------- sub-case 1 ---------------------
 //        exp = 51.61739635047955;
 //        assertEquals(exp, VectorNorms.norm(a));
 //
-//        // --------------------- Sub-case 2 ---------------------
+//        // --------------------- sub-case 2 ---------------------
 //        exp = 51.82204923335818;
 //        assertEquals(exp, VectorNorms.norm(a, 1.4));
 //
-//        // --------------------- Sub-case 3 ---------------------
+//        // --------------------- sub-case 3 ---------------------
 //        exp = 51.599999999999994;
 //        assertEquals(exp, VectorNorms.norm(a, 23));
 //
-//        // --------------------- Sub-case 4 ---------------------
+//        // --------------------- sub-case 4 ---------------------
 //        exp = 152.7777441673176;
 //        assertEquals(exp, VectorNorms.norm(a, 0.3));
 //
-//        // --------------------- Sub-case 5 ---------------------
+//        // --------------------- sub-case 5 ---------------------
 //        exp = 51.6;
 //        assertEquals(exp, VectorNorms.norm(a, Double.POSITIVE_INFINITY));
 //
-//        // --------------------- Sub-case 6 ---------------------
+//        // --------------------- sub-case 6 ---------------------
 //        exp = 51.6;
 //        assertEquals(exp, VectorNorms.infNorm(a));
 //    }

@@ -14,56 +14,56 @@ class MatrixPropertiesTests {
 
     @Test
     void isIdentityTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {-0.442, 13.5, 35.6}, {0.4441, 6, 90}};
         A = new Matrix(aEntries);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {-0.442, 13.5, 35.6}};
         A = new Matrix(aEntries);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         aEntries = new double[][]{{1, 2}, {-0.442, 13.5}};
         A = new Matrix(aEntries);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         aEntries = new double[][]{{1, 0},
                                   {0, 1}};
         A = new Matrix(aEntries);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         aEntries = new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
         A = new Matrix(aEntries);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
         A = new Matrix(aEntries);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 6 ---------------
+        // --------------- sub-case 6 ---------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
         A = new Matrix(aEntries);
         expBoolResult = true;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 7 ---------------
+        // --------------- sub-case 7 ---------------
         aEntries = new double[][]{{1, 0, 0, 0}, {0, 1, 0, 0}, {1, 0, 1, 0}, {0, 0, 0, 1}};
         A = new Matrix(aEntries);
         expBoolResult = false;
         assertEquals(expBoolResult, A.isI());
 
-        // --------------- Sub-case 8 ---------------
+        // --------------- sub-case 8 ---------------
         aEntries = new double[][]{{0, 0}, {0, 0}};
         A = new Matrix(aEntries);
         expBoolResult = false;
@@ -76,7 +76,7 @@ class MatrixPropertiesTests {
         double[][] bEntries;
         Matrix B;
 
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         aEntries = new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
         A = new Matrix(aEntries);
         bEntries = new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
@@ -84,7 +84,7 @@ class MatrixPropertiesTests {
 
         assertTrue(Invert.isInv(A, B));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         aEntries = new double[][]{{2, 1}, {7, 4}};
         A = new Matrix(aEntries);
 
@@ -94,7 +94,7 @@ class MatrixPropertiesTests {
         assertTrue(Invert.isInv(A, B));
 
 
-        // ------------------ Sub-case 3 ------------------
+        // ------------------ sub-case 3 ------------------
         aEntries = new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
         A = new Matrix(aEntries);
         bEntries = new double[][]{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
@@ -102,7 +102,7 @@ class MatrixPropertiesTests {
 
         assertTrue(Invert.isInv(A, B));
 
-        // ------------------ Sub-case 4 ------------------
+        // ------------------ sub-case 4 ------------------
         aEntries = new double[][]{{2.243, 1}, {7235, 4.44656}};
         A = new Matrix(aEntries);
 
@@ -111,7 +111,7 @@ class MatrixPropertiesTests {
 
         assertFalse(Invert.isInv(A, B));
 
-        // ------------------ Sub-case 5 ------------------
+        // ------------------ sub-case 5 ------------------
         aEntries = new double[][]{{2.243, 1,23.4}, {7235, 4.44656, -845.5}};
         A = new Matrix(aEntries);
 
@@ -124,12 +124,12 @@ class MatrixPropertiesTests {
 
     @Test
     void isOrthogonalTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {-0.442, 13.5, 35.6}, {0.4441, 6, 90}};
         A = new Matrix(aEntries);
         assertFalse(A.isOrthogonal());
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{
                 {1, 0, 0},
                 {0, 1, 0},
@@ -137,7 +137,7 @@ class MatrixPropertiesTests {
         A = new Matrix(aEntries);
         assertTrue(A.isOrthogonal());
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         aEntries = new double[][]{
                 {1, 0, 0},
                 {0, 0, 1},
@@ -145,7 +145,7 @@ class MatrixPropertiesTests {
         A = new Matrix(aEntries);
         assertTrue(A.isOrthogonal());
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         aEntries = new double[][]{
                 {2, -2, 1},
                 {1, 2, 2},
@@ -153,7 +153,7 @@ class MatrixPropertiesTests {
         A = new Matrix(aEntries).div(3);
         assertTrue(A.isOrthogonal());
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         aEntries = new double[][]{
                 {-0.6372525669012274, 0.44183946030385846, 0.5401926054008803, -0.031537469407094426, -0.3253988235839168},
                 {-0.4244602495444651, -0.278448048912439, -0.384432919721785, 0.7274699431594314, -0.2555366757381484},
@@ -162,7 +162,7 @@ class MatrixPropertiesTests {
                 {-0.13655509844199198, -0.6809482581623562, 0.6161065453344614, 0.10994607997667842, 0.35494613547543796}};
         assertTrue(A.isOrthogonal());
 
-        // --------------- Sub-case 5 ---------------
+        // --------------- sub-case 5 ---------------
         aEntries = new double[][]{
                 {2, -2, 1},
                 {1, 2, 2}};

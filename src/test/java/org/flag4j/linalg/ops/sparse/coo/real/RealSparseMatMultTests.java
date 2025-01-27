@@ -23,7 +23,7 @@ class RealSparseMatMultTests {
 
     @Test
     void matMultTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         aEntries = new double[]{1, 9.43};
         aRowIndices = new int[]{0, 2};
         aColIndices = new int[]{2, 1};
@@ -52,7 +52,7 @@ class RealSparseMatMultTests {
 
     @Test
     void matVecMultTestCase() {
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         aEntries = new double[]{1, 7.9, 9.43};
         aRowIndices = new int[]{0, 1, 2};
         aColIndices = new int[]{2, 0, 1};

@@ -15,7 +15,7 @@ class RealSymmHessTests {
 
     @Test
     void symmHessDecompTestCase() {
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         aEntries = new double[][]{
                 {100.2345, -8.1445},
                 {-8.1445, 100.2345}};
@@ -28,7 +28,7 @@ class RealSymmHessTests {
 
         Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         aEntries = new double[][]{
                 {1, 2, 3},
                 {2, 5, 6},
@@ -42,7 +42,7 @@ class RealSymmHessTests {
 
         Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
-        // ----------------------- Sub-case 3 -----------------------
+        // ----------------------- sub-case 3 -----------------------
         aEntries = new double[][]{
                 {1,  -4,   2.5, 15, 0   },
                 {-4,  2,   8.1, 4,  1   },
@@ -58,7 +58,7 @@ class RealSymmHessTests {
 
         Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
-        // ----------------------- Sub-case 4 -----------------------
+        // ----------------------- sub-case 4 -----------------------
         aEntries = new double[][]{
                 {1.4, -0.002, 14.51},
                 {-0.002, 4.501, -9.14},
@@ -71,7 +71,7 @@ class RealSymmHessTests {
 
         Assertions.assertEquals(new Matrix(A.shape), A.sub(A_hat).round());
 
-        // ----------------------- Sub-case 5 -----------------------
+        // ----------------------- sub-case 5 -----------------------
         aEntries = new double[][]{
                 {1.4, 5, 14.51},
                 {-0.002, 4.501, -9.14},

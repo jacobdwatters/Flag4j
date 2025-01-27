@@ -32,7 +32,7 @@ class CooCVectorReshapeTests {
 
     @Test
     void reshapeTestCase() {
-        // ------------------ Sub-case 1 ------------------
+        // ------------------ sub-case 1 ------------------
         expEntries = new Complex128[]{
                 new Complex128(2.455, -83.6), new Complex128(0, 24.56),
                 new Complex128(24.56), new Complex128(-9356.1, 35)
@@ -45,7 +45,7 @@ class CooCVectorReshapeTests {
         assertEquals(exp, a.flatten());
         assertEquals(exp, a.flatten(0));
 
-        // ------------------ Sub-case 2 ------------------
+        // ------------------ sub-case 2 ------------------
         assertThrows(TensorShapeException.class, ()->a.reshape(new Shape(sparseSize-2)));
         assertThrows(TensorShapeException.class, ()->a.reshape(sparseSize+32));
         assertThrows(LinearAlgebraException.class, ()->a.flatten(-35));

@@ -26,7 +26,7 @@ class CooMatrixElemDivTests {
         double[] expEntries;
         CooMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.4438057635382914, 0.1584073685290338, 0.6422718458358927, 0.7588801607997614, 0.21918998350329344};
         aRowIndices = new int[]{0, 1, 2, 3, 4};
@@ -49,7 +49,7 @@ class CooMatrixElemDivTests {
 
         assertEquals(exp, RealDenseSparseMatrixOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.022415659127439036, 0.4427456213990437, 0.5909502892607543};
         aRowIndices = new int[]{0, 1, 1};
@@ -70,7 +70,7 @@ class CooMatrixElemDivTests {
 
         assertEquals(exp, RealDenseSparseMatrixOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.2628603919772923, 0.4832584151042525, 0.09732142956805734};
         aRowIndices = new int[]{0, 1, 1};
@@ -97,7 +97,7 @@ class CooMatrixElemDivTests {
         Complex128[] expEntries;
         CooCMatrix exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         aShape = new Shape(5, 5);
         aEntries = new double[]{0.8290713116268288, 0.40772922471694184, 0.5345871783654969, 0.11148753066679329, 0.5148538501414794};
         aRowIndices = new int[]{2, 3, 3, 4, 4};
@@ -120,7 +120,7 @@ class CooMatrixElemDivTests {
 
         assertEquals(exp, RealComplexDenseCooMatOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.41089341705897764, 0.11457154954599069, 0.28303647128436815};
         aRowIndices = new int[]{1, 2, 2};
@@ -141,7 +141,7 @@ class CooMatrixElemDivTests {
 
         assertEquals(exp, RealComplexDenseCooMatOps.elemDiv(A, B));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         aShape = new Shape(3, 5);
         aEntries = new double[]{0.12160331491060905, 0.6189704537780147, 0.641396804512954};
         aRowIndices = new int[]{0, 0, 2};

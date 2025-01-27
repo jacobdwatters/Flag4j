@@ -50,7 +50,7 @@ public final class TransposeDispatcher {
      */
     private static final int COMPLEX_BLOCKED_THRESHOLD = 5_000;
     /**
-     * Threshold for using blocked hermitian algorithm
+     * Threshold for using blocked Hermitian algorithm
      */
     private static final int HERMITIAN_BLOCKED_THRESHOLD = 50_000;
     /**
@@ -168,11 +168,11 @@ public final class TransposeDispatcher {
 
 
     /**
-     * Dispatches a matrix hermitian transpose (i.e. conjugate transpose) problem to the appropriate algorithm based on its shape and
+     * Dispatches a matrix Hermitian transpose (i.e. conjugate transpose) problem to the appropriate algorithm based on its shape and
      * size.
      * @param shape Shape of the matrix to transpose and conjugate.
      * @param src Entries of the matrix to transpose and conjugate.
-     * @param dest Array to store the hermitian transpose result in. May be {@code null}. If not {@code null}, must be at least as
+     * @param dest Array to store the Hermitian transpose result in. May be {@code null}. If not {@code null}, must be at least as
      * large as {@code src}.
      * @return If {@code dest != null} a reference to the {@code dest} array will be returned. Otherwise, if {@code dest == null}
      * then a new array will be created and returned.
@@ -395,7 +395,7 @@ public final class TransposeDispatcher {
 
 
     /**
-     * Chooses the appropriate matrix hermitian transpose algorithm based on the shape of a matrix.
+     * Chooses the appropriate matrix Hermitian transpose algorithm based on the shape of a matrix.
      * @param shape Shape of matrix to transpose.
      * @return The appropriate matrix transpose algorithm.
      */

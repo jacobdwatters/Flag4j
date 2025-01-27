@@ -25,7 +25,7 @@ class CVectorElemOppTests {
 
     @Test
     void sqrtTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         expEntries = new Complex128[]{aEntries[0].sqrt(), aEntries[1].sqrt(), aEntries[2].sqrt(),
                 aEntries[3].sqrt(), aEntries[4].sqrt()};
         exp = new CVector(expEntries);
@@ -36,7 +36,7 @@ class CVectorElemOppTests {
 
     @Test
     void absTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         assertEquals(new Vector(
                 new double[]{
                         aEntries[0].mag(), aEntries[1].mag(), aEntries[2].mag(),
@@ -47,7 +47,7 @@ class CVectorElemOppTests {
 
     @Test
     void recipTestCase() {
-        // ---------------------- Sub-case 1 ----------------------
+        // ---------------------- sub-case 1 ----------------------
         expEntries = new Complex128[]{aEntries[0].multInv(), aEntries[1].multInv(), aEntries[2].multInv(),
                 aEntries[3].multInv(), aEntries[4].multInv()};
         exp = new CVector(expEntries);

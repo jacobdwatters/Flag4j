@@ -17,7 +17,7 @@ class CsrMatrixGetSetTests {
 
     @Test
     void getTests() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         aEntries = new double[][]{
                 {0, 1, 0, 0, 4, 0, 0},
                 {0, 9.1, 0, 0, -1.4, 0, 0},
@@ -57,7 +57,7 @@ class CsrMatrixGetSetTests {
         assertEquals(801.4, A.get(3, 5));
         assertEquals(15, A.get(3, 6));
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(-1, 0));
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, -1));
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(4, 0));
@@ -75,7 +75,7 @@ class CsrMatrixGetSetTests {
                 {0, 0, 0, 4, 0, 801.4, 15}};
         A = new Matrix(aEntries).toCsr();
 
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         expEntries = new double[][]{
                 {0, 1, 0, 0, 4, 0, 0},
                 {0, 9.1, 0, 0, 1004.4, 0, 0},
@@ -84,7 +84,7 @@ class CsrMatrixGetSetTests {
         exp = new Matrix(expEntries).toCsr();
         assertEquals(exp, A.set(1004.4, 1, 4));
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         expEntries = new double[][]{
                 {-2, 1, 0, 0, 4, 0, 0},
                 {0, 9.1, 0, 0, -1.4, 0, 0},
@@ -93,7 +93,7 @@ class CsrMatrixGetSetTests {
         exp = new Matrix(expEntries).toCsr();
         assertEquals(exp, A.set(-2.0, 0, 0));
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         expEntries = new double[][]{
                 {0, 1, 0, 0, 4, 0, 5},
                 {0, 9.1, 0, 0, -1.4, 0, 0},
@@ -102,7 +102,7 @@ class CsrMatrixGetSetTests {
         exp = new Matrix(expEntries).toCsr();
         assertEquals(exp, A.set(5.0, 0, 6));
 
-        // -------------------------- Sub-case 4 --------------------------
+        // -------------------------- sub-case 4 --------------------------
         expEntries = new double[][]{
                 {0, 1, 0, 0, 4, 0, 0},
                 {0, 9.1, 0, 0, -1.4, 0, 0},
@@ -111,7 +111,7 @@ class CsrMatrixGetSetTests {
         exp = new Matrix(expEntries).toCsr();
         assertEquals(exp, A.set(-992.5, 3, 4));
 
-        // -------------------------- Sub-case 5 --------------------------
+        // -------------------------- sub-case 5 --------------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(1.3, -1, 0));
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(1.3, 0, -1));
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(1.3, 4, 0));

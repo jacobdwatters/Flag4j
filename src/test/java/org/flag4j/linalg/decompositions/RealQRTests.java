@@ -17,7 +17,7 @@ class RealQRTests {
         // Tests account for numerical loss of precision.
         QR = new RealQR();
 
-        // --------------------------- Sub-case 1 ---------------------------
+        // --------------------------- sub-case 1 ---------------------------
         aEntries = new double[][]
                 {{0, 1, 0, 0},
                 {0, 0, 1, 0},
@@ -42,7 +42,7 @@ class RealQRTests {
         assertEquals(expQ, QR.getQ());
         assertEquals(expR, QR.getR());
 
-        // --------------------------- Sub-case 2 ---------------------------
+        // --------------------------- sub-case 2 ---------------------------
         aEntries = new double[][]{{1.0, 5.6, -9.355, 215.0},
                 {56.0, 1.0, 15.2, 14.0},
                 {2.4, -0.00025, 1.0, 0.0},

@@ -31,25 +31,25 @@ class TensorReshapeTests {
 
     @Test
     void reshapeTestCase() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         expShape = new Shape(1, 1, 12, 1);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.reshape(expShape));
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         expShape = new Shape(4, 3);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.reshape(expShape));
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         expShape = new Shape(2, 3, 2);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.reshape(expShape));
 
-        // -------------------------- Sub-case 4 --------------------------
+        // -------------------------- sub-case 4 --------------------------
         expShape = new Shape(2, 2, 3, 1);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
@@ -59,34 +59,34 @@ class TensorReshapeTests {
 
     @Test
     void flattenTestCase() {
-        // -------------------------- Sub-case 1 --------------------------
+        // -------------------------- sub-case 1 --------------------------
         expShape = new Shape(12);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten());
 
-        // -------------------------- Sub-case 2 --------------------------
+        // -------------------------- sub-case 2 --------------------------
         expShape = new Shape(1, 1, 12);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten(2));
 
-        // -------------------------- Sub-case 3 --------------------------
+        // -------------------------- sub-case 3 --------------------------
         expShape = new Shape(1, 12, 1);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten(1));
 
-        // -------------------------- Sub-case 4 --------------------------
+        // -------------------------- sub-case 4 --------------------------
         expShape = new Shape(12, 1, 1);
         exp = new Tensor(expShape, Arrays.copyOf(aEntries, aEntries.length));
 
         assertEquals(exp, A.flatten(0));
 
-        // -------------------------- Sub-case 5 --------------------------
+        // -------------------------- sub-case 5 --------------------------
         assertThrows(LinearAlgebraException.class, ()->A.flatten(-1));
 
-        // -------------------------- Sub-case 6 --------------------------
+        // -------------------------- sub-case 6 --------------------------
         assertThrows(LinearAlgebraException.class, ()->A.flatten(5));
     }
 }

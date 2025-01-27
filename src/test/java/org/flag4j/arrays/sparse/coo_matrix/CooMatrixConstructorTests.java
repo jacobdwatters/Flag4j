@@ -17,7 +17,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void sizeTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         size = 5;
         expShape = new Shape(5, 5);
         expNonZero = new double[0];
@@ -30,7 +30,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         size = -1;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size));
     }
@@ -38,7 +38,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void rowsColsTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         rows = 10;
         cols = 12;
         expShape = new Shape(rows, cols);
@@ -52,7 +52,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = 100123;
         cols = 99123341;
         expShape = new Shape(rows, cols);
@@ -66,17 +66,17 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = -1;
         cols = 12;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols));
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         rows = 1;
         cols = -12;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         rows = -1;
         cols = -2;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols));
@@ -85,7 +85,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void shapeTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         rows = 10;
         cols = 12;
         expShape = new Shape(rows, cols);
@@ -99,7 +99,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = 100123;
         cols = 99123341;
         expShape = new Shape(rows, cols);
@@ -117,7 +117,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void sizeEntriesIndicesTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         size = 5;
         expShape = new Shape(size, size);
         expNonZero = new double[]{1, 2, 5, 6};
@@ -130,11 +130,11 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         size = -1;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZero, expRowIndices, expColIndices));
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         size = 2;
         expShape = new Shape(size, size);
         expNonZero = new double[]{1, 2, 5, 6, 5};
@@ -143,7 +143,7 @@ class CooMatrixConstructorTests {
 
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZero, expRowIndices, expColIndices));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         size = 5;
         expShape = new Shape(size, size);
         expNonZero = new double[]{1, 2, 5};
@@ -152,7 +152,7 @@ class CooMatrixConstructorTests {
 
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(size, expNonZero, expRowIndices, expColIndices));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         size = 5;
         expShape = new Shape(size, size);
         expNonZero = new double[]{1, 2, 5, 4};
@@ -165,7 +165,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void rowColEntriesIndicesTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         rows = 10;
         cols = 12;
         expShape = new Shape(rows, cols);
@@ -179,7 +179,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = 100123;
         cols = 99123341;
         expShape = new Shape(rows, cols);
@@ -193,17 +193,17 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = -1;
         cols = 12;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         rows = 1;
         cols = -12;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         rows = -1;
         cols = -2;
         assertThrows(IllegalArgumentException.class, () -> new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices));
@@ -212,7 +212,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void shapeEntriesIndicesTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         rows = 10;
         cols = 12;
         expShape = new Shape(rows, cols);
@@ -226,7 +226,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = 100123;
         cols = 99123341;
         expShape = new Shape(rows, cols);
@@ -244,7 +244,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void rowColEntriesIntIndicesTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         rows = 10;
         cols = 12;
         expShape = new Shape(rows, cols);
@@ -259,7 +259,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = 100123;
         cols = 99123341;
         expShape = new Shape(rows, cols);
@@ -277,7 +277,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void shapeEntriesIntIndicesTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         rows = 10;
         cols = 12;
         expShape = new Shape(rows, cols);
@@ -292,7 +292,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = 100123;
         cols = 99123341;
         expShape = new Shape(rows, cols);
@@ -311,7 +311,7 @@ class CooMatrixConstructorTests {
 
     @Test
     void copyTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         rows = 10;
         cols = 12;
         expShape = new Shape(rows, cols);
@@ -327,7 +327,7 @@ class CooMatrixConstructorTests {
         assertArrayEquals(expColIndices, A.colIndices);
         assertArrayEquals(expRowIndices, A.rowIndices);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         rows = 100123;
         cols = 99123341;
         expShape = new Shape(rows, cols);

@@ -48,7 +48,7 @@ class MatrixStackTests {
 
     @Test
     void realDenseTestCase() {
-        // -----------------------  Sub-case 1 -----------------------
+        // -----------------------  sub-case 1 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         entries2 = new double[][]{{4, 5}, {5, 4}, {99.2134, -0.23}};
 
@@ -60,7 +60,7 @@ class MatrixStackTests {
 
         assertEquals(exp, realDense.stack(realDense2, 0));
 
-        // -----------------------  Sub-case 2 -----------------------
+        // -----------------------  sub-case 2 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         entries2 = new double[][]{{4, 5}, {5, 4}};
 
@@ -70,7 +70,7 @@ class MatrixStackTests {
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(realDense2, 0));
 
 
-        // -----------------------  Sub-case 3 -----------------------
+        // -----------------------  sub-case 3 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         entries2 = new double[][]{{4, 5, -0.53}, {5, 4, 1.3}};
 
@@ -82,7 +82,7 @@ class MatrixStackTests {
 
         assertEquals(exp, realDense.stack(realDense2, 1));
 
-        // -----------------------  Sub-case 4 -----------------------
+        // -----------------------  sub-case 4 -----------------------
         entries = new double[][]{{1, 2, 3}, {4, 14, -5.12}, {0, 9.34, -0.13}};
         entries2 = new double[][]{{4, 5}, {5, 4}};
 
@@ -91,7 +91,7 @@ class MatrixStackTests {
 
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(realDense2, 1));
 
-        // -----------------------  Sub-case 5 -----------------------
+        // -----------------------  sub-case 5 -----------------------
         assertThrows(IllegalArgumentException.class, ()->realDense.stack(realDense2, 7));
     }
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -529,7 +529,7 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
                 CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));
                 // Apply rotation to T matrix to bring it into upper triangular form.
                 Givens.leftMult2x2Rotator(tComplex, G, m, givensWorkComplex);
-                // Apply hermitian transpose to keep transformation similar.
+                // Apply Hermitian transpose to keep transformation similar.
                 Givens.rightMult2x2Rotator(tComplex, G, m, givensWorkComplex);
 
                 if(uComplex != null) {

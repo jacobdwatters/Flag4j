@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,7 @@ public final class RealComplexCooConcats {
      * @throws IllegalArgumentException If {@code a.numRows != b.numRows}
      */
     public static CooCMatrix augment(CooCMatrix a, CooMatrix b) {
-        ValidateParameters.ensureEquals(a.numRows, b.numRows);
+        ValidateParameters.ensureAllEqual(a.numRows, b.numRows);
 
         Shape destShape = new Shape(a.numRows, a.numCols + b.numCols);
         Complex128[] destEntries = new Complex128[a.data.length + b.data.length];
@@ -88,7 +88,7 @@ public final class RealComplexCooConcats {
      * @return The result of augmenting the vector {@code b} to the right hand side of the matrix {@code a}.
      */
     public static CooCMatrix augment(CooCMatrix a, CooVector b) {
-        ValidateParameters.ensureEquals(a.numRows, b.size);
+        ValidateParameters.ensureAllEqual(a.numRows, b.size);
 
         Shape destShape = new Shape(a.numRows, a.numCols + 1);
         Complex128[] destEntries = new Complex128[a.data.length + b.data.length];

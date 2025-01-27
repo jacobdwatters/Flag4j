@@ -15,7 +15,7 @@ class CMatrixRemoveRowColTests {
 
     @Test
     void removeRowTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -29,7 +29,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeRow(index));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -43,7 +43,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeRow(index));
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -52,7 +52,7 @@ class CMatrixRemoveRowColTests {
         index = -1;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRow(index));
 
-        // -------------------- Sub-case 4--------------------
+        // -------------------- sub-case 4--------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -65,7 +65,7 @@ class CMatrixRemoveRowColTests {
 
     @Test
     void removeRowsTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -77,7 +77,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeRows(0, 1));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -91,7 +91,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeRows(index));
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -99,7 +99,7 @@ class CMatrixRemoveRowColTests {
         A = new CMatrix(aEntries);
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeRows(-1, 1, 0));
 
-        // -------------------- Sub-case 4--------------------
+        // -------------------- sub-case 4--------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -111,7 +111,7 @@ class CMatrixRemoveRowColTests {
 
     @Test
     void removeColTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -126,7 +126,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeCol(index));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -141,7 +141,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeCol(index));
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -150,7 +150,7 @@ class CMatrixRemoveRowColTests {
         index = -1;
         assertThrows(ArrayIndexOutOfBoundsException.class, ()->A.removeCol(index));
 
-        // -------------------- Sub-case 4--------------------
+        // -------------------- sub-case 4--------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4)},
                 {new Complex128(85.124, 51), new Complex128(3)},
@@ -163,7 +163,7 @@ class CMatrixRemoveRowColTests {
 
     @Test
     void removeColsTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4), new Complex128(3.4, 65.34)},
                 {new Complex128(85.124, 51), new Complex128(3), new Complex128(3, 5.56)},
@@ -177,7 +177,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeCols(0, 1));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4), new Complex128(3.4, 65.34)},
                 {new Complex128(85.124, 51), new Complex128(3), new Complex128(3, 5.56)},
@@ -192,7 +192,7 @@ class CMatrixRemoveRowColTests {
 
         assertEquals(exp, A.removeCols(index));
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4), new Complex128(3.4, 65.34)},
                 {new Complex128(85.124, 51), new Complex128(3), new Complex128(3, 5.56)},
@@ -200,7 +200,7 @@ class CMatrixRemoveRowColTests {
         A = new CMatrix(aEntries);
         assertThrows(IllegalArgumentException.class, ()->A.removeCols(-1, 0, 1, 2));
 
-        // -------------------- Sub-case 4--------------------
+        // -------------------- sub-case 4--------------------
         aEntries = new Complex128[][]{
                 {new Complex128(1, 34.3), new Complex128(0.44, -9.4), new Complex128(3.4, 65.34)},
                 {new Complex128(85.124, 51), new Complex128(3), new Complex128(3, 5.56)},

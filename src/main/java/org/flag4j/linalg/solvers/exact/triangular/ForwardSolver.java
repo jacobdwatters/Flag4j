@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -95,7 +95,7 @@ public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends
      */
     protected void checkParams(T coeff, int constantRows) {
         ValidateParameters.ensureSquare(coeff.getShape());
-        ValidateParameters.ensureEquals(coeff.numRows(), constantRows);
+        ValidateParameters.ensureAllEqual(coeff.numRows(), constantRows);
 
         if(enforceLower && !coeff.isTriL()) {
             throw new IllegalArgumentException("Expecting matrix L to be lower triangular.");

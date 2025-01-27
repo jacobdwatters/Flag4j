@@ -27,30 +27,30 @@ class TensorGetSetTests {
 
     @Test
     void setTestCase() {
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         A.set(-99.245, 0, 1, 0, 0, 1);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expEntries[shape.getFlatIndex(0, 1, 0, 0, 1)] = -99.245;
 
         assertArrayEquals(expEntries, A.data);
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         A.set(156.4, 0, 2, 1, 0, 0);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expEntries[shape.getFlatIndex(0, 2, 1, 0, 0)] = 156.4;
 
         assertArrayEquals(expEntries, A.data);
 
-        // -------------------- Sub-case 3 --------------------
+        // -------------------- sub-case 3 --------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(156.4, 0, 2, 1));
 
-        // -------------------- Sub-case 4 --------------------
+        // -------------------- sub-case 4 --------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(156.4, 0, 1, 0, 0, 1, 0));
 
-        // -------------------- Sub-case 5 --------------------
+        // -------------------- sub-case 5 --------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(-99.245, 0, 0, 0, 0, 2));
 
-        // -------------------- Sub-case 6 --------------------
+        // -------------------- sub-case 6 --------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.set(-99.245, 0, 0, -2, 0, 1));
     }
 
@@ -59,24 +59,24 @@ class TensorGetSetTests {
     void getTestCase() {
         double exp;
 
-        // ------------------- Sub-case 1 -------------------
+        // ------------------- sub-case 1 -------------------
         exp = 1.0;
         assertEquals(exp, A.get(0, 2, 1, 0, 0));
 
-        // ------------------- Sub-case 2 -------------------
+        // ------------------- sub-case 2 -------------------
         exp = 2.556;
         assertEquals(exp, A.get(0, 0, 0, 0, 1));
 
-        // ------------------- Sub-case 3 -------------------
+        // ------------------- sub-case 3 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(1, 0, 0, 0, 1));
 
-        // ------------------- Sub-case 4 -------------------
+        // ------------------- sub-case 4 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, -1, 0, 0, 1));
 
-        // ------------------- Sub-case 5 -------------------
+        // ------------------- sub-case 5 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, 2, 1, 0));
 
-        // ------------------- Sub-case 6 -------------------
+        // ------------------- sub-case 6 -------------------
         assertThrows(IndexOutOfBoundsException.class, ()->A.get(0, 2, 1, 0, 1, 0));
     }
 }

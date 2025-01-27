@@ -35,7 +35,7 @@ class CTensorConversionTests {
         double[] expEntries;
         Tensor exp;
 
-        // --------------------- Sub-case 1 ---------------------
+        // --------------------- sub-case 1 ---------------------
         expEntries = new double[]{1.4415, 235.61, 0, 1.0, -85.1, 1.345, 0.014, -140.0, 0, 51.0, 6.1, -0.00014};
         exp = new Tensor(shape, expEntries);
 
@@ -51,14 +51,14 @@ class CTensorConversionTests {
         Shape expShape;
         CMatrix exp;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(1, aEntries.length);
         exp = new CMatrix(expShape, expEntries);
 
         assertEquals(exp, A.toMatrix());
 
-        // ----------------------- Sub-case 2 -----------------------
+        // ----------------------- sub-case 2 -----------------------
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(4, 3);
         B = A.reshape(expShape);
@@ -73,7 +73,7 @@ class CTensorConversionTests {
         Complex128[] expEntries;
         CVector exp;
 
-        // ----------------------- Sub-case 1 -----------------------
+        // ----------------------- sub-case 1 -----------------------
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         exp = new CVector(expEntries);
 

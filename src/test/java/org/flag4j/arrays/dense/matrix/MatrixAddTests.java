@@ -28,7 +28,7 @@ class MatrixAddTests {
 
     @Test
     void matrixMatrixTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}, {1.343, 6.7, -88.4}};
         A = new Matrix(aEntries);
@@ -41,7 +41,7 @@ class MatrixAddTests {
 
         assertEquals(exp, sum);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}};
         A = new Matrix(aEntries);
@@ -54,14 +54,14 @@ class MatrixAddTests {
 
         assertEquals(exp, sum);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}, {1, 2, 3}};
         A = new Matrix(aEntries);
         B = new Matrix(bEntries);
         assertThrows(LinearAlgebraException.class, ()->A.add(B));
 
-        // --------------- Sub-case 4 ---------------
+        // --------------- sub-case 4 ---------------
         aEntries = new double[][]{{1, 2}, {4, 5}};
         bEntries = new double[][]{{0.333, 56.4, 13.4}, {-1.44, 5, 85.1}};
         A = new Matrix(aEntries);
@@ -72,7 +72,7 @@ class MatrixAddTests {
 
     @Test
     void matrixDoubleTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         b = 2.133;
         A = new Matrix(aEntries);
@@ -84,7 +84,7 @@ class MatrixAddTests {
 
         assertEquals(exp, sum);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         b = 2.133;
         A = new Matrix(aEntries);
@@ -100,7 +100,7 @@ class MatrixAddTests {
 
     @Test
     void matrixComplex128TestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bC = new Complex128(33.444, -9.3545);
         A = new Matrix(aEntries);
@@ -116,7 +116,7 @@ class MatrixAddTests {
         assertArrayEquals(expEntriesC, sumC.data);
         assertEquals(expShape, sumC.shape);
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         bC = new Complex128(33.444, -9.3545);
         A = new Matrix(aEntries);
@@ -135,7 +135,7 @@ class MatrixAddTests {
 
     @Test
     void matrixCMatrixTestCase() {
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         bCEntries = new Complex128[][]{
                 {new Complex128(1.23, -344.5), new Complex128(2.33, 5.6), new Complex128(3.13, -34)},
@@ -157,7 +157,7 @@ class MatrixAddTests {
         assertEquals(expShape, sumC.shape);
 
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}};
         bCEntries = new Complex128[][]{
                 {new Complex128(1.23, -344.5), new Complex128(2.33, 5.6), new Complex128(3.13, -34)},
@@ -176,7 +176,7 @@ class MatrixAddTests {
         assertArrayEquals(expEntriesC, sumC.data);
         assertEquals(expShape, sumC.shape);
 
-        // --------------- Sub-case 3 ---------------
+        // --------------- sub-case 3 ---------------
         aEntries = new double[][]{{1, 2}, {4, 5}};
         bCEntries = new Complex128[][]{
                 {new Complex128(1.23, -344.5), new Complex128(2.33, 5.6), new Complex128(3.13, -34)},
@@ -196,7 +196,7 @@ class MatrixAddTests {
         Shape bShape;
         CooMatrix B;
 
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         A = new Matrix(aEntries);
 
@@ -212,7 +212,7 @@ class MatrixAddTests {
 
         assertEquals(exp, A.add(B));
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         A = new Matrix(aEntries);
 
@@ -235,7 +235,7 @@ class MatrixAddTests {
         Shape bShape;
         CooCMatrix B;
 
-        // --------------- Sub-case 1 ---------------
+        // --------------- sub-case 1 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
         A = new Matrix(aEntries);
 
@@ -256,7 +256,7 @@ class MatrixAddTests {
 
         assertEquals(expC, A.add(B));
 
-        // --------------- Sub-case 2 ---------------
+        // --------------- sub-case 2 ---------------
         aEntries = new double[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         A = new Matrix(aEntries);
 

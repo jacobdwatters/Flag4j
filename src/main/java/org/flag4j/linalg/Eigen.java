@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ public final class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(Matrix src) {
-        ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
+        ValidateParameters.ensureAllEqual(2, src.numRows, src.numCols);
         return new CVector(get2x2EigenValues(src.data[0], src.data[1], src.data[2], src.data[3]));
     }
 
@@ -144,7 +144,7 @@ public final class Eigen {
      * @return A complex vector containing the eigenvalues of the 2x2 {@code src} matrix.
      */
     public static CVector get2x2EigenValues(CMatrix src) {
-        ValidateParameters.ensureEquals(2, src.numRows, src.numCols);
+        ValidateParameters.ensureAllEqual(2, src.numRows, src.numCols);
         return new CVector(get2x2EigenValues(src.data[0], src.data[1], src.data[2], src.data[3]));
     }
 
@@ -792,7 +792,7 @@ public final class Eigen {
         for(int i=0; i<numRows; i++)
             lambdas.data[i] = T.data[i*numRows + i];
 
-        // If the src matrix is hermitian, then U will contain the eigenvectors.
+        // If the src matrix is Hermitian, then U will contain the eigenvectors.
         if(!src.isHermitian())
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
 

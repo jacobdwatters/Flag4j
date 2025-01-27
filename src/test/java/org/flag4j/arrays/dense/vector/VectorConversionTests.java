@@ -22,7 +22,7 @@ class VectorConversionTests {
 
     @Test
     void toMatrixTestCase() {
-        // --------------------- Sub-case 1  ---------------------
+        // --------------------- sub-case 1  ---------------------
         aEntries = new double[]{1.34, -8.244, 1.234, 90031.3};
         a = new Vector(aEntries);
         matExpEntries = new double[][]{{1.34}, {-8.244}, {1.234}, {90031.3}};
@@ -30,7 +30,7 @@ class VectorConversionTests {
 
         assertEquals(matExp, a.toMatrix());
 
-        // --------------------- Sub-case 2  ---------------------
+        // --------------------- sub-case 2  ---------------------
         aEntries = new double[]{1.34, -8.244, 1.234, 90031.3};
         a = new Vector(aEntries);
         matExpEntries = new double[][]{{1.34}, {-8.244}, {1.234}, {90031.3}};
@@ -38,7 +38,7 @@ class VectorConversionTests {
 
         assertEquals(matExp, a.toMatrix(true));
 
-        // --------------------- Sub-case 2  ---------------------
+        // --------------------- sub-case 2  ---------------------
         aEntries = new double[]{1.34, -8.244, 1.234, 90031.3};
         a = new Vector(aEntries);
         matExpEntries = new double[][]{{1.34, -8.244, 1.234, 90031.3}};
@@ -50,7 +50,7 @@ class VectorConversionTests {
 
     @Test
     void toTensorTestCase() {
-        // --------------------- Sub-case 1  ---------------------
+        // --------------------- sub-case 1  ---------------------
         aEntries = new double[]{1.34, -8.244, 1.234, 90031.3};
         a = new Vector(aEntries);
         tensorExpEntries = new double[]{1.34, -8.244, 1.234, 90031.3};
@@ -59,7 +59,7 @@ class VectorConversionTests {
 
         assertEquals(tensorExp, a.toTensor());
 
-        // --------------------- Sub-case 2  ---------------------
+        // --------------------- sub-case 2  ---------------------
         aEntries = new double[]{-34534, 6.2234};
         a = new Vector(aEntries);
         tensorExpEntries = new double[]{-34534, 6.2234};

@@ -114,8 +114,8 @@ public final class RealCooMatrixGetSet {
      * @throws IllegalArgumentException If {@code row.length != src.numCols}.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, CooVector row) {
-        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
-        ValidateParameters.ensureEquals(src.numCols, row.size);
+        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
+        ValidateParameters.ensureAllEqual(src.numCols, row.size);
 
         int[] rowArray = new int[row.nnz];
         Arrays.fill(rowArray, rowIdx);
@@ -146,8 +146,8 @@ public final class RealCooMatrixGetSet {
      * @return A copy of the {@code src} matrix with the specified row set to the dense {@code row} array.
      */
     public static CooMatrix setRow(CooMatrix src, int rowIdx, double[] row) {
-        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
-        ValidateParameters.ensureEquals(src.numCols, row.length);
+        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
+        ValidateParameters.ensureAllEqual(src.numCols, row.length);
 
         int[] startEnd = SparseElementSearch.matrixFindRowStartEnd(src.rowIndices, rowIdx);
         int start = startEnd[0];
@@ -229,8 +229,8 @@ public final class RealCooMatrixGetSet {
      * rows in {@code src} matrix.
      */
     public static CooMatrix setCol(CooMatrix src, int colIdx, double[] col) {
-        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
-        ValidateParameters.ensureEquals(src.numRows, col.length);
+        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
+        ValidateParameters.ensureAllEqual(src.numRows, col.length);
 
         Integer[] colIndices = new Integer[col.length];
         Arrays.fill(colIndices, colIdx);
@@ -256,8 +256,8 @@ public final class RealCooMatrixGetSet {
      * in the {@code col} vector.
      */
     public static CooMatrix setCol(CooMatrix src, int colIdx, CooVector col) {
-        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
-        ValidateParameters.ensureEquals(src.numRows, col.size);
+        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
+        ValidateParameters.ensureAllEqual(src.numRows, col.size);
 
         // Initialize destination arrays with the new column and the appropriate indices.
         List<Double> destEntries = ArrayConversions.toArrayList(col.data);
@@ -315,8 +315,8 @@ public final class RealCooMatrixGetSet {
      */
     public static CooMatrix setSlice(CooMatrix src, CooMatrix values, int row, int col) {
         // Ensure the values matrix fits inside the src matrix.
-        ValidateParameters.ensureIndicesInBounds(src.numRows, row);
-        ValidateParameters.ensureIndicesInBounds(src.numCols, col);
+        ValidateParameters.validateArrayIndices(src.numRows, row);
+        ValidateParameters.validateArrayIndices(src.numCols, col);
 
         ValidateParameters.ensureLessEq(src.numRows, values.numRows + row);
         ValidateParameters.ensureLessEq(src.numCols, values.numCols + col);
@@ -454,7 +454,7 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified row from this sparse matrix.
      */
     public static CooVector getRow(CooMatrix src, int rowIdx) {
-        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
+        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -479,8 +479,8 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static CooVector getRow(CooMatrix src, int rowIdx, int start, int end) {
-        ValidateParameters.ensureIndicesInBounds(src.numRows, rowIdx);
-        ValidateParameters.ensureIndicesInBounds(src.numCols, start, end-1);
+        ValidateParameters.validateArrayIndices(src.numRows, rowIdx);
+        ValidateParameters.validateArrayIndices(src.numCols, start, end-1);
         ValidateParameters.ensureLessEq(end-1, start);
 
         List<Double> entries = new ArrayList<>();
@@ -504,7 +504,7 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified column from this sparse matrix.
      */
     public static CooVector getCol(CooMatrix src, int colIdx) {
-        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
+        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
 
         List<Double> entries = new ArrayList<>();
         List<Integer> indices = new ArrayList<>();
@@ -529,8 +529,8 @@ public final class RealCooMatrixGetSet {
      * @return Returns the specified column range from this sparse matrix.
      */
     public static CooVector getCol(CooMatrix src, int colIdx, int start, int end) {
-        ValidateParameters.ensureIndicesInBounds(src.numCols, colIdx);
-        ValidateParameters.ensureIndicesInBounds(src.numRows, start, end);
+        ValidateParameters.validateArrayIndices(src.numCols, colIdx);
+        ValidateParameters.validateArrayIndices(src.numRows, start, end);
         ValidateParameters.ensureLessEq(end, start);
 
         List<Double> entries = new ArrayList<>();

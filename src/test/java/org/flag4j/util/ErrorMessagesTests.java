@@ -17,7 +17,7 @@ class ErrorMessagesTests {
         // --------- sub-case 1 ---------
         s1 = new Shape(2);
         s2 = new Shape(5);
-        expMsg = String.format("Expecting matrices to have the same shape but got %s and %s.",
+        expMsg = String.format("Expecting tensors to have the same shape but got %s and %s.",
                 "(2)", "(5)");
 
         assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));
@@ -26,7 +26,7 @@ class ErrorMessagesTests {
         // --------- sub-case 2 ---------
         s1 = new Shape(1, 2, 3, 4);
         s2 = new Shape(4, 3, 2, 1);
-        expMsg = String.format("Expecting matrices to have the same shape but got %s and %s.",
+        expMsg = String.format("Expecting tensors to have the same shape but got %s and %s.",
                 "(1, 2, 3, 4)", "(4, 3, 2, 1)");
 
         assertEquals(expMsg, ErrorMessages.equalShapeErrMsg(s1, s2));

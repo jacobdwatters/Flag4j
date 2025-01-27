@@ -134,8 +134,8 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         // TODO: Need methods which allow custom error message to be passed in. It can be very difficult to
         //  understand why a COO matrix could not be constructed.
         ValidateParameters.ensureRank(shape, 2);
-        ValidateParameters.ensureIndicesInBounds(shape.get(0), rowIndices);
-        ValidateParameters.ensureIndicesInBounds(shape.get(1), colIndices);
+        ValidateParameters.validateArrayIndices(shape.get(0), rowIndices);
+        ValidateParameters.validateArrayIndices(shape.get(1), colIndices);
         ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
 
         this.rowIndices = rowIndices;
@@ -431,7 +431,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T reshape(Shape newShape) {
-        ValidateParameters.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
         int oldColCount = shape.get(1);
         int newColCount = newShape.get(1);
 
@@ -648,7 +648,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public U multTranspose(T b) {
-        ValidateParameters.ensureEquals(numCols, b.numCols);
+        ValidateParameters.ensureAllEqual(numCols, b.numCols);
         return mult(b.H());
     }
 
@@ -666,7 +666,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T stack(T b) {
-        ValidateParameters.ensureEquals(numCols, b.numCols);
+        ValidateParameters.ensureAllEqual(numCols, b.numCols);
 
         Shape destShape = new Shape(numRows+b.numRows, numCols);
         W[] destEntries = makeEmptyDataArray(data.length + b.data.length);
@@ -693,7 +693,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T augment(T b) {
-        ValidateParameters.ensureEquals(numRows, b.numRows);
+        ValidateParameters.ensureAllEqual(numRows, b.numRows);
 
         Shape destShape = new Shape(numRows, numCols + b.numCols);
         W[] destEntries = makeEmptyDataArray(data.length + b.data.length);
@@ -716,7 +716,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T augment(V b) {
-        ValidateParameters.ensureEquals(numRows, b.size);
+        ValidateParameters.ensureAllEqual(numRows, b.size);
 
         Shape destShape = new Shape(numRows, numCols + 1);
         W[] destEntries = makeEmptyDataArray(nnz + b.data.length);
@@ -876,7 +876,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeRow(int rowIndex) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowIndex);
+        ValidateParameters.validateArrayIndices(numRows, rowIndex);
         Shape shape = new Shape(numRows-1, numCols);
 
         // Find the start and end index within the data array which have the given row index.
@@ -913,7 +913,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeRows(int... rowIdxs) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowIdxs);
+        ValidateParameters.validateArrayIndices(numRows, rowIdxs);
         // Ensure the indices are sorted.
         Arrays.sort(rowIdxs);
 
@@ -960,7 +960,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeCol(int colIndex) {
-        ValidateParameters.ensureValidArrayIndices(numRows, colIndex);
+        ValidateParameters.validateArrayIndices(numRows, colIndex);
 
         Shape shape = new Shape(numRows, numCols-1);
         List<W> destEntries = new ArrayList<>(data.length);
@@ -991,7 +991,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      */
     @Override
     public T removeCols(int... colIdxs) {
-        ValidateParameters.ensureValidArrayIndices(numRows, colIdxs);
+        ValidateParameters.validateArrayIndices(numRows, colIdxs);
 
         // Ensure the indices are sorted.
         Arrays.sort(colIdxs);

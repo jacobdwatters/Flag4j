@@ -16,62 +16,62 @@ class Complex64ComparisonTest {
 
     @Test
     void equalsTestCase() {
-        // ------------ Sub-case 1 ---------------
+        // ------------ sub-case 1 ---------------
         a = new Complex64(5.123f, 331.4f);
         obj = new Complex64(5.123f, 331.4f);
         Assertions.assertEquals(a, obj);
 
-        // ------------ Sub-case 2 ---------------
+        // ------------ sub-case 2 ---------------
         a = new Complex64(5.123f, 331.4f);
         b = new Complex64(5.123f, 331.4f);
         Assertions.assertEquals(a, b);
 
-        // ------------ Sub-case 3 ---------------
+        // ------------ sub-case 3 ---------------
         a = new Complex64(5.123f, 331.4f);
         b = new Complex64(5.123f, 331.4001f);
         Assertions.assertNotEquals(a, b);
 
-        // ------------ Sub-case 4 ---------------
+        // ------------ sub-case 4 ---------------
         a = new Complex64(5.123f, 331.4f);
         b = new Complex64(5.123f, 331.401f);
         Assertions.assertNotEquals(a, b);
 
-        // ------------ Sub-case 5 ---------------
+        // ------------ sub-case 5 ---------------
         a = new Complex64(-5.123f);
         bFloat = -5.123f;
         Assertions.assertEquals(a, new Complex64(bFloat));
 
-        // ------------ Sub-case 6 ---------------
+        // ------------ sub-case 6 ---------------
         a = new Complex64(-5.123f, 1);
         bFloat = -5.123f;
         Assertions.assertNotEquals(a, new Complex64(bFloat));
 
-        // ------------ Sub-case 7 ---------------
+        // ------------ sub-case 7 ---------------
         a = new Complex64(2);
         integer = 2;
         Assertions.assertEquals(a, new Complex64(integer));
 
-        // ------------ Sub-case 8 ---------------
+        // ------------ sub-case 8 ---------------
         a = new Complex64(2);
         integer = 0;
         Assertions.assertNotEquals(a, new Complex64(integer));
 
-        // ------------ Sub-case 9 ---------------
+        // ------------ sub-case 9 ---------------
         a = new Complex64(2.09124f);
         d = 2.09124f;
         Assertions.assertTrue(a.equals(d));
 
-        // ------------ Sub-case 10 ---------------
+        // ------------ sub-case 10 ---------------
         a = new Complex64(7);
         d = 7;
         Assertions.assertTrue(a.equals(d));
 
-        // ------------ Sub-case 11 ---------------
+        // ------------ sub-case 11 ---------------
         a = new Complex64(3.024f);
         d = 2.09124f;
         Assertions.assertFalse(a.equals(d));
 
-        // ------------ Sub-case 12 ---------------
+        // ------------ sub-case 12 ---------------
         a = new Complex64(9);
         d = 7;
         Assertions.assertFalse(a.equals(d));
@@ -92,7 +92,7 @@ class Complex64ComparisonTest {
 
     @Test
     void compareTestCase() {
-        // -------- Sub-case 1 ----------
+        // -------- sub-case 1 ----------
         a = new Complex64(400);
         b = new Complex64(3, 1.21f);
         expCompare = 1;
@@ -100,7 +100,7 @@ class Complex64ComparisonTest {
         compare = a.compareTo(b);
         Assertions.assertEquals(expCompare, compare);
 
-        // -------- Sub-case 2 ----------
+        // -------- sub-case 2 ----------
         a = new Complex64(4);
         b = new Complex64(3, 3.4214f);
         expCompare = -1;
@@ -108,7 +108,7 @@ class Complex64ComparisonTest {
         compare = a.compareTo(b);
         Assertions.assertEquals(expCompare, compare);
 
-        // -------- Sub-case 3 ----------
+        // -------- sub-case 3 ----------
         a = new Complex64(34.13f, 11.44f);
         b = new Complex64(11.44f, 34.13f);
         expCompare = 0;

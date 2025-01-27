@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023-2024. Jacob Watters
+ * Copyright (c) 2023-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -257,8 +257,8 @@ public final class Invert {
 
 
     /**
-     * Inverts a hermitian positive definite matrix.
-     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually hermitian positive definite.
+     * Inverts a Hermitian positive definite matrix.
+     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually Hermitian positive definite.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.
@@ -270,9 +270,9 @@ public final class Invert {
 
 
     /**
-     * Inverts a hermitian positive definite matrix.
+     * Inverts a Hermitian positive definite matrix.
      * @param src Positive definite matrix.
-     * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually hermitian
+     * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually Hermitian
      *                    positive definite. <b>WARNING</b>: Checking if the matrix is positive definite can be very computationally
      *                    expensive.
      * @return The inverse of the {@code src} matrix.

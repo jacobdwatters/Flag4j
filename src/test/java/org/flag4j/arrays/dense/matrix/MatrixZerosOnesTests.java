@@ -13,14 +13,14 @@ class MatrixZerosOnesTests {
 
     @Test
     void zerosTestCase()  {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[46][101];
         A = new Matrix(aEntries);
         exp = true;
 
         Assertions.assertEquals(exp, A.isZeros());
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[46][101];
         aEntries[21][9] = 1.324;
         A = new Matrix(aEntries);
@@ -32,7 +32,7 @@ class MatrixZerosOnesTests {
 
     @Test
     void onesTestCase()  {
-        // ----------------- Sub-case 1 -----------------
+        // ----------------- sub-case 1 -----------------
         aEntries = new double[46][101];
         ArrayBuilder.fill(aEntries, 1.0);
         A = new Matrix(aEntries);
@@ -40,7 +40,7 @@ class MatrixZerosOnesTests {
 
         Assertions.assertEquals(exp, A.isOnes());
 
-        // ----------------- Sub-case 2 -----------------
+        // ----------------- sub-case 2 -----------------
         aEntries = new double[46][101];
         ArrayBuilder.fill(aEntries, 1.0);
         aEntries[21][9] = -1;

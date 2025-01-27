@@ -37,14 +37,14 @@ class CVectorInnerProductTests {
         double[] bEntries;
         Vector b;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new double[]{1.455, 6.345, -0.00035, 1.56, -8815.56};
         b = new Vector(bEntries);
         exp = new Complex128("25.12969816999999 + 8968.199567075002i");
 
         assertEquals(exp, RealFieldDenseVectorOps.inner(a.data, b.data));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new double[]{1.455, 1.56, -8815.56};
         b = new Vector(bEntries);
 
@@ -58,7 +58,7 @@ class CVectorInnerProductTests {
         double[] bEntries;
         CooVector b;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new double[]{1.455, -0.00035};
         sparseIndices = new int[]{1, 2};
         sparseSize = 5;
@@ -67,7 +67,7 @@ class CVectorInnerProductTests {
 
         assertEquals(exp, RealFieldDenseCooVectorOps.inner(a.data, b.data, b.indices, b.size));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new double[]{1.455, -0.00035};
         sparseIndices = new int[]{1, 2};
         sparseSize = 2;
@@ -84,7 +84,7 @@ class CVectorInnerProductTests {
         Complex128[] bEntries;
         CVector b;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new Complex128[]{new Complex128(24.5, -6.01), new Complex128(3), new Complex128(0, 824),
             new Complex128(-9, 4.5), new Complex128(-0.00024, -5615.789)};
         b = new CVector(bEntries);
@@ -92,7 +92,7 @@ class CVectorInnerProductTests {
 
         assertEquals(exp, a.inner(b));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(24.5, -6.01), new Complex128(3), new Complex128(0, 824),
                 new Complex128(-9, 4.5)};
         b = new CVector(bEntries);
@@ -107,7 +107,7 @@ class CVectorInnerProductTests {
         Complex128[] bEntries;
         CooCVector b;
 
-        // -------------------- Sub-case 1 --------------------
+        // -------------------- sub-case 1 --------------------
         bEntries = new Complex128[]{new Complex128(24.5, -6.01), new Complex128(3)};
         sparseSize = 5;
         sparseIndices = new int[]{0, 4};
@@ -116,7 +116,7 @@ class CVectorInnerProductTests {
 
         assertEquals(exp, DenseCooFieldVectorOps.innerProduct(a.data, b.data, b.indices, b.size));
 
-        // -------------------- Sub-case 2 --------------------
+        // -------------------- sub-case 2 --------------------
         bEntries = new Complex128[]{new Complex128(24.5, -6.01), new Complex128(3)};
         sparseSize = 1145;
         sparseIndices = new int[]{0, 4};

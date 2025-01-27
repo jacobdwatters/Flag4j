@@ -55,7 +55,7 @@ public abstract class AbstractDenseFieldTensor<T extends AbstractDenseFieldTenso
      */
     protected AbstractDenseFieldTensor(Shape shape, V[] entries) {
         super(shape, entries);
-        ValidateParameters.ensureEquals(shape.totalEntriesIntValueExact(), entries.length);
+        ValidateParameters.ensureAllEqual(shape.totalEntriesIntValueExact(), entries.length);
         this.zeroElement = (entries.length > 0 && entries[0] != null) ? entries[0].getZero() : null;
     }
 

@@ -21,7 +21,7 @@ class CVectorConstructorTests {
 
     @Test
     void sizeTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expSize = 5;
         expShape = new Shape(expSize);
         expEntries = new Complex128[expSize];
@@ -37,7 +37,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expSize = 0;
         expShape = new Shape(expSize);
         expEntries = new Complex128[expSize];
@@ -53,14 +53,14 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         expSize = -1;
         assertThrows(IllegalArgumentException.class, () -> new Vector(expSize));
     }
 
     @Test
     void sizeFillTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expSize = 5;
         fillValue = new Complex128(-10.23423, 100.2);
         expShape = new Shape(expSize);
@@ -77,7 +77,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expSize = 0;
         fillValue = new Complex128(-10.23423, 100.2);
         expShape = new Shape(expSize);
@@ -94,7 +94,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         expSize = -1;
         fillValue = new Complex128(-10.23423, 100.2);
         assertThrows(IllegalArgumentException.class, () -> new CVector(expSize, fillValue));
@@ -103,7 +103,7 @@ class CVectorConstructorTests {
 
     @Test
     void sizeFillDTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expSize = 5;
         fillValueD = 10.234;
         expShape = new Shape(expSize);
@@ -120,7 +120,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expSize = 0;
         fillValueD = -10.234;
         expShape = new Shape(expSize);
@@ -137,7 +137,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         expSize = -1;
         fillValueD = -10.234;
         assertThrows(IllegalArgumentException.class, () -> new CVector(expSize, fillValueD));
@@ -146,7 +146,7 @@ class CVectorConstructorTests {
 
     @Test
     void entriesTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         entriesD = new double[]{1.0433, 2, -3, 4, 5, 6, 7, 100, -0.1231};
         expSize = entriesD.length;
         expShape = new Shape(expSize);
@@ -163,7 +163,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         entriesD = new double[]{-0.234974};
         expSize = entriesD.length;
         expShape = new Shape(expSize);
@@ -184,7 +184,7 @@ class CVectorConstructorTests {
 
     @Test
     void entriesITestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -201,7 +201,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -222,7 +222,7 @@ class CVectorConstructorTests {
 
     @Test
     void entriesCTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expEntries = new Complex128[]{new Complex128(100, 234.13), new Complex128(-0.992, 113.3),
                 new Complex128(-0.0000000000001), new Complex128(0, -342.13)};
         expSize = expEntries.length;
@@ -236,7 +236,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         expEntries = new Complex128[]{new Complex128(-22, -0.92)};
         expSize = expEntries.length;
         expShape = new Shape(expSize);
@@ -253,7 +253,7 @@ class CVectorConstructorTests {
 
     @Test
     void copyTestCase() {
-        // ----------- Sub-case 1 ------------
+        // ----------- sub-case 1 ------------
         expEntries = new Complex128[]{new Complex128(100, 234.13), new Complex128(-0.992, 113.3),
                 new Complex128(-0.0000000000001), new Complex128(0, -342.13)};
         expSize = expEntries.length;
@@ -268,7 +268,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 2 ------------
+        // ----------- sub-case 2 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -286,7 +286,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 3 ------------
+        // ----------- sub-case 3 ------------
         entriesI = new int[]{0, 2, -3, 4, 5, 6, 7, 100, -9924};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
@@ -304,7 +304,7 @@ class CVectorConstructorTests {
             assertEquals(expEntries[i], a.data[i]);
         }
 
-        // ----------- Sub-case 4 ------------
+        // ----------- sub-case 4 ------------
         entriesI = new int[]{-22};
         expSize = entriesI.length;
         expShape = new Shape(expSize);
