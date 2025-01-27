@@ -250,7 +250,7 @@ public final class PrettyPrint {
         int precision = PrintOptions.getPrecision();
 
         if(startIdx != stopIdx) {
-            ValidateParameters.ensureValidArrayIndices(src.length, startIdx, stopIdx-1);
+            ValidateParameters.validateArrayIndices(src.length, startIdx, stopIdx-1);
             ValidateParameters.ensurePositive(stride);
             ValidateParameters.ensureGreaterEq(startIdx, stopIdx);
 
@@ -283,7 +283,7 @@ public final class PrettyPrint {
         int precision = PrintOptions.getPrecision();
 
         if(startIdx != stopIdx) {
-            ValidateParameters.ensureValidArrayIndices(src.length, startIdx, stopIdx-1);
+            ValidateParameters.validateArrayIndices(src.length, startIdx, stopIdx-1);
             ValidateParameters.ensurePositive(stride);
             ValidateParameters.ensureGreaterEq(startIdx, stopIdx);
 
