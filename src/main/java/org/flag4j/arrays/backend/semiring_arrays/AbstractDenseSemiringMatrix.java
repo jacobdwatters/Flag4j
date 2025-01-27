@@ -443,7 +443,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public T swapCols(int colIndex1, int colIndex2) {
-        ValidateParameters.ensureValidArrayIndices(numCols, colIndex1, colIndex2);
+        ValidateParameters.validateArrayIndices(numCols, colIndex1, colIndex2);
 
         if(colIndex1 != colIndex2) {
             V temp;
@@ -618,8 +618,8 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      *                                  fit completely within this matrix.
      */
     public T setSlice(T values, int rowStart, int colStart) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart);
-        ValidateParameters.ensureValidArrayIndices(numCols, colStart);
+        ValidateParameters.validateArrayIndices(numRows, rowStart);
+        ValidateParameters.validateArrayIndices(numCols, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             int src1Offset = (i+rowStart)*numCols + colStart;
@@ -669,8 +669,8 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public T getSlice(int rowStart, int rowEnd, int colStart, int colEnd) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd);
-        ValidateParameters.ensureValidArrayIndices(numCols, colStart, colEnd);
+        ValidateParameters.validateArrayIndices(numRows, rowStart, rowEnd);
+        ValidateParameters.validateArrayIndices(numCols, colStart, colEnd);
 
         int sliceRows = rowEnd-rowStart;
         int sliceCols = colEnd-colStart;
@@ -714,8 +714,8 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      * @throws IllegalArgumentException If the values array has a different shape then this matrix.
      */
     public T setValues(V[][] values) {
-        ValidateParameters.ensureEquals(numRows, values.length);
-        ValidateParameters.ensureEquals(numCols, values[0].length);
+        ValidateParameters.ensureAllEqual(numRows, values.length);
+        ValidateParameters.ensureAllEqual(numCols, values[0].length);
 
         for(int i=0; i<numRows; i++) {
             int rowOffset = i*numCols;
@@ -944,7 +944,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public U getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.validateArrayIndices(numCols, colStart, colEnd-1);
         ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols + colStart;
         int stop = rowIdx*numCols + colEnd;
@@ -970,7 +970,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      */
     @Override
     public U getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd-1);
+        ValidateParameters.validateArrayIndices(numRows, rowStart, rowEnd-1);
         ValidateParameters.ensureGreaterEq(rowStart, rowEnd);
         V[] col = makeEmptyDataArray(rowEnd-rowStart);
 

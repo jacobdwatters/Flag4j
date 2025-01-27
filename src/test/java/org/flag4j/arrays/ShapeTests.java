@@ -1,6 +1,5 @@
-package org.flag4j;
+package org.flag4j.arrays;
 
-import org.flag4j.arrays.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +13,7 @@ class ShapeTests {
 
     @Test
     void testDimsConstructorTestCase() {
-        // ----------- Sub-case 1 -----------
+        // ----------- sub-case 1 -----------
         expRank = 3;
         expDims1 = new int[]{1, 5, 18};
         shape1 = new Shape(expDims1);
@@ -22,7 +21,7 @@ class ShapeTests {
         assertEquals(expRank, shape1.getRank());
         assertArrayEquals(expDims1, shape1.getDims());
 
-        // ----------- Sub-case 2 -----------
+        // ----------- sub-case 2 -----------
         expRank = 1;
         expDims1 = new int[]{8};
         shape1 = new Shape(expDims1);
@@ -30,12 +29,12 @@ class ShapeTests {
         assertEquals(expRank, shape1.getRank());
         assertArrayEquals(expDims1, shape1.getDims());
 
-        // ----------- Sub-case 3 -----------
+        // ----------- sub-case 3 -----------
         expRank = 13;
         expDims1 = new int[]{8, 1, 2, 3, 4, 1, 10, 19, 304, 11, 8, 3, 90};
         shape1 = new Shape(expDims1);
 
-        // ----------- Sub-case 4 -----------
+        // ----------- sub-case 4 -----------
         expDims1 = new int[]{1, 3, -1, 0};
         assertThrows(IllegalArgumentException.class, () -> new Shape(expDims1));
     }
@@ -43,7 +42,7 @@ class ShapeTests {
 
     @Test
     void getTestCase() {
-        // ----------- Sub-case 1 -----------
+        // ----------- sub-case 1 -----------
         expDims1 = new int[]{1, 5, 18};
         shape1 = new Shape(expDims1);
 
@@ -51,7 +50,7 @@ class ShapeTests {
             assertEquals(expDims1[i], shape1.get(i));
         }
 
-        // ----------- Sub-case 3 -----------
+        // ----------- sub-case 3 -----------
         expDims1 = new int[]{4, 903, 11, 45};
         shape1 = new Shape(expDims1);
 
@@ -63,17 +62,17 @@ class ShapeTests {
 
     @Test
     void totalEntriesTestCase() {
-        // ----------- Sub-case 1 -----------
+        // ----------- sub-case 1 -----------
         expDims1 = new int[]{1, 5, 18};
         shape1 = new Shape(expDims1);
         assertEquals(5 * 18, shape1.totalEntries().intValue());
 
-        // ----------- Sub-case 2 -----------
+        // ----------- sub-case 2 -----------
         expDims1 = new int[]{4, 903, 11, 45};
         shape1 = new Shape(expDims1);
         assertEquals(4*903*11*45, shape1.totalEntries().intValue());
 
-        // ----------- Sub-case 3 -----------
+        // ----------- sub-case 3 -----------
         expDims1 = new int[]{};
         shape1 = new Shape(expDims1); // Represents a scalar value.
         assertEquals(1, shape1.totalEntries().intValue());
@@ -82,7 +81,7 @@ class ShapeTests {
 
     @Test
     void equalsTestCase() {
-        // ----------- Sub-case 1 -----------
+        // ----------- sub-case 1 -----------
         expDims1 = new int[]{1, 5, 18};
         expDims2 = new int[]{1, 5, 18};
         shape1 = new Shape(expDims1);
@@ -90,7 +89,7 @@ class ShapeTests {
 
         assertEquals(shape1, shape2);
 
-        // ----------- Sub-case 2 -----------
+        // ----------- sub-case 2 -----------
         expDims1 = new int[]{1, 5, 18};
         expDims2 = new int[]{1, 5, 18, 0};
         shape1 = new Shape(expDims1);
@@ -98,7 +97,7 @@ class ShapeTests {
 
         assertNotEquals(shape1, shape2);
 
-        // ----------- Sub-case 3 -----------
+        // ----------- sub-case 3 -----------
         expDims1 = new int[]{1};
         expDims2 = new int[]{4};
         shape1 = new Shape(expDims1);
@@ -106,7 +105,7 @@ class ShapeTests {
 
         assertNotEquals(shape1, shape2);
 
-        // ----------- Sub-case 4 -----------
+        // ----------- sub-case 4 -----------
         expDims1 = new int[]{};
         expDims2 = new int[]{};
         shape1 = new Shape(expDims1);
@@ -118,19 +117,19 @@ class ShapeTests {
 
     @Test
     void strideTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         shape1 = new Shape(4, 2, 3);
         expStrides = new int[]{6, 3, 1};
 
         assertArrayEquals(expStrides, shape1.getStrides());
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         shape1 = new Shape();
         expStrides = new int[]{};
 
         assertArrayEquals(expStrides, shape1.getStrides());
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         shape1 = new Shape(15, 2, 3, 9);
         expStrides = new int[]{54, 27, 9, 1};
 
@@ -139,35 +138,35 @@ class ShapeTests {
 
     @Test
     void entriesIndexTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         shape1 = new Shape(4, 2, 3);
         indices = new int[]{1, 0, 2};
         expValue = 8;
         assertEquals(expValue, shape1.getFlatIndex(indices));
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         shape1 = new Shape(4, 2, 3);
         indices = new int[]{2, 1, 1};
         expValue = 16;
         assertEquals(expValue, shape1.getFlatIndex(indices));
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 0, 1, 5};
         expValue = 608;
         assertEquals(expValue, shape1.getFlatIndex(indices));
 
-        // -------------- Sub-case 4 --------------
+        // -------------- sub-case 4 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 0, 1, 5, 1};
         assertThrows(IllegalArgumentException.class, () -> shape1.getFlatIndex(indices));
 
-        // -------------- Sub-case 5 --------------
+        // -------------- sub-case 5 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 2, 1, 5};
         assertThrows(IndexOutOfBoundsException.class, () -> shape1.getFlatIndex(indices));
 
-        // -------------- Sub-case 6 --------------
+        // -------------- sub-case 6 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 1, 1, 101};
         assertThrows(IndexOutOfBoundsException.class, () -> shape1.getFlatIndex(indices));
@@ -176,7 +175,7 @@ class ShapeTests {
 
     @Test
     void swapAxesTestCase() {
-        // -------------- Sub-case 1 --------------
+        // -------------- sub-case 1 --------------
         shape1 = new Shape(4, 2, 3);
         shape2 = shape1.swapAxes(0, 1);
         expDims1 = new int[]{2, 4, 3};
@@ -185,7 +184,7 @@ class ShapeTests {
         assertArrayEquals(expDims1, shape2.getDims());
         assertArrayEquals(expStrides, shape2.getStrides());
 
-        // -------------- Sub-case 2 --------------
+        // -------------- sub-case 2 --------------
         shape1 = new Shape(4, 2, 3);
         shape2 = shape1.swapAxes(1, 0);
         expDims1 = new int[]{2, 4, 3};
@@ -194,7 +193,7 @@ class ShapeTests {
         assertArrayEquals(expDims1, shape2.getDims());
         assertArrayEquals(expStrides, shape2.getStrides());
 
-        // -------------- Sub-case 3 --------------
+        // -------------- sub-case 3 --------------
         shape1 = new Shape(4, 2, 3);
         shape2 = shape1.swapAxes(0, 2);
         expDims1 = new int[]{3, 2, 4};

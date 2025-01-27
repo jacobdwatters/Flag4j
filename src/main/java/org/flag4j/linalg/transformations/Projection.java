@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +26,36 @@ package org.flag4j.linalg.transformations;
 
 
 import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 
 /**
- * This class contains static methods usefully for computing projection transformation matrices.
+ * A utility class for generating projection matrices used in 3D graphics transformations.
+ *
+ * <h3>Supported Projections:</h3>
+ * <ul>
+ *   <li>Support for creating perspective projection matrices with specified field-of-view (FOV),
+ *       aspect ratio, and near/far clipping planes.</li>
+ *   <li>Support for creating orthogonal projection matrices with customizable boundaries
+ *       (xMin, xMax, yMin, yMax) and clipping planes.</li>
+ * </ul>
+ *
+ * <h3>Examples:</h3>
+ * <pre>{@code
+ * // Create a perspective projection matrix.
+ * Matrix perspective = Projection.getPerspective(
+ *      Math.toRadians(60), 16.0/9.0, 0.1, 100.0
+ * );
+ *
+ * // Create an orthogonal projection matrix.
+ * Matrix orthogonal = Projection.getOrthogonal(
+ *      -10, 10, -10, 10, 0.1, 100.0
+ * );
+ * }</pre>
  */
 public final class Projection {
 
     private Projection() {
         // Hide constructor for utility class. for utility class.
-        throw new IllegalArgumentException(ErrorMessages.getUtilityClassErrMsg());
     }
 
 
@@ -54,8 +73,8 @@ public final class Projection {
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
     public static Matrix getPerspective(double fov, double aspectRatio, double nearClip, double farClip) {
-        ValidateParameters.ensureGreaterEq(0, aspectRatio);
-        if(nearClip>=farClip)
+        ValidateParameters.ensureAllGreaterEq(0, aspectRatio);
+        if(nearClip >= farClip)
             throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
 
         Matrix perspective = new Matrix(4);
@@ -86,8 +105,8 @@ public final class Projection {
      * @throws AssertionError If {@code nearClip!=farClip}.
      */
     public static Matrix getPerspective(double fovX, double fovY, double aspectRatio, double nearClip, double farClip){
-        ValidateParameters.ensureGreaterEq(0, aspectRatio);
-        if(nearClip>=farClip)
+        ValidateParameters.ensureAllGreaterEq(0, aspectRatio);
+        if(nearClip >= farClip)
             throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
 
         Matrix perspective = new Matrix(4);
@@ -100,7 +119,7 @@ public final class Projection {
         perspective.data[5] = 1.0/(Math.tan(fovYRad/2.0));
         perspective.data[10] = -(farClip + nearClip)/(farClip - nearClip);
         perspective.data[11] = -1.0;
-        perspective.data[14] = -2.0*farClip*nearClip/(farClip-nearClip);
+        perspective.data[14] = -2.0*farClip*nearClip/(farClip - nearClip);
 
         return perspective;
     }
@@ -120,16 +139,20 @@ public final class Projection {
      */
     public static Matrix getOrthogonal(double xMin, double xMax, double yMin, double yMax,
                                           double nearClip, double farClip){
-        if(nearClip>=farClip)
+        if(xMin>=xMax)
+            throw new IllegalArgumentException("xMin cannot be greater than or equal to xMax.");
+        if(yMin>=yMax)
+            throw new IllegalArgumentException("yMin cannot be greater than or equal to yMax.");
+        if(nearClip >= farClip)
             throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
         Matrix ortho = new Matrix(4);
 
-        ortho.data[0] = 2.0/(xMax-xMin);
-        ortho.data[5] = 2.0/(yMax-yMin);
+        ortho.data[0] = 2.0/(xMax - xMin);
+        ortho.data[5] = 2.0/(yMax - yMin);
         ortho.data[10] = -2.0/(farClip-nearClip);
         ortho.data[12] = -(xMax + xMin)/(xMax - xMin);
         ortho.data[13] = -(yMax + yMin)/(yMax - yMin);
-        ortho.data[14] = -(farClip + nearClip)/(farClip-nearClip);
+        ortho.data[14] = -(farClip + nearClip)/(farClip - nearClip);
         ortho.data[15] = 1.0;
 
         return ortho;
@@ -149,16 +172,16 @@ public final class Projection {
      */
     public static Matrix getOrthogonal(double xMax, double yMax,
                                           double nearClip, double farClip){
-        if(nearClip>=farClip)
+        if(nearClip >= farClip)
             throw new IllegalArgumentException("nearClip cannot be equal to or greater than farClip.");
         Matrix ortho = new Matrix(4);
 
         ortho.data[0] = 2.0/xMax;
         ortho.data[5] = 2.0/yMax;
-        ortho.data[10] = -2.0/(farClip-nearClip);
+        ortho.data[10] = -2.0/(farClip - nearClip);
         ortho.data[12] = -1.0;
         ortho.data[13] = -1.0;
-        ortho.data[14] = -(farClip + nearClip)/(farClip-nearClip);
+        ortho.data[14] = -(farClip + nearClip)/(farClip - nearClip);
         ortho.data[15] = 1.0;
 
         return ortho;
@@ -168,7 +191,7 @@ public final class Projection {
 
     /**
      * Creates a {@code 4x4} orthogonal projection matrix to project a 2D point in an orthographic viewing region.
-     * Equivalent to {@link #getOrthogonal(double, double, double, double, double, double)} with {@code nearClip=-1} and
+     * Equivalent to {@link #getOrthogonal(double, double, double, double, double, double)} with {@code nearClip = -1} and
      * {@code farClip = 1}.
      * @param xMin Minimum {@code x} value of image plane to project to.
      * @param xMax Maximum {@code x} value of image plane to project to.

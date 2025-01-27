@@ -83,7 +83,7 @@ public final class RealDenseTranspose {
      */
     public static double[] standard(double[] src, Shape shape, int[] axes) {
         ValidateParameters.ensurePermutation(axes);
-        ValidateParameters.ensureEquals(shape.getRank(), axes.length);
+        ValidateParameters.ensureAllEqual(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");
@@ -116,7 +116,7 @@ public final class RealDenseTranspose {
      */
     public static double[] standardConcurrent(double[] src, Shape shape, int[] axes) {
         ValidateParameters.ensurePermutation(axes);
-        ValidateParameters.ensureEquals(shape.getRank(), axes.length);
+        ValidateParameters.ensureAllEqual(shape.getRank(), axes.length);
         if(shape.getRank() < 2) { // Can't transpose tensor with less than 2 axes.
             throw new IllegalArgumentException("Tensor transpose not defined for rank " + shape.getRank() +
                     " tensor.");

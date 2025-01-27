@@ -19,7 +19,7 @@ class CooCMatrixReshapeTests {
 
     @Test
     void flattenTests() {
-        // ---------------- Sub-case 1 ----------------
+        // ---------------- sub-case 1 ----------------
         actShape = new Shape(54, 12);
         actData = new Complex128[]{new Complex128(1, 2), new Complex128(3, 4), new Complex128(5, 6),
                 new Complex128(7, 8), new Complex128(9, 10)};
@@ -36,7 +36,7 @@ class CooCMatrixReshapeTests {
 
         assertEquals(exp, act.flatten());
 
-        // ---------------- Sub-case 2 ----------------
+        // ---------------- sub-case 2 ----------------
         actShape = new Shape(54, 12);
         actData = new Complex128[]{};
         actRowIndices = new int[]{};
@@ -51,7 +51,7 @@ class CooCMatrixReshapeTests {
 
         assertEquals(exp, act.flatten());
 
-        // ---------------- Sub-case 3 ----------------
+        // ---------------- sub-case 3 ----------------
         actShape = new Shape(25, 15);
         actData = new Complex128[]{new Complex128(0.2777, 0.94248), new Complex128(0.38635, 0.24736), new Complex128(0.3829, 0.22189), new Complex128(0.49247, 0.31679), new Complex128(0.5719, 0.25363), new Complex128(0.24135, 0.72457), new Complex128(0.83898, 0.67385), new Complex128(0.43352, 0.61757)};
         actRowIndices = new int[]{6, 7, 8, 8, 15, 17, 19, 23};
@@ -66,7 +66,7 @@ class CooCMatrixReshapeTests {
 
         assertEquals(exp, act.flatten(1));
 
-        // ---------------- Sub-case 4 ----------------
+        // ---------------- sub-case 4 ----------------
         actShape = new Shape(12, 54);
         actData = new Complex128[]{new Complex128(0.51154, 0.50554), new Complex128(0.79968, 0.71548), new Complex128(0.4903, 0.39299), new Complex128(0.93451, 0.13945), new Complex128(0.89019, 0.7986), new Complex128(0.59208, 0.65129)};
         actRowIndices = new int[]{2, 4, 5, 7, 7, 9};
@@ -81,7 +81,7 @@ class CooCMatrixReshapeTests {
 
         assertEquals(exp, act.flatten(0));
 
-        // ---------------- Sub-case 5 ----------------
+        // ---------------- sub-case 5 ----------------
         actShape = new Shape(5, 5);
         actData = new Complex128[]{};
         actRowIndices = new int[]{};
@@ -100,7 +100,7 @@ class CooCMatrixReshapeTests {
 
     @Test
     void reshapeTests() {
-        // ---------------- Sub-case 1 ----------------
+        // ---------------- sub-case 1 ----------------
         actShape = new Shape(12, 4);
         actData = new Complex128[]{};
         actRowIndices = new int[]{};
@@ -115,7 +115,7 @@ class CooCMatrixReshapeTests {
 
         assertEquals(exp, act.reshape(expShape));
 
-        // ---------------- Sub-case 2 ----------------
+        // ---------------- sub-case 2 ----------------
         actShape = new Shape(12, 4);
         actData = new Complex128[]{new Complex128(0.34722, 0.89473), new Complex128(0.3139, 0.63988), new Complex128(0.18243, 0.63827), new Complex128(0.34544, 0.55157), new Complex128(0.85195, 0.06837)};
         actRowIndices = new int[]{0, 2, 4, 5, 10};
@@ -130,7 +130,7 @@ class CooCMatrixReshapeTests {
 
         assertEquals(exp, act.reshape(expShape));
 
-        // ---------------- Sub-case 3 ----------------
+        // ---------------- sub-case 3 ----------------
         actShape = new Shape(8, 8);
         actData = new Complex128[]{new Complex128(0.07652, 0.43013), new Complex128(0.58944, 0.31322), new Complex128(0.66872, 0.3021)};
         actRowIndices = new int[]{4, 5, 6};
@@ -145,7 +145,7 @@ class CooCMatrixReshapeTests {
 
         assertEquals(exp, act.reshape(expShape));
 
-        // ---------------- Sub-case 4 ----------------
+        // ---------------- sub-case 4 ----------------
         actShape = new Shape(8, 8);
         actData = new Complex128[]{new Complex128(0.07652, 0.43013), new Complex128(0.58944, 0.31322), new Complex128(0.66872, 0.3021)};
         actRowIndices = new int[]{4, 5, 6};

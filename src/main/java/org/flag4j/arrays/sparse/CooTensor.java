@@ -384,7 +384,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor flatten(int axis) {
-        ValidateParameters.ensureIndicesInBounds(indices[0].length, axis);
+        ValidateParameters.validateArrayIndices(indices[0].length, axis);
         int[][] destIndices = new int[indices.length][indices[0].length];
 
         // Compute new shape.
@@ -410,7 +410,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
      */
     @Override
     public CooTensor reshape(Shape newShape) {
-        ValidateParameters.ensureBroadcastable(shape, newShape);
+        ValidateParameters.ensureTotalEntriesEqual(shape, newShape);
 
         int rank = indices[0].length;
         int newRank = newShape.getRank();
@@ -637,8 +637,8 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
     public CooTensor tensorTr(int axis1, int axis2) {
         // Validate parameters.
         ValidateParameters.ensureNotEquals(axis1, axis2);
-        ValidateParameters.ensureValidArrayIndices(getRank(), axis1, axis2);
-        ValidateParameters.ensureEquals(shape.get(axis1), shape.get(axis2));
+        ValidateParameters.validateArrayIndices(getRank(), axis1, axis2);
+        ValidateParameters.ensureAllEqual(shape.get(axis1), shape.get(axis2));
 
         int rank = getRank();
         int[] dims = shape.getDims();
@@ -737,7 +737,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
     @Override
     public CooTensor T(int axis1, int axis2) {
         int rank = getRank();
-        ValidateParameters.ensureIndicesInBounds(rank, axis1, axis2);
+        ValidateParameters.validateArrayIndices(rank, axis1, axis2);
 
         if(axis1 == axis2) return copy(); // Simply return a copy.
 
@@ -775,7 +775,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
     @Override
     public CooTensor T(int... axes) {
         int rank = getRank();
-        ValidateParameters.ensureEquals(rank, axes.length);
+        ValidateParameters.ensureAllEqual(rank, axes.length);
         ValidateParameters.ensurePermutation(axes);
 
         int[][] transposeIndices = new int[nnz][rank];

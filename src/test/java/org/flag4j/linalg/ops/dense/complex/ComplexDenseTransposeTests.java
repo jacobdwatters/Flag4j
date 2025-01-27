@@ -16,7 +16,7 @@ class ComplexDenseTransposeTests {
 
     @Test
     void transposeTestCase() {
-        // ------------- Sub-case 1 ---------------
+        // ------------- sub-case 1 ---------------
         numRows = 3;
         numCols = 4;
         A = new Complex128[]{
@@ -58,7 +58,7 @@ class ComplexDenseTransposeTests {
         DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
         assertArrayEquals(expTranspose, act);
 
-        // ------------- Sub-case 2 ---------------
+        // ------------- sub-case 2 ---------------
         numRows = 6;
         numCols = 2;
         A = new Complex128[]{new Complex128(1), new Complex128(2), new Complex128(3),
@@ -97,7 +97,7 @@ class ComplexDenseTransposeTests {
         DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
         assertArrayEquals(expTranspose, act);
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 12;
         numCols = 1;
         A = new Complex128[]{new Complex128(1), new Complex128(2), new Complex128(3),
@@ -136,7 +136,7 @@ class ComplexDenseTransposeTests {
         DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
         assertArrayEquals(expTranspose, act);
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 3;
         numCols = 3;
         A = new Complex128[]{
@@ -173,7 +173,7 @@ class ComplexDenseTransposeTests {
         DenseRingHermitianTranspose.blockedMatrixConcurrentHerm(A, numRows, numCols, act);
         assertArrayEquals(expTranspose, act);
 
-        // ------------- Sub-case 3 ---------------
+        // ------------- sub-case 3 ---------------
         numRows = 1;
         numCols = 1;
         A = new Complex128[]{new Complex128(1.13)};

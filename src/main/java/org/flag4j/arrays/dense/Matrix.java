@@ -310,7 +310,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @param numCols Number of columns in this matrix.
      * @param data Entries of the matrix.
      */
-    public Matrix(int numRows, int numCols, double[] data) {
+    public Matrix(int numRows, int numCols, double... data) {
         super(new Shape(numRows, numCols), data);
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
@@ -321,8 +321,9 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * Constructs a diagonal matrix from an array specifying the diagonal elements of the matrix.
      * @param data Diagonal elements of the matrix. All other values will be zero.
      * @return A diagonal matrix whose diagonal elements are equal to {@code data}.
+     * @see #diag(Vector)
      */
-    public static Matrix diag(double[] data) {
+    public static Matrix diag(double... data) {
         int size = data.length;
         double[] fullData = new double[size*size];
 
@@ -333,6 +334,17 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
         }
 
         return new Matrix(size, size, fullData);
+    }
+
+
+    /**
+     * Constructs a diagonal matrix from a vector specifying the diagonal elements of the matrix.
+     * @param vec Diagonal elements of the matrix. All other values will be zero.
+     * @return A diagonal matrix whose diagonal elements are equal to the entries of {@code vec}.
+     * @see #diag(double...)
+     */
+    public static Matrix diag(Vector vec) {
+        return diag(vec.data);
     }
 
 
@@ -642,7 +654,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     @Override
     public Matrix multTranspose(Matrix b) {
         // Ensure this matrix can be multiplied to the transpose of B.
-        ValidateParameters.ensureEquals(this.numCols, b.numCols);
+        ValidateParameters.ensureAllEqual(this.numCols, b.numCols);
 
         return new Matrix(
                 new Shape(this.numRows, b.numRows),
@@ -754,7 +766,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix swapRows(int rowIndex1, int rowIndex2) {
-        ValidateParameters.ensureGreaterEq(0, rowIndex1, rowIndex2);
+        ValidateParameters.ensureAllGreaterEq(0, rowIndex1, rowIndex2);
         ValidateParameters.ensureGreaterEq(rowIndex1, this.numRows-1);
         ValidateParameters.ensureGreaterEq(rowIndex2, this.numRows-1);
 
@@ -783,7 +795,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix swapCols(int colIndex1, int colIndex2) {
-        ValidateParameters.ensureGreaterEq(0, colIndex1, colIndex2);
+        ValidateParameters.ensureAllGreaterEq(0, colIndex1, colIndex2);
         ValidateParameters.ensureGreaterEq(colIndex1, this.numCols-1);
         ValidateParameters.ensureGreaterEq(colIndex2, this.numCols-1);
 
@@ -949,8 +961,8 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix setSliceCopy(Matrix values, int rowStart, int colStart) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart);
-        ValidateParameters.ensureValidArrayIndices(numCols, colStart);
+        ValidateParameters.validateArrayIndices(numRows, rowStart);
+        ValidateParameters.validateArrayIndices(numCols, colStart);
         Matrix copy = new Matrix(this);
 
         for(int i=0; i<values.numRows; i++) {
@@ -979,8 +991,8 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      *                                  fit completely within this matrix.
      */
     public Matrix setSlice(Matrix values, int rowStart, int colStart) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart);
-        ValidateParameters.ensureValidArrayIndices(numCols, colStart);
+        ValidateParameters.validateArrayIndices(numRows, rowStart);
+        ValidateParameters.validateArrayIndices(numCols, colStart);
 
         for(int i=0; i<values.numRows; i++) {
             System.arraycopy(
@@ -1010,7 +1022,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     public Matrix setSlice(double[][] values, int rowStart, int colStart) {
         ValidateParameters.ensureLessEq(numRows, rowStart + values.length);
         ValidateParameters.ensureLessEq(numCols, colStart + values[0].length);
-        ValidateParameters.ensureGreaterEq(0, rowStart, colStart);
+        ValidateParameters.ensureAllGreaterEq(0, rowStart, colStart);
         int cols = values[0].length;
 
         for(int i=0, size=values.length; i<size; i++) {
@@ -1042,7 +1054,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     public Matrix setSlice(Double[][] values, int rowStart, int colStart) {
         ValidateParameters.ensureLessEq(numRows, rowStart + values.length);
         ValidateParameters.ensureLessEq(numCols, colStart + values[0].length);
-        ValidateParameters.ensureGreaterEq(0, rowStart, colStart);
+        ValidateParameters.ensureAllGreaterEq(0, rowStart, colStart);
 
         for(int i=0, size=values.length; i<size; i++) {
             int rowOffset = (i+rowStart)*numCols + colStart;
@@ -1436,7 +1448,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Vector getRow(int rowIdx, int colStart, int colEnd) {
-        ValidateParameters.ensureIndicesInBounds(numCols, colStart, colEnd-1);
+        ValidateParameters.validateArrayIndices(numCols, colStart, colEnd-1);
         ValidateParameters.ensureGreaterEq(colStart, colEnd);
         int start = rowIdx*numCols + colStart;
         int stop = rowIdx*numCols + colEnd;
@@ -1462,7 +1474,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Vector getCol(int colIdx, int rowStart, int rowEnd) {
-        ValidateParameters.ensureValidArrayIndices(numRows, rowStart, rowEnd-1);
+        ValidateParameters.validateArrayIndices(numRows, rowStart, rowEnd-1);
         ValidateParameters.ensureGreaterEq(rowStart, rowEnd);
         double[] col = new double[numRows];
 
