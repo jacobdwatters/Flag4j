@@ -540,7 +540,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
                 CMatrix G = Givens.get2x2Rotator(new CVector(mu[0], a21));
                 // Apply rotation to T matrix to bring it into upper triangular form.
                 Givens.leftMult2x2Rotator(tComplex, G, m, givensWorkComplex);
-                // Apply hermitian transpose to keep transformation similar.
+                // Apply Hermitian transpose to keep transformation similar.
                 Givens.rightMult2x2Rotator(tComplex, G, m, givensWorkComplex);
 
                 if(uComplex != null) {

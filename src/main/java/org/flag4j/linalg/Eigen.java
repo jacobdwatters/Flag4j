@@ -792,7 +792,7 @@ public final class Eigen {
         for(int i=0; i<numRows; i++)
             lambdas.data[i] = T.data[i*numRows + i];
 
-        // If the src matrix is hermitian, then U will contain the eigenvectors.
+        // If the src matrix is Hermitian, then U will contain the eigenvectors.
         if(!src.isHermitian())
             U = U.mult(getEigenVectorsTriu(T)); // Compute the eigenvectors of T and convert to eigenvectors of src.
 

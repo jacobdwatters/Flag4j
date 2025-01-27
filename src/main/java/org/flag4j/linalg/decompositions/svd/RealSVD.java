@@ -81,11 +81,11 @@ public class RealSVD extends SVD<Matrix> {
 
 
     /**
-     * Computes the inverse direct sum of a matrix and its hermitian transpose.
+     * Computes the inverse direct sum of a matrix and its Hermitian transpose.
      *
-     * @param src Matrix to inverse direct add with its hermitian transpose.
+     * @param src Matrix to inverse direct add with its Hermitian transpose.
      *
-     * @return The inverse direct sum of the {@code src} matrix with its hermitian transpose.
+     * @return The inverse direct sum of the {@code src} matrix with its Hermitian transpose.
      */
     @Override
     protected Matrix invDirectSum(Matrix src) {

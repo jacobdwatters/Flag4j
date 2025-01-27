@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
     /**
      * <p>Constructs a complex Cholesky decomposer.
      *
-     * <p>If you would like to enforce a check for hermitian symmetry at the time
+     * <p>If you would like to enforce a check for Hermitian symmetry at the time
      * of decomposition, see {@link #ComplexCholesky(boolean)}.
      */
     public ComplexCholesky() {
@@ -55,8 +55,8 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
     /**
      * Constructs a complex Cholesky decomposer.
      *
-     * @param checkPosDef flag indicating if the matrix to be decomposed should be explicitly checked to be hermitian ({@code true}).
-     * If{@code false}, no check will be made and the matrix will be treated as if it were hermitian and only the lower half of the
+     * @param checkPosDef flag indicating if the matrix to be decomposed should be explicitly checked to be Hermitian ({@code true}).
+     * If{@code false}, no check will be made and the matrix will be treated as if it were Hermitian and only the lower half of the
      * matrix will be accessed
      */
     public ComplexCholesky(boolean checkPosDef) {
@@ -68,9 +68,9 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
      * Decompose a matrix into A=LL<sup>H</sup> where L is a lower triangular matrix and L<sup>H</sup> is
      * the conjugate transpose of L.
      *
-     * @param src The source matrix to decompose. Must be hermitian positive-definite.
+     * @param src The source matrix to decompose. Must be Hermitian positive-definite.
      * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If {@code src} is not symmetric and {@link #ComplexCholesky(boolean)
+     * @throws IllegalArgumentException If {@code src} is not Hermitian and {@link #ComplexCholesky(boolean)
      * enforceSymmetric} was set to true when this decomposer was instantiated.
      * @throws LinearAlgebraException If {@code src} is not positive-definite.
      */

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ public abstract class LstsqSolver<T extends MatrixMixin<T, ?, U, ?>, U extends V
      */
     protected final UnitaryDecomposition<T, ?> qr;
     /**
-     * {@code Q} The hermitian transpose of the orthonormal matrix from the {@code QR} decomposition.
+     * {@code Q} The Hermitian transpose of the orthonormal matrix from the {@code QR} decomposition.
      */
     protected T Qh;
     /**
