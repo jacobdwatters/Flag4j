@@ -27,6 +27,7 @@ package org.flag4j.linalg.decompositions.schur;
 
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.linalg.decompositions.Decomposition;
+import org.flag4j.linalg.decompositions.balance.Balancer;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import org.flag4j.rng.RandomComplex;
 import org.flag4j.util.ValidateParameters;
@@ -69,12 +70,13 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      *Decomposer to compute the Hessenburg decomposition as a setup step for the implicit double step QR algorithm.
      */
     protected UnitaryDecomposition<T, U> hess;
-//    /**
-//     * <p>Balancer to scale rows and columns of matrix to be decomposed so that all row and columns have roughly similar sized norms.
-//     * <p>This is done to attempt to improve the condition number and improve numerical stability when computing the Schur
-//     * decomposition.
-//     */
-//    protected RealMatrixBalancerOld balancer;
+    /**
+     * <p>Balancer to apply a similarity transform to the matrix before the QR-algorithm is executed. This similarity transform
+     * consists of permuting rows/columns to isolate decoupled eigenvalues then scaling the rows and columns of the matrix
+     *
+     * <p>This is done to attempt to improve the conditioning of the eigen-problem.
+     */
+    protected Balancer<T> balancer;
     /**
      *Stores the number of rows in the matrix being decomposed.
      */

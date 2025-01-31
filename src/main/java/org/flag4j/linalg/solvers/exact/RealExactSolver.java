@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,9 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
     public RealExactSolver() {
-        super(new RealLU(), new RealForwardSolver(true), new RealBackSolver());
+        super(new RealLU(),
+                new RealForwardSolver(true, false),
+                new RealBackSolver(false));
     }
 
 

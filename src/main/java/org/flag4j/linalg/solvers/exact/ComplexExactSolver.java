@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,9 @@ public class ComplexExactSolver extends ExactSolver<CMatrix, CVector> {
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
     public ComplexExactSolver() {
-        super(new ComplexLU(), new ComplexForwardSolver(true), new ComplexBackSolver());
+        super(new ComplexLU(),
+                new ComplexForwardSolver(true, false),
+                new ComplexBackSolver(false));
     }
 
 

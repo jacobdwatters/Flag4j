@@ -25,6 +25,7 @@
 package org.flag4j.linalg.solvers.exact.triangular;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
@@ -78,13 +79,18 @@ public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends Ve
     /**
      * Ensures passed parameters are valid for the back solver.
      * @param coeff Coefficient matrix in the linear system.
-     * @param constantRows Number of rows in the constant vector or matrix.
+     * @param constantRows Shape of the constant vector or matrix.
      * @throws IllegalArgumentException If coeff is not square,  {@code coeff.numRows()!=constantRows}, or if {@code enforceTriU} is
      * true and {@code coeff} is not upper triangular.
      */
-    protected void checkParams(T coeff, int constantRows) {
+    protected void checkParams(T coeff, Shape constantShape) {
         ValidateParameters.ensureSquare(coeff.getShape());
-        ValidateParameters.ensureAllEqual(coeff.numRows(), constantRows);
+
+        if(coeff.numRows() != constantShape.get(0)) {
+            throw new IllegalArgumentException("Expecting coefficient matrix rows to match " +
+                    "constant vector/matrix entries/rows " +
+                    "\nbut got shapes: " + coeff.getShape() + ", " + constantShape + ".");
+        }
 
         if(enforceTriU && !coeff.isTriU())
             throw new IllegalArgumentException("Expecting matrix U to be upper triangular.");
@@ -98,8 +104,7 @@ public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends Ve
      * @param numCols Number of columns in the coefficient matrix.
      */
     protected void checkSingular(double detAbs, int numRows, int numCols) {
-        if(detAbs <= RANK_CONDITION*Math.max(numRows, numCols) || Double.isNaN(detAbs)) {
+        if(detAbs <= RANK_CONDITION*Math.max(numRows, numCols) || Double.isNaN(detAbs))
             throw new SingularMatrixException("Could not solve system.");
-        }
     }
 }

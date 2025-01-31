@@ -301,9 +301,10 @@ public class PermutationMatrix implements Serializable {
     public Vector leftMult(Vector src) {
         ValidateParameters.ensureAllEqual(size, src.size);
         double[] destEntries = new double[src.data.length];
+        double[] srcData = src.data;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++)
-            destEntries[rowIdx] = src.data[permutation[rowIdx]];
+            destEntries[rowIdx] = srcData[permutation[rowIdx]];
 
         return new Vector(destEntries);
     }

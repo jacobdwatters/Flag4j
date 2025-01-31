@@ -109,7 +109,7 @@ public final class Rotation {
         // Hide default constructor for utility class.
     }
 
-    // TODO: Consider having an object-oriented class for rotations like in scipy.spatial.transform.Rotation
+    // TODO: Consider having an object-oriented class for rotations similar to scipy.spatial.transform.Rotation
 
 
     /**

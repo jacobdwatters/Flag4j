@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -83,7 +83,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
      */
     @Override
     public CVector solve(CMatrix U, CVector b) {
-        checkParams(U, b.size);
+        checkParams(U, b.shape);
 
         Complex128 sum;
         int uIndex;
@@ -123,7 +123,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
      */
     @Override
     public CMatrix solve(CMatrix U, CMatrix B) {
-        checkParams(U, B.numRows);
+        checkParams(U, B.shape);
 
         Complex128 sum, diag;
         int uIndex, xIndex;
@@ -175,7 +175,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     public CMatrix solveIdentity(CMatrix U) {
-        checkParams(U, U.numRows);
+        checkParams(U, U.shape);
 
         Complex128 sum, diag;
         int uIndex, xIndex;
@@ -228,7 +228,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
      * @return The result of solving the linear system U*X=L for the matrix X.
      */
     public CMatrix solveLower(CMatrix U, CMatrix L) {
-        checkParams(U, L.numRows);
+        checkParams(U, L.shape);
 
         Complex128 sum, diag;
         int uIndex, xIndex;

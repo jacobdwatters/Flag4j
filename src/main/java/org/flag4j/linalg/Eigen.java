@@ -529,7 +529,7 @@ public final class Eigen {
      * @return A matrix containing the eigenvectors of {@code T} as its columns.
      */
     public static Matrix getEigenVectorsTriu(Matrix T) {
-        RealBackSolver backSolver = new RealBackSolver();
+        RealBackSolver backSolver = new RealBackSolver(false);
         Matrix Q = new Matrix(T.numRows);
 
         Matrix S_hat;

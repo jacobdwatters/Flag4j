@@ -30,29 +30,41 @@ import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
+import org.flag4j.linalg.solvers.exact.triangular.BackSolver;
+import org.flag4j.linalg.solvers.exact.triangular.ForwardSolver;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
 
+// TODO: Javadoc needs updated. This can solve Ax=b or AX=B.
 /**
  * <p>Solves a well determined system of equations Ax=b in an exact sense by using a LU decomposition.
  * <p>If the system is not well determined, i.e. {@code A} is square and full rank, then use a
- * {@link LstsqSolver least-squares solver}.
+ * {@link org.flag4j.linalg.solvers.lstsq.LstsqSolver least-squares solver}.
+ *
+ * @param <T> The type of the coefficient matrix in the linear system.
+ * @param <U> The type of vector in the linear system.
  */
 public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
         U extends VectorMixin<U, T, ?, ?>>
         implements LinearMatrixSolver<T, U> {
 
+    // TODO: A huge benefit of using a decomposition based solver is that you can compute the decomposition (LU or other) once
+    //      in O(n^3) then use that to solve Ax=b using any b in O(n^2). So, someone may want to keep a solver around and solve
+    //      multiple Ax=b problems for different b at different times. Solvers should allow for that. You should be able to
+    //      create an instance of this class tied to a coefficient matrix so this can be done. All solvers (exact and lstsq)
+    //      should be converted to use this API.
+
 
     /**
      * Forward Solver for solving system with lower triangular coefficient matrix.
      */
-    protected final LinearMatrixSolver<T, U> forwardSolver;
+    protected final ForwardSolver<T, U, ?> forwardSolver;
     /**
      * Backwards solver for solving system with upper triangular coefficient matrix.
      */
-    protected final LinearMatrixSolver<T, U> backSolver;
+    protected final BackSolver<T, U, ?> backSolver;
 
     /**
      * Decomposer to compute {@code LU} decomposition.
@@ -70,9 +82,11 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
     /**
      * Constructs an exact LU solver with a specified {@code LU} decomposer.
      * @param lu {@code LU} decomposer to employ in solving the linear system.
+     * @param forwardSolver Solver to use when solving <b>LY = b</b>.
+     * @param backSolver Solver to use when solving <b>LY = b</b>.
      * @throws IllegalArgumentException If the {@code LU} decomposer does not use partial pivoting.
      */
-    protected ExactSolver(LU<T> lu, LinearMatrixSolver<T, U> forwardSolver, LinearMatrixSolver<T, U> backSolver) {
+    protected ExactSolver(LU<T> lu, ForwardSolver<T, U, ?> forwardSolver, BackSolver<T, U, ?> backSolver) {
         if(lu.pivotFlag!= PARTIAL) {
             throw new IllegalArgumentException("LU solver must use partial pivoting but got " +
                     lu.pivotFlag.name() + ".");
@@ -139,6 +153,25 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
         decompose(A); // Compute LU decomposition.
 
         T Y = forwardSolver.solve(LU, permuteRows(B));
+        return backSolver.solve(LU, Y); // If A is singular, it will be discovered in the back solve.
+    }
+
+
+    /**
+     * Solves the set of linear system of equations given by {@code A*X=I} for the matrix {@code X} where I is the identity matrix
+     * of the appropriate size.
+     *
+     * @param A Coefficient matrix in the linear system.
+     * @return The solution to {@code X} in the linear system {@code A*X=I}.
+     * @throws IllegalArgumentException If {@code A} is not square.
+     * @throws SingularMatrixException If {@code A} is singular.
+     */
+    public T solveIdentity(T A) {
+        ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
+
+        decompose(A); // Compute LU decomposition.
+
+        T Y = forwardSolver.solve(LU, lu.getP());
         return backSolver.solve(LU, Y); // If A is singular, it will be discovered in the back solve.
     }
 
