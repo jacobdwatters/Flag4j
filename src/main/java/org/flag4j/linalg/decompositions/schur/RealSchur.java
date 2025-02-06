@@ -29,6 +29,7 @@ import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.Eigen;
+import org.flag4j.linalg.decompositions.balance.RealBalancer;
 import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.transformations.Givens;
@@ -71,7 +72,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * set the seed for the pseudo-random number generator using {@link #RealSchur(long)}
      */
     public RealSchur() {
-        super(true, new RandomComplex(), new RealHess());
+        super(true, new RandomComplex(), new RealHess(true, true), new RealBalancer());
     }
 
 
@@ -81,7 +82,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      *
      * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * <p>By default if a constructor with no {@code computeU} parameter is called, {@code U} <b>WILL</b> be computed.
+     * <p>By default, if a constructor with no {@code computeU} parameter is called, {@code U} <b>WILL</b> be computed.
      *
      * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
      * set the seed for the pseudo-random number generator using {@link #RealSchur(boolean, long)}
@@ -90,7 +91,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * {@code U} will be computed. If false, {@code U} will not be computed.
      */
     public RealSchur(boolean computeU) {
-        super(computeU, new RandomComplex(), new RealHess(computeU));
+        super(computeU, new RandomComplex(), new RealHess(computeU, true), new RealBalancer());
     }
 
 
@@ -99,7 +100,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the QR algorithm.
      */
     public RealSchur(long seed) {
-        super(true, new RandomComplex(seed), new RealHess());
+        super(true, new RandomComplex(seed), new RealHess(true, true), new RealBalancer());
     }
 
 
@@ -108,54 +109,49 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * @param seed Seed to use for pseudo-random number generator when computing exceptional shifts during the QR algorithm.
      */
     public RealSchur(boolean computeU, long seed) {
-        super(computeU, new RandomComplex(seed), new RealHess(computeU));
+        super(computeU, new RandomComplex(seed), new RealHess(computeU, true), new RealBalancer());
     }
 
 
-    /**
-     * <p>Sets the number of iterations of the QR algorithm to perform without deflation before performing a random shift.
-     *
-     * <p>That is, if {@code exceptionalThreshold = 10}, then at most 10 iterations QR algorithm iterations will be performed.
-     * If, by the 10th iteration, no convergence has been detected which allows for deflation, then a QR algorithm iteration
-     * will be performed with a random (i.e. exceptional) shift.
-     *
-     * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}
-     *
-     * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without deflation
-     *                             before performing an iteration with random shifts.
-     * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
-     */
+    @Override
     public RealSchur setExceptionalThreshold(int exceptionalThreshold) {
         // Provided so that calls like the following can be made:
         //    RealSchur schur = new RealSchur().setExceptionalThreshold(x).decompose()
-        return (RealSchur) super.setExceptionalThreshold(exceptionalThreshold);
+        super.setExceptionalThreshold(exceptionalThreshold);
+        return this;
+    }
+
+
+    @Override
+    public RealSchur setMaxIterationFactor(int maxIterationFactor) {
+        // Provided so calls like the following can be made:
+        //    RealSchur schur = new RealSchur().setMaxIterationFactor(x).decompose()
+        super.setMaxIterationFactor(maxIterationFactor);
+        return this;
+    }
+
+
+    @Override
+    public RealSchur enforceFinite(boolean enforceFinite) {
+        // Provided so that calls like the following can be made:
+        //    RealSchur schur = new RealSchur().enforceFinite(true).decompose()
+        super.enforceFinite(enforceFinite);
+        return this;
     }
 
 
     /**
-     * <p>Specify maximum iteration factor for computing the total number of iterations to run the QR algorithm
-     * for when computing the decomposition. The maximum number of iterations is computed as
+     * <p>Reverts the scaling and permutations applied during the balancing step to obtain the correct form.
+     * <p>Specifically, this method computes
      * <pre>
-     *     {@code maxIteration = maxIterationFactor * src.numRows;} </pre>
-     * If the algorithm does not converge within this limit, an error will be thrown.
-     *
-     * <p>By default, this is computed as
-     * <pre>
-     *     {@code maxIterations = DEFAULT_MAX_ITERS_FACTOR * src.numRows;}</pre>
-     *
-     * where {@code src} is the matrix
-     * being decomposed.
-     *
-     * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
-     * QR algorithm for.
-     * @return A reference to this decomposer.
-     * @throws IllegalArgumentException If {@code maxIterationFactor} is not positive.
+     *     <b>U</b> := <b>PDU</b>
+     *        = <b>TU</b></pre>
+     * where <b>P</b> and <b>D</b> are the permutation and scaling matrices respectively from balancing.
      */
-    public RealSchur setMaxIterationFactor(int maxIterationFactor) {
-        // Provided so calls like the following can be made:
-        //    RealSchur schur = new RealSchur().setMaxIterationFactor(x).decompose()
-        return (RealSchur) super.setMaxIterationFactor(maxIterationFactor);
+    @Override
+    protected void unbalance() {
+        // Unbalancing can be skipped entirely if the Schur basis Q is not being computed.
+        if (computeU) U = balancer.applyLeftTransform(U);
     }
 
 
@@ -193,12 +189,11 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * QR converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
      * repeated eigenvalues.
      *
-     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
-     *                    or possible 2x2 block upper triangular form.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      */
     @Override
-    protected void performExceptionalShift(int workingSize) {
-        performSingleShift(workingSize, computeExceptionalShift(workingSize));
+    protected void performExceptionalShift(int workEnd) {
+        performSingleShift(workEnd, computeExceptionalShift(workEnd));
     }
 
 
@@ -210,15 +205,14 @@ public class RealSchur extends Schur<Matrix, double[]> {
      */
     protected double computeExceptionalShift(int k) {
         double value = T.data[k*numRows + k];
-        value = (value==0) ? 1 : Math.abs(value); // Ensure shift is not zero.
+        value = (value == 0.0) ? 1.0 : Math.abs(value); // Ensure shift is not zero.
 
-        double p = 1 - Math.pow(0.1, numExceptional);
-        value *= p + 2*(1 - p)*(rng.nextDouble() - 0.5);
+        double p = 1.0 - Math.pow(0.1, numExceptional);
+        value *= p + 2.0*(1.0 - p)*(rng.nextDouble() - 0.5);
 
         // Choose a sign randomly.
-        if(rng.nextBoolean()) {
+        if(rng.nextBoolean())
             value = -value;
-        }
 
         return value;
     }
@@ -238,25 +232,24 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
     /**
      * Performs a full iteration of the implicit single shifted QR algorithm (this includes the bulge chase).
-     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
-     *                   or possible 2x2 block upper triangular form.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      * @param shift The shift to use in the implicit single shifted QR algorithm.
      */
-    protected void performSingleShift(int workingSize, double shift) {
+    protected void performSingleShift(int workEnd, double shift) {
         // Compute the non-zero data of first column for shifted matrix.
-        computeImplicitSingleShift(workingSize, shift);
+        computeImplicitSingleShift(workEnd, shift);
 
         // Extract non-zero values from first column in shifted matrix.
         double p1 = shiftCol[0];
         double p2 = shiftCol[1];
 
-        for(int i=0; i<=workingSize-1; i++) {
+        for(int i = iLow; i <= workEnd - 1; i++) {
             if(makeReflector(i, p1, p2)) // Construct reflector.
-                applySingleShiftReflector(i, i>0); // Apply the reflector if needed.
+                applySingleShiftReflector(i, i > iLow); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
             p1 = T.data[(i + 1)*numRows + i];
-            if(i < workingSize-1) p2 = T.data[(i + 2)*numRows + i];
+            p2 = (i < workEnd-1) ? T.data[(i + 2)*numRows + i] : 0.0;
         }
     }
 
@@ -287,12 +280,11 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
     /**
      * Performs a full iteration of the Francis implicit double shifted QR algorithm (this includes the bulge chase).
-     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
-     *                   or possible 2x2 block upper triangular form.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      */
-    protected void performDoubleShift(int workingSize) {
+    protected void performDoubleShift(int workEnd) {
         // Compute the non-zero data (first three) of the first column of the double shifted matrix.
-        computeImplicitDoubleShift(workingSize);
+        computeImplicitDoubleShift(workEnd);
 
         // Extract non-zero values in first column of the double shifted matrix.
         double p1 = shiftCol[0];
@@ -300,28 +292,28 @@ public class RealSchur extends Schur<Matrix, double[]> {
         double p3 = shiftCol[2];
 
         // Apply shift and chase bulge.
-        for(int i=0; i<=workingSize-2; i++) {
+        for(int i = iLow; i <= workEnd - 2; i++) {
             if(makeReflector(i, p1, p2, p3)) // Construct Householder reflector.
-                applyDoubleShiftReflector(i, i>0); // Apply the reflector if needed.
+                applyDoubleShiftReflector(i, i > iLow); // Apply the reflector if needed.
 
             // Set values to be used in computing the next bulge chasing reflector.
             p1 = T.data[(i + 1)*numRows + i];
             p2 = T.data[(i + 2)*numRows + i];
-            if(i < workingSize-2) p3 = T.data[(i + 3)*numRows + i];
+            if(i < workEnd - 2) p3 = T.data[(i + 3)*numRows + i];
         }
 
         // The last reflector in the bulge chase only acts on last two rows of the working matrix.
-        if(makeReflector(workingSize-1, p1, p2)) // Construct Householder reflector.
-            applySingleShiftReflector(workingSize-1, true); // Apply the reflector if needed.
+        if(makeReflector(workEnd - 1, p1, p2)) // Construct Householder reflector.
+            applySingleShiftReflector(workEnd - 1, true); // Apply the reflector if needed.
     }
 
 
     /**
      * Computes the shifts for a Francis double shift iteration. Specifically, the shifts are the generalized Rayleigh quotients of
      * degree two.
-     * @param workingSize Size of current working matrix.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      */
-    protected void computeImplicitDoubleShift(int workingSize) {
+    protected void computeImplicitDoubleShift(int workEnd) {
         // The shift computed here, p, represents the double shift
         //  p = (T - rho1*I)(T - rho2*I)*e1 where I is the identity matrix, e1 is the first column of I, and (rho1, rho2)
         //  are taken to be the eigenvalues of the lower 2x2 sub-matrix within the working matrix.
@@ -329,32 +321,35 @@ public class RealSchur extends Schur<Matrix, double[]> {
         //  only three non-zero data (the first three data) all of which are real. Hence, all arithmetic may be carried out in
         //  real arithmetic. As such, eigenvalues are not explicitly computed as that would require complex arithmetic.
 
-        // Extract values from lower right 2x2 sub-matrix within the working size.
-        int leftIdx = workingSize-1;
-        double x11 = T.data[leftIdx*numRows + leftIdx];
-        double x12 = T.data[leftIdx*numRows + workingSize];
-        double x21 = T.data[workingSize*numRows + leftIdx];
-        double x22 = T.data[workingSize*numRows + workingSize];
+        // Extract values from lower right 2x2 sub-matrix within the working block.
+        int topIdx = (workEnd - 1)*numRows + workEnd;
+        int bottomIdx = workEnd*numRows + workEnd;
+        double x11 = T.data[topIdx - 1];
+        double x12 = T.data[topIdx];
+        double x21 = T.data[bottomIdx - 1];
+        double x22 = T.data[bottomIdx];
 
-        // Extract top right data of T for use in computing the shift p.
-        double a11 = T.data[0];
-        double a12 = T.data[1];
-        double a21 = T.data[numRows];
-        double a22 = T.data[numRows + 1];
-        double a32 = T.data[2*numRows + 1];
+        // Extract top left data of working block of T for use in computing the shift p.
+        topIdx = iLow*numRows + iLow;
+        bottomIdx = (iLow + 1)*numRows + iLow;
+        double a11 = T.data[topIdx];
+        double a12 = T.data[topIdx + 1];
+        double a21 = T.data[bottomIdx];
+        double a22 = T.data[bottomIdx + 1];
+        double a32 = T.data[(iLow + 2)*numRows + iLow + 1];
 
         // Scale values to improve stability and help avoid possible over(under)flow issues.
         temp[0] = a11; temp[1] = a21; temp[2] = a12; temp[3] = a22; temp[4] = a32;
         temp[5] = x11; temp[6] = x22; temp[7] = x12; temp[8] = x21;
-        double maxAbs = RealProperties.maxAbs(temp);
+        double maxAbsInv = 1.0 / RealProperties.maxAbs(temp);
 
-        a11 /= maxAbs; a12 /= maxAbs; a21 /= maxAbs; a22 /= maxAbs; a32 /= maxAbs;
-        x11 /= maxAbs; x12 /= maxAbs; x21 /= maxAbs; x22 /= maxAbs;
+        a11 *= maxAbsInv; a12 *= maxAbsInv; a21 *= maxAbsInv; a22 *= maxAbsInv; a32 *= maxAbsInv;
+        x11 *= maxAbsInv; x12 *= maxAbsInv; x21 *= maxAbsInv; x22 *= maxAbsInv;
 
         double trace = x11 + x22; // Compute trace (useful in computing the shift p).
         double det = x11*x22 - x12*x21; // Compute determinant (useful in computing shift p).
 
-        // Compute first three non-zero data of the shift p.
+        // Compute first three non-zero values of the shift p.
         shiftCol[0] = a11*a11 + a12*a21 - a11*trace + det;
         shiftCol[1] = a21*(a11 + a22 - trace);
         shiftCol[2] = a32*a21;
@@ -389,11 +384,11 @@ public class RealSchur extends Schur<Matrix, double[]> {
         // Apply reflector to left (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
         Householder.leftMultReflector(T, householderVector, currentFactor, i, i, endRow, workArray);
         // Apply reflector to right (Assumes T is upper hessenburg except for possibly a bulge of size shiftSize).
-        Householder.rightMultReflector(T, householderVector, currentFactor, 0, i, endRow);
+        Householder.rightMultReflector(T, householderVector, currentFactor, iLow, i, endRow);
 
         if(computeU) {
             // Accumulate the reflector in U if it is being computed.
-            Householder.rightMultReflector(U, householderVector, currentFactor, 0, i, endRow);
+            Householder.rightMultReflector(U, householderVector, currentFactor, iLow, i, endRow);
         }
     }
 
@@ -412,26 +407,26 @@ public class RealSchur extends Schur<Matrix, double[]> {
         // Scale components for stability and overflow purposes.
         double maxAbs = Math.max(Math.abs(p1), Math.max(Math.abs(p2), Math.abs(p3)));
 
-        if(maxAbs <= EPS_F64*Math.abs(T.data[i*numRows + i])) {
+        if(maxAbs <= EPS_F64*Math.abs(T.data[i*numRows + i]))
             return false; // No reflector needs to be constructed or applied.
-        }
 
-        p1 /= maxAbs;
-        p2 /= maxAbs;
-        p3 /= maxAbs;
+        double maxAbsInv = 1.0/maxAbs;  // Reciprocal to save a couple division operations.
+        p1 *= maxAbsInv;
+        p2 *= maxAbsInv;
+        p3 *= maxAbsInv;
 
-        norm = Math.sqrt(p1*p1 + p2*p2 + p3*p3); // Compute scaled 2-norm.
+        norm = Math.sqrt(p1*p1 + p2*p2 + p3*p3);  // Compute scaled 2-norm.
 
         // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
         if(p1 < 0) norm = -norm;
 
         double div = p1 + norm;
         currentFactor = div/norm;
-        norm *= maxAbs; // Rescale norm to be proper magnitude.
+        norm *= maxAbs;  // Rescale norm to be proper magnitude.
 
         householderVector[i] = 1.0;
-        householderVector[i+1] = p2 / div;
-        householderVector[i+2] = p3 / div;
+        householderVector[i + 1] = p2 / div;
+        householderVector[i + 2] = p3 / div;
 
         return true;
     }
@@ -448,45 +443,46 @@ public class RealSchur extends Schur<Matrix, double[]> {
      */
     protected boolean makeReflector(int i, double p1, double p2) {
         double maxAbs = Math.max(Math.abs(p1), Math.abs(p2));
-        if(maxAbs <= EPS_F64*Math.abs(T.data[i*numRows + i])) {
+        if(maxAbs <= EPS_F64*Math.abs(T.data[i*numRows + i]))
             return false; // No reflector needs to be constructed or applied.
-        }
 
         // Scale components for stability and over(under)flow purposes.
         p1 /= maxAbs;
         p2 /= maxAbs;
 
-        norm = Math.sqrt(p1*p1 + p2*p2); // Compute scaled norm.
+        norm = Math.sqrt(p1*p1 + p2*p2);  // Compute scaled norm.
+
         // Change sign of norm depending on first entry in column for stability purposes in Householder vector.
         if(p1 < 0) norm = -norm;
 
         double div = p1 + norm;
         currentFactor = div/norm;
-        norm *= maxAbs; // Rescale norm to be proper magnitude.
+        norm *= maxAbs;  // Rescale norm to be proper magnitude.
 
         householderVector[i] = 1.0; // Ensure first value of reflector is 1.
-        householderVector[i+1] = p2 / div;
+        householderVector[i + 1] = p2 / div;
 
-        return true; // Reflector has been constructed and must be applied.
+        return true;  // Reflector has been constructed and must be applied.
     }
 
 
     /**
      * Checks for convergence of lower 2x2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
      * convergence is found, this will also zero out the values which have converged to near zero.
-     * @param workingSize Size of current working matrix.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if
      * convergence to upper triangular form is detected and two if convergence to block upper triangular form is detected.
      */
-    protected int checkConvergence(int workingSize) {
-        int leftRow = (workingSize-1)*numRows;
+    protected int checkConvergence(int workEnd) {
+        int leftRow = (workEnd-1)*numRows + workEnd;
+        int rightRow = workEnd*numRows + workEnd;
 
-        double a11 = T.data[(workingSize-2)*numRows + workingSize - 2];
-        double a21 = T.data[leftRow + workingSize - 2];
-        double a22 = T.data[leftRow + workingSize - 1];
-        double a23 = T.data[leftRow + workingSize];
-        double a32 = T.data[workingSize*numRows + workingSize - 1];
-        double a33 = T.data[workingSize*numRows + workingSize];
+        double a11 = T.data[(workEnd-2)*numRows + workEnd - 2];
+        double a21 = T.data[leftRow - 2];
+        double a22 = T.data[leftRow - 1];
+        double a23 = T.data[leftRow];
+        double a32 = T.data[rightRow - 1];
+        double a33 = T.data[rightRow];
 
         // Uses deflation criteria proposed by Wilkinson: |A[k, k-1]| < eps*(|A[k, k]| + |A[k-1, k-1]|)
         // AND the deflation criteria proposed by Ahues and Tisseur:
@@ -494,14 +490,28 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
         if(Math.abs(a32) < EPS_F64*( Math.abs(a33) + Math.abs(a22) )
                 && Math.abs(a32)*Math.abs(a23) <= EPS_F64*Math.abs(a33)*Math.abs(a33 - a22)) {
-            T.data[workingSize*numRows + workingSize - 1] = 0; // Zero out converged value.
+            T.data[rightRow - 1] = 0; // Zero out converged value.
             return 1; // Deflate by 1.
         } else if(Math.abs(a21) < EPS_F64*( Math.abs(a11) + Math.abs(a22) )) {
-            T.data[leftRow + workingSize - 2] = 0; // Zero out converged value.
+            T.data[leftRow - 2] = 0; // Zero out converged value.
             return 2; // Deflate by 2.
         }
 
         return 0; // No convergence detected. Do not deflate.
+    }
+
+
+    /**
+     * Ensures that {@code src} only contains finite values.
+     *
+     * @param src Matrix of interest.
+     *
+     * @throws IllegalArgumentException If {@code src} does <em>not</em> contain only finite values.
+     */
+    @Override
+    protected void checkFinite(Matrix src) {
+        if(!src.isFinite())
+            throw new IllegalArgumentException("Matrix is not finite.");
     }
 
 
@@ -526,10 +536,10 @@ public class RealSchur extends Schur<Matrix, double[]> {
         Complex128[] givensWorkComplex = new Complex128[2*numRows];
 
         for(int m=numRows-1; m>0; m--) {
-            Complex128 a11 = (Complex128) tComplex.data[(m - 1)*numRows + m - 1];
-            Complex128 a12 = (Complex128) tComplex.data[(m - 1)*numRows + m];
-            Complex128 a21 = (Complex128) tComplex.data[m*numRows + m - 1];
-            Complex128 a22 = (Complex128) tComplex.data[m*numRows + m];
+            Complex128 a11 = tComplex.data[(m - 1)*numRows + m - 1];
+            Complex128 a12 = tComplex.data[(m - 1)*numRows + m];
+            Complex128 a21 = tComplex.data[m*numRows + m - 1];
+            Complex128 a22 = tComplex.data[m*numRows + m];
 
             if(a21.mag() > EPS_F64*(a11.mag() + a22.mag())) {
                 // non-converged 2x2 block found.

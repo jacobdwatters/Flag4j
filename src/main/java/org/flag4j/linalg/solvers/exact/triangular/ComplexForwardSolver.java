@@ -28,7 +28,7 @@ package org.flag4j.linalg.solvers.exact.triangular;
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.util.ValidateParameters;
+import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
@@ -48,7 +48,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * Creates a solver to solve a linear system where the coefficient matrix is lower triangular.
      */
     public ComplexForwardSolver() {
-        super(false, false);
+        super(false, true);
     }
 
 
@@ -61,7 +61,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * </ul>
      */
     public ComplexForwardSolver(boolean isUnit) {
-        super(isUnit, false);
+        super(isUnit, true);
     }
 
 
@@ -97,8 +97,6 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      */
     @Override
     public CVector solve(CMatrix L, CVector b) {
-        ValidateParameters.ensureSquareMatrix(L.shape);
-        ValidateParameters.ensureAllEqual(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
@@ -116,9 +114,22 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      */
     @Override
     public CMatrix solve(CMatrix L, CMatrix B) {
-        ValidateParameters.ensureSquareMatrix(L.shape);
-        ValidateParameters.ensureAllEqual(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
+    }
+
+
+    /**
+     * Solves a linear system <b>L*X=P</b> for <b>X</b> where <b>L</b> is a lower triangular matrix and
+     * <b>P</b> is a permutation matrix.
+     *
+     * @param L Lower triangular coefficient matrix.
+     * @param P Constant permutation matrix.
+     *
+     * @return The solution of <b>X</b> for the linear system <b>L*X=P</b>.
+     */
+    @Override
+    public CMatrix solve(CMatrix L, PermutationMatrix P) {
+        return isUnit ? solveUnitPerm(L, P) : solvePerm(L, P);
     }
 
 
@@ -133,7 +144,6 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * the principle diagonal).
      */
     public CMatrix solveIdentity(CMatrix L) {
-        ValidateParameters.ensureSquareMatrix(L.shape);
         return isUnit ? solveUnitLowerIdentity(L) : solveLowerIdentity(L);
     }
 
@@ -152,16 +162,14 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
         int lIndexStart;
         CVector x = new CVector(L.numRows);
         det = new Complex128(L.numRows); // Since it is unit lower, matrix has full rank.
-
         x.data[0] = b.data[0];
 
         for(int i=1; i<L.numRows; i++) {
             sum = Complex128.ZERO;
             lIndexStart = i*L.numCols;
 
-            for(int j=i-1; j>-1; j--) {
-                sum = sum.add(L.data[lIndexStart + j].mult((Complex128) x.data[j]));
-            }
+            for(int j=i-1; j>-1; j--)
+                sum = sum.add(L.data[lIndexStart + j].mult(x.data[j]));
 
             x.data[i] = b.data[i].sub(sum);
         }
@@ -191,21 +199,18 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
         for(int j=0; j<L.numCols; j++) {
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? Complex128.ONE : Complex128.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
 
-                for(int k=0; k<i; k++) {
-                    sum = sum.sub(L.data[lIndexStart++].mult((Complex128) xCol[k]));
-                }
+                for(int k=0; k<i; k++)
+                    sum = sum.sub(L.data[lIndexStart++].mult(xCol[k]));
 
-                X.data[xIndex] = sum;
-                xCol[i] = sum;
+                X.data[xIndex] = xCol[i] = sum;
             }
         }
 
@@ -228,31 +233,29 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
         Complex128 sum, diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(L.shape);
-        det = (Complex128) L.data[0];
+        det = L.data[0];
         xCol = new Complex128[L.numRows];
 
         X.data[0] = L.data[0].multInv();
 
         for(int j=0; j<L.numCols; j++) {
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
-                if(j==0) det = det.mult((Complex128) L.data[i*L.numCols + i]);
+                if(j==0) det = det.mult(L.data[i*L.numCols + i]);
 
                 sum = (i==j) ? Complex128.ONE : Complex128.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
-                diag = (Complex128) L.data[i*(L.numCols + 1)];
+                diag = L.data[i*(L.numCols + 1)];
 
                 for(int k=0; k<i; k++)
-                    sum = sum.sub(L.data[lIndexStart++].mult((Complex128) xCol[k]));
+                    sum = sum.sub(L.data[lIndexStart++].mult(xCol[k]));
 
                 Complex128 value = sum.div(diag);
-                X.data[xIndex] = value;
-                xCol[i] = value;
+                X.data[xIndex] = xCol[i] = value;
             }
         }
 
@@ -276,18 +279,17 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
         Complex128 sum, diag;
         int lIndexStart;
         CVector x = new CVector(L.numRows);
-        det = (Complex128) L.data[0];
-        x.data[0] = b.data[0].div((Complex128) L.data[0]);
+        det = L.data[0];
+        x.data[0] = b.data[0].div(L.data[0]);
 
         for(int i=1; i<L.numRows; i++) {
             sum = Complex128.ZERO;
             lIndexStart = i*L.numCols;
-            diag = (Complex128) L.data[i*(L.numCols + 1)];
+            diag = L.data[i*(L.numCols + 1)];
             det = det.mult(diag);
 
-            for(int j=i-1; j>-1; j--) {
-                sum = sum.add(L.data[lIndexStart + j].mult((Complex128) x.data[j]));
-            }
+            for(int j=i-1; j>-1; j--)
+                sum = sum.add(L.data[lIndexStart + j].mult(x.data[j]));
 
             x.data[i] = b.data[i].sub(sum).div(diag);
         }
@@ -317,22 +319,19 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
             X.data[j] = B.data[j];
 
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = Complex128.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
 
-                for(int k=0; k<i; k++) {
-                    sum = sum.add(L.data[lIndexStart++].mult((Complex128) xCol[k]));
-                }
+                for(int k=0; k<i; k++)
+                    sum = sum.add(L.data[lIndexStart++].mult(xCol[k]));
 
                 Complex128 value = B.data[xIndex].sub(sum);
-                X.data[xIndex] = value;
-                xCol[i] = value;
+                X.data[xIndex] = xCol[i] = value;
             }
         }
 
@@ -355,37 +354,127 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
         Complex128 diag;
         int lIndexStart, xIndex;
         CMatrix X = new CMatrix(B.shape);
-        det = (Complex128) L.data[0];
+        det = L.data[0];
         xCol = new Complex128[L.numRows];
 
         for(int j=0; j<B.numCols; j++) {
-            X.data[j] = B.data[j].div((Complex128) L.data[0]);
+            X.data[j] = B.data[j].div(L.data[0]);
 
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = Complex128.ZERO;
                 lIndexStart = i*L.numCols;
                 xIndex = i*X.numCols + j;
-                diag = (Complex128) L.data[i*(L.numCols + 1)];
+                diag = L.data[i*(L.numCols + 1)];
 
                 if(j==0) det = det.mult(diag);
 
-                for(int k=0; k<i; k++) {
-                    sum = sum.add(L.data[lIndexStart++].mult((Complex128) xCol[k]));
-                }
+                for(int k=0; k<i; k++)
+                    sum = sum.add(L.data[lIndexStart++].mult(xCol[k]));
 
                 Complex128 value = B.data[xIndex].sub(sum).div(diag);
-                X.data[xIndex] = value;
-                xCol[i] = value;
+                X.data[xIndex] = xCol[i] = value;
             }
         }
 
         checkSingular(det.mag(), L.numRows, L.numCols); // Ensure matrix is not singular.
 
+        return X;
+    }
+
+
+    /**
+     * Solves a linear system <b>LX=P</b> where the coefficient matrix <b>L</b> is lower triangular and the
+     * constant matrix <b>P</b> is a permutation matrix.
+     * @param L Lower triangular coefficient matrix <b>L</b>.
+     * @return The solution of <b>X</b> to the linear system <b>LX=P</b>.
+     * @throws SingularMatrixException If {@code L} is singular (i.e. has a zero on the principle diagonal).
+     */
+    private CMatrix solvePerm(CMatrix L, PermutationMatrix P) {
+        checkParams(L, P.size);
+
+        final int n = P.size;
+        int[] perm = P.getPermutation();
+        X = new CMatrix(P.size, P.size);
+        det = L.data[0];  // Since it is unit lower, matrix has full rank.
+        xCol = new Complex128[n];
+
+        for (int j = 0; j < n; j++) {
+            Complex128 bVal0 = (perm[0] == j) ? Complex128.ONE : Complex128.ZERO;
+            X.data[j] = bVal0.div(L.data[0]);
+
+            // Temporarily store column for better cache performance on innermost loop.
+            for (int k = 0; k < n; k++)
+                xCol[k] = X.data[k*n + j];
+
+            for (int i = 1; i < n; i++) {
+                Complex128 sum = Complex128.ZERO;
+                int lIndexStart = i*n;
+
+                // Accumulate the dot product.
+                for (int k = 0; k < i; k++)
+                    sum = sum.add(L.data[lIndexStart + k].mult(xCol[k]));
+
+                Complex128 diag = L.data[i*(n + 1)];
+
+                if (j == 0) det = det.mult(diag);
+
+                Complex128 bVal = (perm[i] == j) ? Complex128.ONE : Complex128.ZERO;
+                Complex128 value = bVal.sub(sum).div(diag);
+
+                X.data[lIndexStart + j] = xCol[i] = value;
+            }
+        }
+
+        // If you want to check for singularity:
+        checkSingular(det.mag(), n, n);
+
+        return X;
+    }
+
+
+    /**
+     * Solves a linear system <b>LX=P</b> where the coefficient matrix <b>L</b> is unit-lower triangular and the
+     * constant matrix <b>P</b> is a permutation matrix.
+     * @param L Unit lower triangular coefficient matrix <b>L</b>.
+     * @return The solution of <b>X</b> to the linear system <b>LX=P</b>.
+     */
+    private CMatrix solveUnitPerm(CMatrix L, PermutationMatrix P) {
+        checkParams(L, P.size);
+
+        final int n = P.size;
+        int[] perm = P.getPermutation();
+        X = new CMatrix(P.size, P.size);
+        det = new Complex128(L.numRows);  // Since it is unit lower, matrix has full rank.
+        xCol = new Complex128[n];
+
+        for (int j = 0; j < n; j++) {
+            Complex128 bVal0 = (perm[0] == j) ? Complex128.ONE : Complex128.ZERO;
+            X.data[j] = bVal0;
+
+            // Temporarily store column for better cache performance on innermost loop.
+            for (int k = 0; k < n; k++)
+                xCol[k] = X.data[k*n + j];
+
+            for (int i = 1; i < n; i++) {
+                Complex128 sum = Complex128.ZERO;
+                int lIndexStart = i*n;   // Start of row i in L
+
+                // Accumulate the dot product
+                for (int k = 0; k < i; k++)
+                    sum = sum.add(L.data[lIndexStart + k].mult(xCol[k]));
+
+                Complex128 bVal = (perm[i] == j) ? Complex128.ONE : Complex128.ZERO;
+                Complex128 value = bVal.sub(sum);
+
+                X.data[lIndexStart + j] = xCol[i] = value;
+            }
+        }
+
+        // No need to check if matrix is singular since it has full rank.
         return X;
     }
 }

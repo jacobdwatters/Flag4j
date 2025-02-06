@@ -44,7 +44,7 @@ public final class CooConcat {
 
     /**
      * <p>Stacks two sparse COO matrices along columns.
-     * <p>WARNING: This method does <i>not</i> perform any bounds checks. If the destination arrays are not large enough, an
+     * <p>WARNING: This method does <em>not</em> perform any bounds checks. If the destination arrays are not large enough, an
      * {@link IndexOutOfBoundsException} will be thrown.
      *
      * @param src1Entries Non-zero data of the first COO matrix to stack.

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ public final class DenseSemiringConversions {
      * @param shape Shape of the matrix.
      * @param entries Entries of the matrix.
      * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      * @return A sparse COO matrix containing the non-zero values of the specified dense matrix.
      */
@@ -87,7 +87,7 @@ public final class DenseSemiringConversions {
      * <p>Converts a dense matrix to an equivalent sparse COO matrix.
      * <p>This should only be done for matrices which are known to be sparse.
      * <p>This method will estimate the sparsity of the matrix at 99%. If a more accurate estimation is known, providing it to
-     * {@link #toCoo(Shape, Semiring[], double)} <i>may</i> provide a slight speedup or reduce excess memory consumption. If the
+     * {@link #toCoo(Shape, Semiring[], double)} <em>may</em> provide a slight speedup or reduce excess memory consumption. If the
      * sparsity is not known, it is recommended to simply use this method.
      *
      * @param shape Shape of the matrix.
@@ -108,7 +108,7 @@ public final class DenseSemiringConversions {
      * @param shape Shape of the tensor.
      * @param entries Entries of the tensor.
      * @param estimatedSparsity Estimated sparsity of the tensor. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      * @return A sparse COO tensor containing the non-zero values of the specified dense tensor.
      */
@@ -136,7 +136,7 @@ public final class DenseSemiringConversions {
      * <p>Converts a dense tensor to an equivalent sparse COO tensor.
      * <p>This should only be done for matrices which are known to be sparse.
      * <p>This method will estimate the sparsity of the tensor at 99%. If a more accurate estimation is known, providing it to
-     * {@link #toCoo(Shape, Semiring[], double)} <i>may</i> provide a slight speedup or reduce excess memory consumption. If the
+     * {@link #toCoo(Shape, Semiring[], double)} <em>may</em> provide a slight speedup or reduce excess memory consumption. If the
      * sparsity is not known, it is recommended to simply use this method.
      *
      * @param shape Shape of the tensor.

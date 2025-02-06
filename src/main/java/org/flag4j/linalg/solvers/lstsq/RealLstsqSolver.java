@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,6 +46,6 @@ public class RealLstsqSolver extends LstsqSolver<Matrix, Vector> {
      * A<sup>T</sup>Ax=A<sup>T</sup>b.
      */
     public RealLstsqSolver() {
-        super(new RealQR(), new RealBackSolver());
+        super(new RealQR(), new RealBackSolver(false));
     }
 }

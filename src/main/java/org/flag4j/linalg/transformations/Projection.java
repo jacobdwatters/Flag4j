@@ -58,6 +58,8 @@ public final class Projection {
         // Hide constructor for utility class. for utility class.
     }
 
+    // TODO: Consider having an object-oriented class for projections similar to scipy.spatial.transform.Rotation
+
 
     /**
      * Creates a {@code 4x4} perspective projection matrix to transform a 3D point represented in homogeneous

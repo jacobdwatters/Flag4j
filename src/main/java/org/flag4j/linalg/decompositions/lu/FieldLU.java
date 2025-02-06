@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,46 +41,36 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
+     * <p>Constructs a LU decomposer for dense field matrices.
+     * <p>This decomposition will be performed out-of-place using partial pivoting.
      */
     public FieldLU() {
-        super(Pivoting.PARTIAL);
+        super(Pivoting.PARTIAL, false);
     }
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
+     * <p>Constructs a LU decomposer for dense field matrices.
+     * <p>This decomposition will be performed out-of-place.
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
     public FieldLU(Pivoting pivoting) {
-        super(pivoting);
+        super(pivoting, false);
     }
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
-     * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
-     *                 will be used. If pivoting is any other value, no pivoting will be used.
-     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LU decomposition with
-     *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
-     *                     from zero, then an exception will be thrown if solving with no pivoting.
+     * Constructs a LU decomposer for dense field matrices.
+     * @param pivoting Pivoting to use.
+     * @param inPlace Flag indicating if the decomposition should be done in/out-of-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in-place.</li>
+     *     <li>If {@code true}, then the decomposition will be done out-of-place.</li>
+     * </ul>
      */
-    public FieldLU(Pivoting pivoting, double zeroPivotTol) {
-        super(pivoting, zeroPivotTol);
-    }
-
-
-    /**
-     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
-     * @param src Source matrix to decompose.
-     */
-    @Override
-    protected void initLU(FieldMatrix<T> src) {
-        // TODO: Add overloaded constructor in super which has flag specifying if the decomposition should be done in place or copied.
-        LU = new FieldMatrix<>(src.shape, src.data.clone());
+    protected FieldLU(Pivoting pivoting, boolean inPlace) {
+        super(pivoting, inPlace);
     }
 
 
@@ -91,10 +81,8 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
     protected void noPivot() {
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<LU.numCols; j++) {
-            if(j<LU.numRows && (LU.data[j*LU.numCols + j]).mag() < zeroPivotTol) {
-                throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
-                        " Consider using LU decomposition with partial pivoting.");
-            }
+            if(j<LU.numRows && (LU.data[j*LU.numCols + j]).mag() == 0.0)
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }

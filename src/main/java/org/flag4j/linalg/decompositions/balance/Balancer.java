@@ -85,6 +85,8 @@ import org.flag4j.util.ValidateParameters;
  * @see #getD()
  * @see #getP()
  * @see #getT()
+ * @see #applyLeftTransform(MatrixMixin) 
+ * @see #applyRightTransform(MatrixMixin)
  */
 public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
 
@@ -257,6 +259,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
         ValidateParameters.ensureSquare(src.getShape());
         balancedMatrix = inPlace ? src : src.copy();
         size = balancedMatrix.numRows();
+
 
         iLow = 0;
         iHigh = size;
@@ -481,7 +484,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
      * Ensures that {@link #decompose(MatrixMixin)} has been called on this instance.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not been called on this instance.
      */
-    private void ensureHasBalanced() {
+    protected void ensureHasBalanced() {
         // If balancedMatrix has not been instantiated, then balance(...) has not been called.
         if(balancedMatrix == null)
             throw new IllegalStateException("No matrix has been balanced by this balancer. Must call balance(...) first.");
@@ -552,6 +555,9 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
         return scalePerm;
     }
 
+
+    // TODO: Add support for getting D^-1, P^-1, and T^-1 directly.
+    //      i.e. add getDInv(...), getPInv(...), getTInv(...) methods.
 
     /**
      * Gets the diagonal scaling matrix for the last matrix balanced by this balancer.
@@ -657,4 +663,20 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
     public Matrix getT() {
         return getP().leftMult(getD(true));
     }
+
+
+    /**
+     * Efficiently left multiplies <b>PD</b> to the provided {@code src} matrix.
+     * @param src Matrix to apply transform to.
+     * @return The result of left multiplying <b>PD</b> to the {@code src} matrix.
+     */
+    public abstract T applyLeftTransform(T src);
+
+
+    /**
+     * Efficiently right multiplies <b>D<sup>-1</sup>P<sup>-1</sup></b> to the provided {@code src} matrix.
+     * @param src Matrix to apply transform to.
+     * @return The result of right multiplying <b>D<sup>-1</sup>P<sup>-1</sup></b> to the {@code src} matrix.
+     */
+    public abstract T applyRightTransform(T src);
 }

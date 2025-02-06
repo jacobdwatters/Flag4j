@@ -31,7 +31,7 @@ import java.util.*;
 
 /**
  * <p>A class which can be used to sort the indices, along with data values, in lexicographical order.
- * <p>This class is <i>not</i> thread safe.
+ * <p>This class is <em>not</em> thread safe.
  * <p>Specifically, if a sparse tensor has shape (10, 15, 5, 2) and the following indices and non-zero values,
  * <pre>
  *      - Indices: {{4, 1, 2, 0}, {4, 0, 1, 2},

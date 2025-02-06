@@ -214,7 +214,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
     /**
      * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
-     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <i>not</i> convert this matrix
+     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <em>not</em> convert this matrix
      * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
      *
      * @param shape Shape of the COO matrix.

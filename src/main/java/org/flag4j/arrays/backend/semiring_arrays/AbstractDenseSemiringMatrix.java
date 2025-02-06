@@ -220,7 +220,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
             int rowOffset = i*numCols;
 
             for(int j=0; j<i; j++)
-                if(!data[rowOffset + j].isOne()) return false; // No need to continue.
+                if(!data[rowOffset + j].isZero()) return false; // No need to continue.
         }
 
         return true;
@@ -245,7 +245,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
             int rowOffset = i*numCols;
 
             for(int j=i+1; j<numCols; j++)
-                if(!data[rowOffset + j].isOne()) return false; // No need to continue.
+                if(!data[rowOffset + j].isZero()) return false; // No need to continue.
         }
 
         return true;
@@ -320,7 +320,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     /**
      * Multiplies this matrix with the transpose of the {@code b} tensor as if by
      * {@code this.mult(b.T())}.
-     * For large matrices, this method <i>may</i>, be noticeably faster than directly computing the transpose followed by the
+     * For large matrices, this method <em>may</em>, be noticeably faster than directly computing the transpose followed by the
      * multiplication as {@code this.mult(b.T())}.
      *
      * @param b The second matrix in the multiplication and the matrix to transpose.
@@ -1037,7 +1037,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     /**
      * Converts this matrix to an equivalent sparse COO matrix.
      * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      * @return A sparse COO matrix that is equivalent to this dense matrix.
      * @see #toCoo() 
@@ -1066,7 +1066,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
     /**
      * Converts this matrix to an equivalent sparse CSR matrix.
      * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      * @return A sparse CSR matrix that is equivalent to this dense matrix.
      * @see #toCsr()

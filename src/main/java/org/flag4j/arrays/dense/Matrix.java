@@ -113,6 +113,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     private static final long serialVersionUID = 1L;
 
     // TODO: Add norm methods.
+    // TODO: Add inv() method to this class and CMatrix.
 
     /**
      * The number of rows in this matrix.
@@ -1203,7 +1204,6 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix setCol(Vector values, int colIndex) {
-        System.out.println("values: " + values);
         return setCol(values.data, colIndex);
     }
 
@@ -1931,7 +1931,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     /**
      * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
-     * <p>For large {@code n} values, this method <i>may</i> be significantly more efficient than calling
+     * <p>For large {@code n} values, this method <em>may</em> be significantly more efficient than calling
      * {@link #mult(Matrix) this.mult(this)} a total of {@code n} times.
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity

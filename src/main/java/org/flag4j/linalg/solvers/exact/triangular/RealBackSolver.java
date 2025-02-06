@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,12 +43,11 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
     protected double det;
 
     /**
-     * Creates a solver for solving linear systems for upper triangular coefficient matrices. Note, by default no check will
-     *      * be made to ensure the coefficient matrix is upper triangular. If you would like to enforce this, see
-     *      * {@link #RealBackSolver(boolean)}.
+     * Creates a solver for solving linear systems for upper triangular coefficient matrices. By default, an explicit check
+     * will be made that the coefficient matrix is upper triangular. To toggle this, use {@link #RealBackSolver(boolean)}.
      */
     public RealBackSolver() {
-        super(false);
+        super(true);
     }
 
 
@@ -58,6 +57,24 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
      */
     public RealBackSolver(boolean enforceTriU) {
         super(enforceTriU);
+    }
+
+
+    /**
+     * Sets a flag indicating if an explicit check should be made that the coefficient matrix is singular.
+     *
+     * @param checkSingular Flag indicating if an explicit check should be made that the matrix is singular (or near singular).
+     * <ul>
+     *     <li>If {@code true}, an explicit singularity check will be made.</li>
+     *     <li>If {@code false}, <em>no</em> check will be made.</li>
+     * </ul>
+     *
+     * @return A reference to this back solver instance.
+     */
+    @Override
+    public RealBackSolver setCheckSingular(boolean checkSingular) {
+        super.setCheckSingular(checkSingular);
+        return this;
     }
 
 
@@ -81,7 +98,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
      */
     @Override
     public Vector solve(Matrix U, Vector b) {
-        checkParams(U, b.size);
+        checkParams(U, b.shape);
 
         double sum, diag;
         int uIndex;
@@ -105,7 +122,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
             x.data[i] = (b.data[i]-sum)/diag;
         }
 
-        checkSingular(Math.abs(det), U.numRows, U.numCols); // Ensure the matrix is not singular.
+        if(checkSingular) checkSingular(Math.abs(det), U.numRows, U.numCols); // Ensure the matrix is not singular.
 
         return x;
     }
@@ -123,7 +140,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
      */
     @Override
     public Matrix solve(Matrix U, Matrix B) {
-        checkParams(U, B.numRows);
+        checkParams(U, B.shape);
 
         double sum, diag;
         int uIndex, xIndex;
@@ -139,9 +156,8 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
             X.data[rowOffset + j] = B.data[rowOffset + j]/uValue;
 
             // Store column to improve cache performance on innermost loop.
-            for(int k=0; k<n; k++) {
+            for(int k=0; k<n; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=n-2; i>=0; i--) {
                 sum = 0;
@@ -151,14 +167,12 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
                 if(j==0) det *= diag;
 
-                for(int k=i+1; k<n; k++) {
+                for(int k=i+1; k<n; k++)
                     sum += U.data[uIndex + k]*xCol[k];
-                }
 
                 double value = (B.data[xIndex] - sum) / diag;
 
-                X.data[xIndex] = value;
-                xCol[i] = value;
+                X.data[xIndex] = xCol[i] = value;
             }
         }
 
@@ -179,7 +193,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     public Matrix solveIdentity(Matrix U) {
-        checkParams(U, U.numRows);
+        checkParams(U, U.shape);
 
         double sum, diag;
         int uIndex, xIndex;
@@ -192,9 +206,8 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
         for(int j=0; j<n; j++) {
             // Store column to improve cache performance on innermost loop.
-            for(int k=0; k<n; k++) {
+            for(int k=0; k<n; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=n-2; i>=0; i--) {
                 sum = (i == j) ? 1 : 0;
@@ -205,13 +218,11 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
                 if(j==0) det *= diag;
 
-                for(int k=i+1; k<n; k++) {
+                for(int k=i+1; k<n; k++)
                     sum -= U.data[uIndex++]*xCol[k];
-                }
 
                 double value = sum / diag;
-                X.data[xIndex] = value;
-                xCol[i] = value;
+                X.data[xIndex] = xCol[i] = value;
             }
         }
 
@@ -233,7 +244,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
      * @return The result of solving the linear system U*X=L for the matrix X.
      */
     public Matrix solveLower(Matrix U, Matrix L) {
-        checkParams(U, L.numRows);
+        checkParams(U, L.shape);
 
         double sum, diag;
         int uIndex, xIndex;
@@ -249,9 +260,8 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
             X.data[rowOffset] = L.data[rowOffset++]/uValue;
 
             // Store column to improve cache performance on innermost loop.
-            for(int k=0; k<n; k++) {
+            for(int k=0; k<n; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=L.numCols-2; i>=0; i--) {
                 sum = 0;
@@ -261,13 +271,11 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
                 if(j==0) det *= diag;
 
-                for(int k=i+1; k<n; k++) {
+                for(int k=i+1; k<n; k++)
                     sum += U.data[uIndex + k]*xCol[k];
-                }
 
                 double value = (L.data[xIndex] - sum) / diag;
-                X.data[xIndex] = value;
-                xCol[i] = value;
+                X.data[xIndex] = xCol[i] = value;
             }
         }
 

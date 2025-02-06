@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -63,9 +63,8 @@ public final class Householder {
         Matrix H = v.outer(v).mult(-2.0/v.inner(v));
 
         int step = H.numCols+1;
-        for(int i = 0; i<H.data.length; i+=step) {
+        for(int i = 0; i<H.data.length; i+=step)
             H.data[i] = 1 + H.data[i];
-        }
 
         return H;
     }
@@ -121,7 +120,7 @@ public final class Householder {
         // Compute signed norm using modified sgn function.
         Complex128 signedNorm = normal.data[0].equals(0) ?
                 new Complex128(-VectorNorms.norm(normal.data)) :
-                Complex128.sgn((Complex128) normal.data[0]).mult(-VectorNorms.norm(normal.data));
+                Complex128.sgn(normal.data[0]).mult(-VectorNorms.norm(normal.data));
 
         v = normal.div(normal.data[0].sub(signedNorm));
         v.data[0] = new Complex128(1);
@@ -138,11 +137,10 @@ public final class Householder {
 
 
     /**
-     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code H}<sup>T</sup>{@code *A = (I-}&alpha{@code vv}<sup>T</sup
-     * >{@code )}<sup>T</sup>{@code *A}.
+     * Left multiplies a Householder matrix H = I - &alpha;vv<sup>T</sup>, represented by the vector
+     * v, to another matrix A. That is, computes H<sup>T</sup>A = (I - &alpha;vv<sup>T</sup>)<sup>T</sup>A.
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector v.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -163,16 +161,14 @@ public final class Householder {
         int srcRowOffset = startRow*numCols;
         double v0 = householderVector[startRow];
 
-        for(int i=startCol; i<numCols; i++) {
+        for(int i=startCol; i<numCols; i++)
             workArray[i] = v0*src.data[srcRowOffset + i];
-        }
 
         for(int k=startRow + 1; k<endRow; k++) {
             int srcIdx = k*numCols + startCol;
             double reflectorValue = householderVector[k];
-            for(int i=startCol; i<numCols; i++) {
+            for(int i=startCol; i<numCols; i++)
                 workArray[i] += reflectorValue*src.data[srcIdx++];
-            }
         }
 
         RealOps.scalMult(workArray, alpha, startCol, numCols, workArray);
@@ -181,9 +177,8 @@ public final class Householder {
             double reflectorValue = householderVector[i];
             int indexA = i*numCols + startCol;
 
-            for(int j=startCol; j<numCols; j++) {
+            for(int j=startCol; j<numCols; j++)
                 src.data[indexA++] -= reflectorValue*workArray[j];
-            }
         }
     }
 
@@ -209,15 +204,13 @@ public final class Householder {
             double sum = 0;
             int rowIndex = startIndex;
 
-            for(int j = startRow; j < endRow; j++) {
+            for(int j = startRow; j < endRow; j++)
                 sum += src.data[rowIndex++]*householderVector[j];
-            }
             sum *= -alpha;
 
             rowIndex = startIndex;
-            for(int j=startRow; j<endRow; j++) {
+            for(int j=startRow; j<endRow; j++)
                 src.data[rowIndex++] += sum*householderVector[j];
-            }
         }
     }
 
@@ -244,16 +237,15 @@ public final class Householder {
         int srcRowOffset = startRow*numCols;
         Complex128 v0 = householderVector[startRow].conj();
 
-        for(int i=startCol; i<numCols; i++) {
-            workArray[i] = v0.mult((Complex128) src.data[srcRowOffset + i]);
-        }
+        for(int i=startCol; i<numCols; i++)
+            workArray[i] = v0.mult(src.data[srcRowOffset + i]);
 
         for(int k=startRow + 1; k<endRow; k++) {
             int srcIdx = k*numCols + startCol;
             Complex128 reflectorValue = householderVector[k].conj();
 
             for(int i=startCol; i<numCols; i++)
-                workArray[i] = workArray[i].add(reflectorValue.mult((Complex128) src.data[srcIdx++]));
+                workArray[i] = workArray[i].add(reflectorValue.mult(src.data[srcIdx++]));
         }
 
         SemiringOps.scalMult(workArray, alpha, workArray, startCol, numCols);
@@ -262,9 +254,8 @@ public final class Householder {
             Complex128 reflectorValue = householderVector[i];
             int indexA = i*numCols + startCol;
 
-            for(int j=startCol; j<numCols; j++) {
-                src.data[indexA] = src.data[indexA++].sub(reflectorValue.mult((Complex128) workArray[j]));
-            }
+            for(int j=startCol; j<numCols; j++)
+                src.data[indexA] = src.data[indexA++].sub(reflectorValue.mult(workArray[j]));
         }
     }
 
@@ -291,15 +282,13 @@ public final class Householder {
             Complex128 sum = Complex128.ZERO;
             int rowIndex = startIndex;
 
-            for(int j = startRow; j < endRow; j++) {
-                sum = sum.add(src.data[rowIndex++].mult((Complex128) householderVector[j]));
-            }
+            for(int j = startRow; j < endRow; j++)
+                sum = sum.add(src.data[rowIndex++].mult(householderVector[j]));
             sum = sum.mult(negAlpha);
 
             rowIndex = startIndex;
-            for(int j=startRow; j<endRow; j++) {
+            for(int j=startRow; j<endRow; j++)
                 src.data[rowIndex] = src.data[rowIndex++].add(sum.mult(householderVector[j].conj()));
-            }
         }
     }
 
@@ -330,27 +319,23 @@ public final class Householder {
             double total = 0;
             int rowOffset = i*numRows;
 
-            for(int j=startCol; j<i; j++) {
+            for(int j=startCol; j<i; j++)
                 total += src.data[j*numRows + i]*householderVector[j];
-            }
-            for(int j=i; j<src.numRows; j++) {
+            for(int j=i; j<src.numRows; j++)
                 total += src.data[rowOffset + j]*householderVector[j];
-            }
 
             workArray[i] = -alpha*total;
         }
 
         // Computes -0.5*alpha*v^T*w
         double innerProd = 0;
-        for(int i=startCol; i<numRows; i++) {
+        for(int i=startCol; i<numRows; i++)
             innerProd += householderVector[i]*workArray[i];
-        }
         innerProd *= -0.5*alpha;
 
         // Computes w + innerProd*v
-        for(int i=startCol; i<numRows; i++) {
+        for(int i=startCol; i<numRows; i++)
             workArray[i] += innerProd*householderVector[i];
-        }
 
         // Computes A + w*v^T + v*w^T
         for(int i=startCol; i<numRows; i++) {
@@ -358,9 +343,8 @@ public final class Householder {
             double h = householderVector[i];
             int rowOffset = i*numRows;
 
-            for(int j=i; j<src.numRows; j++) {
+            for(int j=i; j<src.numRows; j++)
                 src.data[rowOffset + j] += prod*householderVector[j] + workArray[j]*h;
-            }
         }
     }
 
@@ -483,27 +467,24 @@ public final class Householder {
             Complex128 total = new Complex128(0, 0);
             int rowOffset = i * numRows;
 
-            for (int j = startCol; j < i; j++) {
-                total = total.add(src.data[j*numRows + i].conj().mult((Complex128) householderVector[j]));
-            }
-            for (int j = i; j < src.numRows; j++) {
-                total = total.add(src.data[rowOffset + j].mult((Complex128) householderVector[j]));
-            }
+            for (int j = startCol; j < i; j++)
+                total = total.add(src.data[j*numRows + i].conj().mult(householderVector[j]));
+            for (int j = i; j < src.numRows; j++)
+                total = total.add(src.data[rowOffset + j].mult(householderVector[j]));
 
             workArray[i] = alpha.mult(total).addInv();
         }
 
         // Computes -0.5*alpha*v^T*w (with conjugation in the scalar product)
         Complex128 innerProd = new Complex128(0, 0);
-        for (int i = startCol; i < numRows; i++) {
-            innerProd = innerProd.add(householderVector[i].conj().mult((Complex128) workArray[i]));
-        }
+        for (int i = startCol; i < numRows; i++)
+            innerProd = innerProd.add(householderVector[i].conj().mult(workArray[i]));
+
         innerProd = innerProd.mult(alpha).mult(new Complex128(-0.5, 0));
 
         // Computes w + innerProd*v
-        for (int i = startCol; i < numRows; i++) {
-            workArray[i] = workArray[i].add(innerProd.mult((Complex128) householderVector[i]));
-        }
+        for (int i = startCol; i < numRows; i++)
+            workArray[i] = workArray[i].add(innerProd.mult(householderVector[i]));
 
         // Computes A + w*v^T + v*w^T (ensuring Hermitian property is maintained)
         for (int i = startCol; i < numRows; i++) {
@@ -513,7 +494,7 @@ public final class Householder {
 
             for (int j = i; j < src.numRows; j++) {
                 src.data[rowOffset + j] = src.data[rowOffset + j]
-                        .add(prod.mult((Complex128) householderVector[j]))
+                        .add(prod.mult(householderVector[j]))
                         .add(workArray[j].mult(h));
             }
         }

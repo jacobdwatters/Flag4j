@@ -26,7 +26,7 @@
  * <p>Contains implementations for sparse tensors, matrices, and vectors.
  *
  * <p>A sparse tensor, matrix, or vector is an array where most elements are zero. However, there is no strict definition for the
- * proportion of zero-values elements within the array for it to be considered sparse but generally there should be <i>many</i>
+ * proportion of zero-values elements within the array for it to be considered sparse but generally there should be <em>many</em>
  * times more than non-zero values.
  *
  * <p>Sparse arrays can offer advantages such as reduced memory usage and, in many cases, improved computational performance.

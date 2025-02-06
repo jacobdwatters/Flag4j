@@ -138,12 +138,12 @@ public class PermutationMatrix implements Serializable {
     /**
      * <p>Constructs a permutation matrix from the specified {@code permutation}.
      *
-     * <p>This constructor will explicitly verify that {@code permutation} is a valid permutation. It is <i>highly</i> recommended
+     * <p>This constructor will explicitly verify that {@code permutation} is a valid permutation. It is <em>highly</em> recommended
      * to do this. However, there is a
      *
      * @param permutation Array specifying the permutation. Must contain a permutation of {@code {0, 1, ..., permutation.length-1}}.
      * {@code permutation[i] = j} indicates that there is a {@code 1} at row {@code i}, column {@code j}.
-     * @throws IllegalArgumentException {@code permutation} is <i>not</i> a permutation of
+     * @throws IllegalArgumentException {@code permutation} is <em>not</em> a permutation of
      * {@code {0, 1, ..., permutation.length-1}.
      */
     public PermutationMatrix(int... permutation) {
@@ -155,9 +155,9 @@ public class PermutationMatrix implements Serializable {
      * <p>Constructs a permutation matrix from the specified {@code permutation}. This constructor also accepts a flag indicating if an
      * explicit check should be made to enforce that the {@code permutation} array is a valid permutation.
      *
-     * <p> It is <i>highly</i> recommended to use {@link #PermutationMatrix(int[])} or set {@code ensurePermutation = true}. However,
+     * <p> It is <em>highly</em> recommended to use {@link #PermutationMatrix(int[])} or set {@code ensurePermutation = true}. However,
      * if there is absolute confidence in the validity of the {@code permutation} array, then setting
-     * {@code ensurePermutation = false} <i>may</i> yield very slight performance benefits.
+     * {@code ensurePermutation = false} <em>may</em> yield very slight performance benefits.
      *
      * @param permutation Array specifying the permutation. Must contain a permutation of {@code {0, 1, ..., permutation.length-1}}.
      * {@code permutation[i] = j} indicates that there is a {@code 1} at row {@code i}, column {@code j}.
@@ -165,10 +165,10 @@ public class PermutationMatrix implements Serializable {
      * permutation of {@code {0, 1, ..., permutation.length-1}}.
      * <ul>
      *     <li>If {@code true}: an explicit check will be made that {@code permutation} is a valid permutation.</li>
-     *     <li>If {@code false}: <i>NO</i> check will be made to ensure {@code permutation} is a valid permutation.</li>
+     *     <li>If {@code false}: <em>NO</em> check will be made to ensure {@code permutation} is a valid permutation.</li>
      * </ul>
      *
-     * @throws IllegalArgumentException If {@code ensurePermutation == true} and {@code permutation} is <i>not</i> a permutation of
+     * @throws IllegalArgumentException If {@code ensurePermutation == true} and {@code permutation} is <em>not</em> a permutation of
      * {@code {0, 1, ..., permutation.length-1}.
      */
     public PermutationMatrix(int[] permutation, boolean ensurePermutation) {
@@ -301,9 +301,10 @@ public class PermutationMatrix implements Serializable {
     public Vector leftMult(Vector src) {
         ValidateParameters.ensureAllEqual(size, src.size);
         double[] destEntries = new double[src.data.length];
+        double[] srcData = src.data;
 
         for(int rowIdx=0; rowIdx<size; rowIdx++)
-            destEntries[rowIdx] = src.data[permutation[rowIdx]];
+            destEntries[rowIdx] = srcData[permutation[rowIdx]];
 
         return new Vector(destEntries);
     }

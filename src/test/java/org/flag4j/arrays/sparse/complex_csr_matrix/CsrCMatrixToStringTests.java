@@ -4,6 +4,9 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.io.PrintOptions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +23,18 @@ class CsrCMatrixToStringTests {
         A = new CooCMatrix(aShape, nnz, rowIndices, colIndices).toCsr();
     }
 
+    @BeforeAll
+    static void setUp() {
+        // Ensure print options are set to default before any test is run.
+        PrintOptions.resetAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        // Ensure print options are reset after each test is run.
+        PrintOptions.resetAll();
+    }
+
 
     @Test
     void toStringTests() {
@@ -32,7 +47,7 @@ class CsrCMatrixToStringTests {
         exp = """
                 shape: (150, 2256)
                 nnz: 6
-                Non-zero data: [ 1.325 + 9.2i  -6 + i  23  34615i  -i  25 + i ]
+                Non-zero data: [ 1.325+9.2i  -6+i  23  34615i  -i  25+i ]
                 Row Pointers: [ 0  2  3  3  3  3  3  3  3  ...  6 ]
                 Col Indices: [ 150  2200  14  15  892  156 ]""";
         build();

@@ -152,7 +152,7 @@ public final class RealProperties {
 
 
     /**
-     * Checks if <i>any</i> of the elements of a tensor contain a {@link Double#NaN}.
+     * Checks if <em>any</em> of the elements of a tensor contain a {@link Double#NaN}.
      * @param src Entries of the tensor.
      * @return {@code true} is any entry of {@code src} is {@link Double#NaN}; {@code false} otherwise.
      */
@@ -165,7 +165,7 @@ public final class RealProperties {
 
 
     /**
-     * Checks if <i>all</i> elements of a tensor are finite.
+     * Checks if <em>all</em> elements of a tensor are finite.
      * @param src Entries of the tensor.
      * @return {@code false} is any entry of {@code src} is not {@link Double#isFinite(double) finite}. Otherwise, returns {@code
      * true}.
@@ -179,7 +179,7 @@ public final class RealProperties {
 
 
     /**
-     * Checks if <i>any</i> of the elements of a tensor is infinite.
+     * Checks if <em>any</em> of the elements of a tensor is infinite.
      * @param src Entries of the tensor.
      * @return {@code true} is any entry of {@code src} is {@link Double#isInfinite(double) infinite}; {@code false} otherwise.
      */

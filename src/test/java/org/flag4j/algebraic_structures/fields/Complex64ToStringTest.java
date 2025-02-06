@@ -1,12 +1,29 @@
 package org.flag4j.algebraic_structures.fields;
 
 import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.io.PrintOptions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class Complex64ToStringTest {
     Complex64 a;
     String expStr;
+
+    @BeforeAll
+    static void setUp() {
+        // Ensure print options are set to default before any test is run.
+        PrintOptions.resetAll();
+    }
+
+
+    @AfterEach
+    void tearDown() {
+        // Ensure print options are reset after each test is run.
+        PrintOptions.resetAll();
+    }
+
 
     @Test
     void realToStringTestCase() {
@@ -80,25 +97,25 @@ class Complex64ToStringTest {
     void complexToStringTestCase() {
         // ---------- sub-case 1 ------------
         a = new Complex64(234.3f, 1);
-        expStr = "234.3 + i";
+        expStr = "234.3+i";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), Complex64.length(a));
 
         // ---------- sub-case 2 ------------
         a = new Complex64(1.341f, 93.234f);
-        expStr = "1.341 + 93.23400115966797i";
+        expStr = "1.341+93.23400115966797i";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), Complex64.length(a));
 
         // ---------- sub-case 3 ------------
         a = new Complex64(-9.324f, -1.23e-5f);
-        expStr = "-9.324 - 1.2299999980314169E-5i";
+        expStr = "-9.324-1.2299999980314169E-5i";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), Complex64.length(a));
 
         // ---------- sub-case 4 ------------
         a = new Complex64(994.242f, -1);
-        expStr = "994.242 - i";
+        expStr = "994.242-i";
         Assertions.assertEquals(expStr, a.toString());
         Assertions.assertEquals(expStr.length(), Complex64.length(a));
     }

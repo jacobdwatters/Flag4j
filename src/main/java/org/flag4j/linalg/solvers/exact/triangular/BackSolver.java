@@ -25,6 +25,7 @@
 package org.flag4j.linalg.solvers.exact.triangular;
 
 
+import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
@@ -43,6 +44,10 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>, V>
         implements LinearMatrixSolver<T, U> {
 
+    // TODO: Investigate alternative methods for determining if the matrix is singular (or near singular).
+    //  Since the coefficient matrix is upper-triangular there is no need to compute the determinant explicitly,
+    //  we need only check if any individual value along the diagonal is near-zero.
+
     /**
      * For storing matrix results.
      */
@@ -60,31 +65,56 @@ public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends Ve
      */
     protected final boolean enforceTriU;
     /**
-     * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
-     * full rank.
+     * Flag indicating if an explicit check should be made that the matrix is singular (or near singular).
+     * <ul>
+     *     <li>If {@code true}, an explicit singularity check will be made.</li>
+     *     <li>If {@code false}, <em>no</em> check will be made.</li>
+     * </ul>
      */
-    protected static final double RANK_CONDITION = Flag4jConstants.EPS_F64;
+    protected boolean checkSingular = true;
 
 
     /**
      * Creates a solver for solving linear systems for upper triangular coefficient matrices.
      * @param enforceTriU Flag indicating if an explicit check should be made that the coefficient matrix is upper triangular.
      */
-    protected BackSolver(boolean enforceTriU) {
+    public BackSolver(boolean enforceTriU) {
         this.enforceTriU = enforceTriU;
+    }
+
+
+    /**
+     * Sets a flag indicating if an explicit check should be made that the coefficient matrix is singular.
+     *
+     * @param checkSingular Flag indicating if an explicit check should be made that the matrix is singular (or near singular).
+     * <ul>
+     *     <li>If {@code true}, an explicit singularity check will be made.</li>
+     *     <li>If {@code false}, <em>no</em> check will be made.</li>
+     * </ul>
+     *
+     * @return A reference to this back solver instance.
+     */
+    protected BackSolver<T, U, V> setCheckSingular(boolean checkSingular) {
+        this.checkSingular = checkSingular;
+        return this;
     }
 
 
     /**
      * Ensures passed parameters are valid for the back solver.
      * @param coeff Coefficient matrix in the linear system.
-     * @param constantRows Number of rows in the constant vector or matrix.
+     * @param constantRows Shape of the constant vector or matrix.
      * @throws IllegalArgumentException If coeff is not square,  {@code coeff.numRows()!=constantRows}, or if {@code enforceTriU} is
      * true and {@code coeff} is not upper triangular.
      */
-    protected void checkParams(T coeff, int constantRows) {
+    protected void checkParams(T coeff, Shape constantShape) {
         ValidateParameters.ensureSquare(coeff.getShape());
-        ValidateParameters.ensureAllEqual(coeff.numRows(), constantRows);
+
+        if(coeff.numRows() != constantShape.get(0)) {
+            throw new IllegalArgumentException("Expecting coefficient matrix rows to match " +
+                    "constant vector/matrix entries/rows " +
+                    "\nbut got shapes: " + coeff.getShape() + ", " + constantShape + ".");
+        }
 
         if(enforceTriU && !coeff.isTriU())
             throw new IllegalArgumentException("Expecting matrix U to be upper triangular.");
@@ -98,8 +128,7 @@ public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends Ve
      * @param numCols Number of columns in the coefficient matrix.
      */
     protected void checkSingular(double detAbs, int numRows, int numCols) {
-        if(detAbs <= RANK_CONDITION*Math.max(numRows, numCols) || Double.isNaN(detAbs)) {
+        if(detAbs <= Flag4jConstants.EPS_F64*Math.max(numRows, numCols) || Double.isNaN(detAbs))
             throw new SingularMatrixException("Could not solve system.");
-        }
     }
 }
