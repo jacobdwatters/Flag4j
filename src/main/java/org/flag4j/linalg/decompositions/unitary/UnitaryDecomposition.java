@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import org.flag4j.util.ValidateParameters;
 
 /**
  * <p>This class is the base class for all decompositions which proceed by using unitary transformations
- * (specifically HouseholderOld reflectors) to bring a matrix into an upper triangular matrix (QR decomposition) or an upper Hessenburg
+ * (specifically Householder reflectors) to bring a matrix into an upper triangular matrix (QR decomposition) or an upper Hessenburg
  * matrix (Hessenburg decomposition).
  *
  * <p>While the QR and Hessenburg decomposition are distinct, they have similar implementations and so this class provides common
@@ -42,9 +42,12 @@ import org.flag4j.util.ValidateParameters;
  */
 public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U> implements Decomposition<T> {
 
+    // TODO: We should consider storing the Householder vectors in the rows instead of in the columns.
+    //  This could improve cache performance when reading the values from the vector.
+
     /**
      * <p>
-     * Storage for the upper triangular/Hessenburg matrix and the vectors of the HouseholderOld reflectors used in the decomposition.
+     * Storage for the upper triangular/Hessenburg matrix and the vectors of the Householder reflectors used in the decomposition.
      * 
      *
      * <p>
@@ -55,7 +58,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
      * 
      *
      * <p>
-     * The HouseholderOld reflectors used to bring the original matrix to the upper triangular/Hessenburg
+     * The Householder reflectors used to bring the original matrix to the upper triangular/Hessenburg
      * form will be stored as the columns below the last non-zero sub-diagonal of the quasi-triangular matrix. The first value of
      * each reflector is not stored but is assumed to be 1.
      * 
@@ -63,7 +66,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
      * <p>This provides compact storage for decompositions which proceed by unitary transformations. Further, the full computation
      * of the unitary matrix can be deferred until it is needed.
      */
-    protected T transformMatrix;
+    public T transformMatrix;  // TODO: Change back to protected. This, is just for debug.
     /**
      * Pointer to the internal data array of {@link #transformMatrix}.
      */
@@ -77,15 +80,23 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
      */
     protected int numCols;
     /**
-     * Storage of the scalar factors for the HouseholderOld reflectors used in the decomposition.
+     * The lower bound (inclusive) of the row/column indices of the block matrix to reduce to quasi-triangular form.
+     */
+    protected int iLow;
+    /**
+     * The upper bound (exclusive) of the row/column indices of the block matrix to reduce to quasi-triangular form.
+     */
+    protected int iHigh;
+    /**
+     * Storage of the scalar factors for the Householder reflectors used in the decomposition.
      */
     protected U qFactors;
     /**
-     * For storing a HouseholderOld vectors.
+     * For storing a Householder vectors.
      */
     protected U householderVector;
     /**
-     * For temporarily storage when applying HouseholderOld vectors. This is useful for
+     * For temporarily storage when applying Householder vectors. This is useful for
      * avoiding unneeded garbage collection and for improving cache performance when traversing columns.
      */
     protected U workArray;
@@ -100,14 +111,26 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
      */
     protected final int subDiagonal;
     /**
-     * Flag indicating if a HouseholderOld reflector was needed for the current column meaning the {@link #transformMatrix} should
+     * Flag indicating if a Householder reflector was needed for the current column meaning the {@link #transformMatrix} should
      * be updated.
      */
     protected boolean applyUpdate;
     /**
-     * Flag indicating if {@code Q} should be computed in the decomposition.
+     * Flag indicating if {@code Q} should be computed in the decomposition from the reflectors applied.
+     * <ul>
+     *     <li>If {@code true}, then {@code Q} will be computed.</li>
+     *     <li>If {@code false}, then {@code Q} will <em>not</em> be computed.</li>
+     * </ul>
      */
     protected boolean storeReflectors;
+    /**
+     * Flag indicating if the decomposition should be done in-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in place.</li>
+     *     <li>If {@code false}, then the decomposition will be done out-of-place.</li>
+     * </ul>
+     */
+    public final boolean inPlace;
 
 
     /**
@@ -115,12 +138,23 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
      * upper Hessenburg).
      * @param subDiagonal Sub-diagonal of the upper quasi-triangular matrix. Must be zero or one. If zero, it will be upper triangular.
      *                   If one, it will be upper Hessenburg.
+     * @param storeReflectors Flag indicating if {@code Q} should be computed in the decomposition from the reflectors applied.
+     * <ul>
+     *     <li>If {@code true}, then {@code Q} will be computed.</li>
+     *     <li>If {@code false}, then {@code Q} will <i>not</i> be computed.</li>
+     * </ul>
+     * @param inPlace Flag indicating if the decomposition should be done in-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in place.</li>
+     *     <li>If {@code false}, then the decomposition will be done out-of-place.</li>
+     * </ul>
      * @throws IllegalArgumentException If {@code 1 < subDiagonal < 0}.
      */
-    protected UnitaryDecomposition(int subDiagonal, boolean storeReflectors) {
+    protected UnitaryDecomposition(int subDiagonal, boolean storeReflectors, boolean inPlace) {
         ValidateParameters.ensureInRange(subDiagonal, 0, 1, "subDiagonal");
         this.subDiagonal = subDiagonal;
         this.storeReflectors = storeReflectors;
+        this.inPlace = inPlace;
     }
 
 
@@ -129,13 +163,44 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
      * explicitly called.
      * @param src The source matrix to decompose.
      */
-    protected void decomposeUnitary(T src) {
+    @Override
+    public UnitaryDecomposition<T, U> decompose(T src) {
         setUp(src); // Initialize datastructures and storage for the decomposition.
-        int offSet = (subDiagonal == 0) ? 0 : subDiagonal + 1;
+        iLow = 0;
+        iHigh = numRows;
 
-        for(int j=0; j<minAxisSize-offSet; j++) {
-            computeHouseholder(j + subDiagonal); // Compute the householder reflector.
-            if(applyUpdate) updateData(j + subDiagonal); // Update the upper-triangular matrix and store the reflectors.
+        reduce();
+
+        return this;
+    }
+
+
+    /**
+     * Applies the unitary decomposition to the matrix. Note, the full computation of {@code Q} is deferred until {@link #getQ()} is
+     * explicitly called.
+     * @param src The source matrix to decompose.
+     */
+    public UnitaryDecomposition<T, U> decompose(T src, int iLow, int iHigh) {
+        setUp(src); // Initialize datastructures and storage for the decomposition.
+        this.iLow = iLow;
+        this.iHigh = iHigh;
+
+        reduce();
+
+        return this;
+    }
+
+
+    /**
+     * Applies the reduction to upper quasi-triangular form.
+     */
+    private void reduce() {
+        int startCol = iLow + subDiagonal;
+        int lastCol = Math.min(iHigh, minAxisSize) - subDiagonal;
+
+        for(int j = startCol; j < lastCol; j++) {
+            computeHouseholder(j);
+            if (applyUpdate) updateData(j);
         }
     }
 
@@ -173,10 +238,11 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
 
     /**
      * Initializes storage and other parameters for the decomposition.
-     * @param src Source matrix to be decomposed.
+     * @param src Source matrix to be decomposed. If {@link #inPlace inPlace == true}, this matrix <em>will</em> be
+     * modified.
      */
     protected void setUp(T src) {
-        transformMatrix = (T) src.copy(); // Initialize QR as the matrix to be decomposed.
+        transformMatrix = inPlace ? src : (T) src.copy(); // Initialize QR as the matrix to be decomposed.
         numRows = transformMatrix.numRows();
         numCols = transformMatrix.numCols();
         minAxisSize = Math.min(numRows, numCols);
@@ -188,22 +254,22 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
 
     /**
      * Initialized any work arrays to be used in computing the decomposition with the proper size.
-     * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code max(numRows, numCols)}
+     * @param maxAxisSize Length of the largest axis in the matrix to be decomposed. That is, {@code Math.max(numRows, numCols)}.
      */
     protected abstract void initWorkArrays(int maxAxisSize);
 
 
     /**
-     * Computes the HouseholderOld vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
-     * @param j Index of the upper left corner of the sub-matrix for which to compute the HouseholderOld vector for the first column.
-     *          That is, a HouseholderOld vector will be computed for the portion of column {@code j} below row {@code j}.
+     * Computes the Householder vector for the first column of the sub-matrix with upper left corner at {@code (j, j)}.
+     * @param j Index of the upper left corner of the sub-matrix for which to compute the Householder vector for the first column.
+     *          That is, a Householder vector will be computed for the portion of column {@code j} below row {@code j}.
      */
     protected abstract void computeHouseholder(int j);
 
 
     /**
-     * Updates the {@link #transformMatrix} matrix using the computed HouseholderOld vector from {@link #computeHouseholder(int)}.
-     * @param j Index of sub-matrix for which the HouseholderOld reflector was computed for.
+     * Updates the {@link #transformMatrix} matrix using the computed Householder vector from {@link #computeHouseholder(int)}.
+     * @param j Index of sub-matrix for which the Householder reflector was computed for.
      */
     protected abstract void updateData(int j);
 

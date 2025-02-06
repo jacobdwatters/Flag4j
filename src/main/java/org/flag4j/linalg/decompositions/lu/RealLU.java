@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,45 +36,36 @@ public class RealLU extends LU<Matrix> {
     
     
     /**
-     * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
+     * <p>Constructs a LU decomposer for real dense matrices.
+     * <p>This decomposition will be performed out-of-place using partial pivoting.
      */
     public RealLU() {
-        super(Pivoting.PARTIAL);
+        super(Pivoting.PARTIAL, false);
     }
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
+     * <p>Constructs a LU decomposer for real dense matrices.
+     * <p>This decomposition will be performed out-of-place.
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
      */
     public RealLU(Pivoting pivoting) {
-        super(pivoting);
+        super(pivoting, false);
     }
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
-     * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
-     *                 will be used. If pivoting is any other value, no pivoting will be used.
-     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LU decomposition with
-     *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
-     *                     from zero, then an exception will be thrown if solving with no pivoting.
+     * Constructs a LU decomposer for real dense matrices.
+     * @param pivoting Pivoting to use.
+     * @param inPlace Flag indicating if the decomposition should be done in/out-of-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in-place.</li>
+     *     <li>If {@code true}, then the decomposition will be done out-of-place.</li>
+     * </ul>
      */
-    public RealLU(Pivoting pivoting, double zeroPivotTol) {
-        super(pivoting, zeroPivotTol);
-    }
-
-
-    /**
-     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
-     * @param src Source matrix to decompose.
-     */
-    @Override
-    protected void initLU(Matrix src) {
-        LU = new Matrix(src);
+    protected RealLU(Pivoting pivoting, boolean inPlace) {
+        super(pivoting, inPlace);
     }
 
 
@@ -87,10 +78,8 @@ public class RealLU extends LU<Matrix> {
 
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<colStop; j++) {
-            if(j<LU.numRows && Math.abs(LU.data[j*LU.numCols + j]) < zeroPivotTol) {
-                throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
-                        " Consider using LU decomposition with partial pivoting.");
-            }
+            if(j<LU.numRows && Math.abs(LU.data[j*LU.numCols + j]) == 0.0)
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }
@@ -130,12 +119,10 @@ public class RealLU extends LU<Matrix> {
             maxIndex = maxIndex(j);
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
-            if(j!=maxIndex[0] && maxIndex[0]!=-1) {
+            if(j!=maxIndex[0] && maxIndex[0]!=-1)
                 swapRows(j, maxIndex[0]);
-            }
-            if(j!=maxIndex[1] && maxIndex[1]!=-1) {
+            if(j!=maxIndex[1] && maxIndex[1]!=-1)
                 swapCols(j, maxIndex[1]);
-            }
 
             computeRows(j);
         }
@@ -158,9 +145,8 @@ public class RealLU extends LU<Matrix> {
 
             if(m!=0) {
                 // Compute and set U values.
-                for (int k = j; k < LU.numCols; k++) {
+                for (int k = j; k < LU.numCols; k++)
                     LU.data[iRow + k] -= m * LU.data[pivotRow + k];
-                }
             }
 
             // Compute and set L value.

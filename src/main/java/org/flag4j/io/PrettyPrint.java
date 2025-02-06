@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Utility class for formatting arrays as &#x2605;&#x2605;<i>pretty</i>&#x2605;&#x2605; human-readable strings.
+ * Utility class for formatting arrays as &#x2605;&#x2605;<em>pretty</em>&#x2605;&#x2605; human-readable strings.
  */
 public final class PrettyPrint {
 
@@ -240,7 +240,7 @@ public final class PrettyPrint {
      * @param stopIdx Stopping index to search for maximum length string (exclusive).
      * @param stride The gap between consecutive elements within {@code src} to check.
      * @param finalIdx The final index to consider for the maximum length string. The length of the string representation of the
-     * element at this index in {@code src} is <i>always</i> considered.
+     * element at this index in {@code src} is <em>always</em> considered.
      * @return The maximum string representation length of elements within {@code src} between indices {@code startIdx} (inclusive)
      * and {@code stopIdx} spaced by {@code stride} and a final element at index {@code finalIdx}.
      * @param <T> Type of elements within the array.
@@ -273,7 +273,7 @@ public final class PrettyPrint {
      * @param stopIdx Stopping index to search for maximum length string (exclusive).
      * @param stride The gap between consecutive elements within {@code src} to check.
      * @param finalIdx The final index to consider for the maximum length string. The length of the string representation of the
-     * element at this index in {@code src} is <i>always</i> considered.
+     * element at this index in {@code src} is <em>always</em> considered.
      * @return The maximum string representation length of elements within {@code src} between indices {@code startIdx} (inclusive)
      * and {@code stopIdx} spaced by {@code stride} and a final element at index {@code finalIdx}.
      * @param <T> Type of elements within the array.
@@ -364,7 +364,10 @@ public final class PrettyPrint {
                 if (PrintOptions.useCentering())
                     value = StringUtils.center(value, totalWidth);
 
-                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+                if (rowStopIndex != 0)
+                    result.append(" ");
+
+                result.append(String.format("[%-" + totalWidth + "s]\n", value));
             }
 
             // Append the last row.
@@ -443,7 +446,10 @@ public final class PrettyPrint {
                 if (PrintOptions.useCentering())
                     value = StringUtils.center(value, totalWidth);
 
-                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+                if (rowStopIndex != 0)
+                    result.append(" ");
+
+                result.append(String.format("[%-" + totalWidth + "s]\n", value));
             }
 
             // Append the last row.

@@ -459,7 +459,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      * Converts this tensor to an equivalent sparse COO tensor.
      *
      * @param estimatedSparsity Estimated sparsity of the tensor. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      *
      * @return A sparse COO tensor that is equivalent to this dense tensor.
@@ -530,7 +530,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
 
 
     /**
-     * Sets all elements of this vector to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * Sets all elements of this vector to zero if they are within {@code tol} of zero. This is <em>not</em> done in place.
      * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
      * @return A copy of this vector with all data within {@code tol} of zero set to zero.
      */

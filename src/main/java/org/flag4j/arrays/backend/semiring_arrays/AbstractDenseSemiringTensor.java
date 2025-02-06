@@ -401,7 +401,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     /**
      * Converts this tensor to an equivalent sparse COO tensor.
      * @param estimatedSparsity Estimated sparsity of the tensor. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      * @return A sparse COO tensor that is equivalent to this dense tensor.
      * @see #toCoo()

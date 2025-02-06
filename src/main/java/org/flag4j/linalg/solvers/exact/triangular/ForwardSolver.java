@@ -27,6 +27,7 @@ package org.flag4j.linalg.solvers.exact.triangular;
 
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
@@ -87,6 +88,16 @@ public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends
 
 
     /**
+     * Solves a linear system <b>L*X=P</b> for <b>X</b> where <b>L</b> is a lower triangular matrix and
+     * <b>P</b> is a permutation matrix.
+     * @param L Lower triangular coefficient matrix.
+     * @param P Constant permutation matrix.
+     * @return The solution of <b>X</b> for the linear system <b>L*X=P</b>.
+     */
+    public abstract T solve(T L, PermutationMatrix P);
+
+
+    /**
      * Ensures passed parameters are valid for the back solver.
      * @param coeff Coefficient matrix in the linear system.
      * @param constantRows Number of rows in the constant vector or matrix.
@@ -97,9 +108,8 @@ public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends
         ValidateParameters.ensureSquare(coeff.getShape());
         ValidateParameters.ensureAllEqual(coeff.numRows(), constantRows);
 
-        if(enforceLower && !coeff.isTriL()) {
+        if(enforceLower && !coeff.isTriL())
             throw new IllegalArgumentException("Expecting matrix L to be lower triangular.");
-        }
     }
 
 
@@ -110,8 +120,7 @@ public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends
      * @param numCols Number of columns in the coefficient matrix.
      */
     protected void checkSingular(double detAbs, int numRows, int numCols) {
-        if(detAbs <= RANK_CONDITION*Math.max(numRows, numCols) || Double.isNaN(detAbs)) {
+        if(detAbs <= RANK_CONDITION*Math.max(numRows, numCols) || Double.isNaN(detAbs))
             throw new SingularMatrixException("Could not solve.");
-        }
     }
 }

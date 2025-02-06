@@ -2,6 +2,8 @@ package org.flag4j.arrays.dense.matrix;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.io.PrintOptions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,24 +14,37 @@ class MatrixToStringTest {
     Matrix A;
     String exp;
 
+    @BeforeAll
+    static void setUp() {
+        // Ensure print options are set to default before any test is run.
+        PrintOptions.resetAll();
+    }
+
+
+    @AfterEach
+    void tearDown() {
+        // Ensure print options are reset after each test is run.
+        PrintOptions.resetAll();
+    }
+
 
     @Test
     void toStringTestCase() {
         // ------------------------ sub-case 1 ------------------------
-//        aEntries = new double[][]{
-//                {1.32239898234, 2.46560324, 1.45, -0.11234},
-//                {0.000324, 1.456, -123.4, 2341.56}};
-//        A = new Matrix(aEntries);
-//        PrintOptions.setPrecision(50);
-//        PrintOptions.setPadding(2);
-//        PrintOptions.setMaxRows(50);
-//        PrintOptions.setMaxColumns(50);
-//        PrintOptions.setCentering(true);
-//        exp = "shape: (2, 4)\n" +
-//                "[[ 1.32239898234  2.46560324   1.45   -0.11234 ]\n" +
-//                " [    3.24E-4       1.456     -123.4  2341.56  ]]";
+        aEntries = new double[][]{
+                {1.32239898234, 2.46560324, 1.45, -0.11234},
+                {0.000324, 1.456, -123.4, 2341.56}};
+        A = new Matrix(aEntries);
+        PrintOptions.setPrecision(50);
+        PrintOptions.setPadding(2);
+        PrintOptions.setMaxRows(50);
+        PrintOptions.setMaxColumns(50);
+        PrintOptions.setCentering(true);
+        exp = "shape: (2, 4)\n" +
+                "[[ 1.32239898234  2.46560324   1.45   -0.11234 ]\n" +
+                " [    3.24E-4       1.456     -123.4  2341.56  ]]";
 
-//        assertEquals(exp, A.toString());
+        assertEquals(exp, A.toString());
 
         // ------------------------ sub-case 2 ------------------------
         aEntries = new double[][]{
@@ -90,7 +105,7 @@ class MatrixToStringTest {
         PrintOptions.setMaxColumns(4);
         PrintOptions.setCentering(true);
         exp = "shape: (2, 4)\n" +
-                "[ [           ...            ]\n" +
+                "[[           ...            ]\n" +
                 " [ 0  1.46  -123.4  2341.56 ]]";
 
         assertEquals(exp, A.toString());
@@ -142,8 +157,5 @@ class MatrixToStringTest {
                 " [0       1.456   -123.4   2341.56   ]]";
 
         assertEquals(exp, A.toString());
-
-        // ------------------------ RESET PRINT OPTIONS ------------------------
-        PrintOptions.resetAll();
     }
 }

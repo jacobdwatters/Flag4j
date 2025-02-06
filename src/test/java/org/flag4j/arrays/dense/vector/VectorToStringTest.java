@@ -3,7 +3,7 @@ package org.flag4j.arrays.dense.vector;
 
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrintOptions;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,13 +17,14 @@ class VectorToStringTest {
 
     @BeforeAll
     static void setup() {
+        PrintOptions.resetAll();
         aEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
         A = new Vector(aEntries);
     }
 
 
-    @AfterAll
-    static void cleanup() {
+    @AfterEach
+    void cleanup() {
         PrintOptions.resetAll();
     }
 

@@ -5,6 +5,7 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.io.PrintOptions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,10 +19,19 @@ class CooCTensorToStringTests {
 
     String exp;
 
-    @AfterEach
-    void reset() {
+    @BeforeAll
+    static void setUp() {
+        // Ensure print options are set to default before any test is run.
         PrintOptions.resetAll();
     }
+
+
+    @AfterEach
+    void tearDown() {
+        // Ensure print options are reset after each test is run.
+        PrintOptions.resetAll();
+    }
+
 
     @Test
     void cooCTensorToStringTests() {
@@ -51,7 +61,7 @@ class CooCTensorToStringTests {
 
         exp = "Shape: (5, 4, 2, 3, 15)\n" +
                 "nnz: 18\n" +
-                "Non-zero Entries: [ 0.8103 + 0.0203i  0.5684 + 0.4151i  0.9044 + 0.8734i  0.201 + 0.7032i  0.9682 + 0.2723i  0.4699 + 0.8203i  0.3871 + 0.3395i  0.7851 + 0.3768i  0.2315 + 0.7695i  ...  0.8007 + 0.4023i ]\n" +
+                "Non-zero Entries: [ 0.8103+0.0203i  0.5684+0.4151i  0.9044+0.8734i  0.201+0.7032i  0.9682+0.2723i  0.4699+0.8203i  0.3871+0.3395i  0.7851+0.3768i  0.2315+0.7695i  ...  0.8007+0.4023i ]\n" +
                 "Non-zero Indices: [ [ 0  0  0  0  0 ]  \n" +
                 "                    [ 0  1  0  0  7 ]  \n" +
                 "                    [ 0  2  1  2  4 ]  \n" +
@@ -73,7 +83,7 @@ class CooCTensorToStringTests {
         exp = """
                 Shape: (5, 4, 2, 3, 15)
                 nnz: 18
-                Non-zero Entries: [ 0.81 + 0.02i  0.568 + 0.415i  ...  0.801 + 0.402i ]
+                Non-zero Entries: [ 0.81+0.02i  0.568+0.415i  ...  0.801+0.402i ]
                 Non-zero Indices: [ [ 0  0  ...  0 ] \s
                                     [ 0  1  ...  7 ] \s
                                     [ 0  2  ...  4 ] \s

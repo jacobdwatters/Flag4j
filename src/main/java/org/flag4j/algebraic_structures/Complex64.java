@@ -1267,7 +1267,7 @@ public class Complex64 implements Field<Complex64> {
 
         if(re != 0.0) {
             realPart = re % 1 == 0 ? String.valueOf((int) re) : String.valueOf(re);
-            sign = im > 0.0 ? " + " : " - ";
+            sign = im > 0.0 ? "+" : "-";
         } else {
             sign = im > 0.0 ? "" : "-";
         }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -71,7 +71,7 @@ public class SymmHess extends RealHess {
      *
      * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
      * If true, then the {@code Q} matrix will be computed explicitly. If {@code Q} is not
-     * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.
+     * needed, setting this to {@code false} <em>may</em> yield a slight increase in efficiency.
      */
     public SymmHess(boolean computeQ) {
         super(computeQ);
@@ -82,7 +82,7 @@ public class SymmHess extends RealHess {
      * Constructs a Hessenberg decomposer for symmetric matrices.
      * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
      * If true, then the {@code Q} matrix will be computed explicitly. If {@code Q} is not
-     * needed, setting this to {@code false} <i>may</i> yield a slight increase in efficiency.
+     * needed, setting this to {@code false} <em>may</em> yield a slight increase in efficiency.
      * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
      * {@link #decompose(Matrix)} is truly symmetric. If {@code true}, an exception will be thrown if the matrix is not symmetric. If
      * {@code false}, the decomposition will proceed under the assumption that the matrix is symmetric whether it actually is or not.
@@ -114,7 +114,7 @@ public class SymmHess extends RealHess {
     @Override
     public Matrix getH() {
         Matrix H = new Matrix(numRows);
-        H.data[0] = transformMatrix.data[0];
+        H.data[0] = transformData[0];
 
         int idx1;
         int idx0;
@@ -124,10 +124,10 @@ public class SymmHess extends RealHess {
             idx1 = rowOffset + i;
             idx0 = idx1 - numRows;
 
-            H.data[idx1] = transformMatrix.data[idx1]; // extract diagonal value.
+            H.data[idx1] = transformData[idx1]; // extract diagonal value.
 
             // extract off-diagonal values.
-            double a = transformMatrix.data[idx0];
+            double a = transformData[idx0];
             H.data[idx0] = a;
             H.data[idx1 - 1] = a;
 
@@ -137,8 +137,8 @@ public class SymmHess extends RealHess {
 
         if(numRows > 1) {
             int rowColBase = numRows*numRows - 1;
-            H.data[rowColBase] = transformMatrix.data[rowColBase];
-            H.data[rowColBase - 1] = transformMatrix.data[rowColBase - numRows];
+            H.data[rowColBase] = transformData[rowColBase];
+            H.data[rowColBase - 1] = transformData[rowColBase - numRows];
         }
 
         return H;
@@ -158,7 +158,7 @@ public class SymmHess extends RealHess {
         // Compute max-abs value in row. (Equivalent to max value in column since matrix is symmetric.)
         int rowU = (j-1)*numRows;
         for(int i=j; i<numRows; i++) {
-            double d = householderVector[i] = transformMatrix.data[rowU + i];
+            double d = householderVector[i] = transformData[rowU + i];
             maxAbs = Math.max(Math.abs(d), maxAbs);
         }
 
@@ -214,9 +214,8 @@ public class SymmHess extends RealHess {
             // Store the Q matrix in the lower portion of the transformation data matrix.
             int col = j-1;
 
-            for(int i=j+1; i<numRows; i++) {
+            for(int i=j+1; i<numRows; i++)
                 transformMatrix.data[i*numRows + col] = householderVector[i];
-            }
         }
     }
 }

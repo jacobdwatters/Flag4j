@@ -3,7 +3,7 @@ package org.flag4j.arrays.dense.tensor;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.io.PrintOptions;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -18,14 +18,15 @@ class TensorToStringTests {
 
     @BeforeAll
     static void setup() {
+        PrintOptions.resetAll();
         aShape = new Shape(2, 3, 1, 2);
         aEntries = new double[]{1, -1.4133, 113.4, 0.4, 11.3, 445, 133.445, 9.8, 13384, -993.44, 11, 12};
         A = new Tensor(aShape, aEntries);
     }
 
 
-    @AfterAll
-    static void cleanup() {
+    @AfterEach
+    void cleanup() {
         PrintOptions.resetAll();
     }
 

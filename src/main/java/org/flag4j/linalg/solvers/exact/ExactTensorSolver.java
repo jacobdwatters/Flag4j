@@ -45,6 +45,7 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
         U extends MatrixMixin<U, ?, V, ?>,
         V extends VectorMixin<V, U, ?, ?>> implements LinearSolver<T> {
 
+    // TODO: Can we use a similar strategy to implement a lstsq tensor solver?
 
     /**
      * Solver to solve a linear matrix equation <i>Cx=d</i> for <i>X</i> where <i>C</i> is a matrix and
@@ -81,9 +82,8 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
 
         int prod = 1;
         int[] dims = outputShape.getDims();
-        for(int k : dims) {
+        for(int k : dims)
             prod *= k;
-        }
 
         // Ensure that prod(a.shape.dims[j]) == prod(a.shape.dims[k]) for all b.rank()<=j<a.rank() and 0<=k<b.rank()
         checkSize(A.getShape().totalEntriesIntValueExact(), prod);

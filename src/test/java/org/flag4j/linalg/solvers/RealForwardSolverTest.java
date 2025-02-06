@@ -3,7 +3,6 @@ package org.flag4j.linalg.solvers;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -99,7 +98,7 @@ class RealForwardSolverTest {
         b = new Vector(bEntries);
 
         Vector finalB3 = b;
-        assertThrows(LinearAlgebraException.class, ()->solver.solve(L, finalB3));
+        assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB3));
     }
 
 
@@ -209,7 +208,7 @@ class RealForwardSolverTest {
         b = new Vector(bEntries);
 
         Vector finalB3 = b;
-        assertThrows(LinearAlgebraException.class, ()->solver.solve(L, finalB3));
+        assertThrows(IllegalArgumentException.class, ()->solver.solve(L, finalB3));
     }
 
 

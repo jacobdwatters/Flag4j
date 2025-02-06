@@ -233,7 +233,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
     /**
      * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
-     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <i>not</i> convert this matrix
+     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <em>not</em> convert this matrix
      * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
      *
      * @param shape Shape of the COO matrix.
@@ -481,7 +481,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
-     * Sets the specified index of this matrix to the provided value. This is <i>not</i> done in place as the number of non-zero
+     * Sets the specified index of this matrix to the provided value. This is <em>not</em> done in place as the number of non-zero
      * data in a sparse tensor is fixed.
      * @param value Value to set within matrix.
      * @param rowIdx Row index to set.
@@ -504,7 +504,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
-     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <em>not</em> done in place.
      * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
      * @return A copy of this matrix with all data within {@code tol} of zero set to zero.
      */

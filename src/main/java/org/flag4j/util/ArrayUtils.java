@@ -160,7 +160,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Creates a deep copy of a 2D array. Assumes arrays are <i>not</i> jagged.
+     * Creates a deep copy of a 2D array. Assumes arrays are <em>not</em> jagged.
      *
      * @param src  Source array to copy.
      * @param dest Destination array of copy. If {@code null}, a new array will be initialized.
@@ -254,7 +254,7 @@ public final class ArrayUtils {
 
     /**
      * Swaps elements in an array according to a specified permutation. This method should be used with extreme caution as unlike
-     * {@link #permute(int[], int[])}, this method does <i>not</i> verify that {@code indices} is a permutation.
+     * {@link #permute(int[], int[])}, this method does <em>not</em> verify that {@code indices} is a permutation.
      *
      * @param src     Array to swap elements within.
      * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
