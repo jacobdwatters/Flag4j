@@ -47,17 +47,23 @@ import org.flag4j.util.ArrayBuilder;
 public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
 
     /**
+     * Simple error message for a zero pivot encountered.
+     */
+    protected static final String ZERO_PIV_ERR = "Zero pivot encountered in decomposition." +
+            " Consider using LU decomposition with partial pivoting.";
+
+    /**
      * Flag indicating what pivoting to use.
      */
     public final Pivoting pivotFlag;
     /**
-     * for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
+     * Flag indicating if the decomposition should be done in/out-of-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in-place.</li>
+     *     <li>If {@code true}, then the decomposition will be done out-of-place.</li>
+     * </ul>
      */
-    final double DEFAULT_ZERO_PIVOT_TOLERANCE = 0.5e-14;
-    /**
-     * Tolerance for determining if pivot value is to be considered zero in LU decomposition with no pivoting.
-     */
-    protected final double zeroPivotTol;
+    protected final boolean inPlace;
     /**
      * Storage for L and U matrices. Stored in a single matrix
      */
@@ -76,28 +82,18 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
     protected int[] rowSwaps; // Array for keeping track of row swaps made with full/partial pivoting.
     protected int[] colSwaps; // Array for keeping track of column swaps made during full pivoting.
 
-
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
-     *                 will be used. If pivoting is any other value, no pivoting will be used.
+     * Constructs a LU decomposer with the specified pivoting.
+     * @param pivoting Pivoting to use.
+     * @param inPlace Flag indicating if the decomposition should be done in/out-of-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in-place.</li>
+     *     <li>If {@code true}, then the decomposition will be done out-of-place.</li>
+     * </ul>
      */
-    protected LU(Pivoting pivoting) {
+    protected LU(Pivoting pivoting, boolean inPlace) {
         pivotFlag = pivoting;
-        zeroPivotTol = DEFAULT_ZERO_PIVOT_TOLERANCE;
-    }
-
-
-    /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
-     *                 will be used. If pivoting is any other value, no pivoting will be used.
-     * @param zeroPivotTol Tolerance for considering a pivot to be zero. If a pivot is less than the tolerance in absolute value,
-     *                     then it will be considered zero.
-     */
-    protected LU(Pivoting pivoting, double zeroPivotTol) {
-        pivotFlag = pivoting;
-        this.zeroPivotTol = zeroPivotTol;
+        this.inPlace = inPlace;
     }
 
 
@@ -133,7 +129,9 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
      * Initializes the {@code LU} matrix by copying the source matrix to decompose.
      * @param src Source matrix to decompose.
      */
-    protected abstract void initLU(T src);
+    protected void initLU(T src) {
+        LU = inPlace ? src : src.copy();
+    }
 
 
     /**

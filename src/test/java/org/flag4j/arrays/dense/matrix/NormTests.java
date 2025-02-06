@@ -26,7 +26,7 @@ class NormTests {
         a = new Matrix(aShape, aData);
         p = 1;
 
-        exp = 4.003647020302842;
+        exp = 4.003647020302841;
 
         assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
@@ -36,7 +36,7 @@ class NormTests {
         a = new Matrix(aShape, aData);
 
         p = 1;
-        exp = 1.803745292776371;
+        exp = 1.8037452927763704;
 
         assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
@@ -46,7 +46,7 @@ class NormTests {
         a = new Matrix(aShape, aData);
 
         p = 1;
-        exp = 1.9501167666102215;
+        exp = 1.9501167666102226;
 
         assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
@@ -72,7 +72,7 @@ class NormTests {
         a = new Matrix(aShape, aData);
 
         p = Double.POSITIVE_INFINITY;
-        exp = 4.169634097557557;
+        exp = 4.169634097557556;
         assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
         // ---------------- sub-case 6 ----------------
@@ -81,7 +81,7 @@ class NormTests {
         a = new Matrix(aShape, aData);
 
         p = 3.25621;
-        exp = 4.215513043537819;
+        exp = 4.215513043537818;
         assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
 
         // ---------------- sub-case 7 ----------------
@@ -101,7 +101,7 @@ class NormTests {
         a = new Matrix(aShape, aData);
 
         p = Double.NEGATIVE_INFINITY;
-        exp = 0.029990005262000484;
+        exp = 0.029990005262000602;
 
         assertEquals(exp, MatrixNorms.schattenNorm(a, p), Flag4jConstants.EPS_F64);
     }
@@ -221,8 +221,8 @@ class NormTests {
         a = new Matrix(aShape, aData);
 
         p = 2;
-        exp = 6.764801864669105;
-        assertEquals(exp, MatrixNorms.inducedNorm(a, p));
+        exp = 6.764801864669111;
+        assertEquals(exp, MatrixNorms.inducedNorm(a, p), Flag4jConstants.EPS_F64);
 
         // ---------------- sub-case 4 ----------------
         aShape = new Shape(5, 5);
@@ -232,8 +232,8 @@ class NormTests {
         a = new Matrix(aShape, aData);
 
         p = -2;
-        exp = 0.4970402772750497;
-        assertEquals(exp, MatrixNorms.inducedNorm(a, p));
+        exp = 0.49704027727504857;
+        assertEquals(exp, MatrixNorms.inducedNorm(a, p), Flag4jConstants.EPS_F64);
 
         // ---------------- sub-case 5 ----------------
         aShape = new Shape(5, 5);

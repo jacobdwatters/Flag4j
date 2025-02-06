@@ -562,7 +562,7 @@ public final class Eigen {
      * @return A matrix containing the eigenvectors of {@code T} as its columns.
      */
     public static CMatrix getEigenVectorsTriu(CMatrix T) {
-        ComplexBackSolver backSolver = new ComplexBackSolver();
+        ComplexBackSolver backSolver = new ComplexBackSolver(false).setCheckSingular(false);
         CMatrix Q = new CMatrix(T.numRows);
 
         CMatrix S_hat;
@@ -577,7 +577,7 @@ public final class Eigen {
             if(S_hat.data.length > 0) {
                 v = backSolver.solve(S_hat, r);
                 // TODO: Should have an append(Complex128...) method for appending scalars to a vector to avoid having to wrap them
-                //  in a vector first.
+                //  in a vector first. Or maybe just an overloaded method.
                 v = v.join(new CVector(Complex128.ONE));
             } else {
                 v = new CVector(Complex128.ONE);

@@ -2,11 +2,28 @@ package org.flag4j.arrays.sparse.coo_matrix;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.io.PrintOptions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CooMatrixToStringTests {
+
+
+    @BeforeAll
+    static void setUp() {
+        // Ensure print options are set to default before any test is run.
+        PrintOptions.resetAll();
+    }
+
+
+    @AfterEach
+    void tearDown() {
+        // Ensure print options are reset after each test is run.
+        PrintOptions.resetAll();
+    }
 
 
     @Test

@@ -229,7 +229,7 @@ public final class Invert {
 
     /**
      * Inverts a symmetric positive definite matrix.
-     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually symmetric positive definite.
+     * @param src Positive definite matrix. It will <em>not</em> be verified if {@code src} is actually symmetric positive definite.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.
@@ -264,7 +264,7 @@ public final class Invert {
 
     /**
      * Inverts a Hermitian positive definite matrix.
-     * @param src Positive definite matrix. It will <i>not</i> be verified if {@code src} is actually Hermitian positive definite.
+     * @param src Positive definite matrix. It will <em>not</em> be verified if {@code src} is actually Hermitian positive definite.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,45 +37,36 @@ public class ComplexLU extends LU<CMatrix> {
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
+     * <p>Constructs a LU decomposer for complex dense matrices.
+     * <p>This decomposition will be performed out-of-place using partial pivoting.
      */
     public ComplexLU() {
-        super(Pivoting.PARTIAL);
+        super(Pivoting.PARTIAL, false);
     }
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
-     * @param pivoting Pivoting to use in the LU decomposition.
-     */
-    public ComplexLU(Pivoting pivoting) {
-        super(pivoting);
-    }
-
-
-    /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
+     * <p>Constructs a LU decomposer for complex dense matrices.
+     * <p>This decomposition will be performed out-of-place.
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
-     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LU decomposition with
-     *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
-     *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public ComplexLU(Pivoting pivoting, double zeroPivotTol) {
-        super(pivoting, zeroPivotTol);
+    public ComplexLU(Pivoting pivoting) {
+        super(pivoting, false);
     }
 
 
     /**
-     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
-     * @param src Source matrix to decompose.
+     * Constructs a LU decomposer for complex dense matrices.
+     * @param pivoting Pivoting to use.
+     * @param inPlace Flag indicating if the decomposition should be done in/out-of-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in-place.</li>
+     *     <li>If {@code true}, then the decomposition will be done out-of-place.</li>
+     * </ul>
      */
-    @Override
-    protected void initLU(CMatrix src) {
-        // TODO: Add overloaded constructor in super which has flag specifying if the decomposition should be done in place or copied.
-        LU = new CMatrix(src.shape, src.data.clone());
+    protected ComplexLU(Pivoting pivoting, boolean inPlace) {
+        super(pivoting, inPlace);
     }
 
 
@@ -86,10 +77,8 @@ public class ComplexLU extends LU<CMatrix> {
     protected void noPivot() {
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<LU.numCols; j++) {
-            if(j<LU.numRows && (LU.data[j*LU.numCols + j]).mag() < zeroPivotTol) {
-                throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
-                        " Consider using LU decomposition with partial pivoting.");
-            }
+            if(j<LU.numRows && (LU.data[j*LU.numCols + j]).mag() == 0.0)
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }
@@ -107,10 +96,9 @@ public class ComplexLU extends LU<CMatrix> {
         for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
-            // Make the appropriate swaps in LU and P (Complex128his is the partial pivoting step).
-            if(j!=maxIndex && maxIndex>=0) {
+            // Make the appropriate swaps in LU and P (This is the partial pivoting step).
+            if(j!=maxIndex && maxIndex>=0)
                 swapRows(j, maxIndex);
-            }
 
             computeRows(j);
         }
@@ -128,13 +116,11 @@ public class ComplexLU extends LU<CMatrix> {
         for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxIndex(j);
 
-            // Make the appropriate swaps in LU, P and Q (Complex128his is the full pivoting step).
-            if(j!=maxIndex[0] && maxIndex[0]!=-1) {
+            // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
+            if(j!=maxIndex[0] && maxIndex[0]!=-1)
                 swapRows(j, maxIndex[0]);
-            }
-            if(j!=maxIndex[1] && maxIndex[1]!=-1) {
+            if(j!=maxIndex[1] && maxIndex[1]!=-1)
                 swapCols(j, maxIndex[1]);
-            }
 
             computeRows(j);
         }
@@ -152,12 +138,12 @@ public class ComplexLU extends LU<CMatrix> {
         for(int i=j+1; i<LU.numRows; i++) {
             int iRow = i*LU.numCols;
             m = LU.data[iRow + j];
-            m = LU.data[pivotRow + j].isZero() ? m : m.div((Complex128) LU.data[pivotRow + j]);
+            m = LU.data[pivotRow + j].isZero() ? m : m.div(LU.data[pivotRow + j]);
 
             if(!m.isZero()) {
                 // Compute and set U values.
                 for(int k=j; k<LU.numCols; k++)
-                    LU.data[iRow + k] = LU.data[iRow + k].sub(m.mult((Complex128) LU.data[pivotRow + k]));
+                    LU.data[iRow + k] = LU.data[iRow + k].sub(m.mult(LU.data[pivotRow + k]));
             }
 
             // Compute and set L value.

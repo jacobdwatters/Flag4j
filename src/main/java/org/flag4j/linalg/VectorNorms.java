@@ -330,7 +330,6 @@ public final class VectorNorms {
         if (maxAbs == 0.0) return 0.0; // Quick return for zero vector.
 
         double maxInv = 1.0 / maxAbs;
-
         final int end = start + n*stride;
 
         // Compute norm as a = |max(src)|, ||src|| = a*||src * (1/a)|| to help protect against overflow.

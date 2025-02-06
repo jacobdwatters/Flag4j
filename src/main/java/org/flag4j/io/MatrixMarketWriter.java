@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -125,7 +125,7 @@ public final class MatrixMarketWriter {
      * Writes the header of the Matrix Market Exchange Format to the file.
      * @param writer The {@link BufferedWriter} to use when writing to file.
      * @param header The Matrix Market Exchange Format header to write to the file.
-     * @param shapeData Contains, in order, either the number of rows and number of columns, <i>or</i> the number of rows, columns,
+     * @param shapeData Contains, in order, either the number of rows and number of columns, <em>or</em> the number of rows, columns,
      * and the number of non-zero data.
      * @throws IOException If an I/O error occurs.
      */

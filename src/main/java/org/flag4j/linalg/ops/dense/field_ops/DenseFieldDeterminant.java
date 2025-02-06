@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -102,7 +102,7 @@ public final class DenseFieldDeterminant {
 
     /**
      * <p>Computes the determinant of a triangular matrix.
-     * <p>WARNING: This method <i>does not</i> make <i>any</i> sanity checks. That is, no checks are made that {@code tri} is
+     * <p>WARNING: This method <em>does not</em> make <em>any</em> sanity checks. That is, no checks are made that {@code tri} is
      * square or triangular.
      * @param tri Triangular matrix. Assumed to be a square triangular matrix.
      * @return The determinant of the triangular matrix {@code tri}.

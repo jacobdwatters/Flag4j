@@ -48,7 +48,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * Creates a solver to solve a linear system where the coefficient matrix is lower triangular.
      */
     public ComplexForwardSolver() {
-        super(false, false);
+        super(false, true);
     }
 
 
@@ -61,7 +61,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * </ul>
      */
     public ComplexForwardSolver(boolean isUnit) {
-        super(isUnit, false);
+        super(isUnit, true);
     }
 
 

@@ -38,7 +38,8 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
     // TODO: In several implementations, a column is temporarily copied. This is likely only worth it for matrices
-    //  larger than a few entries. If the matrix is small consider not doing this.
+    //  larger than a few entries. If the matrix is small consider not doing this. Also should investigate the minimum size
+    //  it is likely "worth it".
 
     /**
      * For computing determinant of lower triangular matrix during solve.
@@ -63,7 +64,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * </ul>
      */
     public RealForwardSolver(boolean isUnit) {
-        super(isUnit, false);
+        super(isUnit, true);
     }
 
 
@@ -416,7 +417,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
             for (int i = 1; i < n; i++) {
                 double sum = 0.0;
-                int lIndexStart = i*n;   // Start of row i in L
+                int lIndexStart = i*n;
 
                 // Accumulate the dot product
                 for (int k = 0; k < i; k++)
@@ -465,7 +466,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
             for (int i = 1; i < n; i++) {
                 double sum = 0.0;
-                int lIndexStart = i*n;   // Start of row i in L
+                int lIndexStart = i*n;
 
                 // Accumulate the dot product
                 for (int k = 0; k < i; k++)

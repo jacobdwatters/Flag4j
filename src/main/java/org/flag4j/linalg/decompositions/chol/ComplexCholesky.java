@@ -111,7 +111,7 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
                     L.data[lIndex3] = diag.sqrt();
                 } else {
                     if(!L.data[j*(L.numCols + 1)].isZero()) {
-                        L.data[lIndex3] = (src.data[lIndex3].sub(sum)).div((Complex128) L.data[lIndex2 + j]);
+                        L.data[lIndex3] = (src.data[lIndex3].sub(sum)).div(L.data[lIndex2 + j]);
                     }
                 }
             }

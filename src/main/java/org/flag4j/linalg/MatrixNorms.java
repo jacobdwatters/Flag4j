@@ -248,7 +248,7 @@ public final class MatrixNorms {
      *
      * <p>This method is equivalent to {@link #norm(Matrix, double, double) norm(src, 2, 2)}.
      * However, this method should generally be preferred over
-     * {@link #norm(Matrix, double, double)} as it <i>may</i> be slightly more efficient.
+     * {@link #norm(Matrix, double, double)} as it <em>may</em> be slightly more efficient.
      *
      * @param src Matrix to compute theFrobenius norm of.
      *
@@ -267,7 +267,7 @@ public final class MatrixNorms {
      *
      * <p>This method is equivalent to {@link #norm(AbstractDenseRingMatrix, double, double) norm(src, 2, 2)}.
      * However, this method should generally be preferred over
-     * {@link #norm(AbstractDenseRingMatrix, double, double)} as it <i>may</i> be slightly more efficient.
+     * {@link #norm(AbstractDenseRingMatrix, double, double)} as it <em>may</em> be slightly more efficient.
      *
      * @param src Matrix to compute theFrobenius norm of.
      *

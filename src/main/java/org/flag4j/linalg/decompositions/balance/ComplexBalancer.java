@@ -24,11 +24,13 @@
 
 package org.flag4j.linalg.decompositions.balance;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.DenseOps;
+import org.flag4j.util.ValidateParameters;
 
 /**
  * <p>Instances of this class may be used to balance complex dense matrices. Balancing a matrix involves computing a
@@ -223,5 +225,62 @@ public class ComplexBalancer extends Balancer<CMatrix> {
     @Override
     protected void vectorScale(double factor, int start, int n, int stride) {
         FieldOps.scalMult(balancedMatrix.data, factor, start, n, stride, balancedMatrix.data);
+    }
+
+
+    /**
+     * Efficiently left multiplies <b>PD</b> to the provided {@code src} matrix.
+     * @param src Matrix to apply transform to.
+     * @return The result of left multiplying <b>PD</b> to the {@code src} matrix.
+     */
+    @Override
+    public CMatrix applyLeftTransform(CMatrix src) {
+        ensureHasBalanced();
+        ValidateParameters.ensureSquareMatrix(src.shape);
+        ValidateParameters.ensureEqualShape(balancedMatrix.shape, src.shape);
+
+        Complex128[] destData = new Complex128[src.data.length];
+        System.arraycopy(src.data, 0, destData, 0, iLow*size);
+        System.arraycopy(src.data, iHigh*size, destData, iHigh*size, (size - iHigh)*size);
+
+        // Left multiply by D.
+        for(int i = iLow; i < iHigh; i++) {
+            int rowOffset = i*size;
+            double scale = scalePerm[i];
+
+            for(int j = 0; j < size; j++)
+                destData[rowOffset + j] = src.data[rowOffset + j].mult(scale);
+        }
+
+        return getP().leftMult(new CMatrix(balancedMatrix.shape, destData));
+    }
+
+
+    /**
+     * Efficiently right multiplies <b>D<sup>-1</sup>P<sup>-1</sup></b> to the provided {@code src} matrix.
+     * @param src Matrix to apply transform to.
+     * @return The result of right multiplying <b>D<sup>-1</sup>P<sup>-1</sup></b> to the {@code src} matrix.
+     */
+    @Override
+    public CMatrix applyRightTransform(CMatrix src) {
+        ensureHasBalanced();
+        ValidateParameters.ensureSquareMatrix(src.shape);
+        ValidateParameters.ensureEqualShape(balancedMatrix.shape, src.shape);
+
+        Complex128[] destData = new Complex128[src.data.length];
+        System.arraycopy(src.data, 0, destData, 0, iLow*size);
+        System.arraycopy(src.data, iHigh*size, destData, iHigh*size, (size - iHigh)*size);
+
+        // Right multiply by D^{-1}.
+        for(int i = iLow; i < iHigh; i++) {
+            int rowOffset = i*size;
+            double scale = 1.0/scalePerm[i];
+
+            for(int j = 0; j < size; j++)
+                destData[rowOffset + j] = src.data[rowOffset + j].mult(scale);
+        }
+
+        // Left multiply by P^{-1}.
+        return getP().inv().rightMult(new CMatrix(balancedMatrix.shape, destData));
     }
 }

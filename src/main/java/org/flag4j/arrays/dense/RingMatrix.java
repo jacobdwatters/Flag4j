@@ -351,7 +351,7 @@ public class RingMatrix<T extends Ring<T>> extends AbstractDenseRingMatrix<
      * Converts this matrix to an equivalent sparse COO matrix.
      *
      * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      *
      * @return A sparse COO matrix that is equivalent to this dense matrix.
@@ -392,7 +392,7 @@ public class RingMatrix<T extends Ring<T>> extends AbstractDenseRingMatrix<
      * Converts this matrix to an equivalent sparse CSR matrix.
      *
      * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      *
      * @return A sparse CSR matrix that is equivalent to this dense matrix.
@@ -408,7 +408,7 @@ public class RingMatrix<T extends Ring<T>> extends AbstractDenseRingMatrix<
     /**
      * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
-     * <p>For large {@code n} values, this method <i>may</i> significantly more efficient than calling
+     * <p>For large {@code n} values, this method <em>may</em> significantly more efficient than calling
      * {@code #mult(Matrix) this.mult(this)} {@code n} times.
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity

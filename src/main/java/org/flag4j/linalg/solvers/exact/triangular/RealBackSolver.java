@@ -61,6 +61,24 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
+     * Sets a flag indicating if an explicit check should be made that the coefficient matrix is singular.
+     *
+     * @param checkSingular Flag indicating if an explicit check should be made that the matrix is singular (or near singular).
+     * <ul>
+     *     <li>If {@code true}, an explicit singularity check will be made.</li>
+     *     <li>If {@code false}, <em>no</em> check will be made.</li>
+     * </ul>
+     *
+     * @return A reference to this back solver instance.
+     */
+    @Override
+    public RealBackSolver setCheckSingular(boolean checkSingular) {
+        super.setCheckSingular(checkSingular);
+        return this;
+    }
+
+
+    /**
      * Gets the determinant computed during the last solve.
      */
     public double getDet() {
@@ -104,7 +122,7 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
             x.data[i] = (b.data[i]-sum)/diag;
         }
 
-        checkSingular(Math.abs(det), U.numRows, U.numCols); // Ensure the matrix is not singular.
+        if(checkSingular) checkSingular(Math.abs(det), U.numRows, U.numCols); // Ensure the matrix is not singular.
 
         return x;
     }

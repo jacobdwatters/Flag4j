@@ -57,7 +57,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
     /**
      * Default factor for computing the maximum number of iterations to perform.
      */
-    protected final int DEFAULT_MAX_ITERS_FACTOR = 30;
+    protected final int DEFAULT_MAX_ITERS_FACTOR = 50;
     /**
      *For storing the (possibly block) upper triangular matrix {@code T} in the Schur decomposition.
      */
@@ -78,9 +78,21 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      */
     protected Balancer<T> balancer;
     /**
-     *Stores the number of rows in the matrix being decomposed.
+     * The lower bound (inclusive) of the row/column indices of the block to reduce to Schur form.
+     */
+    protected int iLow;
+    /**
+     * The upper bound (exclusive) of the row/column indices of the block to reduce to Schur form.
+     */
+    protected int iHigh;
+    /**
+     * Stores the number of rows in the matrix being decomposed (<em>after</em> balancing).
      */
     protected int numRows;
+    /**
+     * Stores the number of rows in the matrix being decomposed (<em>before</em> balancing).
+     */
+    protected int numOrigRows;
     /**
      * Stores the vector {@code v} in the Householder reflector P = I - &alpha vv<sup>T</sup>.
      */
@@ -126,7 +138,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * found. If false, no check will be made and the floating point arithmetic will carry on with {@link Double#POSITIVE_INFINITY
      * infinities},  {@link Double#NEGATIVE_INFINITY negative-infinities}, and {@link Double#NaN NaNs} present.
      */
-    protected boolean checkFinite;  // TODO: Make use of this field.
+    protected boolean checkFinite = false;
     /**
      * Flag indicating if the orthogonal matrix {@code U} in the Schur decomposition should be computed. If false, {@code U} will
      * not be computed. This may provide performance improvements for large matrices when {@code U} is not required (for instance:
@@ -144,13 +156,16 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * {@code U} will be computed. If false, {@code U} will not be computed.
      * @param rng Random number generator to use when performing random exceptional shifts.
      * @param hess Decomposer to compute the Hessenburg decomposition as a setup step for the QR algorithm.
+     * @param balancer Balancer which balances the matrix as a preprocessing step to improve the conditioning of the eigenvalue
+     * problem.
      */
-    protected Schur(boolean computeU, RandomComplex rng, UnitaryDecomposition<T, U> hess) {
+    protected Schur(boolean computeU, RandomComplex rng, UnitaryDecomposition<T, U> hess, Balancer<T> balancer) {
         maxIterationsFactor = DEFAULT_MAX_ITERS_FACTOR;
         exceptionalThreshold = DEFAULT_EXCEPTIONAL_ITERS;
         this.rng = rng;
         this.computeU = computeU;
         this.hess = hess;
+        this.balancer = balancer;
     }
 
 
@@ -163,8 +178,10 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      *
      * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}
      *
-     * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without deflation
-     *                             before performing an iteration with random shifts.
+     * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without
+     * deflation before performing an iteration with random shifts.
+     *
+     * @return A reference to this Schur decomposer.
      * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
      */
@@ -186,11 +203,31 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      *
      * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
      * QR algorithm for.
+     *
+     * @return A reference to this Schur decomposer.
+     *
      * @throws IllegalArgumentException If {@code maxIterationFactor} is not positive.
      */
     public Schur<T, U> setMaxIterationFactor(int maxIterationFactor) {
         ValidateParameters.ensurePositive(maxIterationFactor);
         this.maxIterationsFactor = maxIterationFactor;
+        return this;
+    }
+
+
+    /**
+     * <p>Sets flag indicating if a check should be made to ensure the matrix being decomposed only contains finite values.
+     * <p>By default, this will be {@code false}.
+     * @param enforceFinite Flag indicating if a check should be made to ensure matrices decomposed by this instance only contain
+     * finite values.
+     * <ul>
+     *     <li>If {@code true}, an explicit check will be made.</li>
+     *     <li>If {@code false}, an explicit check will <em>not</em> be made.</li>
+     * </ul>
+     * @return A reference to this Schur decomposer.
+     */
+    public Schur<T, U> enforceFinite(boolean enforceFinite) {
+        this.checkFinite = enforceFinite;
         return this;
     }
 
@@ -217,7 +254,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * <p>Computes the Schur decomposition of the input matrix.
      *
      * @implNote The Schur decomposition is computed using Francis implicit double shifted QR algorithm.
-     * There are known cases where this variant of the QR algorithm <i>may</i> fail to converge. Random shifting is employed when the
+     * There are known cases where this variant of the QR algorithm <em>may</em> fail to converge. Random shifting is employed when the
      * matrix is not converging which greatly minimizes this issue. It is unlikely that a general matrix will fail to converge with
      * these random shifts however, no guarantees of convergence can be made.
      * @param src The source matrix to decompose.
@@ -227,26 +264,29 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
     protected void decomposeBase(T src) {
         setUp(src);
 
-        int workingSize = numRows-1;
+        int workingSize = iHigh - iLow - 1;
+        int workEnd = iHigh - 1;  // Equivalent to iLow + workingSize.
         int iters = 0;
 
+        // Each iteration of this loop is a complete implicit QR algorithm iteration.
         while(workingSize >= 2 && iters < maxIterations) {
             if(sinceLastExceptional >= exceptionalThreshold) {
                 // Perform an exceptional shift iteration.
                 sinceLastExceptional = 0; // Reset number of iterations completed.
-                performExceptionalShift(workingSize);
+                numExceptional++;
+                performExceptionalShift(workEnd);
             } else {
                 // Perform a normal double shift iteration.
                 sinceLastExceptional++; // Increase number of iterations performed without an exceptional shift.
-                numExceptional++;
-                performDoubleShift(workingSize);
+                performDoubleShift(workEnd);
             }
 
             // Check for convergence and deflate as needed.
-            int deflate = checkConvergence(workingSize);
+            int deflate = checkConvergence(workEnd);
             if(deflate > 0) {
                 sinceLastExceptional = 0; // Reset the number of iterations since the last exceptional shift.
                 workingSize -= deflate; // Reduce working size.
+                workEnd -= deflate;
             }
 
             iters++;
@@ -256,6 +296,9 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
             throw new LinearAlgebraException("Schur decomposition failed to converge in " + maxIterations + " iterations. " +
                     "Increasing maxIterationsFactor may allow for the decomposition to converge.");
         }
+
+        // Undo any transformations applied during balancing and reconstitute full matrix.
+        unbalance();
     }
 
 
@@ -273,11 +316,30 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
         setUpArrays();
 
-        hess.decompose(src);
-        T = hess.getUpper(); // Reduce matrix to upper Hessenburg form.
+        // Balance matrix.
+        balancer.decompose(src);
+        iLow = balancer.getILow();
+        iHigh = balancer.getIHigh();
+        T = balancer.getB();
+
+        // Reduce to upper Hessenburg form.
+        hess.decompose(T, iLow, iHigh);
+        T = hess.getUpper();
         // Initialize U as the product of transformations used in Hessenburg decomposition if requested.
         U = computeU ? hess.getQ() : null; // Hessenburg decomposition computes U lazily only when getQ() is called.
     }
+
+
+    /**
+     * <p>Reverts the scaling and permutations applied during the balancing step to obtain the correct form.
+     *
+     * <p>Specifically, this method computes
+     * <pre>
+     *     <b>U</b> := <b>PDU</b>
+     *        = <b>TU</b></pre>
+     * where <b>P</b> and <b>D</b> are the permutation and scaling matrices respectively from balancing.
+     */
+    protected abstract void unbalance();
 
 
     /**
@@ -291,26 +353,32 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * chosen to be a random value with the same magnitude as the lower right element of the working matrix. This can help the
      * QR converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
      * repeated eigenvalues.
-     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
-     *                   or possible 2x2 block upper triangular form.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      */
-    protected abstract void performExceptionalShift(int workingSize);
+    protected abstract void performExceptionalShift(int workEnd);
 
 
     /**
      * Performs a full iteration of the Francis implicit double shifted QR algorithm (this includes the bulge chase).
-     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
-     *                   or possible 2x2 block upper triangular form.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      */
-    protected abstract void performDoubleShift(int workingSize);
+    protected abstract void performDoubleShift(int workEnd);
 
 
     /**
      * Checks for convergence of lower 2x2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
      * convergence is found, this will also zero out the values which have converged to near zero.
-     * @param workingSize Size of current working matrix.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if
      * convergence to upper triangular form is detected and two if convergence to block upper triangular form is detected.
      */
-    protected abstract int checkConvergence(int workingSize);
+    protected abstract int checkConvergence(int workEnd);
+
+
+    /**
+     * Ensures that {@code src} only contains finite values.
+     * @param src Matrix of interest.
+     * @throws IllegalArgumentException If {@code src} does <em>not</em> contain only finite values.
+     */
+    protected abstract void checkFinite(T src);
 }
