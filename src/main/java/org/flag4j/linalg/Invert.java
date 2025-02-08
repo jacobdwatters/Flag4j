@@ -48,7 +48,7 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
 /**
  * This class provides methods for computing the inverse of a matrix. Specialized methods are provided for inverting triangular,
- * diagonal, and symmetric positive definite matrices.
+ * diagonal, and symmetric positive-definite matrices.
  */
 public final class Invert {
 
@@ -68,20 +68,6 @@ public final class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
     public static Matrix inv(Matrix src) {
-        // TODO: Verify new implementation then delete old (commented out) implementation.
-//        ValidateParameters.ensureSquareMatrix(src.shape);
-//        LU<Matrix> lu = new RealLU().decompose(src);
-//
-//        // Solve U*inv(A) = inv(L) for inv(A)
-//        RealBackSolver backSolver = new RealBackSolver(false);
-//        RealForwardSolver forwardSolver = new RealForwardSolver(true);
-//
-//        // Compute the inverse of unit lower triangular matrix L.
-//        Matrix Linv = forwardSolver.solveIdentity(lu.getL());
-//        Matrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
-//
-//        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
-
         return new RealExactSolver().solveIdentity(src);
     }
 
@@ -97,20 +83,6 @@ public final class Invert {
      * @throws SingularMatrixException If the {@code src} matrix is singular (i.e. not invertible).
      */
     public static CMatrix inv(CMatrix src) {
-        // TODO: Verify new implementation then delete old (commented out) implementation.
-//        ValidateParameters.ensureSquareMatrix(src.shape);
-//        LU<CMatrix> lu = new ComplexLU().decompose(src);
-//
-//        // Solve U*inv(A) = inv(L) for inv(A)
-//        ComplexBackSolver backSolver = new ComplexBackSolver();
-//        ComplexForwardSolver forwardSolver = new ComplexForwardSolver(true);
-//
-//        // Compute the inverse of unit lower triangular matrix L.
-//        CMatrix Linv = forwardSolver.solveIdentity(lu.getL());
-//        CMatrix inverse = backSolver.solveLower(lu.getU(), Linv); // Compute inverse of row permuted A.
-//
-//        return lu.getP().rightMult(inverse); // Finally, apply permutation matrix from LU decomposition.
-
         return new ComplexExactSolver().solveIdentity(src);
     }
 
@@ -228,8 +200,8 @@ public final class Invert {
 
 
     /**
-     * Inverts a symmetric positive definite matrix.
-     * @param src Positive definite matrix. It will <em>not</em> be verified if {@code src} is actually symmetric positive definite.
+     * Inverts a symmetric positive-definite matrix.
+     * @param src positive-definite matrix. It will <em>not</em> be verified if {@code src} is actually symmetric positive-definite.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.
@@ -241,10 +213,10 @@ public final class Invert {
 
 
     /**
-     * Inverts a symmetric positive definite matrix.
-     * @param src Positive definite matrix.
+     * Inverts a symmetric positive-definite matrix.
+     * @param src positive-definite matrix.
      * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually symmetric
-     *                    positive definite. <b>WARNING</b>: Checking if the matrix is positive definite can be very computationally
+     *                    positive-definite. <b>WARNING</b>: Checking if the matrix is positive-definite can be very computationally
      *                    expensive.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
@@ -263,8 +235,8 @@ public final class Invert {
 
 
     /**
-     * Inverts a Hermitian positive definite matrix.
-     * @param src Positive definite matrix. It will <em>not</em> be verified if {@code src} is actually Hermitian positive definite.
+     * Inverts a Hermitian positive-definite matrix.
+     * @param src positive-definite matrix. It will <em>not</em> be verified if {@code src} is actually Hermitian positive-definite.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
      * @throws SingularMatrixException If the {@code src} matrix is singular.
@@ -276,10 +248,10 @@ public final class Invert {
 
 
     /**
-     * Inverts a Hermitian positive definite matrix.
-     * @param src Positive definite matrix.
+     * Inverts a Hermitian positive-definite matrix.
+     * @param src positive-definite matrix.
      * @param checkPosDef Flag indicating if a check should be made to see if {@code src} is actually Hermitian
-     *                    positive definite. <b>WARNING</b>: Checking if the matrix is positive definite can be very computationally
+     *                    positive-definite. <b>WARNING</b>: Checking if the matrix is positive-definite can be very computationally
      *                    expensive.
      * @return The inverse of the {@code src} matrix.
      * @throws IllegalArgumentException If the matrix is not square.
@@ -351,11 +323,10 @@ public final class Invert {
     public static boolean isInv(Matrix src1, Matrix src2) {
         boolean result;
 
-        if(!src1.isSquare() || !src2.isSquare() || !src1.shape.equals(src2.shape)) {
+        if(!src1.isSquare() || !src2.isSquare() || !src1.shape.equals(src2.shape))
             result = false;
-        } else {
+        else
             result = src1.mult(src2).isCloseToI();
-        }
 
         return result;
     }

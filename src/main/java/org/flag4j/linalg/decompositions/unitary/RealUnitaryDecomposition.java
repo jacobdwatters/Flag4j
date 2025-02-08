@@ -30,9 +30,13 @@ import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.Flag4jConstants;
 
 /**
- * This class is the base class for real matrix decompositions which proceed by using unitary/orthogonal transformations
- * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the
- * QR and Hessenburg decompositions.
+ * <p>The base class for real matrix decompositions which proceed by using orthogonal transformations
+ * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the QR and
+ * Hessenburg decompositions.
+ *
+ * <p>This class is provided because both the QR and Hessenburg decompositions proceed by very similar computations resulting in a
+ * substantial amount of overlap in the implementations of the two decompositions. This class serves to implement these common
+ * computations such that implementations of either decomposition may utilize them without the need of reimplementing them.
  */
 public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matrix, double[]> {
 
@@ -134,13 +138,14 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      * <p>Gets the unitary {@code Q} matrix from the unitary decomposition.
      *
      * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
-     * null.
+     * {@code null}.
      *
      * @return The {@code Q} matrix from the unitary decomposition. Note, if the reflectors for this decomposition were not saved,
      * then {@code Q} can not be computed and this method will return {@code null}.
      */
     @Override
     public Matrix getQ() {
+        ensureHasDecomposed();
         if(!storeReflectors)
             return null;
 
@@ -151,8 +156,9 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
         for(int j=lastCol - 1; j>=startCol; j--) {
             householderVector[j] = 1.0; // Ensure first value of reflector is 1.
 
+            // Extract column containing reflector vector.
             for(int i=j + 1; i<iHigh; i++)
-                householderVector[i] = transformData[i*numCols + j - subDiagonal]; // Extract column containing reflector vector.
+                householderVector[i] = transformData[i*numCols + j - subDiagonal];
 
             if(qFactors[j]!=0) // Otherwise, no reflector to apply.
                 Householder.leftMultReflector(Q, householderVector, qFactors[j], j, j, iHigh, workArray);
@@ -168,6 +174,8 @@ public abstract class RealUnitaryDecomposition extends UnitaryDecomposition<Matr
      */
     @Override
     protected Matrix getUpper(Matrix H) {
+        ensureHasDecomposed();
+
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;

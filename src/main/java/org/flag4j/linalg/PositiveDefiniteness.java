@@ -32,7 +32,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * This class contains several methods for determining the positive definiteness of a matrix.
+ * This class contains several methods for determining the positive-definiteness of a matrix.
  */
 public final class PositiveDefiniteness {
 
@@ -44,12 +44,12 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
+     * Checks if the matrix is positive-definite. A matrix {@code M} is positive-definite iff
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if
      * all eigenvalues are strictly greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
-     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
+     * @param src Matrix to check if it is positive-definite.
+     * @return {@code true} if the matrix is positive-definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
     public static boolean isPosDef(Matrix src) {
@@ -66,12 +66,12 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is positive definite. A matrix {@code M} is positive definite iff
+     * Checks if the matrix is positive-definite. A matrix {@code M} is positive-definite iff
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is Hermitian and
      * all eigenvalues are strictly greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
-     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
+     * @param src Matrix to check if it is positive-definite.
+     * @return {@code true} if the matrix is positive-definite; {@code false} otherwise.
      * @see #isPosSemiDef(CMatrix)
      */
     public static boolean isPosDef(CMatrix src) {
@@ -88,12 +88,12 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is symmetric positive definite. A matrix {@code M} is positive definite iff
+     * Checks if the matrix is symmetric positive-definite. A matrix {@code M} is positive-definite iff
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
      * greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
-     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
+     * @param src Matrix to check if it is positive-definite.
+     * @return {@code true} if the matrix is positive-definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
     public static boolean isHermPosDef(Matrix src) {
@@ -102,7 +102,7 @@ public final class PositiveDefiniteness {
         try {
             new RealCholesky(true).decompose(src);
         } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive definite.
+            result = false; // Could not compute Cholesky decomposition. Matrix is not symmetric positive-definite.
         }
 
         return result;
@@ -110,12 +110,12 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is symmetric positive definite. A matrix {@code M} is positive definite iff
+     * Checks if the matrix is symmetric positive-definite. A matrix {@code M} is positive-definite iff
      * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
      * greater than zero.
      *
-     * @param src Matrix to check if it is positive definite.
-     * @return {@code true} if the matrix is positive definite; {@code false} otherwise.
+     * @param src Matrix to check if it is positive-definite.
+     * @return {@code true} if the matrix is positive-definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
     public static boolean isHermPosDef(CMatrix src) {
@@ -124,7 +124,7 @@ public final class PositiveDefiniteness {
         try {
             new ComplexCholesky(true).decompose(src);
         } catch(LinearAlgebraException | IllegalArgumentException e) {
-            result = false; // Could not compute Cholesky decomposition. Matrix is not Hermitian positive definite.
+            result = false; // Could not compute Cholesky decomposition. Matrix is not Hermitian positive-definite.
         }
 
         return result;

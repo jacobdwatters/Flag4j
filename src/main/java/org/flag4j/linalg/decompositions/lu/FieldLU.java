@@ -26,16 +26,62 @@ package org.flag4j.linalg.decompositions.lu;
 
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.dense.FieldMatrix;
+import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * <p>This class provides methods for computing the LU decomposition of a dense matrix whose elements are members
- * of a {@link Field}.
+ * <p>Instances of this class can be used to compute the LU decomposition of a dense field matrix.
  *
- * <p>The following decompositions are provided: {@code A=LU}, {@code PA=LU}, and {@code PAQ=LU} which are determined by the
- * {@link org.flag4j.linalg.decompositions.lu.LU.Pivoting pivoting} used.
- * .
+ * <p>The LU decomposition decomposes a rectangular matrix <b>A</b> into the product of
+ * a unit-lower triangular matrix <b>L</b> and an upper triangular matrix <b>U</b>, such that:
+ * <pre>
+ *     <b>A = LU</b></pre>
+ *
+ * <h3>Pivoting Strategies:</h3>
+ * <p>Pivoting may be used to improve the stability of the decomposition. Pivoting involves swapping rows and/or columns within the
+ * matrix during decomposition.
+ *
+ * <p>This class supports three pivoting strategies via the {@link Pivoting} enum:
+ * <ul>
+ *     <li>{@link Pivoting#NONE}: No pivoting is performed. This pivoting strategy is generally <em>not</em> recommended.</li>
+ *     <li>{@link Pivoting#PARTIAL}: Only row pivoting is performed to improve numerical stability.
+ *     Generally, this is the preferred pivoting strategy. The decomposition then becomes,
+ *     <pre>
+ *         <b>PA = LU</b></pre></li>
+ *     where <b>P</b> is a {@link PermutationMatrix permutation matrix} representing the row swaps.
+ *     <li>{@link Pivoting#FULL}: Both row and column pivoting are performed to enhance numerical robustness.
+ *     The decomposition then becomes,
+ *     <pre>
+ *         <b>PAQ = LU</b></pre>
+ *     where <b>P</b> and <b>Q</b> are {@link PermutationMatrix permutation matrices} representing the row and column swaps
+ *     respectively.
+ *
+ *     <p>Full pivoting <em>may</em> be useful for <em>highly</em> ill-conditioned matrices but, for practical
+ *     purposes, partial pivoting is generally sufficient and more performant.</li>
+ * </ul>
+ *
+ * <h3>Storage Format:</h3>
+ * The computed LU decomposition is stored within a single matrix {@code LU}, where:
+ * <ul>
+ *     <li>The upper triangular part (including the diagonal) represents the non-zero values of <b>U</b>.</li>
+ *     <li>The strictly lower triangular part represents the non-zero, non-diagonal values of <b>L</b>. Since <b>L</b> is
+ *     unit-lower triangular, the diagonal is not stored as it is known to be all zeros.</li>
+ * </ul>
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate a concrete subclass of {@code LU}.</li>
+ *     <li>Call {@link #decompose(FieldMatrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getL()}, {@link #getU()}, {@link #getP()}, and {@link #getQ()}.</li>
+ * </ol>
+ *
+ * @param <T> The type of matrix on which LU decomposition is performed.
+ *
+ * @see Pivoting
+ * @see PermutationMatrix
+ * @see FieldMatrix
  */
 public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
 
@@ -101,7 +147,12 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
             // Make the appropriate swaps in LU and P (This is the partial pivoting step).
-            if(j!=maxIndex && maxIndex>=0) swapRows(j, maxIndex);
+            if(j!=maxIndex && maxIndex>=0)
+                swapRows(j, maxIndex);
+
+            // Check for zero pivot after swapping.
+            if (j < LU.numRows && LU.data[j*LU.numCols + j].isZero())
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }
@@ -120,8 +171,14 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
             maxIndex = maxIndex(j);
 
             // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
-            if(j!=maxIndex[0] && maxIndex[0]!=-1) swapRows(j, maxIndex[0]);
-            if(j!=maxIndex[1] && maxIndex[1]!=-1) swapCols(j, maxIndex[1]);
+            if(j!=maxIndex[0] && maxIndex[0]!=-1)
+                swapRows(j, maxIndex[0]);
+            if(j!=maxIndex[1] && maxIndex[1]!=-1)
+                swapCols(j, maxIndex[1]);
+
+            // Check for zero pivot after both row and column swaps.
+            if (j < LU.numRows && LU.data[j*LU.numCols + j].isZero())
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }
@@ -209,17 +266,17 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      * Gets the unit lower triangular matrix of the decomposition.
      *
      * @return The lower triangular matrix of the decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(FieldMatrix)}.
      */
     @Override
     public FieldMatrix<T> getL() {
+        ensureHasDecomposed();
         FieldMatrix<T> L = new FieldMatrix(LU.numRows, Math.min(LU.numRows, LU.numCols), LU.data[0].getZero());
         final T ONE = LU.data[0].getOne();
 
         // Copy L values from LU matrix.
         for(int i=0; i<LU.numRows; i++) {
-            if(i<LU.numCols)
-                L.data[i*L.numCols+i] = ONE; // Set principle diagonal to be ones.
-
+            if(i<LU.numCols) L.data[i*L.numCols + i] = ONE; // Set principle diagonal to be ones.
             System.arraycopy(LU.data, i*LU.numCols, L.data, i*L.numCols, i);
         }
 
@@ -231,9 +288,11 @@ public class FieldLU<T extends Field<T>> extends LU<FieldMatrix<T>> {
      * Gets the upper triangular matrix of the decomposition.
      *
      * @return The lower triangular matrix of the decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(FieldMatrix)}.
      */
     @Override
     public FieldMatrix<T> getU() {
+        ensureHasDecomposed();
         FieldMatrix<T> U = new FieldMatrix<T>(Math.min(LU.numRows, LU.numCols), LU.numCols, LU.data[0].getZero());
         int stopIdx = Math.min(LU.numRows, LU.numCols);
 

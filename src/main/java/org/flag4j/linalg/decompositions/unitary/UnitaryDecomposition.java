@@ -34,13 +34,14 @@ import org.flag4j.util.ValidateParameters;
  * (specifically Householder reflectors) to bring a matrix into an upper triangular matrix (QR decomposition) or an upper Hessenburg
  * matrix (Hessenburg decomposition).
  *
- * <p>While the QR and Hessenburg decomposition are distinct, they have similar implementations and so this class provides common
- * code for the two decompositions.
+ * <p>This class is provided because both the QR and Hessenburg decompositions proceed by very similar computations resulting in a
+ * substantial amount of overlap in the implementations of the two decompositions. This class serves to implement these common
+ * computations such that implementations of either decomposition may utilize them without the need of reimplementing them.
  *
  * @param <T> Type of the matrix to be decomposed.
  * @param <U> Internal storage datatype of the matrix.
  */
-public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U> implements Decomposition<T> {
+public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomposition<T> {
 
     // TODO: We should consider storing the Householder vectors in the rows instead of in the columns.
     //  This could improve cache performance when reading the values from the vector.
@@ -171,6 +172,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
 
         reduce();
 
+        hasDecomposed = true;
         return this;
     }
 
