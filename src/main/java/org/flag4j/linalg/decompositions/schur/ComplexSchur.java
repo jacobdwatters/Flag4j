@@ -39,17 +39,50 @@ import org.flag4j.rng.RandomComplex;
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
 /**
- * <p>This class computes the Schur decomposition of a complex dense square matrix.
+ * <p>Instanced of this class can be used for computing the Schur decomposition of a real dense square matrix.
  *
- * <p>That is, decompose a square matrix A into A=UTU<sup>H</sup> where U is a unitary
- * matrix and T is a quasi-upper triangular matrix called the Schur form of A. T is upper triangular
- * except for possibly 2x2 blocks along the diagonal. T is similar to A. Meaning they share the same eigenvalues.
- * 
+ * <p>The Schur decomposition decomposes a given square matrix <b>A</b> into:
+ * <pre>
+ *     <b>A = UTU<sup>T</sup></b></pre>
+ * where <b>U</b> is an orthogonal matrix <b>T</b> is a
+ * quasi-upper triangular matrix known as the <em>Schur form</em> of <b>A</b>. This means <b>T</b> is upper triangular except
+ * for possibly 2&times;2 blocks along its diagonal, which correspond to complex conjugate pairs of eigenvalues.
  *
- * <p>This code was adapted from the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a> library and the description of
- * the Francis implicit double shifted QR algorithm given in
+ * <p>The Schur decomposition proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
+ * support specifying a seed for the pseudo-random number generator.
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate an instance of {@code ComplexSchur}.</li>
+ *     <li>Call {@link #decompose(CMatrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getT()}.</li>
+ * </ol>
+ *
+ * <h3>Efficiency Considerations:</h3>
+ * If eigenvectors are not required, setting {@code computeU = false} <em>may</em> improve performance.
+ *
+ * <p>This class was inspired by code from the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>
+ * library and the description of the Francis implicit double shifted QR algorithm from
  * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
  * Computations 3rd Edition by David S. Watkins</a>.
+ *
+ * @implNote This decomposition is performed using the <b>implicit double-shift QR algorithm</b>, which iteratively
+ * reduces the matrix to Schur form using orthogonal transformations. In addition to this, random shifting is used in cases where
+ * normal convergence fails.
+ *
+ * <p>As a preprocessing step to improve conditioning and stability, the matrix is first {@link ComplexBalancer balanced} then
+ * reduced to {@link ComplexHess Hessenberg form}.
+ *
+ * @param <T> The type of matrix to be decomposed.
+ * @param <U> The type for the internal storage data structure of the matrix to be decomposed.
+ *
+ * @see ComplexBalancer
+ * @see org.flag4j.linalg.decompositions.hess.ComplexHess
+ * @see #getT()
+ * @see #getU()
+ * @see #setMaxIterationFactor(int)
+ * @see #setExceptionalThreshold(int)
  */
 public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
@@ -63,7 +96,8 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
      */
     protected Complex128 norm;
     /**
-     * Stores the scalar factor &alpha for use in computation of the Householder reflector P = I - &alpha vv<sup>H</sup>.
+     * Stores the scalar factor &alpha for use in computation of the Householder reflector
+     * <b>P = I - </b>&alpha;<b> vv<sup>T</sup></b>.
      */
     protected Complex128 currentFactor;
 
@@ -71,7 +105,7 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
     /**
      * <p>Creates a decomposer to compute the Schur decomposition for a complex dense matrix.
      *
-     * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
+     * <p>Note: This decomposer <em>may</em> use random numbers during the decomposition. If reproducible results are needed,
      * set the seed for the pseudo-random number generator using {@link #ComplexSchur(long)}
      */
     public ComplexSchur() {
@@ -80,18 +114,18 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the U matrix may or may not
+     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the <b>U</b> matrix may or may not
      * be computed.
      *
-     * <p>If the U matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
+     * <p>If the <b>U</b> matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * <p>By default, if a constructor with no {@code computeU} parameter is called, U <b>WILL</b> be computed.
+     * <p>By default, if a constructor with no {@code computeU} parameter is called, <b>U</b> <em>will</em> be computed.
      *
      * <p>Note: This decomposer <em>may</em> use random numbers during the decomposition. If reproducible results are desired,
      * set the seed for the pseudo-random number generator using {@link #ComplexSchur(boolean, long)}
      *
      * @param computeU Flag indicating if the unitary U matrix should be computed for the Schur decomposition. If true,
-     * U will be computed. If false, U will not be computed.
+     * U will be computed. If false, <b>U</b> will not be computed.
      */
     public ComplexSchur(boolean computeU) {
         super(computeU, new RandomComplex(), new ComplexHess(computeU, true), new ComplexBalancer());
@@ -469,7 +503,7 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
 
 
     /**
-     * Checks for convergence of lower 2x2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
+     * Checks for convergence of lower 2&times;2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
      * convergence is found, this will also zero out the values which have converged to near zero.
      * @param workEnd The ending row (inclusive) of the current active working block.
      * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if

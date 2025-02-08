@@ -1098,12 +1098,12 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * as if they were row vectors resulting in a {@code 2&times;n} matrix.
      * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * as if they were column vectors resulting in a {@code n&times;2} matrix.
      * 
      *
      * @param b Vector to stack with this vector.

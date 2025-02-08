@@ -151,7 +151,7 @@ public final class RealComplexDenseSparseEquals {
                 colIndex = B.colIndices[i];
                 int idx = rowIndex*A.numCols + colIndex;
 
-                if(entriesCopy[idx] != ((Complex128) B.data[i]).re || ((Complex128) B.data[i]).im != 0) {
+                if(entriesCopy[idx] != B.data[i].re || B.data[i].im != 0) {
                     equal = false;
                     break;
                 }
@@ -230,7 +230,7 @@ public final class RealComplexDenseSparseEquals {
             for(int i=0; i<B.nnz; i++) {
                 entriesIndex = A.shape.getFlatIndex(B.indices[i]);
 
-                if(entriesCopy[entriesIndex] != ((Complex128) B.data[i]).re || ((Complex128) B.data[i]).im != 0) {
+                if(entriesCopy[entriesIndex] != (B.data[i]).re || (B.data[i]).im != 0) {
                     equal = false;
                     break;
                 }

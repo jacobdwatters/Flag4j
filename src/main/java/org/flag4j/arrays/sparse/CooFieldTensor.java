@@ -106,7 +106,7 @@ import java.util.List;
  * // Reshape tensor.
  * CooFieldTensor<Complex128> reshaped = tensor.reshape(15, 150, 45)
  *
- * // Compute tensor dot product (result is 5-by-5 dense tensor).
+ * // Compute tensor dot product (result is 5&times;5 dense tensor).
  * FieldTensor<Complex128> dot = tensor.dot(tensor,
  *      new int[]{0, 1, 2},
  *      new int[]{0, 1, 2}

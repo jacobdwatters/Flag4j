@@ -141,14 +141,14 @@ public final class ArrayUtils {
      * @return {@code true} if all data in {@code src2} have zero imaginary component and real component equal to the
      * corresponding entry in {@code src1}; {@code false} otherwise.
      */
-    public static <T extends Field<T>> boolean equals(double[] src1, T[] src2) {
+    public static boolean equals(double[] src1, Complex128[] src2) {
         boolean equal = true;
 
         if (src1.length != src2.length) {
             equal = false;
         } else {
             for(int i=0, size = src1.length; i < size; i++) {
-                if (src1[i] != ((Complex128) src2[i]).re || ((Complex128) src2[i]).im != 0) {
+                if (src1[i] != src2[i].re || src2[i].im != 0) {
                     equal = false;
                     break; // No need to continue.
                 }
@@ -874,7 +874,7 @@ public final class ArrayUtils {
         Complex128[] dest = new Complex128[src.length];
 
         for(int i=0, size=src.length; i<size; i++)
-            dest[i] = (Complex128) opp.apply(src[i]);
+            dest[i] = opp.apply(src[i]);
 
         return dest;
     }
@@ -895,7 +895,7 @@ public final class ArrayUtils {
         double[] dest = new double[src.length];
 
         for(int i=0, size=src.length; i<size; i++)
-            dest[i] = opp.apply((Complex128) src[i]);
+            dest[i] = opp.apply(src[i]);
 
         return dest;
     }

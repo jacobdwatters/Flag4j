@@ -61,7 +61,7 @@ public final class RealComplexDenseSparseVectorOps {
 
         for(int i=0; i<src2.nnz; i++) {
             index = src2.indices[i];
-            dest.data[index] = dest.data[index].add((Complex128) src2.data[i]);
+            dest.data[index] = dest.data[index].add(src2.data[i]);
         }
 
         return dest;
@@ -82,7 +82,7 @@ public final class RealComplexDenseSparseVectorOps {
 
         for(int i=0; i<src2.nnz; i++) {
             index = src2.indices[i];
-            dest.data[index] = dest.data[index].sub((Complex128) src2.data[i]);
+            dest.data[index] = dest.data[index].sub(src2.data[i]);
         }
 
         return dest;
@@ -105,7 +105,7 @@ public final class RealComplexDenseSparseVectorOps {
 
         for(int i=0; i<src1.nnz; i++) {
             int idx = src1.indices[i];
-            dest.data[idx] = dest.data[idx].add((Complex128) src1.data[i]);
+            dest.data[idx] = dest.data[idx].add(src1.data[i]);
         }
 
         return dest;
@@ -161,7 +161,7 @@ public final class RealComplexDenseSparseVectorOps {
         Complex128[] dest = new Complex128[src1.data.length];
 
         for(int i=0; i<src1.nnz; i++)
-            dest[i] = new Complex128(src1.data[i]).div((Complex128) src2.data[src1.indices[i]]);
+            dest[i] = new Complex128(src1.data[i]).div(src2.data[src1.indices[i]]);
 
         return new CooCVector(src1.size, dest, src1.indices.clone());
     }

@@ -187,7 +187,7 @@ public final class Invert {
         Complex128 det = Complex128.ONE;
 
         for(int i = 0; i<src.data.length; i+=step) {
-            value = (Complex128) src.data[i];
+            value = src.data[i];
             det = det.mult(value);
             inverse.data[i] = value.multInv();
         }

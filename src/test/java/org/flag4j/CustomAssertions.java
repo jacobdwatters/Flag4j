@@ -42,16 +42,16 @@ public final class CustomAssertions {
         Assertions.assertEquals(exp.shape, act.shape);
         for(int i = 0; i<exp.data.length; i++) {
             if(exp.data[i].isNaN()) {
-                if(Double.isNaN(((Complex128) exp.data[i]).re)) {
-                    assertTrue(Double.isNaN(((Complex128) act.data[i]).re));
+                if(Double.isNaN(exp.data[i].re)) {
+                    assertTrue(Double.isNaN(act.data[i].re));
                 } else {
-                    Assertions.assertEquals(((Complex128) exp.data[i]).re, ((Complex128) act.data[i]).re, 0);
+                    Assertions.assertEquals(exp.data[i].re, act.data[i].re, 0);
                 }
 
-                if(Double.isNaN(((Complex128) exp.data[i]).im)) {
-                    assertTrue(Double.isNaN(((Complex128) act.data[i]).im));
+                if(Double.isNaN(exp.data[i].im)) {
+                    assertTrue(Double.isNaN(act.data[i].im));
                 } else {
-                    Assertions.assertEquals(((Complex128) exp.data[i]).im, ((Complex128) act.data[i]).im, 0);
+                    Assertions.assertEquals(exp.data[i].im, act.data[i].im, 0);
                 }
             } else {
                 Assertions.assertEquals(exp.data[i], act.data[i]);

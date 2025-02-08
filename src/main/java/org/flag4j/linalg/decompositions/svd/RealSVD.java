@@ -36,9 +36,30 @@ import org.flag4j.linalg.Eigen;
  * <p>Instances of this class can be used to compute the singular value decomposition (SVD) of a
  * {@link Matrix real dense matrix}.
  *
- * <p>That is, decompose a rectangular matrix M as M=USV<sup>T</sup> where U and V are
- * orthogonal matrices whose columns are the left and right singular vectors of M and S is a rectangular
- * diagonal matrix containing the singular values of M.
+ * <p>That is, decomposes a rectangular matrix <b>M</b> into <b>M=U&Sigma;V</b><sup>T</sup> where <b>U</b> and <b>V</b> are
+ * orthogonal matrices whose columns are the left and right singular vectors of <b>M</b> and <b>&Sigma;</b> is a rectangular
+ * diagonal matrix containing the singular values of <b>M</b>.
+ *
+ * <p>The SVD may also be used to compute the (numerical) rank of the matrix using {@link #getRank()}.
+ *
+ * <p>The SVD proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
+ * support specifying a seed for the pseudo-random number generator.
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate an instance of {@code RealSVD}.</li>
+ *     <li>Call {@link #decompose(Matrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getS()}.</li>
+ * </ol>
+ *
+ * <h3>Efficiency Considerations:</h3>
+ * If singular vectors are not required, setting {@code computeUV = false} <em>may</em> improve performance.
+ *
+ * @see #getU()
+ * @see #getS()
+ * @see #getV()
+ * @see #getRank()
  */
 public class RealSVD extends SVD<Matrix> {
 
@@ -53,11 +74,13 @@ public class RealSVD extends SVD<Matrix> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix.
-     * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
-     *                  (i.e. the singular vectors). By default, this is true.<br>
-     *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
-     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
-     *                 needed, this may provide a performance improvement.
+     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * (i.e. the singular vectors).
+     * <ul>
+     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
+     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     needed, this <em>may</em> provide a performance improvement.</li>
+     * </ul>
      */
     public RealSVD(boolean computeUV) {
         super(computeUV, false);
@@ -66,17 +89,45 @@ public class RealSVD extends SVD<Matrix> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix.
-     * @param computeUV A flag which indicates if the orthogonal matrices {@code Q} and {@code V} should be computed
-     *                  (i.e. the singular vectors). By default, this is true.<br>
-     *                 - If true, the {@code Q} and {@code V} matrices will be computed.<br>
-     *                 - If false, the {@code Q} and {@code V} matrices  will <b>not</b> be computed. If they are not
-     *                 needed, this may provide a performance improvement.
-     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed. This is false by default.<br>
-     *                 - If true, reduced SVD is computed.
-     *                 - If false, the full SVD is computed.
+     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * (i.e. the singular vectors).
+     * <ul>
+     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
+     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     needed, this <em>may</em> provide a performance improvement.</li>
+     * </ul>
+     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * (i.e. the singular vectors).
+     * <ul>
+     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
+     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     needed, this <em>may</em> provide a performance improvement.</li>
+     * </ul>
      */
     public RealSVD(boolean computeUV, boolean reduced) {
         super(computeUV, reduced);
+    }
+
+
+    /**
+     * Creates a decomposer to compute the Schur decomposition.
+     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * (i.e. the singular vectors).
+     * <ul>
+     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
+     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     needed, this <em>may</em> provide a performance improvement.</li>
+     * </ul>
+     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.
+     * <ul>
+     *     <li>If {@code true}, reduced SVD is computed.</li>
+     *     <li>If {@code false}, the full SVD is computed.</li>
+     * </ul>
+     * @param seed Seed to use in pseudo-random number generators. Setting this will allow for reproducibility
+     * between multiple calls with the same inputs.
+     */
+    public RealSVD(boolean computeUV, boolean reduced, long seed) {
+        super(computeUV, reduced, seed);
     }
 
 
@@ -104,7 +155,7 @@ public class RealSVD extends SVD<Matrix> {
      */
     @Override
     protected Matrix makeEigenPairs(Matrix B, double[] eigVals) {
-        CMatrix[] pairs = Eigen.getEigenPairs(B);
+        CMatrix[] pairs = useSeed ? Eigen.getEigenPairs(B, seed) : Eigen.getEigenPairs(B);
         double[] vals = pairs[0].toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
 
@@ -121,17 +172,17 @@ public class RealSVD extends SVD<Matrix> {
      */
     @Override
     protected void makeEigenVals(Matrix B, double[] eigVals) {
-        CVector valsTest = Eigen.getEigenValues(B);
+        CVector valsTest = useSeed ? Eigen.getEigenValues(B, seed) : Eigen.getEigenValues(B);
         double[] vals = Eigen.getEigenValues(B).toReal().data;
         System.arraycopy(vals, 0, eigVals, 0, eigVals.length);
     }
 
 
     /**
-     * Initializes the unitary {@code U} and {@code V} matrices for the SVD.
+     * Initializes the unitary <b>U</b> and <b>V</b> matrices for the SVD.
      *
      * @param src Shape of the source matrix being decomposed.
-     * @param cols The number of columns for {@code U} and {@code V}.
+     * @param cols The number of columns for <b>U</b> and <b>V</b>.
      */
     @Override
     protected void initUV(Shape src, int cols) {
@@ -141,16 +192,16 @@ public class RealSVD extends SVD<Matrix> {
 
 
     /**
-     * Extracts the singular vectors, normalizes them and sets the columns of {@code U}
-     * and {@code V} to be the left/right singular vectors.
+     * Extracts the singular vectors, normalizes them and sets the columns of <b>U</b>
+     * and <b>V</b> to be the left/right singular vectors.
      *
      * @param singularVecs Computed left and right singular vectors.
-     * @param j            Index of the column of {@code U} and {@code V} to set.
+     * @param j            Index of the column of <b>U</b> and <b>V</b> to set.
      */
     @Override
     protected void extractNormalizedCols(Matrix singularVecs, int j) {
         // Extract left and right singular vectors and normalize.
-        V.setCol(singularVecs.getCol(2*j, 0, V.numRows()).normalize(), j);
-        U.setCol(singularVecs.getCol(2*j, V.numRows(), singularVecs.numRows()).normalize(), j);
+        V.setCol(singularVecs.getCol(2*j, 0, V.numRows).normalize(), j);
+        U.setCol(singularVecs.getCol(2*j, V.numRows, singularVecs.numRows).normalize(), j);
     }
 }

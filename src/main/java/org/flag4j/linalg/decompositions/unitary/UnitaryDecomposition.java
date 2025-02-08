@@ -189,6 +189,7 @@ public abstract class UnitaryDecomposition<T extends MatrixMixin<T, ?, ?, ?>, U>
 
         reduce();
 
+        hasDecomposed = true;
         return this;
     }
 

@@ -31,23 +31,42 @@ import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
- * Computes the Hessenburg decomposition of a complex dense Hermitian matrix. That is, for a square, Hermitian matrix
- * A, computes the decomposition A=QHQ<sup>H</sup> where Q is an unitary matrix and
- * H is a Hermitian matrix in tri-diagonal form (special case of Hessenburg form) which is similar to A
- * (i.e. has the same eigenvalues).
- * <p>
- * A matrix H is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonal.
- * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.
- * <p>
- * For example, the following matrix is in Hermitian tri-diagonal form where each 'x' may hold a different value (provided
+ * <p>Computes the Hessenberg decomposition of a real dense Hermitian matrix.
+ * <p>The Hessenberg decomposition decomposes a given Hermitian matrix <b>A</b> into the product:
+ * <pre>
+ *     <b>A = QHQ<sup>H</sup></b></pre>
+ * where <b>Q</b> is an orthogonal matrix and <b>H</b> is a Hermitian tri-diagonal matrix (special case of Hessenburg form)
+ * which is similar to <b>A</b> (i.e. has the same eigenvalues)
+ *
+ * <p>A matrix <b>H</b> is in tri-diagonal form if it has all zeros below the first sub-diagonal and above the first super-diagonal.
+ *
+ * <p>For example, the following matrix is in Hermitian tri-diagonal form where each '&times;' may hold a different value (provided
  * the matrix is Hermitian):
  * <pre>
- *     [[ x x 0 0 0 ]
- *      [ x x x 0 0 ]
- *      [ 0 x x x 0 ]
- *      [ 0 0 x x x ]
- *      [ 0 0 0 x x ]]</pre>
+ *     [[ &times; &times; 0 0 0 ]
+ *      [ &times; &times; &times; 0 0 ]
+ *      [ 0 &times; &times; &times; 0 ]
+ *      [ 0 0 &times; &times; &times; ]
+ *      [ 0 0 0 &times; &times; ]]</pre>
  *
+ * <h3>Efficiency Considerations:</h3>
+ * <ul>
+ *     <li>If the orthogonal matrix <b>Q</b> is not required, setting {@code computeQ = false} in the constructor
+ *     <em>may</em> improve performance.</li>
+ *     <li>Support for in-place decomposition to reduce memory usage.</li>
+ * </ul>
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate an instance of {@code HermHess}.</li>
+ *     <li>Call {@link #decompose(CMatrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getH()} and {@link #getQ()}.</li>
+ * </ol>
+ *
+ * @see SymmHess
+ * @see #getH()
+ * @see #getQ()
  */
 public class HermHess extends ComplexHess {
 
@@ -58,7 +77,7 @@ public class HermHess extends ComplexHess {
 
     /**
      * Constructs a Hessenberg decomposer for Hermitian matrices. By default, the Householder vectors used in the decomposition will be
-     * stored so that the full unitary {@code Q} matrix can be formed by calling {@link #getQ()}.
+     * stored so that the full unitary <b>Q</b> matrix can be formed by calling {@link #getQ()}.
      */
     public HermHess() {
         super();
@@ -67,8 +86,8 @@ public class HermHess extends ComplexHess {
 
     /**
      * Constructs a Hessenberg decomposer for Hermitian matrices.
-     * @param computeQ Flag indicating if the unitary {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the {@code Q} matrix will be computed explicitly.
+     * @param computeQ Flag indicating if the unitary <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the <b>Q</b> matrix will be computed explicitly.
      */
     public HermHess(boolean computeQ) {
         super(computeQ);
@@ -77,8 +96,8 @@ public class HermHess extends ComplexHess {
 
     /**
      * Constructs a Hessenberg decomposer for Hermitian matrices.
-     * @param computeQ Flag indicating if the unitary {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the {@code Q} matrix will be computed explicitly.
+     * @param computeQ Flag indicating if the unitary <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the <b>Q</b> matrix will be computed explicitly.
      * @param enforceHermitian Flag indicating if an explicit check should be made to ensure any matrix passed to
      * {@link #decompose(CMatrix)} is truly Hermitian. If true, an exception will be thrown if the matrix is not Hermitian. If false,
      * the decomposition will proceed under the assumption that the matrix is Hermitian whether it actually is or not. If the
@@ -86,6 +105,26 @@ public class HermHess extends ComplexHess {
      */
     public HermHess(boolean computeQ, boolean enforceHermitian) {
         super(computeQ);
+        this.enforceHermitian = enforceHermitian;
+    }
+
+
+    /**
+     * Constructs a Hessenberg decomposer for Hermitian matrices.
+     * @param computeQ Flag indicating if the unitary <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the <b>Q</b> matrix will be computed explicitly.
+     * @param enforceHermitian Flag indicating if an explicit check should be made to ensure any matrix passed to
+     * {@link #decompose(CMatrix)} is truly Hermitian. If true, an exception will be thrown if the matrix is not Hermitian. If false,
+     * the decomposition will proceed under the assumption that the matrix is Hermitian whether it actually is or not. If the
+     * matrix is not Hermitian, then the values in the upper triangular portion of the matrix are taken to be the values.
+     * @param inPlace Flag indicating if the decomposition should be done in-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in place.</li>
+     *     <li>If {@code false}, then the decomposition will be done out-of-place.</li>
+     * </ul>
+     */
+    public HermHess(boolean computeQ, boolean enforceHermitian, boolean inPlace) {
+        super(computeQ, inPlace);
         this.enforceHermitian = enforceHermitian;
     }
 
@@ -104,8 +143,8 @@ public class HermHess extends ComplexHess {
 
 
     /**
-     * Gets the Hessenberg matrix from the decomposition. The matrix will be Hermitian tri-diagonal.
-     * @return The Hermitian tri-diagonal (Hessenberg) matrix from this decomposition.
+     * Gets the Hessenberg matrix, <b>H</b>, from the decomposition. The matrix will be Hermitian tri-diagonal.
+     * @return The Hermitian tri-diagonal (Hessenberg) matrix, <b>H</b>, from this decomposition.
      */
     @Override
     public CMatrix getH() {

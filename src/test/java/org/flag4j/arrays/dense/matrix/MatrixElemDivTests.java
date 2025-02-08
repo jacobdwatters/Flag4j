@@ -72,16 +72,16 @@ class MatrixElemDivTests {
         resultC = A.div(BC);
 
         for(int i = 0; i<resultC.data.length; i++) {
-            if(Double.isNaN(((Complex128) expResultC.data[i]).re)) {
-                assertTrue(Double.isNaN(((Complex128) resultC.data[i]).re));
+            if(Double.isNaN((expResultC.data[i]).re)) {
+                assertTrue(Double.isNaN((resultC.data[i]).re));
             } else {
-                assertEquals(((Complex128) expResultC.data[i]).re, ((Complex128) resultC.data[i]).re);
+                assertEquals((expResultC.data[i]).re, (resultC.data[i]).re);
             }
 
-            if(Double.isNaN(((Complex128) expResultC.data[i]).im)) {
-                assertTrue(Double.isNaN(((Complex128) resultC.data[i]).im));
+            if(Double.isNaN((expResultC.data[i]).im)) {
+                assertTrue(Double.isNaN((resultC.data[i]).im));
             } else {
-                assertEquals(((Complex128) expResultC.data[i]).im, ((Complex128) resultC.data[i]).im);
+                assertEquals((expResultC.data[i]).im, (resultC.data[i]).im);
             }
         }
 

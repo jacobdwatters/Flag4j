@@ -74,12 +74,12 @@ public final class DenseCsrSemiringMatMult {
 
             for(int aIndex=start; aIndex<stop; aIndex++) {
                 int aCol = src1.colIndices[aIndex];
-                Complex128 aVal = (Complex128) src1.data[aIndex];
+                T aVal = src1.data[aIndex];
                 int src2Idx = aCol*src2.numCols;
                 int destIdx = rowOffset;
 
                 while(destIdx < innerStop)
-                    destEntries[destIdx] = destEntries[destIdx++].add(src2.data[src2Idx++].mult((T) aVal));
+                    destEntries[destIdx] = destEntries[destIdx++].add(src2.data[src2Idx++].mult(aVal));
             }
         }
 
