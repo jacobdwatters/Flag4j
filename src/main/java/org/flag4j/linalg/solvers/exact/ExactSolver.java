@@ -33,6 +33,7 @@ import org.flag4j.linalg.solvers.LinearMatrixSolver;
 import org.flag4j.linalg.solvers.exact.triangular.BackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ForwardSolver;
 import org.flag4j.util.ValidateParameters;
+import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
@@ -127,7 +128,11 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
         ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
         ValidateParameters.ensureAllEqual(A.numCols(), b.length()); // b must have the same number of data as columns in A.
 
-        decompose(A); // Compute LU decomposition.
+        try {
+            decompose(A); // Compute LU decomposition.
+        } catch (LinearAlgebraException e) {
+            throw new SingularMatrixException(e.getMessage());
+        }
 
         U y = forwardSolver.solve(LU, permuteRows(b));
         return backSolver.solve(LU, y); // If A is singular, then U will be singular, and it will be discovered here.
@@ -150,7 +155,11 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
         ValidateParameters.ensureSquareMatrix(A.getShape()); // Ensure A is square.
         ValidateParameters.ensureAllEqual(A.numCols(), B.numRows()); // b must have the same number of data as columns in A.
 
-        decompose(A); // Compute LU decomposition.
+        try {
+            decompose(A); // Compute LU decomposition.
+        } catch (LinearAlgebraException e) {
+            throw new SingularMatrixException(e.getMessage());
+        }
 
         T Y = forwardSolver.solve(LU, permuteRows(B));
         return backSolver.solve(LU, Y); // If A is singular, it will be discovered in the back solve.

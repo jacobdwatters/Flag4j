@@ -44,7 +44,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * @param <T> The type of matrix to be decomposed.
  * @param <U> The type for the internal storage datastructure of the matrix to be decomposed.
  */
-public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Decomposition<T> {
+public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomposition<T> {
 
     /**
      * Random number generator to be used when computing a random exceptional shift.

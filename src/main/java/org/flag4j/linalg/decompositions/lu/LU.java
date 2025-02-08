@@ -31,26 +31,72 @@ import org.flag4j.util.ArrayBuilder;
 
 
 /**
- * <p>This abstract class specifies methods for computing the LU decomposition of a matrix.
+ * <p>An abstract base class for LU decomposition of a matrix.
  *
- * <p>The {@code LU} decomposition, decomposes a matrix {@code A} into a unit lower triangular matrix {@code L}
- * and an upper triangular matrix {@code U} such that {@code A=LU}.
+ * <p>The LU decomposition decomposes a matrix <b>A</b> into the product of
+ * a unit-lower triangular matrix <b>L</b> and an upper triangular matrix <b>U</b>, such that:
+ * <pre>
+ *     <b>A = LU</b></pre>
  *
- * <p>If partial pivoting is used, the decomposition will also yield a permutation matrix {@code P} such that
- * {@code PA=LU}.
+ * <h3>Pivoting Strategies:</h3>
+ * <p>Pivoting may be used to improve the stability of the decomposition. Pivoting involves swapping rows and/or columns within the
+ * matrix during decomposition.
  *
- * <p>If full pivoting is used, the decomposition will yield an additional permutation matrix {@code Q} such that
- *  {@code PAQ=LU}.
+ * <p>This class supports three pivoting strategies via the {@link Pivoting} enum:
+ * <ul>
+ *     <li>{@link Pivoting#NONE}: No pivoting is performed. This pivoting strategy is generally <em>not</em> recommended.</li>
+ *     <li>{@link Pivoting#PARTIAL}: Only row pivoting is performed to improve numerical stability.
+ *     Generally, this is the preferred pivoting strategy. The decomposition then becomes,
+ *     <pre>
+ *         <b>PA = LU</b></pre></li>
+ *     where <b>P</b> is a {@link PermutationMatrix permutation matrix} representing the row swaps.
+ *     <li>{@link Pivoting#FULL}: Both row and column pivoting are performed to enhance numerical robustness.
+ *     The decomposition then becomes,
+ *     <pre>
+ *         <b>PAQ = LU</b></pre>
+ *     where <b>P</b> and <b>Q</b> are {@link PermutationMatrix permutation matrices} representing the row and column swaps
+ *     respectively.
  *
- * @param <T> Type of the matrix to decompose.
+ *     <p>Full pivoting <em>may</em> be useful for <em>highly</em> ill-conditioned matrices but, for practical
+ *     purposes, partial pivoting is generally sufficient and more performant.</li>
+ * </ul>
+ *
+ * <h3>Storage Format:</h3>
+ * The computed LU decomposition is stored within a single matrix {@code LU}, where:
+ * <ul>
+ *     <li>The upper triangular part (including the diagonal) represents the non-zero values of <b>U</b>.</li>
+ *     <li>The strictly lower triangular part represents the non-zero, non-diagonal values of <b>L</b>. Since <b>L</b> is
+ *     unit-lower triangular, the diagonal is not stored as it is known to be all zeros.</li>
+ * </ul>
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate a concrete subclass of {@code LU}.</li>
+ *     <li>Call {@link #decompose(MatrixMixin)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getL()}, {@link #getU()}, {@link #getP()}, and {@link #getQ()}.</li>
+ * </ol>
+ *
+ * <h3>Implementation Notes:</h3>
+ * <p>Subclasses must implement the specific pivoting strategies by defining:
+ * <ul>
+ *     <li>{@link #noPivot()} - LU decomposition without pivoting.</li>
+ *     <li>{@link #partialPivot()} - LU decomposition with row pivoting.</li>
+ *     <li>{@link #fullPivot()} - LU decomposition with full pivoting.</li>
+ * </ul>
+ *
+ * @param <T> The type of matrix on which LU decomposition is performed.
+ *
+ * @see Pivoting
+ * @see PermutationMatrix
  */
-public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
+public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> extends Decomposition<T> {
 
     /**
-     * Simple error message for a zero pivot encountered.
+     * Error message for when a zero pivot is encountered.
      */
-    protected static final String ZERO_PIV_ERR = "Zero pivot encountered in decomposition." +
-            " Consider using LU decomposition with partial pivoting.";
+    protected static final String ZERO_PIV_ERR = "Zero pivot encountered in decomposition LU decomposition.";
+
 
     /**
      * Flag indicating what pivoting to use.
@@ -65,22 +111,37 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
      */
     protected final boolean inPlace;
     /**
-     * Storage for L and U matrices. Stored in a single matrix
+     * <p>Storage for <b>L</b> and <b>U</b> matrices. Stored in a single matrix.
+     *
+     * <p>The upper triangular portion of {@code LU}, including the diagonal, stores the non-zero values of <b>U</b> while the lower
+     * triangular portion, excluding the diagonal, stores the non-zero, non-diagonal values of <b>L</b>.
+     * Since <b>L</b> is unit-lower triangular, the diagonal need not be stored as it is known to be all ones.
      */
     protected T LU;
     /**
-     * Permutation matrix to store row swaps if partial pivoting is used.
+     * Permutation matrix to store row swaps if {@link Pivoting#PARTIAL partial pivoting} is used.
      */
     protected PermutationMatrix P;
     /**
-     * Permutation matrix to store column swaps if full pivoting is used.
+     * Permutation matrix to store column swaps if {@link Pivoting#FULL full pivoting} is used.
      */
     protected PermutationMatrix Q;
-
-    protected int numRowSwaps; // Tracks the number of row swaps made during full/partial pivoting.
-    protected int numColSwaps; // Tracks the number of column swaps made during full pivoting.
-    protected int[] rowSwaps; // Array for keeping track of row swaps made with full/partial pivoting.
-    protected int[] colSwaps; // Array for keeping track of column swaps made during full pivoting.
+    /**
+     * Tracks the number of row swaps made during partial/full pivoting.
+     */
+    protected int numRowSwaps;
+    /**
+     * Tracks the number of column swaps made during full pivoting.
+     */
+    protected int numColSwaps;
+    /**
+     * Array to track row swaps made with full/partial pivoting.
+     */
+    protected int[] rowSwaps;
+    /**
+     * Array to track column swaps made with full pivoting.
+     */
+    protected int[] colSwaps;
 
     /**
      * Constructs a LU decomposer with the specified pivoting.
@@ -98,9 +159,10 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
 
 
     /**
-     * Applies {@code LU} decomposition to the source matrix using the pivoting specified in the constructor.
+     * Applies LU decomposition to the source matrix using the pivoting specified in the constructor.
      *
-     * @param src The source matrix to decompose. Not modified.
+     * @param src The source matrix to decompose. If {@code inPlace} was {@code true} in the constructor then this matrix will be
+     * modified.
      * @return A reference to this decomposer.
      */
     @Override
@@ -121,6 +183,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
             fullPivot();
         }
 
+        super.hasDecomposed = true;
         return this;
     }
 
@@ -153,12 +216,14 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
 
 
     /**
-     * Gets the {@code L} and {@code U} matrices of the decomposition combined in a single matrix.
-     * @return The {@code L} and {@code U} matrices of the decomposition stored together in a single matrix.
-     * The diagonal of {@code L} is all ones and is not stored allowing the diagonal of {@code U} to be stored along
+     * Gets the <b>L</b> and <b>U</b> matrices of the decomposition combined in a single matrix.
+     * @return The <b>L</b> and <b>U</b> matrices of the decomposition stored together in a single matrix.
+     * The diagonal of <b>L</b> is all ones and is not stored allowing the diagonal of <b>U</b> to be stored along
      * the diagonal of the combined matrix.
+     * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
     public T getLU() {
+        ensureHasDecomposed();
         return LU;
     }
 
@@ -166,6 +231,7 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
     /**
      * Gets the unit lower triangular matrix of the decomposition.
      * @return The unit lower triangular matrix of the decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
     public abstract T getL();
 
@@ -173,15 +239,18 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
     /**
      * Gets the upper triangular matrix of the decomposition.
      * @return The upper triangular matrix of the decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
     public abstract T getU();
 
 
     /**
      * Gets the row permutation matrix of the decomposition.
-     * @return The row permutation matrix of the decomposition. If no pivoting was used, null will be returned.
+     * @return The row permutation matrix of the decomposition. If <em>no</em> pivoting was used, {@code null} will be returned.
+     * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
     public PermutationMatrix getP() {
+        ensureHasDecomposed();
         if(rowSwaps != null) P = new PermutationMatrix(rowSwaps);
         else P = null;
 
@@ -191,9 +260,12 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
 
     /**
      * Gets the column permutation matrix of the decomposition.
-     * @return The column permutation matrix of the decomposition. If full pivoting was not used, null will be returned.
+     * @return The column permutation matrix of the decomposition. If full pivoting was <em>not</em> used, {@code null} will be
+     * returned.
+     * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
     public PermutationMatrix getQ() {
+        ensureHasDecomposed();
         // Invert to ensure matrix represents column swaps.
         if(colSwaps != null) Q = new PermutationMatrix(colSwaps).inv();
         else Q = null;
@@ -205,8 +277,10 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
     /**
      * Gets the number of row swaps used in the last decomposition.
      * @return The number of row swaps used in the last decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
     public int getNumRowSwaps() {
+        ensureHasDecomposed();
         return numRowSwaps;
     }
 
@@ -214,8 +288,10 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
     /**
      * Gets the number of column swaps used in the last decomposition.
      * @return The number of column swaps used in the last decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
     public int getNumColSwaps() {
+        ensureHasDecomposed();
         return numColSwaps;
     }
 
@@ -255,21 +331,5 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposi
      */
     public enum Pivoting {
         NONE, PARTIAL, FULL;
-
-        /**
-         * Converts an ordinal to the corresponding pivot flag.
-         * @param ordinal Ordinal to convert.
-         * @return The pivot flag with the corresponding ordinal. If the no pivot exists with the specified ordinal,
-         * {@link #PARTIAL} is returned.
-         */
-        private static Pivoting get(int ordinal) {
-            if(ordinal == Pivoting.FULL.ordinal()) {
-                return Pivoting.FULL;
-            } else if(ordinal == Pivoting.NONE.ordinal()) {
-                return Pivoting.NONE;
-            } else {
-                return Pivoting.PARTIAL;
-            }
-        }
     }
 }

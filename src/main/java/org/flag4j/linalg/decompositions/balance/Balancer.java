@@ -88,7 +88,7 @@ import org.flag4j.util.ValidateParameters;
  * @see #applyLeftTransform(MatrixMixin) 
  * @see #applyRightTransform(MatrixMixin)
  */
-public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
+public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomposition<T> {
 
     /**
      * Simple scaling factor used to help ensure safe scaling without over/underflow.

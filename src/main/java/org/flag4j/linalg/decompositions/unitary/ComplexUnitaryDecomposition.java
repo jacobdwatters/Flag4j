@@ -35,9 +35,9 @@ import org.flag4j.util.Flag4jConstants;
  * (specifically Householder reflectors) to bring a matrix into an upper triangular/Hessenburg matrix. Specifically, the QR and
  * Hessenburg decompositions.
  *
- * <p>This class is provided because both the QR and Hessenburg matrix proceed by very similar computations resulting in a
+ * <p>This class is provided because both the QR and Hessenburg decompositions proceed by very similar computations resulting in a
  * substantial amount of overlap in the implementations of the two decompositions. This class serves to implement these common
- * computations such that both decompositions may utilize them without the need of reimplementing them.
+ * computations such that implementations of either decompositions may utilize them without the need of reimplementing them.
  */
 public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<CMatrix, Complex128[]> {
 
@@ -141,13 +141,14 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      * <p>Gets the unitary {@code Q} matrix from the {@code QR} decomposition.
      *
      * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
-     * null.
+     * {@code null}.
      *
      * @return The {@code Q} matrix from the {@code QR} decomposition. Note, if the reflectors for this decomposition were not saved,
      * then {@code Q} can not be computed and this method will return {@code null}.
      */
     @Override
     public CMatrix getQ() {
+        ensureHasDecomposed();
         if(!storeReflectors)
             return null;
 
@@ -156,12 +157,13 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
         for(int j=minAxisSize - 1; j>=subDiagonal; j--) {
             householderVector[j] = Complex128.ONE; // Ensure first value of reflector is 1.
 
+            // Extract column containing reflector vector.
             for(int i=j + 1; i<numRows; i++)
-                householderVector[i] = transformData[i*numCols + j - subDiagonal]; // Extract column containing reflector vector.
+                householderVector[i] = transformData[i*numCols + j - subDiagonal];
 
-            if(!(qFactors[j]==null || qFactors[j].equals(Complex128.ZERO))) { // Otherwise, no reflector to apply.
+
+            if(!(qFactors[j]==null || qFactors[j].equals(Complex128.ZERO))) // Otherwise, no reflector to apply.
                 Householder.leftMultReflector(Q, householderVector, qFactors[j], j, j, numRows, workArray);
-            }
         }
 
         return Q;
@@ -174,6 +176,7 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
      */
     @Override
     protected CMatrix getUpper(CMatrix H) {
+        ensureHasDecomposed();
         // Copy top rows.
         for(int i=0; i<subDiagonal; i++) {
             int rowOffset = i*numCols;

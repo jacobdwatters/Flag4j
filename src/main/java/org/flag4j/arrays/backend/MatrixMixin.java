@@ -565,7 +565,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
      * @return The lower-triangular portion of this matrix. with all other data in the resulting matrix will be zero.
      */
     default T getTriL() {
-        return getTriU(0);
+        return getTriL(0);
     }
 
 
