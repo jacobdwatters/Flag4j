@@ -562,15 +562,15 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
     /**
      * Gets the diagonal scaling matrix for the last matrix balanced by this balancer.
      * @param full Flag indicating if the full diagonal scaling matrix should be constructed or if only the scaling factors should
-     * be returned. If the last matrix balanced had shape n-by-n then,
+     * be returned. If the last matrix balanced had shape n&times;n then,
      * <ul>
-     *     <li>If {@code true}: The full n-by-n diagonal scaling matrix will be created.</li>
-     *     <li>If {@code false}: A matrix of shape 1-by-n containing only the scaling factors
+     *     <li>If {@code true}: The full n&times;n diagonal scaling matrix will be created.</li>
+     *     <li>If {@code false}: A matrix of shape 1&times;n containing only the scaling factors
      *     (i.e. the diagonal entries of the full scaling matrix).
      *     </li>
      * </ul>
-     * @return If {@code full == true} then the full n-by-n scaling matrix is returned. Otherwise if {@code full == false}
-     * a matrix of shape 1-by-n containing only the diagonal scaling factors is returned.
+     * @return If {@code full == true} then the full n&times;n scaling matrix is returned. Otherwise if {@code full == false}
+     * a matrix of shape 1&times;n containing only the diagonal scaling factors is returned.
      * @see #getD()
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -607,7 +607,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
      * <p> Note, this method will <i>not</i> construct the full diagonal scaling matrix. If the full matrix is desired, use
      * {@link #getD(boolean)}.
      *
-     * @return A 1-by-n matrix containing the diagonal elements of the full n-by-n diagonal scaling matrix.
+     * @return A 1&times;n matrix containing the diagonal elements of the full n&times;n diagonal scaling matrix.
      * @see #getD(boolean)
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */

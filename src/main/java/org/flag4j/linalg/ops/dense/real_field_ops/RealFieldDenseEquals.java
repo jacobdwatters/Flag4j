@@ -24,6 +24,7 @@
 
 package org.flag4j.linalg.ops.dense.real_field_ops;
 
+import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
@@ -39,7 +40,6 @@ public final class RealFieldDenseEquals {
 
     private RealFieldDenseEquals() {
         // Hide default constructor.
-        
     }
 
 
@@ -74,6 +74,6 @@ public final class RealFieldDenseEquals {
      * @return True if the two tensors are numerically element-wise equivalent.
      */
     public static <T extends Field<T>> boolean tensorEquals(double[] src1, Shape shape1, T[] src2, Shape shape2) {
-        return shape1.equals(shape2) && ArrayUtils.equals(src1, src2);
+        return shape1.equals(shape2) && ArrayUtils.equals(src1, (Complex128[]) src2);
     }
 }

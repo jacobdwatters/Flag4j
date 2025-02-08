@@ -108,10 +108,10 @@ public final class RealDenseDeterminant {
 
 
     /**
-     * Explicitly computes the determinant of a 2x2 matrix.
+     * Explicitly computes the determinant of a 2&times;2 matrix.
      *
      * @param A Matrix to compute the determinant of.
-     * @return The determinant of the 2x2 matrix.
+     * @return The determinant of the 2&times;2 matrix.
      */
     public static double det2(Matrix A) {
         ValidateParameters.ensureEqualShape(A.shape, new Shape(2, 2));

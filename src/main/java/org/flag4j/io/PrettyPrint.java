@@ -25,7 +25,6 @@
 package org.flag4j.io;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -102,7 +101,7 @@ public final class PrettyPrint {
 
         // Get data up until the stopping point.
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
-            value = StringUtils.ValueOfRound((Complex128) arr[i], precision);
+            value = StringUtils.ValueOfRound(arr[i], precision);
             width = padding + value.length();
             value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -116,7 +115,7 @@ public final class PrettyPrint {
             result.append(String.format("%-" + width + "s", value));
         }
 
-        value = StringUtils.ValueOfRound((Complex128) arr[arr.length-1], PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(arr[arr.length-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));

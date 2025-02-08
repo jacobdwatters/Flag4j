@@ -273,7 +273,7 @@ public class RandomComplex extends Random {
         if(corrCoeff <= -1.0 || corrCoeff >= 1.0)
             throw new IllegalArgumentException("Correlation coefficient must be in range (-1, 1) but got: " + corrCoeff + ".");
 
-        // Unrolled Cholesky decomposition of the 2-by-2 covariance matrix.
+        // Unrolled Cholesky decomposition of the 2&times;2 covariance matrix.
         double l11 = Math.sqrt(stdRe*stdRe);
         double l21 = corrCoeff*stdRe*stdIm / l11;
         double l22 = Math.sqrt(stdIm*stdIm - l21 * l21);
@@ -477,7 +477,7 @@ public class RandomComplex extends Random {
         if(corrCoeff <= -1.0 || corrCoeff >= 1.0)
             throw new IllegalArgumentException("Correlation coefficient must be in range (-1, 1) but got: " + corrCoeff + ".");
 
-        // Unrolled Cholesky decomposition of the 2-by-2 covariance matrix.
+        // Unrolled Cholesky decomposition of the 2&times;2 covariance matrix.
         float l11 = (float) Math.sqrt(stdRe*stdRe);
         float l21 = corrCoeff*stdRe*stdIm / l11;
         float l22 = (float) Math.sqrt(stdIm*stdIm - l21 * l21);

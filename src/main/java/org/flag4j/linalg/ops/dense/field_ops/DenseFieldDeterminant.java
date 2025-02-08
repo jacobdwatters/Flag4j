@@ -109,11 +109,11 @@ public final class DenseFieldDeterminant {
      */
     public static <T extends Field<T>> T detTriUnsafe(AbstractDenseFieldMatrix<?, ?, T> tri) {
         if(tri == null || tri.data.length == 0) return null;
-        T detU = (T) tri.data[0];
+        T detU = tri.data[0];
 
         // Compute the determinant of tri
         for(int i=1, size=tri.numRows; i<size; i++)
-            detU = detU.mult((T) tri.data[i*tri.numCols + i]);
+            detU = detU.mult(tri.data[i*tri.numCols + i]);
 
         return detU;
     }
@@ -126,21 +126,21 @@ public final class DenseFieldDeterminant {
      */
     public static <T extends Field<T>> T det3(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(3, 3));
-        T det = mat.data[0].mult(mat.data[4].mult((T) mat.data[8]).sub(mat.data[5].mult((T) mat.data[7])));
-        det = det.sub(mat.data[1].mult(mat.data[3].mult((T) mat.data[8]).sub(mat.data[5].mult((T) mat.data[6]))));
-        det = det.add(mat.data[2].mult(mat.data[3].mult((T) mat.data[7]).sub(mat.data[4].mult((T) mat.data[6]))));
+        T det = mat.data[0].mult(mat.data[4].mult(mat.data[8]).sub(mat.data[5].mult(mat.data[7])));
+        det = det.sub(mat.data[1].mult(mat.data[3].mult(mat.data[8]).sub(mat.data[5].mult(mat.data[6]))));
+        det = det.add(mat.data[2].mult(mat.data[3].mult(mat.data[7]).sub(mat.data[4].mult(mat.data[6]))));
         return det;
     }
 
 
     /**
-     * Explicitly computes the determinant of a 2x2 matrix.
+     * Explicitly computes the determinant of a 2&times;2 matrix.
      * @param mat Matrix to compute the determinant of.
-     * @return The determinant of the 2x2 matrix.
+     * @return The determinant of the 2&times;2 matrix.
      */
     public static <T extends Field<T>> T det2(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(2, 2));
-        return mat.data[0].mult((T) mat.data[3]).sub(mat.data[1].mult((T) mat.data[2]));
+        return mat.data[0].mult(mat.data[3]).sub(mat.data[1].mult(mat.data[2]));
     }
 
 
@@ -151,6 +151,6 @@ public final class DenseFieldDeterminant {
      */
     public static <T extends Field<T>> T det1(AbstractDenseFieldMatrix<?, ?, T> mat) {
         ValidateParameters.ensureEqualShape(mat.shape, new Shape(1, 1));
-        return (T) mat.data[0];
+        return mat.data[0];
     }
 }

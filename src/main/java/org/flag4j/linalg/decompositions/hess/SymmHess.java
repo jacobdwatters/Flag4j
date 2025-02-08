@@ -30,24 +30,44 @@ import org.flag4j.linalg.transformations.Householder;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
+
 /**
- * <p>Computes the Hessenburg decomposition of a real dense symmetric matrix. That is, for a square, symmetric matrix
- * A, computes the decomposition A=QHQ<sup>T</sup> where Q is an orthogonal matrix and
- * H is a symmetric matrix in tri-diagonal form (special case of Hessenburg form) which is similar to A
- * (i.e. has the same eigenvalues).
+ * <p>Computes the Hessenberg decomposition of a real dense symmetric matrix.
+ * <p>The Hessenberg decomposition decomposes a given symmetric matrix <b>A</b> into the product:
+ * <pre>
+ *     <b>A = QHQ<sup>T</sup></b></pre>
+ * where <b>Q</b> is an orthogonal matrix and <b>H</b> is a symmetric tri-diagonal matrix (special case of Hessenburg form)
+ * which is similar to <b>A</b> (i.e. has the same eigenvalues)
  *
- * <p>A matrix H is in tri-diagonal form if it is nearly diagonal except for possibly the first sub/super-diagonals.
- * Specifically, if H has all zeros below the first sub-diagonal and above the first super-diagonal.
+ * <p>A matrix <b>H</b> is in tri-diagonal form if it has all zeros below the first sub-diagonal and above the first super-diagonal.
  *
- * <p>For example, the following matrix is in symmetric tri-diagonal form where each 'x' may hold a different value (provided
+ * <p>For example, the following matrix is in symmetric tri-diagonal form where each '&times;' may hold a different value (provided
  * the matrix is symmetric):
  * <pre>
- *     [[ x x 0 0 0 ]
- *      [ x x x 0 0 ]
- *      [ 0 x x x 0 ]
- *      [ 0 0 x x x ]
- *      [ 0 0 0 x x ]]</pre>
- * 
+ *     [[ &times; &times; 0 0 0 ]
+ *      [ &times; &times; &times; 0 0 ]
+ *      [ 0 &times; &times; &times; 0 ]
+ *      [ 0 0 &times; &times; &times; ]
+ *      [ 0 0 0 &times; &times; ]]</pre>
+ *
+ * <h3>Efficiency Considerations:</h3>
+ * <ul>
+ *     <li>If the orthogonal matrix <b>Q</b> is not required, setting {@code computeQ = false} in the constructor
+ *     <em>may</em> improve performance.</li>
+ *     <li>Support for in-place decomposition to reduce memory usage.</li>
+ * </ul>
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate an instance of {@code SymmHess}.</li>
+ *     <li>Call {@link #decompose(Matrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getH()} and {@link #getQ()}.</li>
+ * </ol>
+ *
+ * @see HermHess
+ * @see #getH()
+ * @see #getQ()
  */
 public class SymmHess extends RealHess {
 
@@ -59,7 +79,7 @@ public class SymmHess extends RealHess {
 
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices. By default, the Householder vectors used in the decomposition will be
-     * stored so that the full orthogonal {@code Q} matrix can be formed by calling {@link #getQ()}.
+     * stored so that the full orthogonal <b>Q</b> matrix can be formed by calling {@link #getQ()}.
      */
     public SymmHess() {
         super();
@@ -69,9 +89,9 @@ public class SymmHess extends RealHess {
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices.
      *
-     * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the {@code Q} matrix will be computed explicitly. If {@code Q} is not
-     * needed, setting this to {@code false} <em>may</em> yield a slight increase in efficiency.
+     * @param computeQ Flag indicating if the orthogonal <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the <b>Q</b> matrix will be computed explicitly. If <b>Q</b> is not
+     * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
      */
     public SymmHess(boolean computeQ) {
         super(computeQ);
@@ -80,9 +100,9 @@ public class SymmHess extends RealHess {
 
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices.
-     * @param computeQ Flag indicating if the orthogonal {@code Q} matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the {@code Q} matrix will be computed explicitly. If {@code Q} is not
-     * needed, setting this to {@code false} <em>may</em> yield a slight increase in efficiency.
+     * @param computeQ Flag indicating if the orthogonal <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the <b>Q</b> matrix will be computed explicitly. If <b>Q</b> is not
+     * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
      * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
      * {@link #decompose(Matrix)} is truly symmetric. If {@code true}, an exception will be thrown if the matrix is not symmetric. If
      * {@code false}, the decomposition will proceed under the assumption that the matrix is symmetric whether it actually is or not.
@@ -90,6 +110,27 @@ public class SymmHess extends RealHess {
      */
     public SymmHess(boolean computeQ, boolean enforceSymmetric) {
         super(computeQ);
+        this.enforceSymmetric = enforceSymmetric;
+    }
+
+
+    /**
+     * Constructs a Hessenberg decomposer for symmetric matrices.
+     * @param computeQ Flag indicating if the orthogonal <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
+     * If true, then the <b>Q</b> matrix will be computed explicitly. If <b>Q</b> is not
+     * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
+     * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
+     * {@link #decompose(Matrix)} is truly symmetric. If {@code true}, an exception will be thrown if the matrix is not symmetric. If
+     * {@code false}, the decomposition will proceed under the assumption that the matrix is symmetric whether it actually is or not.
+     * If the matrix is not symmetric, then the values in the upper triangular portion of the matrix are taken to be the values.
+     * @param inPlace Flag indicating if the decomposition should be done in-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in place.</li>
+     *     <li>If {@code false}, then the decomposition will be done out-of-place.</li>
+     * </ul>
+     */
+    public SymmHess(boolean computeQ, boolean enforceSymmetric, boolean inPlace) {
+        super(computeQ, inPlace);
         this.enforceSymmetric = enforceSymmetric;
     }
 
@@ -108,11 +149,12 @@ public class SymmHess extends RealHess {
 
 
     /**
-     * Gets the Hessenberg matrix from the decomposition. The matrix will be symmetric tri-diagonal.
-     * @return The symmetric tri-diagonal (Hessenberg) matrix from this decomposition.
+     * Gets the Hessenberg matrix, <b>H</b>, from the decomposition. The matrix will be symmetric tri-diagonal.
+     * @return The symmetric tri-diagonal (Hessenberg) matrix, <b>H</b>, from this decomposition.
      */
     @Override
     public Matrix getH() {
+        ensureHasDecomposed();
         Matrix H = new Matrix(numRows);
         H.data[0] = transformData[0];
 

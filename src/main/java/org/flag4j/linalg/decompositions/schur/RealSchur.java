@@ -40,17 +40,50 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
 
 /**
- * <p>This class computes the Schur decomposition of a real dense square matrix.
+ * <p>Instanced of this class can be used for computing the Schur decomposition of a real dense square matrix.
  *
- * <p>That is, decompose a square matrix A into A=UTU<sup>T</sup> where U is an orthogonal
- * matrix and  is a block-upper triangular matrix called the real-Schur form of A. T is upper triangular
- * except for possibly 2-by-22 blocks along the diagonal. T is similar to A.
- * 
+ * <p>The Schur decomposition decomposes a given square matrix <b>A</b> into:
+ * <pre>
+ *     <b>A = UTU<sup>T</sup></b></pre>
+ * where <b>U</b> is an orthogonal matrix <b>T</b> is a
+ * quasi-upper triangular matrix known as the <em>Schur form</em> of <b>A</b>. This means <b>T</b> is upper triangular except
+ * for possibly 2&times;2 blocks along its diagonal, which correspond to complex conjugate pairs of eigenvalues.
  *
- * <p>This code was adapted from the code found in the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>
+ * <p>The Schur decomposition proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
+ * support specifying a seed for the pseudo-random number generator.
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate an instance of {@code RealSchur}.</li>
+ *     <li>Call {@link #decompose(Matrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getT()}.</li>
+ * </ol>
+ *
+ * <h3>Efficiency Considerations:</h3>
+ * If eigenvectors are not required, setting {@code computeU = false} <em>may</em> improve performance.
+ *
+ * <p>This class was inspired by code from the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>
  * library and the description of the Francis implicit double shifted QR algorithm from
  * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
  * Computations 3rd Edition by David S. Watkins</a>.
+ *
+ * @implNote This decomposition is performed using the <b>implicit double-shift QR algorithm</b>, which iteratively
+ * reduces the matrix to Schur form using orthogonal transformations. In addition to this, random shifting is used in cases where
+ * normal convergence fails.
+ *
+ * <p>As a preprocessing step to improve conditioning and stability, the matrix is first {@link RealBalancer balanced} then
+ * reduced to {@link RealHess Hessenberg form}.
+ *
+ * @param <T> The type of matrix to be decomposed.
+ * @param <U> The type for the internal storage data structure of the matrix to be decomposed.
+ *
+ * @see RealBalancer
+ * @see org.flag4j.linalg.decompositions.hess.RealHess
+ * @see #getT()
+ * @see #getU()
+ * @see #setMaxIterationFactor(int)
+ * @see #setExceptionalThreshold(int)
  */
 public class RealSchur extends Schur<Matrix, double[]> {
 
@@ -60,7 +93,8 @@ public class RealSchur extends Schur<Matrix, double[]> {
      */
     protected double norm;
     /**
-     * Stores the scalar factor &alpha for use in computation of the Householder reflector P = I - &alpha vv<sup>T</sup>.
+     * Stores the scalar factor &alpha; for use in computation of the Householder reflector
+     * <b>P = I - </b>&alpha;<b> vv<sup>T</sup></b>.
      */
     protected double currentFactor;
 
@@ -68,7 +102,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
     /**
      * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.
      *
-     * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
+     * <p>Note: This decomposer <em>may</em> use random numbers during the decomposition. If reproducible results are needed,
      * set the seed for the pseudo-random number generator using {@link #RealSchur(long)}
      */
     public RealSchur() {
@@ -77,18 +111,18 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the {@code U} matrix may or may not
+     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the <b>U</b> matrix may or may not
      * be computed.
      *
-     * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
+     * <p>If the <b>U</b> matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * <p>By default, if a constructor with no {@code computeU} parameter is called, {@code U} <b>WILL</b> be computed.
+     * <p>By default, if a constructor with no {@code computeU} parameter is called, <b>U</b> <em>will</em> be computed.
      *
-     * <p>Note: This decomposer <i><b>may</b></i> use random numbers during the decomposition. If reproducible results are needed,
+     * <p>Note: This decomposer <em>may</em> use random numbers during the decomposition. If reproducible results are needed,
      * set the seed for the pseudo-random number generator using {@link #RealSchur(boolean, long)}
      *
-     * @param computeU Flag indicating if the unitary {@code U} matrix should be computed for the Schur decomposition. If true,
-     * {@code U} will be computed. If false, {@code U} will not be computed.
+     * @param computeU Flag indicating if the unitary <b>U</b> matrix should be computed for the Schur decomposition. If true,
+     * <b>U</b> will be computed. If false, <b>U</b> will not be computed.
      */
     public RealSchur(boolean computeU) {
         super(computeU, new RandomComplex(), new RealHess(computeU, true), new RealBalancer());
@@ -467,7 +501,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Checks for convergence of lower 2x2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
+     * Checks for convergence of lower 2&times;2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
      * convergence is found, this will also zero out the values which have converged to near zero.
      * @param workEnd The ending row (inclusive) of the current active working block.
      * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if
@@ -520,13 +554,13 @@ public class RealSchur extends Schur<Matrix, double[]> {
      *
      * <p>That is, converts the real block
      * upper triangular Schur matrix to a complex valued properly upper triangular matrix. If the unitary transformation matrix
-     * {@code U} was computed, the transformations will also be updated accordingly.
+     * <b>U</b> was computed, the transformations will also be updated accordingly.
      *
      * <p>This method was adapted from the code given by
      * <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html">scipy.linalg.rsf2csf</a> (v1.12.0).
      *
-     * @return An array of length 2 containing the complex Schur matrix {@code T} from the last decomposition, and if computed, the
-     * complex unitary transformation matrix {@code U} from the decomposition. If {@code U} was not computed, then the arrays second
+     * @return An array of length 2 containing the complex Schur matrix <b>T</b> from the last decomposition, and if computed, the
+     * complex unitary transformation matrix <b>U</b> from the decomposition. If <b>U</b> was not computed, then the arrays second
      * value will be null.
      */
     public CMatrix[] real2ComplexSchur() {

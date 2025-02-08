@@ -93,9 +93,9 @@ class CMatrixSubTests {
                 {new Complex128(994.33134, Double.POSITIVE_INFINITY), new Complex128(445, 6)}};
         B = new CMatrix(bEntries);
         expEntries = new Complex128[][]{
-                {new Complex128(234.56, -0.23).sub((Complex128) B.data[0]), new Complex128(4).sub((Complex128) B.data[1])},
-                {new Complex128(67.1, 0.0003443993).sub((Complex128) B.data[2]), new Complex128(8.4554, -98.2).sub((Complex128) B.data[3])},
-                {new Complex128(-723.234, 4).sub((Complex128) B.data[4]), new Complex128(-9.431).sub((Complex128) B.data[5])}};
+                {new Complex128(234.56, -0.23).sub(B.data[0]), new Complex128(4).sub(B.data[1])},
+                {new Complex128(67.1, 0.0003443993).sub(B.data[2]), new Complex128(8.4554, -98.2).sub(B.data[3])},
+                {new Complex128(-723.234, 4).sub(B.data[4]), new Complex128(-9.431).sub(B.data[5])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(B));
@@ -205,9 +205,9 @@ class CMatrixSubTests {
         B = new CooCMatrix(sparseShape, bEntries, rowIndices, colIndices);
 
         expEntries = new Complex128[][]{
-                {new Complex128(234.56, -0.23).sub((Complex128) B.data[0]), new Complex128(4)},
+                {new Complex128(234.56, -0.23).sub(B.data[0]), new Complex128(4)},
                 {new Complex128(67.1, 0.0003443993), new Complex128(8.4554, -98.2)},
-                {new Complex128(-723.234, 4), new Complex128(-9.431).sub((Complex128) B.data[1])}};
+                {new Complex128(-723.234, 4), new Complex128(-9.431).sub(B.data[1])}};
         exp = new CMatrix(expEntries);
 
         assertEquals(exp, A.sub(B));

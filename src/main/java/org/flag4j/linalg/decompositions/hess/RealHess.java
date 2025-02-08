@@ -30,12 +30,16 @@ import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
+
 /**
- * <p>Computes the Hessenburg decomposition of a real dense square matrix. That is, for a square matrix
- * A, computes the decomposition A=QHQ<sup>T</sup> where Q is an orthogonal matrix and
- * H is a matrix in upper Hessenburg form which is similar to A (i.e. has the same eigenvalues).
+ * <p>Computes the Hessenberg decomposition of a real dense square matrix.
+ * <p>The Hessenberg decomposition decomposes a given square matrix <b>A</b> into the product:
+ * <pre>
+ *     <b>A = QHQ<sup>T</sup></b></pre>
+ * where <b>Q</b> is an orthogonal matrix and <b>H</b> is an upper Hessenberg matrix, which is similar to <b>A</b>
+ * (i.e., it has the same eigenvalues).
  *
- * <p>A matrix H is in upper Hessenburg form if it is nearly upper triangular. Specifically, if H has
+ * <p>A matrix <b>H</b> is in upper Hessenburg form if it is nearly upper triangular. Specifically, if <b>H</b> has
  * all zeros below the first sub-diagonal.
  *
  * <p>For example, the following matrix is in upper Hessenburg form where each '&times;' may hold a different value:
@@ -46,7 +50,26 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *      [ 0 0 &times; &times; &times; ]
  *      [ 0 0 0 &times; &times; ]]</pre>
  *
+ * <h3>Efficiency Considerations:</h3>
+ * <ul>
+ *     <li>If the orthogonal matrix <b>Q</b> is not required, setting {@code computeQ = false} in the constructor
+ *     <em>may</em> improve performance.</li>
+ *     <li>Support for in-place decomposition to reduce memory usage.</li>
+ *     <li>Support for decomposition of matrix sub-blocks, enabling efficient eigenvalue computations.</li>
+ * </ul>
+ *
+ * <h3>Usage:</h3>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate an instance of {@code RealHess}.</li>
+ *     <li>Call {@link #decompose(Matrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getH()} and {@link #getQ()}.</li>
+ * </ol>
+ *
  * @see ComplexHess
+ * @see #getH()
+ * @see #getQ()
+ * @see org.flag4j.linalg.decompositions.balance.RealBalancer
  */
 public class RealHess extends RealUnitaryDecomposition {
 
@@ -70,7 +93,7 @@ public class RealHess extends RealUnitaryDecomposition {
      * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.
      *
      * @param computeQ Flag indicating if the orthogonal matrix in the Hessenburg decomposition should be computed. If it is not
-     * needed, setting this to {@code false} <em>may</em> yield a slight increase in efficiency.
+     * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
      * @see #RealHess()
      * @see #RealHess(boolean, boolean)
      */
@@ -84,7 +107,7 @@ public class RealHess extends RealUnitaryDecomposition {
      * below the first sub-diagonal. That is, reduce to an upper Hessenburg matrix.
      *
      * @param computeQ Flag indicating if the orthogonal matrix in the Hessenburg decomposition should be computed. If it is not
-     * needed, setting this to {@code false} <em>may</em> yield a slight increase in efficiency.
+     * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
      * @param inPlace Flag indicating if the decomposition should be done in-place.
      * <ul>
      *     <li>If {@code true}, then the decomposition will be done in place.</li>
@@ -100,8 +123,10 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * Applies decomposition to the source matrix. Note, the computation of the orthogonal matrix {@code Q} in the decomposition is
-     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when {@code Q} is not needed.
+     * <p>Computes the Hessenberg decomposition of the specified matrix.
+     * 
+     * <p>Note, the computation of the orthogonal matrix <b>Q</b> in the decomposition is
+     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when <b>Q</b> is not needed.
      *
      * @param src The source matrix to decompose.
      * @return A reference to this decomposer.
@@ -116,8 +141,8 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * <p>Applies decomposition to the source matrix. Note, the computation of the orthogonal matrix {@code Q} in the decomposition is
-     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when {@code Q} is not needed.
+     * <p>Applies decomposition to the source matrix. Note, the computation of the orthogonal matrix <b>Q</b> in the decomposition is
+     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when <b>Q</b> is not needed.
      *
      * <p>This method can be used specify that only a sub-block within the full matrix needs to be
      * reduced. This is useful when you know that an upper and lower diagonal block of the matrix is already
@@ -129,8 +154,8 @@ public class RealHess extends RealUnitaryDecomposition {
      *      [  <b>0</b>   <b>B</b>  <b>Z</b>  ]
      *      [  <b>0</b>   <b>0</b>  <b>T2</b> ]</pre>
      * where <b>T1</b> and <b>T2</b> are in upper-triangular form. As such, only the <b>B</b> block needs to be reduced.
-     * The staring row/column index of <b>B</b> (inclusive) is specified by {@code iLow} and the ending row/column
-     * index (exclusive) is specified by {@code iHigh}. It should be noted that the blocks <b>X</b> and <b>Z</b> will also be updated
+     * The staring row/column index of <b>B</b> is specified by {@code iLow} (inclusive) and the ending row/column
+     * index is specified by {@code iHigh} (exclusive). It should be noted that the blocks <b>X</b> and <b>Z</b> will also be updated
      * during the reduction of <b>B</b> so the full matrix must still be passed.
      *
      * @param src The source matrix to decompose.
@@ -169,8 +194,8 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * Gets the upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
-     * @return The upper Hessenburg matrix {@code H} from the Hessenburg decomposition.
+     * Gets the upper Hessenburg matrix <b>H</b> from the Hessenburg decomposition.
+     * @return The upper Hessenburg matrix <b>H</b> from the Hessenburg decomposition.
      */
     public Matrix getH() {
         return getUpper(new Matrix(numRows));

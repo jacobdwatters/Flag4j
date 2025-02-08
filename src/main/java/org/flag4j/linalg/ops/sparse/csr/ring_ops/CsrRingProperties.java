@@ -25,7 +25,6 @@
 package org.flag4j.linalg.ops.sparse.csr.ring_ops;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCsrRingMatrix;
@@ -106,11 +105,11 @@ public final class CsrRingProperties {
             int stop = src.rowPointers[i+1];
 
             for(int j=start; j<stop; j++) {
-                Complex128 value = (Complex128) src.data[j];
+                T value = src.data[j];
 
                 if(value.abs() > aTol) {
                     // Then keep value.
-                    entries.add((T) value);
+                    entries.add(value);
                     colIndices.add(src.colIndices[j]);
                     rowPointers[i]++;
                 }

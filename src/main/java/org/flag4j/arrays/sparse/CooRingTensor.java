@@ -106,7 +106,7 @@ import java.util.function.BinaryOperator;
  * // Reshape tensor.
  * CooRingTensor<RealInt32> reshaped = tensor.reshape(15, 150, 45)
  *
- * // Compute tensor dot product (result is 5-by-5 dense tensor).
+ * // Compute tensor dot product (result is 5&times;5 dense tensor).
  * RingTensor<RealInt32> dot = tensor.dot(tensor,
  *      new int[]{0, 1, 2},
  *      new int[]{0, 1, 2}

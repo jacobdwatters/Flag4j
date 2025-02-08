@@ -73,7 +73,7 @@ public final class RealFieldDenseCooOps {
      * @param destEntries Array to store non-zero data resulting from the element-wise product.
      * Assumed to have length {@code src2.nnz}.
      * @param destIndices Array to store non-zero indices resulting from the element-wise product.
-     * Assumed to have size {@code src2.nnz}-by-{@code src2.getRank()}.
+     * Assumed to have size {@code src2.nnz}&times;{@code src2.getRank()}.
      * @return The result of element-wise multiplication between the two tensors.
      * @throws IllegalArgumentException If the tensors do not have the same shape.
      */

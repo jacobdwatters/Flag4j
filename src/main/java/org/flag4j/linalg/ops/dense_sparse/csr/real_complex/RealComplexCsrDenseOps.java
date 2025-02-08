@@ -76,7 +76,7 @@ public final class RealComplexCsrDenseOps {
 
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                dest[idx] = opp.apply((Complex128) src1.data[j], ((Complex128) dest[idx]).re);
+                dest[idx] = opp.apply(src1.data[j], dest[idx].re);
             }
         }
 
@@ -105,7 +105,7 @@ public final class RealComplexCsrDenseOps {
             for(int j=start; j<stop; j++) {
                 int idx = rowOffset + src2.colIndices[i];
 
-                dest[idx] = opp.apply(src1.data[idx], (Complex128) src2.data[j]);
+                dest[idx] = opp.apply(src1.data[idx], src2.data[j]);
             }
         }
 

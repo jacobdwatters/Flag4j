@@ -78,7 +78,7 @@ public final class RealComplexSparseVectorOps {
 
         for(int i = 0; i<src.data.length; i++) {
             int idx = src.indices[i];
-            dest[idx] = dest[idx].add((Complex128) src.data[i]);
+            dest[idx] = dest[idx].add(src.data[i]);
         }
 
         return new CVector(dest);
@@ -232,7 +232,7 @@ public final class RealComplexSparseVectorOps {
 
         while(src1Counter < src1.data.length && src2Counter < src2.data.length) {
             if(src1.indices[src1Counter] == src2.indices[src2Counter]) {
-                values.add(new Complex128(src1.data[src1Counter]).sub((Complex128) src2.data[src2Counter]));
+                values.add(new Complex128(src1.data[src1Counter]).sub(src2.data[src2Counter]));
                 indices.add(src1.indices[src1Counter]);
                 src1Counter++;
                 src2Counter++;
