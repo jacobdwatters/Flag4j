@@ -1,4 +1,8 @@
+# IntelliJ Stuff
 /.idea/
 /flag4j.iml
+qodana.yaml
+
+# Build files and docs
 /target/
 /docs/
