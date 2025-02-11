@@ -33,7 +33,7 @@ jobs:
         with:
           # Path to the folder containing generated docs
           # Adjust path to match your actual Javadoc output
-          path: target/site/apidocs
+          path: target/reports/apidocs
 
   # --- 2) Deploy the artifact to GitHub Pages
   deploy-docs:
