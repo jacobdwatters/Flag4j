@@ -46,14 +46,14 @@ import java.util.Arrays;
  * <p>A {@code SemiringMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
  * and may offer improved performance for certain operations compared to general rank-n tensors.
  *
- * <h3>Key Features:</h3>
+ * <h2>Key Features:</h2>
  * <ul>
  *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
  *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
  *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
  * </ul>
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <p>Using {@link BoolSemiring a boolean semiring}:
  * <pre>{@code
  * // Constructing an integer matrix from a 2D array of booleans

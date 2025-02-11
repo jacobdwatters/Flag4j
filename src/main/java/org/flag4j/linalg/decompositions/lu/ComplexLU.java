@@ -38,7 +38,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * <pre>
  *     <b>A = LU</b></pre>
  *
- * <h3>Pivoting Strategies:</h3>
+ * <h2>Pivoting Strategies:</h2>
  * <p>Pivoting may be used to improve the stability of the decomposition. Pivoting involves swapping rows and/or columns within the
  * matrix during decomposition.
  *
@@ -61,7 +61,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *     purposes, partial pivoting is generally sufficient and more performant.</li>
  * </ul>
  *
- * <h3>Storage Format:</h3>
+ * <h2>Storage Format:</h2>
  * The computed LU decomposition is stored within a single matrix {@code LU}, where:
  * <ul>
  *     <li>The upper triangular part (including the diagonal) represents the non-zero values of <b>U</b>.</li>
@@ -69,7 +69,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *     unit-lower triangular, the diagonal is not stored as it is known to be all zeros.</li>
  * </ul>
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * The decomposition workflow typically follows these steps:
  * <ol>
  *     <li>Instantiate a concrete subclass of {@code LU}.</li>

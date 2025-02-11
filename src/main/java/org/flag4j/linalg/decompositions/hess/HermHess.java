@@ -49,14 +49,14 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *      [ 0 0 &times; &times; &times; ]
  *      [ 0 0 0 &times; &times; ]]</pre>
  *
- * <h3>Efficiency Considerations:</h3>
+ * <h2>Efficiency Considerations:</h2>
  * <ul>
  *     <li>If the orthogonal matrix <b>Q</b> is not required, setting {@code computeQ = false} in the constructor
  *     <em>may</em> improve performance.</li>
  *     <li>Support for in-place decomposition to reduce memory usage.</li>
  * </ul>
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * The decomposition workflow typically follows these steps:
  * <ol>
  *     <li>Instantiate an instance of {@code HermHess}.</li>

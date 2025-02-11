@@ -38,7 +38,7 @@ import org.flag4j.rng.distributions.RealUniform;
 /**
  * A utility class for generating random dense tensors, matrices, and vectors with customizable distributions.
  *
- * <h3>Features:</h3>
+ * <h2>Features:</h2>
  * <ul>
  *   <li>Generate random tensors, matrices, and vectors with real or complex entries.</li>
  *   <li>Support for configurable uniform and Gaussian distributions.</li>
@@ -48,7 +48,7 @@ import org.flag4j.rng.distributions.RealUniform;
  * <p>This class relies on the {@code RandomComplex} and {@code RandomArray} classes for pseudorandom number
  * generation and array population.
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  *     RandomDenseTensor rtg = new RandomDenseTensor(12345L);
  *

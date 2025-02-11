@@ -42,7 +42,7 @@ import java.util.function.UnaryOperator;
  *
  * <p>For other array operations see: {@link ArrayBuilder}, {@link ArrayConversions}, and {@link ArrayJoiner}.
  *
- * <h3>Key Features:</h3>
+ * <h2>Key Features:</h2>
  * <ul>
  *   <li>Deep comparison and copying of multidimensional arrays.</li>
  *   <li>Element-wise operations, including transformations, swaps, and permutations.</li>
@@ -50,7 +50,7 @@ import java.util.function.UnaryOperator;
  *   <li>Flattening and reshaping of multidimensional arrays.</li>
  * </ul>
  *
- * <h3>Usage Examples</h3>
+ * <h2>Usage Examples</h2>
  * <pre>{@code
  * // Compute the cumulative sum of an integer array
  * int[] array = {1, 2, 3, 4};
@@ -74,7 +74,7 @@ import java.util.function.UnaryOperator;
  * ArrayUtils.applyTransform(data, x -> x * x); // Squares each value in the array
  * }</pre>
  *
- * <h3>Restrictions</h3>
+ * <h2>Restrictions</h2>
  * <ul>
  *   <li>Multidimensional arrays are expected to be rectangular for all methods in this class.
  *   However, this is not explicitly enforced and jagged arrays may cause unexpected behavior.</li>

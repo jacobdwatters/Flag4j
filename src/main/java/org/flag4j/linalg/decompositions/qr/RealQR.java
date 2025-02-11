@@ -45,7 +45,7 @@ import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
  *         <b>Q</b> with the same number of rows as <b>A</b>.</li>
  * </ul>
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * The decomposition workflow typically follows these steps:
  * <ol>
  *     <li>Instantiate an instance of {@code RealQR}.</li>

@@ -74,7 +74,7 @@ import java.util.List;
  * offering significant memory savings and potentially more efficient computational operations than equivalent dense
  * representations.
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  * // shape, data, and indices for COO vector.
  * Shape shape = new Shape(512);

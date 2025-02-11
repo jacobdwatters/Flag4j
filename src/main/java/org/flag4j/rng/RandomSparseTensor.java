@@ -41,14 +41,14 @@ import java.math.RoundingMode;
 /**
  * A utility class for generating random sparse tensors and matrices with customizable sparsity and distributions.
  *
- * <h3>Features:</h3>
+ * <h2>Features:</h2>
  * <ul>
  *   <li>Generate sparse matrices and tensors with specified sparsity levels.</li>
  *   <li>Support for uniform and annular (complex valued) distributions for non-zero values.</li>
  *   <li>Create symmetric sparse matrices.</li>
  * </ul>
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  *     RandomSparseTensor generator = new RandomSparseTensor(12345L);
  *     CooMatrix sparseMatrix = generator.randomCooMatrix(100, 100, 0, 10, 0.95);

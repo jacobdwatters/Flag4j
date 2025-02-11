@@ -39,7 +39,7 @@ import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
  * <p>If the system is not well determined, i.e. <b>A</b> is square and full rank, then use a
  * {@link org.flag4j.linalg.solvers.lstsq.RealLstsqSolver least-squares solver}.
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * <p>A single system may be solved by calling either {@link #solve(Matrix, Vector)} or
  * {@link #solve(Matrix, Vector)}.
  *

@@ -42,7 +42,7 @@ import java.util.Random;
  *         bivariate Gaussian distributions.</li>
  * </ul>
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  * RandomComplex randomComplex = new RandomComplex();
  *

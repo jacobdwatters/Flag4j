@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  * <p>This class supports multiple array types, including primitive types ({@code int[]}, {@code double[]}) as well as
  * {@code Complex128} and {@code Complex64}.
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  * // Ensure an array exists, if not create an array of size 10.
  * int[] myArray = ArrayBuilder.getOrCreateArray(null, 10);
@@ -55,7 +55,7 @@ import java.util.function.Supplier;
  * ArrayBuilder.stridedFillZeros(stridedArray, 2, 3);
  * }</pre>
  *
- * <h3>Restrictions:</h3>
+ * <h2>Restrictions:</h2>
  * <ul>
  *   <li>This class is <i>not</i> designed for jagged (non-rectangular) arrays. All methods dealing with multidimensional arrays
  *   assume, without an explicit check, that all arrays are rectangular.</li>
