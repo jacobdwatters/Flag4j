@@ -1,4 +1,4 @@
-/docs
-/.idea
+/.idea/
 /flag4j.iml
-/target
+/target/
+/docs/
