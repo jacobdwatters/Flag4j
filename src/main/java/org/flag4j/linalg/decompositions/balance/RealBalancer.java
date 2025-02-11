@@ -256,8 +256,9 @@ public class RealBalancer extends Balancer<Matrix> {
 
 
     /**
-     * Efficiently right multiplies D<sup>-1</sup>P<sup>-1</sup> to the provided {@code src} matrix. This operation is done in-place.
-     * @param src Matrix to apply transform to (modified).
+     * Efficiently right multiplies <b>D<sup>-1</sup>P<sup>-1</sup></b> to the provided {@code src} matrix.
+     * @param src Matrix to apply transform to.
+     * @return The result of right multiplying <b>D<sup>-1</sup>P<sup>-1</sup></b> to the {@code src} matrix.
      */
     @Override
     public Matrix applyRightTransform(Matrix src) {

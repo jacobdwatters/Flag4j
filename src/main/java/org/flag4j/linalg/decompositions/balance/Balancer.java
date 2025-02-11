@@ -27,6 +27,7 @@ package org.flag4j.linalg.decompositions.balance;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.PermutationMatrix;
+import org.flag4j.linalg.Invert;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.Flag4jConstants;
@@ -164,12 +165,12 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
     /**
      * @param doPermutations Flag indicating if row/column permutations should be used when balancing the matrix.
      * <ul>
-     *     <li>If {@code true}, permutations will be used and P will be computed.</li>
+     *     <li>If {@code true}, permutations will be used and <b>P</b> will be computed.</li>
      *     <li>If {@code false}, permutations will <i>not</i> be used and the row and column positions will not be affected.</li>
      * </ul>
      * @param doScaling Flag indicating if row/column scaling should be done when balancing the matrix.
      * <ul>
-     *     <li>If {@code true}, scaling will be used and D will be computed.</li>
+     *     <li>If {@code true}, scaling will be used and <b>D</b> will be computed.</li>
      *     <li>If {@code false}, scaling will <i>not</i> be used.</li>
      * </ul>
      * @param inPlace Flag indicating if the balancing should be done in-place or if a copy should be made.
@@ -304,11 +305,11 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
      *             [ T1  X  Y  ]
      *   P<sup>-1</sup> A P = [  0  B  Z  ]
      *             [  0  0  T2 ]</pre>
-     * <p>Where {@code T1} and {@code T2} are upper-triangular matrices whose eigenvalues are the diagonal elements of the matrix.
-     * {@code P} is the permutation matrix representing the row and column swaps performed within this method.
+     * <p>Where <b>T1</b> and <b>T2</b> are upper-triangular matrices whose eigenvalues are the diagonal elements of the matrix.
+     * <b>P</b> is the permutation matrix representing the row and column swaps performed within this method.
      *
      * <p>{@link #iLow} and {@link #iHigh} Specify the starting (inclusive) and ending (exclusive) row/column index of the submatrix
-     * {@code B}.
+     * <b>B</b>.
      */
     protected void doIterativePermutations() {
         boolean notConverged = true;
@@ -387,8 +388,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
      * of that value, there &ell;<sup>1</sup> norms are "close". Scaling need only be done for rows/column of the matrix which do not
      * isolate eigenvalues; rows between {@link #iLow} (inclusive) to {@link #iHigh} (exclusive).
      *
-     * <p>D<sub>1</sub> is the diagonal matrix describing such scaling and is the diagonal matrix computed by this method. \
-     * The diagonal values of D<sub>1</sub> are stored in {@link #scalePerm} between indices {@link #iLow} (inclusive) to
+     * <p><b>D<sub>1</sub></b> is the diagonal matrix describing such scaling and is the diagonal matrix computed by this method.
+     * The diagonal values of <b>D<sub>1</sub></b> are stored in {@link #scalePerm} between indices {@link #iLow} (inclusive) to
      * {@link #iHigh} (exclusive).
      */
     protected void doIterativeScaling() {
@@ -492,7 +493,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the starting index (inclusive) for the sub-matrix B<sub>1</sub> of the balanced matrix which did not isolate eigenvalues.
+     * Gets the starting index (inclusive) for the sub-matrix <b>B<sub>1</sub></b> of the balanced matrix which did not isolate
+     * eigenvalues.
      * @return The starting index (inclusive) for the sub-matrix of the balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -503,7 +505,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the starting index (exclusive) for the sub-matrix B<sub>1</sub> of the balanced matrix which did not isolate eigenvalues.
+     * Gets the starting index (exclusive) for the sub-matrix <b>B<sub>1</sub></b> of the balanced matrix which did not isolate
+     * eigenvalues.
      * @return The starting index (exclusive) for the sub-matrix of the balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -514,7 +517,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the full balanced matrix, B, for the last matrix balanced by this balancer.
+     * Gets the full balanced matrix, <b>B</b>, for the last matrix balanced by this balancer.
      * @return The full balanced matrix for the last matrix balanced by this balancer.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -525,7 +528,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the sub-matrix B<sub>1</sub> of the full balanced matrix which did not isolate eigenvalues.
+     * Gets the sub-matrix <b>B<sub>1</sub></b> of the full balanced matrix which did not isolate eigenvalues.
      * @return The sub-matrix of the full balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -555,9 +558,6 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
         return scalePerm;
     }
 
-
-    // TODO: Add support for getting D^-1, P^-1, and T^-1 directly.
-    //      i.e. add getDInv(...), getPInv(...), getTInv(...) methods.
 
     /**
      * Gets the diagonal scaling matrix for the last matrix balanced by this balancer.
@@ -655,13 +655,45 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Get the combined permutation and diagonal scaling matrix, T, from the last matrix balanced.
+     * Get the combined permutation and diagonal scaling matrix, <b>T=PD</b>, from the last matrix balanced.
      * This is equivalent to {@code getP().leftMult(getD(true))}.
      * @return The combined permutation and diagonal scaling matrix from the last matrix balanced.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
     public Matrix getT() {
         return getP().leftMult(getD(true));
+    }
+
+
+    /**
+     * Gets the inverse of the full diagonal scaling matrix <b>D<sup>-1</sup></b> from the balancing problem.
+     * @return The inverse of the full diagonal scaling matrix <b>D<sup>-1</sup></b> from the balancing problem.
+     * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
+     */
+    public Matrix getDInv() {
+        return Invert.invDiag(getD(true));
+    }
+
+
+    /**
+     * Gets the inverse of the permutation matrix <b>P<sup>-1</sup></b> from the balancing problem.
+     * @return The inverse of the permutation matrix <b>P<sup>-1</sup></b> from the balancing problem.
+     * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
+     */
+    public PermutationMatrix getPInv() {
+        return getP().inv();
+    }
+
+
+    /**
+     * Get the inverse of combined permutation and diagonal scaling matrix,
+     * <b>T<sup>-1</sup>=D<sup>-1</sup>P<sup>-1</sup></b>, from the last matrix balanced.
+     * This is equivalent to {@code getP().inv().rightMult(getDInv())}.
+     * @return The combined permutation and diagonal scaling matrix from the last matrix balanced.
+     * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
+     */
+    public Matrix getTInv() {
+        return getP().inv().rightMult(getDInv());
     }
 
 

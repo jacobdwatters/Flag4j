@@ -27,8 +27,8 @@ package org.flag4j.linalg.solvers;
 
 /**
  * <p>Interface representing a linear system solver for tensor equations. Implementations of this interface
- * provide methods to solve linear equations involving tensors, such as <i>AX=B</i>, where
- * <i>A</i>, <i>B</i>, and <i>X</i> are tensors.
+ * provide methods to solve linear equations involving tensors, such as <b>AX=B</b>, where
+ * <b>A</b>, <b>B</b>, and <b>X</b> are tensors.
  *
  * <p>Solvers may compute exact solutions or approximate solutions in a least squares sense, depending on the
  * properties of the tensor equation.
@@ -38,13 +38,13 @@ package org.flag4j.linalg.solvers;
 public interface LinearSolver<T> {
 
     /**
-     * Solves the linear tensor equation <i>AX=B</i> for the tensor <i>X</i>. The multiplication <i>AX</i> is defined such that
-     * it performs a tensor dot product over all indices of <i>X</i> with the rightmost indices of <i>A</i>, equivalent to
+     * Solves the linear tensor equation <b>AX=B</b> for the tensor <b>X</b>. The multiplication <b>AX</b> is defined such that
+     * it performs a tensor dot product over all indices of <b>X</b> with the rightmost indices of <b>A</b>, equivalent to
      * {@code A.tensorDot(X, X.getRank())}.
      *
      * @param A The coefficient tensor in the linear system.
      * @param B The constant tensor in the linear system.
-     * @return The solution tensor <i>X</i> satisfying <i>AX=B</i>.
+     * @return The solution tensor <b>X</b> satisfying <b>AX=B</b>.
      */
     T solve(T A, T B);
 }
