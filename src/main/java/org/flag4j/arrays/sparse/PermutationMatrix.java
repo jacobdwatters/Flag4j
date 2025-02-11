@@ -61,7 +61,7 @@ import java.util.Arrays;
  * {@code {0, 1, ..., n-1}}.
  *
  * <p>
- * <h3>Example usage:</h3>
+ * <h2>Example usage:</h2>
  * <pre>{@code
  *         // Construct matrices to permute.
  *         Matrix a = new Vector(ArrayUtils.range(0, 5)).repeat(5, 1);

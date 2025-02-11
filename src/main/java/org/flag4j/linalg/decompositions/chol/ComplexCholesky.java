@@ -42,19 +42,19 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * The decomposition is primarily used for efficient numerical solutions to linear systems, computing matrix inverses,
  * and generating samples from multivariate normal distributions.
  *
- * <h3>Hermitian Verification:</h3>
+ * <h2>Hermitian Verification:</h2>
  * <p>This class provides an option to explicitly check whether the input matrix is Hermitian. If {@code enforceHermitian} is set
  * to {@code true}, the implementation will verify that <b>A</b> satisfies <b>A = A<sup>H</sup></b> before performing decomposition.
  * If set to {@code false}, the matrix is assumed to be Hermitian, no explicit check will be performed, and only the lower-diagonal
  * entries of <b>A</b> are accessed.
  *
- * <h3>positive-definiteness Check:</h3>
+ * <h2>positive-definiteness Check:</h2>
  * <p>To ensure numerical stability, the algorithm verifies that all diagonal entries of <b>L</b> are positive.
  * A tolerance threshold, {@code posDefTolerance}, is used to determine whether a diagonal entry is considered
  * non-positive, indicating that the matrix is <em>not</em> positive-definite. This threshold can be adjusted using
  * {@link #setPosDefTolerance(double)}.
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * <p>A typical workflow using a concrete implementation of Cholesky decomposition follows these steps:
  * <ol>
  *     <li>Instantiate an instance of {@code ComplexCholesky}.</li>

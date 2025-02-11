@@ -34,7 +34,7 @@ import org.flag4j.arrays.backend.MatrixMixin;
  * such as LU, QR, SVD, Schur, and Hessenburg decompositions. Implementing classes must define
  * the decomposition process by overriding the {@link #decompose(MatrixMixin)} method.
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * <p>A typical workflow using a decomposition class follows these steps:
  * <ol>
  *     <li>Instantiate a concrete implementation of a decomposition.</li>
@@ -42,7 +42,7 @@ import org.flag4j.arrays.backend.MatrixMixin;
  *     <li>Retrieve decomposition results via additional getter methods provided by the subclass.</li>
  * </ol>
  *
- * <h3>State Management:</h3>
+ * <h2>State Management:</h2>
  *
  * <p>The class maintains an internal state flag, {@code hasDecomposed}, which tracks whether
  * a matrix decomposition has been performed. This ensures that methods depending on the

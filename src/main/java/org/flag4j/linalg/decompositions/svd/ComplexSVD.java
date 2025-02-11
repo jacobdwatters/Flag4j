@@ -45,7 +45,7 @@ import org.flag4j.linalg.Eigen;
  * <p>The SVD proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
  * support specifying a seed for the pseudo-random number generator.
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * The decomposition workflow typically follows these steps:
  * <ol>
  *     <li>Instantiate a concrete instance of {@code ComplexSVD}.</li>
@@ -53,7 +53,7 @@ import org.flag4j.linalg.Eigen;
  *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getS()}.</li>
  * </ol>
  *
- * <h3>Efficiency Considerations:</h3>
+ * <h2>Efficiency Considerations:</h2>
  * If singular vectors are not required, setting {@code computeUV = false} <em>may</em> improve performance.
  *
  * @see #getU()

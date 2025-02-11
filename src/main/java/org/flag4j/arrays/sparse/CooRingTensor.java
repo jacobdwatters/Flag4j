@@ -80,7 +80,7 @@ import java.util.function.BinaryOperator;
  * is extremely low, offering significant memory savings and potentially more efficient computational operations than
  * equivalent dense representations.
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  * // Define shape, data, and indices.
  * Shape shape = new Shape(15, 30, 45, 5)

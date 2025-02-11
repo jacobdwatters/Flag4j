@@ -44,7 +44,7 @@ import java.util.Arrays;
  * <p>A {@code SemiringTensor} is a generalization of the {@link  SemiringMatrix}, allowing for higher-dimensional data and operations
  * while maintaining the benefits of Semiring-based arithmetic and dense storage.
  *
- * <h3>Key Features:</h3>
+ * <h2>Key Features:</h2>
  * <ul>
  *   <li>Support for standard tensor operations like addition, element-wise multiplication, and reshaping.</li>
  *   <li>Conversion methods to other representations, including {@link SemiringMatrix}, {@link SemiringVector}, and COO
@@ -52,7 +52,7 @@ import java.util.Arrays;
  *   <li>Utility methods for computing properties like rank and shape</li>
  * </ul>
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <ul>
  *
  * <li>Constructing a tensor from a {@code Shape shape} and flat data array.

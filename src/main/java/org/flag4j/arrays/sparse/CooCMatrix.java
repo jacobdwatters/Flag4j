@@ -65,7 +65,7 @@ import java.util.List;
  * efficient
  * matrix ops.
  *
- * <h3>COO Representation:</h3>
+ * <h2>COO Representation:</h2>
  * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>

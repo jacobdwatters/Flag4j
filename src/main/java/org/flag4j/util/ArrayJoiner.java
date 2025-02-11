@@ -31,7 +31,7 @@ import java.util.Arrays;
  * The {@code ArrayJoiner} class provides utility methods for combining and repeating arrays.
  * It simplifies operations involving concatenating and repeating arrays.
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  * // Join two arrays
  * int[] array1 = {1, 2, 3};

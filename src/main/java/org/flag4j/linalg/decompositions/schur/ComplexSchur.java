@@ -51,7 +51,7 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
  * <p>The Schur decomposition proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
  * support specifying a seed for the pseudo-random number generator.
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  * The decomposition workflow typically follows these steps:
  * <ol>
  *     <li>Instantiate an instance of {@code ComplexSchur}.</li>
@@ -59,7 +59,7 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
  *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getT()}.</li>
  * </ol>
  *
- * <h3>Efficiency Considerations:</h3>
+ * <h2>Efficiency Considerations:</h2>
  * If eigenvectors are not required, setting {@code computeU = false} <em>may</em> improve performance.
  *
  * <p>This class was inspired by code from the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>

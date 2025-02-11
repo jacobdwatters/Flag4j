@@ -43,7 +43,7 @@ import java.util.Arrays;
  * A Givens rotation is a matrix <b>G</b>(i, j, &theta;) which, when left multiplied to a vector, represents
  *  a counterclockwise rotation of &theta; radians of the vector in the (i, j) plane.
  *
- * <h3>Supported Operations:</h3>
+ * <h2>Supported Operations:</h2>
  * <ul>
  *     <li>General Givens rotation matrices for arbitrary rotation angles.</li>
  *     <li>Specialized rotators for zeroing elements in a given vector.</li>
@@ -51,7 +51,7 @@ import java.util.Arrays;
  *     <li>Optimized left and right multiplication of 2&times;2 rotators for structured matrices.</li>
  * </ul>
  *
- * <h3>Usage Examples:</h3>
+ * <h2>Usage Examples:</h2>
  * <ul>
  *     <li>Creating a General Givens Rotation Matrix.
  *     <pre>{@code

@@ -44,7 +44,7 @@ import java.util.List;
  *   <li>Transforming between primitive and custom numerical representations (e.g., {@code int[]} to {@code double[]}).</li>
  * </ul>
  *
- * <h3>Usage Examples</h3>
+ * <h2>Usage Examples</h2>
  * <pre>{@code
  * // Convert an array of integers to Complex128 array.
  * int[] intArray = {1, 2, 3};
@@ -63,7 +63,7 @@ import java.util.List;
  * Integer[] boxedArray = ArrayConversions.boxed(primitiveIntArray);
  * }</pre>
  *
- * <h3>Restrictions:</h3>
+ * <h2>Restrictions:</h2>
  * <ul>
  *   <li>All source arrays and lists must be non-{@code null} unless explicitly stated otherwise.</li>
  *   <li>The caller must ensure that destination arrays have sufficient capacity when provided.</li>
