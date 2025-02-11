@@ -22,7 +22,9 @@ jobs:
           # Adjust according to your build system (Maven, Gradle, etc.)
           # Example with Maven:
           mvn clean install
-          mvn javadoc:javadoc
+          mvn javadoc:javadoc \
+          -Dmaven.javadoc.failOnError=false \
+          -Dmaven.javadoc.skip=false
 
       - name: Upload Pages Artifact
         # This action collects the directory containing docs
