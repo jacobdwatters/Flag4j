@@ -54,15 +54,15 @@ import org.flag4j.util.ValidateParameters;
  *
  * <p>When permutations are used during balancing we obtain a specific form. First,
  * <pre>
- *             [ T<sub>1</sub>  X   Y  ]
+ *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
  *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]
- *             [  0  0   T<sub>2</sub> ]</pre>
+ *           <sup>  </sup>[  0  0   T<sub>2</sub> ]</pre>
  * Where T<sub>1</sub> and T<sub>2</sub> are upper triangular matrices whose eigenvalues lie along the diagonal. These are also
  * eigenvalues of A. Then, if scaling is applied we obtain:
  * <pre>
- *                  [ T<sub>1</sub>     X*D<sub>1</sub>       Y    ]
+ *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B*<sub>1</sub>D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
- *                   [  0      0         T<sub>2</sub>   ]</pre>
+ *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
  * Where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>
  *         [ I<sub>1</sub> 0  0  ]

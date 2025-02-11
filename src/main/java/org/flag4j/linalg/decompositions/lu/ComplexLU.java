@@ -77,8 +77,6 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *     <li>Retrieve the resulting matrices using {@link #getL()}, {@link #getU()}, {@link #getP()}, and {@link #getQ()}.</li>
  * </ol>
  *
- * @param <T> The type of matrix on which LU decomposition is performed.
- *
  * @see Pivoting
  * @see PermutationMatrix
  * @see CMatrix

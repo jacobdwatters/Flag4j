@@ -46,7 +46,7 @@ import org.flag4j.arrays.dense.Vector;
  *
  * <p>Rotation matrices have the following properties:
  * <ul>
- *   <li>A rotation matrix is orthogonal: <b></b>R<sup>-1</sup></b> = <b>R</b><sup>T</sup>.</li>
+ *   <li>A rotation matrix is orthogonal: <b>R<sup>-1</sup></b> = <b>R</b><sup>T</sup>.</li>
  *   <li>Rotations preserve the length of vectors (orthogonal transformations).</li>
  *   <li>The inverse/transpose rotation matrix undoes the rotation: <b>x</b> = <b>R</b><sup>T</sup><b>Rx</b> =
  *   <b>RR</b><sup>T</sup><b>x</b></li>
