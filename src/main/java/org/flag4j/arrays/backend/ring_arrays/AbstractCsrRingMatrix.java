@@ -49,8 +49,8 @@ import org.flag4j.util.exceptions.TensorShapeException;
  *     <li>The full {@link #shape shape} of the matrix.</li>
  *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
  *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
- *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
- *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
+ *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}
+ *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row</li>
  *     {@code i}.
  *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
  * </ul>
@@ -64,7 +64,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
  * @param <T> Type of this CSR field matrix.
  * @param <U> Type of dense field matrix equivalent to {@code T}.
  * @param <V> Type of vector equivalent to {@code V}.
- * @param <Y> Type of field element of this matrix.
+ * @param <W> Type of field element of this matrix.
  */
 public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U, V, W>,
         U extends AbstractDenseRingMatrix<U, ?, W>,

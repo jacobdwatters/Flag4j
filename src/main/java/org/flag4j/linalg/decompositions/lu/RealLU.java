@@ -24,6 +24,7 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -72,7 +73,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * The decomposition workflow typically follows these steps:
  * <ol>
  *     <li>Instantiate a concrete subclass of {@code LU}.</li>
- *     <li>Call {@link #decompose(Matrix)} to perform the factorization.</li>
+ *     <li>Call {@link LU#decompose(MatrixMixin)} to perform the factorization.</li>
  *     <li>Retrieve the resulting matrices using {@link #getL()}, {@link #getU()}, {@link #getP()}, and {@link #getQ()}.</li>
  * </ol>
  *

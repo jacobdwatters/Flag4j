@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2025. Jacob Watters
+ * Copyright (c) 2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,6 @@
  */
 
 /**
- * This package contains ops which can be applied to both dense or sparse tensors.
+ * Solvers for under-, well-, or over-determined linear systems in a least-squares sense.
  */
-package org.flag4j.linalg.ops.common;
-
+package org.flag4j.linalg.solvers.lstsq;

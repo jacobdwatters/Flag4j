@@ -39,27 +39,25 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
 
 /**
- * <p>Solves a well determined system of equations <b>Ax=b</b> or <b>AX=B</b> in an exact sense by using a LU decomposition
- * where <b>A</b>, <b>B</b>, and <b>X</b> are matrices, and <b>x</b> and <b>b</b> are vectors.
- *
- * <p>If the system is not well determined, i.e. <b>A</b> is square and full rank, then use a
+ * <p>Solves a well determined system of equations <strong>Ax = b</strong> or <strong>AX = B</strong> in an exact sense.
+ * <p>If the system is not well determined, i.e. <strong>A</strong> is not square or not full rank, then use a
  * {@link org.flag4j.linalg.solvers.lstsq.LstsqSolver least-squares solver}.
  *
  * <h2>Usage:</h2>
  * <p>A single system may be solved by calling either {@link #solve(MatrixMixin, VectorMixin)} or
  * {@link #solve(MatrixMixin, VectorMixin)}.
  *
- * <p>Instances of this solver may also be used to efficiently solve many systems of the form <b>Ax=b</b> or <b>AX=B</b>
- * for the same coefficient matrix <b>A</b> but numerous constant vectors/matrices <b>b</b> or <b>B</b>. To do this, the workflow
+ * <p>Instances of this solver may also be used to efficiently solve many systems of the form <strong>Ax = b</strong> or <strong>AX = B</strong>
+ * for the same coefficient matrix <strong>A</strong> but numerous constant vectors/matrices <strong>b</strong> or <strong>B</strong>. To do this, the workflow
  * would be as follows:
  * <ol>
  *     <li>Create a concrete instance of {@code LinearMatrixSolver}.</li>
- *     <li>Call {@link #decompose(MatrixMixin) decompse(A)} once on the coefficient matrix <b>A</b>.</li>
+ *     <li>Call {@link #decompose(MatrixMixin) decompse(A)} once on the coefficient matrix <strong>A</strong>.</li>
  *     <li>Call {@link #solve(VectorMixin) solve(b)} or {@link #solve(MatrixMixin) solve(B)} as many times as needed to solve each
- *     system for with the various <b>b</b> vectors and/or <b>B</b> matrices. </li>
+ *     system for with the various <strong>b</strong> vectors and/or <strong>B</strong> matrices. </li>
  * </ol>
  *
- * <b>Note:</b> Any call made to one of the following methods after a call to {@link #decompose(MatrixMixin) decompse(A)} will
+ * <strong>Note:</strong> Any call made to one of the following methods after a call to {@link #decompose(MatrixMixin) decompse(A)} will
  * override the coefficient matrix set that call:
  * <ul>
  *     <li>{@link #solve(MatrixMixin, VectorMixin)}</li>
@@ -68,6 +66,9 @@ import static org.flag4j.linalg.decompositions.lu.LU.Pivoting.PARTIAL;
  *
  * <p>Specialized solvers are provided for inversion using {@link #solveIdentity(MatrixMixin)}. This should be preferred
  * over calling on of the other solve methods and providing an identity matrix explicitly.
+ * 
+ * <h2>Implementation Notes:</h2>
+ * The
  *
  * @param <T> The type of the coefficient matrix in the linear system.
  * @param <U> The type of vector in the linear system.
@@ -101,8 +102,8 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
     /**
      * Constructs an exact LU solver with a specified LU decomposer.
      * @param lu LU decomposer to employ in solving the linear system.
-     * @param forwardSolver Solver to use when solving <b>LY = b</b>.
-     * @param backSolver Solver to use when solving <b>LY = b</b>.
+     * @param forwardSolver Solver to use when solving <strong>LY = b</strong>.
+     * @param backSolver Solver to use when solving <strong>LY = b</strong>.
      * @throws IllegalArgumentException If the LU decomposer does not use partial pivoting.
      */
     protected ExactSolver(LU<T> lu, ForwardSolver<T, U, ?> forwardSolver, BackSolver<T, U, ?> backSolver) {
@@ -118,16 +119,16 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * Decomposes a matrix <b>A</b> using an {@link LU LU decomposition}. This decomposition is then used by
+     * Decomposes a matrix <strong>A</strong> using an {@link LU LU decomposition}. This decomposition is then used by
      * {@link #solve(VectorMixin)} and {@link #solve(MatrixMixin)} to efficiently solve the systems
-     * <b>Ax=b</b> and <b>AX=B</b> respectively.
+     * <strong>Ax = b</strong> and <strong>AX = B</strong> respectively.
      *
-     * <p><b>Note</b>: Any subsequent call to {@link #solve(MatrixMixin, VectorMixin)} or {@link #solve(MatrixMixin, MatrixMixin)}
+     * <p><strong>Note</strong>: Any subsequent call to {@link #solve(MatrixMixin, VectorMixin)} or {@link #solve(MatrixMixin, MatrixMixin)}
      * after a call to this method will override the coefficient matrix.
      *
      * <p>This is useful, and more efficient than {@link #solve(MatrixMixin, VectorMixin)} and
      * {@link #solve(MatrixMixin, MatrixMixin)}, if you need to solve multiple systems of this form
-     * for the same <b>A</b> but numerous <b>b</b>'s or <b>B</b>'s that may not all be available at the same time.
+     * for the same <strong>A</strong> but numerous <strong>b</strong>'s or <strong>B</strong>'s that may not all be available at the same time.
      *
      * @param A Matrix to decompose.
      */
@@ -147,10 +148,11 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * <p>Solves the linear system of equations given by <b>Ax=b</b> for the vector <b>x</b>. The system must be well
+     * <p>Solves the linear system of equations given by <strong>Ax = b</strong> for the vector <strong>x</strong>. The system must be well
      * determined.
-     * @param b Vector of constants, <b>b</b>, in the linear system.
-     * @return The solution to <b>x</b> in the linear system <b>Ax=b</b>.
+     * @param b Vector of constants, <strong>b</strong>, in the linear system.
+     * @return The solution to <strong>x</strong> in the linear system <strong>Ax = b</strong> for the last <strong>A</strong> passed to
+     * {@link #decompose(MatrixMixin)}.
      * @throws IllegalStateException If no coefficient matrix has been specified for this solver by first calling one of the following:
      * <ul>
      *     <li>{@link #decompose(MatrixMixin)}</li>
@@ -170,9 +172,9 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * <p>Solves the set of linear system of equations given by <b>AX=B</b> for the matrix <b>X</b>.
+     * <p>Solves the set of linear system of equations given by <strong>AX = B</strong> for the matrix <strong>X</strong>.
      *
-     * @param B Matrix of constants, <b>B</b>, in the linear system.
+     * @param B Matrix of constants, <strong>B</strong>, in the linear system.
      * @throws IllegalStateException If no coefficient matrix has been specified for this solver by first calling one of the following:
      * <ul>
      *     <li>{@link #decompose(MatrixMixin)}</li>
@@ -192,16 +194,16 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * <p>Solves the linear system of equations given by <b>Ax=b</b> for the vector <b>x</b>. The system must be well
+     * <p>Solves the linear system of equations given by <strong>Ax = b</strong> for the vector <strong>x</strong>. The system must be well
      * determined.
      *
-     * <p><b>Note</b>: Any call of this method will override the coefficient matrix specified in any previous calls to
+     * <p><strong>Note</strong>: Any call of this method will override the coefficient matrix specified in any previous calls to
      * {@link #decompose(MatrixMixin)} on the same solver instance.
      *
-     * @param A Coefficient matrix, <b>A</b>, in the linear system. Must be square and have full rank
+     * @param A Coefficient matrix, <strong>A</strong>, in the linear system. Must be square and have full rank
      *          (i.e. all rows, or equivalently columns, must be linearly independent).
-     * @param b Vector of constants, <b>b</b>, in the linear system.
-     * @return The solution to <b>x</b> in the linear system <b>Ax=b</b>.
+     * @param b Vector of constants, <strong>b</strong>, in the linear system.
+     * @return The solution to <strong>x</strong> in the linear system <strong>Ax = b</strong>.
      * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of data in
      * {@code b}.
      * @throws IllegalArgumentException If {@code A} is not square.
@@ -219,15 +221,15 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * <p>Solves the set of linear system of equations given by <b>AX=B</b> for the matrix <b>X</b>.
+     * <p>Solves the set of linear system of equations given by <strong>AX = B</strong> for the matrix <strong>X</strong>.
      *
-     * <p><b>Note</b>: Any call of this method will override the coefficient matrix specified in any previous calls to
+     * <p><strong>Note</strong>: Any call of this method will override the coefficient matrix specified in any previous calls to
      * {@link #decompose(MatrixMixin)} on the same solver instance.
      *
-     * @param A Coefficient matrix, <b>A</b>, in the linear system. Must be square and have full rank
+     * @param A Coefficient matrix, <strong>A</strong>, in the linear system. Must be square and have full rank
      *          (i.e. all rows, or equivalently columns, must be linearly independent).
-     * @param B Matrix of constants, <b>B</b>, in the linear system.
-     * @return The solution to <b>x</b> in the linear system <b>AX=B</b>.
+     * @param B Matrix of constants, <strong>B</strong>, in the linear system.
+     * @return The solution to <strong>x</strong> in the linear system <strong>AX = B</strong>.
      * @throws IllegalArgumentException If the number of columns in {@code A} is not equal to the number of rows in
      * {@code B}.
      * @throws IllegalArgumentException If {@code A} is not square.
@@ -245,15 +247,15 @@ public abstract class ExactSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * Solves the set of linear system of equations given by <b>AX=I</b> for the matrix <b>x</b> where <b>I</b>
-     * is the identity matrix of the appropriate size. Thus, <b>X = A<sup>-1</sup></b> meaning this method computes the inverse of
-     * <b>A</b>.
+     * Solves the set of linear system of equations given by <strong>AX=I</strong> for the matrix <strong>x</strong> where <strong>I</strong>
+     * is the identity matrix of the appropriate size. Thus, <strong>X = A<sup>-1</sup></strong> meaning this method computes the inverse of
+     * <strong>A</strong>.
      *
      * <p>This method should be preferred over {@code solve(A, Matrix.I(A.shape))} or {@code solve(A, CMatrix.I(A.shape))} as it uses
      * specialized solvers that take advantage of the structure of the identity matrix.
      *
      * @param A Coefficient matrix in the linear system.
-     * @return The solution to <b>x</b> in the linear system <b>AX=I</b>.
+     * @return The solution to <strong>x</strong> in the linear system <strong>AX=I</strong>.
      * @throws IllegalArgumentException If {@code A} is not square.
      * @throws SingularMatrixException If {@code A} is singular.
      */
