@@ -23,6 +23,6 @@
  */
 
 /**
- * Distributions useful for repeated random sampling from the same distribution.
+ * Statistical distributions useful for repeated random sampling.
  */
 package org.flag4j.rng.distributions;

@@ -35,7 +35,7 @@ import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
  * {@link ComplexLU LU decomposition}
  * where <b>A</b>, <b>B</b>, and <b>X</b> are matrices, and <b>x</b> and <b>b</b> are vectors.
  *
- * <p>If the system is not well determined, i.e. <b>A</b> is square and full rank, then use a
+ * <p>If the system is not well determined, i.e. <b>A</b> is not square or not full rank, then use a
  * {@link org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolver least-squares solver}.
  *
  * <h2>Usage:</h2>

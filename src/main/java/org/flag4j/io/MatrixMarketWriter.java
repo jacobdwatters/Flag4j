@@ -40,7 +40,7 @@ import java.io.IOException;
 
 
 /**
- * <p></p>A utility class for writing matrices (from the Flag4j library) to a file in the
+ * <p>A utility class for writing matrices (from the Flag4j library) to a file in the
  * <a href="https://math.nist.gov/MatrixMarket/formats.html">Matrix Market Exchange Format</a>.
  *
  * <p>This class supports writing both dense and sparse matrices (real or complex) to the
@@ -49,7 +49,7 @@ import java.io.IOException;
  *
  * <p>All matrices are currently written in general form and the symmetry is not considered.
  *
- * <p><h2>Currently Supported Matrix Types</h2>
+ * <h2>Currently Supported Matrix Types</h2>
  * <ul>
  *   <li>{@code Matrix} (real dense)</li>
  *   <li>{@code CMatrix} (complex dense)</li>

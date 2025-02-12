@@ -59,7 +59,8 @@ import org.flag4j.util.exceptions.TensorShapeException;
  *
  * @param <T> Type of this sparse COO tensor.
  * @param <U> Type of dense tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
- * {@link #tensorDot(AbstractCooRingTensor, int[], int[])} ) between two sparse tensors results in a dense tensor.
+ * {@link AbstractCooSemiringTensor#tensorDot(AbstractCooSemiringTensor, int[], int[])} ) between two sparse tensors results in a dense
+ * tensor.
  * @param <V> Type of the {@link Ring} which the data of this tensor belong to.
  */
 public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U, V>,
