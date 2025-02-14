@@ -61,10 +61,25 @@ import org.flag4j.util.ValidateParameters;
  *           <sup>  </sup>[  0  0   T<sub>2</sub> ]</pre>
  * Where T<sub>1</sub> and T<sub>2</sub> are upper triangular matrices whose eigenvalues lie along the diagonal. These are also
  * eigenvalues of A. Then, if scaling is applied we obtain:
+ *
+ * <span class="latex-replaceable">
  * <pre>
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
  *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
+ * </span>
+ *
+ * <!-- LATEX: {@literal $$ \begin{bmatrix} T_1 & XD_1 & Y \\ \mathbf{0} & D_1^{-1}B_1D_1 & D_1^{-1}Z \\ \mathbf{0} & \mathbf{0} & T_2 \end{bmatrix}  $$ } -->
+ *
+ * <!-- LATEX:
+ * {@literal
+ * $$ \begin{bmatrix}
+ * T_1 & XD_1 & Y \\
+ * \mathbf{0} & D_1^{-1}B_1D_1 & D_1^{-1}Z \\
+ * \mathbf{0} & \mathbf{0} & T_2
+ * \end{bmatrix}  $$
+ * }
+ * -->
  *
  * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>

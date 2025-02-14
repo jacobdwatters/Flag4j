@@ -1,3 +1,5 @@
+
+[![Build and Deploy Javadoc](https://github.com/jacobdwatters/Flag4j/actions/workflows/javadoc-gh-pages.yml/badge.svg)](https://github.com/jacobdwatters/Flag4j/actions/workflows/javadoc-gh-pages.yml)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jacobdwatters_Flag4j&metric=coverage)](https://sonarcloud.io/summary/new_code?id=jacobdwatters_Flag4j)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=jacobdwatters_Flag4j&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=jacobdwatters_Flag4j)
 

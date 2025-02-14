@@ -29,7 +29,7 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.rng.RandomComplex;
 
 /**
- * A 2D bivariateGaussian distribution on the complex plane.
+ * A 2D bivariate Gaussian distribution on the complex plane.
  */
 public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex> {
 
@@ -54,9 +54,6 @@ public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex
      */
     private final double corrCoeff;
 
-    //corrCoeff Correlation coefficient between real and imaginary values in the distribution. Must satisfy
-    //     * {@code corrCoeff > -1 && corrCoeff < 1}.
-
 
     /**
      * Validated standard deviations and correlation coefficient are within proper bounds.
@@ -72,7 +69,7 @@ public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex
 
 
     /**
-     * Constructs 2D bivariateGaussian distribution on the complex plane with a correlation coefficient of zero.
+     * Constructs 2D bivariate Gaussian distribution on the complex plane with a correlation coefficient of zero.
      * To specify a correlation coefficient use {@link #Complex128BiGaussian(RandomComplex, double, double, double, double, double)}.
      *
      * @param rng Pseudorandom number generator to use when randomly sampling from this distribution.
@@ -93,7 +90,7 @@ public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex
 
 
     /**
-     * Constructs 2D bivariateGaussian distribution on the complex plane with a specified correlation coefficient.
+     * Constructs 2D bivariate Gaussian distribution on the complex plane with a specified correlation coefficient.
      *
      * @param rng Pseudorandom number generator to use when randomly sampling from this distribution.
      * @param meanRe Mean along real axis of complex plane for the distribution.
