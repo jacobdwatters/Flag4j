@@ -88,12 +88,13 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix L and a vector b.
-     * That is, solves the linear system L*x=b where L is a lower triangular matrix.
-     * @param L Unit lower triangular coefficient matrix. If {@code L} is not unit lower triangular, it will be treated
-     *          as if it were.
-     * @param b Constant vector.
-     * @return The result of solving the linear system L*x=b where L is a lower triangular matrix.
+     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and a vector <strong>b</strong>.
+     * That is, solves the linear system <strong>Lx = b</strong> for <strong>x</strong> where <strong>L</strong> is lower triangular.
+     * @param L Lower triangular coefficient matrix <strong>L</strong>. {@code L} is assumed to be lower triangular and only entries
+     * at and below the principle diagonal will be accessed.
+     * @param b Constant vector <strong>b</strong>.
+     * @return The result of solving the linear system <strong>Lx = b</strong> where <strong>L</strong> is a lower triangular.
+     * @throws SingularMatrixException If {@code L} is singular (i.e. has at least one zero on the principle diagonal).
      */
     @Override
     public CVector solve(CMatrix L, CVector b) {
@@ -102,15 +103,13 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix L and a matrix B.
-     * That is, solves the linear system L*X=B where L is a lower triangular matrix.
-     * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
-     *          as if it were.
-     * @param B Constant Matrix.
-     * @return The result of solving the linear system L*X=B where L is a lower triangular matrix.
-     * If the lower triangular matrix L is singular (i.e. has a zero on the principle diagonal).
-     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
-     * the principle diagonal).
+     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and a matrix <strong>B</strong>.
+     * That is, solves the linear system <strong>LX = B</strong> for <strong>X</strong> where <strong>L</strong> is lower triangular.
+     * @param L Lower triangular coefficient matrix <strong>L</strong>. {@code L} is assumed to be lower triangular and only entries
+     * at and below the principle diagonal will be accessed.
+     * @param b Constant matrix <strong>B</strong>.
+     * @return The result of solving the linear system <strong>LX = B</strong> where <strong>L</strong> is a lower triangular.
+     * @throws SingularMatrixException If {@code L} is singular (i.e. has at least one zero on the principle diagonal).
      */
     @Override
     public CMatrix solve(CMatrix L, CMatrix B) {
@@ -119,13 +118,13 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
 
     /**
-     * Solves a linear system <b>L*X=P</b> for <b>X</b> where <b>L</b> is a lower triangular matrix and
-     * <b>P</b> is a permutation matrix.
+     * Solves a linear system <strong>LX = P</strong> for <strong>X</strong> where <strong>L</strong> is a lower triangular matrix and
+     * <strong>P</strong> is a permutation matrix.
      *
      * @param L Lower triangular coefficient matrix.
      * @param P Constant permutation matrix.
      *
-     * @return The solution of <b>X</b> for the linear system <b>L*X=P</b>.
+     * @return The solution of <strong>X</strong> for the linear system <strong>LX = P</strong>.
      */
     @Override
     public CMatrix solve(CMatrix L, PermutationMatrix P) {
@@ -135,11 +134,11 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
     /**
      * Performs forward substitution for a unit lower triangular matrix L and the identity matrix.
-     * That is, solves the linear system L*X=I where L is a lower triangular matrix and I is
+     * That is, solves the linear system <strong>LX = I</strong> where L is a lower triangular matrix and I is
      * the appropriately sized identity matrix.
      * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
      *          as if it were.
-     * @return The result of solving the linear system L*X=B where L is a lower triangular matrix.
+     * @return The result of solving the linear system <strong>LX = B</strong> where L is a lower triangular matrix.
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
      * the principle diagonal).
      */
@@ -153,7 +152,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
      *          as if it were.
      * @param b Vector of constants in the linear system.
-     * @return The solution of x for the linear system L*x=b.
+     * @return The solution of x for the linear system <strong>Lx = b</strong>.
      */
     private CVector solveUnitLower(CMatrix L, CVector b) {
         checkParams(L, b.size);
@@ -182,7 +181,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * Solves a linear system where the coefficient matrix is unit lower triangular and the constant matrix
      * is the identity matrix.
      * @param L Unit lower triangular matrix.
-     * @return The solution of X for the linear system L*X=I.
+     * @return The solution of X for the linear system <strong>LX = I</strong>.
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
      * the principle diagonal).
      */
@@ -219,11 +218,11 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
 
     /**
-     * Solves a linear system L*X=I where the coefficient matrix L is lower triangular and the
+     * Solves a linear system <strong>LX = I</strong> where the coefficient matrix L is lower triangular and the
      * constant matrix I is the appropriately sized identity matrix.
      * @param L Unit lower triangular matrix (Note, this is not checked).
      *          If {@code L} is not lower triangular, it will be treated as if it were. No error will be thrown.
-     * @return The solution of X for the linear system L*X=I.
+     * @return The solution of X for the linear system <strong>LX = I</strong>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -269,7 +268,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
      * @param b Vector of constants in the linear system.
-     * @return The solution of x for the linear system L*x=b.
+     * @return The solution of x for the linear system <strong>Lx = b</strong>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -304,7 +303,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Unit lower triangular matrix.
      * @param B Matrix of constants in the linear system.
-     * @return The solution of X for the linear system L*X=b.
+     * @return The solution of X for the linear system <strong>LX = B</strong>.
      */
     private CMatrix solveUnitLower(CMatrix L, CMatrix B) {
         checkParams(L, B.numRows);
@@ -343,7 +342,7 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
      * @param B Matrix of constants in the linear system.
-     * @return The solution of X for the linear system L*X=b.
+     * @return The solution of X for the linear system <strong>LX = B</strong>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -387,10 +386,10 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
 
     /**
-     * Solves a linear system <b>LX=P</b> where the coefficient matrix <b>L</b> is lower triangular and the
-     * constant matrix <b>P</b> is a permutation matrix.
-     * @param L Lower triangular coefficient matrix <b>L</b>.
-     * @return The solution of <b>X</b> to the linear system <b>LX=P</b>.
+     * Solves a linear system <strong>LX=P</strong> where the coefficient matrix <strong>L</strong> is lower triangular and the
+     * constant matrix <strong>P</strong> is a permutation matrix.
+     * @param L Lower triangular coefficient matrix <strong>L</strong>.
+     * @return The solution of <strong>X</strong> to the linear system <strong>LX=P</strong>.
      * @throws SingularMatrixException If {@code L} is singular (i.e. has a zero on the principle diagonal).
      */
     private CMatrix solvePerm(CMatrix L, PermutationMatrix P) {
@@ -437,10 +436,10 @@ public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Comple
 
 
     /**
-     * Solves a linear system <b>LX=P</b> where the coefficient matrix <b>L</b> is unit-lower triangular and the
-     * constant matrix <b>P</b> is a permutation matrix.
-     * @param L Unit lower triangular coefficient matrix <b>L</b>.
-     * @return The solution of <b>X</b> to the linear system <b>LX=P</b>.
+     * Solves a linear system <strong>LX=P</strong> where the coefficient matrix <strong>L</strong> is unit-lower triangular and the
+     * constant matrix <strong>P</strong> is a permutation matrix.
+     * @param L Unit lower triangular coefficient matrix <strong>L</strong>.
+     * @return The solution of <strong>X</strong> to the linear system <strong>LX=P</strong>.
      */
     private CMatrix solveUnitPerm(CMatrix L, PermutationMatrix P) {
         checkParams(L, P.size);
