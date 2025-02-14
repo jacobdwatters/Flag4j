@@ -34,9 +34,9 @@ import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
- * This solver solves linear systems of equations where the coefficient matrix in a lower triangular real dense matrix
- * and the constant vector is a real dense vector. That is, solves, L*x=b or L*X=B for the vector x or the
- * matrix X respectively where L is a lower triangular matrix.
+ * This solver solves linear systems of equations where the coefficient matrix is lower triangular.
+ * That is, solves the systems <strong>Lx = b</strong> or <strong>LX = B</strong> where <strong>L</strong> is a lower triangular
+ * matrix. This is accomplished using a simple forward substitution.
  *
  * @param <T> Type of coefficient matrix.
  * @param <U> Vector type equivalent to the coefficient matrix.
@@ -88,11 +88,11 @@ public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends
 
 
     /**
-     * Solves a linear system <b>L*X=P</b> for <b>X</b> where <b>L</b> is a lower triangular matrix and
-     * <b>P</b> is a permutation matrix.
+     * Solves a linear system <strong>LX = P</strong> for <strong>X</strong> where <strong>L</strong> is a lower triangular matrix and
+     * <strong>P</strong> is a permutation matrix.
      * @param L Lower triangular coefficient matrix.
      * @param P Constant permutation matrix.
-     * @return The solution of <b>X</b> for the linear system <b>L*X=P</b>.
+     * @return The solution of <strong>X</strong> for the linear system <strong>LX = P</strong>.
      */
     public abstract T solve(T L, PermutationMatrix P);
 
