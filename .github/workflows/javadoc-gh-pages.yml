@@ -26,6 +26,7 @@ jobs:
 
       # - name: Inject MathJax script
       #   # inject MathJax for rendering
+
       #   run: |
       #     find target/reports/apidocs -type f -name "*.html" -exec \
       #       sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
