@@ -32,8 +32,11 @@ import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
- * This solver solves linear systems of equations where the coefficient matrix in a lower triangular complex dense matrix
- * and the constant vector/matrix is complex and dense.
+ * This solver solves linear systems of equations where the coefficient matrix is lower triangular.
+ * That is, solves the systems <strong>Lx = b</strong> or <strong>LX = B</strong> where <strong>L</strong> is a lower triangular
+ * matrix. This is accomplished using a simple forward substitution.
+ *
+ * @see RealForwardSolver
  */
 public class ComplexForwardSolver extends ForwardSolver<CMatrix, CVector, Complex128[]> {
 

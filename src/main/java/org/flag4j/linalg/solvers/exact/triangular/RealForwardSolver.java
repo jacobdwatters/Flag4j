@@ -35,6 +35,8 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * This solver solves linear systems of equations where the coefficient matrix is lower triangular.
  * That is, solves the systems <strong>Lx = b</strong> or <strong>LX = B</strong> where <strong>L</strong> is a lower triangular
  * matrix. This is accomplished using a simple forward substitution.
+ *
+ * @see ComplexForwardSolver
  */
 public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 

@@ -45,6 +45,10 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>, V>
         implements LinearMatrixSolver<T, U> {
 
+    // TODO: Investigate alternative methods for determining if the matrix is singular (or near singular).
+    //  Since the coefficient matrix is upper-triangular there is no need to compute the determinant explicitly,
+    //  we need only check if any individual value along the diagonal is near-zero.
+
     /**
      * Threshold for determining if a determinant is to be considered zero when checking if the coefficient matrix is
      * full rank.
