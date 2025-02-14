@@ -28,7 +28,6 @@ package org.flag4j.linalg.solvers.exact.triangular;
 import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 
@@ -93,14 +92,15 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves the linear system of equations given by <span class="latex-inline">Ux = b</span> where the coefficient matrix
-     * <span class="latex-inline">U</span> is an {@link Matrix#isTriU() upper triangular} matrix.
+     * Solves the linear system of equations given by U*x=b where the coefficient matrix U
+     * is an upper triangular matrix.
      *
-     * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *          this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
+     * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
+     *          upper triangular, it will be treated as if it were.
      * @param b Vector of constants in the linear system.
-     * @return The solution to x in the linear system <span class="latex-inline">Ux = b</span>.
-     * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
+     * @return The solution to x in the linear system A*x=b.
+     * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. if it has a zero along
+     * the principle diagonal).
      */
     @Override
     public CVector solve(CMatrix U, CVector b) {
@@ -133,13 +133,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves the linear system of equations given by <span class="latex-inline">UX = B</span> where the coefficient matrix
-     * <span class="latex-inline">U</span> is an {@link Matrix#isTriU() upper triangular} matrix.
+     * Solves the linear system of equations given by U*X=B where the coefficient matrix U
+     * is an upper triangular matrix.
      *
-     * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
+     * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
+     *          upper triangular, it will be treated as if it were.
      * @param B Matrix of constants in the linear system.
-     * @return The solution to X in the linear system <span class="latex-inline">UX = B</span>.
+     * @return The solution to X in the linear system A*X=B.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -242,17 +242,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves a special case of the linear system <span class="latex-inline">UX = L</span> for <span class="latex-inline">X</span>
-     * where the coefficient matrix <span class="latex-inline">U</span>
-     * is an {@link Matrix#isTriU() upper triangular} matrix and the constant matrix <span class="latex-inline">L</span> is
-     * {@link Matrix#isTriL() lower triangular}.
+     * Solves a special case of the linear system U*X=L for X where the coefficient matrix U
+     * is an {@link CMatrix#isTriU() upper triangular} matrix and the constant matrix L is
+     * {@link CMatrix#isTriL() lower triangular}.
      *
-     * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
-     * @param L Lower triangular constant matrix. This is not explicit checked. If {@code L} is not lower triangular, values above
-     *          the principle diagonal will be ignored and the result will still be correctly computed.
-     * @return The result of solving the linear system <span class="latex-inline">UX = L</span> for the matrix
-     * <span class="latex-inline">X</span>.
+     * @param U Upper triangular coefficient matrix
+     * @param L Lower triangular constant matrix.
+     * @return The result of solving the linear system U*X=L for the matrix X.
      */
     public CMatrix solveLower(CMatrix U, CMatrix L) {
         checkParams(U, L.shape);
