@@ -18,19 +18,19 @@ jobs:
           java-version: 23
 
       - name: Build Javadoc
-        # Generate javadoc and inject MathJax in a very cheeky way.
         run: |
           mvn clean install
           mvn javadoc:javadoc \
           -Dmaven.javadoc.failOnError=false \
           -Dmaven.javadoc.skip=false
           
-      - name: Inject MathJax script
-        run: |
-          find target/reports/apidocs -type f -name "*.html" -exec \
-            sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
-            </script>' {} +
+      # - name: Inject MathJax script
+      #   # inject MathJax for rendering 
+      #   run: |
+      #     find target/reports/apidocs -type f -name "*.html" -exec \
+      #       sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
+      #       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
+      #       </script>' {} +
 
       - name: Upload Pages Artifact
         # This action collects the directory containing docs
