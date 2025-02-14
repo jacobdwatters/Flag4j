@@ -29,7 +29,7 @@ jobs:
       - name: Inject MathJax script
         # Adjust path to where your Javadoc output is actually generated
         run: |
-          find target/site/apidocs -type f -name "*.html" -exec \
+          find target/reports/apidocs -type f -name "*.html" -exec \
             sed -i '/<\/head>/i <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>' {} +
 
       - name: Upload Pages Artifact
