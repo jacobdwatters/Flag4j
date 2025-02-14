@@ -24,8 +24,8 @@ jobs:
           mvn javadoc:javadoc \
           -Dmaven.javadoc.failOnError=false \
           -Dmaven.javadoc.skip=false \
-          -header "<script id=\"MathJax-script\" async \
-           src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>"
+          -header "<script type="text/javascript" id="MathJax-script" async \ 
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>"
           
       # - name: Inject MathJax script
       #   # Adjust path to where your Javadoc output is actually generated
