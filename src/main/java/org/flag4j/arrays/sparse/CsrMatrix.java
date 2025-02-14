@@ -61,7 +61,7 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
  * The non-zero values of the matrix are stored in a compact form, reducing memory usage and improving performance for many matrix
  * operations.
  *
- * <h3>CSR Representation:</h3>
+ * <h2>CSR Representation:</h2>
  * A CSR matrix is represented internally using three main arrays:
  * <ul>
  *   <li><b>Data:</b> Non-zero values are stored in a one-dimensional array {@link #data} of length {@link #nnz}. Any element not
@@ -91,7 +91,7 @@ import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
  *
  * <p>Conversion to other formats, such as COO or dense matrices, can be performed using {@link #toCoo()} or {@link #toDense()}.
  *
- * <h3>Usage Examples:</h3>
+ * <h2>Usage Examples:</h2>
  * <pre>{@code
  * // Define matrix data.
  * Shape shape = new Shape(8, 8);

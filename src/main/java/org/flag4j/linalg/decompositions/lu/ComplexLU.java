@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,56 +26,96 @@ package org.flag4j.linalg.decompositions.lu;
 
 
 import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
- * <p>Complex128his class provides methods for computing the LU decomposition of a complex dense matrix.
- * <p>Complex128he following decompositions are provided: A=LU, PA=LU, and PAQ=LU.
+ * <p>Instances of this class can be used to compute the LU decomposition of a complex dense matrix.
+ *
+ * <p>The LU decomposition decomposes a matrix <b>A</b> into the product of
+ * a unit-lower triangular matrix <b>L</b> and an upper triangular matrix <b>U</b>, such that:
+ * <pre>
+ *     <b>A = LU</b></pre>
+ *
+ * <h2>Pivoting Strategies:</h2>
+ * <p>Pivoting may be used to improve the stability of the decomposition. Pivoting involves swapping rows and/or columns within the
+ * matrix during decomposition.
+ *
+ * <p>This class supports three pivoting strategies via the {@link Pivoting} enum:
+ * <ul>
+ *     <li>{@link Pivoting#NONE}: No pivoting is performed. This pivoting strategy is generally <em>not</em> recommended.</li>
+ *     <li>{@link Pivoting#PARTIAL}: Only row pivoting is performed to improve numerical stability.
+ *     Generally, this is the preferred pivoting strategy. The decomposition then becomes,
+ *     <pre>
+ *         <b>PA = LU</b></pre></li>
+ *     where <b>P</b> is a {@link PermutationMatrix permutation matrix} representing the row swaps.
+ *     <li>{@link Pivoting#FULL}: Both row and column pivoting are performed to enhance numerical robustness.
+ *     The decomposition then becomes,
+ *     <pre>
+ *         <b>PAQ = LU</b></pre>
+ *     where <b>P</b> and <b>Q</b> are {@link PermutationMatrix permutation matrices} representing the row and column swaps
+ *     respectively.
+ *
+ *     <p>Full pivoting <em>may</em> be useful for <em>highly</em> ill-conditioned matrices but, for practical
+ *     purposes, partial pivoting is generally sufficient and more performant.</li>
+ * </ul>
+ *
+ * <h2>Storage Format:</h2>
+ * The computed LU decomposition is stored within a single matrix {@code LU}, where:
+ * <ul>
+ *     <li>The upper triangular part (including the diagonal) represents the non-zero values of <b>U</b>.</li>
+ *     <li>The strictly lower triangular part represents the non-zero, non-diagonal values of <b>L</b>. Since <b>L</b> is
+ *     unit-lower triangular, the diagonal is not stored as it is known to be all zeros.</li>
+ * </ul>
+ *
+ * <h2>Usage:</h2>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate a concrete subclass of {@code LU}.</li>
+ *     <li>Call {@link LU#decompose(MatrixMixin)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getL()}, {@link #getU()}, {@link #getP()}, and {@link #getQ()}.</li>
+ * </ol>
+ *
+ * @see Pivoting
+ * @see PermutationMatrix
+ * @see CMatrix
  */
 public class ComplexLU extends LU<CMatrix> {
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix using partial pivoting.
+     * <p>Constructs a LU decomposer for complex dense matrices.
+     * <p>This decomposition will be performed out-of-place using partial pivoting.
      */
     public ComplexLU() {
-        super(Pivoting.PARTIAL);
+        super(Pivoting.PARTIAL, false);
     }
 
 
     /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
-     * @param pivoting Pivoting to use in the LU decomposition.
-     */
-    public ComplexLU(Pivoting pivoting) {
-        super(pivoting);
-    }
-
-
-    /**
-     * Constructs a LU decomposer to decompose the specified matrix.
-     *
+     * <p>Constructs a LU decomposer for complex dense matrices.
+     * <p>This decomposition will be performed out-of-place.
      * @param pivoting Pivoting to use. If pivoting is 2, full pivoting will be used. If pivoting is 1, partial pivoting
      *                 will be used. If pivoting is any other value, no pivoting will be used.
-     * @param zeroPivotTol Value for determining if a zero pivot value is detected when computing the LU decomposition with
-     *                     no pivoting. If a pivot value (value along the principle diagonal of U) is within this tolerance
-     *                     from zero, then an exception will be thrown if solving with no pivoting.
      */
-    public ComplexLU(Pivoting pivoting, double zeroPivotTol) {
-        super(pivoting, zeroPivotTol);
+    public ComplexLU(Pivoting pivoting) {
+        super(pivoting, false);
     }
 
 
     /**
-     * Initializes the {@code LU} matrix by copying the source matrix to decompose.
-     * @param src Source matrix to decompose.
+     * Constructs a LU decomposer for complex dense matrices.
+     * @param pivoting Pivoting to use.
+     * @param inPlace Flag indicating if the decomposition should be done in/out-of-place.
+     * <ul>
+     *     <li>If {@code true}, then the decomposition will be done in-place.</li>
+     *     <li>If {@code true}, then the decomposition will be done out-of-place.</li>
+     * </ul>
      */
-    @Override
-    protected void initLU(CMatrix src) {
-        // TODO: Add overloaded constructor in super which has flag specifying if the decomposition should be done in place or copied.
-        LU = new CMatrix(src.shape, src.data.clone());
+    protected ComplexLU(Pivoting pivoting, boolean inPlace) {
+        super(pivoting, inPlace);
     }
 
 
@@ -86,10 +126,8 @@ public class ComplexLU extends LU<CMatrix> {
     protected void noPivot() {
         // Using Gaussian elimination and no pivoting
         for(int j=0; j<LU.numCols; j++) {
-            if(j<LU.numRows && (LU.data[j*LU.numCols + j]).mag() < zeroPivotTol) {
-                throw new LinearAlgebraException("Zero pivot encountered in decomposition." +
-                        " Consider using LU decomposition with partial pivoting.");
-            }
+            if(j<LU.numRows && LU.data[j*LU.numCols + j].isZero())
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }
@@ -107,10 +145,13 @@ public class ComplexLU extends LU<CMatrix> {
         for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxColIndex(j); // Find row index of max value (in absolute value) in column j so that the index >= j.
 
-            // Make the appropriate swaps in LU and P (Complex128his is the partial pivoting step).
-            if(j!=maxIndex && maxIndex>=0) {
+            // Make the appropriate swaps in LU and P (This is the partial pivoting step).
+            if(j!=maxIndex && maxIndex>=0)
                 swapRows(j, maxIndex);
-            }
+
+            // Check for zero pivot after swapping.
+            if (j < LU.numRows && LU.data[j*LU.numCols + j].isZero())
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }
@@ -128,13 +169,15 @@ public class ComplexLU extends LU<CMatrix> {
         for(int j=0; j<LU.numCols; j++) {
             maxIndex = maxIndex(j);
 
-            // Make the appropriate swaps in LU, P and Q (Complex128his is the full pivoting step).
-            if(j!=maxIndex[0] && maxIndex[0]!=-1) {
+            // Make the appropriate swaps in LU, P and Q (This is the full pivoting step).
+            if(j!=maxIndex[0] && maxIndex[0]!=-1)
                 swapRows(j, maxIndex[0]);
-            }
-            if(j!=maxIndex[1] && maxIndex[1]!=-1) {
+            if(j!=maxIndex[1] && maxIndex[1]!=-1)
                 swapCols(j, maxIndex[1]);
-            }
+
+            // Check for zero pivot after both row and column swaps.
+            if (j < LU.numRows && LU.data[j*LU.numCols + j].isZero())
+                throw new LinearAlgebraException(ZERO_PIV_ERR);
 
             computeRows(j);
         }
@@ -152,12 +195,12 @@ public class ComplexLU extends LU<CMatrix> {
         for(int i=j+1; i<LU.numRows; i++) {
             int iRow = i*LU.numCols;
             m = LU.data[iRow + j];
-            m = LU.data[pivotRow + j].isZero() ? m : m.div((Complex128) LU.data[pivotRow + j]);
+            m = LU.data[pivotRow + j].isZero() ? m : m.div(LU.data[pivotRow + j]);
 
             if(!m.isZero()) {
                 // Compute and set U values.
                 for(int k=j; k<LU.numCols; k++)
-                    LU.data[iRow + k] = LU.data[iRow + k].sub(m.mult((Complex128) LU.data[pivotRow + k]));
+                    LU.data[iRow + k] = LU.data[iRow + k].sub(m.mult(LU.data[pivotRow + k]));
             }
 
             // Compute and set L value.
@@ -169,7 +212,7 @@ public class ComplexLU extends LU<CMatrix> {
     /**
      * Computes the max absolute value in a column so that the row is >= j.
      * @param j column index.
-     * @return Complex128he index of the maximum absolute value in the specified column such that the row is >= j.
+     * @return The index of the maximum absolute value in the specified column such that the row is >= j.
      */
     private int maxColIndex(int j) {
         int maxIndex = -1;
@@ -219,10 +262,12 @@ public class ComplexLU extends LU<CMatrix> {
     /**
      * Gets the unit lower triangular matrix of the decomposition.
      *
-     * @return Complex128he lower triangular matrix of the decomposition.
+     * @return The lower triangular matrix of the decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(CMatrix)}.
      */
     @Override
     public CMatrix getL() {
+        ensureHasDecomposed();
         CMatrix L = new CMatrix(LU.numRows, Math.min(LU.numRows, LU.numCols), Complex128.ZERO);
         final Complex128 ONE = LU.data[0].getOne();
 
@@ -239,10 +284,12 @@ public class ComplexLU extends LU<CMatrix> {
     /**
      * Gets the upper triangular matrix of the decomposition.
      *
-     * @return Complex128he lower triangular matrix of the decomposition.
+     * @return The lower triangular matrix of the decomposition.
+     * @throws IllegalStateException If this method is called before {@link #decompose(CMatrix)}.
      */
     @Override
     public CMatrix getU() {
+        ensureHasDecomposed();
         CMatrix U = new CMatrix(Math.min(LU.numRows, LU.numCols), LU.numCols, Complex128.ZERO);
 
         int stopIdx = Math.min(LU.numRows, LU.numCols);

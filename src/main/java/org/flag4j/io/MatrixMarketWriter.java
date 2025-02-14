@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ import java.io.IOException;
 
 
 /**
- * <p></p>A utility class for writing matrices (from the Flag4j library) to a file in the
+ * <p>A utility class for writing matrices (from the Flag4j library) to a file in the
  * <a href="https://math.nist.gov/MatrixMarket/formats.html">Matrix Market Exchange Format</a>.
  *
  * <p>This class supports writing both dense and sparse matrices (real or complex) to the
@@ -49,7 +49,7 @@ import java.io.IOException;
  *
  * <p>All matrices are currently written in general form and the symmetry is not considered.
  *
- * <p><h2>Currently Supported Matrix Types</h2>
+ * <h2>Currently Supported Matrix Types</h2>
  * <ul>
  *   <li>{@code Matrix} (real dense)</li>
  *   <li>{@code CMatrix} (complex dense)</li>
@@ -125,7 +125,7 @@ public final class MatrixMarketWriter {
      * Writes the header of the Matrix Market Exchange Format to the file.
      * @param writer The {@link BufferedWriter} to use when writing to file.
      * @param header The Matrix Market Exchange Format header to write to the file.
-     * @param shapeData Contains, in order, either the number of rows and number of columns, <i>or</i> the number of rows, columns,
+     * @param shapeData Contains, in order, either the number of rows and number of columns, <em>or</em> the number of rows, columns,
      * and the number of non-zero data.
      * @throws IOException If an I/O error occurs.
      */

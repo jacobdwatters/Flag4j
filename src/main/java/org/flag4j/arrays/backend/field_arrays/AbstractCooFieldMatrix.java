@@ -47,7 +47,7 @@ import org.flag4j.util.ValidateParameters;
  * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
  * matrix).
  *
- * <h3>COO Representation:</h3>
+ * <h2>COO Representation:</h2>
  * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
@@ -114,7 +114,7 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
      */
     @Override
     public U multTranspose(T b) {
-        // TODO: Ensure all complex and field matrices use the Hermitian transpose for this method.
+        // TODO: Ensure all complex and field matrices use the hermitian transpose for this method.
         ValidateParameters.ensureAllEqual(numCols, b.numCols);
         return mult(b.H());
     }

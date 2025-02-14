@@ -109,7 +109,7 @@ class CMatrixUnaryOpsTests {
 
 
     @Test
-    void HermitianTransposeTestCase() {
+    void hermitianTransposeTestCase() {
         // -------------------- sub-case 1 --------------------
         aEntries = new Complex128[][]{
                 {new Complex128(234.66, -9923.1), new Complex128(32.4), new Complex128(394728.1)},

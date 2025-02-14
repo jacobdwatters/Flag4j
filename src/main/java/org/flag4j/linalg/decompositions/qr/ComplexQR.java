@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,16 +29,45 @@ import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 
 
 /**
- * <p>Instances of this class compute the {@code QR} decomposition of a {@link CMatrix complex dense matrix}.
- * <p>The {@code QR} decomposition, decomposes a matrix {@code A} into a unitary matrix {@code Q}
- * and an upper triangular matrix {@code R} such that {@code A=QR}.
+ * <p>Computes the QR decomposition of dense complex matrix.
  *
- * <p>Much of this code has been adapted from the EJML library.
+ * <p>The QR decomposition factorizes a given matrix <b>A</b> into the product of an orthogonal matrix <b>Q</b>
+ * and an upper triangular matrix <b>R</b>, such that:
+ * <pre>
+ *     A = QR</pre>
+ *
+ * <p>The decomposition can be computed in either the <em>full</em> or <em>reduced</em> form:
+ * <ul>
+ *     <li><b>Reduced QR decomposition:</b> When {@code reduced = true}, the decomposition produces a compact form where
+ *         <b>Q</b> has the same number of rows as <b>A</b> but only as many columns as the rank of <b>A</b>.</li>
+ *     <li><b>Full QR decomposition:</b> When {@code reduced = false}, the decomposition produces a square orthogonal matrix
+ *         <b>Q</b> with the same number of rows as <b>A</b>.</li>
+ * </ul>
+ *
+ * <h2>Usage:</h2>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate an instance of {@code RealQR}.</li>
+ *     <li>Call {@link #decompose(CMatrix)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getQ()} and {@link #getR()}.</li>
+ * </ol>
+ *
+ * @implNote This class extends {@link ComplexUnitaryDecomposition} and provides implementations for computing the
+ * QR decomposition efficiently. The decomposition uses Householder transformations to iteratively
+ * zero out sub-diagonal entries while maintaining numerical stability.
+ *
+ * @see ComplexUnitaryDecomposition
+ * @see #getR()
+ * @see #getQ()
  */
 public class ComplexQR extends ComplexUnitaryDecomposition {
 
     /**
-     * Flag indicating if the reduced (true) or full (false) {@code QR} decomposition should be computed.
+     * Flag indicating if the reduced or full decomposition should be computed.
+     * <ul>
+     *     <li>If {@code true}: the reduced decomposition will be computed.</li>
+     *     <li>If {@code false}: the full decomposition will be computed.</li>
+     * </ul>
      */
     protected final boolean reduced;
 
@@ -71,7 +100,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
      */
     @Override
     public ComplexQR decompose(CMatrix src) {
-        decomposeUnitary(src);
+        super.decompose(src);
         return this;
     }
 

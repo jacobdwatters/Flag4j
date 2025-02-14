@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -565,7 +565,7 @@ public interface MatrixMixin<T extends MatrixMixin<T, U, V, W>,
      * @return The lower-triangular portion of this matrix. with all other data in the resulting matrix will be zero.
      */
     default T getTriL() {
-        return getTriU(0);
+        return getTriL(0);
     }
 
 

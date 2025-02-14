@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ import org.flag4j.arrays.dense.SemiringMatrix;
  * {@link Matrix}, {@link CMatrix}, {@link FieldMatrix}, or {@link SemiringMatrix}, and delegates operations to the
  * appropriate concrete implementation. The concrete implementation must implement {@link MatrixMixin}.
  *
- * <h3>Features:</h3>
+ * <h2>Features:</h2>
  * <p>The {@code SmartMatrix} class supports most basic matrix operations but may be more limited than the base concrete matrix types.
  * <ul>
  *   <li>Support for element-wise operations such as addition, subtraction, multiplication, and division.</li>
@@ -51,7 +51,7 @@ import org.flag4j.arrays.dense.SemiringMatrix;
  *   <li>Human-readable string representations and standard equality checks.</li>
  * </ul>
  *
- * <h3>Usage:</h3>
+ * <h2>Usage:</h2>
  *
  * <ul>
  *     <li>Creating and adding a real dense and complex dense matrix:
@@ -109,7 +109,7 @@ import org.flag4j.arrays.dense.SemiringMatrix;
  * }</pre></li>
  * </ul>
  *
- * <h3>Notes:</h3>
+ * <h2>Notes:</h2>
  * <ul>
  *   <li>Operations between incompatible base matrix types will result in an {@link UnsupportedOperationException}.</li>
  *   <ul><li>For example: attempting to divide a dense matrix by a sparse matrix or adding a {@link Matrix real matrix}
@@ -294,7 +294,7 @@ public class SmartMatrix {
      * It ensures type safety by attempting to cast the result to the specified type. If the cast is
      * not valid, a {@link ClassCastException} will be thrown at runtime.
      *
-     * <p><h3>Usage Examples:</h3>
+     * <p><h2>Usage Examples:</h2>
      * <ul>
      *     <li> Real Matrix:
      * <pre>{@code

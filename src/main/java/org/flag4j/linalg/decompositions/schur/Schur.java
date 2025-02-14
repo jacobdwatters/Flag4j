@@ -27,6 +27,7 @@ package org.flag4j.linalg.decompositions.schur;
 
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.linalg.decompositions.Decomposition;
+import org.flag4j.linalg.decompositions.balance.Balancer;
 import org.flag4j.linalg.decompositions.unitary.UnitaryDecomposition;
 import org.flag4j.rng.RandomComplex;
 import org.flag4j.util.ValidateParameters;
@@ -34,16 +35,53 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * <p>The base class for Schur decompositions.
+ * <p>An abstract base class for computing the Schur decomposition of a square matrix.
  *
- * <p>The Schur decomposition decomposes a square matrix A into A=UTU<sup>H</sup> where U is a unitary
- * matrix and T is a quasi-upper triangular matrix called the "Schur form" of A. T is upper triangular
- * except for possibly 2-by-2 blocks along the principle diagonal. T is similar to A meaning they have equivalent eigenvalues.
+ * <p>The Schur decomposition decomposes a given square matrix <b>A</b> into:
+ * <pre>
+ *     <b>A = UTU</b><sup>H</sup></pre>
+ * where <b>U</b> is a unitary (or orthogonal for real matrices) matrix <b>T</b> is a
+ * quasi-upper triangular matrix known as the <em>Schur form</em> of <b>A</b>. This means <b>T</b> is upper triangular except
+ * for possibly 2&times;2 blocks along its diagonal, which correspond to complex conjugate pairs of eigenvalues.
+ *
+ * <p>The Schur decomposition proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
+ * support specifying a seed for the pseudo-random number generator.
+ *
+ * <h2>Usage:</h2>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate a con concrete instance of {@code Schur}.</li>
+ *     <li>Call {@link #decompose(MatrixMixin)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getT()}.</li>
+ * </ol>
+ *
+ * <h2>Efficiency Considerations:</h2>
+ * If eigenvectors are not required, setting {@code computeU = false} <em>may</em> improve performance.
+ *
+ * <p>This class was inspired by code from the <a href="http://ejml.org/wiki/index.php?title=Main_Page">EJML</a>
+ * library and the description of the Francis implicit double shifted QR algorithm from
+ * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
+ * Computations 3rd Edition by David S. Watkins</a>.
+ *
+ * @implNote This decomposition is performed using the <b>implicit double-shift QR algorithm</b>, which iteratively
+ * reduces the matrix to Schur form using orthogonal transformations. In addition to this, random shifting is used in cases where
+ * normal convergence fails.
+ *
+ * <p>As a preprocessing step to improve conditioning and stability, the matrix is first {@link Balancer balanced} then reduced to
+ * <b>Hessenberg form</b> via a {@link UnitaryDecomposition}.
  *
  * @param <T> The type of matrix to be decomposed.
- * @param <U> The type for the internal storage datastructure of the matrix to be decomposed.
+ * @param <U> The type for the internal storage data structure of the matrix to be decomposed.
+ *
+ * @see Balancer
+ * @see org.flag4j.linalg.decompositions.hess.RealHess
+ * @see org.flag4j.linalg.decompositions.hess.ComplexHess
+ * @see #getT()
+ * @see #getU()
+ * @see #setMaxIterationFactor(int)
+ * @see #setExceptionalThreshold(int)
  */
-public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Decomposition<T> {
+public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomposition<T> {
 
     /**
      * Random number generator to be used when computing a random exceptional shift.
@@ -56,37 +94,46 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
     /**
      * Default factor for computing the maximum number of iterations to perform.
      */
-    protected final int DEFAULT_MAX_ITERS_FACTOR = 30;
+    protected final int DEFAULT_MAX_ITERS_FACTOR = 50;
     /**
-     *For storing the (possibly block) upper triangular matrix {@code T} in the Schur decomposition.
+     *For storing the (possibly block) upper triangular matrix <b>T</b> in the Schur decomposition.
      */
     protected T T;
     /**
-     *For storing the unitary {@code U} matrix in the Schur decomposition.
+     *For storing the unitary <b>U</b> matrix in the Schur decomposition.
      */
     protected T U;
     /**
      *Decomposer to compute the Hessenburg decomposition as a setup step for the implicit double step QR algorithm.
      */
     protected UnitaryDecomposition<T, U> hess;
-//    /**
-//     * <p>Balancer to scale rows and columns of matrix to be decomposed so that all row and columns have roughly similar sized norms.
-//     * <p>This is done to attempt to improve the condition number and improve numerical stability when computing the Schur
-//     * decomposition.
-//     */
-//    protected RealMatrixBalancerOld balancer;
     /**
-     *Stores the number of rows in the matrix being decomposed.
+     * <p>Balancer to apply a similarity transform to the matrix before the QR-algorithm is executed. This similarity transform
+     * consists of permuting rows/columns to isolate decoupled eigenvalues then scaling the rows and columns of the matrix
+     *
+     * <p>This is done to attempt to improve the conditioning of the eigen-problem.
+     */
+    protected Balancer<T> balancer;
+    /**
+     * The lower bound (inclusive) of the row/column indices of the block to reduce to Schur form.
+     */
+    protected int iLow;
+    /**
+     * The upper bound (exclusive) of the row/column indices of the block to reduce to Schur form.
+     */
+    protected int iHigh;
+    /**
+     * Stores the number of rows in the matrix being decomposed (<em>after</em> balancing).
      */
     protected int numRows;
     /**
-     * Stores the vector {@code v} in the Householder reflector P = I - &alpha vv<sup>T</sup>.
+     * Stores the vector <b>v</b> in the Householder reflector <b>P = I - </b>&alpha;<b> vv<sup>T</sup></b>.
      */
     protected U householderVector;
     /**
-     * Stores the non-zero data of the first column of the shifted matrix (A- &rho<sub>1</sub>I)(A-&rho<sub>2</sub> I)
-     * where
-     * &rho<sub>1</sub> and &rho<sub>2</sub> are the two shifts.
+     * Stores the non-zero data of the first column of the shifted matrix
+     * <b>(A- </b>&rho;<sub>1</sub><b>I)(A-</b>&rho;<sub>2</sub><b> I)</b>
+     * where &rho;<sub>1</sub> and &rho;<sub>2</sub> are the two shifts.
      */
     protected U shiftCol;
     /**
@@ -124,11 +171,14 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * found. If false, no check will be made and the floating point arithmetic will carry on with {@link Double#POSITIVE_INFINITY
      * infinities},  {@link Double#NEGATIVE_INFINITY negative-infinities}, and {@link Double#NaN NaNs} present.
      */
-    protected boolean checkFinite;  // TODO: Make use of this field.
+    protected boolean checkFinite = false;
     /**
-     * Flag indicating if the orthogonal matrix {@code U} in the Schur decomposition should be computed. If false, {@code U} will
-     * not be computed. This may provide performance improvements for large matrices when {@code U} is not required (for instance:
-     * in eigenvalue computations where eigenvectors are not needed).
+     * Flag indicating if the orthogonal matrix <b>U</b> in the Schur decomposition should be computed.
+     * <ul>
+     *     <li>If {@code true}, <b>U</b> will be computed.</li>
+     *     <li>If {@code false}, <b>U</b> will <em>not</em> be computed. This <em>may</em> improve performance if <b>U</b>
+     *     is not required.</li>
+     * </ul>
      */
     protected final boolean computeU;
 
@@ -136,19 +186,26 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
     /**
      * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.
      *
-     * <p>If the {@code U} matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
+     * <p>If the <b>U</b> matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * @param computeU Flag indicating if the unitary {@code U} matrix should be computed for the Schur decomposition. If true,
-     * {@code U} will be computed. If false, {@code U} will not be computed.
+     * @param computeU Flag indicating if the orthogonal matrix <b>U</b> in the Schur decomposition should be computed.
+     * <ul>
+     *     <li>If {@code true}, <b>U</b> will be computed.</li>
+     *     <li>If {@code false}, <b>U</b> will <em>not</em> be computed. This <em>may</em> improve performance if <b>U</b>
+     *     is not required.</li>
+     * </ul>
      * @param rng Random number generator to use when performing random exceptional shifts.
      * @param hess Decomposer to compute the Hessenburg decomposition as a setup step for the QR algorithm.
+     * @param balancer Balancer which balances the matrix as a preprocessing step to improve the conditioning of the eigenvalue
+     * problem.
      */
-    protected Schur(boolean computeU, RandomComplex rng, UnitaryDecomposition<T, U> hess) {
+    protected Schur(boolean computeU, RandomComplex rng, UnitaryDecomposition<T, U> hess, Balancer<T> balancer) {
         maxIterationsFactor = DEFAULT_MAX_ITERS_FACTOR;
         exceptionalThreshold = DEFAULT_EXCEPTIONAL_ITERS;
         this.rng = rng;
         this.computeU = computeU;
         this.hess = hess;
+        this.balancer = balancer;
     }
 
 
@@ -161,8 +218,10 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      *
      * <p>By default, the threshold is set to {@link #DEFAULT_EXCEPTIONAL_ITERS}
      *
-     * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without deflation
-     *                             before performing an iteration with random shifts.
+     * @param exceptionalThreshold The new exceptional shift threshold. i.e. the number of iterations to perform without
+     * deflation before performing an iteration with random shifts.
+     *
+     * @return A reference to this Schur decomposer.
      * @return A reference to this decomposer.
      * @throws IllegalArgumentException If {@code exceptionalThreshold} is not positive.
      */
@@ -184,6 +243,9 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      *
      * @param maxIterationFactor maximum iteration factor for use in computing the total maximum number of iterations to run the
      * QR algorithm for.
+     *
+     * @return A reference to this Schur decomposer.
+     *
      * @throws IllegalArgumentException If {@code maxIterationFactor} is not positive.
      */
     public Schur<T, U> setMaxIterationFactor(int maxIterationFactor) {
@@ -194,19 +256,38 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
 
     /**
-     * Gets the upper, or possibly block-upper, triangular Schur matrix {@code T} from the Schur decomposition
-     * @return The T matrix from the Schur decomposition A=UTU<sup>H</sup>
+     * <p>Sets flag indicating if a check should be made to ensure the matrix being decomposed only contains finite values.
+     * <p>By default, this will be {@code false}.
+     * @param enforceFinite Flag indicating if a check should be made to ensure matrices decomposed by this instance only contain
+     * finite values.
+     * <ul>
+     *     <li>If {@code true}, an explicit check will be made.</li>
+     *     <li>If {@code false}, an explicit check will <em>not</em> be made.</li>
+     * </ul>
+     * @return A reference to this Schur decomposer.
+     */
+    public Schur<T, U> enforceFinite(boolean enforceFinite) {
+        this.checkFinite = enforceFinite;
+        return this;
+    }
+
+
+    /**
+     * Gets the upper, or possibly block-upper, triangular Schur matrix <b>T</b> from the Schur decomposition
+     * @return The <b>T</b> matrix from the Schur decomposition <b>A=UTU<sup>H</sup></b>
      */
     public T getT() {
+        ensureHasDecomposed();
         return T;
     }
 
 
     /**
-     * Gets the unitary matrix {@code U} from the Schur decomposition containing the Schur vectors as its columns.
-     * @return A=UTU<sup>H</sup>
+     * Gets the unitary matrix <b>U</b> from the Schur decomposition containing the Schur vectors as its columns.
+     * @return <b>A=UTU<sup>H</sup></b>
      */
     public T getU() {
+        ensureHasDecomposed();
         return U;
     }
 
@@ -215,7 +296,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * <p>Computes the Schur decomposition of the input matrix.
      *
      * @implNote The Schur decomposition is computed using Francis implicit double shifted QR algorithm.
-     * There are known cases where this variant of the QR algorithm <i>may</i> fail to converge. Random shifting is employed when the
+     * There are known cases where this variant of the QR algorithm <em>may</em> fail to converge. Random shifting is employed when the
      * matrix is not converging which greatly minimizes this issue. It is unlikely that a general matrix will fail to converge with
      * these random shifts however, no guarantees of convergence can be made.
      * @param src The source matrix to decompose.
@@ -225,26 +306,29 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
     protected void decomposeBase(T src) {
         setUp(src);
 
-        int workingSize = numRows-1;
+        int workingSize = iHigh - iLow - 1;
+        int workEnd = iHigh - 1;  // Equivalent to iLow + workingSize.
         int iters = 0;
 
+        // Each iteration of this loop is a complete implicit QR algorithm iteration.
         while(workingSize >= 2 && iters < maxIterations) {
             if(sinceLastExceptional >= exceptionalThreshold) {
                 // Perform an exceptional shift iteration.
                 sinceLastExceptional = 0; // Reset number of iterations completed.
-                performExceptionalShift(workingSize);
+                numExceptional++;
+                performExceptionalShift(workEnd);
             } else {
                 // Perform a normal double shift iteration.
                 sinceLastExceptional++; // Increase number of iterations performed without an exceptional shift.
-                numExceptional++;
-                performDoubleShift(workingSize);
+                performDoubleShift(workEnd);
             }
 
             // Check for convergence and deflate as needed.
-            int deflate = checkConvergence(workingSize);
+            int deflate = checkConvergence(workEnd);
             if(deflate > 0) {
                 sinceLastExceptional = 0; // Reset the number of iterations since the last exceptional shift.
                 workingSize -= deflate; // Reduce working size.
+                workEnd -= deflate;
             }
 
             iters++;
@@ -254,6 +338,10 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
             throw new LinearAlgebraException("Schur decomposition failed to converge in " + maxIterations + " iterations. " +
                     "Increasing maxIterationsFactor may allow for the decomposition to converge.");
         }
+
+        // Undo any transformations applied during balancing and reconstitute full matrix.
+        unbalance();
+        this.hasDecomposed = true;
     }
 
 
@@ -271,11 +359,30 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
 
         setUpArrays();
 
-        hess.decompose(src);
-        T = hess.getUpper(); // Reduce matrix to upper Hessenburg form.
+        // Balance matrix.
+        balancer.decompose(src);
+        iLow = balancer.getILow();
+        iHigh = balancer.getIHigh();
+        T = balancer.getB();
+
+        // Reduce to upper Hessenburg form.
+        hess.decompose(T, iLow, iHigh);
+        T = hess.getUpper();
         // Initialize U as the product of transformations used in Hessenburg decomposition if requested.
         U = computeU ? hess.getQ() : null; // Hessenburg decomposition computes U lazily only when getQ() is called.
     }
+
+
+    /**
+     * <p>Reverts the scaling and permutations applied during the balancing step to obtain the correct form.
+     *
+     * <p>Specifically, this method computes
+     * <pre>
+     *     <b>U</b> := <b>PDU</b>
+     *        = <b>TU</b></pre>
+     * where <b>P</b> and <b>D</b> are the permutation and scaling matrices respectively from balancing.
+     */
+    protected abstract void unbalance();
 
 
     /**
@@ -289,26 +396,32 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> implements Dec
      * chosen to be a random value with the same magnitude as the lower right element of the working matrix. This can help the
      * QR converge for certain pathological cases where the double shift algorithm oscillates or fails to converge for
      * repeated eigenvalues.
-     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
-     *                   or possible 2x2 block upper triangular form.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      */
-    protected abstract void performExceptionalShift(int workingSize);
+    protected abstract void performExceptionalShift(int workEnd);
 
 
     /**
      * Performs a full iteration of the Francis implicit double shifted QR algorithm (this includes the bulge chase).
-     * @param workingSize The current working size for the decomposition. I.e. all data below this row have converged to an upper
-     *                   or possible 2x2 block upper triangular form.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      */
-    protected abstract void performDoubleShift(int workingSize);
+    protected abstract void performDoubleShift(int workEnd);
 
 
     /**
-     * Checks for convergence of lower 2x2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
+     * Checks for convergence of lower 2&times;2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
      * convergence is found, this will also zero out the values which have converged to near zero.
-     * @param workingSize Size of current working matrix.
+     * @param workEnd The ending row (inclusive) of the current active working block.
      * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if
      * convergence to upper triangular form is detected and two if convergence to block upper triangular form is detected.
      */
-    protected abstract int checkConvergence(int workingSize);
+    protected abstract int checkConvergence(int workEnd);
+
+
+    /**
+     * Ensures that {@code src} only contains finite values.
+     * @param src Matrix of interest.
+     * @throws IllegalArgumentException If {@code src} does <em>not</em> contain only finite values.
+     */
+    protected abstract void checkFinite(T src);
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +27,44 @@ package org.flag4j.linalg.solvers.exact;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
-import org.flag4j.linalg.decompositions.lu.LU;
 import org.flag4j.linalg.decompositions.lu.RealLU;
 import org.flag4j.linalg.solvers.exact.triangular.RealBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
 
 /**
- * Solver for solving a well determined system of linear equations in an exact sense using the
- * {@link LU LU decomposition.}
+ * <p>Solves a well determined system of equations <b>Ax=b</b> or <b>AX=B</b> in an exact sense by using a
+ * {@link RealLU LU decomposition}
+ * where <b>A</b>, <b>B</b>, and <b>X</b> are matrices, and <b>x</b> and <b>b</b> are vectors.
+ *
+ * <p>If the system is not well determined, i.e. <b>A</b> is not square or not full rank, then use a
+ * {@link org.flag4j.linalg.solvers.lstsq.RealLstsqSolver least-squares solver}.
+ *
+ * <h2>Usage:</h2>
+ * <p>A single system may be solved by calling either {@link #solve(Matrix, Vector)} or
+ * {@link #solve(Matrix, Vector)}.
+ *
+ * <p>Instances of this solver may also be used to efficiently solve many systems of the form <b>Ax=b</b> or <b>AX=B</b>
+ * for the same coefficient matrix <b>A</b> but numerous constant vectors/matrices <b>b</b> or <b>B</b>. To do this, the workflow
+ * would be as follows:
+ * <ol>
+ *     <li>Create an instance of {@code RealExactSolver}.</li>
+ *     <li>Call {@link #decompose(Matrix) decompse(A)} once on the coefficient matrix <b>A</b>.</li>
+ *     <li>Call {@link #solve(Vector) solve(b)} or {@link #solve(Matrix) solve(B)} as many times as needed to solve each
+ *     system for with the various <b>b</b> vectors and/or <b>B</b> matrices. </li>
+ * </ol>
+ *
+ * <b>Note:</b> Any call made to one of the following methods after a call to {@link #decompose(Matrix) decompse(A)} will
+ * override the coefficient matrix set that call:
+ * <ul>
+ *     <li>{@link #solve(Matrix, Vector)}</li>
+ *     <li>{@link #solve(Matrix, Matrix)}</li>
+ * </ul>
+ *
+ * <p>Specialized solvers are provided for inversion using {@link #solveIdentity(Matrix)}. This should be preferred
+ * over calling on of the other solve methods and providing an identity matrix explicitly.
+ *
+ * @param <T> The type of the coefficient matrix in the linear system.
+ * @param <U> The type of vector in the linear system.
  */
 public class RealExactSolver extends ExactSolver<Matrix, Vector> {
 
@@ -42,7 +72,9 @@ public class RealExactSolver extends ExactSolver<Matrix, Vector> {
      * Constructs an exact LU solver where the coefficient matrix is real dense.
      */
     public RealExactSolver() {
-        super(new RealLU(), new RealForwardSolver(true), new RealBackSolver());
+        super(new RealLU(),
+                new RealForwardSolver(true, false),
+                new RealBackSolver(false));
     }
 
 

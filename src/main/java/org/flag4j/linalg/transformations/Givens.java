@@ -36,11 +36,57 @@ import org.flag4j.util.ValidateParameters;
 import java.util.Arrays;
 
 /**
- * <p>This class contains methods for computing real or complex Givens' rotation matrices.
- * 
- * <p>A Givens' rotator is a square matrix G(i, k, theta) which, when left multiplied to a vector, represents
- * a counterclockwise rotation of theta radians of the vector in the (i, j) plane. Givens rotators
- * are a unitary transformation.
+ * Utility class for constructing and applying Givens rotation matrices for both real and complex-valued matrices.
+ *
+ * <p>Givens rotations are orthogonal (unitary in the complex case) transformations used in numerical linear algebra
+ * for applications such as QR decomposition, Hessenberg reduction, and least-squares solutions.
+ * A Givens rotation is a matrix <b>G</b>(i, j, &theta;) which, when left multiplied to a vector, represents
+ *  a counterclockwise rotation of &theta; radians of the vector in the (i, j) plane.
+ *
+ * <h2>Supported Operations:</h2>
+ * <ul>
+ *     <li>General Givens rotation matrices for arbitrary rotation angles.</li>
+ *     <li>Specialized rotators for zeroing elements in a given vector.</li>
+ *     <li>Efficient 22 Givens rotations for small-scale transformations.</li>
+ *     <li>Optimized left and right multiplication of 2&times;2 rotators for structured matrices.</li>
+ * </ul>
+ *
+ * <h2>Usage Examples:</h2>
+ * <ul>
+ *     <li>Creating a General Givens Rotation Matrix.
+ *     <pre>{@code
+ * int size = 5;
+ * int i = 1, j = 3;
+ * double theta = Math.PI / 4.0;  // 45-degree rotation.
+ * Matrix G = Givens.getGeneralRotator(size, i, j, theta);
+ *     }</pre>
+ *     </li>
+ *
+ *     <li>Creating a General Givens Rotation Matrix.
+ *     <pre>{@code
+ * int size = 5;
+ * int i = 1, j = 3;
+ * double theta = Math.PI / 4.0;  // 45-degree rotation
+ * Matrix G = Givens.getGeneralRotator(size, i, j, theta);
+ *     }</pre>
+ *     </li>
+ *
+ *     <li>Constructing a Rotator to Zero an Element.
+ *     <pre>{@code
+ * Vector v = new Vector(3.0, 4.0, 5.0);
+ * Matrix G = Givens.getRotator(v, 1);  // Rotates to zero v[1]
+ *     }</pre>
+ *     </li>
+ *
+ *     <li>Applying a 2&times;2 Givens Rotator.
+ *     <pre>{@code
+ * Matrix A = ...;  // Some matrix
+ * Matrix G = Givens.get2x2Rotator(3.0, 4.0);
+ * Givens.leftMult2x2Rotator(A, G, 2, null);  // Applies G at row 2 efficiently.
+ *     }</pre></li>
+ * </ul>
+ *
+ * <p>All methods in this class are static, as the class is not instantiable and should be used as a utility class.
  */
 public final class Givens {
 
@@ -81,13 +127,13 @@ public final class Givens {
 
 
     /**
-     * Constructs a Givens rotator G such that for a vector v,
-     * Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
-     * That is, when the rotator G is left multiplied to the vector v, it zeros out the entry at position {@code i}.
-     * @param v Vector to construct Givens rotator for.
-     * @param i Position to zero out when applying the rotator to {@code v}.
-     * @return A Givens rotator G such that for a vector v,
-     * Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
+     * Constructs a Givens rotator <b>G</b> such that for a vector <b>v</b>,
+     * <b>Gv</b> = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
+     * That is, when the rotator <b>G</b> is left multiplied to the vector v, it zeros out the entry at position {@code i}.
+     * @param v Vector <b>v</b> to construct Givens rotator for.
+     * @param i Position to zero out when applying the rotator to <b>v</b>.
+     * @return A Givens rotator <b>G</b> such that for a vector <b>v</b>,
+     * <b>Gv</b> = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static Matrix getRotator(Vector v, int i) {
@@ -96,14 +142,14 @@ public final class Givens {
 
 
     /**
-     * Constructs a Givens rotator G such that for a vector v,
-     * Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
-     * That is, when the rotator G is left multiplied to the vector v,
+     * Constructs a Givens rotator <b>G</b> such that for a vector <b>v</b>,
+     * <b>Gv</b> = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
+     * That is, when the rotator <b>G</b> is left multiplied to the vector <b>v</b>,
      * it zeros out the entry at position {@code i}.
-     * @param v Vector to construct Givens rotator for.
-     * @param i Position to zero out when applying the rotator to {@code v}.
-     * @return A Givens rotator G such that for a vector v,
-     * Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
+     * @param v Vector <b>v</b> to construct Givens rotator for.
+     * @param i Position to zero out when applying the rotator to <b>v</b>.
+     * @return A Givens rotator <b>G</b> such that for a vector <b>v</b>,
+     * <b>Gv</b> = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static Matrix getRotator(double[] v, int i) {
@@ -123,14 +169,14 @@ public final class Givens {
 
 
     /**
-     * Constructs a Givens rotator G such that for a vector v,
-     * Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
-     * That is, when the rotator G is left multiplied to the vector v,
+     * Constructs a Givens rotator <b>G</b> such that for a vector <b>v</b>,
+     * <b>Gv</b> = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
+     * That is, when the rotator <b>G</b> is left multiplied to the vector <b>v</b>,
      * it zeros out the entry at position {@code i}.
-     * @param v Vector to construct Givens rotator for.
-     * @param i Position to zero out when applying the rotator to {@code v}.
-     * @return A Givens rotator G such that for a vector v,
-     * Gv = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
+     * @param v Vector <b>v</b> to construct Givens rotator for.
+     * @param i Position to zero out when applying the rotator to <b>v</b>.
+     * @return A Givens rotator <b>G</b> such that for a vector <b>v</b>,
+     * <b>Gv</b> = [r<sub>1</sub> ... r<sub>i</sub> ... r<sub>n</sub>] where r<sub>i</sub>=0.
      * @throws IndexOutOfBoundsException If {@code i} is not in the range [0, v.size).
      */
     public static CMatrix getRotator(CVector v, int i) {
@@ -152,12 +198,12 @@ public final class Givens {
 
 
     /**
-     * Constructs a Givens rotator G of size 2 such that for a vector v = [a, b] we have
-     * Gv = [r, 0].
-     * @param v Vector of size 2 to construct Givens rotator for.
-     * @return A Givens rotator G of size 2 such that for a vector v = [a, b] we have
-     * Gx = [r, 0].
-     * @throws IllegalArgumentException If the vector {@code v} is not of size 2.
+     * Constructs a Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have
+     * <b>Gv</b> = [r, 0].
+     * @param v Vector <b>v</b> of size 2 to construct Givens rotator for.
+     * @return A Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have
+     * <b>Gv</b> = [r, 0].
+     * @throws IllegalArgumentException If {@code v.size != 2}.
      */
     public static Matrix get2x2Rotator(Vector v) {
         ValidateParameters.ensureArrayLengthsEq(2, v.size);
@@ -166,12 +212,11 @@ public final class Givens {
 
 
     /**
-     * Constructs a Givens rotator G of size 2 such that for a vector v = [a, b] nwe have Gv = [r, 0].
-     * @param v0 First entry in vector to construct rotator for.
-     * @param v1 Second entry in vector to construct rotator for.
-     * @return A Givens rotator G of size 2 such that for a vector v = [a, b] we have
-     * Gx = [r, 0].
-     * @throws IllegalArgumentException If the vector {@code v} is not of size 2.
+     * Constructs a Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have <b>Gv</b> = [r, 0].
+     * @param v0 First entry in vector <b>v</b> to construct rotator for.
+     * @param v1 Second entry in vector <b>v</b> to construct rotator for.
+     * @return A Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have
+     * <b>Gv</b> = [r, 0].
      */
     public static Matrix get2x2Rotator(double v0, double v1) {
         double[] cs = stableTrigVals(v0, v1);
@@ -184,18 +229,18 @@ public final class Givens {
 
 
     /**
-     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.
+     * <p>Left multiplies a 2&times;2 Givens rotator to a matrix at the specified row. This is done in place.
      *
-     * <p>Specifically, computes G*A[i-1:i+1][i-1:i+1] where i={@code row}, G is the 2x2 Givens rotator,
-     * A is the matrix to apply the reflector to, and A[i-1:i+1][i-1:]
-     * represents the slice of A the reflector effects which has shape (2, A.numCols - i - 1).
+     * <p>Specifically, computes <b>G*A</b>[i-1:i+1][i-1:i+1] where i={@code row}, <b>G</b> is the 2&times;2 Givens rotator,
+     * <b>A</b> is the matrix to apply the reflector to, and <b>A</b>[i-1:i+1][i-1:]
+     * represents the slice of <b>A</b> the reflector effects which has shape 2&times;{@code (A.numCols - i - 1)}.
      *
      * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
-     * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.
+     * @param G The 2&times;2 givens rotator. Note, the size is not explicitly checked.
      * @param row The row to the rotator is being applied to.
-     * @param workArray Array to store temporary values. If null, a new array will be created (modified).
+     * @param workArray Array to store temporary values. If {@code null}, a new array will be created (modified).
      * @throws ArrayIndexOutOfBoundsException If the {@code workArray} is not at least large enough to store the
      * {@code 2*(A.numCols - i - 1)} data.
      */
@@ -204,26 +249,31 @@ public final class Givens {
         double[] src2 = src.data;
 
         int cols2 = src.numCols;
-        int destCols = (cols2 - (row-1));
-        if(workArray==null) workArray = new double[2*destCols];
+        int destCols = cols2 - (row - 1);
+        if(workArray==null)
+            workArray = new double[2*destCols];
+        else
+            Arrays.fill(workArray, 0, 2*destCols, 0.0); // Ensure that the work-array gets zeroed out.
 
-        int m = row-1;
-        int src2Row1 = m*cols2 + m;
-        int src2Row2 = row*cols2 + m;
+        int m = row - 1;
+        int rowOffset1 = m*cols2 + m;
+        int rowOffset2 = (m + 1)*cols2 + m;
 
         double g11 = src1[0];
         double g12 = src1[1];
         double g21 = src1[2];
         double g22 = src1[3];
 
-        for(int j=m; j<cols2; j++) {
-            int destIdx1 = j - m;
-            int destIdx2 = destCols + destIdx1;
+        // Apply the rotator.
+        for (int j = 0; j < destCols; j++) {
+            double val1 = src2[rowOffset1 + j];
+            double val2 = src2[rowOffset2 + j];
 
-            workArray[destIdx1] += g11*src2[src2Row1];
-            workArray[destIdx2] += g21*src2[src2Row1++];
-            workArray[destIdx1] += g12*src2[src2Row2];
-            workArray[destIdx2] += g22*src2[src2Row2++];
+            double out1 = g11*val1 + g12*val2;
+            double out2 = g21*val1 + g22*val2;
+
+            workArray[j] = out1;
+            workArray[j + destCols] = out2;
         }
 
         System.arraycopy(workArray, 0, src2, m*cols2 + m, destCols);
@@ -232,18 +282,19 @@ public final class Givens {
 
 
     /**
-     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place
+     * <p>Right multiplies a 2&times;2 Givens rotator to a matrix at the specified row. This is done in place
      *
-     * <p>Specifically, computes A[:][i-1:i+1]*G<sup>H</sup>
-     * where i={@code row}, G is the 2x2 Givens rotator, A is the matrix to apply the reflector to, and A[:i+1][i-1:i+1]
-     * represents the slice of A the reflector effects which has shape {(row+1, 2).
+     * <p>Specifically, computes <b>A</b>[:][i-1:i+1]*<b>G</b><sup>H</sup>
+     * where i={@code row}, <b>G</b> is the 2&times;2 Givens rotator, <b>A</b> is the matrix to apply the reflector to, and
+     * <b>A</b>[:i+1][i-1:i+1]
+     * represents the slice of <b>A</b> the reflector effects which has shape {@code row+1}&times;2.
      *
      * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
-     * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.
+     * @param G The 2&times;2 givens rotator. Note, the size is not explicitly checked.
      * @param row The row to the rotator is being applied to.
-     * @param workArray Array to store temporary values. If null, a new array will be created (modified).
+     * @param workArray Array to store temporary values. If {@code null}, a new array will be created (modified).
      * If the {@code workArray} is not at least large enough to store the
      * {@code 2*(row+1)} data.
      */
@@ -253,7 +304,10 @@ public final class Givens {
 
         int cols1 = src.numCols;
         int rows1 = src.numRows;
-        if(workArray==null) workArray = new double[2*rows1]; // Has shape (row+1, 2)
+        if(workArray==null)
+            workArray = new double[2*rows1]; // Has shape (row+1, 2).
+        else
+            Arrays.fill(workArray, 0, 2*rows1 + 2, 0.0); // Ensure that the work-array gets zeroed out.
 
         int m = row - 1;
 
@@ -284,18 +338,18 @@ public final class Givens {
 
 
     /**
-     * <p>Left multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place.
+     * <p>Left multiplies a 2&times;2 Givens rotator to a matrix at the specified row. This is done in place.
      *
-     * <p>Specifically, computes G*A[i-1:i+1][i-1:i+1] where i={@code row},  G is the 2x2 Givens rotator,
-     * A is the matrix to apply the reflector to, and {A[i-1:i+1][i-1:]
-     * represents the slice of A the reflector effects which has shape (2, A.numCols - i - 1).
+     * <p>Specifically, computes <b>G</b>*<b>A</b>[i-1:i+1][i-1:i+1] where i={@code row}, <b>G</b> is the 2&times;2 Givens rotator,
+     * <b>A</b> is the matrix to apply the reflector to, and <b>A</b>[i-1:i+1][i-1:]
+     * represents the slice of <b>A</b> the reflector effects which has shape 2&times;{@code A.numCols - i - 1}.
      *
      * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
-     * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.
+     * @param G The 2&times;2 givens rotator. Note, the size is not explicitly checked.
      * @param row The row to the rotator is being applied to.
-     * @param workArray Array to store temporary values. If null, a new array will be created (modified).
+     * @param workArray Array to store temporary values. If {@code null}, a new array will be created (modified).
      * If the {@code workArray} is not at least large enough to store the
      * {@code 2*(A.numCols - i - 1)} data.
      */
@@ -305,12 +359,14 @@ public final class Givens {
 
         int cols2 = src.shape.get(1);
         int destCols = (cols2 - (row-1));
-        if(workArray==null) workArray = new Complex128[2*destCols];
-        Arrays.fill(workArray, 0, 2*destCols, Complex128.ZERO);
+        if(workArray==null)
+            workArray = new Complex128[2*destCols];
+        else
+            Arrays.fill(workArray, 0, 2*destCols, Complex128.ZERO);
 
         int m = row-1;
-        int src2Row1 = m*cols2 + m;
-        int src2Row2 = row*cols2 + m;
+        int rowOffset1 = m*cols2 + m;
+        int rowOffset2 = (m + 1)*cols2 + m;
 
         Complex128 g11 = src1[0];
         Complex128 g12 = src1[1];
@@ -318,14 +374,15 @@ public final class Givens {
         Complex128 g22 = src1[3];
 
         // Apply the rotator.
-        for(int j=m; j<cols2; j++) {
-            int destIdx1 = j - m;
-            int destIdx2 = destCols + destIdx1;
+        for(int j = 0; j < destCols; j++) {
+            Complex128 val1 = src2[rowOffset1 + j];
+            Complex128 val2 = src2[rowOffset2 + j];
 
-            workArray[destIdx1] = workArray[destIdx1].add(g11.mult((Complex128) src2[src2Row1]));
-            workArray[destIdx2] = workArray[destIdx2].add(g21.mult((Complex128) src2[src2Row1++]));
-            workArray[destIdx1] = workArray[destIdx1].add(g12.mult((Complex128) src2[src2Row2]));
-            workArray[destIdx2] = workArray[destIdx2].add(g22.mult((Complex128) src2[src2Row2++]));
+            Complex128 out1 = g11.mult(val1).add(g12.mult(val2));
+            Complex128 out2 = g21.mult(val1).add(g22.mult(val2));
+
+            workArray[j] = out1;
+            workArray[j + destCols] = out2;
         }
 
         // Copy result back into src matrix.
@@ -335,18 +392,18 @@ public final class Givens {
 
 
     /**
-     * <p>Right multiplies a 2x2 Givens rotator to a matrix at the specified row. This is done in place
+     * <p>Right multiplies a 2&times;2 Givens rotator to a matrix at the specified row. This is done in place
      *
-     * <p>Specifically, computes A[:][i-1:i+1]*G<sup>H</sup>
-     * where i={@code row}, G is the 2x2 Givens rotator, A is the matrix to apply the reflector to, and
-     * {@code A[:i+1][i-1:i+1]} represents the slice of A the reflector effects which has shape {@code (row+1, 2)}.
+     * <p>Specifically, computes <b>A</b>[:][i-1:i+1]*<b>G</b><sup>H</sup>
+     * where i={@code row}, <b>G</b> is the 2&times;2 Givens rotator, <b>A</b> is the matrix to apply the reflector to, and
+     * <b>A</b>[:i+1][i-1:i+1] represents the slice of <b>A</b> the reflector effects which has shape {@code row+1}&times;2.
      *
      * <p>This method is likely to be faster than computing this multiplication explicitly.
      *
      * @param src The matrix to left multiply the rotator to (modified).
-     * @param G The 2x2 givens rotator. Note, the size is not explicitly checked.
+     * @param G The 2&times;2 givens rotator. Note, the size is not explicitly checked.
      * @param row The row to the rotator is being applied to.
-     * @param workArray Array to store temporary values. If null, a new array will be created (modified).
+     * @param workArray Array to store temporary values. If {@code null}, a new array will be created (modified).
      * If the {@code workArray} is not at least large enough to store the 
      * {@code 2*(row+1)} data.
      */
@@ -388,23 +445,22 @@ public final class Givens {
 
 
     /**
-     * Constructs a Givens rotator G of size 2 such that for a vector v = [a, b] we have Gv = [r, 0].
-     * @param v Vector to construct Givens rotator for.
-     * @return A Givens rotator G of size 2 such that for a vector v = [a, b] we have Gx = [r, 0].
+     * Constructs a Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have <b>Gv</b> = [r, 0].
+     * @param v Vector <b>v</b> to construct Givens rotator for.
+     * @return A Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have <b>Gv</b> = [r, 0].
      * @throws IllegalArgumentException If {@code v.size != 2}.
      */
     public static CMatrix get2x2Rotator(CVector v) {
         ValidateParameters.ensureArrayLengthsEq(2, v.size);
-
-        return get2x2Rotator((Complex128) v.data[0], (Complex128) v.data[1]);
+        return get2x2Rotator(v.data[0], v.data[1]);
     }
 
 
     /**
-     * Constructs a Givens rotator G of size 2 such that for a vector v = [a, b] we have Gv = [r, 0].
-     * @param v0 First entry in vector to construct rotator for.
-     * @param v1 Second entry in vector to construct rotator for.
-     * @return A Givens rotator {@code G} of size 2 such that for a vector v = [a, b] we have Gx = [r, 0].
+     * Constructs a Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have <b>Gv</b> = [r, 0].
+     * @param v0 First entry in vector <b>v</b> to construct rotator for.
+     * @param v1 Second entry in vector <b>v</b> to construct rotator for.
+     * @return A Givens rotator <b>G</b> of size 2 such that for a vector <b>v</b> = [a, b] we have <b>Gv</b> = [r, 0].
      * @throws IllegalArgumentException If {@code v.size != 2}.
      */
     public static CMatrix get2x2Rotator(Complex128 v0, Complex128 v1) {

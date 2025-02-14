@@ -24,11 +24,9 @@
 
 package org.flag4j.linalg.ops.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.*;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCsrSemiringMatrix;
-import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
@@ -726,7 +724,7 @@ public final class SparseUtils {
      * @param rowPointers Non-zero row indices of the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      * @return A {@link SparseMatrixData} containing the data of the CSR matrix resulting from dropping all zeros from the specified
-     * CSR matrix. Note, the returned data will be in COO format and <i>not</i> CSR.
+     * CSR matrix. Note, the returned data will be in COO format and <em>not</em> CSR.
      */
     public static <T extends Semiring<T>> SparseMatrixData<T> dropZerosCsr(
             Shape shape, T[] data, int[] rowPointers, int[] colIndices) {
@@ -756,7 +754,7 @@ public final class SparseUtils {
      * @param rowEnd Ending row index of the slice (exclusive).
      * @param colStart Starting column index of the slice (inclusive).
      * @param colEnd Ending column index of the slice (exclusive).
-     * @throws IllegalArgumentException If <i>any</i> of the following are {@code true}:
+     * @throws IllegalArgumentException If <em>any</em> of the following are {@code true}:
      * <ul>
      *     <li>{@code rowStart >= rowEnd}</li>
      *     <li>{@code colStart >= colEnd}</li>
@@ -791,7 +789,7 @@ public final class SparseUtils {
      * @param rowPointers The non-zero row pointers of the CSR matrix.
      * @param colIndices The non-zero column indices of the CSR matrix.
      *
-     * @throws IllegalArgumentException If <i>any</i> of the following are {@code true}:
+     * @throws IllegalArgumentException If <em>any</em> of the following are {@code true}:
      * <ul>
      *     <li>{@code shape.getRank() != 2}</li>
      *     <li>{@code rowPointers.length != shape.get(0) + 1}</li>
@@ -812,23 +810,5 @@ public final class SparseUtils {
             throw new IllegalArgumentException("Illegal CSR definition: the number of column indices must be equal" +
                     "to the number of non-zero entries but got " + colIndices.length + " for nnz=" + nnz + ".");
         }
-    }
-
-
-    // TODO: TEMP
-    public static void main(String[] args) {
-        Complex128[] bNnz = new Complex128[]{new Complex128(234.5, -0.2), Complex128.ZERO, Complex128.ZERO, Complex128.ZERO,
-                new Complex128(345.1, 2.5),
-                new Complex128(9.4, -1),
-                Complex128.ZERO, new Complex128(235.1, 94.2), new Complex128(3.12, 4),
-                new Complex128(0, 1), new Complex128(2,9733)};
-        int[][] bIndices = new int[][]{
-                {0, 0, 0, 0, 0, 1, 5, 5, 12, 67, 67},
-                {0, 1, 2, 3, 5, 14, 45, 5002, 142, 15, 60001}};
-        Shape bShape = new Shape(900, 450000);
-
-        CooCMatrix b = new CooCMatrix(bShape, bNnz, bIndices[0], bIndices[1]);
-
-        b.coalesce();
     }
 }

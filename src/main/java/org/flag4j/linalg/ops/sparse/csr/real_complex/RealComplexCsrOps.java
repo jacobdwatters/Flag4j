@@ -86,7 +86,7 @@ public final class RealComplexCsrOps {
                 int col2 = src2.colIndices[rowPtr2];
 
                 if(col1 == col2) {
-                    dest.add(opp.apply(src1.data[rowPtr1], (Complex128) src2.data[rowPtr2]));
+                    dest.add(opp.apply(src1.data[rowPtr1], src2.data[rowPtr2]));
                     colIndices.add(col1);
                     rowPtr1++;
                     rowPtr2++;
@@ -95,7 +95,7 @@ public final class RealComplexCsrOps {
                     colIndices.add(col1);
                     rowPtr1++;
                 } else {
-                    if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.data[rowPtr2]));
+                    if(uOpp!=null) dest.add(uOpp.apply(src2.data[rowPtr2]));
                     else dest.add(src2.data[rowPtr2]);
                     colIndices.add(col2);
                     rowPtr2++;
@@ -112,7 +112,7 @@ public final class RealComplexCsrOps {
             }
 
             while(rowPtr2 < src2.rowPointers[i+1]) {
-                if(uOpp!=null) dest.add(uOpp.apply((Complex128) src2.data[rowPtr2]));
+                if(uOpp!=null) dest.add(uOpp.apply(src2.data[rowPtr2]));
                 else dest.add(src2.data[rowPtr2]);
                 colIndices.add(src2.colIndices[rowPtr2]);
                 rowPtr2++;
@@ -316,7 +316,7 @@ public final class RealComplexCsrOps {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 
@@ -343,7 +343,7 @@ public final class RealComplexCsrOps {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = rowOffset + src1.colIndices[j];
-                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 
@@ -369,7 +369,7 @@ public final class RealComplexCsrOps {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = i*sum.numCols + src1.colIndices[j];
-                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 
@@ -395,7 +395,7 @@ public final class RealComplexCsrOps {
 
             for(int j=rowStart; j<rowEnd; j++) {
                 int idx = i*sum.numCols + src1.colIndices[j];
-                sum.data[idx] = sum.data[idx].add((Complex128) src1.data[j]);
+                sum.data[idx] = sum.data[idx].add(src1.data[j]);
             }
         }
 

@@ -35,7 +35,7 @@ import org.flag4j.linalg.solvers.LinearSolver;
 import org.flag4j.util.ValidateParameters;
 
 /**
- * <p>Solves a well determined system of equations <i>AX=B</i> in an exact sense where <i>A</i>, <i>X</i>, and <i>B</i> are tensors.
+ * <p>Solves a well determined system of equations <b>AX=B</b> in an exact sense where <b>A</b>, <b>X</b>, and <b>B</b> are tensors.
  *
  * @param <T> Type of tensor in equation to solve.
  * @param <U> Matrix type equivalent of tensor to solve.
@@ -45,10 +45,9 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
         U extends MatrixMixin<U, ?, V, ?>,
         V extends VectorMixin<V, U, ?, ?>> implements LinearSolver<T> {
 
-
     /**
-     * Solver to solve a linear matrix equation <i>Cx=d</i> for <i>X</i> where <i>C</i> is a matrix and
-     * <i>x</i> and <i>d</i> are vectors.
+     * Solver to solve a linear matrix equation <b>Cx=d</b> for <b>x</b> where <b>C</b> is a matrix and
+     * <b>x</b> and <b>d</b> are vectors.
      */
     private final LinearMatrixSolver<U, V> matrixSolver;
 
@@ -64,15 +63,15 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
 
 
     /**
-     * <p>Solves the linear tensor equation given by <i>AX=B</i> for the tensor <i>X</i>.
+     * <p>Solves the linear tensor equation given by <b>AX=B</b> for the tensor <b>X</b>.
      *
-     * <p>All indices of <i>X</i> are summed over in the tensor product with the rightmost indices of <i>A</i> as if by
+     * <p>All indices of <b>X</b> are summed over in the tensor product with the rightmost indices of <b>A</b> as if by
      * {@link org.flag4j.arrays.backend.semiring_arrays.TensorOverSemiring#tensorDot(TensorOverSemiring, int[], int[])} where
      * {@code M = new int[]{X.rank()-1, X.rank(), X.rank()+1, ..., A.rank()-1}} and
      * {@code N = new int[]{0, 1, ..., X.rank()-1}}
      * @param A Coefficient tensor in the linear system.
      * @param B Tensor of constants in the linear system.
-     * @return The solution to <i>X</i> in the linear system <i>AX=B</i>.
+     * @return The solution to <b>X</b> in the linear system <b>AX=B</b>.
      */
     @Override
     public T solve(T A, T B) {
@@ -81,9 +80,8 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
 
         int prod = 1;
         int[] dims = outputShape.getDims();
-        for(int k : dims) {
+        for(int k : dims)
             prod *= k;
-        }
 
         // Ensure that prod(a.shape.dims[j]) == prod(a.shape.dims[k]) for all b.rank()<=j<a.rank() and 0<=k<b.rank()
         checkSize(A.getShape().totalEntriesIntValueExact(), prod);
@@ -99,10 +97,10 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
 
     /**
      * Constructs the shape of the output.
-     * @param A Tensor corresponding to A in <i>AX=B</i>.
-     * @param B Tensor corresponding to B in <i>AX=B</i>.
+     * @param A Tensor corresponding to <b>A</b> in <b>AX=B</b>.
+     * @param B Tensor corresponding to <b>B</b> in <b>AX=B</b>.
      * @param aRankOriginal Original rank of {@code A} before any reshaping.
-     * @return The shape of <i>X</i> in <i>AX=B</i>.
+     * @return The shape of <b>X</b> in <b>AX=B</b>.
      */
     protected Shape getOutputShape(T A, T B, int aRankOriginal) {
         int start = -(aRankOriginal - B.getRank());
@@ -117,7 +115,7 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
 
     /**
      * Ensures that {@code aNumEntries==prod}.
-     * @param aNumEntries The total number of data in the {@code A} tensor.
+     * @param aNumEntries The total number of data in the <b>A</b> tensor.
      * @param prod Product of all axis lengths in the output shape.
      */
     protected void checkSize(int aNumEntries, int prod) {
@@ -128,8 +126,8 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
     /**
      * Initializes matrix for equivalent linear matrix equation.
      * @param A Tensor to convert to matrix.
-     * @param prod Product of all axis lengths in {@code A}.
-     * @return A matrix with the same data as tensor {@code A} with shape (prod, prod).
+     * @param prod Product of all axis lengths in <b>A</b>.
+     * @return A matrix with the same data as tensor <b>A</b> with shape (prod, prod).
      */
     protected abstract U initMatrix(T A, int prod);
 
@@ -144,9 +142,9 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
 
     /**
      * Wraps solution as a tensor and reshapes to the proper shape.
-     * @param x Vector solution to matrix linear equation which is equivalent to the tensor equation <i>Ax=b</i>.
-     * @param outputShape Shape for the solution tensor <i>x</i>.
-     * @return The solution <i>x</i> to the linear tensor equation <i>Ax=b</i>.
+     * @param x Vector solution to matrix linear equation which is equivalent to the tensor equation <b>Ax=b</b>.
+     * @param outputShape Shape for the solution tensor <b>x</b>.
+     * @return The solution <b>x</b> to the linear tensor equation <b>Ax=b</b>.
      */
     protected abstract T wrap(V x, Shape outputShape);
 }

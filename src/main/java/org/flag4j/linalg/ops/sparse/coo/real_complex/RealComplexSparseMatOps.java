@@ -283,7 +283,7 @@ public final class RealComplexSparseMatOps {
             }
 
             if(add1 && add2) {
-                values.add(new Complex128(src1.data[src1Counter]).sub((Complex128) src2.data[src2Counter]));
+                values.add(new Complex128(src1.data[src1Counter]).sub(src2.data[src2Counter]));
                 rowIndices.add(src1.rowIndices[src1Counter]);
                 colIndices.add(src1.colIndices[src1Counter]);
                 src1Counter++;
@@ -409,7 +409,7 @@ public final class RealComplexSparseMatOps {
         for(int i = 0; i<col.data.length; i++) {
             int idx = col.indices[i]*src.numCols;
             int end = idx + src.numCols;
-            Complex128 value = (Complex128) col.data[i];
+            Complex128 value = col.data[i];
 
             while(idx < end) {
                 destEntries[idx] = destEntries[idx++].add(value);
@@ -439,7 +439,7 @@ public final class RealComplexSparseMatOps {
         for(int i = 0; i<row.data.length; i++) {
             int idx = 0;
             int colIdx = row.indices[i];
-            Complex128 value = (Complex128) row.data[i];
+            Complex128 value = row.data[i];
 
             while(idx < destEntries.length) {
                 destEntries[idx + colIdx] = destEntries[idx + colIdx].add(value);

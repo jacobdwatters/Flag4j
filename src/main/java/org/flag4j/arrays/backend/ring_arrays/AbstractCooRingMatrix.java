@@ -45,7 +45,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
  * <p>COO matrices are optimized for hyper-sparse matrices (i.e. matrices which contain almost all zeros relative to the size of the
  * matrix).
  *
- * <h3>COO Representation:</h3>
+ * <h2>COO Representation:</h2>
  * A sparse COO matrix is stored as:
  * <ul>
  *     <li>The full {@link #shape shape} of the matrix.</li>
@@ -63,7 +63,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
  *
  * @param <T> Type of this sparse COO matrix.
  * @param <U> Type of dense matrix which is similar to {@code T}.
- * @param <W> Type of sparse COO vector which is similar to {@code T}.
+ * @param <V> Type of sparse COO vector which is similar to {@code T}.
  * @param <W> Type of the arrays element in this matrix.
  */
 public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U, V, W>,

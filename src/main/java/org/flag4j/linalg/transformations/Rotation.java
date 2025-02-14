@@ -48,8 +48,8 @@ import org.flag4j.arrays.dense.Vector;
  * <ul>
  *   <li>A rotation matrix is orthogonal: <b>R<sup>-1</sup></b> = <b>R</b><sup>T</sup>.</li>
  *   <li>Rotations preserve the length of vectors (orthogonal transformations).</li>
- *   <li>The inverse/transpose rotation matrix undoes the rotation: <b>x</b> = <b>R</b><sup>T</sup><b>R</b>x = 
- *   <b>RR</b><sup>T</sup>x</li>
+ *   <li>The inverse/transpose rotation matrix undoes the rotation: <b>x</b> = <b>R</b><sup>T</sup><b>Rx</b> =
+ *   <b>RR</b><sup>T</sup><b>x</b></li>
  *   <li>Successive rotations can be composed through matrix multiplication (rotation order is from right to left).</li>
  * </ul>
  *
@@ -109,7 +109,7 @@ public final class Rotation {
         // Hide default constructor for utility class.
     }
 
-    // TODO: Consider having an object-oriented class for rotations like in scipy.spatial.transform.Rotation
+    // TODO: Consider having an object-oriented class for rotations similar to scipy.spatial.transform.Rotation
 
 
     /**

@@ -27,15 +27,20 @@ package org.flag4j.linalg.solvers.exact.triangular;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.arrays.sparse.PermutationMatrix;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
- * This solver solves linear systems of equations where the coefficient matrix in a lower triangular real dense matrix
- * and the constant vector is a real dense vector.
+ * This solver solves linear systems of equations where the coefficient matrix is lower triangular.
+ * That is, solves the systems <strong>Lx = b</strong> or <strong>LX = B</strong> where <strong>L</strong> is a lower triangular
+ * matrix. This is accomplished using a simple forward substitution.
  */
 public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
+    // TODO: In several implementations, a column is temporarily copied. This is likely only worth it for matrices
+    //  larger than a few entries. If the matrix is small consider not doing this. Also should investigate the minimum size
+    //  it is likely "worth it".
 
     /**
      * For computing determinant of lower triangular matrix during solve.
@@ -47,7 +52,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Creates a solver to solve a linear system where the coefficient matrix is lower triangular.
      */
     public RealForwardSolver() {
-        super(false, false);
+        super(false, true);
     }
 
 
@@ -60,7 +65,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * </ul>
      */
     public RealForwardSolver(boolean isUnit) {
-        super(isUnit, false);
+        super(isUnit, true);
     }
 
 
@@ -87,49 +92,58 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix L and a vector b.
-     * That is, solves the linear system L*x=b where L is a lower triangular matrix.
-     * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
-     *          as if it were.
-     * @param b Constant vector.
-     * @return The result of solving the linear system L*x=b where L is a lower triangular matrix.
-     * @throws SingularMatrixException If
+     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and a vector <strong>b</strong>.
+     * That is, solves the linear system <strong>Lx = b</strong> for <strong>x</strong> where <strong>L</strong> is lower triangular.
+     * @param L Lower triangular coefficient matrix <strong>L</strong>. {@code L} is assumed to be lower triangular and only entries
+     * at and below the principle diagonal will be accessed.
+     * @param b Constant vector <strong>b</strong>.
+     * @return The result of solving the linear system <strong>Lx = b</strong> where <strong>L</strong> is a lower triangular.
+     * @throws SingularMatrixException If {@code L} is singular (i.e. has at least one zero on the principle diagonal).
      */
     @Override
     public Vector solve(Matrix L, Vector b) {
-        ValidateParameters.ensureSquareMatrix(L.shape);
-        ValidateParameters.ensureAllEqual(L.numRows, b.size);
         return isUnit ? solveUnitLower(L, b) : solveLower(L, b);
     }
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix L and a matrix B.
-     * That is, solves the linear system L*X=B where L is a lower triangular matrix.
-     * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
-     *          as if it were.
-     * @param B Constant Matrix.
-     * @return The result of solving the linear system L*X=B where L is a lower triangular matrix.
-     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
-     *      * the principle diagonal).
+     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and a matrix <strong>B</strong>.
+     * That is, solves the linear system <strong>LX = B</strong> for <strong>X</strong> where <strong>L</strong> is lower triangular.
+     * @param L Lower triangular coefficient matrix <strong>L</strong>. {@code L} is assumed to be lower triangular and only entries
+     * at and below the principle diagonal will be accessed.
+     * @param b Constant matrix <strong>B</strong>.
+     * @return The result of solving the linear system <strong>LX = B</strong> where <strong>L</strong> is a lower triangular.
+     * @throws SingularMatrixException If {@code L} is singular (i.e. has at least one zero on the principle diagonal).
      */
     @Override
     public Matrix solve(Matrix L, Matrix B) {
-        ValidateParameters.ensureSquareMatrix(L.shape);
-        ValidateParameters.ensureAllEqual(L.numRows, B.numRows);
         return isUnit ? solveUnitLower(L, B) : solveLower(L, B);
     }
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix L and the identity matrix.
-     * That is, solves the linear system L*X=I where L is a lower triangular matrix and I is
-     * the appropriately sized identity matrix.
-     * @param L Lower triangular coefficient matrix. If {@code L} is not lower triangular, it will be treated
-     *          as if it were.
-     * @return The result of solving the linear system L*X=B where L is a lower triangular matrix.
-     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular (i.e. has a zero on
-     * the principle diagonal).
+     * Solves a linear system <strong>LX = P</strong> for <strong>X</strong> where <strong>L</strong> is a lower triangular matrix and
+     * <strong>P</strong> is a permutation matrix.
+     * @param L Lower triangular coefficient matrix <strong>L</strong>.
+     * @param P Constant permutation matrix <strong>P</strong>.
+     * @return The solution to <strong>X</strong> in the linear system <strong>LX = P</strong>.
+     */
+    @Override
+    public Matrix solve(Matrix L, PermutationMatrix P) {
+        return isUnit ? solveUnitPerm(L, P) : solvePerm(L, P);
+    }
+
+
+
+    /**
+     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and the identity matrix.
+     * That is, solves the linear system <strong>LX = I</strong> where <strong>L</strong> is a lower triangular matrix and
+     * <strong>I</strong> is the appropriately sized identity matrix.
+     * @param L Lower triangular coefficient matrix, <strong>L</strong>. If {@code L} is not lower triangular, it will be treated
+     *          as if it were and only data in the lower triangular portion will be accessed.
+     * @return The result of solving the linear system <strong>LX = B</strong> where <strong>L</strong> is a lower triangular matrix.
+     * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular
+     * (i.e. has at least one zero on the principle diagonal).
      */
     public Matrix solveIdentity(Matrix L) {
         ValidateParameters.ensureSquareMatrix(L.shape);
@@ -138,10 +152,10 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a linear system where the coefficient matrix is unit lower triangular.
+     * Solves the linear system <strong>Lx = b</strong> where <strong>L</strong> is <em>unit</em> lower triangular.
      * @param L Unit lower triangular matrix.
      * @param b Vector of constants in the linear system.
-     * @return The solution of x for the linear system L*x=b.
+     * @return The solution of x for the linear system <strong>Lx = b</strong>.
      */
     private Vector solveUnitLower(Matrix L, Vector b) {
         checkParams(L, b.size);
@@ -157,9 +171,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
             sum = 0;
             lIndexStart = i*L.numCols;
 
-            for(int j=i-1; j>-1; j--) {
+            for(int j=i-1; j>-1; j--)
                 sum += L.data[lIndexStart + j]*x.data[j];
-            }
 
             x.data[i] = b.data[i]-sum;
         }
@@ -173,7 +186,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
      * @param b Vector of constants in the linear system.
-     * @return The solution of x for the linear system L*x=b.
+     * @return The solution of x for the linear system <strong>Lx = b</strong>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -193,9 +206,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
             diag = L.data[i*(L.numCols + 1)];
             det *= diag;
 
-            for(int j=i-1; j>-1; j--) {
+            for(int j=i-1; j>-1; j--)
                 sum += L.data[lIndexStart + j]*x.data[j];
-            }
 
             x.data[i] = (b.data[i]-sum)/diag;
         }
@@ -210,7 +222,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Unit lower triangular matrix.
      * @param B Matrix of constants in the linear system.
-     * @return The solution of X for the linear system L*X=b.
+     * @return The solution of X for the linear system <strong>LX = B</strong>.
      */
     private Matrix solveUnitLower(Matrix L, Matrix B) {
         checkParams(L, B.numRows);
@@ -225,19 +237,16 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
             X.data[j] = B.data[j];
 
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = 0;
                 lIndexStart = i*(L.numCols + 1) - 1;
                 xIndex = i*X.numCols + j;
 
-                for(int k=i-1; k>-1; k--) {
-                    sum += L.data[lIndexStart--]*X.data[k*X.numCols + j];
-                }
-
+                for(int k=i-1; k>-1; k--)
+                    sum += L.data[lIndexStart--]*xCol[k];
 
                 xCol[i] = X.data[xIndex] = B.data[xIndex] - sum;
             }
@@ -252,7 +261,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
      * @param B Matrix of constants in the linear system.
-     * @return The solution of X for the linear system L*X=b.
+     * @return The solution of X for the linear system <strong>LX = B</strong>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -270,9 +279,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
             X.data[j] = B.data[j]/L.data[0];
 
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = 0;
@@ -283,9 +291,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
                 if(j == 0) det *= diag;
 
-                for(int k=0; k<i; k++) {
+                for(int k=0; k<i; k++)
                     sum += L.data[lIndexStart++]*xCol[k];
-                }
 
                 double value = (B.data[xIndex] - sum) / diag;
                 X.data[xIndex] = value;
@@ -303,7 +310,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is unit lower triangular and the constant matrix
      * is the identity matrix.
      * @param L Unit lower triangular matrix.
-     * @return The solution of X for the linear system L*X=I.
+     * @return The solution of <strong>X</strong> for the linear system <strong><strong>LX = I</strong></strong>.
      */
     private Matrix solveUnitLowerIdentity(Matrix L) {
         checkParams(L, L.numRows);
@@ -318,18 +325,16 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
         for(int j=0; j<L.numCols; j++) {
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? 1.0 : 0.0;
                 lIndexStart = i*L.numCols;
                 xIndex = lIndexStart + j;
 
-                for(int k=0; k<i; k++) {
+                for(int k=0; k<i; k++)
                     sum -= L.data[lIndexStart++]*xCol[k];
-                }
 
                 xCol[i] = X.data[xIndex] = sum;
             }
@@ -341,11 +346,11 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a linear system L*X=I where the coefficient matrix L is lower triangular and the
+     * Solves a linear system <strong>LX = I</strong> where the coefficient matrix L is lower triangular and the
      * constant matrix I is the appropriately sized identity matrix.
      * @param L Unit lower triangular matrix (Note, this is not checked).
      *          If {@code L} is not lower triangular, it will be treated as if it were. No error will be thrown.
-     * @return The solution of X for the linear system L*X=I.
+     * @return The solution of X for the linear system <strong>LX = I</strong>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -361,9 +366,8 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
         for(int j=0; j<L.numCols; j++) {
             // Temporarily store column for better cache performance on innermost loop.
-            for(int k=0; k<xCol.length; k++) {
+            for(int k=0; k<xCol.length; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=1; i<L.numRows; i++) {
                 sum = (i==j) ? 1.0 : 0.0;
@@ -373,18 +377,109 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
                 if(j==0) det*=diag;
 
-                for(int k=0; k<i; k++) {
+                for(int k=0; k<i; k++)
                     sum -= L.data[lIndexStart++]*xCol[k];
-                }
 
                 double value = sum / diag;
-                X.data[xIndex] = value;
-                xCol[i] = value;
+                X.data[xIndex] = xCol[i] = value;
             }
         }
 
         checkSingular(Math.abs(det), L.numRows, L.numCols); // Ensure matrix is not singular.
 
+        return X;
+    }
+
+
+    /**
+     * Solves a linear system <strong>LX=P</strong> where the coefficient matrix <strong>L</strong> is lower triangular and the
+     * constant matrix <strong>P</strong> is a permutation matrix.
+     * @param L Lower triangular coefficient matrix <strong>L</strong>.
+     * @return The solution of <strong>X</strong> to the linear system <strong>LX=P</strong>.
+     * @throws SingularMatrixException If {@code L} is singular (i.e. has a zero on the principle diagonal).
+     */
+    private Matrix solvePerm(Matrix L, PermutationMatrix P) {
+        checkParams(L, P.size);
+
+        final int n = P.size;
+        int[] perm = P.getPermutation();
+        X = new Matrix(P.size, P.size);
+        det = L.data[0];
+        xCol = new double[n];
+
+        for (int j = 0; j < n; j++) {
+            double bVal0 = (perm[0] == j) ? 1.0 : 0.0;
+            X.data[j] = bVal0 / L.data[0];
+
+            // Temporarily store column for better cache performance on innermost loop.
+            for (int k = 0; k < n; k++)
+                xCol[k] = X.data[k*n + j];
+
+            for (int i = 1; i < n; i++) {
+                double sum = 0.0;
+                int lIndexStart = i*n;
+
+                // Accumulate the dot product
+                for (int k = 0; k < i; k++)
+                    sum += L.data[lIndexStart + k]*xCol[k];
+
+                double diag = L.data[i*(n + 1)];
+
+                if (j == 0) det *= diag;
+
+                double bVal = (perm[i] == j) ? 1.0 : 0.0;
+                double value = (bVal - sum) / diag;
+
+                X.data[lIndexStart + j] = xCol[i] = value;
+            }
+        }
+
+        // If you want to check for singularity:
+        checkSingular(Math.abs(det), n, n);
+
+        return X;
+    }
+
+
+    /**
+     * Solves a linear system <strong>LX=P</strong> where the coefficient matrix <strong>L</strong> is unit-lower triangular and the
+     * constant matrix <strong>P</strong> is a permutation matrix.
+     * @param L Unit lower triangular coefficient matrix <strong>L</strong>.
+     * @return The solution of <strong>X</strong> to the linear system <strong>LX=P</strong>.
+     */
+    private Matrix solveUnitPerm(Matrix L, PermutationMatrix P) {
+        checkParams(L, P.size);
+
+        final int n = P.size;
+        int[] perm = P.getPermutation();
+        X = new Matrix(P.size, P.size);
+        det = L.numRows;
+        xCol = new double[n];
+
+        for (int j = 0; j < n; j++) {
+            double bVal0 = (perm[0] == j) ? 1.0 : 0.0;
+            X.data[j] = bVal0;
+
+            // Temporarily store column for better cache performance on innermost loop.
+            for (int k = 0; k < n; k++)
+                xCol[k] = X.data[k*n + j];
+
+            for (int i = 1; i < n; i++) {
+                double sum = 0.0;
+                int lIndexStart = i*n;
+
+                // Accumulate the dot product
+                for (int k = 0; k < i; k++)
+                    sum += L.data[lIndexStart + k]*xCol[k];
+
+                double bVal = (perm[i] == j) ? 1.0 : 0.0;
+                double value = bVal - sum;
+
+                X.data[lIndexStart + j] = xCol[i] = value;
+            }
+        }
+
+        // No need to check if matrix is singular since it has full rank.
         return X;
     }
 }

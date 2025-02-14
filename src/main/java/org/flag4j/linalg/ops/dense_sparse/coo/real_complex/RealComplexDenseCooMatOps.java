@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,7 @@ public final class RealComplexDenseCooMatOps {
         for(int i=0; i<src2.nnz; i++) {
             int row = src2.rowIndices[i];
             int col = src2.colIndices[i];
-            dest.data[row*src1.numCols + col] = dest.data[row*src1.numCols + col].add((Complex128) src2.data[i]);
+            dest.data[row*src1.numCols + col] = dest.data[row*src1.numCols + col].add(src2.data[i]);
         }
 
         return dest;
@@ -78,7 +78,7 @@ public final class RealComplexDenseCooMatOps {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.data[idx] = dest.data[idx].sub((Complex128) src2.data[i]);
+            dest.data[idx] = dest.data[idx].sub(src2.data[i]);
         }
 
         return dest;
@@ -98,7 +98,7 @@ public final class RealComplexDenseCooMatOps {
 
         for(int i=0; i<src2.nnz; i++) {
             int idx = src2.rowIndices[i]*src1.numCols + src2.colIndices[i];
-            dest.data[idx] = dest.data[idx].add((Complex128) src2.data[i]);
+            dest.data[idx] = dest.data[idx].add(src2.data[i]);
         }
 
         return dest;
@@ -173,7 +173,7 @@ public final class RealComplexDenseCooMatOps {
         for(int i = 0; i<src1.data.length; i++) {
             row = src1.rowIndices[i];
             col = src1.colIndices[i];
-            quotient[i] = new Complex128(src1.data[i]).div((Complex128) src2.data[row*src2.numCols + col]);
+            quotient[i] = new Complex128(src1.data[i]).div(src2.data[row*src2.numCols + col]);
         }
 
         return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());

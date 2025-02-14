@@ -42,7 +42,7 @@ import java.util.function.UnaryOperator;
  *
  * <p>For other array operations see: {@link ArrayBuilder}, {@link ArrayConversions}, and {@link ArrayJoiner}.
  *
- * <h3>Key Features:</h3>
+ * <h2>Key Features:</h2>
  * <ul>
  *   <li>Deep comparison and copying of multidimensional arrays.</li>
  *   <li>Element-wise operations, including transformations, swaps, and permutations.</li>
@@ -50,7 +50,7 @@ import java.util.function.UnaryOperator;
  *   <li>Flattening and reshaping of multidimensional arrays.</li>
  * </ul>
  *
- * <h3>Usage Examples</h3>
+ * <h2>Usage Examples</h2>
  * <pre>{@code
  * // Compute the cumulative sum of an integer array
  * int[] array = {1, 2, 3, 4};
@@ -74,7 +74,7 @@ import java.util.function.UnaryOperator;
  * ArrayUtils.applyTransform(data, x -> x * x); // Squares each value in the array
  * }</pre>
  *
- * <h3>Restrictions</h3>
+ * <h2>Restrictions</h2>
  * <ul>
  *   <li>Multidimensional arrays are expected to be rectangular for all methods in this class.
  *   However, this is not explicitly enforced and jagged arrays may cause unexpected behavior.</li>
@@ -141,14 +141,14 @@ public final class ArrayUtils {
      * @return {@code true} if all data in {@code src2} have zero imaginary component and real component equal to the
      * corresponding entry in {@code src1}; {@code false} otherwise.
      */
-    public static <T extends Field<T>> boolean equals(double[] src1, T[] src2) {
+    public static boolean equals(double[] src1, Complex128[] src2) {
         boolean equal = true;
 
         if (src1.length != src2.length) {
             equal = false;
         } else {
             for(int i=0, size = src1.length; i < size; i++) {
-                if (src1[i] != ((Complex128) src2[i]).re || ((Complex128) src2[i]).im != 0) {
+                if (src1[i] != src2[i].re || src2[i].im != 0) {
                     equal = false;
                     break; // No need to continue.
                 }
@@ -160,7 +160,7 @@ public final class ArrayUtils {
 
 
     /**
-     * Creates a deep copy of a 2D array. Assumes arrays are <i>not</i> jagged.
+     * Creates a deep copy of a 2D array. Assumes arrays are <em>not</em> jagged.
      *
      * @param src  Source array to copy.
      * @param dest Destination array of copy. If {@code null}, a new array will be initialized.
@@ -254,7 +254,7 @@ public final class ArrayUtils {
 
     /**
      * Swaps elements in an array according to a specified permutation. This method should be used with extreme caution as unlike
-     * {@link #permute(int[], int[])}, this method does <i>not</i> verify that {@code indices} is a permutation.
+     * {@link #permute(int[], int[])}, this method does <em>not</em> verify that {@code indices} is a permutation.
      *
      * @param src     Array to swap elements within.
      * @param indices Array containing indices of the permutation. If the {@code src} array has length {@code N}, then
@@ -874,7 +874,7 @@ public final class ArrayUtils {
         Complex128[] dest = new Complex128[src.length];
 
         for(int i=0, size=src.length; i<size; i++)
-            dest[i] = (Complex128) opp.apply(src[i]);
+            dest[i] = opp.apply(src[i]);
 
         return dest;
     }
@@ -895,7 +895,7 @@ public final class ArrayUtils {
         double[] dest = new double[src.length];
 
         for(int i=0, size=src.length; i<size; i++)
-            dest[i] = opp.apply((Complex128) src[i]);
+            dest[i] = opp.apply(src[i]);
 
         return dest;
     }

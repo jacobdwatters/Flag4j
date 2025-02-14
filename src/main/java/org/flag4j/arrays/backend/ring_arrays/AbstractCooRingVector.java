@@ -60,7 +60,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
  * @param <T> Type of this vector.
  * @param <U> Type of equivalent dense vector.
  * @param <V> Type of matrix equivalent to {@code T}.
- * @param <Y> Type of dense matrix equivalent to {@code U}.
+ * @param <W> Type of dense matrix equivalent to {@code U}.
  * @param <Y> Type of the arrays element in this vector.
  */
 public abstract class AbstractCooRingVector<

@@ -51,7 +51,7 @@ import java.util.function.BinaryOperator;
  * corresponding non-zero values, rather than allocating memory for every element in the full matrix shape. This
  * allows efficient representation and manipulation of large matrices containing a substantial number of zeros.
  *
- * <h3>COO Representation:</h3>
+ * <h2>COO Representation:</h2>
  * A sparse COO matrix is stored as:
  * <ul>
  *     <li><b>Shape:</b> The full {@link #shape} of the matrix specifying its number of rows and columns.</li>
@@ -78,7 +78,7 @@ import java.util.function.BinaryOperator;
  * offering significant memory savings and potentially more efficient computational operations than equivalent dense
  * representations.
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  * // shape, data, and indices for COO matrix.
  * Shape shape = new Shape(512, 1024);

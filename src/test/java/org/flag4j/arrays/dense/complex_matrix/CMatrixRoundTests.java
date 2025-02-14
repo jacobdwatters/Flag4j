@@ -33,19 +33,19 @@ class CMatrixRoundTests {
             if(!exp.data[i].isNaN()) {
                 assertEquals(exp.data[i], B.data[i]);
             } else {
-                double expRe = ((Complex128) exp.data[i]).re;
-                double expIm = ((Complex128) exp.data[i]).im;
+                double expRe = (exp.data[i]).re;
+                double expIm = (exp.data[i]).im;
 
                 if(Double.isNaN(expRe)) {
-                    assertTrue(Double.isNaN(((Complex128) B.data[i]).re));
+                    assertTrue(Double.isNaN((B.data[i]).re));
                 } else {
-                    assertEquals(expRe, ((Complex128) B.data[i]).re);
+                    assertEquals(expRe, (B.data[i]).re);
                 }
 
                 if(Double.isNaN(expIm)) {
-                    assertTrue(Double.isNaN(((Complex128) B.data[i]).im));
+                    assertTrue(Double.isNaN((B.data[i]).im));
                 } else {
-                    assertEquals(expIm, ((Complex128) B.data[i]).im);
+                    assertEquals(expIm, (B.data[i]).im);
                 }
             }
         }
@@ -82,9 +82,9 @@ class CMatrixRoundTests {
                 }
 
                 if(Double.isNaN(expIm)) {
-                    assertTrue(Double.isNaN(((Complex128) B.data[i]).im));
+                    assertTrue(Double.isNaN((B.data[i]).im));
                 } else {
-                    assertEquals(expIm, ((Complex128) B.data[i]).im);
+                    assertEquals(expIm, (B.data[i]).im);
                 }
             }
         }
@@ -110,19 +110,19 @@ class CMatrixRoundTests {
             if(!exp.data[i].isNaN()) {
                 assertEquals(exp.data[i], B.data[i]);
             } else {
-                double expRe = ((Complex128) exp.data[i]).re;
-                double expIm = ((Complex128) exp.data[i]).im;
+                double expRe = (exp.data[i]).re;
+                double expIm = (exp.data[i]).im;
 
                 if(Double.isNaN(expRe)) {
-                    assertTrue(Double.isNaN(((Complex128) B.data[i]).re));
+                    assertTrue(Double.isNaN((B.data[i]).re));
                 } else {
-                    assertEquals(expRe, ((Complex128) B.data[i]).re);
+                    assertEquals(expRe, (B.data[i]).re);
                 }
 
                 if(Double.isNaN(expIm)) {
-                    assertTrue(Double.isNaN(((Complex128) B.data[i]).im));
+                    assertTrue(Double.isNaN((B.data[i]).im));
                 } else {
-                    assertEquals(expIm, ((Complex128) B.data[i]).im);
+                    assertEquals(expIm, (B.data[i]).im);
                 }
             }
         }
@@ -150,19 +150,19 @@ class CMatrixRoundTests {
             if(!exp.data[i].isNaN()) {
                 assertEquals(exp.data[i], B.data[i]);
             } else {
-                double expRe = ((Complex128) exp.data[i]).re;
-                double expIm = ((Complex128) exp.data[i]).im;
+                double expRe = (exp.data[i]).re;
+                double expIm = (exp.data[i]).im;
 
                 if(Double.isNaN(expRe)) {
-                    assertTrue(Double.isNaN(((Complex128) B.data[i]).re));
+                    assertTrue(Double.isNaN((B.data[i]).re));
                 } else {
-                    assertEquals(expRe, ((Complex128) B.data[i]).re);
+                    assertEquals(expRe, (B.data[i]).re);
                 }
 
                 if(Double.isNaN(expIm)) {
-                    assertTrue(Double.isNaN(((Complex128) B.data[i]).im));
+                    assertTrue(Double.isNaN((B.data[i]).im));
                 } else {
-                    assertEquals(expIm, ((Complex128) B.data[i]).im);
+                    assertEquals(expIm, (B.data[i]).im);
                 }
             }
         }

@@ -37,14 +37,47 @@ import java.util.Arrays;
 /**
  * <p>This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.
  *
- * <p>That is, decomposes a rectangular matrix M into M=USV<sup>H</sup> where U and V are
- * unitary matrices whose columns are the left and right singular vectors of M and S is a rectangular
- * diagonal matrix containing the singular values of M.
+ * <p>That is, decomposes a rectangular matrix <b>M</b> into <b>M=U&Sigma;V</b><sup>H</sup> where <b>U</b> and <b>V</b> are
+ * unitary matrices whose columns are the left and right singular vectors of <b>M</b> and <b>&Sigma;</b> is a rectangular
+ * diagonal matrix containing the singular values of <b>M</b>.
+ *
+ * <p>The SVD may also be used to compute the (numerical) rank of the matrix using {@link #getRank()}.
+ *
+ * <p>The SVD proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
+ * support specifying a seed for the pseudo-random number generator.
+ *
+ * <h2>Usage:</h2>
+ * The decomposition workflow typically follows these steps:
+ * <ol>
+ *     <li>Instantiate a concrete instance of {@code SVD}.</li>
+ *     <li>Call {@link #decompose(MatrixMixin)} to perform the factorization.</li>
+ *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getS()}.</li>
+ * </ol>
+ *
+ * <h2>Efficiency Considerations:</h2>
+ * If singular vectors are not required, setting {@code computeUV = false} <em>may</em> improve performance.
+ *
+ * @see #getU()
+ * @see #getS()
+ * @see #getV()
+ * @see #getRank()
  *
  * @param <T> The type of the matrix to compute the singular value decomposition of.
  */
-public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
+public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decomposition<T> {
 
+    /**
+     * Seed to use in pseudo-random number generator.
+     */
+    protected long seed;
+    /**
+     * Flag indicating if seeding should be used in pseudo-random operations.
+     * <ul>
+     *     <li>If {@code true}, then seeding <em>will</em> be used.</li>
+     *     <li>If {@code false}, then seeding <em>will not</em> be used.</li>
+     * </ul>
+     */
+    protected boolean useSeed;
     /**
      * Flag which indicates if the singular vectors should be computed in addition to the singular values.
      */
@@ -54,15 +87,15 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
      */
     protected boolean reduced;
     /**
-     * The unitary matrix U corresponding to M=USV<sup>H</sup> in the SVD.
+     * The unitary matrix <b>U</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
      */
     protected T U;
     /**
-     * The rectangular diagonal S corresponding to M=USV<sup>H</sup> in the SVD.
+     * The rectangular diagonal <b>&Sigma;</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
      */
     protected Matrix S;
     /**
-     * The unitary matrix V corresponding to M=USV<sup>H</sup> in the SVD.
+     * The unitary matrix <b>V</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
      */
     protected T V;
     /**
@@ -73,35 +106,67 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
 
     /**
      * Creates a decomposer to compute the Schur decomposition.
-     * @param computeUV A flag which indicates if the unitary matrices {@code Q} and V should be computed
-     *                  (i.e. the singular vectors).<br>
-     *                 - If true, the {@code Q} and V matrices will be computed.
-     *                 - If false, the {@code Q} and V matrices  will <b>not</b> be computed. If it is not needed, this may
-     *                 provide a performance improvement.
-     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.<br>
-     *                 - If true, reduced SVD is computed.
-     *                 - If false, the full SVD is computed.
+     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * (i.e. the singular vectors).
+     * <ul>
+     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
+     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     needed, this <em>may</em> provide a performance improvement.</li>
+     * </ul>
+     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.
+     * <ul>
+     *     <li>If {@code true}, reduced SVD is computed.</li>
+     *     <li>If {@code false}, the full SVD is computed.</li>
+     * </ul>
      */
     protected SVD(boolean computeUV, boolean reduced) {
         this.computeUV = computeUV;
         this.reduced = reduced;
+        this.useSeed = false;
     }
 
 
     /**
-     * Gets the unitary matrix U corresponding to M=USV<sup>H</sup> in the SVD.
-     * @return U corresponding to M=USV<sup>H</sup> in the SVD.
+     * Creates a decomposer to compute the Schur decomposition.
+     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * (i.e. the singular vectors).
+     * <ul>
+     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
+     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     needed, this <em>may</em> provide a performance improvement.</li>
+     * </ul>
+     * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.
+     * <ul>
+     *     <li>If {@code true}, reduced SVD is computed.</li>
+     *     <li>If {@code false}, the full SVD is computed.</li>
+     * </ul>
+     * @param seed Seed to use in pseudo-random number generators. Setting this will allow for reproducibility
+     * between multiple calls with the same inputs.
+     */
+    protected SVD(boolean computeUV, boolean reduced, long seed) {
+        this.computeUV = computeUV;
+        this.reduced = reduced;
+        this.seed = seed;
+        this.useSeed = true;
+    }
+
+
+    /**
+     * Gets the unitary matrix <b>U</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * @return <b>U</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
      */
     public T getU() {
+        ensureHasDecomposed();
         return U;
     }
 
 
     /**
-     * Gets the diagonal matrix S corresponding to M=USV<sup>H</sup> in the SVD.
-     * @return S corresponding to M=USV<sup>H</sup> in the SVD.
+     * Gets the diagonal matrix <b>&Sigma;</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * @return <b>&Sigma;</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
      */
     public Matrix getS() {
+        ensureHasDecomposed();
         return S;
     }
 
@@ -112,16 +177,18 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
      * @return The singular values of the last matrix decomposed.
      */
     public Vector getSingularValues() {
+        ensureHasDecomposed();
         return S.getDiag();
     }
 
 
     /**
-     * Gets the unitary matrix V corresponding to M=USV<sup>H</sup> in the SVD.
-     * @return V corresponding to M=USV<sup>H</sup> in the SVD. Note that the Hermitian transpose has
-     * <b>not</b> been computed.
+     * Gets the unitary matrix <b>V</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * @return <b>V</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD. Note that the Hermitian transpose has
+     * <em>not</em> been computed.
      */
     public T getV() {
+        ensureHasDecomposed();
         return V;
     }
 
@@ -131,6 +198,7 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
      * @return The rank of the last matrix decomposed.
      */
     public int getRank() {
+        ensureHasDecomposed();
         return rank;
     }
 
@@ -183,6 +251,7 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
             j++;
         }
 
+        super.hasDecomposed = true;
         return this;
     }
 
@@ -210,7 +279,7 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
 
         // Tolerance for considering a singular value zero.
         // TODO: Make tolerance configurable and use this as the default tolerance.
-        double tol = 2.0*Math.max(rows, cols)* Flag4jConstants.EPS_F64*sorted[sorted.length-1];
+        double tol = 2.0*Math.max(rows, cols)*Flag4jConstants.EPS_F64*sorted[sorted.length - 1];
 
         for(double val : singularValues)
             if(val > tol) rank++;
@@ -238,18 +307,18 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> implements Decompos
 
 
     /**
-     * Initializes the unitary U and V matrices for the SVD.
+     * Initializes the unitary <b>U</b> and <b>V</b> matrices for the SVD.
      * @param src Shape of the source matrix being decomposed.
-     * @param cols The number of columns for U and V.
+     * @param cols The number of columns for <b>U</b> and <b>V</b>.
      */
     protected abstract void initUV(Shape src, int cols);
 
 
     /**
-     * Extracts the singular vectors, normalizes them and sets the columns of U
-     * and V to be the left/right singular vectors.
+     * Extracts the singular vectors, normalizes them and sets the columns of <b>U</b>
+     * and <b>V</b> to be the left/right singular vectors.
      * @param singularVecs Computed left and right singular vectors.
-     * @param j Index of the column of U and V to set.
+     * @param j Index of the column of <b>U</b> and <b>V</b> to set.
      */
     protected abstract void extractNormalizedCols(T singularVecs, int j);
 }

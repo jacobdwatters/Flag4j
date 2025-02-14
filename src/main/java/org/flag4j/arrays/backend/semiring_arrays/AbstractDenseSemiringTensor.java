@@ -47,8 +47,6 @@ import java.util.Arrays;
  * <p>The {@link #data} of an AbstractDenseSemiringTensor are mutable but the {@link #shape} is fixed.
  *
  * @param <T> The type of this dense semiring tensor.
- * @param <U> Type of sparse tensor equivalent to {@code T}. This type parameter is required because some ops (e.g.
- * {@link #toCoo()}) may result in a sparse tensor.
  * @param <V> The type of the {@link Semiring} which this tensor's data belong to.
  */
 public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemiringTensor<T, V>, V extends Semiring<V>>
@@ -401,7 +399,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
     /**
      * Converts this tensor to an equivalent sparse COO tensor.
      * @param estimatedSparsity Estimated sparsity of the tensor. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      * @return A sparse COO tensor that is equivalent to this dense tensor.
      * @see #toCoo()

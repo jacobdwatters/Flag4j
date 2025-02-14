@@ -96,7 +96,7 @@ class CsrCMatrixTransposeTests {
 
 
     @Test
-    void HermitianTransposeTests() {
+    void hermitianTransposeTests() {
         // -------------------- sub-case 1 ---------------------
         aEntries = new Complex128[][]{
                 {new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.89855+0.38209i"), new Complex128("0.0"), new Complex128("0.0"), new Complex128("0.0")},

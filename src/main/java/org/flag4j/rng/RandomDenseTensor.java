@@ -38,17 +38,17 @@ import org.flag4j.rng.distributions.RealUniform;
 /**
  * A utility class for generating random dense tensors, matrices, and vectors with customizable distributions.
  *
- * <h3>Features:</h3>
+ * <h2>Features:</h2>
  * <ul>
  *   <li>Generate random tensors, matrices, and vectors with real or complex entries.</li>
  *   <li>Support for configurable uniform and Gaussian distributions.</li>
- *   <li>Create specialized matrices, such as symmetric, orthogonal, unitary, triangular, and positive definite.</li>
+ *   <li>Create specialized matrices, such as symmetric, orthogonal, unitary, triangular, and positive-definite.</li>
  * </ul>
  *
  * <p>This class relies on the {@code RandomComplex} and {@code RandomArray} classes for pseudorandom number
  * generation and array population.
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <pre>{@code
  *     RandomDenseTensor rtg = new RandomDenseTensor(12345L);
  *
@@ -58,7 +58,7 @@ import org.flag4j.rng.distributions.RealUniform;
  *     // Random unitary matrix.
  *     CMatrix unitaryMatrix = rtg.randomUnitaryMatrix(5);
  *
- *     // Random symmetric positive definite matrix.
+ *     // Random symmetric positive-definite matrix.
  *     Matrix symmPosDef = rtg.randomSymPosDef(12);
  * }</pre>
  *
@@ -638,13 +638,13 @@ public class RandomDenseTensor {
 
 
     /**
-     * Generates a pseudorandom symmetric positive definite matrix. This is done as if by
+     * Generates a pseudorandom symmetric positive-definite matrix. This is done as if by
      * <pre>
      *     Matrix D = randomDiagMatrix(size, 0, 1);
      *     Matrix Q = randomOrthogonalMatrix(size);
      *     return Q.T().mult(D).mult(Q);</pre>
-     * @param size Size of the symmetric positive definite matrix to generate.
-     * @return A pseudorandom symmetric positive definite matrix.
+     * @param size Size of the symmetric positive-definite matrix to generate.
+     * @return A pseudorandom symmetric positive-definite matrix.
      * @see #randomHermPosDefMatrix(int)
      */
     public Matrix randomSymmPosDefMatrix(int size) {
@@ -655,13 +655,13 @@ public class RandomDenseTensor {
 
 
     /**
-     * Generates a pseudorandom symmetric positive definite matrix. This is done as if by
+     * Generates a pseudorandom symmetric positive-definite matrix. This is done as if by
      * <pre>
      *     Matrix D = randomDiagMatrix(size, 0, 1);
      *     CMatrix U = randomUnitaryMatrix(size);
      *     return U.H().mult(D).mult(U);</pre>
-     * @param size Size of the symmetric positive definite matrix to generate.
-     * @return A pseudorandom symmetric positive definite matrix.
+     * @param size Size of the symmetric positive-definite matrix to generate.
+     * @return A pseudorandom symmetric positive-definite matrix.
      * @see #randomSymmPosDefMatrix(int)
      */
     public CMatrix randomHermPosDefMatrix(int size) {

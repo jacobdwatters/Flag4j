@@ -53,7 +53,7 @@ import java.util.function.BinaryOperator;
  * The non-zero values of the matrix are stored in a compact form, reducing memory usage and improving performance for many matrix
  * operations.
  *
- * <h3>CSR Representation:</h3>
+ * <h2>CSR Representation:</h2>
  * A CSR matrix is represented internally using three main arrays:
  * <ul>
  *   <li><b>Data:</b> Non-zero values are stored in a one-dimensional array {@link #data} of length {@link #nnz}. Any element not
@@ -83,7 +83,7 @@ import java.util.function.BinaryOperator;
  *
  * <p>Conversion to other formats, such as COO or dense matrices, can be performed using {@link #toCoo()} or {@link #toDense()}.
  *
- * <h3>Usage Examples:</h3>
+ * <h2>Usage Examples:</h2>
  * <pre>{@code
  * // Define matrix data.
  * Shape shape = new Shape(8, 8);
@@ -214,7 +214,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
     /**
      * <p>Constructs a sparse COO matrix of a similar type to this sparse CSR matrix.
-     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <i>not</i> convert this matrix
+     * <p>Note: this method constructs a new COO matrix with the specified data and indices. It does <em>not</em> convert this matrix
      * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
      *
      * @param shape Shape of the COO matrix.

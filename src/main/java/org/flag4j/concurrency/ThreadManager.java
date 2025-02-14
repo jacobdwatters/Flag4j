@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022-2024. Jacob Watters
+ * Copyright (c) 2022-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -105,7 +105,7 @@ public final class ThreadManager {
      * <p>Computes a specified tensor operation concurrently by evenly dividing work among available threads (specified by
      * {@link Configurations#getNumThreads()}).
      *
-     * <p>WARNING: This method provides <i>no</i> guarantees of thread safety. It is the responsibility of the caller to ensure that
+     * <p>WARNING: This method provides <em>no</em> guarantees of thread safety. It is the responsibility of the caller to ensure that
      * {@code operation} is thread safe.
      *
      * @param totalSize Total size of the outer loop for the operation.

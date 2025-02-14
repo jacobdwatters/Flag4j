@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,6 @@
  */
 
 /**
- * <p>This package contains classes for Pseudo-random generation of real/complex numbers, and arrays, vectors,
- * matrices, and tensors. 
+ * Pseudo-random generation of real/complex numbers, and arrays, vectors, matrices, and tensors.
  */
 package org.flag4j.rng;

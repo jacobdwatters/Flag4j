@@ -45,7 +45,7 @@ public final class RandomArray {
 
 
     /**
-     * Creates a RandomArrayOld object to generate arrays filled with random values using a default random number generator.
+     * Creates a RandomArray object to generate arrays filled with random values using a default random number generator.
      */
     public RandomArray() {
         this.rng = new RandomComplex();
@@ -53,7 +53,7 @@ public final class RandomArray {
 
 
     /**
-     * Creates a RandomArrayOld object to generate arrays filled with random values using the specified complex
+     * Creates a RandomArray object to generate arrays filled with random values using the specified complex
      * random number generator.
      * @param rng The complex random number generator to use when creating random arrays.
      */
@@ -136,7 +136,7 @@ public final class RandomArray {
      * @param rowEnd Ending row index (exclusive).
      * @param colStart Starting column index (inclusive).
      * @param colEnd Ending column index (exclusive).
-     * @return A two-dimensional array of shape {@code 2-by-numIndices} containing unique two-dimensional indices.
+     * @return A two-dimensional array of shape {@code 2&times;numIndices} containing unique two-dimensional indices.
      * The first row contains row indices, the second, column indices. The indices will be sorted by rows then columns.
      * @see #randomUniqueIndices(int, int, int)
      */

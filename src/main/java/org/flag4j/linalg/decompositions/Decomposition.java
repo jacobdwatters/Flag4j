@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,15 +28,87 @@ import org.flag4j.arrays.backend.MatrixMixin;
 
 
 /**
- * This interface specifies methods which should be implemented in all decompositions.
- * @param <T> Matrix type to decompose.
+ * <p>An abstract base class representing a matrix decomposition.
+ *
+ * <p>This class provides a foundation for various matrix decompositions,
+ * such as LU, QR, SVD, Schur, and Hessenburg decompositions. Implementing classes must define
+ * the decomposition process by overriding the {@link #decompose(MatrixMixin)} method.
+ *
+ * <h2>Usage:</h2>
+ * <p>A typical workflow using a decomposition class follows these steps:
+ * <ol>
+ *     <li>Instantiate a concrete implementation of a decomposition.</li>
+ *     <li>Call {@link #decompose(MatrixMixin)} to perform the decomposition and a specific matrix.</li>
+ *     <li>Retrieve decomposition results via additional getter methods provided by the subclass.</li>
+ * </ol>
+ *
+ * <h2>State Management:</h2>
+ *
+ * <p>The class maintains an internal state flag, {@code hasDecomposed}, which tracks whether
+ * a matrix decomposition has been performed. This ensures that methods depending on the
+ * decomposition can verify its existence before proceeding. The {@link #ensureHasDecomposed()}
+ * method is provided to enforce this check. Below is a minimal example usage of {@link #ensureHasDecomposed()} for
+ * a LU decomposition.
+ * <pre>{@code
+ * class RealLU extends Decomposition<Matrix> {
+ *     Matrix L;
+ *     Matrix U;
+ *     // Other fields and constructors...
+ *
+ *     @Override
+ *     public RealLU decompose(Matrix a) {
+ *         // LU implementation...
+ *         super.hasDecomposed = true;
+ *         return this;
+ *     }
+ *
+ *     public Matrix getL() {
+ *         super.ensureHasDecomposed();
+ *         return L;
+ *     }
+ *
+ *     public Matrix getU() {
+ *         super.ensureHasDecomposed();
+ *         return U;
+ *     }
+ * }
+ * }</pre>
+ *
+ * @param <T> The type of matrix that this decomposition operates on.
  */
-public interface Decomposition<T extends MatrixMixin<T, ?, ?, ?>> {
+public abstract class Decomposition<T extends MatrixMixin<T, ?, ?, ?>> {
+
+    /**
+     * Error message to print when a method dependent on the result of the decomposition is called prior to the decomposition
+     * being computed.
+     */
+    private static final String NO_DECOMPOSE_ERR = "No matrix has been decomposed. Must call decompose(...) on this instance first.";
+
+    /**
+     * Flag indicating if this instance has computed a decomposition.
+     * <ul>
+     *     <li>If {@code true} then this instance has decomposed a matrix.</li>
+     *     <li>If {@code false} then this instance has <em>not</em> yet decomposed a matrix.</li>
+     * </ul>
+     */
+    protected boolean hasDecomposed = false;
+
 
     /**
      * Applies decomposition to the source matrix.
      * @param src The source matrix to decompose.
      * @return A reference to this decomposer.
      */
-    Decomposition<T> decompose(T src);
+    public abstract Decomposition<T> decompose(T src);
+
+
+    /**
+     * <p>Ensures that this instance has computed a decomposition.
+     * <p>This is useful to ensure that a decomposition has been computed in a method that depends on the result of the decomposition.
+     * @throws IllegalStateException If {@link #hasDecomposed hasDecomposed == False}.
+     */
+    protected void ensureHasDecomposed() {
+        if(!hasDecomposed)
+            throw new IllegalStateException("No matrix has been decomposed. Must call decompose(...) on this instance first.");
+    }
 }

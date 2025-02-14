@@ -315,7 +315,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
 
 
     /**
-     * Sets all elements of this vector to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * Sets all elements of this vector to zero if they are within {@code tol} of zero. This is <em>not</em> done in place.
      * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
      * @return A copy of this vector with all data within {@code tol} of zero set to zero.
      */
@@ -375,7 +375,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
         double mag = 0;
 
         for(int i = 0, size=nnz; i < size; i++) {
-            Complex128 v = (Complex128) data[i];
+            Complex128 v = data[i];
             mag += (v.re*v.re + v.im*v.im);
         }
 
@@ -406,7 +406,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
 
         for (int i = 0; i < data.length; i++) {
             if (!data[i].isZero()) {
-                result = 31*result + ((Complex128) data[i]).hashCode();
+                result = 31*result + data[i].hashCode();
                 result = 31*result + Integer.hashCode(indices[i]);
             }
         }
@@ -438,7 +438,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
 
             // Get data up until the stopping point.
             for(int i = 0; i<stopIndex; i++) {
-                value = StringUtils.ValueOfRound((Complex128) data[i], precision);
+                value = StringUtils.ValueOfRound(data[i], precision);
                 width = padding + value.length();
                 value = centering ? StringUtils.center(value, width) : value;
                 result.append(String.format("%-" + width + "s", value));
@@ -452,7 +452,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
             }
 
             // Get last entry now
-            value = StringUtils.ValueOfRound((Complex128) data[size-1], precision);
+            value = StringUtils.ValueOfRound(data[size-1], precision);
             width = padding + value.length();
             value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));

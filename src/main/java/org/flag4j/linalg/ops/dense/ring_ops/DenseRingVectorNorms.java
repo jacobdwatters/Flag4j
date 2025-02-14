@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ package org.flag4j.linalg.ops.dense.ring_ops;
 
 import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
-import org.flag4j.util.ErrorMessages;
 
 /**
  * This utility class contains methods for computing norms of dense {@link Ring}

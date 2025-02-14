@@ -31,7 +31,7 @@ import org.flag4j.util.ValidateParameters;
 /**
  * A utility class for generating projection matrices used in 3D graphics transformations.
  *
- * <h3>Supported Projections:</h3>
+ * <h2>Supported Projections:</h2>
  * <ul>
  *   <li>Support for creating perspective projection matrices with specified field-of-view (FOV),
  *       aspect ratio, and near/far clipping planes.</li>
@@ -39,7 +39,7 @@ import org.flag4j.util.ValidateParameters;
  *       (xMin, xMax, yMin, yMax) and clipping planes.</li>
  * </ul>
  *
- * <h3>Examples:</h3>
+ * <h2>Examples:</h2>
  * <pre>{@code
  * // Create a perspective projection matrix.
  * Matrix perspective = Projection.getPerspective(
@@ -57,6 +57,8 @@ public final class Projection {
     private Projection() {
         // Hide constructor for utility class. for utility class.
     }
+
+    // TODO: Consider having an object-oriented class for projections similar to scipy.spatial.transform.Rotation
 
 
     /**

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@ import org.flag4j.arrays.backend.VectorMixin;
 
 /**
  * <p>Interface representing a solver for linear systems involving matrices and vectors. Implementations
- * of this interface provide methods to solve equations such as <i>Ax=b</i> and
- * <i>AX=B</i>, where <i>A</i>, <i>B</i>, and <i>X</i> are matrices, and <i>x</i> and <i>b</i> are vectors.
+ * of this interface provide methods to solve equations such as <b>Ax=b</b> and
+ * <b>AX=B</b>, where <b>A</b>, <b>B</b>, and <b>X</b> are matrices, and <b>x</b> and <b>b</b> are vectors.
  *
  * <p>Solvers may compute exact solutions or approximate solutions in a least squares sense, depending on the properties of the system.
  *
@@ -42,21 +42,21 @@ public interface LinearMatrixSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * Solves the linear system of equations <i>Ax=b</i> for the vector <i>x</i>.
+     * Solves the linear system of equations <b>Ax=b</b> for the vector <b>x</b>.
      *
-     * @param A The coefficient matrix <i>A</i> in the linear system.
+     * @param A The coefficient matrix <b>A</b> in the linear system.
      * @param b The constant vector in the linear system.
-     * @return The solution vector <i>x</i> satisfying <i>Ax=b</i>.
+     * @return The solution vector <b>x</b> satisfying <b>Ax=b</b>.
      */
     U solve(T A, U b);
 
 
     /**
-     * Solves the linear matrix equation <i>AX=B</i> for the matrix <i>X</i>.
+     * Solves the linear matrix equation <b>AX=B</b> for the matrix <b>X</b>.
      *
      * @param A The coefficient matrix in the linear system.
      * @param B The constant matrix in the linear system.
-     * @return The solution matrix <i>X</i> satisfying <i>AX=B</i>.
+     * @return The solution matrix <b>X</b> satisfying <b>AX=B</b>.
      */
     @Override
     T solve(T A, T B);

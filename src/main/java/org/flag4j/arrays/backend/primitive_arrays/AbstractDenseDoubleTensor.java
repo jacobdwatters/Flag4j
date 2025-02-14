@@ -380,7 +380,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
 
 
     /**
-     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <i>not</i> done in place.
+     * Sets all elements of this matrix to zero if they are within {@code tol} of zero. This is <em>not</em> done in place.
      * @param precision The precision to round to (i.e. the number of decimal places to round to). Must be non-negative.
      * @return A copy of this matrix with all data within {@code tol} of zero set to zero.
      */

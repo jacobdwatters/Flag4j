@@ -25,7 +25,6 @@
 package org.flag4j.io;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Utility class for formatting arrays as &#x2605;&#x2605;<i>pretty</i>&#x2605;&#x2605; human-readable strings.
+ * Utility class for formatting arrays as &#x2605;&#x2605;<em>pretty</em>&#x2605;&#x2605; human-readable strings.
  */
 public final class PrettyPrint {
 
@@ -102,7 +101,7 @@ public final class PrettyPrint {
 
         // Get data up until the stopping point.
         for(int i=0; i<maxEntries-1 && i<arr.length-1; i++) {
-            value = StringUtils.ValueOfRound((Complex128) arr[i], precision);
+            value = StringUtils.ValueOfRound(arr[i], precision);
             width = padding + value.length();
             value = centering ? StringUtils.center(value, width) : value;
             result.append(String.format("%-" + width + "s", value));
@@ -116,7 +115,7 @@ public final class PrettyPrint {
             result.append(String.format("%-" + width + "s", value));
         }
 
-        value = StringUtils.ValueOfRound((Complex128) arr[arr.length-1], PrintOptions.getPrecision());
+        value = StringUtils.ValueOfRound(arr[arr.length-1], PrintOptions.getPrecision());
         width = PrintOptions.getPadding() + value.length();
         value = PrintOptions.useCentering() ? StringUtils.center(value, width) : value;
         result.append(String.format("%-" + width + "s", value));
@@ -240,7 +239,7 @@ public final class PrettyPrint {
      * @param stopIdx Stopping index to search for maximum length string (exclusive).
      * @param stride The gap between consecutive elements within {@code src} to check.
      * @param finalIdx The final index to consider for the maximum length string. The length of the string representation of the
-     * element at this index in {@code src} is <i>always</i> considered.
+     * element at this index in {@code src} is <em>always</em> considered.
      * @return The maximum string representation length of elements within {@code src} between indices {@code startIdx} (inclusive)
      * and {@code stopIdx} spaced by {@code stride} and a final element at index {@code finalIdx}.
      * @param <T> Type of elements within the array.
@@ -273,7 +272,7 @@ public final class PrettyPrint {
      * @param stopIdx Stopping index to search for maximum length string (exclusive).
      * @param stride The gap between consecutive elements within {@code src} to check.
      * @param finalIdx The final index to consider for the maximum length string. The length of the string representation of the
-     * element at this index in {@code src} is <i>always</i> considered.
+     * element at this index in {@code src} is <em>always</em> considered.
      * @return The maximum string representation length of elements within {@code src} between indices {@code startIdx} (inclusive)
      * and {@code stopIdx} spaced by {@code stride} and a final element at index {@code finalIdx}.
      * @param <T> Type of elements within the array.
@@ -364,7 +363,10 @@ public final class PrettyPrint {
                 if (PrintOptions.useCentering())
                     value = StringUtils.center(value, totalWidth);
 
-                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+                if (rowStopIndex != 0)
+                    result.append(" ");
+
+                result.append(String.format("[%-" + totalWidth + "s]\n", value));
             }
 
             // Append the last row.
@@ -443,7 +445,10 @@ public final class PrettyPrint {
                 if (PrintOptions.useCentering())
                     value = StringUtils.center(value, totalWidth);
 
-                result.append(String.format(" [%-" + totalWidth + "s]\n", value));
+                if (rowStopIndex != 0)
+                    result.append(" ");
+
+                result.append(String.format("[%-" + totalWidth + "s]\n", value));
             }
 
             // Append the last row.

@@ -27,6 +27,7 @@ package org.flag4j.linalg.decompositions.balance;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.PermutationMatrix;
+import org.flag4j.linalg.Invert;
 import org.flag4j.linalg.decompositions.Decomposition;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.Flag4jConstants;
@@ -55,16 +56,23 @@ import org.flag4j.util.ValidateParameters;
  *
  * <p>When permutations are used during balancing we obtain a specific form. First,
  * <pre>
- *             [ T<sub>1</sub>  X   Y  ]
+ *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
  *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]
- *             [  0  0   T<sub>2</sub> ]</pre>
+ *           <sup>  </sup>[  0  0   T<sub>2</sub> ]</pre>
  * Where T<sub>1</sub> and T<sub>2</sub> are upper triangular matrices whose eigenvalues lie along the diagonal. These are also
  * eigenvalues of A. Then, if scaling is applied we obtain:
  * <pre>
- *                  [ T<sub>1</sub>     X*D<sub>1</sub>       Y    ]
- *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B*<sub>1</sub>D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
- *                  [  0      0         T<sub>2</sub>   ]</pre>
- * Where D<sub>1</sub> is a diagonal matrix such that,
+ *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
+ *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
+ *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
+ *
+ * $$ \begin{bmatrix}
+ * T_1 & XD_1 & Y \\
+ * \mathbf{0} & D_1^{-1}B_1D_1 & D_1^{-1}Z \\
+ * \mathbf{0} & \mathbf{0} & T_2
+ * \end{bmatrix}  $$
+ *
+ * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>
  *         [ I<sub>1</sub> 0  0  ]
  *     D = [ 0  D<sub>1</sub> 0  ]
@@ -85,8 +93,10 @@ import org.flag4j.util.ValidateParameters;
  * @see #getD()
  * @see #getP()
  * @see #getT()
+ * @see #applyLeftTransform(MatrixMixin) 
+ * @see #applyRightTransform(MatrixMixin)
  */
-public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Decomposition<T> {
+public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomposition<T> {
 
     /**
      * Simple scaling factor used to help ensure safe scaling without over/underflow.
@@ -162,12 +172,12 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
     /**
      * @param doPermutations Flag indicating if row/column permutations should be used when balancing the matrix.
      * <ul>
-     *     <li>If {@code true}, permutations will be used and P will be computed.</li>
+     *     <li>If {@code true}, permutations will be used and <b>P</b> will be computed.</li>
      *     <li>If {@code false}, permutations will <i>not</i> be used and the row and column positions will not be affected.</li>
      * </ul>
      * @param doScaling Flag indicating if row/column scaling should be done when balancing the matrix.
      * <ul>
-     *     <li>If {@code true}, scaling will be used and D will be computed.</li>
+     *     <li>If {@code true}, scaling will be used and <b>D</b> will be computed.</li>
      *     <li>If {@code false}, scaling will <i>not</i> be used.</li>
      * </ul>
      * @param inPlace Flag indicating if the balancing should be done in-place or if a copy should be made.
@@ -258,6 +268,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
         balancedMatrix = inPlace ? src : src.copy();
         size = balancedMatrix.numRows();
 
+
         iLow = 0;
         iHigh = size;
 
@@ -301,11 +312,11 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
      *             [ T1  X  Y  ]
      *   P<sup>-1</sup> A P = [  0  B  Z  ]
      *             [  0  0  T2 ]</pre>
-     * <p>Where {@code T1} and {@code T2} are upper-triangular matrices whose eigenvalues are the diagonal elements of the matrix.
-     * {@code P} is the permutation matrix representing the row and column swaps performed within this method.
+     * <p>Where <b>T1</b> and <b>T2</b> are upper-triangular matrices whose eigenvalues are the diagonal elements of the matrix.
+     * <b>P</b> is the permutation matrix representing the row and column swaps performed within this method.
      *
      * <p>{@link #iLow} and {@link #iHigh} Specify the starting (inclusive) and ending (exclusive) row/column index of the submatrix
-     * {@code B}.
+     * <b>B</b>.
      */
     protected void doIterativePermutations() {
         boolean notConverged = true;
@@ -384,8 +395,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
      * of that value, there &ell;<sup>1</sup> norms are "close". Scaling need only be done for rows/column of the matrix which do not
      * isolate eigenvalues; rows between {@link #iLow} (inclusive) to {@link #iHigh} (exclusive).
      *
-     * <p>D<sub>1</sub> is the diagonal matrix describing such scaling and is the diagonal matrix computed by this method. \
-     * The diagonal values of D<sub>1</sub> are stored in {@link #scalePerm} between indices {@link #iLow} (inclusive) to
+     * <p><b>D<sub>1</sub></b> is the diagonal matrix describing such scaling and is the diagonal matrix computed by this method.
+     * The diagonal values of <b>D<sub>1</sub></b> are stored in {@link #scalePerm} between indices {@link #iLow} (inclusive) to
      * {@link #iHigh} (exclusive).
      */
     protected void doIterativeScaling() {
@@ -481,7 +492,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
      * Ensures that {@link #decompose(MatrixMixin)} has been called on this instance.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not been called on this instance.
      */
-    private void ensureHasBalanced() {
+    protected void ensureHasBalanced() {
         // If balancedMatrix has not been instantiated, then balance(...) has not been called.
         if(balancedMatrix == null)
             throw new IllegalStateException("No matrix has been balanced by this balancer. Must call balance(...) first.");
@@ -489,7 +500,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
 
 
     /**
-     * Gets the starting index (inclusive) for the sub-matrix B<sub>1</sub> of the balanced matrix which did not isolate eigenvalues.
+     * Gets the starting index (inclusive) for the sub-matrix <b>B<sub>1</sub></b> of the balanced matrix which did not isolate
+     * eigenvalues.
      * @return The starting index (inclusive) for the sub-matrix of the balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -500,7 +512,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
 
 
     /**
-     * Gets the starting index (exclusive) for the sub-matrix B<sub>1</sub> of the balanced matrix which did not isolate eigenvalues.
+     * Gets the starting index (exclusive) for the sub-matrix <b>B<sub>1</sub></b> of the balanced matrix which did not isolate
+     * eigenvalues.
      * @return The starting index (exclusive) for the sub-matrix of the balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -511,7 +524,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
 
 
     /**
-     * Gets the full balanced matrix, B, for the last matrix balanced by this balancer.
+     * Gets the full balanced matrix, <b>B</b>, for the last matrix balanced by this balancer.
      * @return The full balanced matrix for the last matrix balanced by this balancer.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -522,7 +535,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
 
 
     /**
-     * Gets the sub-matrix B<sub>1</sub> of the full balanced matrix which did not isolate eigenvalues.
+     * Gets the sub-matrix <b>B<sub>1</sub></b> of the full balanced matrix which did not isolate eigenvalues.
      * @return The sub-matrix of the full balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -556,15 +569,15 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
     /**
      * Gets the diagonal scaling matrix for the last matrix balanced by this balancer.
      * @param full Flag indicating if the full diagonal scaling matrix should be constructed or if only the scaling factors should
-     * be returned. If the last matrix balanced had shape n-by-n then,
+     * be returned. If the last matrix balanced had shape n&times;n then,
      * <ul>
-     *     <li>If {@code true}: The full n-by-n diagonal scaling matrix will be created.</li>
-     *     <li>If {@code false}: A matrix of shape 1-by-n containing only the scaling factors
+     *     <li>If {@code true}: The full n&times;n diagonal scaling matrix will be created.</li>
+     *     <li>If {@code false}: A matrix of shape 1&times;n containing only the scaling factors
      *     (i.e. the diagonal entries of the full scaling matrix).
      *     </li>
      * </ul>
-     * @return If {@code full == true} then the full n-by-n scaling matrix is returned. Otherwise if {@code full == false}
-     * a matrix of shape 1-by-n containing only the diagonal scaling factors is returned.
+     * @return If {@code full == true} then the full n&times;n scaling matrix is returned. Otherwise if {@code full == false}
+     * a matrix of shape 1&times;n containing only the diagonal scaling factors is returned.
      * @see #getD()
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -601,7 +614,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
      * <p> Note, this method will <i>not</i> construct the full diagonal scaling matrix. If the full matrix is desired, use
      * {@link #getD(boolean)}.
      *
-     * @return A 1-by-n matrix containing the diagonal elements of the full n-by-n diagonal scaling matrix.
+     * @return A 1&times;n matrix containing the diagonal elements of the full n&times;n diagonal scaling matrix.
      * @see #getD(boolean)
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -649,7 +662,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
 
 
     /**
-     * Get the combined permutation and diagonal scaling matrix, T, from the last matrix balanced.
+     * Get the combined permutation and diagonal scaling matrix, <b>T=PD</b>, from the last matrix balanced.
      * This is equivalent to {@code getP().leftMult(getD(true))}.
      * @return The combined permutation and diagonal scaling matrix from the last matrix balanced.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
@@ -657,4 +670,52 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> implements Dec
     public Matrix getT() {
         return getP().leftMult(getD(true));
     }
+
+
+    /**
+     * Gets the inverse of the full diagonal scaling matrix <b>D<sup>-1</sup></b> from the balancing problem.
+     * @return The inverse of the full diagonal scaling matrix <b>D<sup>-1</sup></b> from the balancing problem.
+     * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
+     */
+    public Matrix getDInv() {
+        return Invert.invDiag(getD(true));
+    }
+
+
+    /**
+     * Gets the inverse of the permutation matrix <b>P<sup>-1</sup></b> from the balancing problem.
+     * @return The inverse of the permutation matrix <b>P<sup>-1</sup></b> from the balancing problem.
+     * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
+     */
+    public PermutationMatrix getPInv() {
+        return getP().inv();
+    }
+
+
+    /**
+     * Get the inverse of combined permutation and diagonal scaling matrix,
+     * <b>T<sup>-1</sup>=D<sup>-1</sup>P<sup>-1</sup></b>, from the last matrix balanced.
+     * This is equivalent to {@code getP().inv().rightMult(getDInv())}.
+     * @return The combined permutation and diagonal scaling matrix from the last matrix balanced.
+     * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
+     */
+    public Matrix getTInv() {
+        return getP().inv().rightMult(getDInv());
+    }
+
+
+    /**
+     * Efficiently left multiplies <b>PD</b> to the provided {@code src} matrix.
+     * @param src Matrix to apply transform to.
+     * @return The result of left multiplying <b>PD</b> to the {@code src} matrix.
+     */
+    public abstract T applyLeftTransform(T src);
+
+
+    /**
+     * Efficiently right multiplies <b>D<sup>-1</sup>P<sup>-1</sup></b> to the provided {@code src} matrix.
+     * @param src Matrix to apply transform to.
+     * @return The result of right multiplying <b>D<sup>-1</sup>P<sup>-1</sup></b> to the {@code src} matrix.
+     */
+    public abstract T applyRightTransform(T src);
 }

@@ -46,14 +46,14 @@ import java.util.Arrays;
  * <p>A {@code SemiringMatrix} is essentially equivalent to a rank-2 tensor but includes extended functionality
  * and may offer improved performance for certain operations compared to general rank-n tensors.
  *
- * <h3>Key Features:</h3>
+ * <h2>Key Features:</h2>
  * <ul>
  *   <li>Support for standard matrix operations like addition, subtraction, multiplication, and exponentiation.</li>
  *   <li>Conversion methods to other matrix representations, such as COO (Coordinate) and CSR (Compressed Sparse Row) formats.</li>
  *   <li>Utility methods for checking properties like being unitary, real, or complex.</li>
  * </ul>
  *
- * <h3>Example Usage:</h3>
+ * <h2>Example Usage:</h2>
  * <p>Using {@link BoolSemiring a boolean semiring}:
  * <pre>{@code
  * // Constructing an integer matrix from a 2D array of booleans
@@ -357,7 +357,7 @@ public class SemiringMatrix<T extends Semiring<T>> extends AbstractDenseSemiring
      * Converts this matrix to an equivalent sparse COO matrix.
      *
      * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      *
      * @return A sparse COO matrix that is equivalent to this dense matrix.
@@ -398,7 +398,7 @@ public class SemiringMatrix<T extends Semiring<T>> extends AbstractDenseSemiring
      * Converts this matrix to an equivalent sparse CSR matrix.
      *
      * @param estimatedSparsity Estimated sparsity of the matrix. Must be between 0 and 1 inclusive. If this is an accurate estimation
-     * it <i>may</i> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
+     * it <em>may</em> provide a slight speedup and can reduce unneeded memory consumption. If memory is a concern, it is better to
      * over-estimate the sparsity. If speed is the concern it is better to under-estimate the sparsity.
      *
      * @return A sparse CSR matrix that is equivalent to this dense matrix.
@@ -414,7 +414,7 @@ public class SemiringMatrix<T extends Semiring<T>> extends AbstractDenseSemiring
     /**
      * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
-     * <p>For large {@code n} values, this method <i>may</i> significantly more efficient than calling
+     * <p>For large {@code n} values, this method <em>may</em> significantly more efficient than calling
      * {@code #mult(Matrix) this.mult(this)} {@code n} times.
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity

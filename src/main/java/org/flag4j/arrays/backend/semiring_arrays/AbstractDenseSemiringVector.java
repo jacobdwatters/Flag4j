@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2024. Jacob Watters
+ * Copyright (c) 2024-2025. Jacob Watters
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -178,12 +178,12 @@ public abstract class AbstractDenseSemiringVector<T extends AbstractDenseSemirin
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 0 stacks the vectors
-     * as if they were row vectors resulting in a {@code 2-by-n} matrix.
+     * as if they were row vectors resulting in a {@code 2&times;n} matrix.
      * 
      *
      * <p>
      * Stacking two vectors of length {@code n} along axis 1 stacks the vectors
-     * as if they were column vectors resulting in a {@code n-by-2} matrix.
+     * as if they were column vectors resulting in a {@code n&times;2} matrix.
      * 
      *
      * @param b Vector to stack with this vector.
