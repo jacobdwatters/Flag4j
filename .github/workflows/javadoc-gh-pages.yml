@@ -30,7 +30,9 @@ jobs:
         # Adjust path to where your Javadoc output is actually generated
         run: |
           find target/reports/apidocs -type f -name "*.html" -exec \
-            sed -i '/<\/head>/i <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>' {} +
+            sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
+            </script>' {} +
 
       - name: Upload Pages Artifact
         # This action collects the directory containing docs
