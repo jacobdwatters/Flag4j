@@ -18,19 +18,22 @@ jobs:
           java-version: 23
 
       - name: Build Javadoc
+        # Generate javadoc and inject MathJax in a very cheeky way.
         run: |
           mvn clean install
           mvn javadoc:javadoc \
           -Dmaven.javadoc.failOnError=false \
-          -Dmaven.javadoc.skip=false
-
-      - name: Inject MathJax script
-        # Adjust path to where your Javadoc output is actually generated
-        run: |
-          find target/reports/apidocs -type f -name "*.html" -exec \
-            sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
-            </script>' {} +
+          -Dmaven.javadoc.skip=false \
+          -header "<script id=\"MathJax-script\" async \
+          src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>"
+          
+      # - name: Inject MathJax script
+      #   # Adjust path to where your Javadoc output is actually generated
+      #   run: |
+      #     find target/reports/apidocs -type f -name "*.html" -exec \
+      #       sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
+      #       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
+      #       </script>' {} +
 
       - name: Upload Pages Artifact
         # This action collects the directory containing docs
@@ -41,7 +44,7 @@ jobs:
           # Adjust path to match your actual Javadoc output
           path: target/reports/apidocs
 
-  # --- 2) Deploy the artifact to GitHub Pages
+  # 2) Deploy the artifact to GitHub Pages
   deploy-docs:
     needs: build-docs
     runs-on: ubuntu-latest
