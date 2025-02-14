@@ -23,16 +23,14 @@ jobs:
           mvn clean install
           mvn javadoc:javadoc \
           -Dmaven.javadoc.failOnError=false \
-          -Dmaven.javadoc.skip=false \
-          -header "<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>"
+          -Dmaven.javadoc.skip=false
           
-      # - name: Inject MathJax script
-      #   # Adjust path to where your Javadoc output is actually generated
-      #   run: |
-      #     find target/reports/apidocs -type f -name "*.html" -exec \
-      #       sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
-      #       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
-      #       </script>' {} +
+      - name: Inject MathJax script
+        run: |
+          find target/reports/apidocs -type f -name "*.html" -exec \
+            sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
+            </script>' {} +
 
       - name: Upload Pages Artifact
         # This action collects the directory containing docs
