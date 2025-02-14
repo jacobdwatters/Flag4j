@@ -44,50 +44,23 @@ import org.flag4j.util.ValidateParameters;
  * balancing transformation is a similarity transformation, the eigenvalues are preserved. Further, when permutations are
  * done during balancing it is possible to isolate decoupled eigenvalues.
  *
- * <p>The similarity transformation of a square matrix <span class="latex-inline">A</span> into the
- * balanced matrix <span class="latex-inline">B</span> can be described as:
- * <span class="latex-eq-align">
+ * <p>The similarity transformation of a square matrix A into the balanced matrix B can be described as:
  * <pre>
  *     B = T<sup>-1</sup> A T
  *       = D<sup>-1</sup> P<sup>-1</sup> A P D.</pre>
- * </span>
- *
- * Solving for <span class="latex-inline">A</span>,
- * balancing may be viewed as the following decomposition:
- * <span class="latex-eq-align">
+ * Solving for A, balancing may be viewed as the following decomposition:
  * <pre>
  *     A = T B T<sup>-1</sup>
  *       = P D B D<sup>-1</sup> P<sup>-1</sup>.</pre>
- * </span>
- *
- * Where <span class="latex-inline">P</span> is a permutation matrix,
- * and <span class="latex-inline">D</span> is a diagonal scaling matrix.
+ * Where P is a permutation matrix, and D is a diagonal scaling matrix.
  *
  * <p>When permutations are used during balancing we obtain a specific form. First,
- * <span class="latex-replace">
  * <pre>
  *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
  *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]
  *           <sup>  </sup>[  0  0   T<sub>2</sub> ]</pre>
- * </span>
- *
- * <!-- LATEX:
- * \[ \begin{align*}
- * P^{-1}AP = \begin{bmatrix}
- * T_1 & X & Y \\
- * \mathbf{0} & B_1 & Z \\
- * \mathbf{0} & \mathbf{0} & T_2
- * \end{bmatrix}
- * \end{align*} \]
- * -->
- *
- * Where <span class="latex-inline">T<sub>1</sub></span>
- * and <span class="latex-inline">T<sub>2</sub></span> are upper triangular
- * matrices whose eigenvalues lie along the diagonal.
- * These are also eigenvalues of <span class="latex-inline">A</span>.
- * Then, if scaling is applied we obtain:
- *
- * <span class="latex-replace">
+ * Where T<sub>1</sub> and T<sub>2</sub> are upper triangular matrices whose eigenvalues lie along the diagonal. These are also
+ * eigenvalues of A. Then, if scaling is applied we obtain:
  * <pre>
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
@@ -104,34 +77,15 @@ import org.flag4j.util.ValidateParameters;
  * }
  * -->
  *
- * where <span class="latex-inline">D<sub>1</sub></span> is a diagonal matrix such that,
- * <span class="latex-replace">
+ * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>
  *         [ I<sub>1</sub> 0  0  ]
  *     D = [ 0  D<sub>1</sub> 0  ]
  *         [ 0  0  I<sub>2</sub> ]</pre>
- * </span>
+ * Where I<sub>1</sub> and I<sub>2</sub> are identity matrices with equivalent shapes to T<sub>1</sub> and T<sub>2</sub>.
  *
- * <!-- LATEX:
- * {@literal
- * \[ D = \begin{bmatrix}
- * I_1 & \mathbf{0} & \mathbf{0} \\
- * \mathbf{0} & D_1 & \mathbf{0} \\
- * \mathbf{0} & \mathbf{0} & I_2
- * \end{bmatrix} \]
- * }
- * -->
- *
- * Where <span class="latex-inline">I<sub>1</sub></span> and
- * <span class="latex-inline">I<sub>2</sub></span> are identity matrices with
- * equivalent shapes to <span class="latex-inline">T<sub>1</sub></span> and
- * <span class="latex-inline">T<sub>2</sub></span>.
- *
- * <p>Once balancing has been applied, one need only compute the eigenvalues of
- * <span class="latex-inline">B<sub>1</sub></span> and combine them with the diagonal
- * entries of <span class="latex-inline">T<sub>1</sub></span> and
- * <span class="latex-inline">T<sub>2</sub></span>
- * to obtain all eigenvalues of <span class="latex-inline">A</span>.
+ * <p>Once balancing has been applied, one need only compute the eigenvalues of B<sub>1</sub> and combine them with the diagonal
+ * entries of T<sub>1</sub> and T<sub>2</sub> to obtain all eigenvalues of A.
  *
  * <p>The code in this class if heavily based on LAPACK's reference implementations of
  * <a href=https://www.netlib.org/lapack/explore-html/df/df3/group__gebal.html>xGEBAL</a> (v 3.12.1).
@@ -273,8 +227,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Computes the <span class="latex-inline">&ell;<sup>2</sup></span> norm of a vector with {@code n} elements from
-     * {@link #balancedMatrix}'s 1D data array
+     * Computes the &ell;<sup>2</sup> norm of a vector with {@code n} elements from {@link #balancedMatrix}'s 1D data array
      * starting at index {@code start} and spaced by {@code stride}.
      * @param start Starting index within {@link #balancedMatrix}'s 1D data array to compute norm of.
      * @param n The number of elements in the vector to compute norm of.
@@ -359,34 +312,16 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
      * eigenvalue are pushed to the left of the matrix. To ensure that the row/column swaps are similarity transforms, if any two
      * rows are swapped the same columns are swapped.
      *
-     * <p>Such row and column permutations transform the original matrix <span class="latex-inline">A</span> into the
-     * following form:
-     * <span class="latex-replace">
+     * <p>Such row and column permutations transform the original matrix {@code A} into the following form:
      * <pre>
-     *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
-     *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]
-     *           <sup>  </sup>[  0  0   T<sub>2</sub> ]</pre>
-     * </span>
-     *
-     * <!-- LATEX:
-     * {@literal
-     * \[ \begin{align*}
-     * P^{-1}AP = \begin{bmatrix}
-     * T_1 & X & Y \\
-     * \mathbf{0} & B_1 & Z \\
-     * \mathbf{0} & \mathbf{0} & T_2
-     * \end{bmatrix}
-     * \end{align*} \]
-     * }
-     * -->
-     *
-     * <p>Where <span class="latex-inline">T<sub>1</sub></span> and <span class="latex-inline">T<sub>2</sub></span>
-     * are upper-triangular matrices whose eigenvalues are the diagonal elements of the matrix.
-     * <span class="latex-inline">P</span> is the permutation matrix representing the row and column swaps performed within
-     * this method.
+     *             [ T1  X  Y  ]
+     *   P<sup>-1</sup> A P = [  0  B  Z  ]
+     *             [  0  0  T2 ]</pre>
+     * <p>Where <b>T1</b> and <b>T2</b> are upper-triangular matrices whose eigenvalues are the diagonal elements of the matrix.
+     * <b>P</b> is the permutation matrix representing the row and column swaps performed within this method.
      *
      * <p>{@link #iLow} and {@link #iHigh} Specify the starting (inclusive) and ending (exclusive) row/column index of the submatrix
-     * <span class="latex-inline">B</span>.
+     * <b>B</b>.
      */
     protected void doIterativePermutations() {
         boolean notConverged = true;
@@ -462,14 +397,11 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
      * <p>Performs the scaling step of matrix balancing.
      *
      * <p>That is, computes scaling factors such that when a column is scaled by such value and the row is scaled by the reciprocal
-     * of that value, there <span class="latex-inline">&ell;<sup>1</sup></span> norms are "close". Scaling need only be done for
-     * rows/column of the matrix which do not isolate eigenvalues; rows between {@link #iLow} (inclusive) to {@link #iHigh}
-     * (exclusive).
+     * of that value, there &ell;<sup>1</sup> norms are "close". Scaling need only be done for rows/column of the matrix which do not
+     * isolate eigenvalues; rows between {@link #iLow} (inclusive) to {@link #iHigh} (exclusive).
      *
-     * <p><span class="latex-inline">&ell;D<sub>1</sub></span> is the diagonal matrix describing such scaling and is
-     * the diagonal matrix computed by this method.
-     * The diagonal values of <span class="latex-inline">&ell;D<sub>1</sub></span> are stored in {@link #scalePerm}
-     * between indices {@link #iLow} (inclusive) to
+     * <p><b>D<sub>1</sub></b> is the diagonal matrix describing such scaling and is the diagonal matrix computed by this method.
+     * The diagonal values of <b>D<sub>1</sub></b> are stored in {@link #scalePerm} between indices {@link #iLow} (inclusive) to
      * {@link #iHigh} (exclusive).
      */
     protected void doIterativeScaling() {
@@ -573,8 +505,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the starting index (inclusive) for the sub-matrix <span class="latex-inline">B<sub>1</sub></span>
-     * of the balanced matrix which did not isolate
+     * Gets the starting index (inclusive) for the sub-matrix <b>B<sub>1</sub></b> of the balanced matrix which did not isolate
      * eigenvalues.
      * @return The starting index (inclusive) for the sub-matrix of the balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
@@ -586,8 +517,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the starting index (exclusive) for the sub-matrix <span class="latex-inline">B<sub>1</sub></span>
-     * of the balanced matrix which did not isolate
+     * Gets the starting index (exclusive) for the sub-matrix <b>B<sub>1</sub></b> of the balanced matrix which did not isolate
      * eigenvalues.
      * @return The starting index (exclusive) for the sub-matrix of the balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
@@ -610,8 +540,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the sub-matrix <span class="latex-inline">B<sub>1</sub></span> of the full balanced matrix
-     * which did not isolate eigenvalues.
+     * Gets the sub-matrix <b>B<sub>1</sub></b> of the full balanced matrix which did not isolate eigenvalues.
      * @return The sub-matrix of the full balanced matrix which did not isolate eigenvalues.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -738,8 +667,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Get the combined permutation and diagonal scaling matrix, <span class="latex-inline">T = PD</span>, from the last
-     * matrix balanced. This is equivalent to {@code getP().leftMult(getD(true))}.
+     * Get the combined permutation and diagonal scaling matrix, <b>T=PD</b>, from the last matrix balanced.
+     * This is equivalent to {@code getP().leftMult(getD(true))}.
      * @return The combined permutation and diagonal scaling matrix from the last matrix balanced.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
@@ -749,10 +678,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the inverse of the full diagonal scaling matrix,
-     * <span class="latex-inline">D<sup>-1</sup></span>, from the balancing problem.
-     * @return The inverse of the full diagonal scaling matrix,
-     * <span class="latex-inline">D<sup>-1</sup></span>, from the balancing problem.
+     * Gets the inverse of the full diagonal scaling matrix <b>D<sup>-1</sup></b> from the balancing problem.
+     * @return The inverse of the full diagonal scaling matrix <b>D<sup>-1</sup></b> from the balancing problem.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
     public Matrix getDInv() {
@@ -761,8 +688,8 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Gets the inverse of the permutation matrix, <span class="latex-inline">P<sup>-1</sup></span>, from the balancing problem.
-     * @return The inverse of the permutation matrix, <span class="latex-inline">P<sup>-1</sup></span>, from the balancing problem.
+     * Gets the inverse of the permutation matrix <b>P<sup>-1</sup></b> from the balancing problem.
+     * @return The inverse of the permutation matrix <b>P<sup>-1</sup></b> from the balancing problem.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
      */
     public PermutationMatrix getPInv() {
@@ -772,7 +699,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
     /**
      * Get the inverse of combined permutation and diagonal scaling matrix,
-     * <span class="latex-inline">T<sup>-1</sup> = D<sup>-1</sup>P<sup>-1</sup></span>, from the last matrix balanced.
+     * <b>T<sup>-1</sup>=D<sup>-1</sup>P<sup>-1</sup></b>, from the last matrix balanced.
      * This is equivalent to {@code getP().inv().rightMult(getDInv())}.
      * @return The combined permutation and diagonal scaling matrix from the last matrix balanced.
      * @throws IllegalStateException If {@link #decompose(MatrixMixin)} has not yet been called on this instance.
@@ -783,19 +710,17 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
 
 
     /**
-     * Efficiently left multiplies <span class="latex-inline">PD</span> to the provided {@code src} matrix.
+     * Efficiently left multiplies <b>PD</b> to the provided {@code src} matrix.
      * @param src Matrix to apply transform to.
-     * @return The result of left multiplying <span class="latex-inline">PD</span> to the {@code src} matrix.
+     * @return The result of left multiplying <b>PD</b> to the {@code src} matrix.
      */
     public abstract T applyLeftTransform(T src);
 
 
     /**
-     * Efficiently right multiplies <span class="latex-inline">D<sup>-1</sup>P<sup>-1</sup></span>
-     * to the provided {@code src} matrix.
+     * Efficiently right multiplies <b>D<sup>-1</sup>P<sup>-1</sup></b> to the provided {@code src} matrix.
      * @param src Matrix to apply transform to.
-     * @return The result of right multiplying <span class="latex-inline">D<sup>-1</sup>P<sup>-1</sup></span>
-     * to the {@code src} matrix.
+     * @return The result of right multiplying <b>D<sup>-1</sup>P<sup>-1</sup></b> to the {@code src} matrix.
      */
     public abstract T applyRightTransform(T src);
 }
