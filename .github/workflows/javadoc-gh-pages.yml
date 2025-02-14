@@ -42,7 +42,7 @@ jobs:
 
       - name: Convert LaTeX
         run: |
-          for file in $(find target/site/apidocs -name "*.html"); do
+          for file in $(find target/reports/apidocs -name "*.html"); do
             awk '
               BEGIN { inside_latex = 0; latex_content = "" }
               /<!-- LATEX:/ { inside_latex = 1; next }
