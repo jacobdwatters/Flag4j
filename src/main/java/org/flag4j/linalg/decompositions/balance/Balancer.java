@@ -72,7 +72,7 @@ import org.flag4j.util.ValidateParameters;
  * \mathbf{0} & \mathbf{0} & T_2
  * \end{bmatrix}  $$
  *
- * Where D<sub>1</sub> is a diagonal matrix such that,
+ * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>
  *         [ I<sub>1</sub> 0  0  ]
  *     D = [ 0  D<sub>1</sub> 0  ]
