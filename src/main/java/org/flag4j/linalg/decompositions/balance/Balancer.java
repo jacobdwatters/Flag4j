@@ -65,13 +65,6 @@ import org.flag4j.util.ValidateParameters;
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
  *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
- * {@literal
- * $$ \begin{bmatrix}
- * T_1 & XD_1 & Y \\
- * \mathbf{0} & D_1^{-1}B_1D_1 & D_1^{-1}Z \\
- * \mathbf{0} & \mathbf{0} & T_2
- * \end{bmatrix}  $$
- * }
  *
  * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>

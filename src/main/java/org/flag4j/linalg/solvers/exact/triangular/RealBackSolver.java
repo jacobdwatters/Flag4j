@@ -33,7 +33,8 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * <p>This solver solves linear systems of equations where the coefficient matrix in an {@link Matrix#isTriU() upper triangular}
  * real dense matrix and the constant vector is a real dense vector or matrix.
  *
- * <p>That is, solves a linear system of equations U*x=b or U*X=B where U is an upper triangular matrix.
+ * <p>That is, solves a linear system of equations <strong>Ux = b</strong> or <strong>UX = B</strong> where
+ * <strong>U</strong> is an upper triangular matrix.
  */
 public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
@@ -87,13 +88,14 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves the linear system of equations given by U*x=b where the coefficient matrix U
+     * Solves the linear system of equations given by <strong>Ux = b</strong> where the coefficient matrix <strong>U</strong>
      * is an {@link Matrix#isTriU() upper triangular} matrix.
      *
-     * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *          this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
-     * @param b Vector of constants in the linear system.
-     * @return The solution to x in the linear system A*x=b.
+     * @param U Upper triangular coefficient matrix, <strong>U</strong>, in the linear system. If {@code enforceTriU} was set to
+     * {@code false} when this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if
+     * it were.
+     * @param b Constant vector, <strong>b</strong>, in the linear system.
+     * @return The solution to <strong>x</strong> in the linear system <strong>Ux = b</strong>.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -129,13 +131,14 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves the linear system of equations given by U*X=B where the coefficient matrix U
+     * Solves the linear system of equations given by <strong>UX = B</strong> where the coefficient matrix <strong>U</strong>
      * is an {@link Matrix#isTriU() upper triangular} matrix.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
-     * @param B Matrix of constants in the linear system.
-     * @return The solution to X in the linear system U*X=B.
+     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were
+     *      and only the upper triangular entries will be accessed.
+     * @param B Constant matrix, <strong>B</strong>, in the linear system.
+     * @return The solution to <strong>X</strong> in the linear system <strong>UX = B</strong>.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -183,13 +186,14 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves the linear system of equations given by U*X=I where the coefficient matrix U
+     * Solves the linear system of equations given by <strong>UX = I</strong> where the coefficient matrix <strong>U</strong>
      * is an {@link Matrix#isTriU() upper triangular} matrix and I is the {@link Matrix#isI() identity}
-     * matrix of appropriate size. This essentially inverts the upper triangular matrix since U*U<sup>-1</sup>=I.
+     * matrix of appropriate size. This essentially inverts the upper triangular matrix since <strong>UU<sup>-1</sup> = I</strong>.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
-     * @return The solution to X in the linear system U*X=B.
+     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were
+     *      and only the upper triangular entries will be accessed.
+     * @return The solution to <strong>X</strong> in the linear system <strong>UX = B</strong>.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     public Matrix solveIdentity(Matrix U) {
@@ -233,15 +237,16 @@ public class RealBackSolver extends BackSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a special case of the linear system U*X=L for X where the coefficient matrix U
-     * is an {@link Matrix#isTriU() upper triangular} matrix and the constant matrix L is
+     * Solves a special case of the linear system <strong>UX = L</strong> for <strong>X</strong> where the coefficient matrix
+     * <strong>U</strong> is an {@link Matrix#isTriU() upper triangular} matrix and the constant matrix <strong>L</strong> is
      * {@link Matrix#isTriL() lower triangular}.
      *
-     * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
-     * @param L Lower triangular constant matrix. This is not explicit checked. If {@code L} is not lower triangular, values above
-     *          the principle diagonal will be ignored and the result will still be correctly computed.
-     * @return The result of solving the linear system U*X=L for the matrix X.
+     * @param U Upper triangular coefficient matrix, <strong>U</strong>, in the linear system. If {@code enforceTriU} was set to
+     * {@code false} when this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if
+     * it were and only the upper triangular entries will be accessed.
+     * @param L Lower triangular constant matrix, <strong>L</strong>. This is not explicit checked. If {@code L} is not lower
+     * triangular, it will be treated as if it were and only the lower triangular entries will be accessed.
+     * @return The result of solving the linear system <strong>UX = L</strong> for the matrix <strong>X</strong>.
      */
     public Matrix solveLower(Matrix U, Matrix L) {
         checkParams(U, L.shape);
