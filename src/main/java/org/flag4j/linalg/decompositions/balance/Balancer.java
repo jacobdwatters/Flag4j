@@ -79,7 +79,7 @@ import org.flag4j.util.ValidateParameters;
  * }
  * -->
  *
- * THIS IS A TEST
+ * <p>THIS IS A TEST</p>
  *
  * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>
