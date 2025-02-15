@@ -40,30 +40,39 @@ jobs:
 #            sed -i -E 's@<span class="latex-replaceable">.*?</span>\s*<!-- LATEX: (.*?) -->@\1@g' "$file"
 #          done
 
-#      - name: Convert LaTeX
-#        run: |
-#          find target/reports/apidocs -type f -name "*.html" | while read -r file; do
-#            awk '
-#            BEGIN { in_latex = 0; replaceable_found = 0; latex_content = "" }
-#
-#            /<!-- LATEX:/ { in_latex = 1; latex_content = ""; next }  # Start capturing LaTeX
-#            in_latex && /-->/ { in_latex = 0; next }  # Stop capturing
-#
-#            in_latex { latex_content = latex_content $0 "\n"; next }  # Store multi-line LaTeX
-#
-#            /<span class="latex-replaceable">/ {
-#              if (latex_content != "") {
-#                print latex_content;  # Replace the span with the stored LaTeX
-#              }
-#              replaceable_found = 1;
-#              next
-#            }
-#
-#            replaceable_found && /<\/span>/ { replaceable_found = 0; next }  # Remove span end tag
-#
-#            { print }  # Print everything else as normal
-#            ' "$file" > temp.html && mv temp.html "$file"
-#          done
+      - name: Convert LaTeX
+        run: |
+          find target/reports/apidocs -type f -name "*.html" | while read -r file; do
+            awk '
+            BEGIN { in_latex = 0; in_span = 0; latex_content = ""; span_found = 0; output = "" }
+            
+            # Detect start of LATEX block
+            /<!-- LATEX:/ { in_latex = 1; latex_content = ""; next }
+            
+            # Capture multi-line LATEX block
+            in_latex && /-->/ { in_latex = 0; next }
+            in_latex { latex_content = latex_content $0 "\n"; next }
+            
+            # Detect start of replaceable span
+            /<span class="latex-replaceable">/ { in_span = 1; span_found = 1; next }
+            
+            # Capture and remove everything inside span, including <pre>
+            in_span && /<\/span>/ { in_span = 0; next }
+            in_span { next }  # Skip content inside span
+            
+            # Replace the span with LaTeX content if available
+            span_found {
+              if (latex_content != "") {
+                print latex_content;
+              }
+              span_found = 0;
+              next;
+            }
+          
+            # Print everything else normally
+            { print }
+            ' "$file" > temp.html && mv temp.html "$file"
+          done
 
 
       - name: Upload Pages Artifact
