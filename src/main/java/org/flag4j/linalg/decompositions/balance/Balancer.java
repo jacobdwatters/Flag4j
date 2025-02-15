@@ -69,19 +69,15 @@ import org.flag4j.util.ValidateParameters;
  *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
  * </span>
  *
- * <!-- LATEX: comment -->
- *
  * <!-- LATEX:
  * {@literal
- * $$ \begin{bmatrix}
+ * $$ D^{-1}P^{-1}APD = \begin{bmatrix}
  * T_1 & XD_1 & Y \\
  * \mathbf{0} & D_1^{-1}B_1D_1 & D_1^{-1}Z \\
  * \mathbf{0} & \mathbf{0} & T_2
  * \end{bmatrix}  $$
  * }
  * -->
- *
- * <p>THIS IS A NEW TEST</p>
  *
  * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>
