@@ -53,7 +53,7 @@ def process_javadoc(file_path):
             f.write(updated_content)
 
 # Process all Javadoc HTML files in
-for file in glob.glob("target/reports/apidocs", recursive=True):
+for file in glob.glob("target/reports/apidocs/**/*.html", recursive=True):
     process_javadoc(file)
 
 print("[LATEX CONVERT] -- complete")
