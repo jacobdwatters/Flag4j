@@ -69,8 +69,6 @@ import org.flag4j.util.ValidateParameters;
  *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
  * </span>
  *
- * <!-- LATEX: {@literal $$ \begin{bmatrix} T_1 & XD_1 & Y \\ \mathbf{0} & D_1^{-1}B_1D_1 & D_1^{-1}Z \\ \mathbf{0} & \mathbf{0} & T_2 \end{bmatrix}  $$ } -->
- *
  * <!-- LATEX:
  * {@literal
  * $$ \begin{bmatrix}
@@ -80,6 +78,8 @@ import org.flag4j.util.ValidateParameters;
  * \end{bmatrix}  $$
  * }
  * -->
+ *
+ * THIS IS A TEST
  *
  * where D<sub>1</sub> is a diagonal matrix such that,
  * <pre>
