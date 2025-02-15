@@ -69,6 +69,8 @@ import org.flag4j.util.ValidateParameters;
  *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
  * </span>
  *
+ * <!-- LATEX: comment -->
+ *
  * <!-- LATEX:
  * {@literal
  * $$ \begin{bmatrix}
