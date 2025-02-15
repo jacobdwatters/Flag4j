@@ -36,32 +36,42 @@ jobs:
 
 #      - name: Convert LaTeX
 #        run: |
-#          for file in $(find target/site/apidocs -name "*.html"); do
+#          for file in $(find target/reports/apidocs -name "*.html"); do
 #            sed -i -E 's@<span class="latex-replaceable">.*?</span>\s*<!-- LATEX: (.*?) -->@\1@g' "$file"
 #          done
 
       - name: Convert LaTeX
         run: |
-          for file in $(find target/reports/apidocs -name "*.html"); do
+          find target/reports/apidocs -type f -name "*.html" | while read -r file; do
             awk '
-              BEGIN { inside_latex = 0; latex_content = "" }
-              /<!-- LATEX:/ { inside_latex = 1; next }
-              inside_latex && /\*\// { inside_latex = 0; print latex_content; latex_content=""; next }
-              inside_latex { gsub(/\* ?/, ""); latex_content = latex_content "\n" $0; next }
-              { print }
-            ' "$file" > tmpfile && mv tmpfile "$file"
+            BEGIN { in_latex = 0; replaceable_found = 0; latex_content = "" }
+
+            /<!-- LATEX:/ { in_latex = 1; latex_content = ""; next }  # Start capturing LaTeX
+            in_latex && /-->/ { in_latex = 0; next }  # Stop capturing
+
+            in_latex { latex_content = latex_content $0 "\n"; next }  # Store multi-line LaTeX
+          
+            /<span class="latex-replaceable">/ { 
+              if (latex_content != "") {
+                print latex_content;  # Replace the span with the stored LaTeX
+              }
+              replaceable_found = 1;
+              next
+            }
+          
+            replaceable_found && /<\/span>/ { replaceable_found = 0; next }  # Remove span end tag
+          
+            { print }  # Print everything else as normal
+            ' "$file" > temp.html && mv temp.html "$file"
           done
 
+
       - name: Upload Pages Artifact
-        # This action collects the directory containing docs
-        # and makes it available as an artifact for later jobs
         uses: actions/upload-pages-artifact@v3.0.1
         with:
-          # Path to the folder containing generated docs
-          # Adjust path to match your actual Javadoc output
           path: target/reports/apidocs
 
-  # --- 2) Deploy the artifact to GitHub Pages
+  # 2) Deploy the artifact to GitHub Pages
   deploy-docs:
     needs: build-docs
     runs-on: ubuntu-latest
