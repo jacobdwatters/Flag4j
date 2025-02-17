@@ -206,11 +206,7 @@ def process_javadoc(file_path) -> None:
 
 
 # Process all Javadoc HTML files in
-if len(sys.argv) > 0:
-    base_dir = sys.argv[1]
-else:
-    base_dir = "target/reports/apidocs"
-
+base_dir = sys.argv[1] if len(sys.argv) > 1 else "target/reports/apidocs"
 for file in glob.glob(base_dir + "/**/*.html", recursive=True):
     process_javadoc(file)
 
