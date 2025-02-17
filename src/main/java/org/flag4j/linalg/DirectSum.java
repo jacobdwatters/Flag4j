@@ -36,6 +36,9 @@ import org.flag4j.util.ArrayJoiner;
 import org.flag4j.util.ArrayUtils;
 
 
+/**
+ * Utility class for commuting the direct sum of two matrices.
+ */
 public final class DirectSum {
 
     private DirectSum() {
@@ -54,14 +57,12 @@ public final class DirectSum {
         Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
-        for(int i=0; i<B.numRows; i++) {
+        for(int i=0; i<B.numRows; i++)
             System.arraycopy(B.data, i*B.numCols, sum.data, (i + A.numRows)*sum.numCols + A.numCols, B.numCols);
-        }
 
         return sum;
     }
@@ -78,9 +79,8 @@ public final class DirectSum {
         Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
         int row, col;
@@ -110,15 +110,13 @@ public final class DirectSum {
             int rowOffset = i*A.numCols;
             int sumRowOffset = i*sum.numCols;
 
-            for(int j=0; j<A.numCols; j++) {
+            for(int j=0; j<A.numCols; j++)
                 sum.data[sumRowOffset + j] = new Complex128(A.data[rowOffset + j]);
-            }
         }
 
         // Copy over second matrix.
-        for(int i=0; i<B.numRows; i++) {
+        for(int i=0; i<B.numRows; i++)
             System.arraycopy(B.data, i*B.numCols, sum.data, (i+A.numRows)*sum.numCols+(A.numCols), B.numCols);
-        }
 
         return sum;
     }
@@ -139,9 +137,8 @@ public final class DirectSum {
             int rowOffset = i*A.numCols;
             int sumRowOffset = i*sum.numCols;
 
-            for(int j=0; j<A.numCols; j++) {
+            for(int j=0; j<A.numCols; j++)
                 sum.data[sumRowOffset + j] = new Complex128(A.data[rowOffset + j]);
-            }
         }
 
         // Copy over second matrix.
@@ -168,14 +165,12 @@ public final class DirectSum {
         Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols, sum.data, (i+B.numRows)*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
-        for(int i=0; i<B.numRows; i++) {
+        for(int i=0; i<B.numRows; i++)
             System.arraycopy(B.data, i*B.numCols, sum.data, i*sum.numCols+A.numCols, B.numCols);
-        }
 
         return sum;
     }
@@ -192,9 +187,8 @@ public final class DirectSum {
         Matrix sum = new Matrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols, sum.data, (i+B.numRows)*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
         int row, col;
@@ -224,16 +218,14 @@ public final class DirectSum {
             int aRowOffset = i*A.numCols;
             int sumRowOffset = (i+B.numRows)*sum.numCols;
 
-            for(int j=0; j<A.numCols; j++) {
+            for(int j=0; j<A.numCols; j++)
                 sum.data[sumRowOffset + j] = new Complex128(A.data[aRowOffset + j]);
-            }
         }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
-            for(int j=0; j<B.numCols; j++) {
+            for(int j=0; j<B.numCols; j++)
                 sum.data[i*sum.numCols + j + A.numCols] = B.data[i*B.numCols + j];
-            }
         }
 
         return sum;
@@ -255,9 +247,8 @@ public final class DirectSum {
             int aRowOffset = i*A.numCols;
             int sumRowOffset = (i+B.numRows)*sum.numCols;
 
-            for(int j=0; j<A.numCols; j++) {
+            for(int j=0; j<A.numCols; j++)
                 sum.data[sumRowOffset + j] = new Complex128(A.data[aRowOffset + j]);
-            }
         }
 
         // Copy over second matrix.
@@ -286,18 +277,16 @@ public final class DirectSum {
         CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols , sum.data, i*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
             int bRowOffset = i*B.numCols;
             int sumRowOffset = (i+A.numRows)*sum.numCols + A.numCols;
 
-            for(int j=0; j<B.numCols; j++) {
+            for(int j=0; j<B.numCols; j++)
                 sum.data[sumRowOffset + j] = new Complex128(B.data[bRowOffset + j]);
-            }
         }
 
         return sum;
@@ -315,9 +304,8 @@ public final class DirectSum {
         CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
         int row;
@@ -366,9 +354,8 @@ public final class DirectSum {
         CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols, sum.data, i*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
         int row;
@@ -395,18 +382,16 @@ public final class DirectSum {
         CMatrix sum = new CMatrix(A.numRows+B.numRows, A.numCols+B.numCols);
 
         // Copy over first matrix.
-        for(int i=0; i<A.numRows; i++) {
+        for(int i=0; i<A.numRows; i++)
             System.arraycopy(A.data, i*A.numCols, sum.data, (i+B.numRows)*sum.numCols, A.numCols);
-        }
 
         // Copy over second matrix.
         for(int i=0; i<B.numRows; i++) {
             int sumRowOffset = i*sum.numCols + A.numCols;
             int bRowOffset = i*B.numCols;
 
-            for(int j=0; j<B.numCols; j++) {
+            for(int j=0; j<B.numCols; j++)
                 sum.data[sumRowOffset + j] = new Complex128(B.data[bRowOffset + j]);
-            }
         }
 
         return sum;

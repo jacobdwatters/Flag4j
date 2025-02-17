@@ -34,10 +34,11 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 /**
  * <p>Instances of this class can be used to compute the LU decomposition of a complex dense matrix.
  *
- * <p>The LU decomposition decomposes a matrix <b>A</b> into the product of
- * a unit-lower triangular matrix <b>L</b> and an upper triangular matrix <b>U</b>, such that:
- * <pre>
- *     <b>A = LU</b></pre>
+ * <p>The LU decomposition decomposes a matrix <span class="latex-inline">A</span> into the product of
+ * a unit-lower triangular matrix <span class="latex-inline">L</span> and an upper triangular matrix 
+ * <span class="latex-inline">U</span>, such that:
+ * <span class="latex-display"><pre>
+ *     A = LU</pre></span>
  *
  * <h2>Pivoting Strategies:</h2>
  * <p>Pivoting may be used to improve the stability of the decomposition. Pivoting involves swapping rows and/or columns within the
@@ -45,17 +46,20 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *
  * <p>This class supports three pivoting strategies via the {@link Pivoting} enum:
  * <ul>
- *     <li>{@link Pivoting#NONE}: No pivoting is performed. This pivoting strategy is generally <em>not</em> recommended.</li>
+ *     <li>{@link Pivoting#NONE}: No pivoting is performed. This pivoting strategy is generally <em>not</em> recommended.
+ *     <span class="latex-display"><pre>
+ *         A = LU</pre></span></li>
  *     <li>{@link Pivoting#PARTIAL}: Only row pivoting is performed to improve numerical stability.
  *     Generally, this is the preferred pivoting strategy. The decomposition then becomes,
- *     <pre>
- *         <b>PA = LU</b></pre></li>
- *     where <b>P</b> is a {@link PermutationMatrix permutation matrix} representing the row swaps.
+ *     <span class="latex-display"><pre>
+ *         PA = LU</pre></span></li>
+ *     where <span class="latex-inline">P</span> is a {@link PermutationMatrix permutation matrix} representing the row swaps.
  *     <li>{@link Pivoting#FULL}: Both row and column pivoting are performed to enhance numerical robustness.
  *     The decomposition then becomes,
- *     <pre>
- *         <b>PAQ = LU</b></pre>
- *     where <b>P</b> and <b>Q</b> are {@link PermutationMatrix permutation matrices} representing the row and column swaps
+ *     <span class="latex-display"><pre>
+ *         PAQ = LU</span></pre>
+ *     where <span class="latex-inline">P</span> and <span class="latex-inline">Q</span> are
+ *     {@link PermutationMatrix permutation matrices} representing the row and column swaps
  *     respectively.
  *
  *     <p>Full pivoting <em>may</em> be useful for <em>highly</em> ill-conditioned matrices but, for practical
@@ -65,19 +69,22 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * <h2>Storage Format:</h2>
  * The computed LU decomposition is stored within a single matrix {@code LU}, where:
  * <ul>
- *     <li>The upper triangular part (including the diagonal) represents the non-zero values of <b>U</b>.</li>
- *     <li>The strictly lower triangular part represents the non-zero, non-diagonal values of <b>L</b>. Since <b>L</b> is
+ *     <li>The upper triangular part (including the diagonal) represents the non-zero values of <span class="latex-inline">U</span>.</li>
+ *     <li>The strictly lower triangular part represents the non-zero, non-diagonal values of <span class="latex-inline">L</span>.
+ *     Since <span class="latex-inline">L</span> is
  *     unit-lower triangular, the diagonal is not stored as it is known to be all zeros.</li>
  * </ul>
  *
  * <h2>Usage:</h2>
  * The decomposition workflow typically follows these steps:
  * <ol>
- *     <li>Instantiate a concrete subclass of {@code LU}.</li>
+ *     <li>Instantiate an instance of {@code ComplexLU}.</li>
  *     <li>Call {@link LU#decompose(MatrixMixin)} to perform the factorization.</li>
  *     <li>Retrieve the resulting matrices using {@link #getL()}, {@link #getU()}, {@link #getP()}, and {@link #getQ()}.</li>
  * </ol>
  *
+ * @see RealLU
+ * @see FieldLU
  * @see Pivoting
  * @see PermutationMatrix
  * @see CMatrix

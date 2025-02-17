@@ -37,9 +37,12 @@ import java.util.Arrays;
 /**
  * <p>This abstract class specifies methods for computing the singular value decomposition (SVD) of a matrix.
  *
- * <p>That is, decomposes a rectangular matrix <b>M</b> into <b>M=U&Sigma;V</b><sup>H</sup> where <b>U</b> and <b>V</b> are
- * unitary matrices whose columns are the left and right singular vectors of <b>M</b> and <b>&Sigma;</b> is a rectangular
- * diagonal matrix containing the singular values of <b>M</b>.
+ * <p>That is, decomposes a rectangular matrix <span class="latex-inline">M</span> into
+ * <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span>
+ * where <span class="latex-inline">U</span> and <span class="latex-inline">V</span> are
+ * unitary matrices whose columns are the left and right singular vectors of <span class="latex-inline">M</span> and 
+ * <span class="latex-inline">&Sigma;</span> is a rectangular
+ * diagonal matrix containing the singular values of <span class="latex-inline">M</span>.
  *
  * <p>The SVD may also be used to compute the (numerical) rank of the matrix using {@link #getRank()}.
  *
@@ -87,15 +90,15 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositi
      */
     protected boolean reduced;
     /**
-     * The unitary matrix <b>U</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * The unitary matrix <span class="latex-inline">U</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
      */
     protected T U;
     /**
-     * The rectangular diagonal <b>&Sigma;</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * The rectangular diagonal <span class="latex-inline">&Sigma;</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
      */
     protected Matrix S;
     /**
-     * The unitary matrix <b>V</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * The unitary matrix <span class="latex-inline">V</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
      */
     protected T V;
     /**
@@ -106,11 +109,11 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositi
 
     /**
      * Creates a decomposer to compute the Schur decomposition.
-     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * @param computeUV A flag which indicates if the unitary matrices <span class="latex-inline">U</span> and <span class="latex-inline">V</span> should be computed
      * (i.e. the singular vectors).
      * <ul>
-     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
-     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     <li>If {@code true}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span> matrices will be computed.</li>
+     *     <li>If {@code false}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span> matrices  will <em>not</em> be computed. If it is not
      *     needed, this <em>may</em> provide a performance improvement.</li>
      * </ul>
      * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.
@@ -128,11 +131,11 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositi
 
     /**
      * Creates a decomposer to compute the Schur decomposition.
-     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * @param computeUV A flag which indicates if the unitary matrices <span class="latex-inline">U</span> and <span class="latex-inline">V</span> should be computed
      * (i.e. the singular vectors).
      * <ul>
-     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
-     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     <li>If {@code true}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span> matrices will be computed.</li>
+     *     <li>If {@code false}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span> matrices  will <em>not</em> be computed. If it is not
      *     needed, this <em>may</em> provide a performance improvement.</li>
      * </ul>
      * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.
@@ -152,8 +155,8 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositi
 
 
     /**
-     * Gets the unitary matrix <b>U</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
-     * @return <b>U</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * Gets the unitary matrix <span class="latex-inline">U</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
+     * @return <span class="latex-inline">U</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
      */
     public T getU() {
         ensureHasDecomposed();
@@ -162,8 +165,8 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositi
 
 
     /**
-     * Gets the diagonal matrix <b>&Sigma;</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
-     * @return <b>&Sigma;</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
+     * Gets the diagonal matrix <span class="latex-inline">&Sigma;</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
+     * @return <span class="latex-inline">&Sigma;</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
      */
     public Matrix getS() {
         ensureHasDecomposed();
@@ -183,8 +186,8 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositi
 
 
     /**
-     * Gets the unitary matrix <b>V</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD.
-     * @return <b>V</b> corresponding to <b>M=U&Sigma;V</b><sup>H</sup> in the SVD. Note that the Hermitian transpose has
+     * Gets the unitary matrix <span class="latex-inline">V</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD.
+     * @return <span class="latex-inline">V</span> corresponding to <span class="latex-inline">M=U&Sigma;V<sup>H</sup></span> in the SVD. Note that the Hermitian transpose has
      * <em>not</em> been computed.
      */
     public T getV() {
@@ -307,18 +310,18 @@ public abstract class SVD<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositi
 
 
     /**
-     * Initializes the unitary <b>U</b> and <b>V</b> matrices for the SVD.
+     * Initializes the unitary <span class="latex-inline">U</span> and <span class="latex-inline">V</span> matrices for the SVD.
      * @param src Shape of the source matrix being decomposed.
-     * @param cols The number of columns for <b>U</b> and <b>V</b>.
+     * @param cols The number of columns for <span class="latex-inline">U</span> and <span class="latex-inline">V</span>.
      */
     protected abstract void initUV(Shape src, int cols);
 
 
     /**
-     * Extracts the singular vectors, normalizes them and sets the columns of <b>U</b>
-     * and <b>V</b> to be the left/right singular vectors.
+     * Extracts the singular vectors, normalizes them and sets the columns of <span class="latex-inline">U</span>
+     * and <span class="latex-inline">V</span> to be the left/right singular vectors.
      * @param singularVecs Computed left and right singular vectors.
-     * @param j Index of the column of <b>U</b> and <b>V</b> to set.
+     * @param j Index of the column of <span class="latex-inline">U</span> and <span class="latex-inline">V</span> to set.
      */
     protected abstract void extractNormalizedCols(T singularVecs, int j);
 }

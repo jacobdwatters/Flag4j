@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - texify-everything # TODO: Temp for testing.
 jobs:
   # 1) Build the Javadoc and upload as artifact
   build-docs:
@@ -33,15 +34,7 @@ jobs:
           -Dmaven.javadoc.failOnError=false \
           -Dmaven.javadoc.skip=false
 
-      # 1.4) Inject MathJax script into the header of all generated html files
-      - name: Inject MathJax script
-        run: |
-          find target/reports/apidocs -type f -name "*.html" -exec \
-            sed -i '/<\/head>/i <script type="text/javascript" id="MathJax-script" async \
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> \
-            </script>' {} +
-
-      # 1.5) Find and convert all specified HTML equations to LaTeX equations
+      # 1.5) Find and convert all specified HTML equations to LaTeX equations and inject MathJax script
       - name: Convert LaTeX
         run: python scripts/convert_latex.py
 

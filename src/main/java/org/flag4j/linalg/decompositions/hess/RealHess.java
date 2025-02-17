@@ -33,26 +33,37 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>Computes the Hessenberg decomposition of a real dense square matrix.
- * <p>The Hessenberg decomposition decomposes a given square matrix <b>A</b> into the product:
- * <pre>
- *     <b>A = QHQ<sup>T</sup></b></pre>
- * where <b>Q</b> is an orthogonal matrix and <b>H</b> is an upper Hessenberg matrix, which is similar to <b>A</b>
+ * <p>The Hessenberg decomposition decomposes a given square matrix <span class="latex-inline">A</span> into the product:
+ * <span class="latex-display"><pre>
+ *     A = QHQ<sup>T</sup></pre></span>
+ * where <span class="latex-inline">Q</span> is an orthogonal matrix and <span class="latex-inline">H</span> is an upper Hessenberg matrix, which is similar to 
+ * <span class="latex-inline">A</span>
  * (i.e., it has the same eigenvalues).
  *
- * <p>A matrix <b>H</b> is in upper Hessenburg form if it is nearly upper triangular. Specifically, if <b>H</b> has
+ * <p>A matrix <span class="latex-inline">H</span> is in upper Hessenburg form if it is nearly upper triangular. Specifically,
+ * if <span class="latex-inline">H</span> has
  * all zeros below the first sub-diagonal.
  *
- * <p>For example, the following matrix is in upper Hessenburg form where each '&times;' may hold a different value:
- * <pre>
+ * <p>For example, the following matrix is in upper Hessenburg form where each '<span class="latex-inline">&times;</span>'
+ * may hold a different value:
+ * <span class="latex-replaceable"><pre>
  *     [[ &times; &times; &times; &times; &times; ]
  *      [ &times; &times; &times; &times; &times; ]
  *      [ 0 &times; &times; &times; &times; ]
  *      [ 0 0 &times; &times; &times; ]
- *      [ 0 0 0 &times; &times; ]]</pre>
+ *      [ 0 0 0 &times; &times; ]]</pre> </span>
+ *
+ * <!-- LATEX: \[ \begin{bmatrix}
+ * \times & \times & \times & \times & \times \\
+ * \times & \times & \times & \times & \times \\
+ * 0 & \times & \times & \times & \times \\
+ * 0 & 0 & \times & \times & \times \\
+ * 0 & 0 & 0 & \times & \times
+ * \end{bmatrix} \] -->
  *
  * <h2>Efficiency Considerations:</h2>
  * <ul>
- *     <li>If the orthogonal matrix <b>Q</b> is not required, setting {@code computeQ = false} in the constructor
+ *     <li>If the orthogonal matrix <span class="latex-inline">Q</span> is not required, setting {@code computeQ = false} in the constructor
  *     <em>may</em> improve performance.</li>
  *     <li>Support for in-place decomposition to reduce memory usage.</li>
  *     <li>Support for decomposition of matrix sub-blocks, enabling efficient eigenvalue computations.</li>
@@ -125,8 +136,9 @@ public class RealHess extends RealUnitaryDecomposition {
     /**
      * <p>Computes the Hessenberg decomposition of the specified matrix.
      * 
-     * <p>Note, the computation of the orthogonal matrix <b>Q</b> in the decomposition is
-     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when <b>Q</b> is not needed.
+     * <p>Note, the computation of the orthogonal matrix <span class="latex-inline">Q</span> in the decomposition is
+     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when
+     * <span class="latex-inline">Q</span> is not needed.
      *
      * @param src The source matrix to decompose.
      * @return A reference to this decomposer.
@@ -141,22 +153,31 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * <p>Applies decomposition to the source matrix. Note, the computation of the orthogonal matrix <b>Q</b> in the decomposition is
-     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when <b>Q</b> is not needed.
+     * <p>Applies decomposition to the source matrix. Note, the computation of the orthogonal matrix <span class="latex-inline">Q</span> in the decomposition is
+     * deferred until {@link #getQ()} is explicitly called. This allows for efficient decompositions when <span class="latex-inline">Q</span> is not needed.
      *
      * <p>This method can be used specify that only a sub-block within the full matrix needs to be
      * reduced. This is useful when you know that an upper and lower diagonal block of the matrix is already
      * in the correct form, and you only need to reduce an inner sub-block of the full matrix.
      * Most commonly this would be useful after balancing a matrix using
      * {@link org.flag4j.linalg.decompositions.balance.RealBalancer RealBalancer}, which results in the form
-     * <pre>
-     *      [ <b>T1</b>   <b>X</b>  <b>Y</b>  ]
-     *      [  <b>0</b>   <b>B</b>  <b>Z</b>  ]
-     *      [  <b>0</b>   <b>0</b>  <b>T2</b> ]</pre>
-     * where <b>T1</b> and <b>T2</b> are in upper-triangular form. As such, only the <b>B</b> block needs to be reduced.
-     * The staring row/column index of <b>B</b> is specified by {@code iLow} (inclusive) and the ending row/column
-     * index is specified by {@code iHigh} (exclusive). It should be noted that the blocks <b>X</b> and <b>Z</b> will also be updated
-     * during the reduction of <b>B</b> so the full matrix must still be passed.
+     * <span class="latex-replaceable"><pre>
+     *      [  T<sub>1</sub>  X  Y  ]
+     *      [  <b>0</b>   B  Z  ]
+     *      [  <b>0</b>   <b>0</b>  T<sub>2</sub> ]</pre></span>
+     *
+     * <!-- LATEX: \[ \begin{bmatrix}
+     * T_1 & X & Y \\
+     * \mathbf{0} & B & Z \\
+     * \mathbf{0} & \mathbf{0} & T_1
+     * \end{bmatrix} \] -->
+     *
+     * where <span class="latex-inline">T<sub>1</sub></span> and <span class="latex-inline">T<sub>2</sub></span>
+     * are in upper-triangular form. As such, only the <span class="latex-inline">B</span> block needs to be reduced.
+     * The staring row/column index of <span class="latex-inline">B</span> is specified by {@code iLow} (inclusive) and the ending row/column
+     * index is specified by {@code iHigh} (exclusive). It should be noted that the blocks <span class="latex-inline">X</span>
+     * and <span class="latex-inline">Z</span> will also be updated
+     * during the reduction of <span class="latex-inline">B</span> so the full matrix must still be passed.
      *
      * @param src The source matrix to decompose.
      * @param iLow Lower bound (inclusive) of the sub-matrix to reduce to upper Hessenburg form.
@@ -172,7 +193,7 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * Creates and initializes Q to the appropriately sized identity matrix.
+     * Creates and initializes <span class="latex-inline">Q</span> to the appropriately sized identity matrix.
      *
      * @return An identity matrix with the appropriate size.
      */
@@ -183,7 +204,8 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * Gets the upper Hessenburg matrix from the last decomposition. Same as {@link #getH()}
+     * Gets the upper Hessenburg matrix, <span class="latex-inline">H</span>,  from the last decomposition.
+     * Same as {@link #getH()}
      *
      * @return The upper Hessenburg matrix from the last decomposition.
      */
@@ -194,8 +216,8 @@ public class RealHess extends RealUnitaryDecomposition {
 
 
     /**
-     * Gets the upper Hessenburg matrix <b>H</b> from the Hessenburg decomposition.
-     * @return The upper Hessenburg matrix <b>H</b> from the Hessenburg decomposition.
+     * Gets the upper Hessenburg matrix, <span class="latex-inline">H</span>, from the Hessenburg decomposition.
+     * @return The upper Hessenburg matrix, <span class="latex-inline">H</span>, from the Hessenburg decomposition.
      */
     public Matrix getH() {
         return getUpper(new Matrix(numRows));

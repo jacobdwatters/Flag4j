@@ -34,21 +34,22 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 /**
  * <p>An abstract base class for Cholesky decomposition of symmetric (or symmetric) positive-definite matrices.
  *
- * <p>The Cholesky decomposition factorizes a symmetric/symmetric, positive-definite matrix <b>A</b> as:
- * <pre>
- *     <b>A = LL<sup>T</sup></b></pre>
- * where <b>L</b> is a lower triangular matrix.
+ * <p>The Cholesky decomposition factorizes a symmetric/symmetric, positive-definite matrix <span class="latex-inline">A</span> as:
+ * <span class="latex-display"><pre>
+ *     A = LL<sup>T</sup></pre></span>
+ * where <span class="latex-inline">L</span> is a lower triangular matrix.
  * The decomposition is primarily used for efficient numerical solutions to linear systems, computing matrix inverses,
  * and generating samples from multivariate normal distributions.
  *
  * <h2>Symmetric Verification:</h2>
  * <p>This class provides an option to explicitly check whether the input matrix is symmetric. If {@code enforceSymmetric} is set
- * to {@code true}, the implementation will verify that <b>A</b> satisfies <b>A = A<sup>T</sup></b> before performing decomposition.
+ * to {@code true}, the implementation will verify that <span class="latex-inline">A</span> satisfies
+ * <span class="latex-inline">A = A<sup>T</sup></span> before performing decomposition.
  * If set to {@code false}, the matrix is assumed to be symmetric, no explicit check will be performed, and only the lower-diagonal
- * entries of <b>A</b> are accessed.
+ * entries of <span class="latex-inline">A</span> are accessed.
  *
  * <h2>positive-definiteness Check:</h2>
- * <p>To ensure numerical stability, the algorithm verifies that all diagonal entries of <b>L</b> are positive.
+ * <p>To ensure numerical stability, the algorithm verifies that all diagonal entries of <span class="latex-inline">L</span> are positive.
  * A tolerance threshold, {@code posDefTolerance}, is used to determine whether a diagonal entry is considered
  * non-positive, indicating that the matrix is <em>not</em> positive-definite. This threshold can be adjusted using
  * {@link #setPosDefTolerance(double)}.
@@ -61,6 +62,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *     <li>Retrieve the factorized matrices using {@link #getL()} or {@link #getLH()}.</li>
  * </ol>
  *
+ * @see ComplexCholesky
  * @see Decomposition
  * @see Matrix
  * @see #setPosDefTolerance(double)
@@ -90,7 +92,8 @@ public class RealCholesky extends Cholesky<Matrix> {
 
 
     /**
-     * Decompose a matrix into A=LL<sup>T</sup> where L is a lower triangular matrix and L<sup>T</sup> is the
+     * Decompose a matrix into <span class="latex-inline">A=LL<sup>T</sup></span> where L is a lower triangular matrix and
+     * <span class="latex-inline">L<sup>T</sup></span> is the
      * transpose of L.
      *
      * @param src The source matrix to decompose. Must be symmetric positive-definite. Note, symmetry will only be checked explicitly

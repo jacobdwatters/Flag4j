@@ -27,8 +27,8 @@ package org.flag4j.linalg.solvers;
 
 /**
  * <p>Interface representing a linear system solver for tensor equations. Implementations of this interface
- * provide methods to solve linear equations involving tensors, such as <b>AX=B</b>, where
- * <b>A</b>, <b>B</b>, and <b>X</b> are tensors.
+ * provide methods to solve linear equations involving tensors, such as <span class="latex-inline">AX = B</span>, where
+ * <span class="latex-inline">A</span>, <span class="latex-inline">B</span>, and <span class="latex-inline">X</span> are tensors.
  *
  * <p>Solvers may compute exact solutions or approximate solutions in a least squares sense, depending on the
  * properties of the tensor equation.
@@ -38,13 +38,15 @@ package org.flag4j.linalg.solvers;
 public interface LinearSolver<T> {
 
     /**
-     * Solves the linear tensor equation <b>AX=B</b> for the tensor <b>X</b>. The multiplication <b>AX</b> is defined such that
-     * it performs a tensor dot product over all indices of <b>X</b> with the rightmost indices of <b>A</b>, equivalent to
+     * Solves the linear tensor equation <span class="latex-inline">AX = B</span> for the tensor <span class="latex-inline">X</span>. 
+     * The multiplication <span class="latex-inline">AX</span> is defined such that
+     * it performs a tensor dot product over all indices of <span class="latex-inline">X</span> with the rightmost indices
+     * of <span class="latex-inline">A</span>, equivalent to
      * {@code A.tensorDot(X, X.getRank())}.
      *
      * @param A The coefficient tensor in the linear system.
      * @param B The constant tensor in the linear system.
-     * @return The solution tensor <b>X</b> satisfying <b>AX=B</b>.
+     * @return The solution tensor <span class="latex-inline">X</span> satisfying <span class="latex-inline">AX = B</span>.
      */
     T solve(T A, T B);
 }

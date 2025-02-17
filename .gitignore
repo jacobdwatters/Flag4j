@@ -6,3 +6,4 @@ qodana.yaml
 # Build files and docs
 /target/
 /docs/
+/local_scripts/

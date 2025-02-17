@@ -138,12 +138,12 @@ public abstract class ComplexUnitaryDecomposition extends UnitaryDecomposition<C
 
 
     /**
-     * <p>Gets the unitary {@code Q} matrix from the {@code QR} decomposition.
+     * <p>Gets the unitary {@code Q} matrix from the QR decomposition.
      *
      * <p>Note, if the reflectors for this decomposition were not saved, then {@code Q} can not be computed and this method will be
      * {@code null}.
      *
-     * @return The {@code Q} matrix from the {@code QR} decomposition. Note, if the reflectors for this decomposition were not saved,
+     * @return The {@code Q} matrix from the QR decomposition. Note, if the reflectors for this decomposition were not saved,
      * then {@code Q} can not be computed and this method will return {@code null}.
      */
     @Override
