@@ -34,8 +34,9 @@ import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
- * Base class for solvers which solve a linear system of equations <strong>Ux = b</strong> or <strong>UX = B</strong>
- * where <strong>U</strong> is an upper triangular matrix. This accomplished using a simple backward substitution.
+ * Base class for solvers which solve a linear system of equations <span class="latex-inline">Ux = b</span> or
+ * <span class="latex-inline">UX = B</span> where <span class="latex-inline">U</span> is an
+ * upper triangular matrix. This system is solved in an exact sense.
  *
  * @param <T> Type of matrix to decompose.
  * @param <U> Vector type equivalent of matrix.

@@ -33,12 +33,11 @@ import org.flag4j.arrays.dense.Vector;
  * These matrices are designed to perform rotations of vectors in a counterclockwise direction when viewed from a
  * positive axis perspective in a right-handed coordinate system.
  *
- * <p>
- *
  * <p>This class supports:
  * <ul>
  *   <li>2D rotation matrices for rotating column vectors by a specified angle in degrees.</li>
- *   <li>3D rotation matrices for rotating about the x-axis, y-axis, and z-axis.</li>
+ *   <li>3D rotation matrices for rotating about the <span class="latex-inline">x</span>-axis,
+ *   <span class="latex-inline">y</span>-axis, and <span class="latex-inline">z</span>-axis.</li>
  *   <li>3D rotation matrices for yaw-pitch-roll rotations.</li>
  *   <li>3D rotation matrices for arbitrary axis rotations.</li>
  *   <li>3D rotation matrices for proper Euler angle rotations.</li>
@@ -46,10 +45,10 @@ import org.flag4j.arrays.dense.Vector;
  *
  * <p>Rotation matrices have the following properties:
  * <ul>
- *   <li>A rotation matrix is orthogonal: <b>R<sup>-1</sup></b> = <b>R</b><sup>T</sup>.</li>
+ *   <li>A rotation matrix is orthogonal: <span class="latex-inline">R<sup>-1</sup> = R<sup>T</sup></span>.</li>
  *   <li>Rotations preserve the length of vectors (orthogonal transformations).</li>
- *   <li>The inverse/transpose rotation matrix undoes the rotation: <b>x</b> = <b>R</b><sup>T</sup><b>Rx</b> =
- *   <b>RR</b><sup>T</sup><b>x</b></li>
+ *   <li>The inverse/transpose rotation matrix undoes the rotation:
+ *   <span class="latex-inline">x = R<sup>T</sup>Rx = RR<sup>T</sup>x</span></li>
  *   <li>Successive rotations can be composed through matrix multiplication (rotation order is from right to left).</li>
  * </ul>
  *
@@ -58,13 +57,13 @@ import org.flag4j.arrays.dense.Vector;
  *         // Rotate a 2D vector by 45 degrees.
  *         double theta = 45.0;
  *         Matrix rotation2D = Rotation.rotate2D(theta);
- *         Vector vector2D = new Vector(1, 0);  // A vector along the x-axis
+ *         Vector vector2D = new Vector(1, 0);  // A vector along the <span class="latex-inline">x</span>-axis
  *         Vector rotatedVector2D = rotation2D.mult(vector2D);
  *
- *         // Rotate a 3D vector about the x-axis by 90 degrees.
+ *         // Rotate a 3D vector about the <span class="latex-inline">x</span>-axis by 90 degrees.
  *         double thetaX = 90.0;
  *         Matrix rotationX3D = Rotation.rotateX3D(thetaX);
- *         Vector vector3D = new Vector(0, 1, 0);  // A vector along the y-axis
+ *         Vector vector3D = new Vector(0, 1, 0);  // A vector along the <span class="latex-inline">y</span>-axis
  *         Vector rotatedVector3D = rotationX3D.mult(vector3D);
  *
  *         // Perform a yaw-pitch-roll rotation in 3D.
@@ -82,9 +81,9 @@ import org.flag4j.arrays.dense.Vector;
  *         Vector arbitraryRotatedVector = arbitraryAxisRotation.mult(vector3D);
  *
  *         // Perform a rotation using proper Euler angles.
- *         double alpha = 30.0;  // Rotation about z-axis
- *         double beta = 45.0;   // Rotation about x-axis
- *         double gamma = 60.0;  // Rotation about z-axis again
+ *         double alpha = 30.0;  // Rotation about <span class="latex-inline">z</span>-axis
+ *         double beta = 45.0;   // Rotation about <span class="latex-inline">x</span>-axis
+ *         double gamma = 60.0;  // Rotation about <span class="latex-inline">z</span>-axis again
  *         Matrix eulerRotation = Rotation.rotateEuler3D(alpha, beta, gamma);
  *         Vector eulerRotatedVector = eulerRotation.mult(vector3D);
  *
@@ -113,19 +112,21 @@ public final class Rotation {
 
 
     /**
-     * <p>Constructs a rotation matrix, <b>R</b>(&theta;), which rotates 2D column vectors {@code theta} degrees.
-     * When {@code theta > 0} the rotation is counterclockwise. When
+     * <p>Constructs a rotation matrix, <span class="latex-inline">R(&theta;)</span>, which rotates 2D column vectors
+     * <span class="latex-inline">&theta;</span> degrees. When <span class="latex-inline">&theta; > 0</span> the rotation is
+     * counterclockwise.
      *
-     * <p>A 2D rotation matrix <b>R</b>(&theta;), rotates a 2D column vector <b>x</b>, &theta; degrees by means of
+     * <p>A 2D rotation matrix <span class="latex-inline">R(&theta;)</span>, rotates a 2D column vector 
+     * <span class="latex-inline">x</span>, <span class="latex-inline">&theta;</span> degrees by means of
      * the following matrix-vector multiplication:
-     * <pre>
-     *     <b>x</b>' = <b>R</b>(&theta;)<b>x</b></pre>
-     * The following holds <b>R</b>(-&theta;) = <b>R</b>(&theta;)<sup>-1</sup> = <b>R</b>(&theta;)<sup>T</sup>.
+     * <span class="latex-display"><pre>
+     *     x' = R(&theta;)x</pre></span>
+     * The following holds <span class="latex-inline">R(-&theta;) = R(&theta;)<sup>-1</sup> = R(&theta;)<sup>T</sup></span>.
      * This means the inverse/transpose may be used to undo a rotation,
-     * <pre>
-     *     <b>x</b> = <b>R</b>(&theta;)<b>R</b>(&theta;)<sup>T</sup><b>x</b>
-     *       = <b>R</b>(&theta;)<sup>T</sup><b>R</b>(&theta;)<b>x</b>
-     *       = I<b>x</b></pre>
+     * <span class="latex-eq-align"><pre>
+     *     x = R(&theta;)R(&theta;)<sup>T</sup>x
+     *       = R(&theta;)<sup>T</sup>R(&theta;)x
+     *       = Ix</pre></span>
      *
      * @param theta The degrees to rotate a 2D vector by.
      * @return A rotation matrix which rotates (counterclockwise) 2D column vectors {@code theta} degrees.
@@ -142,23 +143,29 @@ public final class Rotation {
 
 
     /**
-     * <p>Constructs a matrix which rotates 3D column vectors about the x-axis {@code theta} degrees. The rotation appears
-     * counterclockwise when the x-axis points toward the observer, {@code theta > 0} and the coordinate system is right-handed.
+     * <p>Constructs a matrix which rotates 3D column vectors about the <span class="latex-inline">x</span>-axis
+     * <span class="latex-inline">&theta;</span> degrees.
+     * The rotation appears counterclockwise when the <span class="latex-inline">x</span>-axis points toward the observer,
+     * <span class="latex-inline">&theta;</span> and the coordinate system is right-handed.
      *
-     * <p>A 3D rotation matrix, <b>R</b><sub>X</sub>(&theta;), rotates a 3D column vector <b>x</b> about the x-axis &theta; degrees by
+     * <p>A 3D rotation matrix, <span class="latex-inline">R<sub>x</sub>(&theta;)</span>, rotates a 3D column vector x about the
+     * <span class="latex-inline">x</span>-axis <span class="latex-inline">&theta;</span>
+     * degrees by
      * means of the following matrix-vector multiplication:
-     * <pre>
-     *     <b>x</b>' = <b>R</b><sub>X</sub>(&theta;)<b>x</b></pre>
-     * The following holds <b>R</b><sub>X</sub>(-&theta;) = <b>R</b><sub>X</sub>(&theta;)<sup>-1</sup> = <b>R</b><sub>X</sub>(&theta;)<sup>T</sup>.
+     * <span class="latex-display"><pre>
+     *     x' = R<sub>x</sub>(&theta;)x</pre></span>
+     * The following holds
+     * <span class="latex-inline">R<sub>x</sub>(-&theta;) = R<sub>x</sub>(&theta;)<sup>-1</sup>
+     * = R<sub>x</sub>(&theta;)<sup>T</sup></span>.
      * This means the inverse/transpose may be used to undo a rotation,
-     * <pre>
-     *     <b>x</b> = <b>R</b><sub>X</sub>(&theta;)<b>R</b><sub>X</sub>(&theta;)<sup>T</sup><b>x</b>
-     *       = <b>R</b><sub>X</sub>(&theta;)<sup>T</sup><b>R</b><sub>X</sub>(&theta;)<b>x</b>
-     *       = I<b>x</b></pre>
+     * <span class="latex-eq-align"><pre>
+     *     x = R<sub>x</sub>(&theta;)R<sub>x</sub>(&theta;)<sup>T</sup>x
+     *       = R<sub>x</sub>(&theta;)<sup>T</sup>R<sub>x</sub>(&theta;)x
+     *       = Ix</pre></span>
      *
      *
-     * @param theta The degrees to rotate a 3D vector about the x-axis by.
-     * @return matrix which rotates 3D column vectors about the x-axis {@code theta} degrees.
+     * @param theta The degrees to rotate a 3D vector about the <span class="latex-inline">x</span>-axis by.
+     * @return matrix which rotates 3D column vectors about the <span class="latex-inline">x</span>-axis {@code theta} degrees.
      */
     public static Matrix rotateX3D(double theta) {
         if(theta == 0) return Matrix.I(3);
@@ -176,23 +183,27 @@ public final class Rotation {
 
 
     /**
-     * <p>Constructs a matrix which rotates 3D column vectors about the y-axis {@code theta} degrees. The rotation appears
-     * counterclockwise when the y-axis points toward the observer, {@code theta > 0} and the coordinate system is right-handed.
+     * <p>Constructs a matrix which rotates 3D column vectors about the <span class="latex-inline">y</span>-axis
+     * <span class="latex-inline">&theta;</span> degrees. The rotation appears
+     * counterclockwise when the <span class="latex-inline">y</span>-axis points toward the observer,
+     * <span class="latex-inline">&theta; > 0</span> and the coordinate system is right-handed.
      *
-     * <p>A 3D rotation matrix, <b>R</b><sub>Y</sub>(&theta;), rotates a 3D column vector <b>x</b> about the y-axis &theta; degrees by
+     * <p>A 3D rotation matrix, <span class="latex-inline">R<sub>y</sub>(&theta;)</span>, rotates a 3D column vector x about the
+     * <span class="latex-inline">y</span>-axis <span class="latex-inline">&theta;</span> degrees by
      * means of the following matrix-vector multiplication:
-     * <pre>
-     *     <b>x</b>' = <b>R</b><sub>Y</sub>(&theta;)<b>x</b></pre>
-     * The following holds <b>R</b><sub>Y</sub>(-&theta;) = <b>R</b><sub>Y</sub>(&theta;)<sup>-1</sup> = <b>R</b><sub>Y</sub>(&theta;)<sup>T</sup>.
+     * <span class="latex-display"><pre>
+     *     x' = R<sub>y</sub>(&theta;)x</pre></span>
+     * The following holds
+     * <span class="latex-inline">R<sub>y</sub>(-&theta;) = R<sub>y</sub>(&theta;)<sup>-1</sup>
+     * = R<sub>y</sub>(&theta;)<sup>T</sup></span>.
      * This means the inverse/transpose may be used to undo a rotation,
-     * <pre>
-     *     <b>x</b> = <b>R</b><sub>Y</sub>(&theta;)<b>R</b><sub>Y</sub>(&theta;)<sup>T</sup><b>x</b>
-     *       = <b>R</b><sub>Y</sub>(&theta;)<sup>T</sup><b>R</b><sub>Y</sub>(&theta;)<b>x</b>
-     *       = I<b>x</b></pre>
+     * <span class="latex-eq-align"><pre>
+     *     x = R<sub>y</sub>(&theta;)R<sub>y</sub>(&theta;)<sup>T</sup>x
+     *       = R<sub>y</sub>(&theta;)<sup>T</sup>R<sub>y</sub>(&theta;)x
+     *       = Ix</pre></span>
      *
-     *
-     * @param theta The degrees to rotate a 3D vector about the y-axis by.
-     * @return matrix which rotates 3D column vectors about the y-axis {@code theta} degrees.
+     * @param theta The degrees to rotate a 3D vector about the <span class="latex-inline">y</span>-axis by.
+     * @return matrix which rotates 3D column vectors about the <span class="latex-inline">y</span>-axis {@code theta} degrees.
      */
     public static Matrix rotateY3D(double theta) {
         if(theta == 0) return Matrix.I(3);
@@ -210,23 +221,26 @@ public final class Rotation {
 
 
     /**
-     * <p>Constructs a matrix which rotates 3D column vectors about the z-axis {@code theta} degrees. The rotation appears
-     * counterclockwise when the z-axis points toward the observer, {@code theta > 0} and the coordinate system is right-handed.
+     * <p>Constructs a matrix which rotates 3D column vectors about the <span class="latex-inline">z</span>-axis
+     * <span class="latex-inline">&theta;</span> degrees. The rotation appears
+     * counterclockwise when the <span class="latex-inline">z</span>-axis points toward the observer,
+     * <span class="latex-inline">&theta; > 0</span> and the coordinate system is right-handed.
      *
-     * <p>A 3D rotation matrix, <b>R</b><sub>Z</sub>(&theta;), rotates a 3D column vector <b>x</b> about the z-axis &theta; degrees by
+     * <p>A 3D rotation matrix, R<sub>z</sub>(&theta;), rotates a 3D column vector x about the
+     * <span class="latex-inline">z</span>-axis <span class="latex-inline">&theta;</span> degrees by
      * means of the following matrix-vector multiplication:
-     * <pre>
-     *     <b>x</b>' = <b>R</b><sub>Z</sub>(&theta;)<b>x</b></pre>
-     * The following holds <b>R</b><sub>Z</sub>(-&theta;) = <b>R</b><sub>Z</sub>(&theta;)<sup>-1</sup> = <b>R</b><sub>Z</sub>(&theta;)<sup>T</sup>.
+     * <span class="latex-display"><pre>
+     *     x' = R<sub>z</sub>(&theta;)x</pre></span>
+     * The following holds <span class="latex-inline">R<sub>z</sub>(-&theta;) = R<sub>z</sub>(&theta;)<sup>-1</sup>
+     * = R<sub>z</sub>(&theta;)<sup>T</sup></span>.
      * This means the inverse/transpose may be used to undo a rotation,
-     * <pre>
-     *     <b>x</b> = <b>R</b><sub>Z</sub>(&theta;)<b>R</b><sub>Z</sub>(&theta;)<sup>T</sup><b>x</b>
-     *       = <b>R</b><sub>Z</sub>(&theta;)<sup>T</sup><b>R</b><sub>Z</sub>(&theta;)<b>x</b>
-     *       = I<b>x</b></pre>
+     * <span class="latex-eq-align"><pre>
+     *     x = R<sub>z</sub>(&theta;)R<sub>z</sub>(&theta;)<sup>T</sup>x
+     *       = R<sub>z</sub>(&theta;)<sup>T</sup>R<sub>z</sub>(&theta;)x
+     *       = Ix</pre></span>
      *
-     *
-     * @param theta The degrees to rotate a 3D vector about the z-axis by.
-     * @return matrix which rotates 3D column vectors about the z-axis {@code theta} degrees.
+     * @param theta The degrees to rotate a 3D vector about the <span class="latex-inline">z</span>-axis by.
+     * @return matrix which rotates 3D column vectors about the <span class="latex-inline">z</span>-axis {@code theta} degrees.
      */
     public static Matrix rotateZ3D(double theta) {
         if(theta == 0) return Matrix.I(3);
@@ -244,29 +258,41 @@ public final class Rotation {
 
 
     /**
-     * <p>Constructs a 3D rotation matrix, <b>R</b>(&alpha;, &beta;, &gamma;), representing a rotation with yaw, pitch, and roll
-     * angles
-     * &alpha;, &beta;, and &gamma; respectively. This is equivalent to rotating by &alpha; degrees about the x-axis,
-     * &beta; degrees about the y-axis, and &gamma; degrees about the z-axis in that order. Each of the three rotations appear
+     * <p>Constructs a 3D rotation matrix, <span class="latex-eq-align">R(&alpha;, &beta;, &gamma;)</span>, representing a rotation
+     * with yaw, pitch, and roll angles
+     * <span class="latex-inline">&alpha;</span>, <span class="latex-inline">&beta;</span>, and
+     * <span class="latex-inline">&gamma;</span> respectively. This is equivalent to rotating by
+     * <span class="latex-inline">&alpha;</span>
+     * degrees about the <span class="latex-inline">x</span>-axis,
+     * &beta; degrees about the <span class="latex-inline">y</span>-axis, and
+     * <span class="latex-inline">&gamma;</span> degrees about the
+     * <span class="latex-inline">z</span>-axis in that order. Each of the three rotations appear
      * counterclockwise when the axis about which they occur points toward the observer,
      * the rotation angle is positive, and the coordinate system is right-handed.
      *
-     * <p>A 3D rotation matrix, <b>R</b>(&alpha;, &beta;, &gamma;), rotates a 3D column vector <b>x</b>,
-     * &gamma;, &beta;, and &alpha; degrees about the x-, y-, and z-axes in that order by means of the following matrix
+     * <p>A 3D rotation matrix, <span class="latex-inline">R(&alpha;, &beta;, &gamma;)</span>, rotates a 3D column vector
+     * <span class="latex-inline">x</span>,
+     * <span class="latex-inline">&gamma;</span>, <span class="latex-inline">&beta;</span>, and
+     * <span class="latex-inline">&alpha;</span> degrees about the <span class="latex-inline">x</span>-,
+     * <span class="latex-inline">y</span>-, and
+     * <span class="latex-inline">z</span>-axes in that order by means of
+     * the following matrix
      * multiplication:
-     * <pre>
-     *     <b>x</b>' = <b>R</b>(&alpha;, &beta;, &gamma;)<b>x</b>
-     *        = <b>R</b><sub>Z</sub>(&gamma;)<b>R</b><sub>Y</sub>(&beta;)<b>R</b><sub>X</sub>(&alpha;)x</pre>
+     * <span class="latex-eq-align"><pre>
+     *     x' = R(&alpha;, &beta;, &gamma;)x
+     *        = R<sub>z</sub>(&gamma;)R<sub>y</sub>(&beta;)R<sub>x</sub>(&alpha;)x</pre></span>
      *
      * <p><strong>Note:</strong> This method is susceptible to gimbal lock, a phenomenon where two of the rotation axes align,
      * causing a loss of one degree of rotational freedom. Gimbal lock occurs when the second rotation in the sequence aligns
      * the axes, such as when the pitch angle (for yaw-pitch-roll) or the second Euler angle (for proper Euler angles) is
-     * &plusmn;90&deg;. To avoid gimbal lock, consider using rotation representations that do not rely on sequential rotations.
+     * <span class="latex-inline">&plusmn;90&deg;</span>. To avoid gimbal lock, consider using rotation representations that do not
+     * rely on sequential rotations.
      *
-     * @param yaw Degrees to rotate about the vertical (yaw) axis (i.e. the z-axis).
-     * @param pitch Degrees to rotate about the lateral (pitch) axis (i.e. the y-axis).
-     * @param roll Degrees to rotate about the longitudinal (roll) axis (i.e. the x-axis).
-     * @return a rotation matrix representing a rotation with yaw, pitch, and roll angles &alpha;, &beta;, and &gamma; respectively.
+     * @param yaw Degrees to rotate about the vertical (yaw) axis (i.e. the <span class="latex-inline">z</span>-axis).
+     * @param pitch Degrees to rotate about the lateral (pitch) axis (i.e. the <span class="latex-inline">y</span>-axis).
+     * @param roll Degrees to rotate about the longitudinal (roll) axis (i.e. the <span class="latex-inline">x</span>-axis).
+     * @return a rotation matrix representing a rotation with yaw, pitch, and roll angles <span class="latex-inline">&alpha;</span>,
+     * <span class="latex-inline">&beta;</span>, and <span class="latex-inline">&gamma;</span> respectively.
      */
     public static Matrix rotate3D(double yaw, double pitch, double roll) {
         if(yaw == 0.0 && pitch == 0.0 && roll == 0.0) return Matrix.I(3);
@@ -291,19 +317,22 @@ public final class Rotation {
 
 
     /**
-     * <p>Constructs a 3D rotation matrix, <b>R<sub>u</sub></b>(&theta;), which representing a rotation of &theta; degrees about
-     * an axis unit vector <b>u</b>. The rotation is a counterclockwise rotation when <b>u</b> points towards the observer, &theta;> 0,
+     * <p>Constructs a 3D rotation matrix, <span class="latex-inline">R<sub>u</sub>(&theta;)</span>, which representing a rotation of
+     * <span class="latex-inline">&theta;</span> degrees about
+     * an axis unit vector u. The rotation is a counterclockwise rotation when u points towards the observer,
+     * <span class="latex-inline">&theta; > 0</span>,
      * and the coordinate system is right-handed.
      *
-     * <p>A 3D rotation matrix, <b>R<sub>u</sub></b>(&theta;), rotates a 3D column vector <b>x</b>,
-     * &theta; degrees about the vector <b>u</b> by means of the following matrix multiplication:
-     * <pre>
-     *     <b>x</b>' = <b>R<sub>u</sub></b>(&theta;)<b>x</b></pre>
+     * <p>A 3D rotation matrix, <span class="latex-inline">R<sub>u</sub>(&theta;)</span>, rotates a 3D column vector x,
+     * <span class="latex-inline">&theta;</span> degrees about the vector u by means of the following matrix multiplication:
+     * <span class="latex-display"><pre>
+     *     x' = R<sub>u</sub>(&theta;)x</pre></span>
      *
-     * @param theta The degrees to rotate about the vector <b>u</b>.
-     * @param axis The axis vector <b>u</b> to rotate about. This vector will be normalized so it need not be a unit vector.
+     * @param theta The degrees to rotate about the vector <span class="latex-inline">u</span>.
+     * @param axis The axis vector <span class="latex-inline">u</span> to rotate about. This vector will be normalized so it need not be a unit vector.
      * Must satisfy {@code axis.size == 3}.
-     * @return
+     * @return A rotation matrix representing a rotation of {@code theta} degrees about the axis specified
+     * by {@code axis}.
      */
     public static Matrix rotate3D(double theta, Vector axis) {
         if(axis.size != 3)
@@ -341,25 +370,32 @@ public final class Rotation {
 
 
     /**
-     * <p>Constructs a 3D rotation matrix, <b>R</b><sub>E</sub>(&alpha;, &beta;, &gamma;), representing a rotation described
-     * by proper Euler angles (&alpha;, &beta;, &gamma;). This is equivalent to performing a rotation about the z-axis by &alpha;
-     * degrees, then about the x-axis by &beta; degrees, then about the z-axis again by &gamma; degrees.
+     * <p>Constructs a 3D rotation matrix, <span class="latex-inline">R<sub>E</sub>(&alpha;, &beta;, &gamma;)</span>,
+     * representing a rotation described
+     * by proper Euler angles <span class="latex-inline">(&alpha;, &beta;, &gamma;)</span>. This is equivalent to
+     * performing a rotation about the
+     * <span class="latex-inline">z</span>-axis by &alpha;
+     * degrees, then about the <span class="latex-inline">x</span>-axis by &beta; degrees, then about the
+     * <span class="latex-inline">z</span>-axis again by &gamma; degrees.
      *
-     * <p>A 3D rotation matrix, <b>R</b><sub>E</sub>(&alpha;, &beta;, &gamma;), rotates a 3D column vector <b>x</b>,
-     * according to the Euler angles (&alpha;, &beta;, &gamma;) by means of the following matrix multiplication:
-     * <pre>
-     *     <b>x</b>' = <b>R</b><sub>E</sub>(&alpha;, &beta;, &gamma;)<b>x</b>
-     *        = <b>R</b><sub>Z</sub>(&gamma;)<b>R</b><sub>X</sub>(&beta;)<b>R</b><sub>Z</sub>(&alpha;)x</pre>
+     * <p>A 3D rotation matrix, <span class="latex-inline">R<sub>E</sub>(&alpha;, &beta;, &gamma;)</span>, rotates a 3D column vector x,
+     * according to the Euler angles <span class="latex-inline">(&alpha;, &beta;, &gamma;)</span> by means of the following
+     * matrix multiplication:
+     * <span class="latex-eq-align"><pre>
+     *     x' = R<sub>E</sub>(&alpha;, &beta;, &gamma;)x
+     *        = R<sub>z</sub>(&gamma;)R<sub>x</sub>(&beta;)R<sub>z</sub>(&alpha;)x</pre></span>
      *
      * <p><strong>Note:</strong> This method is susceptible to gimbal lock, a phenomenon where two of the rotation axes align,
      * causing a loss of one degree of rotational freedom. Gimbal lock occurs when the second rotation in the sequence aligns
      * the axes, such as when the pitch angle (for yaw-pitch-roll) or the second Euler angle (for proper Euler angles) is
-     * &plusmn;90&deg;. To avoid gimbal lock, consider using rotation representations that do not rely on sequential rotations.
+     * <span class="latex-inline">&plusmn;90&deg;</span>. To avoid gimbal lock, consider using rotation representations that do not
+     * rely on sequential rotations.
      *
-     * @param alpha Degrees of first rotation about the z-axis.
-     * @param beta Degrees of second rotation about the x-axis.
-     * @param gamma Degrees of third rotation about the z-axis.
-     * @return Constructs a rotation matrix representing a rotation described by proper Euler angles (&alpha;, &beta;, &gamma;).
+     * @param alpha Degrees of first rotation about the <span class="latex-inline">z</span>-axis.
+     * @param beta Degrees of second rotation about the <span class="latex-inline">x</span>-axis.
+     * @param gamma Degrees of third rotation about the <span class="latex-inline">z</span>-axis.
+     * @return Constructs a rotation matrix representing a rotation described by proper Euler angles
+     * <span class="latex-inline">(&alpha;, &beta;, &gamma;)</span>.
      */
     public static Matrix rotateEuler(double alpha, double beta, double gamma) {
         if(alpha == 0.0 && beta == 0.0 && gamma == 0.0) return Matrix.I(3);

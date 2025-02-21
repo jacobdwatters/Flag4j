@@ -37,12 +37,14 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 /**
  * <p>An abstract base class for computing the Schur decomposition of a square matrix.
  *
- * <p>The Schur decomposition decomposes a given square matrix <b>A</b> into:
- * <pre>
- *     <b>A = UTU</b><sup>H</sup></pre>
- * where <b>U</b> is a unitary (or orthogonal for real matrices) matrix <b>T</b> is a
- * quasi-upper triangular matrix known as the <em>Schur form</em> of <b>A</b>. This means <b>T</b> is upper triangular except
- * for possibly 2&times;2 blocks along its diagonal, which correspond to complex conjugate pairs of eigenvalues.
+ * <p>The Schur decomposition decomposes a given square matrix <span class="latex-inline">A</span> into:
+ * <span class="latex-display"><pre>
+ *     A = UTU<sup>H</sup></pre></span>
+ * where <span class="latex-inline">U</span> is a unitary (or orthogonal for real matrices) matrix <span class="latex-inline">T</span>
+ * is a quasi-upper triangular matrix known as the <em>Schur form</em> of <span class="latex-inline">A</span>.
+ * This means <span class="latex-inline">T</span> is upper triangular except
+ * for possibly <span class="latex-inline">2&times;2</span> blocks along its diagonal, which correspond to complex conjugate
+ * pairs of eigenvalues.
  *
  * <p>The Schur decomposition proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
  * support specifying a seed for the pseudo-random number generator.
@@ -63,12 +65,12 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  * <a href="https://www.math.wsu.edu/faculty/watkins/books.html">Fundamentals of Matrix
  * Computations 3rd Edition by David S. Watkins</a>.
  *
- * @implNote This decomposition is performed using the <b>implicit double-shift QR algorithm</b>, which iteratively
+ * @implNote This decomposition is performed using the <strong>implicit double-shift QR algorithm</strong>, which iteratively
  * reduces the matrix to Schur form using orthogonal transformations. In addition to this, random shifting is used in cases where
  * normal convergence fails.
  *
  * <p>As a preprocessing step to improve conditioning and stability, the matrix is first {@link Balancer balanced} then reduced to
- * <b>Hessenberg form</b> via a {@link UnitaryDecomposition}.
+ * <strong>Hessenberg form</strong> via a {@link UnitaryDecomposition}.
  *
  * @param <T> The type of matrix to be decomposed.
  * @param <U> The type for the internal storage data structure of the matrix to be decomposed.
@@ -96,11 +98,11 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
      */
     protected final int DEFAULT_MAX_ITERS_FACTOR = 50;
     /**
-     *For storing the (possibly block) upper triangular matrix <b>T</b> in the Schur decomposition.
+     *For storing the (possibly block) upper triangular matrix <span class="latex-inline">T</span> in the Schur decomposition.
      */
     protected T T;
     /**
-     *For storing the unitary <b>U</b> matrix in the Schur decomposition.
+     *For storing the unitary <span class="latex-inline">U</span> matrix in the Schur decomposition.
      */
     protected T U;
     /**
@@ -127,13 +129,15 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
      */
     protected int numRows;
     /**
-     * Stores the vector <b>v</b> in the Householder reflector <b>P = I - </b>&alpha;<b> vv<sup>T</sup></b>.
+     * Stores the vector <span class="latex-inline">v</span> in the Householder reflector
+     * <span class="latex-inline">P = I - &alpha;vv<sup>T</sup></span>.
      */
     protected U householderVector;
     /**
      * Stores the non-zero data of the first column of the shifted matrix
-     * <b>(A- </b>&rho;<sub>1</sub><b>I)(A-</b>&rho;<sub>2</sub><b> I)</b>
-     * where &rho;<sub>1</sub> and &rho;<sub>2</sub> are the two shifts.
+     * <span class="latex-inline">(A- &rho;<sub>1</sub>I)(A-&rho;<sub>2</sub> I)</span>
+     * where <span class="latex-inline">&rho;<sub>1</sub></span> and <span class="latex-inline">&rho;<sub>2</sub></span>
+     * are the two shifts.
      */
     protected U shiftCol;
     /**
@@ -173,10 +177,10 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
      */
     protected boolean checkFinite = false;
     /**
-     * Flag indicating if the orthogonal matrix <b>U</b> in the Schur decomposition should be computed.
+     * Flag indicating if the orthogonal matrix <span class="latex-inline">U</span> in the Schur decomposition should be computed.
      * <ul>
-     *     <li>If {@code true}, <b>U</b> will be computed.</li>
-     *     <li>If {@code false}, <b>U</b> will <em>not</em> be computed. This <em>may</em> improve performance if <b>U</b>
+     *     <li>If {@code true}, <span class="latex-inline">U</span> will be computed.</li>
+     *     <li>If {@code false}, <span class="latex-inline">U</span> will <em>not</em> be computed. This <em>may</em> improve performance if <span class="latex-inline">U</span>
      *     is not required.</li>
      * </ul>
      */
@@ -186,12 +190,13 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
     /**
      * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix.
      *
-     * <p>If the <b>U</b> matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
+     * <p>If the <span class="latex-inline">U</span> matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * @param computeU Flag indicating if the orthogonal matrix <b>U</b> in the Schur decomposition should be computed.
+     * @param computeU Flag indicating if the orthogonal matrix <span class="latex-inline">U</span> in the Schur decomposition should be computed.
      * <ul>
-     *     <li>If {@code true}, <b>U</b> will be computed.</li>
-     *     <li>If {@code false}, <b>U</b> will <em>not</em> be computed. This <em>may</em> improve performance if <b>U</b>
+     *     <li>If {@code true}, <span class="latex-inline">U</span> will be computed.</li>
+     *     <li>If {@code false}, <span class="latex-inline">U</span> will <em>not</em> be computed. This <em>may</em>
+     *     improve performance if <span class="latex-inline">U</span>
      *     is not required.</li>
      * </ul>
      * @param rng Random number generator to use when performing random exceptional shifts.
@@ -273,8 +278,10 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
 
 
     /**
-     * Gets the upper, or possibly block-upper, triangular Schur matrix <b>T</b> from the Schur decomposition
-     * @return The <b>T</b> matrix from the Schur decomposition <b>A=UTU<sup>H</sup></b>
+     * Gets the upper, or possibly block-upper, triangular Schur matrix <span class="latex-inline">T</span>
+     * from the Schur decomposition
+     * @return The <span class="latex-inline">T</span> matrix from the Schur decomposition
+     * <span class="latex-inline">A=UTU<sup>H</sup></span>.
      */
     public T getT() {
         ensureHasDecomposed();
@@ -283,8 +290,10 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
 
 
     /**
-     * Gets the unitary matrix <b>U</b> from the Schur decomposition containing the Schur vectors as its columns.
-     * @return <b>A=UTU<sup>H</sup></b>
+     * Gets the unitary matrix <span class="latex-inline">U</span> from the Schur decomposition containing
+     * the Schur vectors as its columns.
+     * @return The <span class="latex-inline">U</span> matrix from the Schur decomposition
+     * <span class="latex-inline">A=UTU<sup>H</sup></span>.
      */
     public T getU() {
         ensureHasDecomposed();
@@ -300,8 +309,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
      * matrix is not converging which greatly minimizes this issue. It is unlikely that a general matrix will fail to converge with
      * these random shifts however, no guarantees of convergence can be made.
      * @param src The source matrix to decompose.
-     * @throws LinearAlgebraException If the decomposition does not converge within the specified number of max iterations. See
-     * {@link }
+     * @throws LinearAlgebraException If the decomposition does not converge within the specified number of max iterations.
      */
     protected void decomposeBase(T src) {
         setUp(src);
@@ -377,10 +385,11 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
      * <p>Reverts the scaling and permutations applied during the balancing step to obtain the correct form.
      *
      * <p>Specifically, this method computes
-     * <pre>
-     *     <b>U</b> := <b>PDU</b>
-     *        = <b>TU</b></pre>
-     * where <b>P</b> and <b>D</b> are the permutation and scaling matrices respectively from balancing.
+     * <span class="latex-eq-align"><pre>
+     *     U := PDU
+     *        = TU</pre></span>
+     * where <span class="latex-inline">P</span> and <span class="latex-inline">D</span> are the permutation and
+     * scaling matrices respectively from balancing.
      */
     protected abstract void unbalance();
 
@@ -409,8 +418,9 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
 
 
     /**
-     * Checks for convergence of lower 2&times;2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
-     * convergence is found, this will also zero out the values which have converged to near zero.
+     * Checks for convergence of lower <span class="latex-inline">2&times;2</span> sub-matrix within working matrix to upper
+     * triangular or block upper triangular form.
+     * If convergence is found, this will also zero out the values which have converged to near zero.
      * @param workEnd The ending row (inclusive) of the current active working block.
      * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if
      * convergence to upper triangular form is detected and two if convergence to block upper triangular form is detected.

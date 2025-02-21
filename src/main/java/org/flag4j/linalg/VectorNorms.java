@@ -30,14 +30,14 @@ import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 
 
 /**
- * A utility class for computing vector norms, including various types of &ell;<sup>p</sup> norms,
+ * A utility class for computing vector norms, including various types of <span class="latex-inline">&ell;<sup>p</sup></span> norms,
  * with support for both dense and sparse vectors. This class provides methods to compute norms
  * for vectors with real entries as well as vectors with entries that belong to a {@link Ring}.
  *
- * <p>The methods in this class utilize scaling internally when computing the &ell;<sup>p</sup> norm to protect against
+ * <p>The methods in this class utilize scaling internally when computing the <span class="latex-inline">&ell;<sup>p</sup></span> norm to protect against
  * overflow and underflow for very large or very small values of {@code p} (in absolute value).
  *
- * <p><strong>Note:</strong> When {@code p < 1}, the results of the &ell;<sup>p</sup> norm methods are not
+ * <p><strong>Note:</strong> When {@code p < 1}, the results of the <span class="latex-inline">&ell;<sup>p</sup></span> norm methods are not
  * technically true mathematical norms but may still be useful for numerical tasks. However, {@code p = 0}
  * will result in {@link Double#NaN}.
  *
@@ -56,12 +56,12 @@ public final class VectorNorms {
     }
 
     /**
-     * <p>Computes the Euclidean (&ell;<sup>2</sup>) norm of a real dense or sparse vector.
+     * <p>Computes the Euclidean (<span class="latex-inline">&ell;<sup>2</sup></span>) norm of a real dense or sparse vector.
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
      * of a sparse vector.
      *
      * @param src Entries of the vector (or non-zero data if vector is sparse) to compute norm of.
-     * @return Euclidean (&ell;<sup>2</sup>) norm
+     * @return Euclidean (<span class="latex-inline">&ell;<sup>2</sup></span>) norm
      */
     public static double norm(double... src) {
         return scaledL2Norm(src);
@@ -69,13 +69,13 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the Euclidean (&ell;<sup>2</sup>) norm of a dense or sparse vector whose entries are members of a
+     * <p>Computes the Euclidean (<span class="latex-inline">&ell;<sup>2</sup></span>) norm of a dense or sparse vector whose entries are members of a
      * {@link Ring}.
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
      * of a sparse vector.
      *
      * @param src Entries of the vector (or non-zero data if vector is sparse) to compute norm of.
-     * @return Euclidean (&ell;<sup>2</sup>) norm
+     * @return Euclidean (<span class="latex-inline">&ell;<sup>2</sup></span>) norm
      */
     public static <T extends Ring<T>> double norm(T... src) {
         return scaledL2Norm(src);
@@ -83,18 +83,18 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the &ell;<sup>p</sup> norm (or p-norm) of a real dense or sparse vector.
+     * <p>Computes the <span class="latex-inline">&ell;<sup>p</sup></span> norm (or p-norm) of a real dense or sparse vector.
      * <p>Some common norms:
      * <ul>
      *     <li>{@code p=1}: The taxicab, city block, or Manhattan norm.</li>
-     *     <li>{@code p=2}: The Euclidean or &ell;<sup>2</sup> norm.</li>
+     *     <li>{@code p=2}: The Euclidean or <span class="latex-inline">&ell;<sup>2</sup></span> norm.</li>
      * </ul>
      *
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
      * of a sparse vector.
      *
      * @param src Entries of the vector (or non-zero data if vector is sparse).
-     * @param p The {@code p} value in the {@code p}-norm. When {@code p < 1}, the result of this method is not technically a
+     * @param p The {@code p} value in the p-norm. When {@code p < 1}, the result of this method is not technically a
      * true mathematical norm. However, it may be useful for various numerical tasks.
      * <ul>
      *     <li>If {@code p} is finite, then the norm is computed as if by:
@@ -112,7 +112,7 @@ public final class VectorNorms {
      * </ul>
      *
      * <p>Warning, if {@code p} is very large in absolute value, overflow errors may occur.
-     * @return The {@code p}-norm of the vector.
+     * @return The p-norm of the vector.
      */
     public static double norm(double[] src, double p) {
         if (src.length == 0) return 0;
@@ -136,18 +136,19 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the &ell;<sup>p</sup> norm (or p-norm) of a dense or sparse vector whose entries are members of a {@link Ring}.
+     * <p>Computes the <span class="latex-inline">&ell;<sup>p</sup></span> norm (or p-norm) of a dense or sparse vector whose
+     * entries are members of a {@link Ring}.
      * <p>Some common norms:
      * <ul>
      *     <li>{@code p=1}: The taxicab, city block, or Manhattan norm.</li>
-     *     <li>{@code p=2}: The Euclidean or &ell;<sup>2</sup> norm.</li>
+     *     <li>{@code p=2}: The Euclidean or <span class="latex-inline">&ell;<sup>2</sup></span> norm.</li>
      * </ul>
      *
      * <p>Zeros do not contribute to this norm so this function may be called on the entries of a dense vector or the non-zero entries
      * of a sparse vector.
      *
      * @param src Entries of the vector (or non-zero data if vector is sparse).
-     * @param p The {@code p} value in the {@code p}-norm. When {@code p < 1}, the result of this method is not technically a
+     * @param p The {@code p} value in the p-norm. When {@code p < 1}, the result of this method is not technically a
      * true mathematical norm. However, it may be useful for various numerical tasks.
      * <ul>
      *     <li>If {@code p} is finite, then the norm is computed as if by:
@@ -165,7 +166,7 @@ public final class VectorNorms {
      * </ul>
      *
      * <p>Warning, if {@code p} is very large in absolute value, overflow errors may occur.
-     * @return The {@code p}-norm of the vector.
+     * @return The p-norm of the vector.
      */
     public static <T extends Ring<T>> double norm(T[] src, double p) {
         if (src.length == 0) return 0;
@@ -189,13 +190,13 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled &ell;<sup>p</sup> norm of a vector.
+     * Computes the scaled <span class="latex-inline">&ell;<sup>p</sup></span> norm of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the &ell;<sup>p</sup> norm for large or small values of {@code p}.
+     * when computing the <span class="latex-inline">&ell;<sup>p</sup></span> norm for large or small values of {@code p}.
      *
-     * @param src The input vector (or non-zero values if vector is sparse) whose &ell;<sup>p</sup> norm is to be computed.
-     * @param p The value of {@code p} for the &ell;<sup>p</sup> norm.
-     * @return The scaled &ell;<sup>p</sup> norm of the input vector.
+     * @param src The input vector (or non-zero values if vector is sparse) whose <span class="latex-inline">&ell;<sup>p</sup></span> norm is to be computed.
+     * @param p The value of {@code p} for the <span class="latex-inline">&ell;<sup>p</sup></span> norm.
+     * @return The scaled <span class="latex-inline">&ell;<sup>p</sup></span> norm of the input vector.
      */
     private static double scaledLpNorm(double[] src, double p) {
         // Find the maximum absolute value in the vector.
@@ -216,12 +217,12 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled &ell;<sup>2</sup> norm (Euclidean norm) of a vector.
+     * Computes the scaled <span class="latex-inline">&ell;<sup>2</sup></span> norm (Euclidean norm) of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the &ell;<sup>2</sup> norm for vectors with very large or very small values.
+     * when computing the <span class="latex-inline">&ell;<sup>2</sup></span> norm for vectors with very large or very small values.
      *
-     * @param src The input vector (or non-zero entries if the vector is sparse) whose &ell;<sup>2</sup> norm is to be computed.
-     * @return The scaled &ell;<sup>2</sup> norm of the input vector.
+     * @param src The input vector (or non-zero entries if the vector is sparse) whose <span class="latex-inline">&ell;<sup>2</sup></span> norm is to be computed.
+     * @return The scaled <span class="latex-inline">&ell;<sup>2</sup></span> norm of the input vector.
      */
     private static double scaledL2Norm(double[] src) {
         // Find the maximum absolute value in the vector.
@@ -244,13 +245,13 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled &ell;<sup>p</sup> norm of a vector.
+     * Computes the scaled <span class="latex-inline">&ell;<sup>p</sup></span> norm of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the &ell;<sup>p</sup> norm for large or small values of {@code p}.
+     * when computing the <span class="latex-inline">&ell;<sup>p</sup></span> norm for large or small values of {@code p}.
      *
-     * @param src The input vector (or non-zero values if vector is sparse) whose &ell;<sup>p</sup> norm is to be computed.
-     * @param p The value of {@code p} for the &ell;<sup>p</sup> norm.
-     * @return The scaled &ell;<sup>p</sup> norm of the input vector.
+     * @param src The input vector (or non-zero values if vector is sparse) whose <span class="latex-inline">&ell;<sup>p</sup></span> norm is to be computed.
+     * @param p The value of {@code p} for the <span class="latex-inline">&ell;<sup>p</sup></span> norm.
+     * @return The scaled <span class="latex-inline">&ell;<sup>p</sup></span> norm of the input vector.
      */
     private static <T extends Ring<T>> double scaledLpNorm(T[] src, double p) {
         // Find the maximum absolute value in the vector.
@@ -271,12 +272,12 @@ public final class VectorNorms {
 
 
     /**
-     * Computes the scaled &ell;<sup>2</sup> norm (Euclidean norm) of a vector.
+     * Computes the scaled <span class="latex-inline">&ell;<sup>2</sup></span> norm (Euclidean norm) of a vector.
      * This method uses scaling to protect against numerical instability such as overflow or underflow
-     * when computing the &ell;<sup>2</sup> norm for vectors with very large or very small values.
+     * when computing the <span class="latex-inline">&ell;<sup>2</sup></span> norm for vectors with very large or very small values.
      *
-     * @param src The input vector (or non-zero entries if the vector is sparse) whose &ell;<sup>2</sup> norm is to be computed.
-     * @return The scaled &ell;<sup>2</sup> norm of the input vector.
+     * @param src The input vector (or non-zero entries if the vector is sparse) whose <span class="latex-inline">&ell;<sup>2</sup></span> norm is to be computed.
+     * @return The scaled <span class="latex-inline">&ell;<sup>2</sup></span> norm of the input vector.
      */
     private static <T extends Ring<T>> double scaledL2Norm(T[] src) {
         // Find the maximum absolute value in the vector.
@@ -299,7 +300,7 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the &ell;<sup>2</sup> (Euclidean) norm of a sub-vector within {@code src},
+     * <p>Computes the <span class="latex-inline">&ell;<sup>2</sup></span> (Euclidean) norm of a sub-vector within {@code src},
      * starting at index {@code start} and considering {@code n} elements spaced by {@code stride}.
      *
      * <p>More formally, this method examines and computes the norm of the elements at indices:
@@ -319,7 +320,7 @@ public final class VectorNorms {
      * @param n The number of elements to consider within {@code src1}. Must be positive but this is not explicitly enforced.
      * @param stride The gap (in indices) between consecutive elements of the sub-vector within {@code src}.
      * Must be positive but this is not explicitly enforced.
-     * @return The &ell;<sup>2</sup> (Euclidean) norm of the specified sub-vector of {@code src}.
+     * @return The <span class="latex-inline">&ell;<sup>2</sup></span> (Euclidean) norm of the specified sub-vector of {@code src}.
      *
      * @throws IndexOutOfBoundsException If {@code start + (n-1)*stride} exceeds {@code src.length - 1}.
      */
@@ -345,7 +346,7 @@ public final class VectorNorms {
 
 
     /**
-     * <p>Computes the &ell;<sup>2</sup> (Euclidean) norm of a sub-vector within {@code src},
+     * <p>Computes the <span class="latex-inline">&ell;<sup>2</sup></span> (Euclidean) norm of a sub-vector within {@code src},
      * starting at index {@code start} and considering {@code n} elements spaced by {@code stride}.
      *
      * <p>More formally, this method examines and computes the norm of the elements at indices:
@@ -365,7 +366,7 @@ public final class VectorNorms {
      * @param n The number of elements to consider within {@code src1}. Must be positive but this is not explicitly enforced.
      * @param stride The gap (in indices) between consecutive elements of the sub-vector within {@code src}.
      * Must be positive but this is not explicitly enforced.
-     * @return The &ell;<sup>2</sup> (Euclidean) norm of the specified sub-vector of {@code src}.
+     * @return The <span class="latex-inline">&ell;<sup>2</sup></span> (Euclidean) norm of the specified sub-vector of {@code src}.
      *
      * @throws IndexOutOfBoundsException If {@code start + (n-1)*stride} exceeds {@code src.length - 1}.
      */

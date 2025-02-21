@@ -29,8 +29,10 @@ import org.flag4j.arrays.backend.VectorMixin;
 
 /**
  * <p>Interface representing a solver for linear systems involving matrices and vectors. Implementations
- * of this interface provide methods to solve equations such as <b>Ax=b</b> and
- * <b>AX=B</b>, where <b>A</b>, <b>B</b>, and <b>X</b> are matrices, and <b>x</b> and <b>b</b> are vectors.
+ * of this interface provide methods to solve equations such as <span class="latex-inline">Ax = b</span> and
+ * <span class="latex-inline">AX = B</span>, where <span class="latex-inline">A</span>, <span class="latex-inline">B</span>,
+ * and <span class="latex-inline">X</span> are matrices, and <span class="latex-inline">x</span> and
+ * <span class="latex-inline">b</span> are vectors.
  *
  * <p>Solvers may compute exact solutions or approximate solutions in a least squares sense, depending on the properties of the system.
  *
@@ -42,21 +44,22 @@ public interface LinearMatrixSolver<T extends MatrixMixin<T, ?, U, ?>,
 
 
     /**
-     * Solves the linear system of equations <b>Ax=b</b> for the vector <b>x</b>.
+     * Solves the linear system of equations <span class="latex-inline">Ax = b</span> for the vector
+     * <span class="latex-inline">x</span>.
      *
-     * @param A The coefficient matrix <b>A</b> in the linear system.
+     * @param A The coefficient matrix <span class="latex-inline">A</span> in the linear system.
      * @param b The constant vector in the linear system.
-     * @return The solution vector <b>x</b> satisfying <b>Ax=b</b>.
+     * @return The solution vector <span class="latex-inline">x</span> satisfying <span class="latex-inline">Ax = b</span>.
      */
     U solve(T A, U b);
 
 
     /**
-     * Solves the linear matrix equation <b>AX=B</b> for the matrix <b>X</b>.
+     * Solves the linear matrix equation <span class="latex-inline">AX = B</span> for the matrix <span class="latex-inline">X</span>.
      *
      * @param A The coefficient matrix in the linear system.
      * @param B The constant matrix in the linear system.
-     * @return The solution matrix <b>X</b> satisfying <b>AX=B</b>.
+     * @return The solution matrix <span class="latex-inline">X</span> satisfying <span class="latex-inline">AX = B</span>.
      */
     @Override
     T solve(T A, T B);

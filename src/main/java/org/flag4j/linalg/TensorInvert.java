@@ -27,7 +27,6 @@ package org.flag4j.linalg;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
-import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Matrix;
@@ -47,7 +46,7 @@ public final class TensorInvert {
 
     /**
      * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
-     * {@link Tensor#tensorDot(AbstractDoubleTensor, int[], int[]) src.tensorDot(X, numIndices)} is the 'identity' tensor for the
+     * {@code src.tensorDot(X, numIndices)} is the 'identity' tensor for the
      * tensor dot product operation.
      *
      * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.
@@ -73,7 +72,7 @@ public final class TensorInvert {
 
     /**
      * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
-     * {@link Tensor#tensorDot(TensorOverSemiRing, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the
+     * {@code src.tensorDot(X, numIndices)} is the 'identity' tensor for the
      * tensor dot product operation.
      *
      * <p>A tensor {@code I} is the identity for a tensor dot product if
@@ -101,7 +100,7 @@ public final class TensorInvert {
 
     /**
      * <p>Computes the 'inverse' of a tensor. That is, computes the tensor {@code X=this.tensorInv()} such that
-     * {@link Tensor#tensorDot(TensorOverSemiRing, int) src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
+     * {@cide src.tensorDot(X, numIndices)} is the 'identity' tensor for the tensor
      * dot product operation.
      * <p>A tensor {@code I} is the identity for a tensor dot product if {@code src.tensorDot(I, numIndices).equals(this)}.
      * @param src Tensor to compute inverse of.

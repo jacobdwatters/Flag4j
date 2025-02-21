@@ -35,22 +35,23 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 /**
  * <p>An abstract base class for Cholesky decomposition of Hermitian (or Hermitian) positive-definite matrices.
  *
- * <p>The Cholesky decomposition factorizes a Hermitian/Hermitian, positive-definite matrix <b>A</b> as:
- * <pre>
- *     <b>A = LL<sup>H</sup></b></pre>
- * where <b>L</b> is a lower triangular matrix.
+ * <p>The Cholesky decomposition factorizes a Hermitian/Hermitian, positive-definite matrix <span class="latex-inline">A</span> as:
+ * <span class="latex-display"><pre>
+ *     A = LL<sup>H</sup></pre></span>
+ * where <span class="latex-inline">L</span> is a lower triangular matrix.
  * The decomposition is primarily used for efficient numerical solutions to linear systems, computing matrix inverses,
  * and generating samples from multivariate normal distributions.
  *
  * <h2>Hermitian Verification:</h2>
  * <p>This class provides an option to explicitly check whether the input matrix is Hermitian. If {@code enforceHermitian} is set
- * to {@code true}, the implementation will verify that <b>A</b> satisfies <b>A = A<sup>H</sup></b> before performing decomposition.
+ * to {@code true}, the implementation will verify that <span class="latex-inline">A</span> satisfies 
+ * <span class="latex-inline">A = A<sup>H</sup></span> before performing decomposition.
  * If set to {@code false}, the matrix is assumed to be Hermitian, no explicit check will be performed, and only the lower-diagonal
- * entries of <b>A</b> are accessed.
+ * entries of <span class="latex-inline">A</span> are accessed.
  *
  * <h2>positive-definiteness Check:</h2>
- * <p>To ensure numerical stability, the algorithm verifies that all diagonal entries of <b>L</b> are positive.
- * A tolerance threshold, {@code posDefTolerance}, is used to determine whether a diagonal entry is considered
+ * <p>To ensure numerical stability, the algorithm verifies that all diagonal entries of <span class="latex-inline">L</span>
+ * are positive. A tolerance threshold, {@code posDefTolerance}, is used to determine whether a diagonal entry is considered
  * non-positive, indicating that the matrix is <em>not</em> positive-definite. This threshold can be adjusted using
  * {@link #setPosDefTolerance(double)}.
  *
@@ -62,6 +63,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *     <li>Retrieve the factorized matrices using {@link #getL()} or {@link #getLH()}.</li>
  * </ol>
  *
+ * @see RealCholesky
  * @see Decomposition
  * @see CMatrix
  * @see #setPosDefTolerance(double)
@@ -91,8 +93,9 @@ public class ComplexCholesky extends Cholesky<CMatrix> {
 
 
     /**
-     * Decompose a matrix into <b>A=LL<sup>H</sup></b> where <b>L</b> is a lower triangular matrix and <b>L<sup>H</sup></b> is
-     * the conjugate transpose of <b>L</b>.
+     * Decompose a matrix into <span class="latex-inline">A = LL<sup>H</span> where <span class="latex-inline">L</span> is a
+     * lower triangular matrix and <span class="latex-inline">L<sup>H</sup></span> is
+     * the conjugate transpose of <span class="latex-inline">L</span>.
      *
      * @param src The source matrix to decompose. Must be Hermitian positive-definite.
      * @return A reference to this decomposer.

@@ -26,6 +26,7 @@ package org.flag4j.linalg.decompositions.svd;
 
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -36,9 +37,11 @@ import org.flag4j.linalg.Eigen;
  * <p>Instances of this class can be used to compute the singular value decomposition (SVD) of a
  * {@link Matrix real dense matrix}.
  *
- * <p>That is, decomposes a rectangular matrix <b>M</b> into <b>M=U&Sigma;V</b><sup>T</sup> where <b>U</b> and <b>V</b> are
- * orthogonal matrices whose columns are the left and right singular vectors of <b>M</b> and <b>&Sigma;</b> is a rectangular
- * diagonal matrix containing the singular values of <b>M</b>.
+ * <p>That is, decomposes a rectangular matrix <span class="latex-inline">M</span> into
+ * <span class="latex-inline">M=U&Sigma;V<sup>T</sup></span> where <span class="latex-inline">U</span> and <span class="latex-inline">V</span> are
+ * orthogonal matrices whose columns are the left and right singular vectors of
+ * <span class="latex-inline">M</span> and <b>&Sigma;</b> is a rectangular
+ * diagonal matrix containing the singular values of <span class="latex-inline">M</span>.
  *
  * <p>The SVD may also be used to compute the (numerical) rank of the matrix using {@link #getRank()}.
  *
@@ -49,7 +52,7 @@ import org.flag4j.linalg.Eigen;
  * The decomposition workflow typically follows these steps:
  * <ol>
  *     <li>Instantiate an instance of {@code RealSVD}.</li>
- *     <li>Call {@link #decompose(Matrix)} to perform the factorization.</li>
+ *     <li>Call {@link SVD#decompose(MatrixMixin)} to perform the factorization.</li>
  *     <li>Retrieve the resulting matrices using {@link #getU()} and {@link #getS()}.</li>
  * </ol>
  *
@@ -74,11 +77,12 @@ public class RealSVD extends SVD<Matrix> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix.
-     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * @param computeUV A flag which indicates if the unitary matrices <span class="latex-inline">U</span> and <span class="latex-inline">V</span> should be computed
      * (i.e. the singular vectors).
      * <ul>
-     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
-     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     <li>If {@code true}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span> matrices will be computed.</li>
+     *     <li>If {@code false}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span> matrices  will <em>not</em> be computed. 
+     *     If it is not
      *     needed, this <em>may</em> provide a performance improvement.</li>
      * </ul>
      */
@@ -89,18 +93,24 @@ public class RealSVD extends SVD<Matrix> {
 
     /**
      * Creates a decomposer to compute the singular value decomposition of a real matrix.
-     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * @param computeUV A flag which indicates if the unitary matrices <span class="latex-inline">U</span> and
+     * <span class="latex-inline">V</span> should be computed
      * (i.e. the singular vectors).
      * <ul>
-     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
-     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     <li>If {@code true}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span>
+     *     matrices will be computed.</li>
+     *     <li>If {@code false}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span>
+     *     matrices  will <em>not</em> be computed. If it is not
      *     needed, this <em>may</em> provide a performance improvement.</li>
      * </ul>
-     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * @param computeUV A flag which indicates if the unitary matrices <span class="latex-inline">U</span>
+     * and <span class="latex-inline">V</span> should be computed
      * (i.e. the singular vectors).
      * <ul>
-     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
-     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     <li>If {@code true}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span>
+     *     matrices will be computed.</li>
+     *     <li>If {@code false}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span>
+     *     matrices  will <em>not</em> be computed. If it is not
      *     needed, this <em>may</em> provide a performance improvement.</li>
      * </ul>
      */
@@ -111,11 +121,14 @@ public class RealSVD extends SVD<Matrix> {
 
     /**
      * Creates a decomposer to compute the Schur decomposition.
-     * @param computeUV A flag which indicates if the unitary matrices <b>U</b> and <b>V</b> should be computed
+     * @param computeUV A flag which indicates if the unitary matrices <span class="latex-inline">U</span>
+     * and <span class="latex-inline">V</span> should be computed
      * (i.e. the singular vectors).
      * <ul>
-     *     <li>If {@code true}, the <b>U</b> and <b>V</b> matrices will be computed.</li>
-     *     <li>If {@code false}, the <b>U</b> and <b>V</b> matrices  will <em>not</em> be computed. If it is not
+     *     <li>If {@code true}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span>
+     *     matrices will be computed.</li>
+     *     <li>If {@code false}, the <span class="latex-inline">U</span> and <span class="latex-inline">V</span>
+     *     matrices  will <em>not</em> be computed. If it is not
      *     needed, this <em>may</em> provide a performance improvement.</li>
      * </ul>
      * @param reduced Flag which indicates if the reduced (or full) SVD should be computed.
@@ -179,10 +192,11 @@ public class RealSVD extends SVD<Matrix> {
 
 
     /**
-     * Initializes the unitary <b>U</b> and <b>V</b> matrices for the SVD.
+     * Initializes the unitary <span class="latex-inline">U</span> and <span class="latex-inline">V</span>
+     * matrices for the SVD.
      *
      * @param src Shape of the source matrix being decomposed.
-     * @param cols The number of columns for <b>U</b> and <b>V</b>.
+     * @param cols The number of columns for <span class="latex-inline">U</span> and <span class="latex-inline">V</span>.
      */
     @Override
     protected void initUV(Shape src, int cols) {
@@ -192,11 +206,11 @@ public class RealSVD extends SVD<Matrix> {
 
 
     /**
-     * Extracts the singular vectors, normalizes them and sets the columns of <b>U</b>
-     * and <b>V</b> to be the left/right singular vectors.
+     * Extracts the singular vectors, normalizes them and sets the columns of <span class="latex-inline">U</span>
+     * and <span class="latex-inline">V</span> to be the left/right singular vectors.
      *
      * @param singularVecs Computed left and right singular vectors.
-     * @param j            Index of the column of <b>U</b> and <b>V</b> to set.
+     * @param j            Index of the column of <span class="latex-inline">U</span> and <span class="latex-inline">V</span> to set.
      */
     @Override
     protected void extractNormalizedCols(Matrix singularVecs, int j) {

@@ -41,38 +41,99 @@ import org.flag4j.util.ValidateParameters;
  * balancing transformation is a similarity transformation, the eigenvalues are preserved. Further, when permutations are
  * done during balancing it is possible to isolate decoupled eigenvalues.
  *
- * <p>The similarity transformation of a square matrix A into the balanced matrix B can be described as:
+ * <p>The similarity transformation of a square matrix <span class="latex-inline">A</span> into the
+ * balanced matrix <span class="latex-inline">B</span> can be described as:
+ * <span class="latex-eq-align">
  * <pre>
  *     B = T<sup>-1</sup> A T
  *       = D<sup>-1</sup> P<sup>-1</sup> A P D.</pre>
- * Solving for A, balancing may be viewed as the following decomposition:
+ * </span>
+ *
+ * Solving for <span class="latex-inline">A</span>,
+ * balancing may be viewed as the following decomposition:
+ * <span class="latex-eq-align">
  * <pre>
  *     A = T B T<sup>-1</sup>
  *       = P D B D<sup>-1</sup> P<sup>-1</sup>.</pre>
- * Where P is a permutation matrix, and D is a diagonal scaling matrix.
+ * </span>
+ *
+ * Where <span class="latex-inline">P</span> is a permutation matrix,
+ * and <span class="latex-inline">D</span> is a diagonal scaling matrix.
  *
  * <p>When permutations are used during balancing we obtain a specific form. First,
+ * <span class="latex-replace">
  * <pre>
  *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
  *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]
  *           <sup>  </sup>[  0  0   T<sub>2</sub> ]</pre>
- * Where T<sub>1</sub> and T<sub>2</sub> are upper triangular matrices whose eigenvalues lie along the diagonal. These are also
- * eigenvalues of A. Then, if scaling is applied we obtain:
+ * </span>
+ *
+ * <!-- LATEX:
+ * {@literal
+ * \[ \begin{align*}
+ * P^{-1}AP = \begin{bmatrix}
+ * T_1 & X & Y \\
+ * \mathbf{0} & B_1 & Z \\
+ * \mathbf{0} & \mathbf{0} & T_2
+ * \end{bmatrix}
+ * \end{align*} \]
+ * }
+ * -->
+ *
+ * Where <span class="latex-inline">T<sub>1</sub></span>
+ * and <span class="latex-inline">T<sub>2</sub></span> are upper triangular
+ * matrices whose eigenvalues lie along the diagonal.
+ * These are also eigenvalues of <span class="latex-inline">A</span>.
+ * Then, if scaling is applied we obtain:
+ *
+ * <span class="latex-replace">
  * <pre>
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
- *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B*<sub>1</sub>D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
+ *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
  *               <sup>    </sup>[  0      0         T<sub>2</sub>  ]</pre>
- * Where D<sub>1</sub> is a diagonal matrix such that,
+ * </span>
+ *
+ * <!-- LATEX:
+ * {@literal
+ * \[ D^{-1}P^{-1}APD = \begin{bmatrix}
+ * T_1 & XD_1 & Y \\
+ * \mathbf{0} & D_1^{-1}B_1D_1 & D_1^{-1}Z \\
+ * \mathbf{0} & \mathbf{0} & T_2
+ * \end{bmatrix} \]
+ * }
+ * -->
+ *
+ * where <span class="latex-inline">D<sub>1</sub></span> is a diagonal matrix such that,
+ * <span class="latex-replace">
  * <pre>
  *         [ I<sub>1</sub> 0  0  ]
  *     D = [ 0  D<sub>1</sub> 0  ]
  *         [ 0  0  I<sub>2</sub> ]</pre>
- * Where I<sub>1</sub> and I<sub>2</sub> are identity matrices with equivalent shapes to T<sub>1</sub> and T<sub>2</sub>.
+ * </span>
  *
- * <p>Once balancing has been applied, one need only compute the eigenvalues of B<sub>1</sub> and combine them with the diagonal
- * entries of T<sub>1</sub> and T<sub>2</sub> to obtain all eigenvalues of A.
+ * <!-- LATEX:
+ * {@literal
+ * \[ D = \begin{bmatrix}
+ * I_1 & \mathbf{0} & \mathbf{0} \\
+ * \mathbf{0} & D_1 & \mathbf{0} \\
+ * \mathbf{0} & \mathbf{0} & I_2
+ * \end{bmatrix} \]
+ * }
+ * -->
  *
- * @param <T> The type of matrix being balanced.
+ * Where <span class="latex-inline">I<sub>1</sub></span> and
+ * <span class="latex-inline">I<sub>2</sub></span> are identity matrices with
+ * equivalent shapes to <span class="latex-inline">T<sub>1</sub></span> and
+ * <span class="latex-inline">T<sub>2</sub></span>.
+ *
+ * <p>Once balancing has been applied, one need only compute the eigenvalues of
+ * <span class="latex-inline">B<sub>1</sub></span> and combine them with the diagonal
+ * entries of <span class="latex-inline">T<sub>1</sub></span> and
+ * <span class="latex-inline">T<sub>2</sub></span>
+ * to obtain all eigenvalues of <span class="latex-inline">A</span>.
+ *
+ * <p>The code in this class if heavily based on LAPACK's reference implementations of
+ * <a href=https://www.netlib.org/lapack/explore-html/df/df3/group__gebal.html>xGEBAL</a> (v 3.12.1).
  *
  * @see #getB()
  * @see #getBSubMatrix()
@@ -180,7 +241,8 @@ public class RealBalancer extends Balancer<Matrix> {
 
 
     /**
-     * Computes the &ell;<sup>2</sup> norm of a vector with {@code n} elements from {@link #balancedMatrix}'s 1D data array
+     * Computes the <span class="latex-inline">&ell;<sup>2</sup></span> norm of a vector with {@code n} 
+     * elements from {@link #balancedMatrix}'s 1D data array
      * starting at index {@code start} and spaced by {@code stride}.
      *
      * @param start Starting index within {@link #balancedMatrix}'s 1D data array to compute norm of.
@@ -228,9 +290,9 @@ public class RealBalancer extends Balancer<Matrix> {
 
 
     /**
-     * Efficiently left multiplies <b>PD</b> to the provided {@code src} matrix.
+     * Efficiently left multiplies <span class="latex-inline">PD</span> to the provided {@code src} matrix.
      * @param src Matrix to apply transform to.
-     * @return The result of left multiplying <b>PD</b> to the {@code src} matrix.
+     * @return The result of left multiplying <span class="latex-inline">PD</span> to the {@code src} matrix.
      */
     @Override
     public Matrix applyLeftTransform(Matrix src) {
@@ -256,9 +318,9 @@ public class RealBalancer extends Balancer<Matrix> {
 
 
     /**
-     * Efficiently right multiplies <b>D<sup>-1</sup>P<sup>-1</sup></b> to the provided {@code src} matrix.
+     * Efficiently right multiplies <span class="latex-inline">D<sup>-1</sup>P<sup>-1</sup></span> to the provided {@code src} matrix.
      * @param src Matrix to apply transform to.
-     * @return The result of right multiplying <b>D<sup>-1</sup>P<sup>-1</sup></b> to the {@code src} matrix.
+     * @return The result of right multiplying <span class="latex-inline">D<sup>-1</sup>P<sup>-1</sup></span> to the {@code src} matrix.
      */
     @Override
     public Matrix applyRightTransform(Matrix src) {

@@ -67,7 +67,8 @@ import java.util.function.Function;
  *             (maximum/minimum absolute row sum)</li>
  *       </ul>
  *   </li>
- *   <li><strong>L<sub>p,q</sub> norms</strong> for both dense and sparse (COO/CSR) matrices.</li>
+ *   <li><strong>L<sub>p,q</sub> norms</strong>
+ *   for both dense and sparse (COO/CSR) matrices.</li>
  *   <li>Common norms like the <strong>Frobenius norm</strong>, <strong>maximum absolute value</strong> (max norm),
  *       and <strong>infinite norm</strong> (maximum row sum) for real and complex matrices.</li>
  *   <li><strong>Entry-wise p-norms</strong>, computed by flattening the matrix and computing the vector p-norm.</li>
@@ -101,7 +102,8 @@ public final class MatrixNorms {
      * @param p The p value in the Schatten p-norm. Some common cases include:
      * <ul>
      *     <li>{@code p=1}: The nuclear (or trace) norm. Equivalent to the sum of singular values.</li>
-     *     <li>{@code p=2}: Frobenius (or L<sub>2, 2</sub>) norm. Equivalent to the square root of the sum of the absolute squares
+     *     <li>{@code p=2}: Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm.
+     *     Equivalent to the square root of the sum of the absolute squares
      *     of all entries in the matrix.</li>
      *     <li>{@code p=Double.POSITIVE_INFINITY}: The spectral norm. Equivalent to the maximum singular value.</li>
      *     <li>{@code p=Double.NEGATIVE_INFINITY}: The minimum singular value.</li>
@@ -130,7 +132,8 @@ public final class MatrixNorms {
      * @param p The p value in the Schatten p-norm. Must be greater than or equal to 1. Some common cases include:
      * <ul>
      *     <li>{@code p=1}: The nuclear (or trace) norm. Equivalent to the sum of singular values.</li>
-     *     <li>{@code p=2}: Frobenius (or L<sub>2, 2</sub>) norm. Equivalent to the square root of the sum of the absolute squares
+     *     <li>{@code p=2}: Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm.
+     *     Equivalent to the square root of the sum of the absolute squares
      *     of all entries in the matrix.</li>
      *     <li>{@code p=Double.POSITIVE_INFINITY}: The spectral norm. Equivalent to the largest singular value.</li>
      * </ul>
@@ -156,8 +159,10 @@ public final class MatrixNorms {
     /**
      * <p>Computes the matrix operator norm of a real dense matrix "induced" by the vector p-norm.
      * Specifically, this method computes the operator norm of the matrix as:
-     * <pre>
-     *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre>
+     * <span class="latex-replace"><pre>
+     *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre></span>
+     *
+     * <!-- LATEX: \[ ||A||_p = \sup_{x \ne 0} \cfrac{||Ax||_p}{||x||_p} \] -->
      *
      * <p>This method supports a limited set of {@code p} values which yield simple formulas. When {@code p < 1}, the result this method
      * returns is not a true mathematical norm. However, these values may still be useful for numerical purposes.
@@ -200,8 +205,10 @@ public final class MatrixNorms {
     /**
      * <p>Computes the matrix operator norm of a complex dense matrix "induced" by the vector p-norm.
      * Specifically, this method computes the operator norm of the matrix as:
-     * <pre>
-     *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre>
+     * <span class="latex-replace"><pre>
+     *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre></span>
+     *
+     * <!-- LATEX: \[ ||A||_p = \sup_{x \ne 0} \cfrac{||Ax||_p}{||x||_p} \] -->
      *
      * <p>This method supports a limited set of {@code p} values which yield simple formulas. When {@code p < 1}, the result this method
      * returns is not a true mathematical norm. However, these values may still be useful for numerical purposes.
@@ -242,7 +249,7 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the Frobenius (or L<sub>2, 2</sub>) norm of a real dense matrix.
+     * <p>Computes the Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm of a real dense matrix.
      *
      * <p>The Frobenius norm is defined as the square root of the sum of absolute squares of all entries in the matrix.
      *
@@ -261,7 +268,7 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the Frobenius (or L<sub>2, 2</sub>) norm of a real dense matrix.
+     * <p>Computes the Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm of a real dense matrix.
      *
      * <p>The Frobenius norm is defined as the square root of the sum of absolute squares of all entries in the matrix.
      *
@@ -328,7 +335,7 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the L<sub>p, q</sub> norm of a real dense matrix.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a real dense matrix.
      * <p>Some common special cases are:
      * <ul>
      *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
@@ -336,7 +343,7 @@ public final class MatrixNorms {
      *     the matrix.</li>
      * </ul>
      *
-     * <p>The L<sub>p, q</sub> norm is computed as if by:
+     * <p>The <span class="latex-inline">L<sub>p,q</sub></span> norm is computed as if by:
      * <pre>{@code
      *      double norm = 0;
      *      for(int j=0; j<src.numCols; j++) {
@@ -350,9 +357,9 @@ public final class MatrixNorms {
      *      return Math.pow(norm, 1.0 / q);
      * }</pre>
      *
-     * @param p p value in the L<sub>p, q</sub> norm.
-     * @param q q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of {@code src}.
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
      */
     public static double norm(Matrix src, double p, double q) {
         if(p == q) return VectorNorms.norm(src.data, p);
@@ -361,7 +368,7 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the L<sub>p, q</sub> norm of a real dense matrix.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a real dense matrix.
      * <p>Some common special cases are:
      * <ul>
      *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
@@ -369,7 +376,7 @@ public final class MatrixNorms {
      *     the matrix.</li>
      * </ul>
      *
-     * <p>The L<sub>p, q</sub> norm is computed as if by:
+     * <p>The <span class="latex-inline">L<sub>p,q</sub></span> norm is computed as if by:
      * <pre>{@code
      *      double norm = 0;
      *      for(int j=0; j<src.numCols; j++) {
@@ -383,9 +390,9 @@ public final class MatrixNorms {
      *      return Math.pow(norm, 1.0 / q);
      * }</pre>
      *
-     * @param p p value in the L<sub>p, q</sub> norm.
-     * @param q q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of {@code src}.
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
      */
     public static double norm(AbstractDenseRingMatrix<?, ?, ?> src, double p, double q) {
         if(p == q) return VectorNorms.norm(src.data, p);
@@ -425,7 +432,7 @@ public final class MatrixNorms {
 
     // ------------------------------ Sparse COO Matrices ------------------------------
     /**
-     * <p>Computes the L<sub>p, q</sub> norm of a real COO matrix.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a real COO matrix.
      * <p>Some common special cases are:
      * <ul>
      *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
@@ -433,9 +440,9 @@ public final class MatrixNorms {
      *     the matrix.</li>
      * </ul>
      *
-     * @param p p value in the L<sub>p, q</sub> norm.
-     * @param q q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of {@code src}.
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
      */
     public static double norm(CooMatrix src, double p, double q) {
         // Sparse implementation is usually only faster for very sparse matrices.
@@ -445,7 +452,7 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the L<sub>p, q</sub> norm of a complex COO matrix.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a complex COO matrix.
      * <p>Some common special cases are:
      * <ul>
      *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
@@ -453,9 +460,9 @@ public final class MatrixNorms {
      *     the matrix.</li>
      * </ul>
      *
-     * @param p p value in the L<sub>p, q</sub> norm.
-     * @param q q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of {@code src}.
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
      */
     public static double norm(CooCMatrix src, double p, double q) {
         // Sparse implementation is usually only faster for very sparse matrices.
@@ -465,11 +472,11 @@ public final class MatrixNorms {
 
 
     /**
-     * Computes the Frobenius (L<sub>2, 2</sub>) norm of this complex COO matrix. This is equivalent to
+     * Computes the Frobenius (<span class="latex-inline">L<sub>2, 2</sub></span>) norm of this complex COO matrix. This is equivalent to
      * {@link #norm(CooMatrix, double, double) norm(src, 2, 2)}.
      *
-     * @param src Matrix to compute the L<sub>2, 2</sub> norm of.
-     * @return the Frobenius (L<sub>2, 2</sub>) norm of this tensor.
+     * @param src Matrix to compute the <span class="latex-inline">L<sub>2, 2</sub></span> norm of.
+     * @return the Frobenius (<span class="latex-inline">L<sub>2, 2</sub></span>) norm of this tensor.
      */
     public static double norm(CooMatrix src) {
         // Sparse implementation is usually only faster for very sparse matrices.
@@ -479,11 +486,11 @@ public final class MatrixNorms {
 
 
     /**
-     * Computes the Frobenius (L<sub>2, 2</sub>) norm of this complex COO matrix. This is equivalent to
+     * Computes the Frobenius (<span class="latex-inline">L<sub>2, 2</sub></span>) norm of this complex COO matrix. This is equivalent to
      * {@link #norm(CooCMatrix, double, double) norm(src, 2, 2)}.
      *
-     * @param src Matrix to compute the L<sub>2, 2</sub> norm of.
-     * @return the Frobenius (L<sub>2, 2</sub>) norm of this tensor.
+     * @param src Matrix to compute the <span class="latex-inline">L<sub>2, 2</sub></span> norm of.
+     * @return the Frobenius (<span class="latex-inline">L<sub>2, 2</sub></span>) norm of this tensor.
      */
     public static double norm(CooCMatrix src) {
         // Sparse implementation is usually only faster for very sparse matrices.
@@ -516,7 +523,7 @@ public final class MatrixNorms {
     // ------------------------------ Sparse CSR Matrices ------------------------------
 
     /**
-     * <p>Computes the L<sub>p, q</sub> norm of a real CSR matrix.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a real CSR matrix.
      * <p>Some common special cases are:
      * <ul>
      *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
@@ -524,9 +531,9 @@ public final class MatrixNorms {
      *     the matrix.</li>
      * </ul>
      *
-     * @param p p value in the L<sub>p, q</sub> norm.
-     * @param q q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of {@code src}.
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
      */
     public static double norm(CsrMatrix src, double p, double q) {
         if(p == 0 || q == 0)
@@ -560,7 +567,7 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the L<sub>p, q</sub> norm of a complex CSR matrix.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a complex CSR matrix.
      * <p>Some common special cases are:
      * <ul>
      *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
@@ -568,9 +575,9 @@ public final class MatrixNorms {
      *     the matrix.</li>
      * </ul>
      *
-     * @param p p value in the L<sub>p, q</sub> norm.
-     * @param q q value in the L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of {@code src}.
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
      */
     public static double norm(CsrCMatrix src, double p, double q) {
         if(p == 0 || q == 0)
@@ -626,7 +633,7 @@ public final class MatrixNorms {
 
 
     /**
-     * Computes the Frobenius (L<sub>2, 2</sub>) of this matrix. This is equivalent to {@link #norm(CsrMatrix, double, double) norm
+     * Computes the Frobenius (<span class="latex-inline">L<sub>2, 2</sub></span>) of this matrix. This is equivalent to {@link #norm(CsrMatrix, double, double) norm
      * (src, 2, 2)}.
      *
      * @param src Matrix to compute the norm of.
@@ -650,12 +657,12 @@ public final class MatrixNorms {
     // -------------------------------------------------- Low-level implementations --------------------------------------------------
 
     /**
-     * Compute the L<sub>p, q</sub> norm of a matrix.
+     * Compute the <span class="latex-inline">L<sub>p,q</sub></span> norm of a matrix.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
-     * @param p First parameter in L<sub>p, q</sub> norm.
-     * @param q Second parameter in L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of the matrix.
+     * @param p First parameter in <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q Second parameter in <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of the matrix.
      */
     private static double matrixNormLpq(double[] src, Shape shape, double p, double q) {
         if(p == 0 || q == 0)
@@ -678,12 +685,12 @@ public final class MatrixNorms {
 
 
     /**
-     * Compute the L<sub>p, q</sub> norm of a matrix.
+     * Compute the <span class="latex-inline">L<sub>p,q</sub></span> norm of a matrix.
      * @param src Entries of the matrix.
      * @param shape Shape of the matrix.
-     * @param p First parameter in L<sub>p, q</sub> norm.
-     * @param q Second parameter in L<sub>p, q</sub> norm.
-     * @return The L<sub>p, q</sub> norm of the matrix.
+     * @param p First parameter in <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q Second parameter in <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of the matrix.
      */
     private static <T extends Ring<T>> double matrixNormLpq(T[] src, Shape shape, double p, double q) {
         if(p == 0 || q == 0)

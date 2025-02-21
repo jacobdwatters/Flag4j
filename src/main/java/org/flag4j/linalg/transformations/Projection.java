@@ -62,7 +62,8 @@ public final class Projection {
 
 
     /**
-     * Creates a {@code 4x4} perspective projection matrix to transform a 3D point represented in homogeneous
+     * Creates a <span class="latex-inline">4&times;4</span> perspective projection matrix to transform a 3D point
+     * represented in homogeneous
      * coordinates.
      *
      * @param fov Field of view in radians (this is the fov in both the {@code x} and {@code y} directions).
@@ -94,8 +95,8 @@ public final class Projection {
 
 
     /**
-     * Creates a {@code 4x4} perspective projection matrix to transform a 3D point represented in homogeneous
-     * coordinates.
+     * Creates a <span class="latex-inline">4&times;4</span> perspective projection matrix to transform a
+     * 3D point represented in homogeneous coordinates.
      *
      * @param fovX Field of view, in radians, in the {@code x} direction.
      * @param fovY Field of view, in radians, in the {@code y} direction.
@@ -128,7 +129,7 @@ public final class Projection {
 
 
     /**
-     * Creates a {@code 4x4} orthogonal projection matrix to project a 3D point in homogeneous coordinates
+     * Creates a <span class="latex-inline">4&times;4</span> orthogonal projection matrix to project a 3D point in homogeneous coordinates
      * onto the specified 2D coordinate grid (i.e. image plane).
      * This is an orthographic projection meaning the distance from the virtual camera will not affect the projection.
      * @param xMin Minimum {@code x} value of image plane to project to.
@@ -162,7 +163,7 @@ public final class Projection {
 
 
     /**
-     * Creates a {@code 4x4} orthogonal projection matrix to project a 3D point in homogeneous coordinates
+     * Creates a <span class="latex-inline">4&times;4</span> orthogonal projection matrix to project a 3D point in homogeneous coordinates
      * onto the specified 2D coordinate grid (i.e. image plane). Here, the minimum {@code x} and {@code y} values are
      * taken to be zero.
      * This is an orthographic projection meaning the distance from the virtual camera will not affect the projection.
@@ -192,7 +193,8 @@ public final class Projection {
 
 
     /**
-     * Creates a {@code 4x4} orthogonal projection matrix to project a 2D point in an orthographic viewing region.
+     * Creates a <span class="latex-inline">4&times;4</span> orthogonal projection matrix to project a 2D point in an orthographic
+     * viewing region.
      * Equivalent to {@link #getOrthogonal(double, double, double, double, double, double)} with {@code nearClip = -1} and
      * {@code farClip = 1}.
      * @param xMin Minimum {@code x} value of image plane to project to.
@@ -222,7 +224,8 @@ public final class Projection {
 
 
     /**
-     * Creates a {@code 4x4} orthogonal projection matrix to project a 2D point in an orthographic viewing region. the
+     * Creates a <span class="latex-inline">4&times;4</span> orthogonal projection matrix to project a
+     * 2D point in an orthographic viewing region. The
      * minimum {@code x} and {@code y} values are assumed to be zero. Equivalent to
      * {@link #getOrthogonal(double, double, double, double)} with {@code nearClip=-1} and
      * {@code farClip = 1}.

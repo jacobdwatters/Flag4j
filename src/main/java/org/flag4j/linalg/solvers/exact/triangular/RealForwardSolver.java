@@ -32,8 +32,9 @@ import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
- * This solver solves linear systems of equations where the coefficient matrix is lower triangular.
- * That is, solves the systems <strong>Lx = b</strong> or <strong>LX = B</strong> where <strong>L</strong> is a lower triangular
+ * This solver solves a real linear system of equations where the coefficient matrix is lower triangular.
+ * That is, solves the systems <span class="latex-inline">Lx = b</span> or <span class="latex-inline">LX = B</span>
+ * where <span class="latex-inline">L</span> is a lower triangular
  * matrix. This is accomplished using a simple forward substitution.
  *
  * @see ComplexForwardSolver
@@ -94,12 +95,15 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and a vector <strong>b</strong>.
-     * That is, solves the linear system <strong>Lx = b</strong> for <strong>x</strong> where <strong>L</strong> is lower triangular.
-     * @param L Lower triangular coefficient matrix <strong>L</strong>. {@code L} is assumed to be lower triangular and only entries
+     * Performs forward substitution for a unit lower triangular matrix <span class="latex-inline">L</span> and a vector
+     * <span class="latex-inline">b</span>.
+     * That is, solves the linear system <span class="latex-inline">Lx = b</span> for <span class="latex-inline">x</span>
+     * where <span class="latex-inline">L</span> is lower triangular.
+     * @param L Lower triangular coefficient matrix <span class="latex-inline">L</span>. {@code L} is assumed to be lower
+     * triangular and only entries
      * at and below the principle diagonal will be accessed.
-     * @param b Constant vector <strong>b</strong>.
-     * @return The result of solving the linear system <strong>Lx = b</strong> where <strong>L</strong> is a lower triangular.
+     * @param b Constant vector <span class="latex-inline">b</span>.
+     * @return The result of solving the linear system <span class="latex-inline">Lx = b</span> where <span class="latex-inline">L</span> is a lower triangular.
      * @throws SingularMatrixException If {@code L} is singular (i.e. has at least one zero on the principle diagonal).
      */
     @Override
@@ -109,12 +113,16 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and a matrix <strong>B</strong>.
-     * That is, solves the linear system <strong>LX = B</strong> for <strong>X</strong> where <strong>L</strong> is lower triangular.
-     * @param L Lower triangular coefficient matrix <strong>L</strong>. {@code L} is assumed to be lower triangular and only entries
+     * Performs forward substitution for a unit lower triangular matrix <span class="latex-inline">L</span> and a matrix
+     * <span class="latex-inline">B</span>.
+     * That is, solves the linear system <span class="latex-inline">LX = B</span> for <span class="latex-inline">X</span> where
+     * <span class="latex-inline">L</span> is lower triangular.
+     * @param L Lower triangular coefficient matrix <span class="latex-inline">L</span>. {@code L} is assumed to be lower
+     * triangular and only entries
      * at and below the principle diagonal will be accessed.
-     * @param b Constant matrix <strong>B</strong>.
-     * @return The result of solving the linear system <strong>LX = B</strong> where <strong>L</strong> is a lower triangular.
+     * @param b Constant matrix <span class="latex-inline">B</span>.
+     * @return The result of solving the linear system <span class="latex-inline">LX = B</span> where
+     * <span class="latex-inline">L</span> is a lower triangular.
      * @throws SingularMatrixException If {@code L} is singular (i.e. has at least one zero on the principle diagonal).
      */
     @Override
@@ -124,11 +132,12 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a linear system <strong>LX = P</strong> for <strong>X</strong> where <strong>L</strong> is a lower triangular matrix and
-     * <strong>P</strong> is a permutation matrix.
-     * @param L Lower triangular coefficient matrix <strong>L</strong>.
-     * @param P Constant permutation matrix <strong>P</strong>.
-     * @return The solution to <strong>X</strong> in the linear system <strong>LX = P</strong>.
+     * Solves a linear system <span class="latex-inline">LX = P</span> for <span class="latex-inline">X</span> where
+     * <span class="latex-inline">L</span> is a lower triangular matrix and
+     * <span class="latex-inline">P</span> is a permutation matrix.
+     * @param L Lower triangular coefficient matrix <span class="latex-inline">L</span>.
+     * @param P Constant permutation matrix <span class="latex-inline">P</span>.
+     * @return The solution to <span class="latex-inline">X</span> in the linear system <span class="latex-inline">LX = P</span>.
      */
     @Override
     public Matrix solve(Matrix L, PermutationMatrix P) {
@@ -138,12 +147,12 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Performs forward substitution for a unit lower triangular matrix <strong>L</strong> and the identity matrix.
-     * That is, solves the linear system <strong>LX = I</strong> where <strong>L</strong> is a lower triangular matrix and
-     * <strong>I</strong> is the appropriately sized identity matrix.
-     * @param L Lower triangular coefficient matrix, <strong>L</strong>. If {@code L} is not lower triangular, it will be treated
+     * Performs forward substitution for a unit lower triangular matrix <span class="latex-inline">L</span> and the identity matrix.
+     * That is, solves the linear system <span class="latex-inline">LX = I</span> where <span class="latex-inline">L</span> is a lower triangular matrix and
+     * <span class="latex-inline">I</span> is the appropriately sized identity matrix.
+     * @param L Lower triangular coefficient matrix, <span class="latex-inline">L</span>. If {@code L} is not lower triangular, it will be treated
      *          as if it were and only data in the lower triangular portion will be accessed.
-     * @return The result of solving the linear system <strong>LX = B</strong> where <strong>L</strong> is a lower triangular matrix.
+     * @return The result of solving the linear system <span class="latex-inline">LX = B</span> where <span class="latex-inline">L</span> is a lower triangular matrix.
      * @throws SingularMatrixException If the matrix lower triangular {@code L} is singular
      * (i.e. has at least one zero on the principle diagonal).
      */
@@ -154,10 +163,10 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves the linear system <strong>Lx = b</strong> where <strong>L</strong> is <em>unit</em> lower triangular.
+     * Solves the linear system <span class="latex-inline">Lx = b</span> where <span class="latex-inline">L</span> is <em>unit</em> lower triangular.
      * @param L Unit lower triangular matrix.
      * @param b Vector of constants in the linear system.
-     * @return The solution of x for the linear system <strong>Lx = b</strong>.
+     * @return The solution of x for the linear system <span class="latex-inline">Lx = b</span>.
      */
     private Vector solveUnitLower(Matrix L, Vector b) {
         checkParams(L, b.size);
@@ -188,7 +197,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
      * @param b Vector of constants in the linear system.
-     * @return The solution of x for the linear system <strong>Lx = b</strong>.
+     * @return The solution of x for the linear system <span class="latex-inline">Lx = b</span>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -224,7 +233,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is unit lower triangular.
      * @param L Unit lower triangular matrix.
      * @param B Matrix of constants in the linear system.
-     * @return The solution of X for the linear system <strong>LX = B</strong>.
+     * @return The solution to <span class="latex-inline">X</span> in the linear system <span class="latex-inline">LX = B</span>.
      */
     private Matrix solveUnitLower(Matrix L, Matrix B) {
         checkParams(L, B.numRows);
@@ -263,7 +272,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is lower triangular.
      * @param L Unit lower triangular matrix.
      * @param B Matrix of constants in the linear system.
-     * @return The solution of X for the linear system <strong>LX = B</strong>.
+     * @return The solution of X for the linear system <span class="latex-inline">LX = B</span>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -312,7 +321,7 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
      * Solves a linear system where the coefficient matrix is unit lower triangular and the constant matrix
      * is the identity matrix.
      * @param L Unit lower triangular matrix.
-     * @return The solution of <strong>X</strong> for the linear system <strong><strong>LX = I</strong></strong>.
+     * @return The solution of <span class="latex-inline">X</span> for the linear system <span class="latex-inline">LX = I</span>.
      */
     private Matrix solveUnitLowerIdentity(Matrix L) {
         checkParams(L, L.numRows);
@@ -348,11 +357,11 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a linear system <strong>LX = I</strong> where the coefficient matrix L is lower triangular and the
+     * Solves a linear system <span class="latex-inline">LX = I</span> where the coefficient matrix L is lower triangular and the
      * constant matrix I is the appropriately sized identity matrix.
      * @param L Unit lower triangular matrix (Note, this is not checked).
      *          If {@code L} is not lower triangular, it will be treated as if it were. No error will be thrown.
-     * @return The solution of X for the linear system <strong>LX = I</strong>.
+     * @return The solution of X for the linear system <span class="latex-inline">LX = I</span>.
      * @throws SingularMatrixException If the lower triangular matrix {@code L} is singular (i.e. has a zero on the
      * principle diagonal).
      */
@@ -394,10 +403,11 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a linear system <strong>LX=P</strong> where the coefficient matrix <strong>L</strong> is lower triangular and the
-     * constant matrix <strong>P</strong> is a permutation matrix.
-     * @param L Lower triangular coefficient matrix <strong>L</strong>.
-     * @return The solution of <strong>X</strong> to the linear system <strong>LX=P</strong>.
+     * Solves a linear system <span class="latex-inline">LX = P</span> where the coefficient matrix <span
+     * class="latex-inline">L</span> is lower triangular and the
+     * constant matrix <span class="latex-inline">P</span> is a permutation matrix.
+     * @param L Lower triangular coefficient matrix <span class="latex-inline">L</span>.
+     * @return The solution of <span class="latex-inline">X</span> to the linear system <span class="latex-inline">LX = P</span>.
      * @throws SingularMatrixException If {@code L} is singular (i.e. has a zero on the principle diagonal).
      */
     private Matrix solvePerm(Matrix L, PermutationMatrix P) {
@@ -444,10 +454,11 @@ public class RealForwardSolver extends ForwardSolver<Matrix, Vector, double[]> {
 
 
     /**
-     * Solves a linear system <strong>LX=P</strong> where the coefficient matrix <strong>L</strong> is unit-lower triangular and the
-     * constant matrix <strong>P</strong> is a permutation matrix.
-     * @param L Unit lower triangular coefficient matrix <strong>L</strong>.
-     * @return The solution of <strong>X</strong> to the linear system <strong>LX=P</strong>.
+     * Solves a linear system <span class="latex-inline">LX = P</span> where the coefficient matrix <span
+     * class="latex-inline">L</span> is unit-lower triangular and the
+     * constant matrix <span class="latex-inline">P</span> is a permutation matrix.
+     * @param L Unit lower triangular coefficient matrix <span class="latex-inline">L</span>.
+     * @return The solution of <span class="latex-inline">X</span> to the linear system <span class="latex-inline">LX = P</span>.
      */
     private Matrix solveUnitPerm(Matrix L, PermutationMatrix P) {
         checkParams(L, P.size);

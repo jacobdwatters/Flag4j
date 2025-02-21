@@ -33,10 +33,11 @@ import org.flag4j.util.ArrayBuilder;
 /**
  * <p>An abstract base class for LU decomposition of a matrix.
  *
- * <p>The LU decomposition decomposes a matrix <b>A</b> into the product of
- * a unit-lower triangular matrix <b>L</b> and an upper triangular matrix <b>U</b>, such that:
- * <pre>
- *     <b>A = LU</b></pre>
+ * <p>The LU decomposition decomposes a matrix <span class="latex-simple">A</span> into the product of
+ * a unit-lower triangular matrix <span class="latex-simple">L</span> and an upper triangular matrix 
+ * <span class="latex-simple">U</span>, such that:
+ * <span class="latex-display"><pre>
+ *     A = LU</pre></span>
  *
  * <h2>Pivoting Strategies:</h2>
  * <p>Pivoting may be used to improve the stability of the decomposition. Pivoting involves swapping rows and/or columns within the
@@ -44,17 +45,21 @@ import org.flag4j.util.ArrayBuilder;
  *
  * <p>This class supports three pivoting strategies via the {@link Pivoting} enum:
  * <ul>
- *     <li>{@link Pivoting#NONE}: No pivoting is performed. This pivoting strategy is generally <em>not</em> recommended.</li>
+ *     <li>{@link Pivoting#NONE}: No pivoting is performed. This pivoting strategy is generally <em>not</em> recommended.
+ *     <span class="latex-display"><pre>
+ *         A = LU</pre></span></li>
  *     <li>{@link Pivoting#PARTIAL}: Only row pivoting is performed to improve numerical stability.
  *     Generally, this is the preferred pivoting strategy. The decomposition then becomes,
- *     <pre>
- *         <b>PA = LU</b></pre></li>
- *     where <b>P</b> is a {@link PermutationMatrix permutation matrix} representing the row swaps.
+ *     <span class="latex-display"><pre>
+ *         PA = LU</pre></span>
+ *     </li>
+ *     where <span class="latex-simple">P</span> is a {@link PermutationMatrix permutation matrix} representing the row swaps.
  *     <li>{@link Pivoting#FULL}: Both row and column pivoting are performed to enhance numerical robustness.
  *     The decomposition then becomes,
- *     <pre>
- *         <b>PAQ = LU</b></pre>
- *     where <b>P</b> and <b>Q</b> are {@link PermutationMatrix permutation matrices} representing the row and column swaps
+ *     <span class="latex-display"><pre>
+ *         PAQ = LU</pre></span>
+ *     where <span class="latex-simple">P</span> and <span class="latex-simple">Q</span> are
+ *     {@link PermutationMatrix permutation matrices} representing the row and column swaps
  *     respectively.
  *
  *     <p>Full pivoting <em>may</em> be useful for <em>highly</em> ill-conditioned matrices but, for practical
@@ -64,8 +69,10 @@ import org.flag4j.util.ArrayBuilder;
  * <h2>Storage Format:</h2>
  * The computed LU decomposition is stored within a single matrix {@code LU}, where:
  * <ul>
- *     <li>The upper triangular part (including the diagonal) represents the non-zero values of <b>U</b>.</li>
- *     <li>The strictly lower triangular part represents the non-zero, non-diagonal values of <b>L</b>. Since <b>L</b> is
+ *     <li>The upper triangular part (including the diagonal) represents the non-zero values of
+ *     <span class="latex-simple">U</span>.</li>
+ *     <li>The strictly lower triangular part represents the non-zero, non-diagonal values of <span class="latex-simple">L</span>.
+ *     Since <span class="latex-simple">L</span> is
  *     unit-lower triangular, the diagonal is not stored as it is known to be all zeros.</li>
  * </ul>
  *
@@ -111,11 +118,13 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositio
      */
     protected final boolean inPlace;
     /**
-     * <p>Storage for <b>L</b> and <b>U</b> matrices. Stored in a single matrix.
+     * <p>Storage for <span class="latex-simple">L</span> and <span class="latex-simple">U</span> matrices. Stored in a single matrix.
      *
-     * <p>The upper triangular portion of {@code LU}, including the diagonal, stores the non-zero values of <b>U</b> while the lower
-     * triangular portion, excluding the diagonal, stores the non-zero, non-diagonal values of <b>L</b>.
-     * Since <b>L</b> is unit-lower triangular, the diagonal need not be stored as it is known to be all ones.
+     * <p>The upper triangular portion of {@code LU}, including the diagonal, stores the non-zero values of
+     * <span class="latex-simple">U</span> while the lower
+     * triangular portion, excluding the diagonal, stores the non-zero, non-diagonal values of <span class="latex-simple">L</span>.
+     * Since <span class="latex-simple">L</span> is unit-lower triangular,
+     * the diagonal need not be stored as it is known to be all ones.
      */
     protected T LU;
     /**
@@ -216,9 +225,9 @@ public abstract class LU<T extends MatrixMixin<T, ?, ?, ?>> extends Decompositio
 
 
     /**
-     * Gets the <b>L</b> and <b>U</b> matrices of the decomposition combined in a single matrix.
-     * @return The <b>L</b> and <b>U</b> matrices of the decomposition stored together in a single matrix.
-     * The diagonal of <b>L</b> is all ones and is not stored allowing the diagonal of <b>U</b> to be stored along
+     * Gets the <span class="latex-simple">L</span> and <span class="latex-simple">U</span> matrices of the decomposition combined in a single matrix.
+     * @return The <span class="latex-simple">L</span> and <span class="latex-simple">U</span> matrices of the decomposition stored together in a single matrix.
+     * The diagonal of <span class="latex-simple">L</span> is all ones and is not stored allowing the diagonal of <span class="latex-simple">U</span> to be stored along
      * the diagonal of the combined matrix.
      * @throws IllegalStateException If this method is called before {@link #decompose(MatrixMixin)}.
      */
