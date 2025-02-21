@@ -639,10 +639,10 @@ public class RandomDenseTensor {
 
     /**
      * Generates a pseudorandom symmetric positive-definite matrix. This is done as if by
-     * <pre>
+     * <pre>{@code
      *     Matrix D = randomDiagMatrix(size, 0, 1);
      *     Matrix Q = randomOrthogonalMatrix(size);
-     *     return Q.T().mult(D).mult(Q);</pre>
+     *     return Q.T().mult(D).mult(Q);}</pre>
      * @param size Size of the symmetric positive-definite matrix to generate.
      * @return A pseudorandom symmetric positive-definite matrix.
      * @see #randomHermPosDefMatrix(int)
@@ -656,10 +656,10 @@ public class RandomDenseTensor {
 
     /**
      * Generates a pseudorandom symmetric positive-definite matrix. This is done as if by
-     * <pre>
+     * <pre>{@code
      *     Matrix D = randomDiagMatrix(size, 0, 1);
      *     CMatrix U = randomUnitaryMatrix(size);
-     *     return U.H().mult(D).mult(U);</pre>
+     *     return U.H().mult(D).mult(U);}</pre>
      * @param size Size of the symmetric positive-definite matrix to generate.
      * @return A pseudorandom symmetric positive-definite matrix.
      * @see #randomSymmPosDefMatrix(int)

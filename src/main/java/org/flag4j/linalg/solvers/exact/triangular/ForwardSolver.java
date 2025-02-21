@@ -35,7 +35,8 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 
 /**
  * This solver solves linear systems of equations where the coefficient matrix is lower triangular.
- * That is, solves the systems <strong>Lx = b</strong> or <strong>LX = B</strong> where <strong>L</strong> is a lower triangular
+ * That is, solves the systems <span class="latex-inline">Lx = b</span> or <span class="latex-inline">LX = B</span>
+ * where <span class="latex-inline">L</span> is a lower triangular
  * matrix. This is accomplished using a simple forward substitution.
  *
  * @param <T> Type of coefficient matrix.
@@ -92,11 +93,12 @@ public abstract class ForwardSolver<T extends MatrixMixin<T, ?, U, ?>, U extends
 
 
     /**
-     * Solves a linear system <strong>LX = P</strong> for <strong>X</strong> where <strong>L</strong> is a lower triangular matrix and
-     * <strong>P</strong> is a permutation matrix.
+     * Solves a linear system <span class="latex-inline">LX = P</span> for
+     * <span class="latex-inline">X</span> where <span class="latex-inline">L</span> is a lower triangular matrix and
+     * <span class="latex-inline">P</span> is a permutation matrix.
      * @param L Lower triangular coefficient matrix.
      * @param P Constant permutation matrix.
-     * @return The solution of <strong>X</strong> for the linear system <strong>LX = P</strong>.
+     * @return The solution of <span class="latex-inline">X</span> for the linear system <span class="latex-inline">LX = P</span>.
      */
     public abstract T solve(T L, PermutationMatrix P);
 

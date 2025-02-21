@@ -32,7 +32,18 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 
 /**
- * This class contains several methods for determining the positive-definiteness of a matrix.
+ * <p>Utility class for checking the positive-(semi-)definiteness of a real or complex matrix.
+ *
+ * <p>A matrix <span class="latex-inline">M</span> is positive-definite iff
+ * <span class="latex-inline">Re[x<sup>H</sup>Mx] > 0</span> for any vector <span class="latex-inline">x</span> or equivalently, if
+ * all eigenvalues are real and strictly greater than zero.
+ *
+ * <p>In the case where <span class="latex-inline">M</span> is real, this simplifies to
+ * <span class="latex-inline">x<sup>T</sup>Mx > 0</span>.
+ *
+ * <p>Similarly, a matrix <span class="latex-inline">M</span> is positive-semi-definite iff
+ * <span class="latex-inline">Re[x<sup>H</sup>Mx] >= 0</span> for any vector <span class="latex-inline">x</span> or equivalently, if
+ * all eigenvalues are real and greater than or equal to than zero.
  */
 public final class PositiveDefiniteness {
 
@@ -40,12 +51,10 @@ public final class PositiveDefiniteness {
         // Hide default constructor for utility class.
     }
 
-    // TODO: Improve javadoc in this class.
-
 
     /**
-     * Checks if the matrix is positive-definite. A matrix {@code M} is positive-definite iff
-     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if
+     * Checks if the matrix is positive-definite. A matrix <span class="latex-inline">M</span> is positive-definite iff
+     * <span class="latex-inline">x<sup>T</sup>Mx > 0</span> for any vector <span class="latex-inline">x</span> or equivalently, if
      * all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive-definite.
@@ -66,9 +75,9 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is positive-definite. A matrix {@code M} is positive-definite iff
-     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if the matrix is Hermitian and
-     * all eigenvalues are strictly greater than zero.
+     * Checks if the matrix is positive-definite. A matrix <span class="latex-inline">M</span> is positive-definite iff
+     * <span class="latex-inline">Re[x<sup>T</sup>Mx] > 0</span> for any vector <span class="latex-inline">x</span> or equivalently,
+     * if all eigenvalues are strictly greater than zero.
      *
      * @param src Matrix to check if it is positive-definite.
      * @return {@code true} if the matrix is positive-definite; {@code false} otherwise.
@@ -88,15 +97,16 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is symmetric positive-definite. A matrix {@code M} is positive-definite iff
-     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
-     * greater than zero.
+     * Checks if the matrix is symmetric positive-definite. A matrix <span class="latex-inline">M</span> is symmetric
+     * positive-definite iff the matrix is symmetric and
+     * <span class="latex-inline">x<sup>H</sup>Mx > 0</span> for any vector <span class="latex-inline">x</span> or
+     * equivalently, if all eigenvalues are real and strictly greater than zero.
      *
      * @param src Matrix to check if it is positive-definite.
      * @return {@code true} if the matrix is positive-definite; {@code false} otherwise.
      * @see #isPosSemiDef(Matrix)
      */
-    public static boolean isHermPosDef(Matrix src) {
+    public static boolean isSymmPosDef(Matrix src) {
         boolean result = true;
 
         try {
@@ -110,9 +120,10 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is symmetric positive-definite. A matrix {@code M} is positive-definite iff
-     * {@code x}<sup>T</sup>{@code Mx > 0} for any vector {@code x}, or equivalently, if all eigenvalues are strictly
-     * greater than zero.
+     * Checks if the matrix is Hermitian positive-definite. A matrix <span class="latex-inline">M</span> is Hermitian
+     * positive-definite iff the matrix is Hermitian and
+     * <span class="latex-inline">Re[x<sup>H</sup>Mx] > 0</span> for any vector <span class="latex-inline">x</span> or
+     * equivalently, if all eigenvalues are real and strictly greater than zero.
      *
      * @param src Matrix to check if it is positive-definite.
      * @return {@code true} if the matrix is positive-definite; {@code false} otherwise.
@@ -132,8 +143,8 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is symmetric and
+     * Checks if the matrix is positive semi-definite. A matrix <span class="latex-inline">M</span> is positive-semi-definite iff
+     * <span class="latex-inline">x<sup>T</sup>Mx >= 0</span> for any vector <span class="latex-inline">x</span>, or equivalently, if
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.
@@ -154,8 +165,9 @@ public final class PositiveDefiniteness {
 
 
     /**
-     * Checks if the matrix is positive semi-definite. A matrix {@code M} is positive semi-definite iff
-     * {@code x}<sup>T</sup>{@code Mx >= 0} for any vector {@code x}, or equivalently, if the matrix is Hermitian and
+     * Checks if the matrix is positive semi-definite. A matrix <span class="latex-inline">M</span> is positive-semi-definite iff
+     * <span class="latex-inline">Re[x<sup>T</sup>Mx] >= 0</span> for any vector <span class="latex-inline">x</span>, or
+     * equivalently, if
      * all eigenvalues are greater than or equal to zero.
      *
      * @param src Matrix to check if it is positive semi-definite.

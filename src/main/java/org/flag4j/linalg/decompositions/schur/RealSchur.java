@@ -42,12 +42,13 @@ import static org.flag4j.util.Flag4jConstants.EPS_F64;
 /**
  * <p>Instanced of this class can be used for computing the Schur decomposition of a real dense square matrix.
  *
- * <p>The Schur decomposition decomposes a given square matrix <b>A</b> into:
- * <pre>
- *     <b>A = UTU<sup>T</sup></b></pre>
- * where <b>U</b> is an orthogonal matrix <b>T</b> is a
- * quasi-upper triangular matrix known as the <em>Schur form</em> of <b>A</b>. This means <b>T</b> is upper triangular except
- * for possibly 2&times;2 blocks along its diagonal, which correspond to complex conjugate pairs of eigenvalues.
+ * <p>The Schur decomposition decomposes a given square matrix <span class="latex-inline">A</span> into:
+ * <span class="latex-display"><pre>
+ *     A = UTU<sup>T</sup></pre></span>
+ * where <span class="latex-inline">U</span> is an orthogonal matrix <span class="latex-inline">T</span> is a
+ * quasi-upper triangular matrix known as the <em>Schur form</em> of <span class="latex-inline">A</span>.
+ * This means <span class="latex-inline">T</span> is upper triangular except
+ * for possibly <span class="latex-inline">2&times;2</span> blocks along its diagonal, which correspond to complex conjugate pairs of eigenvalues.
  *
  * <p>The Schur decomposition proceeds by an iterative algorithm with possible random behavior. For reproducibility, constructors
  * support specifying a seed for the pseudo-random number generator.
@@ -93,8 +94,8 @@ public class RealSchur extends Schur<Matrix, double[]> {
      */
     protected double norm;
     /**
-     * Stores the scalar factor &alpha; for use in computation of the Householder reflector
-     * <b>P = I - </b>&alpha;<b> vv<sup>T</sup></b>.
+     * Stores the scalar factor <span class="latex-inline">&alpha;</span> for use in computation of the Householder reflector
+     * <span class="latex-inline">P = I - &alpha; vv<sup>T</sup></span>.
      */
     protected double currentFactor;
 
@@ -111,18 +112,19 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the <b>U</b> matrix may or may not
+     * <p>Creates a decomposer to compute the Schur decomposition for a real dense matrix where the <span class="latex-inline">U</span> matrix may or may not
      * be computed.
      *
-     * <p>If the <b>U</b> matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
+     * <p>If the <span class="latex-inline">U</span> matrix is not needed, passing {@code computeU = false} may provide a performance improvement.
      *
-     * <p>By default, if a constructor with no {@code computeU} parameter is called, <b>U</b> <em>will</em> be computed.
+     * <p>By default, if a constructor with no {@code computeU} parameter is called, <span class="latex-inline">U</span> <em>will</em> be computed.
      *
      * <p>Note: This decomposer <em>may</em> use random numbers during the decomposition. If reproducible results are needed,
      * set the seed for the pseudo-random number generator using {@link #RealSchur(boolean, long)}
      *
-     * @param computeU Flag indicating if the unitary <b>U</b> matrix should be computed for the Schur decomposition. If true,
-     * <b>U</b> will be computed. If false, <b>U</b> will not be computed.
+     * @param computeU Flag indicating if the unitary <span class="latex-inline">U</span> matrix should be computed for the
+     * Schur decomposition. If {@code true}, <span class="latex-inline">U</span> will be computed. If {@code false},
+     * <span class="latex-inline">U</span> will not be computed.
      */
     public RealSchur(boolean computeU) {
         super(computeU, new RandomComplex(), new RealHess(computeU, true), new RealBalancer());
@@ -177,10 +179,10 @@ public class RealSchur extends Schur<Matrix, double[]> {
     /**
      * <p>Reverts the scaling and permutations applied during the balancing step to obtain the correct form.
      * <p>Specifically, this method computes
-     * <pre>
-     *     <b>U</b> := <b>PDU</b>
-     *        = <b>TU</b></pre>
-     * where <b>P</b> and <b>D</b> are the permutation and scaling matrices respectively from balancing.
+     * <span class="latex-eq-align"><pre>
+     *    U := PDU
+     *       = TU</pre></span>
+     * where <span class="latex-inline">P</span> and <span class="latex-inline">D</span> are the permutation and scaling matrices respectively from balancing.
      */
     @Override
     protected void unbalance() {
@@ -501,7 +503,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
 
 
     /**
-     * Checks for convergence of lower 2&times;2 sub-matrix within working matrix to upper triangular or block upper triangular form. If
+     * Checks for convergence of lower <span class="latex-inline">2&times;2</span> sub-matrix within working matrix to upper triangular or block upper triangular form. If
      * convergence is found, this will also zero out the values which have converged to near zero.
      * @param workEnd The ending row (inclusive) of the current active working block.
      * @return Returns the amount the working matrix size should be deflated. Will be zero if no convergence is detected, one if
@@ -554,14 +556,15 @@ public class RealSchur extends Schur<Matrix, double[]> {
      *
      * <p>That is, converts the real block
      * upper triangular Schur matrix to a complex valued properly upper triangular matrix. If the unitary transformation matrix
-     * <b>U</b> was computed, the transformations will also be updated accordingly.
+     * <span class="latex-inline">U</span> was computed, the transformations will also be updated accordingly.
      *
      * <p>This method was adapted from the code given by
      * <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.rsf2csf.html">scipy.linalg.rsf2csf</a> (v1.12.0).
      *
-     * @return An array of length 2 containing the complex Schur matrix <b>T</b> from the last decomposition, and if computed, the
-     * complex unitary transformation matrix <b>U</b> from the decomposition. If <b>U</b> was not computed, then the arrays second
-     * value will be null.
+     * @return An array of length 2 containing the complex Schur matrix <span class="latex-inline">T</span>
+     * from the last decomposition, and if computed, the
+     * complex unitary transformation matrix <span class="latex-inline">U</span> from the decomposition.
+     * If <span class="latex-inline">U</span> was not computed, then the arrays second value will be null.
      */
     public CMatrix[] real2ComplexSchur() {
         // Convert matrices to complex matrices.

@@ -31,23 +31,25 @@ import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
 /**
  * <p>Computes the QR decomposition of dense complex matrix.
  *
- * <p>The QR decomposition factorizes a given matrix <b>A</b> into the product of an orthogonal matrix <b>Q</b>
- * and an upper triangular matrix <b>R</b>, such that:
- * <pre>
- *     A = QR</pre>
+ * <p>The QR decomposition factorizes a given matrix <span class="latex-inline">A</span> into the product of an orthogonal 
+ * matrix <span class="latex-inline">Q</span>
+ * and an upper triangular matrix <span class="latex-inline">R</span>, such that:
+ * <span class="latex-display"><pre>
+ *     A = QR</pre></span>
  *
  * <p>The decomposition can be computed in either the <em>full</em> or <em>reduced</em> form:
  * <ul>
  *     <li><b>Reduced QR decomposition:</b> When {@code reduced = true}, the decomposition produces a compact form where
- *         <b>Q</b> has the same number of rows as <b>A</b> but only as many columns as the rank of <b>A</b>.</li>
+ *         <span class="latex-inline">Q</span> has the same number of rows as <span class="latex-inline">A</span> but only as many
+ *         columns as the rank of <span class="latex-inline">A</span>.</li>
  *     <li><b>Full QR decomposition:</b> When {@code reduced = false}, the decomposition produces a square orthogonal matrix
- *         <b>Q</b> with the same number of rows as <b>A</b>.</li>
+ *         <span class="latex-inline">Q</span> with the same number of rows as <span class="latex-inline">A</span>.</li>
  * </ul>
  *
  * <h2>Usage:</h2>
  * The decomposition workflow typically follows these steps:
  * <ol>
- *     <li>Instantiate an instance of {@code RealQR}.</li>
+ *     <li>Instantiate an instance of {@code ComplexQR}.</li>
  *     <li>Call {@link #decompose(CMatrix)} to perform the factorization.</li>
  *     <li>Retrieve the resulting matrices using {@link #getQ()} and {@link #getR()}.</li>
  * </ol>
@@ -56,7 +58,7 @@ import org.flag4j.linalg.decompositions.unitary.ComplexUnitaryDecomposition;
  * QR decomposition efficiently. The decomposition uses Householder transformations to iteratively
  * zero out sub-diagonal entries while maintaining numerical stability.
  *
- * @see ComplexUnitaryDecomposition
+ * @see RealQR
  * @see #getR()
  * @see #getQ()
  */
@@ -106,7 +108,7 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
 
 
     /**
-     * Creates and initializes Q to the appropriately sized identity matrix.
+     * Creates and initializes <span class="latex-inline">Q</span> to the appropriately sized identity matrix.
      *
      * @return An identity matrix with the appropriate size.
      */
@@ -118,9 +120,9 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
 
 
     /**
-     * Gets the upper triangular matrix {@code R} from the last decomposition.
+     * Gets the upper triangular matrix, <span class="latex-inline">R</span>, from the last decomposition.
      *
-     * @return The upper triangular matrix {@code R} from the last decomposition.
+     * @return The upper triangular matrix, <span class="latex-inline">R</span>, from the last decomposition.
      */
     @Override
     public CMatrix getUpper() {
@@ -129,8 +131,8 @@ public class ComplexQR extends ComplexUnitaryDecomposition {
 
 
     /**
-     * Gets the upper triangular matrix {@code R} from the {@code QR} decomposition.
-     * @return The upper triangular matrix {@code R} from the {@code QR} decomposition.
+     * Gets the upper triangular matrix, <span class="latex-inline">R</span>, from the QR decomposition.
+     * @return The upper triangular matrix, <span class="latex-inline">R</span>, from the QR decomposition.
      */
     public CMatrix getR() {
         int rRows = reduced ? minAxisSize : numRows; // Get R in reduced form or not.

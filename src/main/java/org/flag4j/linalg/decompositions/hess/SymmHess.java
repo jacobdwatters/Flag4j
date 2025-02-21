@@ -33,26 +33,36 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 /**
  * <p>Computes the Hessenberg decomposition of a real dense symmetric matrix.
- * <p>The Hessenberg decomposition decomposes a given symmetric matrix <b>A</b> into the product:
- * <pre>
- *     <b>A = QHQ<sup>T</sup></b></pre>
- * where <b>Q</b> is an orthogonal matrix and <b>H</b> is a symmetric tri-diagonal matrix (special case of Hessenburg form)
- * which is similar to <b>A</b> (i.e. has the same eigenvalues)
+ * <p>The Hessenberg decomposition decomposes a given symmetric matrix <span class="latex-inline">A</span> into the product:
+ * <span class="latex-display"><pre>
+ *     A = QHQ<sup>T</sup></pre></span>
+ * where <span class="latex-inline">Q</span> is an orthogonal matrix and <span class="latex-inline">H</span>
+ * is a symmetric tri-diagonal matrix (special case of Hessenburg form)
+ * which is similar to <span class="latex-inline">A</span> (i.e. has the same eigenvalues)
  *
- * <p>A matrix <b>H</b> is in tri-diagonal form if it has all zeros below the first sub-diagonal and above the first super-diagonal.
+ * <p>A matrix <span class="latex-inline">H</span> is in tri-diagonal form if it has all zeros below the first sub-diagonal
+ * and above the first super-diagonal.
  *
- * <p>For example, the following matrix is in symmetric tri-diagonal form where each '&times;' may hold a different value (provided
- * the matrix is symmetric):
- * <pre>
+ * <p>For example, the following matrix is in symmetric tri-diagonal form where each '<span class="latex-inline">&times;</span>'
+ * may hold a different value (provided the matrix is symmetric):
+ * <span class="latex-replace"><pre>
  *     [[ &times; &times; 0 0 0 ]
  *      [ &times; &times; &times; 0 0 ]
  *      [ 0 &times; &times; &times; 0 ]
  *      [ 0 0 &times; &times; &times; ]
- *      [ 0 0 0 &times; &times; ]]</pre>
+ *      [ 0 0 0 &times; &times; ]]</pre></span>
+ *
+ * <!-- LATEX: \[ \begin{bmatrix}
+ * \times & \times & 0 & 0 & 0 \\
+ * \times & \times & \times & 0 & 0 \\
+ * 0 & \times & \times & \times & 0 \\
+ * 0 & 0 & \times & \times & \times \\
+ * 0 & 0 & 0 & \times & \times \\
+ * \end{bmatrix} \] -->
  *
  * <h2>Efficiency Considerations:</h2>
  * <ul>
- *     <li>If the orthogonal matrix <b>Q</b> is not required, setting {@code computeQ = false} in the constructor
+ *     <li>If the orthogonal matrix <span class="latex-inline">Q</span> is not required, setting {@code computeQ = false} in the constructor
  *     <em>may</em> improve performance.</li>
  *     <li>Support for in-place decomposition to reduce memory usage.</li>
  * </ul>
@@ -79,7 +89,7 @@ public class SymmHess extends RealHess {
 
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices. By default, the Householder vectors used in the decomposition will be
-     * stored so that the full orthogonal <b>Q</b> matrix can be formed by calling {@link #getQ()}.
+     * stored so that the full orthogonal <span class="latex-inline">Q</span> matrix can be formed by calling {@link #getQ()}.
      */
     public SymmHess() {
         super();
@@ -89,9 +99,10 @@ public class SymmHess extends RealHess {
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices.
      *
-     * @param computeQ Flag indicating if the orthogonal <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the <b>Q</b> matrix will be computed explicitly. If <b>Q</b> is not
-     * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
+     * @param computeQ Flag indicating if the orthogonal <span class="latex-inline">Q</span> matrix from the Hessenberg decomposition should be explicitly computed.
+     * if {@code true}, then the <span class="latex-inline">Q</span> matrix will be computed explicitly.
+     * If <span class="latex-inline">Q</span> is not needed, setting this to {@code false} <em>may</em> yield an increase in
+     * performance.
      */
     public SymmHess(boolean computeQ) {
         super(computeQ);
@@ -100,8 +111,10 @@ public class SymmHess extends RealHess {
 
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices.
-     * @param computeQ Flag indicating if the orthogonal <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the <b>Q</b> matrix will be computed explicitly. If <b>Q</b> is not
+     * @param computeQ Flag indicating if the orthogonal <span class="latex-inline">Q</span> matrix from the
+     * Hessenberg decomposition should be explicitly computed.
+     * if {@code true}, then the <span class="latex-inline">Q</span> matrix will be computed explicitly.
+     * If <span class="latex-inline">Q</span> is not
      * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
      * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
      * {@link #decompose(Matrix)} is truly symmetric. If {@code true}, an exception will be thrown if the matrix is not symmetric. If
@@ -116,8 +129,8 @@ public class SymmHess extends RealHess {
 
     /**
      * Constructs a Hessenberg decomposer for symmetric matrices.
-     * @param computeQ Flag indicating if the orthogonal <b>Q</b> matrix from the Hessenberg decomposition should be explicitly computed.
-     * If true, then the <b>Q</b> matrix will be computed explicitly. If <b>Q</b> is not
+     * @param computeQ Flag indicating if the orthogonal <span class="latex-inline">Q</span> matrix from the Hessenberg decomposition should be explicitly computed.
+     * if {@code true}, then the <span class="latex-inline">Q</span> matrix will be computed explicitly. If <span class="latex-inline">Q</span> is not
      * needed, setting this to {@code false} <em>may</em> yield an increase in performance.
      * @param enforceSymmetric Flag indicating if an explicit check should be made to ensure any matrix passed to
      * {@link #decompose(Matrix)} is truly symmetric. If {@code true}, an exception will be thrown if the matrix is not symmetric. If
@@ -149,8 +162,8 @@ public class SymmHess extends RealHess {
 
 
     /**
-     * Gets the Hessenberg matrix, <b>H</b>, from the decomposition. The matrix will be symmetric tri-diagonal.
-     * @return The symmetric tri-diagonal (Hessenberg) matrix, <b>H</b>, from this decomposition.
+     * Gets the Hessenberg matrix, <span class="latex-inline">H</span>, from the decomposition. The matrix will be symmetric tri-diagonal.
+     * @return The symmetric tri-diagonal (Hessenberg) matrix, <span class="latex-inline">H</span>, from this decomposition.
      */
     @Override
     public Matrix getH() {

@@ -29,7 +29,42 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.rng.RandomComplex;
 
 /**
- * A 2D bivariateGaussian distribution on the complex plane.
+ * A 2D bivariate Gaussian distribution on the complex plane.
+ *
+ * <p>The covariance matrix, <span class="latex-inline"><b>&Sigma;</b></span>, of such a distribution is expressed as:
+ * <span class="latex-replace"><pre>
+ *   <b>&Sigma;</b> = [  &sigma;<sub>x</sub><sup>2</sup>    &rho;&sigma;<sub>x</sub>&sigma;<sub>y</sub> ]
+ *       [ &rho;&sigma;<sub>x</sub>&sigma;<sub>y</sub>     &sigma;<sub>y</sub><sup>2</sup> ]</pre></span>
+ * <!-- LATEX: \[
+ * \mathbf{\Sigma} = \begin{bmatrix}
+ * \sigma_x^2 & \rho\sigma_x\sigma_y \\
+ * \rho\sigma_x\sigma_y & \sigma_y^2
+ * \end{bmatrix}
+ * \] -->
+ *
+ * where <span class="latex-inline">&rho;</span> is the correlation coefficient,
+ * <span class="latex-inline">&sigma;<sub>x</sub></span> is the standard deviation
+ * along the real axis, and <span class="latex-inline">&sigma;<sub>y</sub></span>
+ * is the standard deviation along the imaginary axis.
+ *
+ * Let <span class="latex-replace"><b>&mu;</b> = [x<sub>0</sub>  y<sub>0</sub>]<sup>T</sup></span>
+ * <!-- LATEX: \( \pmb{\mu} = \begin{bmatrix} x_0 & y_0 \end{bmatrix}^T \) -->
+ * be the mean column vector and <span class="latex-replace"><b>z</b> = [x  y]<sup>T</sup></span>
+ * <!-- LATEX: \( \mathbf{z} = \begin{bmatrix} x & y \end{bmatrix}^T \) --> also be a
+ * column vector. Then, the PDF of the bivariate Gaussian distribution may be expressed as:
+ * <span class="latex-replace"><pre>
+ *     f(<b>z</b>) = 1/(2 &pi; det(<b>&Sigma;</b>)<sup>1/2</sup>) exp[-1/2 (<b>z</b> - <b>&mu;</b>)<sup>T</sup> <b>&Sigma;</b><sup>-1</sup> (<b>z</b> - <b>&mu;</b>)]</pre>
+ * </span>
+ *
+ * <!-- LATEX: \[
+ * f(\mathbf{z}) = \frac{1}{2\pi \sqrt{\det(\mathbf{\Sigma})}} \exp\left[ -\frac{1}{2} (\mathbf{z} - \pmb{\mu})^T
+ * \mathbf{\Sigma}^{-1}(\mathbf{z} - \pmb{\mu})\right]
+ * \] -->
+ *
+ * @see Complex128UniformRect
+ * @see Complex128UniformDisk
+ * @see RealUniform
+ * @see RealGaussian
  */
 public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex> {
 
@@ -54,9 +89,6 @@ public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex
      */
     private final double corrCoeff;
 
-    //corrCoeff Correlation coefficient between real and imaginary values in the distribution. Must satisfy
-    //     * {@code corrCoeff > -1 && corrCoeff < 1}.
-
 
     /**
      * Validated standard deviations and correlation coefficient are within proper bounds.
@@ -72,7 +104,7 @@ public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex
 
 
     /**
-     * Constructs 2D bivariateGaussian distribution on the complex plane with a correlation coefficient of zero.
+     * Constructs 2D bivariate Gaussian distribution on the complex plane with a correlation coefficient of zero.
      * To specify a correlation coefficient use {@link #Complex128BiGaussian(RandomComplex, double, double, double, double, double)}.
      *
      * @param rng Pseudorandom number generator to use when randomly sampling from this distribution.
@@ -93,7 +125,7 @@ public class Complex128BiGaussian extends Distribution<Complex128, RandomComplex
 
 
     /**
-     * Constructs 2D bivariateGaussian distribution on the complex plane with a specified correlation coefficient.
+     * Constructs 2D bivariate Gaussian distribution on the complex plane with a specified correlation coefficient.
      *
      * @param rng Pseudorandom number generator to use when randomly sampling from this distribution.
      * @param meanRe Mean along real axis of complex plane for the distribution.

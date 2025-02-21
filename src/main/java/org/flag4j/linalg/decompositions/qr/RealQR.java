@@ -32,17 +32,19 @@ import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
 /**
  * <p>Computes the QR decomposition of a real dense matrix.
  *
- * <p>The QR decomposition factorizes a given matrix <b>A</b> into the product of an orthogonal matrix <b>Q</b>
- * and an upper triangular matrix <b>R</b>, such that:
- * <pre>
- *     A = QR</pre>
+ * <p>The QR decomposition factorizes a given matrix <span class="latex-inline">A</span> into the product of an 
+ * orthogonal matrix <span class="latex-inline">Q</span>
+ * and an upper triangular matrix <span class="latex-inline">R</span>, such that:
+ * <span class="latex-display"><pre>
+ *     A = QR</pre></span>
  *
  * <p>The decomposition can be computed in either the <em>full</em> or <em>reduced</em> form:
  * <ul>
  *     <li><b>Reduced QR decomposition:</b> When {@code reduced = true}, the decomposition produces a compact form where
- *         <b>Q</b> has the same number of rows as <b>A</b> but only as many columns as the rank of <b>A</b>.</li>
+ *         <span class="latex-inline">Q</span> has the same number of rows as <span class="latex-inline">A</span> but only as
+ *         many columns as the rank of <span class="latex-inline">A</span>.</li>
  *     <li><b>Full QR decomposition:</b> When {@code reduced = false}, the decomposition produces a square orthogonal matrix
- *         <b>Q</b> with the same number of rows as <b>A</b>.</li>
+ *         <span class="latex-inline">Q</span> with the same number of rows as <span class="latex-inline">A</span>.</li>
  * </ul>
  *
  * <h2>Usage:</h2>
@@ -57,7 +59,7 @@ import org.flag4j.linalg.decompositions.unitary.RealUnitaryDecomposition;
  * QR decomposition efficiently. The decomposition uses Householder transformations to iteratively
  * zero out sub-diagonal entries while maintaining numerical stability.
  *
- * @see RealUnitaryDecomposition
+ * @see ComplexQR
  * @see #getR()
  * @see #getQ()
  */
@@ -111,7 +113,7 @@ public class RealQR extends RealUnitaryDecomposition {
 
 
     /**
-     * Creates and initializes the <b>Q</b> matrix to the appropriately sized identity matrix.
+     * Creates and initializes the <span class="latex-inline">Q</span> matrix to the appropriately sized identity matrix.
      *
      * @return An identity matrix with the appropriate size.
      */
@@ -123,7 +125,7 @@ public class RealQR extends RealUnitaryDecomposition {
 
 
     /**
-     * Gets the upper triangular matrix <b>R</b> from the last decomposition. Same as {@link #getR()}.
+     * Gets the upper triangular matrix, <span class="latex-inline">R</span>, from the last decomposition. Same as {@link #getR()}.
      *
      * @return The upper triangular matrix from the last decomposition.
      */
@@ -134,8 +136,8 @@ public class RealQR extends RealUnitaryDecomposition {
 
 
     /**
-     * Gets the upper triangular matrix <b>R</b> from the QR decomposition.
-     * @return The upper triangular matrix <b>R</b> from the QR decomposition.
+     * Gets the upper triangular matrix, <span class="latex-inline">R</span>, from the QR decomposition.
+     * @return The upper triangular matrix, <span class="latex-inline">R</span>, from the QR decomposition.
      */
     public Matrix getR() {
         int rRows = reduced ? minAxisSize : numRows; // Get R in reduced form or not.

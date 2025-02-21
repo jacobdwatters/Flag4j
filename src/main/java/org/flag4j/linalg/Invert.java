@@ -59,8 +59,9 @@ public final class Invert {
 
     /**
      * Computes the inverse of this matrix. This is done by computing the {@link LU LU decomposition} of
-     * this matrix, inverting  L using a back-solve algorithm, then solving  U*inv(src)=inv(L)
-     * for  inv(src).
+     * this matrix, inverting <span class="latex-inline">L</span> using a back-solve algorithm, then solving
+     * <span class="latex-inline">UA<sup>-1</sup> = L<sup>-1</sup></span>
+     * for <span class="latex-inline">A<sup>-1</sup></span>.
      *
      * @param src Matrix to compute inverse of.
      * @return The inverse of this matrix.
@@ -74,8 +75,9 @@ public final class Invert {
 
     /**
      * Computes the inverse of this matrix. This is done by computing the {@link LU LU decomposition} of
-     * this matrix, inverting  L using a back-solve algorithm, then solving  U*inv(src)=inv(L)
-     * for  inv(src).
+     * this matrix, inverting <span class="latex-inline">L</span> using a back-solve algorithm, then solving
+     * <span class="latex-inline">UA<sup>-1</sup> = L<sup>-1</sup></span>
+     * for <span class="latex-inline">A<sup>-1</sup></span>.
      *
      * @param src Matrix to compute inverse of.
      * @return The inverse of this matrix.
@@ -272,13 +274,13 @@ public final class Invert {
     // ------------------------------------------- Pseudo-inverses -------------------------------------------
 
     /**
-     * Computes the pseudo-inverse of this matrix. That is, for a matrix A, computes the Moore–Penrose
-     * A<sup>+</sup> such that the following hold:
+     * Computes the pseudo-inverse of this matrix. That is, for a matrix <span class="latex-inline">A</span>,
+     * computes the Moore–Penrose <span class="latex-inline">A<sup>+</sup></span> such that the following hold:
      * <ol>
-     *   <li>AA<sup>+</sup>A=A.</li>
-     *   <li>A<sup>+</sup>AA<sup>+</sup>=A<sup>+</sup>.</li>
-     *   <li>AA<sup>+</sup> is Hermitian.</li>
-     *   <li>A<sup>+</sup>A is also Hermitian.</li>
+     *   <li><span class="latex-inline">AA<sup>+</sup>A=A</span>.</li>
+     *   <li><span class="latex-inline">A<sup>+</sup>AA<sup>+</sup>=A<sup>+</sup></span>.</li>
+     *   <li><span class="latex-inline">AA<sup>+</sup></span> is Hermitian.</li>
+     *   <li><span class="latex-inline">A<sup>+</sup>A</span> is also Hermitian.</li>
      * </ol>
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
@@ -292,13 +294,13 @@ public final class Invert {
 
 
     /**
-     * Computes the pseudo-inverse of this matrix. That is, for a matrix A, computes the Moore–Penrose
-     * A<sup>+</sup> such that the following hold:
+     * Computes the pseudo-inverse of this matrix. That is, for a matrix <span class="latex-inline">A</span>,
+     * computes the Moore–Penrose <span class="latex-inline">A<sup>+</sup></span> such that the following hold:
      * <ol>
-     *   <li>AA<sup>+</sup> A=A.</li>
-     *   <li> A<sup>+</sup> AA<sup>+</sup> =A<sup>+</sup>.</li>
-     *   <li> AA<sup>+</sup> is Hermitian.</li>
-     *   <li> A<sup>+</sup> A is also Hermitian.</li>
+     *   <li><span class="latex-inline">AA<sup>+</sup>A=A</span>.</li>
+     *   <li><span class="latex-inline">A<sup>+</sup>AA<sup>+</sup>=A<sup>+</sup></span>.</li>
+     *   <li><span class="latex-inline">AA<sup>+</sup></span> is Hermitian.</li>
+     *   <li><span class="latex-inline">A<sup>+</sup>A</span> is also Hermitian.</li>
      * </ol>
      *
      * @return The Moore–Penrose pseudo-inverse of this matrix.
