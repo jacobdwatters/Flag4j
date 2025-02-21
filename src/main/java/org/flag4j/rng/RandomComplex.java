@@ -137,13 +137,17 @@ public class RandomComplex extends Random {
                     min + " and max=" + max + ".");
         }
 
-        return randomComplex128(Math.sqrt(nextDouble()*(max*max - min*min) + min*min));
+        double minSq = min*min;
+
+        return randomComplex128(Math.sqrt(nextDouble()*(max*max - minSq) + minSq));
     }
 
 
     /**
-     * Generates a pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
-     * @return A pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
+     * Generates a pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at
+     * <span class="latex-inline">(0, 0)</span>.
+     * @return A pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at
+     * <span class="latex-inline">(0, 0)</span>.
      * @see #randomRectComplex128(double, double, double, double)
      */
     public Complex128 randomRectComplex128() {
@@ -168,13 +172,18 @@ public class RandomComplex extends Random {
 
     /**
      * <p>Generates a pseudorandom complex number sampled from a 2D circular standard Gaussian (normal) distribution on the complex
-     * plain. The distribution is centered at (0.0, 0.0) with standard deviation {@code 1.0} along both the real and imaginary axes
+     * plain. The distribution is centered at <span class="latex-inline">(0, 0)</span>
+     * with standard deviation <span class="latex-inline">&sigma;=1</span> along both the real and imaginary axes
      * of the complex plane.
      *
-     * <p>The 2D circular standard Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
-     * axis, &sigma;, is defined as:
-     * <pre>
-     *     f(x, y) = 1/(2&pi;) exp[ -1/2 (x<sup>2</sup> + y<sup>2</sup>) ]</pre>
+     * <p>The 2D circular standard Gaussian distribution centered at <span class="latex-inline">(x<sub>0</sub>, x<sub>0</sub>)</span>
+     * with standard deviation along both axes, <span class="latex-inline">&sigma;</span>, is defined as:
+     * <span class="latex-replace"><pre>
+     *     f(x, y) = 1/(2&pi;) exp[ -1/2 (x<sup>2</sup> + y<sup>2</sup>) ]</pre></span>
+     *
+     * <!-- LATEX: \[
+     * f(x, y) = \frac{1}{2\pi} \exp\left[-\frac{1}{2}(x_2 + y_2)\right]
+     * \] -->
      *
      * @param mean Mean of distribution.
      * @param std Standard deviation of distribution. Must be greater than zero.
@@ -194,10 +203,16 @@ public class RandomComplex extends Random {
      * The distribution is centered at ({@code mean}, {@code mean}) with standard deviation {@code std} along
      * both the real and imaginary axes of the complex plane.
      *
-     * <p>The 2D circular Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
-     * axis, &sigma;, is defined as:
-     * <pre>
-     *     f(x, y) = 1/(2&pi;&sigma;<sup>2</sup>) exp[ -1/(2&sigma;<sup>2</sup>) ((x - x<sub>0</sub>)<sup>2</sup> + (y - x<sub>0</sub>)<sup>2</sup>) ]</pre>
+     * <p>The 2D circular Gaussian distribution centered at <span class="latex-inline">(x<sub>0</sub>, x<sub>0</sub>)</span>
+     * with standard deviations along each axis, <span class="latex-inline">&sigma;</span>, is defined as:
+     * <span class="latex-replace"><pre>
+     *     f(x, y) = 1/(2&pi;&sigma;<sup>2</sup>) exp[ -1/(2&sigma;<sup>2</sup>) ((x - x<sub>0</sub>)<sup>2</sup> + (y - y<sub>0</sub>)<sup>2</sup>) ]</pre>
+     * </span>
+     *
+     * <!-- LATEX: \[
+     * f(x, y) = \frac{1}{2\pi\sigma^2} \exp\left[-\frac{1}{2\sigma^2}\left(\left(x_2 - x_0\right)^2
+     * + \left(y - y_0\right)^2\right)\right]
+     * \] -->
      *
      * @param mean Mean of distribution.
      * @param std Standard deviation of distribution. Must be greater than zero.
@@ -219,8 +234,14 @@ public class RandomComplex extends Random {
      *
      * <p>The 2D Gaussian distribution centered at (x<sub>0</sub>, y<sub>0</sub>) with standard deviations along each
      * axis, &sigma;<sub>X</sub> and &sigma;<sub>Y</sub>, is defined as:
-     * <pre>
+     * <span class="latex-replace"><pre>
      *     f(x, y) = 1/(2&pi;&sigma;<sub>X</sub>&sigma;<sub>Y</sub>) * exp[ -(x - x<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>X</sub><sup>2</sup> - (y - y<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>Y</sub><sup>2</sup>]</pre>
+     * </span>
+     *
+     * <!-- LATEX: \[
+     * f(x, y) = \frac{1}{2\pi\sigma_x \sigma_y} \exp\left[-\left(\frac{x_2 - x_0}{\sigma_x}\right)^2 - \left(\frac{y - y_0}{
+     * \sigma_y}\right)^2\right]
+     * \] -->
      *
      * @param meanRe Mean of distribution along real axis.
      * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
@@ -243,14 +264,35 @@ public class RandomComplex extends Random {
      * the real and imaginary axes of the complex plane respectively. Further, {@code corrCoeff} is the correlation coefficient
      * between the real and imaginary values.
      *
-     * <p>The covariance matrix, <b>&Sigma;</b>,  of such a distribution is expressed as:
-     * <pre>
-     *   <b>&Sigma;</b> = [      stdRe*stdRe        corrCoeff*stdRe*stdIm ]
-     *       [ corrCoeff*stdRe*stdIm        stdIm*stdIm      ]</pre>
-     * Let &mu; = [x<sub>0</sub>  y<sub>0</sub>]<sup>T</sup> be the mean column vector and <b>z</b> = [x  y]<sup>T</sup> also be a
+     * <p>The covariance matrix, <span class="latex-inline"><b>&Sigma;</b></span>, of such a distribution is expressed as:
+     * <span class="latex-replace"><pre>
+     *   <b>&Sigma;</b> = [  &sigma;<sub>x</sub><sup>2</sup>    &rho;&sigma;<sub>x</sub>&sigma;<sub>y</sub> ]
+     *       [ &rho;&sigma;<sub>x</sub>&sigma;<sub>y</sub>     &sigma;<sub>y</sub><sup>2</sup> ]</pre></span>
+     * <!-- LATEX: \[
+     * \mathbf{\Sigma} = \begin{bmatrix}
+     * \sigma_x^2 & \rho\sigma_x\sigma_y \\
+     * \rho\sigma_x\sigma_y & \sigma_y^2
+     * \end{bmatrix}
+     * \] -->
+     *
+     * where <span class="latex-inline">&rho;</span> is the correlation coefficient,
+     * <span class="latex-inline">&sigma;<sub>x</sub></span> is the standard deviation
+     * along the real axis, and <span class="latex-inline">&sigma;<sub>y</sub></span>
+     * is the standard deviation along the imaginary axis.
+     *
+     * Let <span class="latex-replace"><b>&mu;</b> = [x<sub>0</sub>  y<sub>0</sub>]<sup>T</sup></span>
+     * <!-- LATEX: \( \pmb{\mu} = \begin{bmatrix} x_0 & y_0 \end{bmatrix}^T \) -->
+     * be the mean column vector and <span class="latex-replace"><b>z</b> = [x  y]<sup>T</sup></span>
+     * <!-- LATEX: \( \mathbf{z} = \begin{bmatrix} x & y \end{bmatrix}^T \) --> also be a
      * column vector. Then, the bivariate Gaussian distribution may be expressed as:
-     * <pre>
-     *     f(<b>z</b>) = 1/(2 &pi; det(<b>&Sigma;</b>)<sup>1/2</sup>) exp[-1/2 (<b>z</b> - &mu;)<sup>T</sup> <b>&Sigma;</b><sup>-1</sup> (<b>z</b> - &mu;)]</pre>
+     * <span class="latex-replace"><pre>
+     *     f(<b>z</b>) = 1/(2 &pi; det(<b>&Sigma;</b>)<sup>1/2</sup>) exp[-1/2 (<b>z</b> - <b>&mu;</b>)<sup>T</sup> <b>&Sigma;</b><sup>-1</sup> (<b>z</b> - <b>&mu;</b>)]</pre>
+     * </span>
+     *
+     * <!-- LATEX: \[
+     * f(\mathbf{z}) = \frac{1}{2\pi \sqrt{\det(\mathbf{\Sigma})}} \exp\left[ -\frac{1}{2} (\mathbf{z} - \pmb{\mu})^T
+     * \mathbf{\Sigma}^{-1}(\mathbf{z} - \pmb{\mu})\right]
+     * \] -->
      *
      * @param meanRe Mean of distribution along real axis.
      * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
@@ -273,7 +315,7 @@ public class RandomComplex extends Random {
         if(corrCoeff <= -1.0 || corrCoeff >= 1.0)
             throw new IllegalArgumentException("Correlation coefficient must be in range (-1, 1) but got: " + corrCoeff + ".");
 
-        // Unrolled Cholesky decomposition of the 2&times;2 covariance matrix.
+        // Unrolled Cholesky decomposition of the 2x2 covariance matrix.
         double l11 = Math.sqrt(stdRe*stdRe);
         double l21 = corrCoeff*stdRe*stdIm / l11;
         double l22 = Math.sqrt(stdIm*stdIm - l21 * l21);
@@ -345,10 +387,11 @@ public class RandomComplex extends Random {
     }
 
 
+
     /**
      * Generates a pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
      * @return A pseudorandom complex number distributed uniformly in the unit square on the complex plane centered at (0.0, 0.0).
-     * @see #randomCartComplex64(double, double, double, double)
+     * @see #randomCartComplex64(float, float, float, float)
      */
     public Complex64 randomCartComplex64() {
         return new Complex64(nextFloat(), nextFloat());
@@ -372,21 +415,26 @@ public class RandomComplex extends Random {
 
     /**
      * <p>Generates a pseudorandom complex number sampled from a 2D circular standard Gaussian (normal) distribution on the complex
-     * plain. The distribution is centered at (0.0, 0.0) with standard deviation {@code 1.0} along both the real and imaginary axes
+     * plain. The distribution is centered at <span class="latex-inline">(0, 0)</span>
+     * with standard deviation <span class="latex-inline">&sigma;=1</span> along both the real and imaginary axes
      * of the complex plane.
      *
-     * <p>The 2D circular standard Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
-     * axis, &sigma;, is defined as:
-     * <pre>
-     *     f(x, y) = 1/(2&pi;) exp[ -1/2 (x<sup>2</sup> + y<sup>2</sup>) ]</pre>
+     * <p>The 2D circular standard Gaussian distribution centered at <span class="latex-inline">(x<sub>0</sub>, x<sub>0</sub>)</span>
+     * with standard deviation along both axes, <span class="latex-inline">&sigma;</span>, is defined as:
+     * <span class="latex-replace"><pre>
+     *     f(x, y) = 1/(2&pi;) exp[ -1/2 (x<sup>2</sup> + y<sup>2</sup>) ]</pre></span>
+     *
+     * <!-- LATEX: \[
+     * f(x, y) = \frac{1}{2\pi} \exp\left[-\frac{1}{2}(x_2 + y_2)\right]
+     * \] -->
      *
      * @param mean Mean of distribution.
      * @param std Standard deviation of distribution. Must be greater than zero.
      * @return A pseudorandom complex number sampled from a 2D circular standard Gaussian (normal) distribution on the complex plain.
      *
-     * @see #randnComplex64(double, double)
-     * @see #randnComplex64(double, double, double, double)
-     * @see #randnComplex64(double, double, double, double, double)
+     * @see #randnComplex64(float, float)
+     * @see #randnComplex64(float, float, float, float)
+     * @see #randnComplex64(float, float, float, float, float)
      */
     public Complex64 randnComplex64() {
         return randnComplex64(0f, 1f, 0f, 1f);
@@ -398,18 +446,24 @@ public class RandomComplex extends Random {
      * The distribution is centered at ({@code mean}, {@code mean}) with standard deviation {@code std} along
      * both the real and imaginary axes of the complex plane.
      *
-     * <p>The 2D circular Gaussian distribution centered at (x<sub>0</sub>, x<sub>0</sub>) with standard deviations along each
-     * axis, &sigma;, is defined as:
-     * <pre>
-     *     f(x, y) = 1/(2&pi;&sigma;<sup>2</sup>) exp[ -1/(2&sigma;<sup>2</sup>) ((x - x<sub>0</sub>)<sup>2</sup> + (y - x<sub>0</sub>)<sup>2</sup>) ]</pre>
+     * <p>The 2D circular Gaussian distribution centered at <span class="latex-inline">(x<sub>0</sub>, x<sub>0</sub>)</span>
+     * with standard deviations along each axis, <span class="latex-inline">&sigma;</span>, is defined as:
+     * <span class="latex-replace"><pre>
+     *     f(x, y) = 1/(2&pi;&sigma;<sup>2</sup>) exp[ -1/(2&sigma;<sup>2</sup>) ((x - x<sub>0</sub>)<sup>2</sup> + (y - y<sub>0</sub>)<sup>2</sup>) ]</pre>
+     * </span>
+     *
+     * <!-- LATEX: \[
+     * f(x, y) = \frac{1}{2\pi\sigma^2} \exp\left[-\frac{1}{2\sigma^2}\left(\left(x_2 - x_0\right)^2
+     * + \left(y - y_0\right)^2\right)\right]
+     * \] -->
      *
      * @param mean Mean of distribution.
      * @param std Standard deviation of distribution. Must be greater than zero.
      * @return A pseudorandom complex number sampled from a 2D circular Gaussian (normal) distribution on the complex plain.
      *
      * @see #randnComplex64()
-     * @see #randnComplex64(double, double, double, double)
-     * @see #randnComplex64(double, double, double, double, double)
+     * @see #randnComplex64(float, float, float, float)
+     * @see #randnComplex64(float, float, float, float, float)
      */
     public Complex64 randnComplex64(float mean, float std) {
         return randnComplex64(mean, std, mean, std);
@@ -423,8 +477,14 @@ public class RandomComplex extends Random {
      *
      * <p>The 2D Gaussian distribution centered at (x<sub>0</sub>, y<sub>0</sub>) with standard deviations along each
      * axis, &sigma;<sub>X</sub> and &sigma;<sub>Y</sub>, is defined as:
-     * <pre>
+     * <span class="latex-replace"><pre>
      *     f(x, y) = 1/(2&pi;&sigma;<sub>X</sub>&sigma;<sub>Y</sub>) * exp[ -(x - x<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>X</sub><sup>2</sup> - (y - y<sub>0</sub>)<sup>2</sup>/2&sigma;<sub>Y</sub><sup>2</sup>]</pre>
+     * </span>
+     *
+     * <!-- LATEX: \[
+     * f(x, y) = \frac{1}{2\pi\sigma_x \sigma_y} \exp\left[-\left(\frac{x_2 - x_0}{\sigma_x}\right)^2 - \left(\frac{y - y_0}{
+     * \sigma_y}\right)^2\right]
+     * \] -->
      *
      * @param meanRe Mean of distribution along real axis.
      * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
@@ -432,9 +492,9 @@ public class RandomComplex extends Random {
      * @param stdIm Standard deviation of distributions along imaginary axis. Must be greater than zero.
      * @return A pseudorandom complex number sampled from a 2D elliptical Gaussian (normal) distribution on the complex plain.
      *
-     * @see #randnComplex64(double, double)
+     * @see #randnComplex64(float, float)
      * @see #randnComplex64()
-     * @see #randnComplex64(double, double, double, double, double)
+     * @see #randnComplex64(float, float, float, float, float)
      */
     public Complex64 randnComplex64(float meanRe, float stdRe, float meanIm, float stdIm) {
         return new Complex64((float) nextGaussian(meanRe, stdRe), (float) nextGaussian(meanIm, stdIm));
@@ -447,14 +507,35 @@ public class RandomComplex extends Random {
      * the real and imaginary axes of the complex plane respectively. Further, {@code corrCoeff} is the correlation coefficient
      * between the real and imaginary values.
      *
-     * <p>The covariance matrix, <b>&Sigma;</b>,  of such a distribution is expressed as:
-     * <pre>
-     *   <b>&Sigma;</b> = [      stdRe*stdRe        corrCoeff*stdRe*stdIm ]
-     *       [ corrCoeff*stdRe*stdIm        stdIm*stdIm      ]</pre>
-     * Let &mu; = [x<sub>0</sub>  y<sub>0</sub>]<sup>T</sup> be the mean column vector and <b>z</b> = [x  y]<sup>T</sup> also be a
+     * <p>The covariance matrix, <span class="latex-inline"><b>&Sigma;</b></span>, of such a distribution is expressed as:
+     * <span class="latex-replace"><pre>
+     *   <b>&Sigma;</b> = [  &sigma;<sub>x</sub><sup>2</sup>    &rho;&sigma;<sub>x</sub>&sigma;<sub>y</sub> ]
+     *       [ &rho;&sigma;<sub>x</sub>&sigma;<sub>y</sub>     &sigma;<sub>y</sub><sup>2</sup> ]</pre></span>
+     * <!-- LATEX: \[
+     * \mathbf{\Sigma} = \begin{bmatrix}
+     * \sigma_x^2 & \rho\sigma_x\sigma_y \\
+     * \rho\sigma_x\sigma_y & \sigma_y^2
+     * \end{bmatrix}
+     * \] -->
+     *
+     * where <span class="latex-inline">&rho;</span> is the correlation coefficient,
+     * <span class="latex-inline">&sigma;<sub>x</sub></span> is the standard deviation
+     * along the real axis, and <span class="latex-inline">&sigma;<sub>y</sub></span>
+     * is the standard deviation along the imaginary axis.
+     *
+     * Let <span class="latex-replace"><b>&mu;</b> = [x<sub>0</sub>  y<sub>0</sub>]<sup>T</sup></span>
+     * <!-- LATEX: \( \pmb{\mu} = \begin{bmatrix} x_0 & y_0 \end{bmatrix}^T \) -->
+     * be the mean column vector and <span class="latex-replace"><b>z</b> = [x  y]<sup>T</sup></span>
+     * <!-- LATEX: \( \mathbf{z} = \begin{bmatrix} x & y \end{bmatrix}^T \) --> also be a
      * column vector. Then, the bivariate Gaussian distribution may be expressed as:
-     * <pre>
-     *     f(<b>z</b>) = 1/(2 &pi; det(<b>&Sigma;</b>)<sup>1/2</sup>) exp[-1/2 (<b>z</b> - &mu;)<sup>T</sup> <b>&Sigma;</b><sup>-1</sup> (<b>z</b> - &mu;)]</pre>
+     * <span class="latex-replace"><pre>
+     *     f(<b>z</b>) = 1/(2 &pi; det(<b>&Sigma;</b>)<sup>1/2</sup>) exp[-1/2 (<b>z</b> - <b>&mu;</b>)<sup>T</sup> <b>&Sigma;</b><sup>-1</sup> (<b>z</b> - <b>&mu;</b>)]</pre>
+     * </span>
+     *
+     * <!-- LATEX: \[
+     * f(\mathbf{z}) = \frac{1}{2\pi \sqrt{\det(\mathbf{\Sigma})}} \exp\left[ -\frac{1}{2} (\mathbf{z} - \pmb{\mu})^T
+     * \mathbf{\Sigma}^{-1}(\mathbf{z} - \pmb{\mu})\right]
+     * \] -->
      *
      * @param meanRe Mean of distribution along real axis.
      * @param stdRe Standard deviation of distributions along real axis. Must be greater than zero.
@@ -465,8 +546,8 @@ public class RandomComplex extends Random {
      * @return A pseudorandom complex number sampled from a bivariate Gaussian (normal) distribution on the complex plain.
      * @throws IllegalArgumentException If {@code corrCoeff <= -1 || corrCoeff >= 1} or {@code stdRe < 0.0 || stdIm < 0.0}.
      *
-     * @see #randnComplex64(double, double)
-     * @see #randnComplex64(double, double, double, double)
+     * @see #randnComplex64(float, float)
+     * @see #randnComplex64(float, float, float, float)
      * @see #randnComplex64()
      */
     public Complex64 randnComplex64(float meanRe, float stdRe, float meanIm, float stdIm, float corrCoeff) {

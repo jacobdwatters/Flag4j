@@ -32,20 +32,20 @@ import sys
 # Must be using pyton 3.7+ to guarantee a dict maintains insertion order.
 html2latex = {
     # Braces
-    r"\{": r"\\left {", r"\}": r"\\right }",
+    r"\{": r"\\left\{", r"\}": r"\\right\}",
 
     # Simple fractions
     r"\([ ]*([^()<>]+)[ ]*\)[ ]*/[ ]*\([ ]*([^()<>]+)[ ]*\)": r"\\cfrac{\g<1>}{\g<2>}",
 
     # Parens, brackets
-    r"\(": r"\\left (", r"\)": r"\\right )", r"\[": r"\\left [", r"]": r"\\right ]",
+    r"\(": r"\\left(", r"\)": r"\\right)", r"\[": r"\\left[", r"]": r"\\right]",
 
     # Sums and products
     r"&Sigma;<sub>(.*?)</sub><sup>(.*?)</sup>": r"\\sum_{\g<1>}^{\g<2>}",
     r"&Pi;<sub>(.*?)</sub><sup>(.*?)</sup>": r"\\prod_{\g<1>}^{\g<2>}",
 
     # Lowercase greek
-    r"&alpha;": r"\\alpha ", r"&beta;": r"\\beta ", r"&gamma;": r"\\gamma ", r"&delta;": r"\\delta ", r"&epsilon;": r"\\epsilon ",
+    r"&alpha;": r"\\alpha ", r"&beta;": r"\\beta ", r"&gamma;": r"\\gamma ", r"&delta;": r"\\delta ", r"&epsilon;": r"\\varepsilon ",
     r"&zeta;": r"\\zeta ", r"&eta;": r"\\eta ", r"&theta;": r"\\theta ", r"&iota;": r"\\iota ", r"&kappa;": r"\\kappa ",
     r"&lambda;": r"\\lambda ", r"&mu;": r"\\mu ", r"&nu;": r"\\nu ", r"&xi;": r"\\xi ", r"&omicron;": r"\\omicron ", r"&pi;": r"\\pi ",
     r"&rho;": r"\\rho ", r"&sigma;": r"\\sigma ", r"&tau;": r"\\tau ", r"&upsilon;": r"\\upsilon ", r"&phi;": r"\\phi ",
@@ -73,9 +73,11 @@ html2latex = {
     r"&oplus;": r"\\oplus ", r"&Implies;": r"\\implies", r"&times;": r"\\times", r"&middot;": r"\\cdot",
 
     # Other symbols.
-    r"&infin;": r"\\inf ", r"\.\.\.": r"\\cdots ", r"&ell;": r"\\ell "
+    r"&infin;": r"\\inf ", r"\.\.\.": r"\\cdots ", r"&ell;": r"\\ell ", r"&deg;": r"^{\\circ}", r"exp": r"\\exp",
+    r"log": r"\\log", r"ln": r"\\ln", r"sin": r"\\sin", r"cos": r"\\cos", r"tan": r"\\tan",
+    r"cot": r"\\cot", r"sec": r"\\sec", r"csc": r"\\csc", r"min": r"\\min", r"max": r"\\max",
+    r"Re": r"\\Re", r"Im": r"\\Im",
 }
-
 
 mathjax_script = '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
 
@@ -120,7 +122,12 @@ def convert_simple(match: re.Match, opened: str, closed: str) -> str:
     :param closed: Closing string for math block. Must be one of ["\\)", "\\]", "$$"]
     :return: The matched content formatted as latex.
     """
-    content = match.group(1).replace("<pre>", "").replace("</pre>", "").strip()
+    content = (match.group(1)
+               .replace("<pre>", "")
+               .replace("</pre>", "")
+               .replace("<blockquote>", "")
+               .replace("</blockquote>", "")
+               .strip())
     for pattern, replacement in html2latex.items():
         content = re.sub(pattern, replacement, content)
     return f"{opened} {content} {closed}"
@@ -150,6 +157,8 @@ def convert_simple_aligned(match: re.Match, align_token, align_replacement) -> s
     content = (match.group(1)
                .replace("<pre>", "")
                .replace("</pre>", "")
+               .replace("<blockquote>", "")
+               .replace("</blockquote>", "")
                .replace(align_token, f"&{align_replacement}")
                .strip()
                .replace("\n", " \\\\ \n"))
@@ -186,14 +195,14 @@ def process_javadoc(file_path) -> None:
                      convert_simple_inline, content, flags=re.DOTALL)
     content = re.sub(r'<span class="latex-display">\s*(.*?)\s*</span>',
                      convert_simple_display, content, flags=re.DOTALL)
-    content = re.sub(r'<span class="latex-eq-aligned">\s*(.*?)\s*</span>',
+    content = re.sub(r'<span class="latex-eq-align">\s*(.*?)\s*</span>',
                      convert_simple_eq_aligned, content, flags=re.DOTALL)
-    content = re.sub(r'<span class="latex-impl-aligned">\s*(.*?)\s*</span>',
+    content = re.sub(r'<span class="latex-impl-align">\s*(.*?)\s*</span>',
                      convert_simple_impl_aligned, content, flags=re.DOTALL)
 
     # Handel custom replacements.
     pattern = re.compile(
-        r'(<span class="latex-replaceable">.*?</span>)\s*<!-- LATEX:\s*(\{@literal)?\s*(.*?)\s*(\})?\s* -->',
+        r'(<span class="latex-replace">.*?</span>)\s*<!--\s*LATEX:\s*(\{@literal)?\s*(.*?)\s*(\})?\s*-->',
         re.DOTALL
     )
 

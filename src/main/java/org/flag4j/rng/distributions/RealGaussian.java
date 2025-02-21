@@ -30,7 +30,21 @@ import java.util.Random;
 
 
 /**
- * A real Gaussian (e.g. normal) distribution.
+ * <p>A 1D real Gaussian (normal) distribution <span class="latex-replace">N(&mu;, &sigma;<sup>2</sup>)</span>
+ * <!-- LATEX:\(\mathcal{N}\left(\mu, \sigma^2\right)\) -->.
+ *
+ * <p>The PDF of the 1D real Gaussian distribution <span class="latex-replace">N(&mu;, &sigma;<sup>2</sup>)</span>
+ * <!-- LATEX:\(\mathcal{N}\left(\mu, \sigma^2\right)\) --> with mean <span class="latex-inline">&mu;</span> and
+ * standard deviation <span class="latex-inline">&sigma;</span> is given by:
+ * <span class="latex-replace"><pre>
+ *     f(x) = 1 / (2&pi;&sigma;<sup>2</sup>)<sup>1/2</sup> exp[ - (x - &mu;)<sup>2</sup> / (2&sigma;<sup>2</sup>) ]</pre></span>
+ *
+ * <!-- LATEX: \[
+ * f(x) = \frac{1}{2\pi\sigma^2} \exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]
+ * \] -->
+ *
+ * @see RealUniform
+ * @see Complex128BiGaussian
  */
 public class RealGaussian extends Distribution<Double, Random> {
 

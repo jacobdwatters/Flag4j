@@ -26,13 +26,24 @@ package org.flag4j.linalg.solvers.exact;
 
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.semiring_arrays.TensorOverSemiring;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.CVector;
 
 
 /**
- * Solver for solving a complex well determined linear tensor equation A*X=B in an exact sense.
+ * <p>Solver for solving a real well determined linear tensor equation <span class="latex-inline">AX = B</span> in an exact sense.
+ *
+ * <p>All indices of <span class="latex-inline">X</span> are summed over in the tensor product with the rightmost indices of
+ * <span class="latex-inline">A</span> as if by
+ * {@link TensorOverSemiring#tensorDot(TensorOverSemiring, int[], int[]) A.tensorDot(X, M, N)} where
+ * {@code M = new int[]{X.rank()-1, X.rank(), X.rank()+1, ..., A.rank()-1}} and
+ * {@code N = new int[]{0, 1, ..., X.rank()-1}}.
+ *
+ * @see RealExactSolver
+ * @see ExactTensorSolver
+ * @see org.flag4j.linalg.TensorInvert
  */
 public class ComplexExactTensorSolver extends ExactTensorSolver<CTensor, CMatrix, CVector> {
 

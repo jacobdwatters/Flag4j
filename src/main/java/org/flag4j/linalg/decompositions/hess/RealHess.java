@@ -46,7 +46,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *
  * <p>For example, the following matrix is in upper Hessenburg form where each '<span class="latex-inline">&times;</span>'
  * may hold a different value:
- * <span class="latex-replaceable"><pre>
+ * <span class="latex-replace"><pre>
  *     [[ &times; &times; &times; &times; &times; ]
  *      [ &times; &times; &times; &times; &times; ]
  *      [ 0 &times; &times; &times; &times; ]
@@ -161,7 +161,7 @@ public class RealHess extends RealUnitaryDecomposition {
      * in the correct form, and you only need to reduce an inner sub-block of the full matrix.
      * Most commonly this would be useful after balancing a matrix using
      * {@link org.flag4j.linalg.decompositions.balance.RealBalancer RealBalancer}, which results in the form
-     * <span class="latex-replaceable"><pre>
+     * <span class="latex-replace"><pre>
      *      [  T<sub>1</sub>  X  Y  ]
      *      [  <b>0</b>   B  Z  ]
      *      [  <b>0</b>   <b>0</b>  T<sub>2</sub> ]</pre></span>

@@ -159,7 +159,7 @@ public final class MatrixNorms {
     /**
      * <p>Computes the matrix operator norm of a real dense matrix "induced" by the vector p-norm.
      * Specifically, this method computes the operator norm of the matrix as:
-     * <span class="latex-replaceable"><pre>
+     * <span class="latex-replace"><pre>
      *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre></span>
      *
      * <!-- LATEX: \[ ||A||_p = \sup_{x \ne 0} \cfrac{||Ax||_p}{||x||_p} \] -->
@@ -205,7 +205,7 @@ public final class MatrixNorms {
     /**
      * <p>Computes the matrix operator norm of a complex dense matrix "induced" by the vector p-norm.
      * Specifically, this method computes the operator norm of the matrix as:
-     * <span class="latex-replaceable"><pre>
+     * <span class="latex-replace"><pre>
      *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre></span>
      *
      * <!-- LATEX: \[ ||A||_p = \sup_{x \ne 0} \cfrac{||Ax||_p}{||x||_p} \] -->

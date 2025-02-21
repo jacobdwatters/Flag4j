@@ -24,6 +24,8 @@
 
 package org.flag4j.linalg.solvers.exact;
 
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.linalg.decompositions.lu.ComplexLU;
@@ -31,35 +33,44 @@ import org.flag4j.linalg.solvers.exact.triangular.ComplexBackSolver;
 import org.flag4j.linalg.solvers.exact.triangular.ComplexForwardSolver;
 
 /**
- * <p>Solves a well determined system of equations <b>Ax=b</b> or <b>AX=B</b> in an exact sense by using a
+ * <p>Solves a well determined system of equations <span class="latex-inline">Ax = b</span> or <span class="latex-inline">AX = B</span>
+ * in an exact sense by using a
  * {@link ComplexLU LU decomposition}
- * where <b>A</b>, <b>B</b>, and <b>X</b> are matrices, and <b>x</b> and <b>b</b> are vectors.
+ * where <span class="latex-inline">A</span>, <span class="latex-inline">B</span>, and <span class="latex-inline">X</span>
+ * are matrices, and <span class="latex-inline">x</span> and <span class="latex-inline">b</span> are vectors.
  *
- * <p>If the system is not well determined, i.e. <b>A</b> is not square or not full rank, then use a
+ * <p>If the system is not well determined, i.e. <span class="latex-inline">A</span> is not square or not full rank, then use a
  * {@link org.flag4j.linalg.solvers.lstsq.ComplexLstsqSolver least-squares solver}.
  *
  * <h2>Usage:</h2>
- * <p>A single system may be solved by calling either {@link #solve(CMatrix, CVector)} or
- * {@link #solve(CMatrix, CVector)}.
+ * <p>A single system may be solved by calling either {@link ExactSolver#solve(MatrixMixin, VectorMixin)} or
+ * {@link ExactSolver#solve(MatrixMixin, VectorMixin)}.
  *
- * <p>Instances of this solver may also be used to efficiently solve many systems of the form <b>Ax=b</b> or <b>AX=B</b>
- * for the same coefficient matrix <b>A</b> but numerous constant vectors/matrices <b>b</b> or <b>B</b>. To do this, the workflow
+ * <p>Instances of this solver may also be used to efficiently solve many systems of the form <span class="latex-inline">Ax = b</span>
+ * or <span class="latex-inline">AX = B</span>
+ * for the same coefficient matrix <span class="latex-inline">A</span> but numerous constant vectors/matrices
+ * <span class="latex-inline">b</span> or <span class="latex-inline">B</span>. To do this, the workflow
  * would be as follows:
  * <ol>
  *     <li>Create an instance of {@code ComplexExactSolver}.</li>
- *     <li>Call {@link #decompose(CMatrix) decompse(A)} once on the coefficient matrix <b>A</b>.</li>
- *     <li>Call {@link #solve(CVector) solve(b)} or {@link #solve(CMatrix) solve(B)} as many times as needed to solve each
- *     system for with the various <b>b</b> vectors and/or <b>B</b> matrices. </li>
+ *     <li>Call {@link ExactSolver#decompose(MatrixMixin) decompse(A)} once on the coefficient matrix
+ *     <span class="latex-inline">A</span>.</li>
+ *     <li>Call {@link ExactSolver#solve(VectorMixin) solve(b)} or {@link ExactSolver#solve(MatrixMixin)
+ *     solve(B)} as many times as needed to
+ *     solve each
+ *     system for with the various <span class="latex-inline">b</span> vectors and/or
+ *     <span class="latex-inline">B</span> matrices. </li>
  * </ol>
  *
- * <b>Note:</b> Any call made to one of the following methods after a call to {@link #decompose(CMatrix) decompse(A)} will
+ * <b>Note:</b> Any call made to one of the following methods after a call to
+ * {@link ExactSolver#decompose(MatrixMixin) decompse(A)} will
  * override the coefficient matrix set that call:
  * <ul>
- *     <li>{@link #solve(CMatrix, CVector)}</li>
- *     <li>{@link #solve(CMatrix, CMatrix)}</li>
+ *     <li>{@link ExactSolver#solve(MatrixMixin, VectorMixin)}</li>
+ *     <li>{@link ExactSolver#solve(MatrixMixin, MatrixMixin)}</li>
  * </ul>
  *
- * <p>Specialized solvers are provided for inversion using {@link #solveIdentity(CMatrix)}. This should be preferred
+ * <p>Specialized solvers are provided for inversion using {@link ExactSolver#solveIdentity(MatrixMixin)}. This should be preferred
  * over calling on of the other solve methods and providing an identity matrix explicitly.
  *
  * @param <T> The type of the coefficient matrix in the linear system.

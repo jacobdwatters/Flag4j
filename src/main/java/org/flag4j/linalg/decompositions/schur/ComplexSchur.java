@@ -179,7 +179,7 @@ public class ComplexSchur extends Schur<CMatrix, Complex128[]> {
     /**
      * <p>Reverts the scaling and permutations applied during the balancing step to obtain the correct form.
      * <p>Specifically, this method computes
-     * <span class="latex-eq-aligned"><pre>
+     * <span class="latex-eq-align"><pre>
      *     U := PDU
      *        = TU</pre>
      * where <span class="latex-inline">P</span> and <span class="latex-inline">D</span> are the permutation and scaling matrices respectively from balancing.

@@ -46,7 +46,7 @@ import org.flag4j.util.ValidateParameters;
  *
  * <p>The similarity transformation of a square matrix <span class="latex-inline">A</span> into the
  * balanced matrix <span class="latex-inline">B</span> can be described as:
- * <span class="latex-eq-aligned">
+ * <span class="latex-eq-align">
  * <pre>
  *     B = T<sup>-1</sup> A T
  *       = D<sup>-1</sup> P<sup>-1</sup> A P D.</pre>
@@ -54,7 +54,7 @@ import org.flag4j.util.ValidateParameters;
  *
  * Solving for <span class="latex-inline">A</span>,
  * balancing may be viewed as the following decomposition:
- * <span class="latex-eq-aligned">
+ * <span class="latex-eq-align">
  * <pre>
  *     A = T B T<sup>-1</sup>
  *       = P D B D<sup>-1</sup> P<sup>-1</sup>.</pre>
@@ -64,7 +64,7 @@ import org.flag4j.util.ValidateParameters;
  * and <span class="latex-inline">D</span> is a diagonal scaling matrix.
  *
  * <p>When permutations are used during balancing we obtain a specific form. First,
- * <span class="latex-replaceable">
+ * <span class="latex-replace">
  * <pre>
  *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
  *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]
@@ -87,7 +87,7 @@ import org.flag4j.util.ValidateParameters;
  * These are also eigenvalues of <span class="latex-inline">A</span>.
  * Then, if scaling is applied we obtain:
  *
- * <span class="latex-replaceable">
+ * <span class="latex-replace">
  * <pre>
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
@@ -105,7 +105,7 @@ import org.flag4j.util.ValidateParameters;
  * -->
  *
  * where <span class="latex-inline">D<sub>1</sub></span> is a diagonal matrix such that,
- * <span class="latex-replaceable">
+ * <span class="latex-replace">
  * <pre>
  *         [ I<sub>1</sub> 0  0  ]
  *     D = [ 0  D<sub>1</sub> 0  ]
@@ -361,7 +361,7 @@ public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomp
      *
      * <p>Such row and column permutations transform the original matrix <span class="latex-inline">A</span> into the
      * following form:
-     * <span class="latex-replaceable">
+     * <span class="latex-replace">
      * <pre>
      *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
      *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]

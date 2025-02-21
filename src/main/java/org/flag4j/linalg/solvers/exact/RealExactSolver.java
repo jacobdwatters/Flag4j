@@ -25,6 +25,8 @@
 package org.flag4j.linalg.solvers.exact;
 
 
+import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.linalg.decompositions.lu.RealLU;
@@ -42,8 +44,8 @@ import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
  * {@link org.flag4j.linalg.solvers.lstsq.RealLstsqSolver least-squares solver}.
  *
  * <h2>Usage:</h2>
- * <p>A single system may be solved by calling either {@link #solve(Matrix, Vector)} or
- * {@link #solve(Matrix, Vector)}.
+ * <p>A single system may be solved by calling either {@link ExactSolver#solve(MatrixMixin, VectorMixin)} or
+ * {@link ExactSolver#solve(MatrixMixin, VectorMixin)}.
  *
  * <p>Instances of this solver may also be used to efficiently solve many systems of the form <span class="latex-inline">Ax = b</span>
  * or <span class="latex-inline">AX = B</span>
@@ -52,20 +54,24 @@ import org.flag4j.linalg.solvers.exact.triangular.RealForwardSolver;
  * would be as follows:
  * <ol>
  *     <li>Create an instance of {@code RealExactSolver}.</li>
- *     <li>Call {@link #decompose(Matrix) decompse(A)} once on the coefficient matrix <span class="latex-inline">A</span>.</li>
- *     <li>Call {@link #solve(Vector) solve(b)} or {@link #solve(Matrix) solve(B)} as many times as needed to solve each
+ *     <li>Call {@link ExactSolver#decompose(MatrixMixin) decompse(A)} once on the coefficient matrix <span
+ *     class="latex-inline">A</span>.</li>
+ *     <li>Call {@link ExactSolver#solve(VectorMixin) solve(b)} or {@link ExactSolver#solve(MatrixMixin) solve(B)} as many times as
+ *     needed to solve
+ *     each
  *     system for with the various <span class="latex-inline">b</span> vectors and/or
  *     <span class="latex-inline">B</span> matrices. </li>
  * </ol>
  *
- * <b>Note:</b> Any call made to one of the following methods after a call to {@link #decompose(Matrix) decompse(A)} will
+ * <b>Note:</b> Any call made to one of the following methods after a call to {@link ExactSolver#decompose(MatrixMixin) decompse(A)}
+ * will
  * override the coefficient matrix set that call:
  * <ul>
- *     <li>{@link #solve(Matrix, Vector)}</li>
- *     <li>{@link #solve(Matrix, Matrix)}</li>
+ *     <li>{@link ExactSolver#solve(MatrixMixin, VectorMixin)}</li>
+ *     <li>{@link ExactSolver#solve(MatrixMixin, VectorMixin)}</li>
  * </ul>
  *
- * <p>Specialized solvers are provided for inversion using {@link #solveIdentity(Matrix)}. This should be preferred
+ * <p>Specialized solvers are provided for inversion using {@link ExactSolver#solveIdentity(MatrixMixin)}. This should be preferred
  * over calling on of the other solve methods and providing an identity matrix explicitly.
  *
  * @param <T> The type of the coefficient matrix in the linear system.

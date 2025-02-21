@@ -38,6 +38,12 @@ import org.flag4j.util.ValidateParameters;
  * <p>Solves a well determined system of equations <span class="latex-inline">AX = B</span> in an exact sense where
  * <span class="latex-inline">A</span>, <span class="latex-inline">X</span>, and <span class="latex-inline">B</span> are tensors.
  *
+ * <p>All indices of <span class="latex-inline">X</span> are summed over in the tensor product with the rightmost indices of
+ * <span class="latex-inline">A</span> as if by
+ * {@link TensorOverSemiring#tensorDot(TensorOverSemiring, int[], int[]) A.tensorDot(X, M, N)} where
+ * {@code M = new int[]{X.rank()-1, X.rank(), X.rank()+1, ..., A.rank()-1}} and
+ * {@code N = new int[]{0, 1, ..., X.rank()-1}}.
+ *
  * @param <T> Type of tensor in equation to solve.
  * @param <U> Matrix type equivalent of tensor to solve.
  * @param <V> Vector type equivalent of tensor to solve.
@@ -70,9 +76,9 @@ public abstract class ExactTensorSolver<T extends AbstractTensor<T, ?, ?>,
      *
      * <p>All indices of <span class="latex-inline">X</span> are summed over in the tensor product with the rightmost indices of
      * <span class="latex-inline">A</span> as if by
-     * {@link org.flag4j.arrays.backend.semiring_arrays.TensorOverSemiring#tensorDot(TensorOverSemiring, int[], int[])} where
+     * {@link TensorOverSemiring#tensorDot(TensorOverSemiring, int[], int[]) A.tensorDot(X, M, N)} where
      * {@code M = new int[]{X.rank()-1, X.rank(), X.rank()+1, ..., A.rank()-1}} and
-     * {@code N = new int[]{0, 1, ..., X.rank()-1}}
+     * {@code N = new int[]{0, 1, ..., X.rank()-1}}.
      * @param A Coefficient tensor in the linear system.
      * @param B Tensor of constants in the linear system.
      * @return The solution to <span class="latex-inline">X</span> in the linear system <span class="latex-inline">AX = B</span>.

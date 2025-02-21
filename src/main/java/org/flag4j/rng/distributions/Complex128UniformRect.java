@@ -29,25 +29,45 @@ import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.rng.RandomComplex;
 
 /**
- * A rectangular uniform distribution on the complex plane.
+ * <p>A rectangular uniform distribution on the complex plane.
+ *
+ * <p>A rectangular uniform distribution on the complex plane is equivalent to combining two 1D uniform distributions over the real
+ * and imaginary axes: <span class="latex-replace">U(a, b)</span> <!-- LATEX: \(\mathcal{U}(a, b) \) -->
+ * and <span class="latex-replace">U(c, d)</span> <!-- LATEX: \(\mathcal{U}(c, d) \) --> respectively.
+ *
+ * <p>The PDF of the joint distribution of the real component <span class="latex-replace">x ~ U(a, b)</span>
+ * <!-- LATEX: \( x \sim \mathcal{U}(a, b) \) --> and the complex component <span class="latex-replace">y ~ U(c, d)</span>
+ * <!-- LATEX: \( y \sim \mathcal{U}(c, d) \) --> for a complex value <span class="latex-inline">z = x + iy</span> is given by:
+ * <span class="latex-replace"><pre>
+ *     f(z) = { 1 / [(b - a)(d - c)] for a &le; Re(z) &lt; b and c &le; Im(z) &lt; d,  0 otherwise.</pre></span>
+ *
+ * <!-- LATEX: \[ f(z) = \begin{cases}
+ * \frac{1}{(b - a)(d - c)} & \text{for } \Re(z) \in [a, b), \Im(z) \in [c, d) \\
+ * 0 & \text{otherwise}.
+ * \end{cases} \] -->
+ *
+ * @see Complex128UniformDisk
+ * @see Complex128BiGaussian
+ * @see RealUniform
+ * @see RealGaussian
  */
 public class Complex128UniformRect extends Distribution<Complex128, RandomComplex> {
 
 
     /**
-     * Lower bound of the real component of the uniform distribution (inclusive).
+     * Lower bound, <span class="latex-inline">a</span>, of the real component of the uniform distribution (inclusive).
      */
     public final double minRe;
     /**
-     * Upper bound of the real component of the uniform distribution (exclusive).
+     * Upper bound, <span class="latex-inline">b</span>, of the real component of the uniform distribution (exclusive).
      */
     public final double maxRe;
     /**
-     * Lower bound of the imaginary component of the uniform distribution (inclusive).
+     * Lower bound, <span class="latex-inline">c</span>, of the imaginary component of the uniform distribution (inclusive).
      */
     public final double minIm;
     /**
-     * Upper bound of the imaginary component of the uniform distribution (exclusive).
+     * Upper bound, <span class="latex-inline">d</span>, of the imaginary component of the uniform distribution (exclusive).
      */
     public final double maxIm;
 

@@ -77,20 +77,20 @@ will be solved for \( x \).
 ### 2.3 Aligned $ \LaTeX $ Replacements
 
 If you would like to align a multi-line HTML equation by equal or "implies" signs, use
-the tags `<span class="latex-eq-aligned">...</span>`. There must be exactly one '='
-per line of the equation. Similarly, `<span class="latex-impl-aligned">...</span>` can
+the tags `<span class="latex-eq-align">...</span>`. There must be exactly one '='
+per line of the equation. Similarly, `<span class="latex-impl-align">...</span>` can
 be used for implication chains.
 
 The following docstring,
 ```java
 /**
- * <span class="latex-eq-aligned">
+ * <span class="latex-eq-align">
  * <pre>
  *     A = T B T<sup>-1</sup>
  *       = P D B D<sup>-1</sup> P<sup>-1</sup></pre>
  * </span>
  *
- * <span class="latex-impl-aligned">
+ * <span class="latex-impl-align">
  * <pre>
  *      x < &alpha; &amp;Implies; x < &amp;Sigma;<sub>i=1</sub><sup>N</sup> (y<sub>i</sub>);
  *            &amp;Implies; x < &amp;beta;</pre>
@@ -112,7 +112,7 @@ will be converted to the following in the final HTML,
 ### 2.4 Customized $ \LaTeX $ Replacements
 For more complicated $ \LaTeX $ Replacements we may want to specify <em>exactly</em> what
 the $ \LaTeX $ should be replacing the HTML. To do this we utilize the `<span
-class="latex-replaceable">...</span>` block.
+class="latex-replace">...</span>` block.
 
 To specify custom $ \LaTeX $ you must provide an HTML equation for simple rendering within an IDE. 
 This allows users to avoid seeing raw $ \LaTeX $ in the docs rendered by the IDE. 
@@ -123,7 +123,7 @@ You can then optionally provide a $ \LaTeX $ equation within an HTML comment to 
 The following doc comment specifies that an equation is replaceable 
 ```java
 /**
- * <span class="latex-replaceable">
+ * <span class="latex-replace">
  * <pre>
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
@@ -131,7 +131,7 @@ The following doc comment specifies that an equation is replaceable
  * </span>
  */
 ```
-The `<span class="latex-replaceable">` tag indicates that the following HTML equation may be replaced by
+The `<span class="latex-replace">` tag indicates that the following HTML equation may be replaced by
 a $ \LaTeX $ equation when building the docs. This tag and the closing `</span>` <em>must</em>
 be included for the equation to be replaced. If there is not a latex equations following this, the
 tag will be ignored.
@@ -158,7 +158,7 @@ the equation inside a special HTML comment. The comment must begin with `<!-- LA
 ```
 
 The HTML comment `<!-- LATEX: ... -->` must immediately follow the `<span 
-class="latex-replaceable">...</span>`
+class="latex-replace">...</span>`
 block for it to be utilized (white space and newlines are allowed between the two). 
 Otherwise, the $ \LaTeX $ comment will be ignored.
 
@@ -171,7 +171,7 @@ The full doc comment would look something like,
 /**
  * Some stuff...
  *
- * <span class="latex-replaceable">
+ * <span class="latex-replace">
  * <pre>
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
@@ -193,7 +193,7 @@ The full doc comment would look something like,
 
 The exact regex used in python to match such instances is:
 ```regexp
-(<span class="latex-replaceable">.*?</span>)\s*<!-- LATEX:\s*(\{@literal\s*.*?\s*}\s*) -->
+(<span class="latex-replace">.*?</span>)\s*<!-- LATEX:\s*(\{@literal\s*.*?\s*}\s*) -->
 ```
 where `.*` will match <em>any</em> character including newlines. If the text in the generated 
 HTML does not match this, no replacements will be made.
@@ -209,7 +209,7 @@ Wow! That looks so much better! Enjoy your $ \LaTeX $.
 # Appendix
 ## A.1 Simple $ \LaTeX $ Regex Replacements
 This is the full regex replacement mapping for simple latex tags: `<span class=simple-inline>`,
-`<span class=simple-display>`, `<span class=latex-eq-aligned>`, `<span class=latex-impl-aligned>`.
+`<span class=simple-display>`, `<span class=latex-eq-align>`, `<span class=latex-impl-align>`.
 
 Replacements are performed in the same order they appear in the mapping.
 

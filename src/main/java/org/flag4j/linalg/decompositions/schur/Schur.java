@@ -385,7 +385,7 @@ public abstract class Schur<T extends MatrixMixin<T, ?, ?, ?>, U> extends Decomp
      * <p>Reverts the scaling and permutations applied during the balancing step to obtain the correct form.
      *
      * <p>Specifically, this method computes
-     * <span class="latex-eq-aligned"><pre>
+     * <span class="latex-eq-align"><pre>
      *     U := PDU
      *        = TU</pre></span>
      * where <span class="latex-inline">P</span> and <span class="latex-inline">D</span> are the permutation and

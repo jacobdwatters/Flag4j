@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - texify-everything # TODO: Temp for testing.
 jobs:
   # 1) Build the Javadoc and upload as artifact
   build-docs:

@@ -71,15 +71,18 @@ public final class Householder {
 
 
     /**
-     * Computes the vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> where {@code H} is a
+     * Computes the vector <span class="latex-inline">v</span> in of a Householder matrix 
+     * <span class="latex-inline">H = I-2vv<sup>T</sup></span> where <span class="latex-inline">H</span> is a
      * transformation matrix which reflects a vector across the plane normal to {@code normal}.
      *
      * <p>This method may be used in conjunction with {@link #leftMultReflector(Matrix, Vector, double, int, int, int)} and
-     * {@link #rightMultReflector(Matrix, Vector, double, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
-     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)
+     * {@link #rightMultReflector(Matrix, Vector, double, int, int, int)} to efficiently apply reflectors. 
+     * Doing this is <span class="latex-inline">O(n^2)</span> while forming the full Householder matrix and performing 
+     * matrix multiplication is <span class="latex-inline">O(n^3)</span>.
      *
-     * @param normal Vector normal to the plane which {@code H} reflects across.
-     * @return The vector {@code v} in of a Householder matrix {@code H=I-2vv}<sup>T</sup> which reflects across a plane
+     * @param normal Vector normal to the plane which <span class="latex-inline">H</span> reflects across.
+     * @return The vector <span class="latex-inline">v</span> in of a Householder matrix
+     * <span class="latex-inline">H = I-2vv<sup>T</sup></span> which reflects across a plane
      * normal to {@code normal}.
      */
     public static Vector getVector(Vector normal) {
@@ -107,8 +110,9 @@ public final class Householder {
      * is normal to the specified {@code normal} vector.
      *
      * <p>This method may be used in conjunction with {@link #leftMultReflector(CMatrix, CVector, Complex128, int, int, int)} and
-     * {@link #rightMultReflector(CMatrix, CVector, Complex128, int, int, int)} to efficiently apply reflectors. Doing this is O(n^2)
-     * while forming the full Householder matrix and performing matrix multiplication is O(n^3)
+     * {@link #rightMultReflector(CMatrix, CVector, Complex128, int, int, int)} to efficiently apply reflectors. Doing this is
+     * <span class="latex-inline">O(n^2)</span>
+     * while forming the full Householder matrix and performing matrix multiplication is <span class="latex-inline">O(n^3)</span>
      *
      * @param normal The vector normal to the plane the Householder reflector will reflect through\.
      * @return A transformation matrix which describes a reflection through a plane containing the origin with the
@@ -137,10 +141,11 @@ public final class Householder {
 
 
     /**
-     * Left multiplies a Householder matrix H = I - &alpha;vv<sup>T</sup>, represented by the vector
-     * v, to another matrix A. That is, computes H<sup>T</sup>A = (I - &alpha;vv<sup>T</sup>)<sup>T</sup>A.
+     * Left multiplies a Householder matrix <span class="latex-inline">H = I - &alpha;vv<sup>T</sup></span>, represented by the vector
+     * v, to another matrix A. That is, computes
+     * <span class="latex-inline">HA = (I - &alpha;vv<sup>T</sup>)A</span>.
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector v.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -184,10 +189,11 @@ public final class Householder {
 
 
     /**
-     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>T</sup>{@code )}.
+     * Right multiplies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>T</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span>, to another matrix <span class="latex-inline">A</span>. That is, computes 
+     * <span class="latex-inline">AH<sup>T</sup> = A(I-&alpha; vv<sup>T</sup>)<sup>T</sup></span>.
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -216,10 +222,11 @@ public final class Householder {
 
 
     /**
-     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>H</sup>{@code )*A}.
+     * Left multiplies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>H</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span>, to another matrix <span class="latex-inline">A</span>. 
+     * That is, computes <span class="latex-inline">HA = (I-&alpha; vv<sup>H</sup>)A</span>.
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -261,10 +268,11 @@ public final class Householder {
 
 
     /**
-     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>H</sup>{@code )}.
+     * Right multiplies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>H</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span>, to another matrix <span class="latex-inline">A</span>. That is, computes 
+     * <span class="latex-inline">AH<sup>H</sup> = A(I-&alpha; vv<sup>H</sup>)<sup>H</sup></span>.
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -294,16 +302,19 @@ public final class Householder {
 
 
     /**
-     * <p>Applies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector {@code v} to a
-     * symmetric matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.
+     * <p>Applies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>T</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span> to a
+     * symmetric matrix <span class="latex-inline">A</span> on both the left and right side. That is, computes
+     * <span class="latex-inline">HAH<sup>T</sup></span>.
      *
      * <p>Note: no check is made to
      * explicitly check that the {@code src} matrix is actually symmetric.
      *
      * @param src Matrix to apply the Householder reflector to. Assumed to be square and symmetric. Upper triangular portion
      * overwritten with the result.
-     * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
-     * @param alpha The scalar &alpha value in Householder reflector matrix definition.
+     * @param householderVector Householder vector <span class="latex-inline">v</span> from the definition of a Householder reflector
+     * matrix.
+     * @param alpha The scalar &alpha; value in Householder reflector matrix definition.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */
@@ -350,13 +361,14 @@ public final class Householder {
 
 
     /**
-     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>T</sup>{@code )*A}.
+     * Left multiplies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>T</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span>, to another matrix <span class="latex-inline">A</span>. That is, computes
+     * <span class="latex-inline">HA = (I-&alpha; vv<sup>T</sup> )A</span>.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
      * matrix.
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -372,14 +384,15 @@ public final class Householder {
 
 
     /**
-     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>T</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>T</sup>{@code )}.
+     * Right multiplies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>T</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span>, to another matrix <span class="latex-inline">A</span>. That is, computes
+     * <span class="latex-inline">AH<sup>T</sup> = A(I-&alpha; vv<sup>T</sup>)<sup>T</sup></span>.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
      * matrix.
      *
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -396,14 +409,15 @@ public final class Householder {
 
 
     /**
-     * Left multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code H*A = (I-}&alpha{@code vv}<sup>H</sup>{@code )*A}.
+     * Left multiplies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>H</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span>, to another matrix <span class="latex-inline">A</span>.
+     * That is, computes <span class="latex-inline">HA = (I-&alpha; vv<sup>H</sup>)A</span>.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
      * matrix.
      *
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -419,14 +433,15 @@ public final class Householder {
 
 
     /**
-     * Right multiplies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector
-     * {@code v}, to another matrix {@code A}. That is, computes {@code A*H = A*(I-}&alpha{@code vv}<sup>H</sup>{@code )}.
+     * Right multiplies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>H</sup></span>, represented by the vector
+     * <span class="latex-inline">v</span>, to another matrix <span class="latex-inline">A</span>.
+     * That is, computes <span class="latex-inline">AH<sup>H</sup> = A(I-&alpha; vv<sup>H</sup>)<sup>H</sup></span>.
      *
      * <p>This method is significantly more efficient than forming the full Householder matrix and multiplying it to the other
      * matrix.
      *
      * @param src Source matrix apply Householder vector to (modified).
-     * @param householderVector Householder vector {@code v}.
+     * @param householderVector Householder vector <span class="latex-inline">v</span>.
      * @param alpha Scalar value in Householder matrix.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param startRow Starting row of sub-matrix in {@code src} to apply reflector to.
@@ -442,16 +457,17 @@ public final class Householder {
 
 
     /**
-     * <p>Applies a Householder matrix {@code H=I-}&alpha{@code vv}<sup>H</sup>, represented by the vector {@code v} to a
-     * Hermitian matrix {@code A} on both the left and right side. That is, computes {@code H*A*H}.
+     * <p>Applies a Householder matrix <span class="latex-inline">H = I-&alpha; vv<sup>H</sup></span>, represented by the vector <span class="latex-inline">v</span> to a
+     * Hermitian matrix <span class="latex-inline">A</span> on both the left and right side.
+     * That is, computes <span class="latex-inline">HAH<sup>H</sup></span>.
      *
      * <p>Note: no check is made to
      * explicitly check that the {@code src} matrix is actually Hermitian.
      *
      * @param src Matrix to apply the Householder reflector to. Assumed to be square and Hermitian. Upper triangular portion
      * overwritten with the result.
-     * @param householderVector Householder vector {@code v} from the definition of a Householder reflector matrix.
-     * @param alpha The scalar &alpha value in Householder reflector matrix definition.
+     * @param householderVector Householder vector <span class="latex-inline">v</span> from the definition of a Householder reflector matrix.
+     * @param alpha The scalar &alpha; value in Householder reflector matrix definition.
      * @param startCol Starting column of sub-matrix in {@code src} to apply reflector to.
      * @param workArray Array for storing temporary values during the computation. Contents will be overwritten.
      */

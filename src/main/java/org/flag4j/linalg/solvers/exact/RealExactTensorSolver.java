@@ -26,18 +26,29 @@ package org.flag4j.linalg.solvers.exact;
 
 
 import org.flag4j.arrays.Shape;
+import org.flag4j.arrays.backend.semiring_arrays.TensorOverSemiring;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.dense.Vector;
 
 /**
- * Solver for solving a real well determined linear tensor equation A*X=B in an exact sense.
+ * <p>Solver for solving a real well determined linear tensor equation <span class="latex-inline">AX = B</span> in an exact sense.
+ *
+ * <p>All indices of <span class="latex-inline">X</span> are summed over in the tensor product with the rightmost indices of
+ * <span class="latex-inline">A</span> as if by
+ * {@link TensorOverSemiring#tensorDot(TensorOverSemiring, int[], int[]) A.tensorDot(X, M, N)} where
+ * {@code M = new int[]{X.rank()-1, X.rank(), X.rank()+1, ..., A.rank()-1}} and
+ * {@code N = new int[]{0, 1, ..., X.rank()-1}}.
+ *
+ * @see ComplexExactSolver
+ * @see ExactTensorSolver
+ * @see org.flag4j.linalg.TensorInvert
  */
 public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vector> {
 
     /**
-     * Creates an exact tensor solver for solving a well determined linear tensor equation A*X=B
-     * for X in an exact sense.
+     * Creates an exact tensor solver for solving a well determined linear tensor equation <span class="latex-inline">AX = B</span>
+     * for <span class="latex-inline">X</span> in an exact sense.
      */
     public RealExactTensorSolver() {
         super(new RealExactSolver());
@@ -47,7 +58,7 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
     /**
      * Initializes matrix for equivalent linear matrix equation.
      *
-     * @param A    Tensor to convert to matrix.
+     * @param A Tensor to convert to matrix.
      * @param prod Product of all axis lengths in {@code A}.
      * @return A matrix with the same data as tensor {@code A} with shape (prod, prod).
      */
@@ -72,9 +83,10 @@ public class RealExactTensorSolver extends ExactTensorSolver<Tensor, Matrix, Vec
     /**
      * Wraps solution as a tensor and reshapes to the proper shape.
      *
-     * @param x           Vector solution to linear matrix equation which is equivalent to the tensor equation A*X=B.
-     * @param outputShape Shape for the solution tensor X.
-     * @return The solution X to the linear tensor equation A*X=B.
+     * @param x Vector solution to linear matrix equation which is equivalent to the tensor equation
+     * <span class="latex-inline">AX = B</span>.
+     * @param outputShape Shape for the solution tensor <span class="latex-inline">X</span>.
+     * @return The solution <span class="latex-inline">X</span> to the linear tensor equation <span class="latex-inline">AX = B</span>.
      */
     @Override
     protected Tensor wrap(Vector x, Shape outputShape) {

@@ -45,7 +45,7 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
  *
  * <p>For example, the following matrix is in symmetric tri-diagonal form where each '<span class="latex-inline">&times;</span>'
  * may hold a different value (provided the matrix is symmetric):
- * <span class="latex-replaceable"><pre>
+ * <span class="latex-replace"><pre>
  *     [[ &times; &times; 0 0 0 ]
  *      [ &times; &times; &times; 0 0 ]
  *      [ 0 &times; &times; &times; 0 ]
