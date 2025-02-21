@@ -41,6 +41,9 @@ import org.flag4j.util.exceptions.SingularMatrixException;
  * @param <T> Type of matrix to decompose.
  * @param <U> Vector type equivalent of matrix.
  * @param <V> Type of internal storage for the matrix and vector.
+ *
+ * @see RealBackSolver
+ * @see ComplexBackSolver
  */
 public abstract class BackSolver<T extends MatrixMixin<T, ?, U, ?>, U extends VectorMixin<U, T, ?, ?>, V>
         implements LinearMatrixSolver<T, U> {
