@@ -30,8 +30,9 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 
 
 /**
- * <p>This solver solves linear systems of equations where the coefficient matrix in an {@link Matrix#isTriU() upper triangular}
- * real dense matrix and the constant vector is a real dense vector or matrix.
+ * This solver solves linear systems of the form <span class="latex-inline">Ux = b</span> or
+ * <span class="latex-inline">UX = B</span> where <span class="latex-inline">U</span> is an
+ * upper triangular matrix. This system is solved in an exact sense.
  *
  * @see ComplexBackSolver
  */

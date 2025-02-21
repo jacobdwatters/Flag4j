@@ -32,11 +32,8 @@ import org.flag4j.util.exceptions.SingularMatrixException;
 
 
 /**
- * This solver solves linear systems of the form <span class="latex-inline">Ux = b</span> or
- * <span class="latex-inline">UX = B</span> where <span class="latex-inline">U</span> is an
- * upper triangular matrix. This system is solved in an exact sense.
- *
- * @see RealBackSolver
+ * This solver solves linear systems of equations where the coefficient matrix in an upper triangular complex dense matrix
+ * and the constant vector is a complex dense vector.
  */
 public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]> {
     
@@ -92,8 +89,8 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves the linear system of equations given by U*x=b where the coefficient matrix U
-     * is an upper triangular matrix.
+     * Solves the linear system of equations given by <span class="latex-inline">Ux = b</span> where the coefficient matrix
+     * <span class="latex-inline">U</span> is an {@link Matrix#isTriU() upper triangular} matrix.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
      *          upper triangular, it will be treated as if it were.
@@ -133,13 +130,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves the linear system of equations given by U*X=B where the coefficient matrix U
-     * is an upper triangular matrix.
+     * Solves the linear system of equations given by <span class="latex-inline">UX = B</span> where the coefficient matrix
+     * <span class="latex-inline">U</span> is an {@link Matrix#isTriU() upper triangular} matrix.
      *
      * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
      *          upper triangular, it will be treated as if it were.
      * @param B Matrix of constants in the linear system.
-     * @return The solution to X in the linear system A*X=B.
+     * @return The solution to <strong>X</strong> in the linear system A*X=B.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -186,15 +183,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves the linear system of equations given by <span class="latex-inline">UX = I</span> where the coefficient matrix
-     * <span class="latex-inline">U</span>
-     * is an {@link Matrix#isTriU() upper triangular} matrix and I is the {@link Matrix#isI() identity}
-     * matrix of appropriate size. This essentially inverts the upper triangular matrix since
-     * <span class="latex-inline">UU<sup>-1</sup> = I</span>.
+     * Solves the linear system of equations given by <strong>UX = I</strong> where the coefficient matrix U
+     * is an {@link CMatrix#isTriU() upper triangular} matrix and I is the {@link CMatrix#isI() identity}
+     * matrix of appropriate size.
      *
-     * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
-     *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
-     * @return The solution to X in the linear system <span class="latex-inline">UX = B</span>.
+     * @param U Upper triangular coefficient matrix in the linear system. If {@code U} is not actually
+     *          upper triangular, it will be treated as if it were.
+     * @return The solution to <strong>X</strong> in the linear system <strong>UX = B</strong>.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     public CMatrix solveIdentity(CMatrix U) {
@@ -242,13 +237,13 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
 
     /**
-     * Solves a special case of the linear system U*X=L for X where the coefficient matrix U
+     * Solves a special case of the linear system <strong>UX = L</strong> for X where the coefficient matrix U
      * is an {@link CMatrix#isTriU() upper triangular} matrix and the constant matrix L is
      * {@link CMatrix#isTriL() lower triangular}.
      *
      * @param U Upper triangular coefficient matrix
      * @param L Lower triangular constant matrix.
-     * @return The result of solving the linear system U*X=L for the matrix X.
+     * @return The result of solving the linear system <strong>UX = L</strong> for the matrix X.
      */
     public CMatrix solveLower(CMatrix U, CMatrix L) {
         checkParams(U, L.shape);
