@@ -99,4 +99,52 @@ class MatrixMarketReadTests {
 
         assertEquals(exp, act);
     }
+
+
+    @Test
+    void loadRealDenseSymmTestCase() throws IOException {
+        String fileName;
+        Matrix exp;
+        Matrix act;
+        MatrixMarketReader mmParser = new MatrixMarketReader();
+
+        // ---------------- sub-case 1 ----------------
+        fileName = "./src/test/data/matrix_market/array/ReDeSymm5x5.mtx";
+        exp = MatrixMarketMatrices.ReDeSymm5x5;
+        act = (Matrix) mmParser.read(fileName);
+
+        assertEquals(exp, act);
+    }
+
+
+    @Test
+    void loadComplexDenseHermTestCase() throws IOException {
+        String fileName;
+        CMatrix exp;
+        CMatrix act;
+        MatrixMarketReader mmParser = new MatrixMarketReader();
+
+        // ---------------- sub-case 1 ----------------
+        fileName = "./src/test/data/matrix_market/array/CmDeHerm5x5.mtx";
+        exp = MatrixMarketMatrices.CmDeHerm5x5;
+        act = (CMatrix) mmParser.read(fileName);
+
+        assertEquals(exp, act);
+    }
+
+
+    @Test
+    void loadPatternCooSymmTestCase() throws IOException {
+        String fileName;
+        CooMatrix exp;
+        CooMatrix act;
+        MatrixMarketReader mmParser = new MatrixMarketReader();
+
+        // ---------------- sub-case 1 ----------------
+        fileName = "./src/test/data/matrix_market/coordinate/can___24.mtx";
+        exp = MatrixMarketMatrices.can___24;
+        act = (CooMatrix) mmParser.read(fileName);
+
+        assertEquals(exp, act);
+    }
 }

@@ -1251,8 +1251,9 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
     /**
      * Sorts the indices of this tensor in lexicographical order while maintaining the associated value for each index.
      */
-    public void sortIndices() {
+    public T sortIndices() {
         CooDataSorter.wrap(data, rowIndices, colIndices).sparseSort().unwrap(data, rowIndices, colIndices);
+        return (T) this;
     }
 
 

@@ -132,7 +132,7 @@ public record MatrixMarketHeader(
      * Enum containing valid object types in a Matrix Market file.
      */
     public enum MMObject {
-        // TODO: Future extensions: SYMMETRIC, SKEW_SYMMETRIC, HERMITIAN.
+        // TODO: Future extensions: VECTOR.
         MATRIX,
     }
 
@@ -153,6 +153,7 @@ public record MatrixMarketHeader(
         REAL,
         INTEGER,
         COMPLEX,
+        PATTERN
     }
 
 
@@ -160,8 +161,10 @@ public record MatrixMarketHeader(
      * Enum containing valid symmetry in a Matrix Market file.
      */
     public enum MMSymmetry {
-        // TODO: Future extensions: SYMMETRIC, SKEW_SYMMETRIC, HERMITIAN.
+        // TODO: Future extensions: SKEW_SYMMETRIC.
         GENERAL,
+        SYMMETRIC,
+        HERMITIAN
     }
 }
 
