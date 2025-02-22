@@ -66,6 +66,10 @@ public class Shape implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * The rank of a tensor with this shape.
+     */
+    private final int rank;
+    /**
      * An array containing the size of each dimension of this shape.
      */
     private final int[] dims;
@@ -99,6 +103,7 @@ public class Shape implements Serializable {
         this.dims = dims;
         strides = new int[dims.length];  // Initialize. Will be filled lazily.
         hasStrides = false; // Indicate strides have not been computed.
+        rank = dims.length;
     }
 
 
@@ -375,6 +380,21 @@ public class Shape implements Serializable {
         }
 
         return totalEntriesIntExact;
+    }
+
+
+    /**
+     * Checks if this shape is square. That is, if <em>all</em> dimensions of this shape are equal.
+     * @return {@code true} if all dimensions of this shape are equal; {@code false} otherwise.
+     */
+    public boolean isSquare() {
+        if(dims.length <= 1) return true;
+        int refDim = dims[0];
+
+        for(int i=1; i<rank; i++)
+            if(dims[i] != refDim) return false;
+
+        return true;
     }
 
 
