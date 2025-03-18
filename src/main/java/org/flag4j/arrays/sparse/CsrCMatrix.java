@@ -24,15 +24,11 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.field_arrays.AbstractCsrFieldMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
-import org.flag4j.arrays.dense.CMatrix;
-import org.flag4j.arrays.dense.CTensor;
-import org.flag4j.arrays.dense.CVector;
-import org.flag4j.arrays.dense.Matrix;
+import org.flag4j.arrays.dense.*;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
@@ -42,37 +38,78 @@ import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
 import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrMatMult;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.List;
+import java.util.function.BinaryOperator;
 
+// TODO: update javadoc to be like that of CsrMatrix.java
 /**
- * <p>A complex sparse matrix stored in compressed sparse row (CSR) format. The {@link #data} of this CSR matrix are
- * {@link Complex128}'s.
+ * <p>Instances of this class represent a complex sparse matrix using the compressed sparse row (CSR) format.
+ * This class is optimized for efficient storage and operations on matrices with a high proportion of zero elements.
+ * The non-zero values of the matrix are stored in a compact form, reducing memory usage and improving performance for many matrix
+ * operations.
  *
- * <p>The {@link #data non-zero data} and non-zero indices of a CSR matrix are mutable but the {@link #shape}
- * and {@link #nnz total number of non-zero data} is fixed.
- *
- * <p>Sparse matrices allow for the efficient storage of and ops on matrices that contain many zero values.
- *
- * <p>A sparse CSR matrix is stored as:
+ * <h2>CSR Representation:</h2>
+ * A CSR matrix is represented internally using three main arrays:
  * <ul>
- *     <li>The full {@link #shape shape} of the matrix.</li>
- *     <li>The non-zero {@link #data} of the matrix. All other data in the matrix are
- *     assumed to be zero. Zero values can also explicitly be stored in {@link #data}.</li>
- *     <li>The {@link #rowPointers row pointers} of the non-zero values in the CSR matrix. Has size {@link #numRows numRows + 1}</li>
- *     <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all values in row
- *     {@code i}.
- *     <li>The {@link #colIndices column indices} of the non-zero values in the sparse matrix.</li>
+ *   <li><b>Data:</b> Non-zero values are stored in a one-dimensional array {@link #data} of length {@link #nnz}. Any element not
+ *   specified in {@code data} is implicitly zero. It is also possible to explicitly store zero values in this array, although this
+ *   is generally not desirable. To remove explicitly defined zeros, use {@link #dropZeros()}</li>
+ *
+ *   <li><b>Row Pointers:</b> A 1D array {@link #rowPointers} of length {@code numRows + 1} where {@code rowPointers[i]} indicates
+ *   the starting index in the {@code data} and {@code colIndices} arrays for row {@code i}. The last entry of {@code rowPointers}
+ *   equals the length of {@code data}. That is, all non-zero values in {@code data} which are in row {@code i} are between
+ *   {@code data[rowIndices[i]} (inclusive) and {@code data[rowIndices[i + 1]} (exclusive).</li>
+ *
+ *   <li><b>Column Indices:</b> A 1D array {@link #colIndices} of length {@link #nnz} storing the column indices corresponding to each non-zero
+ *   value in {@code data}.</li>
  * </ul>
  *
- * <p>Note: many ops assume that the data of the CSR matrix are sorted lexicographically by the row and column indices.
- * (i.e.) by row indices first then column indices. However, this is not explicitly verified. Any ops implemented in this
- * class will preserve the lexicographical sorting.
+ * <p>The total number of non-zero elements ({@link #nnz}) and the shape are fixed for a given instance, but the values
+ * in {@link #data} and their corresponding {@link #rowPointers} and {@link #colIndices} may be updated. Many operations
+ * assume that the indices are sorted lexicographically by row, and then by column, but this is not strictly enforced.
+ * All provided operations preserve the lexicographical row-major sorting of data and indices. If there is any doubt about the
+ * ordering of indices, use {@link #sortIndices()} to ensure they are explicitly sorted. CSR tensors may also store multiple entries
+ * for the same index (referred to as an uncoalesced tensor). To combine all duplicated entries use {@link #coalesce()} or
+ * {@link #coalesce(BinaryOperator)}.
  *
- * <p>If indices need to be sorted explicitly, call {@link #sortIndices()}.
+ * <p>CSR matrices are optimized for efficient storage and operations on matrices with a high proportion of zero elements.
+ * CSR matrices are ideal for row-wise operations and matrix-vector multiplications. In general, CSR matrices are not efficient at
+ * handling many incremental updates. In this case {@link CooMatrix COO matrices} are usually preferred.
+ *
+ * <p>Conversion to other formats, such as COO or dense matrices, can be performed using {@link #toCoo()} or {@link #toDense()}.
+ *
+ * <h2>Usage Examples:</h2>
+ * <pre>{@code
+ * // Define matrix data.
+ * Shape shape = new Shape(8, 8);
+ * double[] data = {1.0, 2.0, 3.0, 4.0};
+ * int[] rowPointers = {0, 1, 1, 1, 1, 3, 3, 3, 4}
+ * int[] colIndices = {0, 0, 5, 2};
+ *
+ * // Create CSR matrix.
+ * CsrMatrix matrix = new CsrMatrix(shape, data, rowPointers, colIndices);
+ *
+ * // Add matrices.
+ * CsrMatrix sum = matrix.add(matrix);
+ *
+ * // Compute matrix-matrix multiplication.
+ * Matrix prod = matrix.mult(matrix);
+ * CsrMatrix sparseProd = matrix.mult2Csr(matrix);
+ *
+ * // Compute matrix-vector multiplication.
+ * Vector denseVector = new Vector(matrix.numCols, 5.0);
+ * Matrix matrixVectorProd = matrix.mult(denseVector);
+ * }</pre>
+ *
+ * @see CMatrix
+ * @see CooCMatrix
+ * @see CVector
+ * @see CooCVector
  */
 public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooCVector, Complex128> {
 
@@ -122,7 +159,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param shape Shape of the zero matrix.
      */
     public CsrCMatrix(Shape shape) {
-        super(shape, new Complex128[0], new int[0], new int[0]);
+        super(shape, new Complex128[0], new int[shape.get(0) + 1], new int[0]);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -173,9 +210,39 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      * @param cols The number of columns in the matrix.
      */
     public CsrCMatrix(int rows, int cols) {
-        super(new Shape(rows, cols), new Complex128[0], new int[0], new int[0]);
+        super(new Shape(rows, cols), new Complex128[0], new int[rows+1], new int[0]);
         setZeroElement(Complex128.ZERO);
     }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing CSR matrices.
+     * @param shape The shape of the matrix to construct.
+     * @param data The non-zero data of this COO matrix.
+     * @param rowPointers The non-zero row pointers of the CSR matrix.
+     * @param colIndices The non-zero column indices of the CSR matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CsrCMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices, Object dummy) {
+        super(shape, entries, rowPointers, colIndices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a CSR matrix which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowPointers The non-zero row pointers of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A COO matrix constructed from the provided parameters.
+     */
+    public static CsrCMatrix unsafeMake(Shape shape, Complex128[] data, int[] rowPointers, int[] colIndices) {
+        return new CsrCMatrix(shape, data, rowPointers, colIndices, null);
+    }
+
 
 
     @Override
@@ -260,7 +327,7 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
         int[] cooRowIndices = new int[nnz];
         int[] cooColIndices = new int[nnz];
         CsrConversions.toCoo(shape, data, rowPointers, colIndices, cooEntries, cooRowIndices, cooColIndices);
-        return new CooCMatrix(shape, cooEntries, cooRowIndices, cooColIndices);
+        return CooCMatrix.unsafeMake(shape, cooEntries, cooRowIndices, cooColIndices);
     }
 
 
@@ -514,6 +581,16 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
 
 
     /**
+     * Drops any explicit zeros in this sparse COO matrix.
+     * @return A copy of this Csr matrix with any explicitly stored zeros removed.
+     */
+    public CsrCMatrix dropZeros() {
+        SparseMatrixData<Complex128> dropData = SparseUtils.dropZerosCsr(shape, this.data, rowPointers, colIndices);
+        return new CsrCMatrix(dropData.shape(), dropData.data(), dropData.rowData(), dropData.colData());
+    }
+
+
+    /**
      * Accepts a visitor that implements the {@link MatrixVisitor} interface.
      * This method is part of the "Visitor Pattern" and allows operations to be performed
      * on the matrix without modifying the matrix's class directly.
@@ -632,5 +709,19 @@ public class CsrCMatrix extends AbstractCsrFieldMatrix<CsrCMatrix, CMatrix, CooC
      */
     public CVector mult(CVector b) {
         return (CVector) DenseCsrSemiringMatMult.standardVector(this, b);
+    }
+
+
+    /**
+     * Computes the matrix-vector multiplication of a vector with this matrix.
+     *
+     * @param b Vector in the matrix-vector multiplication.
+     *
+     * @return The result of multiplying this matrix with {@code b}.
+     *
+     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the size of {@code b}.
+     */
+    public CVector mult(Vector b) {
+        return (CVector) RealFieldDenseCsrMatMult.standardVector(this, b);
     }
 }

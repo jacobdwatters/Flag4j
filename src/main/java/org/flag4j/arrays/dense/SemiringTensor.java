@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringTensor;
 import org.flag4j.arrays.sparse.CooSemiringTensor;

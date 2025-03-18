@@ -101,7 +101,7 @@ public final class RealCooMatrixGetSet {
             destColIndices = src.colIndices.clone();
         }
 
-        return new CooMatrix(src.shape, destEntries, destRowIndices, destColIndices);
+        return CooMatrix.unsafeMake(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -214,7 +214,7 @@ public final class RealCooMatrixGetSet {
             );
         }
 
-        return new CooMatrix(src.shape, destEntries, destRowIndices, destColIndices);
+        return CooMatrix.unsafeMake(src.shape, destEntries, destRowIndices, destColIndices);
     }
 
 

@@ -24,11 +24,11 @@
 
 package org.flag4j.arrays.backend.ring_arrays;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringTensor;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingTensorOps;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 /**
@@ -52,7 +52,7 @@ import org.flag4j.util.exceptions.TensorShapeException;
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
- *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
+ *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the nD
  *     index of {@code data[i]}.
  *     </li>
  * </ul>
@@ -78,6 +78,18 @@ public abstract class AbstractCooRingTensor<T extends AbstractCooRingTensor<T, U
      */
     protected AbstractCooRingTensor(Shape shape, V[] data, int[][] indices) {
         super(shape, data, indices);
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO tensors.
+     * @param shape The shape of the tensor to construct.
+     * @param data The non-zero data of this tensor.
+     * @param indices The indices of the non-zero data.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    protected AbstractCooRingTensor(Shape shape, V[] data, int[][] indices, Object dummy) {
+        super(shape, data, indices, dummy);
     }
 
 

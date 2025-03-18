@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.ops.common.ring_ops;
 
-import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.numbers.Ring;
 
 /**
  * Utility class useful for computing ops on {@link Ring} tensors.

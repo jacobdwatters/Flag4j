@@ -25,12 +25,12 @@
 package org.flag4j.linalg.ops.dense_sparse.coo.real_complex;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ValidateParameters;
 
 /**
@@ -124,7 +124,7 @@ public final class RealComplexDenseCooMatOps {
             destEntries[i] = src1.data[row*src1.numCols + col].mult(src2.data[i]);
         }
 
-        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return CooCMatrix.unsafeMake(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -145,7 +145,7 @@ public final class RealComplexDenseCooMatOps {
             destEntries[i] = src2.data[i].mult(src1.data[row*src1.numCols + col]);
         }
 
-        return new CooCMatrix(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
+        return CooCMatrix.unsafeMake(src2.shape, destEntries, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -176,6 +176,6 @@ public final class RealComplexDenseCooMatOps {
             quotient[i] = new Complex128(src1.data[i]).div(src2.data[row*src2.numCols + col]);
         }
 
-        return new CooCMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return CooCMatrix.unsafeMake(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 }

@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
@@ -51,10 +50,13 @@ import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
-import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.dispatch.RealDenseMatMultDispatcher;
+import org.flag4j.linalg.ops.dispatch.RealDenseMatVecMultDispatcher;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -634,10 +636,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix mult(Matrix b) {
-        double[] entries = RealDenseMatrixMultiplyDispatcher.dispatch(this, b);
-        Shape shape = new Shape(this.numRows, b.numCols);
-
-        return new Matrix(shape, entries);
+        return RealDenseMatMultDispatcher.dispatch(this, b);
     }
 
 
@@ -1405,9 +1404,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Vector mult(Vector b) {
-        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-        return new Vector(entries);
+        return RealDenseMatVecMultDispatcher.dispatch(this, b);
     }
 
 
@@ -1807,7 +1804,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public Matrix mult(CsrMatrix b) {
-        return RealCsrDenseMatrixMultiplication.standard(this, b);
+        return RealCsrDenseMatMult.standard(this, b);
     }
 
 

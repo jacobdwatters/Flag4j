@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.backend.field_arrays;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
@@ -36,6 +35,7 @@ import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.sparse.csr.CsrOps;
 import org.flag4j.linalg.ops.sparse.csr.ring_ops.CsrRingProperties;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.numbers.Field;
 
 public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T, U, V, W>,
         U extends AbstractDenseFieldMatrix<U, ?, W>,
@@ -49,16 +49,34 @@ public abstract class AbstractCsrFieldMatrix<T extends AbstractCsrFieldMatrix<T,
      * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero data of this CSR matrix.
+     * @param data The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    protected AbstractCsrFieldMatrix(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
-        super(shape, entries, rowPointers, colIndices);
+    protected AbstractCsrFieldMatrix(Shape shape, W[] data, int[] rowPointers, int[] colIndices) {
+        super(shape, data, rowPointers, colIndices);
     }
+
+
+    /**
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
+     *
+     * @param shape Shape of this tensor.
+     * @param data The non-zero data of this CSR matrix.
+     * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
+     * values in row {@code i}.
+     * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
+     * {@code data.length == colData.length}.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    protected AbstractCsrFieldMatrix(Shape shape, W[] data, int[] rowPointers, int[] colIndices, Object dummy) {
+        super(shape, data, rowPointers, colIndices, dummy);
+    }
+
 
     /**
      * <p>Computes the matrix multiplication between two sparse CSR matrices and stores the result in a sparse matrix.

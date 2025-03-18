@@ -24,13 +24,13 @@
 
 package org.flag4j.arrays.backend.semiring_arrays;
 
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
 import org.flag4j.linalg.ops.dense.DenseConcat;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringVectorOps;
+import org.flag4j.numbers.Field;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 
 /**

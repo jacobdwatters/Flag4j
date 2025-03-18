@@ -167,7 +167,7 @@ public class RealDenseSparseMatrixOps {
             product[i] = src1.data[row*src1.numCols + col]*src2.data[i];
         }
 
-        return new CooMatrix(src2.shape, product, src2.rowIndices.clone(), src2.colIndices.clone());
+        return CooMatrix.unsafeMake(src2.shape, product, src2.rowIndices.clone(), src2.colIndices.clone());
     }
 
 
@@ -203,7 +203,7 @@ public class RealDenseSparseMatrixOps {
             quotient[i] = src1.data[i] / src2.data[row*src2.numCols + col];
         }
 
-        return new CooMatrix(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
+        return CooMatrix.unsafeMake(src1.shape, quotient, src1.rowIndices.clone(), src1.colIndices.clone());
     }
 
 

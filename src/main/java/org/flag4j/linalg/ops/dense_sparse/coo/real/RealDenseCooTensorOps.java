@@ -81,7 +81,7 @@ public class RealDenseCooTensorOps {
             destEntries[i] = src1.data[index]*src2.data[i];
         }
 
-        return new CooTensor(src2.shape, destEntries, destIndices);
+        return CooTensor.unsafeMake(src2.shape, destEntries, destIndices);
     }
 
 
@@ -104,7 +104,7 @@ public class RealDenseCooTensorOps {
             destEntries[i] = src1.data[index]/src2.data[i];
         }
 
-        return new CooTensor(src2.shape, destEntries, destIndices);
+        return CooTensor.unsafeMake(src2.shape, destEntries, destIndices);
     }
 
 

@@ -24,11 +24,11 @@
 
 package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Pair;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingMatrix;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;

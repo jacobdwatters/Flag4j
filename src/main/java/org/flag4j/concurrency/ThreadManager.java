@@ -27,10 +27,33 @@ package org.flag4j.concurrency;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.flag4j.concurrency.Configurations.DEFAULT_PARALLELISM;
+
 /**
- * This class contains the base thread pool for all concurrent ops and methods for managing the pool.
+ * <p>Manages a global thread pool and utility methods for executing parallel operations in Flag4j.
+ *
+ * <h2>Usage:</h2>
+ * <ul>
+ *   <li>This class provides a shared, fixed-size thread pool to perform parallel operations.</li>
+ *   <li>The size of this thread pool (i.e. the "parallelism level") can be set via
+ *       {@link #setParallelismLevel(int)} and queried via {@link #getParallelismLevel()}.</li>
+ *   <li>The pool uses daemon threads to avoid blocking JVM shutdown.</li>
+ * </ul>
+ *
+ * <h2>Thread Safety & Design:</h2>
+ * <ul>
+ *   <li>This class is thread-safe in that calls to {@code setParallelismLevel} and concurrent operations
+ *       do not corrupt internal state. However, changing the parallelism level while tasks are actively
+ *       running may cause those tasks to be abruptly shut down. Use <em>extreme</em> caution if dynamic
+ *       changes to parallelism are required.</li>
+ *   <li>The methods {@link #concurrentOperation(int, TensorOperation)} and
+ *       {@link #concurrentBlockedOperation(int, int, TensorOperation)} assume the provided
+ *       {@link TensorOperation} is itself thread-safe. If there are blocks within the operation which are not thread-safe they
+ *       should be wrapped in a {@code synchronized} block.</li>
+ * </ul>
  */
 public final class ThreadManager {
     private ThreadManager() {
@@ -40,10 +63,10 @@ public final class ThreadManager {
     /**
      * Simple thread factory for creating basic daemon threads.
      */
-    private static final ThreadFactory daemonFactory = r -> {
-        Thread t = new Thread(r);
-        t.setDaemon(true); // Set the thread as a daemon thread
-        return t;
+    private static final ThreadFactory DAEMON_FACTORY = r -> {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true); // Set the thread as a daemon thread to avoid blocking JVM shutdown.
+        return thread;
     };
 
 
@@ -51,44 +74,62 @@ public final class ThreadManager {
      * The parallelism level for the thread manager. That is, the number of threads to be used in the thread pool
      * when executing concurrent ops.
      */
-    private static int parallelismLevel = Configurations.DEFAULT_NUM_THREADS;
+    private static int parallelismLevel = DEFAULT_PARALLELISM;
 
     /**
      * Simple logger for when a thread throws an exception during execution.
      */
-    private static final Logger threadLogger = Logger.getLogger(ThreadManager.class.getName());
+    private static final Logger THREAD_LOGGER = Logger.getLogger(ThreadManager.class.getName());
 
     /**
      * Thread pool for managing threads executing concurrent ops.
      */
-    private static ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelismLevel, daemonFactory);
-    private static ForkJoinPool streamPool = new ForkJoinPool(parallelismLevel);
+    private static ThreadPoolExecutor threadPool =
+            (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelismLevel, DAEMON_FACTORY);
+
+    /**
+     * Lock object for synchronizing changes to the thread pool and parallelismLevel.
+     */
+    private static final Object POOL_LOCK = new Object();
+
 
     /**
      * Sets the number of threads to use in the thread pool.
-     * @param parallelismLevel Number of threads to use in the thread pool. If this is less than 1, the parallelism will
-     *                         simply be set to 1.
+     * @param parallelismLevel The parallelism level to use in the thread pool.
+     * <ul>
+     *     <li>If {@code parallelismLevel > 0}: The parallelism level is used as is.</li>
+     *     <li>If {@code parallelismLevel <= 0}: The parallelism level will be set to
+     *     {@code Math.max(Configurations.DEFAULT_PARALLELISM + parallelismLevel, 1)}. Such values may be interpreted as
+     *     'x' less than the number of available processors. To set the parallelism level to 2 less than the number of available
+     *     processors, do {@code setParallelismLevel(-2)}.</li>
+     * </ul>
      */
     protected static void setParallelismLevel(int parallelismLevel) {
-        if(threadPool != null) {
-            threadPool.shutdown(); // Disable new tasks from being submitted.
-            try {
-                // Wait for existing tasks to terminate.
-                if(!threadPool.awaitTermination(60, TimeUnit.SECONDS)) {
-                    threadPool.shutdownNow(); // Cancel currently executing tasks.
+        synchronized (POOL_LOCK) {
+            // Attempt to gracefully shut down the old pool.
+            if(threadPool != null) {
+                threadPool.shutdown(); // Disable new tasks from being submitted.
+                try {
+                    // Wait for existing tasks to terminate.
+                    if(!threadPool.awaitTermination(60, TimeUnit.SECONDS)) {
+                        threadPool.shutdownNow(); // Cancel currently executing tasks.
 
-                    if(!threadPool.awaitTermination(60, TimeUnit.SECONDS))
-                        threadLogger.warning("ThreadPool did not terminate");
+                        if(!threadPool.awaitTermination(60, TimeUnit.SECONDS))
+                            THREAD_LOGGER.warning("ThreadPool did not terminate gracefully.");
+                    }
+                } catch(InterruptedException ie) {
+                    THREAD_LOGGER.log(Level.WARNING, "Interrupted during thread pool shutdown.", ie);
+                    threadPool.shutdownNow();
+                    Thread.currentThread().interrupt();
                 }
-            } catch(InterruptedException ie) {
-                threadLogger.warning(ie.getMessage());
-                threadPool.shutdownNow();
-                Thread.currentThread().interrupt();
             }
-        }
 
-        parallelismLevel = Math.max(parallelismLevel, 1);
-        threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelismLevel, daemonFactory);
+            if (parallelismLevel <= 0)
+                parallelismLevel = DEFAULT_PARALLELISM + parallelismLevel;
+
+            parallelismLevel = Math.max(parallelismLevel, 1);  // Ensure the value is positive.
+            threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(parallelismLevel, DAEMON_FACTORY);
+        }
     }
 
 
@@ -103,7 +144,7 @@ public final class ThreadManager {
 
     /**
      * <p>Computes a specified tensor operation concurrently by evenly dividing work among available threads (specified by
-     * {@link Configurations#getNumThreads()}).
+     * {@link Configurations#getParallelismLevel()}).
      *
      * <p>WARNING: This method provides <em>no</em> guarantees of thread safety. It is the responsibility of the caller to ensure that
      * {@code operation} is thread safe.
@@ -113,10 +154,11 @@ public final class ThreadManager {
      */
     public static void concurrentOperation(final int totalSize, final TensorOperation operation) {
         // Calculate chunk size.
-        int chunkSize = (totalSize + parallelismLevel - 1) / parallelismLevel;
-        List<Future<?>> futures = new ArrayList<>(parallelismLevel);
+        final int LOCAL_PARALLELISM = getParallelismLevel();
+        int chunkSize = (totalSize + LOCAL_PARALLELISM - 1) / LOCAL_PARALLELISM;
+        List<Future<?>> futures = new ArrayList<>(LOCAL_PARALLELISM);
 
-        for(int threadIndex = 0; threadIndex < parallelismLevel; threadIndex++) {
+        for(int threadIndex = 0; threadIndex < LOCAL_PARALLELISM; threadIndex++) {
             final int startIdx = threadIndex * chunkSize;
             final int endIdx = Math.min(startIdx + chunkSize, totalSize);
 
@@ -129,10 +171,13 @@ public final class ThreadManager {
         for(Future<?> future : futures) {
             try {
                 future.get(); // Ensure all tasks are complete.
-            } catch (InterruptedException | ExecutionException e) {
-                // An exception occurred.
-                threadLogger.warning(e.getMessage());
+            } catch (InterruptedException e) {
+                // Log and preserve interrupt status.
+                THREAD_LOGGER.log(Level.WARNING, "Interrupted while waiting for concurrent operation task.", e);
                 Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
+                // The operation threw an exception.
+                THREAD_LOGGER.log(Level.WARNING, "Error during concurrent operation task.", e);
             }
         }
     }
@@ -140,14 +185,14 @@ public final class ThreadManager {
 
     /**
      * <p>Computes a specified blocked tensor operation concurrently by evenly dividing work among available threads (specified by
-     * {@link Configurations#getNumThreads()}).
+     * {@link Configurations#getParallelismLevel()}).
      *
      * <p>Unlike {@link #concurrentOperation(int, TensorOperation)} this method respects the block size of the blocked operation.
      * This means tasks split across threads will be aligned to block borders if possible which allows for the improved cache
-     * performance benefits of blocked ops to be fully realized. For this reason, it is not recommended to use
+     * performance benefits of blocked ops to be fully realized. For this reason, it is <em>not</em> recommended to use
      * {@link #concurrentOperation(int, TensorOperation)} to compute a blocked operation concurrently.
      *
-     * <p>WARNING: This method provides <i>no</i> guarantees of thread safety. It is the responsibility of the caller to ensure that
+     * <p>WARNING: This method provides <em>no</em> guarantees of thread safety. It is the responsibility of the caller to ensure that
      * {@code blockedOperation} is thread safe.
      *
      * @param totalSize Total size of the outer loop for the operation.
@@ -156,8 +201,9 @@ public final class ThreadManager {
      */
     public static void concurrentBlockedOperation(final int totalSize, final int blockSize, final TensorOperation blockedOperation) {
         // Calculate chunk size for blocks.
+        final int LOCAL_PARALLELISM = getParallelismLevel();
         int numBlocks = (totalSize + blockSize - 1)/blockSize;
-        List<Future<?>> futures = new ArrayList<>(parallelismLevel);
+        List<Future<?>> futures = new ArrayList<>(LOCAL_PARALLELISM);
 
         for(int blockIndex = 0; blockIndex < numBlocks; blockIndex++) {
             final int startBlock = blockIndex*blockSize;
@@ -172,10 +218,11 @@ public final class ThreadManager {
         for(Future<?> future : futures) {
             try {
                 future.get(); // Ensure all tasks are complete.
-            } catch(InterruptedException | ExecutionException e) {
-                // An exception occurred.
-                threadLogger.warning(e.getMessage());
+            } catch (InterruptedException e) {
+                THREAD_LOGGER.log(Level.WARNING, "Interrupted while waiting for blocked operation task.", e);
                 Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
+                THREAD_LOGGER.log(Level.WARNING, "Error during blocked operation task.", e);
             }
         }
     }

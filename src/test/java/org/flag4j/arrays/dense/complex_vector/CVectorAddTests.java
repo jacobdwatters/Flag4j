@@ -1,12 +1,12 @@
 package org.flag4j.arrays.dense.complex_vector;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 import org.junit.jupiter.api.BeforeEach;
@@ -229,7 +229,7 @@ class CVectorAddTests {
         // ------------------ sub-case 4 ------------------
         bEntries = new double[]{-1.4};
         sparseSize = 3;
-        sparseIndices = new int[]{3};
+        sparseIndices = new int[]{2};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
 
         CooVector finalB2 = b;
@@ -558,7 +558,7 @@ class CVectorAddTests {
         setup();
         bEntries = new double[]{-1.4};
         sparseSize = 3;
-        sparseIndices = new int[]{3};
+        sparseIndices = new int[]{2};
         b = new CooVector(sparseSize, bEntries, sparseIndices);
 
         CooVector finalB2 = b;

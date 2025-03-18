@@ -1,8 +1,8 @@
 package org.flag4j.complex_coo_matrix;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
+import org.flag4j.numbers.Complex128;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -146,7 +146,7 @@ class CooCMatrixConstructorTests {
         expRowIndices = new int[]{0, 0, 1, 3, 4};
         expColIndices = new int[]{0, 4, 1, 3, 4};
 
-        assertThrows(IndexOutOfBoundsException.class, () -> new CooCMatrix(size, expNonZero, expRowIndices, expColIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCMatrix(size, expNonZero, expRowIndices, expColIndices));
 
         // --------------- sub-case 4 ---------------
         size = 5;

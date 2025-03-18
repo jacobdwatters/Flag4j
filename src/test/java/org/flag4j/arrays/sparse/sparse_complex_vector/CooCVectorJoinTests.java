@@ -1,9 +1,9 @@
 package org.flag4j.arrays.sparse.sparse_complex_vector;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.numbers.Complex128;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

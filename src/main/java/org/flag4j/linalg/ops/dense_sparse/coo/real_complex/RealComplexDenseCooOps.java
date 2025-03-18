@@ -24,13 +24,13 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -63,7 +63,7 @@ public final class RealComplexDenseCooOps {
             destEntries[i] = new Complex128(src1.data[index]).div(src2.data[i]);
         }
 
-        return new CooCTensor(src2.shape, destEntries, destIndices);
+        return CooCTensor.unsafeMake(src2.shape, destEntries, destIndices);
     }
 
 
@@ -130,7 +130,7 @@ public final class RealComplexDenseCooOps {
             destEntries[i] = src1.data[src2.shape.getFlatIndex(src2.indices[i])].mult(src2.data[i]);
         }
 
-        return new CooCTensor(src2.shape, destEntries, indices);
+        return CooCTensor.unsafeMake(src2.shape, destEntries, indices);
     }
 
 
@@ -151,7 +151,7 @@ public final class RealComplexDenseCooOps {
         for(int i=0, size=destEntries.length; i<size; i++)
             destEntries[i] = src2.data[i].mult(src1.data[src2.shape.getFlatIndex(src2.indices[i])]);
 
-        return new CooCTensor(src2.shape, destEntries, indices);
+        return CooCTensor.unsafeMake(src2.shape, destEntries, indices);
     }
 
 

@@ -25,11 +25,11 @@
 package org.flag4j.linalg.ops.sparse.coo.real_complex;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -74,7 +74,7 @@ public final class RealComplexCooConcats {
         System.arraycopy(ArrayUtils.shift(a.numCols, shifted), 0,
                 destColIndices, a.colIndices.length, b.colIndices.length);
 
-        CooCMatrix dest = new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        CooCMatrix dest = CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
         dest.sortIndices(); // Ensure indices are sorted properly.
 
         return dest;
@@ -105,7 +105,7 @@ public final class RealComplexCooConcats {
         Arrays.fill(destColIndices, a.data.length, destColIndices.length, a.numCols);
         System.arraycopy(b.indices, 0, destRowIndices, a.data.length, b.data.length);
 
-        CooCMatrix mat = new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        CooCMatrix mat = CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
         mat.sortIndices();
 
         return mat;

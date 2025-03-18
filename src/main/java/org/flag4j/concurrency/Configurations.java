@@ -24,82 +24,119 @@
 
 package org.flag4j.concurrency;
 
-// TODO: This should be moved outside of the concurrency package as it also deals with non-concurrent configurations such as block
-//  size.
 
-// TODO: Configurations should be stored in a configs.properties file (or similar) and the java.util.Properties class should be used
-//  to read the file to set the properties. This would allow users to hand tweak performance configurations be editing the configs
-//  file.
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Properties;
+import java.util.logging.Logger;
 
-// TODO: The class MUST be thread safe. If a config is programmatically set it may effect correctness of concurrent operations running
-//  on another thread.
 
 /**
- * Configurations for standard and concurrent ops.
+ * <p>A utility class for configuring standard and concurrent operations.
+ * <p>This class provides configurable settings for multithreaded and blocked computations.
+ *
+ * <p>If a configuration file {@code ./configs/GeneralConfigs.properties} is present, settings will be loaded
+ * at class initialization. If not, default values will be used.
+ *
+ * <h2>Thread Safety:</h2>
+ * This class is designed to be thread-safe.
+ * <ul>
+ *     <li>The {@code parallelism} setting is managed via {@link ThreadManager}, which ensures safe access.</li>
+ *     <li>The {@code blockSize} setting is accessed and modified using synchronized methods.</li>
+ * </ul>
  */
 public final class Configurations {
 
     /**
-     * The default number of threads to use for concurrent algorithms.
+     * The default parallelism (i.e. number of threads) to use for concurrent algorithms.
      */
-    public static final int DEFAULT_NUM_THREADS = Runtime.getRuntime().availableProcessors();
+    public static final int DEFAULT_PARALLELISM = Runtime.getRuntime().availableProcessors();
     /**
      * The default block size for blocked algorithms.
      */
     public static final int DEFAULT_BLOCK_SIZE = 64;
     /**
-     * The default minimum recursive size for recursive algorithms.
-     */
-    public static final int DEFAULT_MIN_RECURSIVE_SIZE = 128;
-    /**
      * The block size to use in blocked algorithms.
      */
-    private static int blockSize = DEFAULT_BLOCK_SIZE;
+    private static volatile int blockSize = DEFAULT_BLOCK_SIZE;
+
+
+    static {
+        // Set up a simple logger in case of missing configs.
+        Logger logger = Logger.getLogger(ThreadManager.class.getName());
+        Path path = Paths.get("./configs/GeneralConfigs.properties");
+        Properties properties = new Properties();
+
+        try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+            properties.load(reader);
+        } catch (IOException e) {
+            logger.warning("Failed to load " + path.toAbsolutePath() + ": " + e.getMessage());
+            logger.warning("Using default configuration");
+        }
+
+        int parallelism = DEFAULT_PARALLELISM;
+
+        if (properties.containsKey("blockSize"))
+            blockSize = Integer.parseInt(properties.getProperty("blockSize"));
+        if (properties.containsKey("parallelism")) {
+            setParallelismLevel(Integer.parseInt(properties.getProperty("parallelism")));
+        }
+    }
 
 
     private Configurations() {
-        
+        // Hide default constructor for utility class.
     }
 
 
     /**
-     * Sets the number of threads for use in concurrent ops as the number of processors available to the Java
+     * Sets the parallelism level (i.e. number of threads) for use in concurrent ops as the number of processors available to the Java
      * virtual machine. Note that this value may change during runtime. This method will include logical cores so the value
      * returned may be higher than the number of physical cores on the machine if hyper-threading is enabled.
      * <br><br>
      * @implNote This is implemented as:
-     * {@code numThreads = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};}
-     * @return The new value of numThreads, i.e. the number of available processors.
+     * {@code parallelism = {@link Runtime#availableProcessors() Runtime.getRuntime().availableProcessors()};}
+     * @return The new parallelism value, i.e. the number of available processors.
      */
-    public static int setNumThreadsAsAvailableProcessors() {
+    public static int setParallelismLevelAsAvailableProcessors() {
         ThreadManager.setParallelismLevel(Runtime.getRuntime().availableProcessors());
         return ThreadManager.getParallelismLevel();
     }
 
 
     /**
-     * Gets the current number of threads to be used.
-     * @return Current number of threads to use in concurrent algorithms.
+     * Gets the current parallelism (i.e. number of threads) to be used in concurrent algorithms.
+     * @return Current parallelism (i.e. number of threads) to use in concurrent algorithms.
      */
-    public static int getNumThreads() {
+    public static int getParallelismLevel() {
         return ThreadManager.getParallelismLevel();
     }
 
 
     /**
-     * Sets the number of threads to use in concurrent algorithms.
-     * @param numThreads Number of threads to use in concurrent algorithms.
+     * Sets the parallelism level (i.e. number of threads) to use in concurrent algorithms.
+     * @param parallelismLevel The parallelism level (i.e. number of threads) to use in concurrent algorithms.
+     * <ul>
+     *     <li>If {@code parallelismLevel > 0}: The parallelism level is used as is.</li>
+     *     <li>If {@code parallelismLevel <= 0}: The parallelism level will be set to
+     *     {@code Math.max(Configurations.DEFAULT_PARALLELISM + parallelismLevel + 1, 1)}.</li>
+     * </ul>
      */
-    public static void setNumThreads(int numThreads) {
-        ThreadManager.setParallelismLevel(numThreads);
+    public static void setParallelismLevel(int parallelismLevel) {
+        ThreadManager.setParallelismLevel(parallelismLevel);
     }
 
 
     /**
-     * Gets the current block size used in blocked algorithms. If it has not been changed it will {@link #DEFAULT_BLOCK_SIZE default to 64}.
+     * Gets the current block size used in blocked algorithms. If it has not been changed it will
+     * {@link #DEFAULT_BLOCK_SIZE default to 64}.
      * @return Current block size to use in concurrent algorithms.
      */
-    public static int getBlockSize() {
+    public static synchronized int getBlockSize() {
         return blockSize;
     }
 
@@ -108,7 +145,7 @@ public final class Configurations {
      * Sets the current block size used in blocked algorithms.
      * @param blockSize Block size to be used in concurrent algorithms.
      */
-    public static void setBlockSize(int blockSize) {
+    public static synchronized void setBlockSize(int blockSize) {
         Configurations.blockSize = Math.max(1, blockSize);
     }
 
@@ -116,8 +153,8 @@ public final class Configurations {
     /**
      * Resets all configurations to their default values.
      */
-    public static void resetAll() {
-        ThreadManager.setParallelismLevel(DEFAULT_NUM_THREADS);
+    public static synchronized void resetAll() {
+        ThreadManager.setParallelismLevel(DEFAULT_PARALLELISM);
         blockSize = DEFAULT_BLOCK_SIZE;
     }
 }

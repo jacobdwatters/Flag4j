@@ -75,7 +75,7 @@ public final class RealSparseMatrixManipulations {
             }
         }
 
-        return new CooMatrix(shape, entries, rowIndices, colIndices);
+        return CooMatrix.unsafeMake(shape, entries, rowIndices, colIndices);
     }
 
 

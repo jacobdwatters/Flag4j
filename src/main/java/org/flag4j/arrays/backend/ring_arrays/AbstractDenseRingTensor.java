@@ -24,12 +24,12 @@
 
 package org.flag4j.arrays.backend.ring_arrays;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringTensor;
 import org.flag4j.linalg.ops.TransposeDispatcher;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 /**

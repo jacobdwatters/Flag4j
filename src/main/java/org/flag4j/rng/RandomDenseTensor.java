@@ -24,11 +24,11 @@
 
 package org.flag4j.rng;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.*;
 import org.flag4j.linalg.decompositions.qr.ComplexQR;
 import org.flag4j.linalg.decompositions.qr.RealQR;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.rng.distributions.Complex128BiGaussian;
 import org.flag4j.rng.distributions.Complex128UniformDisk;
 import org.flag4j.rng.distributions.RealGaussian;
@@ -79,11 +79,10 @@ public class RandomDenseTensor {
 
     
     /**
-     * Constructs a new pseudorandom tensor generator with a seed which is unlikely to be the same as other
-     * from any other invocation of this constructor.
+     * Constructs a new pseudorandom tensor generator with the seed set to {@link RandomState#getGlobalSeed()}
      */
     public RandomDenseTensor() {
-        COMPLEX_RNG = new RandomComplex();
+        COMPLEX_RNG = new RandomComplex(RandomState.getGlobalSeed());
         RAND_ARRAY = new RandomArray(COMPLEX_RNG);
     }
     

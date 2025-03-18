@@ -1,6 +1,5 @@
 package org.flag4j.arrays.sparse.sparse_complex_vector;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
@@ -8,6 +7,7 @@ import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 

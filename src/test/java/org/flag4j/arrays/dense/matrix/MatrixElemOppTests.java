@@ -1,7 +1,7 @@
 package org.flag4j.arrays.dense.matrix;
 
 import org.flag4j.CustomAssertions;
-import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,9 +1,9 @@
 package org.flag4j.arrays.sparse.complex_csr_matrix;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CsrCMatrix;
+import org.flag4j.numbers.Complex128;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -388,8 +388,8 @@ class CsrCMatrixGetRowColTests {
 
         // --------------------- sub-case 4 ---------------------
         A = new CsrCMatrix(1000, 15235);
-        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(34, -1, A.numCols));
-        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(2, 1001, A.numCols));
+        assertThrows(IllegalArgumentException.class, ()->A.getRow(34, -1, A.numCols));
+        assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(1001, 2, A.numCols));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(-1, -4, A.numCols));
         assertThrows(IndexOutOfBoundsException.class, ()->A.getRow(9026910, 20015, A.numCols));
     }

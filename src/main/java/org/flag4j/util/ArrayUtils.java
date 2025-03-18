@@ -24,11 +24,11 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
+import org.flag4j.numbers.Field;
+import org.flag4j.numbers.Semiring;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -390,7 +390,7 @@ public final class ArrayUtils {
      * @throws IllegalArgumentException If {@code nDArray} is not an array or has inconsistent (i.e. non-rectangular) dimensions.
      */
     public static Shape nDArrayShape(Object nDArray) {
-        if (nDArray.getClass().isArray()) {
+        if (!nDArray.getClass().isArray()) {
             throw new IllegalArgumentException("Object is not an array.");
         }
 

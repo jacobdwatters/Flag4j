@@ -1,9 +1,9 @@
 package org.flag4j.arrays.sparse.sparse_complex_tensor;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.io.PrintOptions;
+import org.flag4j.numbers.Complex128;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

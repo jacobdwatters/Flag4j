@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
@@ -40,6 +39,7 @@ import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMa
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops.DenseCsrSemiringMatMult;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -616,7 +616,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CooCMatrix elemMult(CooCMatrix b) {
         Complex128[] dest = new Complex128[b.nnz];
         DenseCooFieldMatrixOps.elemMult(shape, data, b.shape, b.data, b.rowIndices, b.colIndices, dest);
-        return new CooCMatrix(shape, dest, b.rowIndices.clone(), b.colIndices.clone());
+        return CooCMatrix.unsafeMake(shape, dest, b.rowIndices.clone(), b.colIndices.clone());
     }
 
 
@@ -648,7 +648,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     public CooCMatrix elemMult(CooMatrix b) {
         Complex128[] dest = new Complex128[b.nnz];
         RealFieldDenseCooMatrixOps.elemMult(this, b, dest);
-        return new CooCMatrix(shape, dest, b.rowIndices.clone(), b.colIndices.clone());
+        return CooCMatrix.unsafeMake(shape, dest, b.rowIndices.clone(), b.colIndices.clone());
     }
 
 

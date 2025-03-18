@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.common.complex;
 
 
-import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ErrorMessages;
 
 /**

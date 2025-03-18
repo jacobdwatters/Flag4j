@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingVector;
 import org.flag4j.arrays.dense.RingMatrix;
@@ -34,6 +33,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 
@@ -165,6 +165,49 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
      */
     public CooRingVector(int size, List<T> entries, List<Integer> indices) {
         super(new Shape(size), (T[]) entries.toArray(Ring[]::new), ArrayConversions.fromIntegerList(indices));
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO vectors.
+     * @param shape Shape of the COO vector to construct.
+     * @param data The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooRingVector(Shape shape, T[] data, int[] indices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO vector in this manner is unsafe.
+        super(shape, data, indices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO vector which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param size The full size of the COO vector.
+     * @param data The non-zero entries of the COO vector.
+     * @param indices The non-zero indices of the COO vector.
+     * @return A COO vector constructed from the provided parameters.
+     */
+    public static <T extends Ring<T>> CooRingVector<T> unsafeMake(int size, T[] data, int[] indices) {
+        return new CooRingVector(new Shape(size), data, indices, null);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO vector which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param Shape Full shape of the COO vector. Assumed to be rank 1 (this is <em>not</em> enforced).
+     * @param data The non-zero entries of the COO vector.
+     * @param indices The non-zero indices of the COO vector.
+     * @return A COO vector constructed from the provided parameters.
+     */
+    public static <T extends Ring<T>> CooRingVector<T> unsafeMake(Shape shape, T[] data, int[] indices) {
+        return new CooRingVector(shape, data, indices, null);
     }
 
 
@@ -355,7 +398,7 @@ public class CooRingVector<T extends Ring<T>> extends AbstractCooRingVector<
     public CooVector abs() {
         double[] dest = new double[data.length];
         RingOps.abs(data, dest);
-        return new CooVector(shape, dest, indices.clone());
+        return CooVector.unsafeMake(shape, dest, indices.clone());
     }
 
 

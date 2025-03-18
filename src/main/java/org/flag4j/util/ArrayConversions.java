@@ -24,8 +24,8 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,11 +1,11 @@
 package org.flag4j.arrays.dense.complex_matrix;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -178,7 +178,7 @@ class CMatrixAddTests {
         A = new CMatrix(aEntries);
         bEntries = new double[]{23.45, -234.57};
         rowIndices = new int[]{0, 2};
-        colIndices = new int[]{0, 1};
+        colIndices = new int[]{0, 0};
         sparseShape = new Shape(A.numRows+1, A.numCols);
         B = new CooMatrix(sparseShape, bEntries, rowIndices, colIndices);
 

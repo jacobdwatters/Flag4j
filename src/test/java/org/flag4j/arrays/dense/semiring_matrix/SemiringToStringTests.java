@@ -1,7 +1,7 @@
 package org.flag4j.arrays.dense.semiring_matrix;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.SemiringMatrix;
 import org.flag4j.io.PrintOptions;

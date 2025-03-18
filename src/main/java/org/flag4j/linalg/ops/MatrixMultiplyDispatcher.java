@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.ops;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Field;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.*;
 import org.flag4j.linalg.ops.dense.real.RealDenseMatMult;
@@ -42,7 +42,6 @@ public final class MatrixMultiplyDispatcher {
 
     private MatrixMultiplyDispatcher() {
         // Hide constructor for utility class. of utility class
-        
     }
 
 

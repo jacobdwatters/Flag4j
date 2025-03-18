@@ -48,18 +48,16 @@ import java.util.StringJoiner;
  * <p>The {@code Shape} class is immutable with respect to its dimensions, ensuring thread safety and consistency. Strides
  * are computed lazily only when needed to minimize overhead.
  *
- * <p>This class is a fundamental building block for tensor ops, particularly in contexts where multidimensional
- * indexing and dimension manipulations are required.
- *
  * <h2>Example usage:</h2>
  *
  * <pre>{@code
- * Shape shape = new Shape(); // Creates a shape for a scalar value.
- * shape = new Shape(3, 4, 5); // Creates a shape for a 3x4x5 tensor.
- * int rank = shape.getRank(); // Gets the rank (number of dimensions).
- * int[] strides = shape.getStrides(); // Retrieves the strides for this shape.
- * int flatIndex = shape.entriesIndex(2, 1, 4); // Converts multidimensional indices to a flat index.
- * int[] multiDimIndex = shape.}
+ * Shape shape = new Shape();  // Creates a shape for a scalar value.
+ * shape = new Shape(3, 4, 5);  // Creates a shape for a 3x4x5 tensor.
+ * int rank = shape.getRank();  // Gets the rank (number of dimensions).
+ * int[] strides = shape.getStrides();  // Retrieves the strides for this shape.
+ * int flatIndex = getFlatIndex(2, 1, 4);  // Converts multidimensional indices to a flat index.
+ * int[] multiDimIndex = shape.getNdIndices(56);  // Flat index to nD index: {2, 3, 1}.
+ * }
  * </pre>
  */
 public class Shape implements Serializable {
@@ -82,11 +80,11 @@ public class Shape implements Serializable {
      */
     private boolean hasStrides;
     /**
-     * Total data of this shape. This is only computed on demand by {@link #totalEntries()}.
+     * Total number of entries of this shape. This is only computed on demand by {@link #totalEntries()}.
      */
     private BigInteger totalEntries = null;
     /**
-     * Stores the total number of data as exact integer if possible. This is only computed on demand by
+     * Stores the total number of entries in this shape as exact integer if possible. This is only computed on demand by
      * {@link #totalEntriesIntValueExact()}.
      */
     private int totalEntriesIntExact = -1;
@@ -121,7 +119,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
-        return dims.clone();
+        return dims;
     }
 
 
@@ -132,7 +130,7 @@ public class Shape implements Serializable {
      */
     public int[] getStrides() {
         makeStrides();
-        return strides.clone();
+        return strides;
     }
 
 
@@ -343,6 +341,8 @@ public class Shape implements Serializable {
     /**
      * Gets the total number of data for a tensor with this shape.
      * @return The total number of data for a tensor with this shape.
+     * @see #totalEntriesIntValueExact()
+     * @see #totalEntriesLongValueExact()
      */
     public BigInteger totalEntries() {
         // Check if totalEntries has already been computed for this shape.
@@ -360,26 +360,89 @@ public class Shape implements Serializable {
 
     /**
      * <p>Gets the total number of data for a tensor with this shape.
-     * If the total number of data exceeds Integer.MAX_VALUE, an exception is thrown.
+     * If the total number of data exceeds {@link Integer#MAX_VALUE}, an exception is thrown.
      *
      * <p>This method is likely to be more efficient than {@link #totalEntries()} if a primitive int value is desired.
      *
      * @return The total number of data for a tensor with this shape.
      * @throws ArithmeticException If the total number of data overflows a primitive int.
+     * @see #totalEntries()
+     * @see #totalEntriesLongValueExact()
      */
     public int totalEntriesIntValueExact() {
         if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed.
+
+        long product = 1;
         totalEntriesIntExact = 1;
 
         for (int dim : dims) {
-            // Check for overflow before multiplying.
-            if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim)
-                throw new ArithmeticException("Integer overflow while computing total data in the shape.");
+            product *= dim;
 
-            totalEntriesIntExact *= dim;
+            // If product > Long.MAX_VALUE, then product*value would overflow since all dims are positive.
+            if (product > Long.MAX_VALUE)
+                throw new ArithmeticException("Long overflow while computing total data in the shape.");
         }
 
+        totalEntriesIntExact = (int) product;
+
         return totalEntriesIntExact;
+    }
+
+
+    /**
+     * <p>Gets the total number of data for a tensor with this shape as a {@code long}.
+     * If the total number of data exceeds {@link Long#MAX_VALUE}, an exception is thrown.
+     *
+     * @return The total number of data for a tensor with this shape.
+     * @throws ArithmeticException If the total number of data overflows a primitive int.
+     * @see #totalEntriesIntValueExact()
+     * @see #totalEntries()
+     */
+    public long totalEntriesLongValueExact() {
+        if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed as an integer.
+
+        long product = 1;
+        for (long value : dims) {
+            if (value == 0 || product == 0) {
+                product = 0;
+                continue;
+            }
+
+            // If product > Long.MAX_VALUE / value, then product*value would overflow since all dims are positive.
+            if (product > Long.MAX_VALUE / value)
+                throw new ArithmeticException("Long overflow while computing total data in the shape.");
+
+            product *= value;
+        }
+
+        // If we can safely cast to an integer, update the cached integer value.
+        if (product < Integer.MAX_VALUE)
+            totalEntriesIntExact = (int) product;
+
+        return product;
+    }
+
+
+    /**
+     * Checks if the total number of elements represented by this shape can be represented as a 32-bit integer without overflowing.
+     * @return {@code true} if the total number of elements represented by this shape can be represented as a
+     * 32-bit integer without overflowing; {@code false} if it would overflow.
+     */
+    public boolean isIntSized() {
+        if(totalEntriesIntExact >= 0) return true; // Value is already known to be computable as an integer.
+        long product = 1;
+
+        for (int value : dims) {
+            product *= value;
+
+            if (product > Integer.MAX_VALUE)
+                return false;  // Integer overflow detected.
+        }
+
+        // Update cached value since we already computed it.
+        totalEntriesIntExact = (int) product;  // This cast is safe since it will only execute if product <= Integer.MAX_VALUE.
+
+        return true;
     }
 
 

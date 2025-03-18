@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.common.semiring_ops;
 
 
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.Semiring;
 
 /**
  * This utility class contains methods useful for aggregating arrays of {@link Semiring}'s.

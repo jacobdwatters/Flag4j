@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.backend.field_arrays;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingMatrix;
@@ -32,6 +31,7 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.sparse.coo.CooConversions;
+import org.flag4j.numbers.Field;
 import org.flag4j.util.ValidateParameters;
 
 
@@ -80,12 +80,26 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
      * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero data of this sparse matrix.
+     * @param data Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    protected AbstractCooFieldMatrix(Shape shape, W[] entries, int[] rowIndices, int[] colIndices) {
-        super(shape, entries, rowIndices, colIndices);
+    protected AbstractCooFieldMatrix(Shape shape, W[] data, int[] rowIndices, int[] colIndices) {
+        super(shape, data, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param data Non-zero data of this sparse matrix.
+     * @param rowIndices Non-zero row indices of this sparse matrix.
+     * @param colIndices Non-zero column indies of this sparse matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant.
+     */
+    protected AbstractCooFieldMatrix(Shape shape, W[] data, int[] rowIndices, int[] colIndices, Object dummy) {
+        super(shape, data, rowIndices, colIndices, dummy);
     }
 
 
@@ -129,7 +143,7 @@ public abstract class AbstractCooFieldMatrix<T extends AbstractCooFieldMatrix<T,
     public CooMatrix abs() {
         double[] abs = new double[data.length];
         RingOps.abs(data, abs);
-        return new CooMatrix(getShape(), abs, rowIndices.clone(), colIndices.clone());
+        return CooMatrix.unsafeMake(getShape(), abs, rowIndices.clone(), colIndices.clone());
     }
 
 

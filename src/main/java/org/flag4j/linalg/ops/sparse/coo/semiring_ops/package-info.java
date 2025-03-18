@@ -23,6 +23,6 @@
  */
 
 /**
- * Implementations of operations on {@link org.flag4j.algebraic_structures.Semiring Semiring} sparse COO (coordinate) array objects.
+ * Implementations of operations on {@link org.flag4j.numbers.Semiring Semiring} sparse COO (coordinate) array objects.
  */
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;

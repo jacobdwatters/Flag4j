@@ -38,8 +38,8 @@
  * Such ops will be documented and should be used with care.
  *
  * <p>This package includes implementations for arrays with real and complex values, as well as generalized support for
- * {@link org.flag4j.algebraic_structures.Semiring semirings},
- * {@link org.flag4j.algebraic_structures.Ring rings}, and {@link org.flag4j.algebraic_structures.Field fields}.
+ * {@link org.flag4j.numbers.Semiring semirings},
+ * {@link org.flag4j.numbers.Ring rings}, and {@link org.flag4j.numbers.Field fields}.
  * Additionally, some specialized sparse matrix types are provided with limited support for ops:
  * {@link org.flag4j.arrays.sparse.PermutationMatrix permutation matrix} and the {@link org.flag4j.arrays.sparse.SymmTriDiag
  * symmetric tri-diagonal matrix}.

@@ -24,8 +24,6 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
 import org.flag4j.arrays.backend.ring_arrays.TensorOverRing;
@@ -39,6 +37,8 @@ import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldTensorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooOps;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -391,7 +391,7 @@ public class CTensor extends AbstractDenseFieldTensor<CTensor, Complex128> {
         Complex128[] dest = new Complex128[b.nnz];
         int[][] indices = new int[b.nnz][rank];
         RealFieldDenseCooOps.elemMult(this, b, dest, indices);
-        return new CooCTensor(shape, dest, indices);
+        return CooCTensor.unsafeMake(shape, dest, indices);
     }
 
 

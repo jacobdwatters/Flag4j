@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.Field;
+import org.flag4j.numbers.Field;
 import org.flag4j.arrays.backend.field_arrays.*;
 import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
 

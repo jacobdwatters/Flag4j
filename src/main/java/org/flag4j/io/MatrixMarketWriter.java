@@ -25,7 +25,7 @@
 package org.flag4j.io;
 
 
-import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.arrays.Pair;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.CMatrix;

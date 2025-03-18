@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
+import org.flag4j.numbers.Semiring;
 
 /**
  * This class contains low level implementations for methods to evaluate certain properties of a sparse COO

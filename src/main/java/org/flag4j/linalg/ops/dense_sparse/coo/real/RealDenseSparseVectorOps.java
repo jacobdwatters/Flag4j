@@ -195,7 +195,7 @@ public class RealDenseSparseVectorOps {
         for(int i=0; i<src2.nnz; i++)
             entries[i] = src1.data[src2.indices[i]]*src2.data[i];
 
-        return new CooVector(src1.size, entries, src2.indices.clone());
+        return CooVector.unsafeMake(src1.size, entries, src2.indices.clone());
     }
 
 
@@ -232,6 +232,6 @@ public class RealDenseSparseVectorOps {
             dest[i] = src1.data[i]/src2.data[src1.indices[i]];
         }
 
-        return new CooVector(src1.size, dest, src1.indices.clone());
+        return CooVector.unsafeMake(src1.size, dest, src1.indices.clone());
     }
 }

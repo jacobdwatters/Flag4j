@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.decompositions.lu;
 
-import org.flag4j.algebraic_structures.Field;
+import org.flag4j.numbers.Field;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.FieldMatrix;
 import org.flag4j.arrays.sparse.PermutationMatrix;

@@ -23,6 +23,6 @@
  */
 
 /**
- * Implementations of operations on {@link org.flag4j.algebraic_structures.Semiring Semiring} dense array objects.
+ * Implementations of operations on {@link org.flag4j.numbers.Semiring Semiring} dense array objects.
  */
 package org.flag4j.linalg.ops.dense.semiring_ops;

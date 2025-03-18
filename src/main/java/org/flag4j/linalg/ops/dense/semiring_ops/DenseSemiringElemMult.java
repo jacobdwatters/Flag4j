@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.dense.semiring_ops;
 
 
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.util.ValidateParameters;

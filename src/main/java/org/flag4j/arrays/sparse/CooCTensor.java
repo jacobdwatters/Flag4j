@@ -24,8 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
 import org.flag4j.arrays.dense.CTensor;
@@ -34,6 +32,8 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -63,7 +63,7 @@ import java.util.List;
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
- *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
+ *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the nD
  *     index of {@code data[i]}.
  *     </li>
  * </ul>
@@ -149,6 +149,34 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
     }
 
 
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO tensors.
+     * @param shape The shape of the tensor to construct.
+     * @param data The non-zero data of this tensor.
+     * @param indices The indices of the non-zero data.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooCTensor(Shape shape, Complex128[] data, int[][] indices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO tensor in this manner is unsafe.
+        super(shape, data, indices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO tensor which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO tensor.
+     * @param data The non-zero data of the COO tensor.
+     * @param indices The non-zero indices of the COO tensor.
+     * @return A COO tensor constructed from the provided parameters.
+     */
+    public static CooCTensor unsafeMake(Shape shape, Complex128[] data, int[][] indices) {
+        return new CooCTensor(shape, data, indices, null);
+    }
+
+
     @Override
     public Complex128[] makeEmptyDataArray(int length) {
         return new Complex128[length];
@@ -222,7 +250,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * ignored.
      */
     public CooTensor toReal() {
-        return new CooTensor(shape, Complex128Ops.toReal(data), indices.clone());
+        return CooTensor.unsafeMake(shape, Complex128Ops.toReal(data), indices.clone());
     }
 
 
@@ -250,7 +278,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
      * @return A new tensor containing the data of this tensor rounded to the specified precision.
      */
     public CooCTensor round(int precision) {
-        return new CooCTensor(shape, Complex128Ops.round(data, precision), ArrayUtils.deepCopy2D(indices, null));
+        return unsafeMake(shape, Complex128Ops.round(data, precision), ArrayUtils.deepCopy2D(indices, null));
     }
 
 
@@ -285,7 +313,7 @@ public class CooCTensor extends AbstractCooFieldTensor<CooCTensor, CTensor, Comp
         CooCTensor t = reshape(newShape); // Reshape as rank 2 tensor. Broadcastable check made here.
         int[][] tIndices = RealDenseTranspose.standardIntMatrix(t.indices);
 
-        return new CooCMatrix(newShape, t.data.clone(), tIndices[0], tIndices[1]);
+        return CooCMatrix.unsafeMake(newShape, t.data.clone(), tIndices[0], tIndices[1]);
     }
 
 

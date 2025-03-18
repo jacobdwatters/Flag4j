@@ -24,12 +24,12 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -613,7 +613,7 @@ public class PermutationMatrix implements Serializable {
             colIndices[rowIdx] = permutation[rowIdx];
         }
 
-        return new CooMatrix(shape, data, rowIndices, colIndices);
+        return CooMatrix.unsafeMake(shape, data, rowIndices, colIndices);
     }
 
 

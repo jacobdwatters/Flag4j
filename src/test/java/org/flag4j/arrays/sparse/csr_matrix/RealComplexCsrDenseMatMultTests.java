@@ -1,6 +1,6 @@
 package org.flag4j.arrays.sparse.csr_matrix;
 
-import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;

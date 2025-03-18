@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
@@ -36,6 +35,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
+import org.flag4j.numbers.Field;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -168,6 +168,37 @@ public class CooFieldMatrix<T extends Field<T>> extends AbstractCooFieldMatrix<C
                 (T[]) entries.toArray(new Field[entries.size()]),
                 ArrayConversions.fromIntegerList(rowIndices),
                 ArrayConversions.fromIntegerList(colIndices));
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO matrices.
+     * @param shape The shape of the matrix to construct.
+     * @param data The non-zero data of this COO matrix.
+     * @param rowIndices The non-zero row indices of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooFieldMatrix(Shape shape, T[] data, int[] rowIndices, int[] colIndices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO tensor in this manner is unsafe.
+        super(shape, data, rowIndices, colIndices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO matrix which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowIndices The non-zero row indices of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A COO matrix constructed from the provided parameters.
+     */
+    public static <T extends Field<T>> CooFieldMatrix<T> unsafeMake(
+            Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
+        return new CooFieldMatrix(shape, data, rowIndices, colIndices, null);
     }
 
 

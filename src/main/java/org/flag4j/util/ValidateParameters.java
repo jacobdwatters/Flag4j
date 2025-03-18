@@ -60,10 +60,10 @@ public final class ValidateParameters {
      * @throws LinearAlgebraException If shapes do not satisfy the requirements of matrix-matrix or matrix-vector multiplication.
      */
     public static void ensureMatMultShapes(Shape shape1, Shape shape2) {
-        boolean valid = shape1.getRank() == 2 && (shape2.getRank() == 1 || shape2.getRank() == 2);
-        valid &= shape1.get(1) == shape2.get(0);
+        int r2 = shape2.getRank();
 
-        if(!valid) throw new LinearAlgebraException(ErrorMessages.matMultShapeErrMsg(shape1, shape2));
+        if (shape1.getRank() != 2 || (r2 != 2 && r2 != 1) || shape1.get(1) != shape2.get(0))
+            throw new LinearAlgebraException(ErrorMessages.matMultShapeErrMsg(shape1, shape2));
     }
 
 

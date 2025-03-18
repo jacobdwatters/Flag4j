@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays.backend.field_arrays;
 
-import org.flag4j.algebraic_structures.Field;
+import org.flag4j.numbers.Field;
 import org.flag4j.arrays.backend.ring_arrays.RingTensorMixin;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;

@@ -24,13 +24,13 @@
 
 package org.flag4j.linalg.ops.sparse;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.*;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCsrSemiringMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;

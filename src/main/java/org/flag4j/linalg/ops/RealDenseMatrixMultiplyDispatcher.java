@@ -91,9 +91,8 @@ public final class RealDenseMatrixMultiplyDispatcher {
                 RealDenseMatMultTranspose::multTransposeBlockedConcurrent,
         };
 
-        for(int i = 0; i< algorithms.length; i++) {
+        for(int i = 0; i< algorithms.length; i++)
             algorithmMap.put(names[i], algorithms[i]);
-        }
     }
 
 

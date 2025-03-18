@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Field;
+import org.flag4j.numbers.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;

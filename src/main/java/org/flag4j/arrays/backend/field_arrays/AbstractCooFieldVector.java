@@ -24,13 +24,14 @@
 
 package org.flag4j.arrays.backend.field_arrays;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingVector;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.arrays.sparse.SparseValidation;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
+import org.flag4j.numbers.Field;
 import org.flag4j.util.ValidateParameters;
 
 
@@ -79,11 +80,25 @@ public abstract class AbstractCooFieldVector<
      * Creates a tensor with the specified data and shape.
      *
      * @param shape Shape of this tensor.
-     * @param data Entries of this tensor. If this tensor is dense, this specifies all data within the tensor.
-     * If this tensor is sparse, this specifies only the non-zero data of the tensor.
+     * @param data Non-zero entries of the tensor.
+     * @param indices Non-zero entries of the tensor.
      */
     protected AbstractCooFieldVector(Shape shape, Y[] data, int[] indices) {
         super(shape, data, indices);
+        SparseValidation.validateCoo(this.size, this.nnz, this.indices);  // Validate parameters.
+    }
+
+
+    /**
+     * Creates a tensor with the specified data and shape without performing <em>any</em> validation on the parameters.
+     *
+     * @param shape Shape of this tensor.
+     * @param data Non-zero entries of the tensor.
+     * @param indices Non-zero entries of the tensor.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant.
+     */
+    protected AbstractCooFieldVector(Shape shape, Y[] data, int[] indices, Object dummy) {
+        super(shape, data, indices, dummy);
     }
 
 
@@ -96,7 +111,7 @@ public abstract class AbstractCooFieldVector<
     public CooVector abs() {
         double[] abs = new double[data.length];
         RingOps.abs(data, abs);
-        return new CooVector(getShape(), abs, indices.clone());
+        return CooVector.unsafeMake(getShape(), abs, indices.clone());
     }
 
 

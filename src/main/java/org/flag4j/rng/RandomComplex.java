@@ -24,8 +24,8 @@
 
 package org.flag4j.rng;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 
 import java.util.Random;
 
@@ -70,11 +70,11 @@ public class RandomComplex extends Random {
 
 
     /**
-     * Constructs a complex value random number generator. The seed of this random number generator is
-     * very likely to be distinct from any other invocation of this constructor.
+     * Constructs a complex value random number generator. The seed of the random number generator will be set to
+     * {@link RandomState#getGlobalSeed()}
      */
     public RandomComplex() {
-        super();
+        super(RandomState.getGlobalSeed());
     }
 
 

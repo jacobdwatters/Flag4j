@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldMatrix;
@@ -43,6 +42,7 @@ import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseMatOps;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -112,7 +112,6 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
                 entries.toArray(new Complex128[entries.size()]),
                 ArrayConversions.fromIntegerList(rowIndices),
                 ArrayConversions.fromIntegerList(colIndices));
-        ValidateParameters.ensureRank(shape, 2);
         if(entries.size() == 0 || entries.get(0) == null)
             setZeroElement(Complex128.ZERO);
     }
@@ -124,7 +123,6 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      */
     public CooCMatrix(Shape shape) {
         super(shape, new Complex128[0], new int[0], new int[0]);
-        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -169,7 +167,6 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      */
     public CooCMatrix(int rows, int cols) {
         super(new Shape(rows, cols), new Complex128[0], new int[0], new int[0]);
-        ValidateParameters.ensureRank(shape, 2);
         setZeroElement(Complex128.ZERO);
     }
 
@@ -195,6 +192,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      */
     public CooCMatrix(int size) {
         super(new Shape(size, size), new Complex128[0], new int[0], new int[0]);
+        setZeroElement(Complex128.ZERO);
     }
 
 
@@ -207,6 +205,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      */
     public CooCMatrix(int size, Complex128[] entries, int[] rowIndices, int[] colIndices) {
         super(new Shape(size, size), entries, rowIndices, colIndices);
+        setZeroElement(Complex128.ZERO);
     }
 
 
@@ -217,6 +216,37 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix(CooCMatrix b) {
         super(b.shape, b.data.clone(), b.rowIndices.clone(), b.colIndices.clone());
     }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO matrices.
+     * @param shape The shape of the matrix to construct.
+     * @param data The non-zero data of this COO matrix.
+     * @param rowIndices The non-zero row indices of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooCMatrix(Shape shape, Complex128[] data, int[] rowIndices, int[] colIndices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO tensor in this manner is unsafe.
+        super(shape, data, rowIndices, colIndices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO matrix which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowIndices The non-zero row indices of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A COO matrix constructed from the provided parameters.
+     */
+    public static CooCMatrix unsafeMake(Shape shape, Complex128[] data, int[] rowIndices, int[] colIndices) {
+        return new CooCMatrix(shape, data, rowIndices, colIndices, null);
+    }
+
 
 
     @Override
@@ -371,7 +401,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCTensor toTensor() {
         int[][] indices = {rowIndices.clone(), colIndices.clone()};
         indices = RealDenseTranspose.blockedIntMatrix(indices);
-        return new CooCTensor(shape, data.clone(), indices);
+        return CooCTensor.unsafeMake(shape, data.clone(), indices);
     }
 
 
@@ -438,7 +468,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * @return A real matrix which is equivalent to this matrix.
      */
     public CooMatrix toReal() {
-        return new CooMatrix(shape, Complex128Ops.toReal(data),
+        return CooMatrix.unsafeMake(shape, Complex128Ops.toReal(data),
                 rowIndices.clone(), colIndices.clone());
     }
 
@@ -467,7 +497,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
      * @return A new matrix containing the data of this matrix rounded to the specified precision.
      */
     public CooCMatrix round(int precision) {
-        return new CooCMatrix(shape, Complex128Ops.round(data, precision), rowIndices.clone(), colIndices.clone());
+        return unsafeMake(shape, Complex128Ops.round(data, precision), rowIndices.clone(), colIndices.clone());
     }
 
 
@@ -548,7 +578,7 @@ public class CooCMatrix extends AbstractCooFieldMatrix<CooCMatrix, CMatrix, CooC
     public CooCMatrix elemMult(CMatrix b) {
         Complex128[] dest = new Complex128[nnz];
         DenseCooFieldMatrixOps.elemMult(b.shape, b.data, shape, data, rowIndices, colIndices, dest);
-        return new CooCMatrix(shape, dest, rowIndices.clone(), colIndices.clone());
+        return unsafeMake(shape, dest, rowIndices.clone(), colIndices.clone());
     }
 
 

@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.backend.semiring_arrays;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.arrays.backend.AbstractTensor;
@@ -36,6 +35,7 @@ import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringElemMult;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringOps;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 
@@ -71,6 +71,17 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
         super(shape, data);
         ValidateParameters.ensureAllEqual(shape.totalEntriesIntValueExact(), data.length);
         this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+    }
+
+
+    /**
+     * Gets the size of the 1D data array backing this tensor.
+     *
+     * @return The size of the 1D data array backing this tensor.
+     */
+    @Override
+    public int dataLength() {
+        return data.length;
     }
 
 

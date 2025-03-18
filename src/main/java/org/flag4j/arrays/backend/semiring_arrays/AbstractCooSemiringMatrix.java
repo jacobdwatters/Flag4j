@@ -25,12 +25,12 @@
 package org.flag4j.arrays.backend.semiring_arrays;
 
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.sparse.SparseValidation;
 import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
@@ -38,6 +38,7 @@ import org.flag4j.linalg.ops.sparse.coo.*;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatMult;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatrixOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringMatrixProperties;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -125,28 +126,48 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
      *
      * @param shape Shape of this tensor.
-     * @param entries Non-zero data of this sparse matrix.
+     * @param data Non-zero data of this sparse matrix.
      * @param rowIndices Non-zero row indices of this sparse matrix.
      * @param colIndices Non-zero column indies of this sparse matrix.
      */
-    protected AbstractCooSemiringMatrix(Shape shape, W[] entries, int[] rowIndices, int[] colIndices) {
-        super(shape, entries);
-        // TODO: Need methods which allow custom error message to be passed in. It can be very difficult to
-        //  understand why a COO matrix could not be constructed.
-        ValidateParameters.ensureRank(shape, 2);
-        ValidateParameters.validateArrayIndices(shape.get(0), rowIndices);
-        ValidateParameters.validateArrayIndices(shape.get(1), colIndices);
-        ValidateParameters.ensureArrayLengthsEq(entries.length, rowIndices.length, colIndices.length);
+    protected AbstractCooSemiringMatrix(Shape shape, W[] data, int[] rowIndices, int[] colIndices) {
+        super(shape, data);
+        SparseValidation.validateCoo(shape, data.length, rowIndices, colIndices);
 
         this.rowIndices = rowIndices;
         this.colIndices = colIndices;
-        nnz = entries.length;
+        nnz = data.length;
         numRows = shape.get(0);
         numCols = shape.get(1);
         sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
 
         // Attempt to set the zero element for the semiring.
-        this.zeroElement = (entries.length > 0 && entries[0] != null) ? entries[0].getZero() : null;
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+    }
+
+
+    /**
+     * <p>Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
+     * <p>This constructor will not perform data validation on <em>any</em> of the parameters.
+     *
+     * @param shape Shape of this tensor.
+     * @param data Non-zero data of this sparse matrix.
+     * @param rowIndices Non-zero row indices of this sparse matrix.
+     * @param colIndices Non-zero column indies of this sparse matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. The value of this object is ignored.
+     */
+    protected AbstractCooSemiringMatrix(Shape shape, W[] data, int[] rowIndices, int[] colIndices, Object dummy) {
+        super(shape, data);
+
+        this.rowIndices = rowIndices;
+        this.colIndices = colIndices;
+        nnz = data.length;
+        numRows = shape.get(0);
+        numCols = shape.get(1);
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
+
+        // Attempt to set the zero element for the semiring.
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
     }
 
 

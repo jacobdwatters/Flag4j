@@ -25,13 +25,13 @@ class CooTensorGetSetTests {
     void cooTensorSetTest() {
         aShape = new Shape(3, 4, 5, 1);
         aEntries = new double[]{1, 223.1333, -0.991233, 100.1234};
-        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         A = new CooTensor(aShape, aEntries, aIndices);
 
         // --------------- sub-case 1 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{1, -451.2, -0.991233, 100.1234};
-        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         exp = new CooTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(-451.2, 1, 2, 0, 0));
@@ -39,7 +39,7 @@ class CooTensorGetSetTests {
         // --------------- sub-case 2 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{1, 223.1333, 32.1, -0.991233, 100.1234};
-        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {1, 2, 4, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        expIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {1, 2, 4, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         exp = new CooTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(32.1, 1, 2, 4, 0));
@@ -47,7 +47,7 @@ class CooTensorGetSetTests {
         // --------------- sub-case 3 ---------------
         expShape = new Shape(3, 4, 5, 1);
         expEntries = new double[]{0.001, 1, 223.1333, -0.991233, 100.1234};
-        expIndices = new int[][]{{0, 0, 0, 0}, {0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        expIndices = new int[][]{{0, 0, 0, 0}, {0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         exp = new CooTensor(expShape, expEntries, expIndices);
 
         assertEquals(exp, A.set(0.001, 0, 0, 0, 0));
@@ -64,7 +64,7 @@ class CooTensorGetSetTests {
     void cooTensorGetTest() {
         aShape = new Shape(3, 4, 5, 1);
         aEntries = new double[]{1, 223.1333, -0.991233, 100.1234};
-        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 1}};
+        aIndices = new int[][]{{0, 1, 0, 0}, {1, 2, 0, 0}, {2, 3, 2, 0}, {2, 3, 4, 0}};
         A = new CooTensor(aShape, aEntries, aIndices);
 
         // --------------- sub-case 1 ---------------

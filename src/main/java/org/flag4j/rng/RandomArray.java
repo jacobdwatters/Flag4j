@@ -24,8 +24,8 @@
 
 package org.flag4j.rng;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 import org.flag4j.rng.distributions.Distribution;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
@@ -46,9 +46,10 @@ public final class RandomArray {
 
     /**
      * Creates a RandomArray object to generate arrays filled with random values using a default random number generator.
+     * The seed of the random number generator will be set to {@link RandomState#getGlobalSeed()}
      */
     public RandomArray() {
-        this.rng = new RandomComplex();
+        this.rng = new RandomComplex(RandomState.getGlobalSeed());
     }
 
 

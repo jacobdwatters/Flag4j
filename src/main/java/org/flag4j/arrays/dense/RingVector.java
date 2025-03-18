@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.numbers.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingVector;
 import org.flag4j.arrays.sparse.CooRingVector;

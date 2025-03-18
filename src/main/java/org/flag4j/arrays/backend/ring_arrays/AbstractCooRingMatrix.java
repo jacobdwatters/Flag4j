@@ -24,13 +24,13 @@
 
 package org.flag4j.arrays.backend.ring_arrays;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringMatrix;
 import org.flag4j.linalg.ops.sparse.coo.CooConversions;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingMatrixOps;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 /**
@@ -84,6 +84,20 @@ public abstract class AbstractCooRingMatrix<T extends AbstractCooRingMatrix<T, U
      */
     protected AbstractCooRingMatrix(Shape shape, W[] entries, int[] rowIndices, int[] colIndices) {
         super(shape, entries, rowIndices, colIndices);
+    }
+
+
+    /**
+     * Creates a sparse coo matrix with the specified non-zero data, non-zero indices, and shape.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries Non-zero data of this sparse matrix.
+     * @param rowIndices Non-zero row indices of this sparse matrix.
+     * @param colIndices Non-zero column indies of this sparse matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant.
+     */
+    protected AbstractCooRingMatrix(Shape shape, W[] entries, int[] rowIndices, int[] colIndices, Object dummy) {
+        super(shape, entries, rowIndices, colIndices, dummy);
     }
 
 

@@ -23,7 +23,7 @@
  */
 
 /**
- * Implementations of operations on two {@link org.flag4j.algebraic_structures.Semiring Semiring} array objects.
+ * Implementations of operations on two {@link org.flag4j.numbers.Semiring Semiring} array objects.
  * Operations are agnostic to sparsity/density.
  */
 package org.flag4j.linalg.ops.common.semiring_ops;

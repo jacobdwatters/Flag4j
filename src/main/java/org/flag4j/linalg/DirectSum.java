@@ -25,12 +25,12 @@
 package org.flag4j.linalg;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayJoiner;
 import org.flag4j.util.ArrayUtils;
@@ -521,7 +521,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -555,7 +555,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -591,7 +591,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -625,7 +625,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -658,7 +658,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -690,7 +690,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -723,7 +723,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -755,7 +755,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
     // -------------------------------------------------------------------------------
 
@@ -793,7 +793,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -827,7 +827,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -863,7 +863,7 @@ public final class DirectSum {
             destColIndices[destIdx] = indices[1] + A.numCols;
         }
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -897,7 +897,7 @@ public final class DirectSum {
             destColIndices[destIdx] = B.colIndices[i] + A.numCols;
         }
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -930,7 +930,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -962,7 +962,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -994,7 +994,7 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, B.rowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, B.colIndices.length, A.colIndices.length);
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 
 
@@ -1027,6 +1027,6 @@ public final class DirectSum {
         System.arraycopy(shiftedRowIndices, 0, destRowIndices, bRowIndices.length, shiftedRowIndices.length);
         System.arraycopy(A.colIndices, 0, destColIndices, bColIndices.length, A.colIndices.length);
 
-        return new CooCMatrix(destShape, destEntries, destRowIndices, destColIndices);
+        return CooCMatrix.unsafeMake(destShape, destEntries, destRowIndices, destColIndices);
     }
 }
