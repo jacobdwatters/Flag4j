@@ -208,21 +208,21 @@ public class Shape implements Serializable {
 
     /**
      * Computes the index of the 1D data array for a dense tensor from nD indices for a tensor with this shape.
-     * @param indices Indices of tensor with this shape.
-     * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
+     * @param nDIndex nD index within a tensor with this shape.
+     * @return The 1D index of the element at the specified nD index in the 1D data array of a dense tensor.
      * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
      * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
-     * @see #unsafeGetFlatIndex(int...)
+     * @see #unsafeGet1DIndex(int...)
      */
-    public int getFlatIndex(int... indices) {
-        if(indices.length != dims.length)
-            throw new IllegalArgumentException("Indices rank " + indices.length + " does not match tensor rank " + dims.length);
+    public int get1DIndex(int... nDIndex) {
+        if(nDIndex.length != dims.length)
+            throw new IllegalArgumentException("Indices rank " + nDIndex.length + " does not match tensor rank " + dims.length);
 
         makeStrides(); // Computes strides if not previously computed.
 
         int index = 0;
-        for(int i=0, stop=indices.length; i<stop; i++) {
-            int idx = indices[i];
+        for(int i=0, stop=nDIndex.length; i<stop; i++) {
+            int idx = nDIndex[i];
             if(idx < 0 || idx >= dims[i]) {
                 throw new IndexOutOfBoundsException("Index " + idx + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
@@ -237,39 +237,64 @@ public class Shape implements Serializable {
 
     /**
      * <p>Computes the index of the 1D data array for a dense tensor from nD indices for a tensor with this shape.
-     * <p>Warning: Unlike {@link #getFlatIndex(int...)}, this method does not perform bounds checking on indices. This can lead
+     * <p>Warning: Unlike {@link #get1DIndex(int...)}, this method does not perform bounds checking on indices. This can lead
      * to exceptions being thrown or possibly no exception but incorrect results if {@code indices} are not valid indices.
-     * @param indices Indices of tensor with this shape.
+     * @param nDIndex Indices of tensor with this shape.
      * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
      * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
      * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
-     * @see #getFlatIndex(int...)
+     * @see #get1DIndex(int...)
      */
-    public int unsafeGetFlatIndex(int... indices) {
+    public int unsafeGet1DIndex(int... nDIndex) {
         makeStrides(); // Computes strides if not previously computed.
 
         int index = 0;
-        for(int i=0, stop=indices.length; i<stop; i++)
-            index += indices[i]*strides[i];
+        for(int i = 0, stop = nDIndex.length; i < stop; i++)
+            index += nDIndex[i]*strides[i];
 
         return index;
     }
 
 
     /**
-     * Efficiently computes the nD tensor indices based on an index from the internal 1D data array.
+     * Efficiently computes the nD tensor index based on a 1D index from the internal 1D data array.
      * @param index Index of internal 1D data array.
      * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
      * with length equal to the {@link #getRank() rank} of this shape.
+     * @see #getNdIndices(int...)
+     * @see #get1DIndex(int...)
      */
     public int[] getNdIndices(int index) {
         makeStrides(); // Ensure strides are initialized if not already.
-        int[] indices = new int[getRank()];
+        int[] indices = new int[rank];
 
         for (int i = 0; i < strides.length; i++)
             indices[i] = (index / strides[i]) % dims[i];
 
         return indices;
+    }
+
+
+    /**
+     * Efficiently computes the nD tensor indices from multiple 1D indices from the internal 1D data array.
+     * @param indices Array of 1D indices.
+     * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
+     * with length equal to the {@link #getRank() rank} of this shape.
+     * @see #getNdIndices(int)
+     * @see #get1DIndex(int...)
+     */
+    public int[][] getNdIndices(int... indices) {
+        makeStrides(); // Ensure strides are initialized if not already.
+        int[][] nDIndices = new int[indices.length][rank];
+
+        for(int i=0; i<indices.length; i++) {
+            int index = indices[i];
+
+            for (int j = 0; j < strides.length; j++)
+                nDIndices[i][j] = (index / strides[j]) % dims[j];
+        }
+
+        return nDIndices;
     }
 
 
@@ -371,7 +396,6 @@ public class Shape implements Serializable {
      */
     public int totalEntriesIntValueExact() {
         if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed.
-
         long product = 1;
         totalEntriesIntExact = 1;
 
@@ -379,8 +403,8 @@ public class Shape implements Serializable {
             product *= dim;
 
             // If product > Long.MAX_VALUE, then product*value would overflow since all dims are positive.
-            if (product > Long.MAX_VALUE)
-                throw new ArithmeticException("Long overflow while computing total data in the shape.");
+            if (product > Integer.MAX_VALUE)
+                throw new ArithmeticException("Integer overflow while computing total data in shape: " + this);
         }
 
         totalEntriesIntExact = (int) product;

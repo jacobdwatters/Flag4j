@@ -470,7 +470,7 @@ public class RealFloat32 implements Field<RealFloat32> {
      */
     public static RealFloat32 round(RealFloat32 n, int decimals) {
         if (decimals < 0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals, "decimals"));
 
         float value = (Double.isFinite(n.value))
                 ? BigDecimal.valueOf(n.value).setScale(decimals, RoundingMode.HALF_UP).floatValue()

@@ -71,7 +71,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public Double get(int... indices) {
         ValidateParameters.validateTensorIndex(shape, indices);
-        return data[shape.getFlatIndex(indices)];
+        return data[shape.get1DIndex(indices)];
     }
 
 
@@ -88,7 +88,7 @@ public abstract class AbstractDenseDoubleTensor<T extends AbstractDoubleTensor<T
     @Override
     public T set(Double value, int... indices) {
         ValidateParameters.validateTensorIndex(shape, indices);
-        data[shape.getFlatIndex(indices)] = value;
+        data[shape.get1DIndex(indices)] = value;
         return (T) this;
     }
 

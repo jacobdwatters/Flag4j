@@ -142,34 +142,34 @@ class ShapeTests {
         shape1 = new Shape(4, 2, 3);
         indices = new int[]{1, 0, 2};
         expValue = 8;
-        assertEquals(expValue, shape1.getFlatIndex(indices));
+        assertEquals(expValue, shape1.get1DIndex(indices));
 
         // -------------- sub-case 2 --------------
         shape1 = new Shape(4, 2, 3);
         indices = new int[]{2, 1, 1};
         expValue = 16;
-        assertEquals(expValue, shape1.getFlatIndex(indices));
+        assertEquals(expValue, shape1.get1DIndex(indices));
 
         // -------------- sub-case 3 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 0, 1, 5};
         expValue = 608;
-        assertEquals(expValue, shape1.getFlatIndex(indices));
+        assertEquals(expValue, shape1.get1DIndex(indices));
 
         // -------------- sub-case 4 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 0, 1, 5, 1};
-        assertThrows(IllegalArgumentException.class, () -> shape1.getFlatIndex(indices));
+        assertThrows(IllegalArgumentException.class, () -> shape1.get1DIndex(indices));
 
         // -------------- sub-case 5 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 2, 1, 5};
-        assertThrows(IndexOutOfBoundsException.class, () -> shape1.getFlatIndex(indices));
+        assertThrows(IndexOutOfBoundsException.class, () -> shape1.get1DIndex(indices));
 
         // -------------- sub-case 6 --------------
         shape1 = new Shape(15, 2, 3, 9);
         indices = new int[]{11, 1, 1, 101};
-        assertThrows(IndexOutOfBoundsException.class, () -> shape1.getFlatIndex(indices));
+        assertThrows(IndexOutOfBoundsException.class, () -> shape1.get1DIndex(indices));
     }
 
 

@@ -303,7 +303,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
         double[] denseData = new double[totalEntries().intValueExact()];
 
         for(int i=0; i<nnz; i++)
-            denseData[shape.getFlatIndex(indices[i])] = this.data[i];
+            denseData[shape.get1DIndex(indices[i])] = this.data[i];
 
         return new Tensor(shape, denseData);
     }
@@ -389,7 +389,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
         int[][] destIndices = new int[data.length][1];
 
         for(int i = 0, size = data.length; i<size; i++)
-            destIndices[i][0] = shape.getFlatIndex(indices[i]);
+            destIndices[i][0] = shape.get1DIndex(indices[i]);
 
         return makeLikeTensor(new Shape(shape.totalEntries().intValueExact()), data.clone(), destIndices);
     }
@@ -414,7 +414,7 @@ public class CooTensor extends AbstractDoubleTensor<CooTensor> {
         destShape[axis] = shape.totalEntries().intValueExact();
 
         for(int i = 0, size = data.length; i<size; i++)
-            destIndices[i][axis] = shape.getFlatIndex(indices[i]);
+            destIndices[i][axis] = shape.get1DIndex(indices[i]);
 
         return makeLikeTensor(new Shape(destShape), data.clone(), destIndices);
     }

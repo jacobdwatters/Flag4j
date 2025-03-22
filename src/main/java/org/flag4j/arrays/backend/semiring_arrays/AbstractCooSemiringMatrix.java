@@ -433,7 +433,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
         int[] destIndices = new int[data.length];
 
         for(int i = 0; i < data.length; i++)
-            destIndices[i] = shape.getFlatIndex(rowIndices[i], colIndices[i]);
+            destIndices[i] = shape.get1DIndex(rowIndices[i], colIndices[i]);
 
         return (axis == 0)
                 ? makeLikeTensor(flatShape, data.clone(), destIndices, new int[data.length])

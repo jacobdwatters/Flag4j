@@ -114,7 +114,7 @@ public class RealFloat64 implements Field<RealFloat64> {
      */
     public static RealFloat64 round(RealFloat64 n, int decimals) {
         if (decimals < 0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals, "decimals"));
         if (!Double.isFinite(n.value))
             return n;
 

@@ -924,7 +924,7 @@ public class Complex128 implements Field<Complex128> {
      */
     public static Complex128 round(Complex128 n, int decimals) {
         if (decimals < 0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals, "decimals"));
 
         double real;
         double imaginary;
@@ -965,7 +965,7 @@ public class Complex128 implements Field<Complex128> {
      */
     public static boolean nearZero(Complex128 n, double tol) {
         if (tol < 0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(tol));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(tol, "tol"));
 
         return n.mag() <= tol;
     }

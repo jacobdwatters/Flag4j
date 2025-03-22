@@ -61,7 +61,7 @@ public final class SparseUtils {
         int[][] destIndices = new int[indices.length][1];
 
         for(int i=0, size=indices.length; i<size; i++)
-            destIndices[i][0] = shape.getFlatIndex(indices[i]);
+            destIndices[i][0] = shape.get1DIndex(indices[i]);
 
         return destIndices;
     }
@@ -80,7 +80,7 @@ public final class SparseUtils {
         int[][] destIndices = new int[indices.length][indices[0].length];
 
         for(int i=0, size=indices.length; i<size; i++)
-            destIndices[i][axis] = shape.getFlatIndex(indices[i]);
+            destIndices[i][axis] = shape.get1DIndex(indices[i]);
 
         return destIndices;
     }

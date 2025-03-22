@@ -285,7 +285,18 @@ public final class ValidateParameters {
      * @see #ensurePositive(int)
      */
     public static void ensureNonNegative(int value) {
-        if(value < 0) throw new IllegalArgumentException(ErrorMessages.getNegValueErr(value));
+        if(value < 0) throw new IllegalArgumentException(ErrorMessages.getNegValueErr(value, "value"));
+    }
+
+
+    /**
+     * Checks if {@code value >= 0}.
+     * @param value Value of interest.
+     * @throws IllegalArgumentException If {@code value < 0}.
+     * @see #ensurePositive(int)
+     */
+    public static void ensureNonNegative(int value, String name) {
+        if(value < 0) throw new IllegalArgumentException(ErrorMessages.getNegValueErr(value, "value"));
     }
 
 

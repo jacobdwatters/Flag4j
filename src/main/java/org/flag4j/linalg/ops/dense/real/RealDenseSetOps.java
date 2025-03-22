@@ -179,6 +179,6 @@ public final class RealDenseSetOps {
      * @param indices Indices of tensor value to be set.
      */
     public static void set(double[] src, Shape shape, double value, int... indices) {
-        src[shape.getFlatIndex(indices)] = value;
+        src[shape.get1DIndex(indices)] = value;
     }
 }

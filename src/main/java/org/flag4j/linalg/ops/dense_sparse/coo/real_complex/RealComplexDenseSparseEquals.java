@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.real_complex;
 
-import org.flag4j.numbers.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Matrix;
@@ -35,6 +34,7 @@ import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
+import org.flag4j.numbers.Complex128;
 
 import java.util.Arrays;
 
@@ -228,14 +228,14 @@ public final class RealComplexDenseSparseEquals {
 
             // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                entriesIndex = A.shape.getFlatIndex(B.indices[i]);
+                entriesIndex = A.shape.get1DIndex(B.indices[i]);
 
                 if(entriesCopy[entriesIndex] != (B.data[i]).re || (B.data[i]).im != 0) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.getFlatIndex(B.indices[i])] = 0;
+                entriesCopy[A.shape.get1DIndex(B.indices[i])] = 0;
             }
 
             if(equal) {
@@ -267,14 +267,14 @@ public final class RealComplexDenseSparseEquals {
 
             // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                entriesIndex = A.shape.getFlatIndex(B.indices[i]);
+                entriesIndex = A.shape.get1DIndex(B.indices[i]);
 
                 if(entriesCopy[entriesIndex].re != B.data[i] || entriesCopy[entriesIndex].im != 0) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.getFlatIndex(B.indices[i])] = Complex128.ZERO;
+                entriesCopy[A.shape.get1DIndex(B.indices[i])] = Complex128.ZERO;
             }
 
             if(equal) {

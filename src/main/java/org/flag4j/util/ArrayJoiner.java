@@ -80,7 +80,21 @@ public final class ArrayJoiner {
     public static int[] join(int[] src1, int[] src2) {
         int[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
         System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
+        return concatenate;
+    }
 
+
+    /**
+     * Joins two arrays together. The elements in the two arrays will be shallowly copied.
+     *
+     * @param src1 First array to join.
+     * @param src2 Second array to join.
+     * @return A single array of length {@code src1.length + src2.length} containing the elements of {@code src1}
+     * followed by the elements of {@code src2}.
+     */
+    public static <T> T[] join(T[] src1, T[] src2) {
+        T[] concatenate = Arrays.copyOf(src1, src1.length + src2.length);
+        System.arraycopy(src2, 0, concatenate, src1.length, src2.length);
         return concatenate;
     }
 

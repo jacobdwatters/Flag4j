@@ -135,7 +135,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public V get(int... indices) {
-        return (V) data[shape.getFlatIndex(indices)];
+        return (V) data[shape.get1DIndex(indices)];
     }
 
 
@@ -152,7 +152,7 @@ public abstract class AbstractDenseSemiringTensor<T extends AbstractDenseSemirin
      */
     @Override
     public T set(V value, int... indices) {
-        data[shape.getFlatIndex(indices)] = value;
+        data[shape.get1DIndex(indices)] = value;
         return (T) this;
     }
 

@@ -902,7 +902,7 @@ public class Complex64 implements Field<Complex64> {
      */
     public static Complex64 round(Complex64 n, int decimals) {
         if (decimals < 0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(decimals, "decimals"));
 
         float real;
         float imaginary;
@@ -943,7 +943,7 @@ public class Complex64 implements Field<Complex64> {
      */
     public static boolean nearZero(Complex64 n, float tol) {
         if (tol < 0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(tol));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(tol, "tol"));
 
         return n.mag() <= tol;
     }

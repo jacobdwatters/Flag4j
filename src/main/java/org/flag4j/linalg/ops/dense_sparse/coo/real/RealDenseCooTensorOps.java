@@ -54,7 +54,7 @@ public class RealDenseCooTensorOps {
 
         for(int i=0, size=src2.nnz; i<size; i++) {
             indices = src2.indices[i];
-            dest.data[dest.shape.getFlatIndex(indices)] += src2.data[i];
+            dest.data[dest.shape.get1DIndex(indices)] += src2.data[i];
         }
 
         return dest;
@@ -77,7 +77,7 @@ public class RealDenseCooTensorOps {
         ArrayUtils.deepCopy2D(src2.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
+            index = src2.shape.get1DIndex(src2.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.data[index]*src2.data[i];
         }
 
@@ -100,7 +100,7 @@ public class RealDenseCooTensorOps {
         ArrayUtils.deepCopy2D(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
+            index = src2.shape.get1DIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.data[index]/src2.data[i];
         }
 
@@ -120,7 +120,7 @@ public class RealDenseCooTensorOps {
         Tensor dest = src1.copy();
 
         for(int i=0, size=src2.nnz; i<size; i++)
-            dest.data[dest.shape.getFlatIndex(src2.indices[i])] -= src2.data[i];
+            dest.data[dest.shape.get1DIndex(src2.indices[i])] -= src2.data[i];
         
         return dest;
     }
@@ -138,7 +138,7 @@ public class RealDenseCooTensorOps {
         Tensor dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++)
-            dest.data[src1.shape.getFlatIndex(src1.indices[i])] += src1.data[i];
+            dest.data[src1.shape.get1DIndex(src1.indices[i])] += src1.data[i];
         
 
         return dest;
@@ -155,7 +155,7 @@ public class RealDenseCooTensorOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++)
-            src1.data[src1.shape.getFlatIndex(src2.indices[i])] += src2.data[i];
+            src1.data[src1.shape.get1DIndex(src2.indices[i])] += src2.data[i];
     }
 
 
@@ -169,7 +169,7 @@ public class RealDenseCooTensorOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++)
-            src1.data[src1.shape.getFlatIndex(src2.indices[i])] -= src2.data[i];
+            src1.data[src1.shape.get1DIndex(src2.indices[i])] -= src2.data[i];
     }
 
 
@@ -184,7 +184,7 @@ public class RealDenseCooTensorOps {
         Tensor sum = new Tensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++)
-            sum.data[src1.shape.getFlatIndex(src1.indices[i])] += src1.data[i];
+            sum.data[src1.shape.get1DIndex(src1.indices[i])] += src1.data[i];
 
         return sum;
     }
@@ -201,7 +201,7 @@ public class RealDenseCooTensorOps {
         Tensor sum = new Tensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++)
-            sum.data[src1.shape.getFlatIndex(src1.indices[i])] -= src1.data[i];
+            sum.data[src1.shape.get1DIndex(src1.indices[i])] -= src1.data[i];
 
         return sum;
     }

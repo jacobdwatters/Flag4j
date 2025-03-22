@@ -32,7 +32,13 @@ import java.util.concurrent.atomic.AtomicLong;
  * Static class containing the global seed and default random number generator in Flag4j.
  */
 public final class RandomState {
+    /**
+     * Global RNG seed for Flag4j.
+     */
     private static final AtomicLong globalSeed = new AtomicLong(new Random().nextLong());
+    /**
+     * Random number generator instance for this thread.
+     */
     private static final ThreadLocal<RandomComplex> threadLocalRandom = ThreadLocal.withInitial(() ->
             new RandomComplex(globalSeed.get()));
 
