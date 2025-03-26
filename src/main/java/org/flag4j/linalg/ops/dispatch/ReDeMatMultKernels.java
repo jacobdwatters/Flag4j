@@ -33,11 +33,11 @@ import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 
 /**
- * Static utility class containing real dense matrix multiplication kernels.
+ * Static utility class containing real dense matrix multiplication kernels. All Kernels are provided as a {@link BinaryOperator}.
  */
-final class RealDenseMatMultKernels {
+final class ReDeMatMultKernels {
 
-    private RealDenseMatMultKernels() {
+    private ReDeMatMultKernels() {
         // Hide default constructor for utility class.
     }
 

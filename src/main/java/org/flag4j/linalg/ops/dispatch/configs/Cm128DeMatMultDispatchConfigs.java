@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  * <h2>Thread Safety:</h2>
  * This class is designed to be thread-safe.
  */
-public final class CmDeMatMultDispatchConfigs {
+public final class Cm128DeMatMultDispatchConfigs {
 
     /**
      * The cache size for caching kernels to use for a given pair of shapes.
@@ -61,12 +61,12 @@ public final class CmDeMatMultDispatchConfigs {
      * Threshold for the total number of entries in both matrices to consider the problem "small enough" to
      * default to the standard algorithm.
      */
-    private static int smallThreshold = 2_450;
+    private static int smallThreshold = 512;
 
     /**
      * Threshold for using a concurrent standard kernel for "near square" matrices.
      */
-    private static int squareMtStandardThreshold = 50;
+    private static int squareMtStandardThreshold = 60;
     /**
      * Threshold for using a concurrent reordered kernel for "near square" matrices.
      */
@@ -76,10 +76,6 @@ public final class CmDeMatMultDispatchConfigs {
      * Thresholds for non-square wide matrices. i.e. {@code m = max(m, n, k)} and {@code max(m, n, k) / min(m, n, k) >  aspectThreshold}.
      */
     private static int wideMtReorderedThreshold = 25;
-    /**
-     * Threshold for using standard matrix-vector kernel when matrix is "near square".
-     */
-    private static int squareSequentialVecThreshold = 256;
 
     /**
      * Threshold for considering the minimum dimension small enough to fall back to sequential kernel.
@@ -110,13 +106,11 @@ public final class CmDeMatMultDispatchConfigs {
             squareMtReorderedThreshold = Integer.parseInt(properties.getProperty("squareMtReorderedThreshold"));
         if (properties.containsKey("wideMtReorderedThreshold"))
             wideMtReorderedThreshold = Integer.parseInt(properties.getProperty("wideMtReorderedThreshold"));
-        if (properties.containsKey("squareSequentialVecThreshold"))
-            squareSequentialVecThreshold = Integer.parseInt(properties.getProperty("squareSequentialVecThreshold"));
         if (properties.containsKey("minDimSmallThreshold"))
             minDimSmallThreshold = Integer.parseInt(properties.getProperty("minDimSmallThreshold"));
     }
 
-    private CmDeMatMultDispatchConfigs() {
+    private Cm128DeMatMultDispatchConfigs() {
         // Hide default constructor for utility clas.
     }
 
@@ -163,16 +157,6 @@ public final class CmDeMatMultDispatchConfigs {
      */
     public static int getWideMtReorderedThreshold() {
         return wideMtReorderedThreshold;
-    }
-
-
-    /**
-     * Gets the threshold for using a sequential kernel for a "near square" complex dense matrix-vector multiplication problem.
-     * @return The Gets the threshold for using a sequential kernel for a "near square" complex dense matrix-vector
-     * multiplication problem.
-     */
-    public static int getSquareSequentialVecThreshold() {
-        return squareSequentialVecThreshold;
     }
 
 

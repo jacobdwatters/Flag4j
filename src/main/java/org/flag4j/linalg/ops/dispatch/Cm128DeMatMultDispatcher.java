@@ -25,19 +25,21 @@
 package org.flag4j.linalg.ops.dispatch;
 
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.dense.Matrix;
-import org.flag4j.linalg.ops.dense.real.RealDenseMatMult;
+import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMult;
+import org.flag4j.linalg.ops.dispatch.configs.Cm128DeMatMultDispatchConfigs;
 import org.flag4j.linalg.ops.dispatch.configs.ReDeMatMultDispatchConfigs;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ErrorMessages;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.function.BiFunction;
 
-import static org.flag4j.linalg.ops.dispatch.RealDenseMatMultKernels.*;
+import static org.flag4j.linalg.ops.dispatch.Cm128DeMatMultKernels.*;
 
 /**
- * <p>A dispatcher that selects the most suitable matrix multiplication kernel for two real dense matrices.
+ * <p>A dispatcher that selects the most suitable matrix multiplication kernel for two {@link CMatrix complex dense matrices}.
  *
  * <p>This class implements a threshold- and shape-based decision tree to optimize performance for various
  * matrix multiplication scenarios (e.g., small matrices, square matrices, wide/tall matrices, matrix-vector
@@ -46,66 +48,62 @@ import static org.flag4j.linalg.ops.dispatch.RealDenseMatMultKernels.*;
  *
  * <h2>Usage:</h2>
  * <ul>
- *   <li>Use {@link #dispatch(Matrix, Matrix)} to multiply two matrices, dynamically choosing the best kernel.</li>
+ *   <li>Use {@link #dispatch(CMatrix, CMatrix)} to multiply two matrices, dynamically choosing the best kernel.</li>
  *   <li>This class is a singleton; call {@link #getInstance()} to retrieve the instance if you need direct
  *   access to the underlying dispatcher.</li>
  * </ul>
  *
  * <h2>Configuration:</h2>
- * The dispatcher reads various thresholds (e.g., {@code ASPECT_THRESH}, {@code SML_THRESH}, etc.)
- * from {@code ReDeMatMultDispatchConfigs}, allowing external tuning without modifying code.
+ * The dispatcher utilizes various thresholds (e.g., {@code ASPECT_THRESH}, {@code SML_THRESH}, etc.)
+ * from {@link Cm128DeMatMultDispatchConfigs}, allowing external tuning without modifying code.
  *
  * <h2>Thread Safety:</h2>
  * <ul>
  *   <li>The dispatcher itself does not maintain mutable state beyond a cached kernel lookup,
  *       which is also thread-safe.</li>
- *   <li>{@link #dispatch(Matrix, Matrix)} is safe to call from multiple threads.</li>
+ *   <li>{@link #dispatch(CMatrix, CMatrix)} is safe to call from multiple threads.</li>
  * </ul>
  *
  * @see BiTensorOpDispatcher
  * @see ReDeMatMultDispatchConfigs
  */
-public final class RealDenseMatMultDispatcher extends BiTensorOpDispatcher<Matrix, Matrix, Matrix> {
+public final class Cm128DeMatMultDispatcher extends BiTensorOpDispatcher<CMatrix, CMatrix, CMatrix> {
 
     /**
      * Threshold for considering a matrix "near-square". If the quotient of the maximum and minimum dimension of either matrix
      * is less than this value, the matrix will be considered "near-square".
      */
-    private static final double ASPECT_THRESH = ReDeMatMultDispatchConfigs.getAspectThreshold();
+    private static final double ASPECT_THRESH = Cm128DeMatMultDispatchConfigs.getAspectThreshold();
 
     /**
      * Threshold for the total number of entries in both matrices to consider the problem "small enough" to
      * default to the standard algorithm.
      */
-    private static final int SML_THRESH = ReDeMatMultDispatchConfigs.getSmallThreshold();
+    private static final int SML_THRESH = Cm128DeMatMultDispatchConfigs.getSmallThreshold();
 
     /**
      * Threshold for square matrices to use a standard concurrent kernel.
      */
-    private static final int SQ_MT_STND_THRESH = ReDeMatMultDispatchConfigs.getSquareMtStandardThreshold();
+    private static final int SQ_MT_STND_THRESH = Cm128DeMatMultDispatchConfigs.getSquareMtStandardThreshold();
     /**
      * Threshold for square matrices to use a reordered concurrent kernel.
      */
-    private static final int SQ_MT_REORD_THRESH = ReDeMatMultDispatchConfigs.getSquareMtReorderedThreshold();
+    private static final int SQ_MT_REORD_THRESH = Cm128DeMatMultDispatchConfigs.getSquareMtReorderedThreshold();
 
     /**
      * Threshold for non-square wide matrices. i.e. {@code m = max(m, n, k)} and {@code max(m, n, k) / min(m, n, k) >  aspectThreshold}.
      */
-    private static final int WIDE_MT_REORD_THRESH = ReDeMatMultDispatchConfigs.getWideMtReorderedThreshold();
-    /**
-     * Threshold for using standard matrix-vector kernel when matrix is "near square".
-     */
-    private static final int SQ_SEQ_VEC_THRESH = ReDeMatMultDispatchConfigs.getSquareSequentialVecThreshold();
+    private static final int WIDE_MT_REORD_THRESH = Cm128DeMatMultDispatchConfigs.getWideMtReorderedThreshold();
 
     /**
      * Threshold for considering the minimum dimension small enough to fall back to sequential kernel.
      */
-    private static final int MIN_DIM_SML_THRESH = ReDeMatMultDispatchConfigs.getMinDimSmallThreshold();
+    private static final int MIN_DIM_SML_THRESH = Cm128DeMatMultDispatchConfigs.getMinDimSmallThreshold();
 
     /**
      * The number of shape pairs to cache so that the kernel need not be recomputed if the shape pair has been seen recently.
      */
-    private static final int CACHE_SIZE = ReDeMatMultDispatchConfigs.getCacheSize();
+    private static final int CACHE_SIZE = Cm128DeMatMultDispatchConfigs.getCacheSize();
 
 
     /**
@@ -113,7 +111,7 @@ public final class RealDenseMatMultDispatcher extends BiTensorOpDispatcher<Matri
      *
      * @param cacheSize The size of the cache for this matrix multiplication dispatcher.
      */
-    private RealDenseMatMultDispatcher(int cacheSize) {
+    private Cm128DeMatMultDispatcher(int cacheSize) {
         super(cacheSize);
     }
 
@@ -134,8 +132,8 @@ public final class RealDenseMatMultDispatcher extends BiTensorOpDispatcher<Matri
      * Simple Holder class for lazy loading of the singleton instance.
      */
     private static class Holder {
-        private static final RealDenseMatMultDispatcher INSTANCE =
-                new RealDenseMatMultDispatcher(CACHE_SIZE);
+        private static final Cm128DeMatMultDispatcher INSTANCE =
+                new Cm128DeMatMultDispatcher(CACHE_SIZE);
     }
 
 
@@ -143,8 +141,8 @@ public final class RealDenseMatMultDispatcher extends BiTensorOpDispatcher<Matri
      * Gets the singleton instance of this class. If this class has not been instanced, a new instance will be created.
      * @return The singleton instance of this class.
      */
-    public static RealDenseMatMultDispatcher getInstance() {
-        return Holder.INSTANCE;
+    public static Cm128DeMatMultDispatcher getInstance() {
+        return Cm128DeMatMultDispatcher.Holder.INSTANCE;
     }
 
 
@@ -154,19 +152,21 @@ public final class RealDenseMatMultDispatcher extends BiTensorOpDispatcher<Matri
      * @param b Right matrix in the matrix multiplication.
      * @return The matrix product of {@code a} and {@code b}.
      */
-    public static Matrix dispatch(Matrix a, Matrix b) {
-        int totalEntries = a.dataLength() + b.dataLength();
+    public static CMatrix dispatch(CMatrix a, CMatrix b) {
+        // Use a long to protect against possible overflow.
+        long totalEntries = a.dataLength() + b.dataLength();
 
         // Return as fast as possible for "small-enough" matrices.
         if(totalEntries < SML_THRESH) {
             if(a.numCols != b.numRows)
                 throw new LinearAlgebraException(ErrorMessages.matMultShapeErrMsg(a.shape, b.shape));
 
-            return new Matrix(new Shape(a.numRows, b.numCols),
-                    RealDenseMatMult.standard(a.data, a.shape, b.data, b.shape));
+            Complex128[] dest = new Complex128[a.numRows*b.numCols];
+            DenseSemiringMatMult.standard(a.data, a.shape, b.data, b.shape, dest);
+            return new CMatrix(new Shape(a.numRows, b.numCols), dest);
         }
 
-        return Holder.INSTANCE.dispatch_(a, b);
+        return Cm128DeMatMultDispatcher.Holder.INSTANCE.dispatch_(a, b);
     }
 
 
@@ -180,24 +180,14 @@ public final class RealDenseMatMultDispatcher extends BiTensorOpDispatcher<Matri
      * @return The appropriate function to use when computing the matrix multiplication between two matrices.
      */
     @Override
-    protected BiFunction<Matrix, Matrix, Matrix> getFunc(Shape aShape, Shape bShape, int data1Length, int data2Length) {
+    protected BiFunction<CMatrix, CMatrix, CMatrix> getFunc(Shape aShape, Shape bShape, int data1Length, int data2Length) {
         int m = aShape.get(0);
         int n = aShape.get(1);
         int k = bShape.get(1);
 
         if(k == 1) {
             // Then we have a matrix-vector product.
-            double aspectRatio = Math.max(m, n) / Math.min(m, n);
-
-            if(aspectRatio <= 4*ASPECT_THRESH) {
-                // The matrix is approximately square.
-                if(m < SQ_SEQ_VEC_THRESH)
-                    return BLK_VEC_AS_MAT;
-                else
-                    return MT_BLK_VEC_AS_MAT;
-            } else {
-                return BLK_VEC_AS_MAT;
-            }
+            return Cm128DeMatMultKernels.MT_STRD_VEC_AS_MAT;
         } else {
             int minDim = Math.min(k, Math.min(m, n));
             int maxDim = Math.max(k, Math.max(m, n));

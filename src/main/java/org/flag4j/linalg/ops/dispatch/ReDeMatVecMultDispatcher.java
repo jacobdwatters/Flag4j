@@ -35,11 +35,11 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.function.BiFunction;
 
-import static org.flag4j.linalg.ops.dispatch.RealDenseMatMultKernels.BLK_VEC;
-import static org.flag4j.linalg.ops.dispatch.RealDenseMatMultKernels.MT_BLK_VEC;
+import static org.flag4j.linalg.ops.dispatch.ReDeMatMultKernels.BLK_VEC;
+import static org.flag4j.linalg.ops.dispatch.ReDeMatMultKernels.MT_BLK_VEC;
 
 /**
- * <p>A dispatcher that selects the most suitable matrix-vector multiplication kernel for real dense matrix/vector.
+ * <p>A dispatcher that selects the most suitable matrix-vector multiplication kernel for a real dense matrix/vector pair.
  *
  * <p>This class implements a threshold- and shape-based decision tree to optimize performance for various
  * matrix-vector multiplication scenarios (e.g., small matrices, square matrices, wide/tall matrices, etc.).
@@ -55,7 +55,7 @@ import static org.flag4j.linalg.ops.dispatch.RealDenseMatMultKernels.MT_BLK_VEC;
  *
  * <h2>Configuration:</h2>
  * The dispatcher reads various thresholds (e.g., {@code ASPECT_THRESH}, {@code SML_THRESH}, etc.)
- * from {@code ReDeMatMultDispatchConfigs}, allowing external tuning without modifying code.
+ * from {@link ReDeMatMultDispatchConfigs}, allowing external tuning without modifying code.
  *
  * <h2>Thread Safety:</h2>
  * <ul>
@@ -67,7 +67,7 @@ import static org.flag4j.linalg.ops.dispatch.RealDenseMatMultKernels.MT_BLK_VEC;
  * @see BiTensorOpDispatcher
  * @see ReDeMatMultDispatchConfigs
  */
-public class RealDenseMatVecMultDispatcher extends BiTensorOpDispatcher<Matrix, Vector, Vector> {
+public final class ReDeMatVecMultDispatcher extends BiTensorOpDispatcher<Matrix, Vector, Vector> {
 
     /**
      * Threshold for considering a matrix "near-square". If the quotient of the maximum and minimum dimension of either matrix
@@ -97,7 +97,7 @@ public class RealDenseMatVecMultDispatcher extends BiTensorOpDispatcher<Matrix, 
      *
      * @param cacheSize The size of the cache for this matrix multiplication dispatcher.
      */
-    protected RealDenseMatVecMultDispatcher(int cacheSize) {
+    protected ReDeMatVecMultDispatcher(int cacheSize) {
         super(cacheSize);
     }
 
@@ -118,8 +118,8 @@ public class RealDenseMatVecMultDispatcher extends BiTensorOpDispatcher<Matrix, 
      * Simple Holder class for lazy loading of the singleton instance.
      */
     private static class Holder {
-        private static final RealDenseMatVecMultDispatcher INSTANCE =
-                new RealDenseMatVecMultDispatcher(CACHE_SIZE);
+        private static final ReDeMatVecMultDispatcher INSTANCE =
+                new ReDeMatVecMultDispatcher(CACHE_SIZE);
     }
 
 
@@ -127,8 +127,8 @@ public class RealDenseMatVecMultDispatcher extends BiTensorOpDispatcher<Matrix, 
      * Gets the singleton instance of this class. If this class has not been instanced, a new instance will be created.
      * @return The singleton instance of this class.
      */
-    public static RealDenseMatVecMultDispatcher getInstance() {
-        return RealDenseMatVecMultDispatcher.Holder.INSTANCE;
+    public static ReDeMatVecMultDispatcher getInstance() {
+        return ReDeMatVecMultDispatcher.Holder.INSTANCE;
     }
 
 
@@ -149,7 +149,7 @@ public class RealDenseMatVecMultDispatcher extends BiTensorOpDispatcher<Matrix, 
             return new Vector(RealDenseMatMult.standardVector(a.data, a.shape, b.data, b.shape));
         }
 
-        return RealDenseMatVecMultDispatcher.Holder.INSTANCE.dispatch_(a, b);
+        return ReDeMatVecMultDispatcher.Holder.INSTANCE.dispatch_(a, b);
     }
 
 

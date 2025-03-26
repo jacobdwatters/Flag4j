@@ -641,8 +641,7 @@ public abstract class AbstractCooSemiringMatrix<T extends AbstractCooSemiringMat
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      */
     @Override
     public U mult(T b) {

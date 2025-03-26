@@ -494,7 +494,6 @@ public class RandomSparseTensor {
     }
 
 
-
     /**
      * Generates a Hermitian {@link CsrCMatrix complex CSR matrix} filled with pseudorandom values uniformly distributed in an annulus
      * centered on the complex plane.

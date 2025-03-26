@@ -2,7 +2,6 @@ package org.flag4j.linalg.ops.common.real;
 
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.MatrixNorms;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -99,18 +98,18 @@ class MatrixNormTests {
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.inducedNorm(A,0));
+        assertThrows(IllegalArgumentException.class, ()-> MatrixNorms.inducedNorm(A,0));
 
         // ---------------- sub-case 10  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A, 0, 1));
+        assertThrows(IllegalArgumentException.class, ()-> MatrixNorms.norm(A, 0, 1));
 
         // ---------------- sub-case 11  ----------------
         aEntries = new double[][]{{1.1234, 99.234, 0.000123}, {-932.45, 551.35, -0.92342}, {123.445, 0.00013, 0}};
         A = new Matrix(aEntries);
 
-        assertThrows(LinearAlgebraException.class, ()-> MatrixNorms.norm(A,1, 0));
+        assertThrows(IllegalArgumentException.class, ()-> MatrixNorms.norm(A,1, 0));
     }
 }

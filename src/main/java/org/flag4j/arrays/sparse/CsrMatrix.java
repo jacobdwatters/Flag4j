@@ -742,8 +742,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      */
     @Override
     public Matrix mult(CsrMatrix b) {
@@ -788,8 +787,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      */
     public CMatrix mult(CsrCMatrix b) {
         return RealComplexCsrMatMult.standard(this, b);

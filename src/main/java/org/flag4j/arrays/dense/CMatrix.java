@@ -26,6 +26,7 @@ package org.flag4j.arrays.dense;
 
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldMatrix;
+import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
@@ -39,6 +40,7 @@ import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMa
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops.DenseCsrSemiringMatMult;
+import org.flag4j.linalg.ops.dispatch.Cm128DeMatMultDispatcher;
 import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -328,10 +330,11 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
-     * // TODO: Update javadoc.
-     * Computes the Euclidean norm of this vector.
+     * <p>Computes the Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm this matrix.
      *
-     * @return The Euclidean norm of this vector.
+     * <p>The Frobenius norm is defined as the square root of the sum of absolute squares of all entries in the matrix.
+     *
+     * @return the Frobenius of this tensor.
      */
     @Override
     public double norm() {
@@ -340,12 +343,29 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
-     * // TODO: Update javadoc.
-     * Computes the p-norm of this vector.
+     * <p>Computes the matrix operator norm of this matrix "induced" by the vector p-norm.
+     * Specifically, this method computes the operator norm of the matrix as:
+     * <span class="latex-replace"><pre>
+     *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre></span>
      *
-     * @param p {@code p} value in the p-norm.
+     * <!-- LATEX: \[ ||A||_p = \sup_{x \ne 0} \cfrac{||Ax||_p}{||x||_p} \] -->
      *
-     * @return The Euclidean norm of this vector.
+     * <p>This method supports a limited set of {@code p} values which yield simple formulas. When {@code p < 1}, the result this method
+     * returns is not a true mathematical norm. However, these values may still be useful for numerical purposes.
+     * <ul>
+     *     <li>{@code p=1}: The maximum absolute column sum.</li>
+     *     <li>{@code p=-1}: The minimum absolute column sum.</li>
+     *     <li>{@code p=2}: The spectral norm. Equivalent to the largest singular value of the matrix.</li>
+     *     <li>{@code p=-2}: The smallest singular value of the matrix.</li>
+     *     <li>{@code p=Double.POSITIVE_INFINITY}: The maximum absolute row sum.</li>
+     *     <li>{@code p=Double.NEGATIVE_INFINITY}: The minimum absolute row sum.</li>
+     * </ul>
+     *
+     * @param p The p value in the "induced" p-norm. Must be one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
+     * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
+     * @return Norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is not one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
+     * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
      */
     @Override
     public double norm(double p) {
@@ -354,12 +374,31 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
 
 
     /**
-     * // TODO: Update javadoc.
-     * Computes the p-norm of this vector.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of this matrix.
+     * <p>Some common special cases are:
+     * <ul>
+     *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
+     *     <li>{@code p=2}, {@code q=2}: The Frobenius norm. Equivalent to the Euclidean norm of the vector of singular values of
+     *     the matrix.</li>
+     * </ul>
      *
-     * @param p {@code p} value in the p-norm.
+     * <p>The <span class="latex-inline">L<sub>p,q</sub></span> norm is computed as if by:
+     * <pre>{@code
+     *      double norm = 0;
+     *      for(int j=0; j<src.numCols; j++) {
+     *          double sum = 0;
+     *          for(int i=0; i<src.numRows; i++)
+     *              sum += Math.pow(src.get(i, j).mag(), p);
      *
-     * @return The Euclidean norm of this vector.
+     *          norm += Math.pow(sum, q / p);
+     *      }
+     *
+     *      return Math.pow(norm, 1.0 / q);
+     * }</pre>
+     *
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
      */
     public double norm(double p, double q) {
         return MatrixNorms.norm(this, p, q);
@@ -408,6 +447,21 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
     @Override
     public CsrCMatrix makeLikeCsrMatrix(Shape shape, Complex128[] entries, int[] rowPointers, int[] colIndices) {
         return new CsrCMatrix(shape, entries, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Computes the matrix multiplication between two matrices.
+     *
+     * @param b Second matrix in the matrix multiplication.
+     *
+     * @return The result of matrix multiplying this matrix with matrix {@code b}.
+     *
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
+     */
+    @Override
+    public CMatrix mult(CMatrix b) {
+        return Cm128DeMatMultDispatcher.dispatch(this, b);
     }
 
 
@@ -781,7 +835,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * <p>Computes the matrix multiplication of this matrix with itself {@code n} times. This matrix must be square.
      *
      * <p>For large {@code n} values, this method <em>may</em> be significantly more efficient than calling
-     * {@link #mult(Matrix) this.mult(this)} a total of {@code n} times.
+     * {@link #mult(AbstractDenseSemiringMatrix) this.mult(this)} a total of {@code n} times.
      * @param n Number of times to multiply this matrix with itself. Must be non-negative.
      * @return If {@code n=0}, then the identity
      *
@@ -897,8 +951,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      */
     public CMatrix mult(CooCMatrix b) {
         ValidateParameters.ensureMatMultShapes(shape, b.shape);
@@ -981,8 +1034,7 @@ public class CMatrix extends AbstractDenseFieldMatrix<CMatrix, CVector, Complex1
      * @return {@code true} if this matrix it is unitary; {@code false} otherwise.
      */
     public boolean isUnitary() {
-        // TODO: Investigate what precision should be used in rounding.
-        return numRows == numCols && mult(H()).round(8).isI();
+        return numRows == numCols && mult(H()).isCloseToIdentity();
     }
 
 

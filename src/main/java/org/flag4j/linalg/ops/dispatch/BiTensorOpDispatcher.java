@@ -32,7 +32,7 @@ import java.util.function.BiFunction;
 
 
 /**
- * Base class for all binary tensor operation dispatchers.
+ * Base class for all dispatchers which apply a binary tensor operation.
  * @param <T> Type of left tensor in tensor operation.
  * @param <U> Type of right tensor in tensor operation.
  * @param <R> Type of tensor resulting from the tensor operation on types {@link T} and {@link U}.
