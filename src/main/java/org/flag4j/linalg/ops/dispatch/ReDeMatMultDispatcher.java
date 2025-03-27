@@ -156,7 +156,7 @@ public final class ReDeMatMultDispatcher extends BiTensorOpDispatcher<Matrix, Ma
      */
     public static Matrix dispatch(Matrix a, Matrix b) {
         // Use a long to protect against possible overflow.
-        long totalEntries = a.dataLength() + b.dataLength();
+        long totalEntries = (long) a.dataLength() + b.dataLength();
 
         // Return as fast as possible for "small-enough" matrices.
         if(totalEntries < SML_THRESH) {
@@ -188,7 +188,7 @@ public final class ReDeMatMultDispatcher extends BiTensorOpDispatcher<Matrix, Ma
 
         if(k == 1) {
             // Then we have a matrix-vector product.
-            double aspectRatio = Math.max(m, n) / Math.min(m, n);
+            double aspectRatio = (double) Math.max(m, n) / Math.min(m, n);
 
             if(aspectRatio <= 4*ASPECT_THRESH) {
                 // The matrix is approximately square.

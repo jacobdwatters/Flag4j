@@ -98,7 +98,7 @@ public class RandomSparseTensor {
     private static int nnzFromSparsity(int totalSize, double sparsity) {
         if(sparsity < 0.0 || sparsity > 1.0)
             throw new IllegalArgumentException("sparsity must be between 0.0 and 1.0 but got " + sparsity + ".");
-        return new BigDecimal(totalSize*(1.0-sparsity)).setScale(0, RoundingMode.HALF_UP).intValueExact();
+        return BigDecimal.valueOf(totalSize*(1.0-sparsity)).setScale(0, RoundingMode.HALF_UP).intValueExact();
     }
 
 
