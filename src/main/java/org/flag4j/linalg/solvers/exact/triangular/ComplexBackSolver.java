@@ -25,7 +25,6 @@
 package org.flag4j.linalg.solvers.exact.triangular;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -100,7 +99,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
      *          this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
      * @param b Vector of constants in the linear system.
-     * @return The solution to x in the linear system <span class="latex-inline">Ux = b</span>.
+     * @return The solution to <span class="latex-inline">x</span></> in the linear system <span class="latex-inline">Ux = b</span>.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -140,7 +139,7 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
      * @param U Upper triangular coefficient matrix in the linear system. If {@code enforceTriU} was set to {@code false} when
      *      this solver instance was created and {@code U} is not actually upper triangular, it will be treated as if it were.
      * @param B Matrix of constants in the linear system.
-     * @return The solution to X in the linear system <span class="latex-inline">UX = B</span>.
+     * @return The solution to <span class="latex-inline">X</span> in the linear system <span class="latex-inline">UX = B</span>.
      * @throws SingularMatrixException If the matrix {@code U} is singular (i.e. has a zero on the principle diagonal).
      */
     @Override
@@ -272,9 +271,8 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
             X.data[rowOffset] = L.data[rowOffset++].div(uValue);
 
             // Store column to improve cache performance on innermost loop.
-            for(int k=0; k<n; k++) {
+            for(int k=0; k<n; k++)
                 xCol[k] = X.data[k*X.numCols + j];
-            }
 
             for(int i=L.numCols-2; i>=0; i--) {
                 sum = Complex128.ZERO;
@@ -284,9 +282,8 @@ public class ComplexBackSolver extends BackSolver<CMatrix, CVector, Complex128[]
 
                 if(j==0) det = det.mult(diag);
 
-                for(int k=i+1; k<n; k++) {
+                for(int k=i+1; k<n; k++)
                     sum = sum.add(U.data[uIndex + k].mult(xCol[k]));
-                }
 
                 Complex128 value = L.data[xIndex].sub(sum).div(diag);
                 X.data[xIndex] = value;

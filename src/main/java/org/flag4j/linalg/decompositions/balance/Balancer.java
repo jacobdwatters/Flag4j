@@ -44,23 +44,50 @@ import org.flag4j.util.ValidateParameters;
  * balancing transformation is a similarity transformation, the eigenvalues are preserved. Further, when permutations are
  * done during balancing it is possible to isolate decoupled eigenvalues.
  *
- * <p>The similarity transformation of a square matrix A into the balanced matrix B can be described as:
+ * <p>The similarity transformation of a square matrix <span class="latex-inline">A</span> into the
+ * balanced matrix <span class="latex-inline">B</span> can be described as:
+ * <span class="latex-eq-align">
  * <pre>
  *     B = T<sup>-1</sup> A T
  *       = D<sup>-1</sup> P<sup>-1</sup> A P D.</pre>
- * Solving for A, balancing may be viewed as the following decomposition:
+ * </span>
+ *
+ * Solving for <span class="latex-inline">A</span>,
+ * balancing may be viewed as the following decomposition:
+ * <span class="latex-eq-align">
  * <pre>
  *     A = T B T<sup>-1</sup>
  *       = P D B D<sup>-1</sup> P<sup>-1</sup>.</pre>
- * Where P is a permutation matrix, and D is a diagonal scaling matrix.
+ * </span>
+ *
+ * Where <span class="latex-inline">P</span> is a permutation matrix,
+ * and <span class="latex-inline">D</span> is a diagonal scaling matrix.
  *
  * <p>When permutations are used during balancing we obtain a specific form. First,
+ * <span class="latex-replace">
  * <pre>
  *           <sup>  </sup>[ T<sub>1</sub>  X   Y  ]
  *   P<sup>-1</sup> A P = [  0  B<sub>1</sub>  Z  ]
  *           <sup>  </sup>[  0  0   T<sub>2</sub> ]</pre>
- * Where T<sub>1</sub> and T<sub>2</sub> are upper triangular matrices whose eigenvalues lie along the diagonal. These are also
- * eigenvalues of A. Then, if scaling is applied we obtain:
+ * </span>
+ *
+ * <!-- LATEX:
+ * \[ \begin{align*}
+ * P^{-1}AP = \begin{bmatrix}
+ * T_1 & X & Y \\
+ * \mathbf{0} & B_1 & Z \\
+ * \mathbf{0} & \mathbf{0} & T_2
+ * \end{bmatrix}
+ * \end{align*} \]
+ * -->
+ *
+ * Where <span class="latex-inline">T<sub>1</sub></span>
+ * and <span class="latex-inline">T<sub>2</sub></span> are upper triangular
+ * matrices whose eigenvalues lie along the diagonal.
+ * These are also eigenvalues of <span class="latex-inline">A</span>.
+ * Then, if scaling is applied we obtain:
+ *
+ * <span class="latex-replace">
  * <pre>
  *               <sup>    </sup>[ T<sub>1</sub>     X*D<sub>1</sub>       Y   ]
  *   D<sup>-1</sup> P<sup>-1</sup> A P D = [  0  D<sub>1</sub><sup>-1</sup>*B<sub>1</sub>*D<sub>1</sub>  D<sub>1</sub><sup>-1</sup>*Z  ]
@@ -77,15 +104,34 @@ import org.flag4j.util.ValidateParameters;
  * }
  * -->
  *
- * where D<sub>1</sub> is a diagonal matrix such that,
+ * where <span class="latex-inline">D<sub>1</sub></span> is a diagonal matrix such that,
+ * <span class="latex-replace">
  * <pre>
  *         [ I<sub>1</sub> 0  0  ]
  *     D = [ 0  D<sub>1</sub> 0  ]
  *         [ 0  0  I<sub>2</sub> ]</pre>
- * Where I<sub>1</sub> and I<sub>2</sub> are identity matrices with equivalent shapes to T<sub>1</sub> and T<sub>2</sub>.
+ * </span>
  *
- * <p>Once balancing has been applied, one need only compute the eigenvalues of B<sub>1</sub> and combine them with the diagonal
- * entries of T<sub>1</sub> and T<sub>2</sub> to obtain all eigenvalues of A.
+ * <!-- LATEX:
+ * {@literal
+ * \[ D = \begin{bmatrix}
+ * I_1 & \mathbf{0} & \mathbf{0} \\
+ * \mathbf{0} & D_1 & \mathbf{0} \\
+ * \mathbf{0} & \mathbf{0} & I_2
+ * \end{bmatrix} \]
+ * }
+ * -->
+ *
+ * Where <span class="latex-inline">I<sub>1</sub></span> and
+ * <span class="latex-inline">I<sub>2</sub></span> are identity matrices with
+ * equivalent shapes to <span class="latex-inline">T<sub>1</sub></span> and
+ * <span class="latex-inline">T<sub>2</sub></span>.
+ *
+ * <p>Once balancing has been applied, one need only compute the eigenvalues of
+ * <span class="latex-inline">B<sub>1</sub></span> and combine them with the diagonal
+ * entries of <span class="latex-inline">T<sub>1</sub></span> and
+ * <span class="latex-inline">T<sub>2</sub></span>
+ * to obtain all eigenvalues of <span class="latex-inline">A</span>.
  *
  * <p>The code in this class if heavily based on LAPACK's reference implementations of
  * <a href=https://www.netlib.org/lapack/explore-html/df/df3/group__gebal.html>xGEBAL</a> (v 3.12.1).
@@ -98,7 +144,7 @@ import org.flag4j.util.ValidateParameters;
  * @see #getD()
  * @see #getP()
  * @see #getT()
- * @see #applyLeftTransform(MatrixMixin) 
+ * @see #applyLeftTransform(MatrixMixin)
  * @see #applyRightTransform(MatrixMixin)
  */
 public abstract class Balancer<T extends MatrixMixin<T, ?, ?, ?>> extends Decomposition<T> {
