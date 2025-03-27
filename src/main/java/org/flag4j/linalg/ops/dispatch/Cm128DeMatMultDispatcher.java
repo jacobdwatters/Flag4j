@@ -154,7 +154,7 @@ public final class Cm128DeMatMultDispatcher extends BiTensorOpDispatcher<CMatrix
      */
     public static CMatrix dispatch(CMatrix a, CMatrix b) {
         // Use a long to protect against possible overflow.
-        long totalEntries = a.dataLength() + b.dataLength();
+        long totalEntries = (long) a.dataLength() + b.dataLength();
 
         // Return as fast as possible for "small-enough" matrices.
         if(totalEntries < SML_THRESH) {

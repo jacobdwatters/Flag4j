@@ -142,7 +142,7 @@ public class Cm128DeMatVecMultDispatcher extends BiTensorOpDispatcher<CMatrix, C
      * @return The matrix product of {@code a} and {@code b}.
      */
     public static CVector dispatch(CMatrix a, CVector b) {
-        int totalEntries = a.dataLength() + b.dataLength();
+        long totalEntries = (long) a.dataLength() + b.dataLength();
 
         // Return as fast as possible for "small-enough" matrices.
         if(totalEntries < SML_THRESH) {
@@ -172,7 +172,7 @@ public class Cm128DeMatVecMultDispatcher extends BiTensorOpDispatcher<CMatrix, C
     protected BiFunction<CMatrix, CVector, CVector> getFunc(Shape aShape, Shape bShape, int data1Length, int data2Length) {
         int m = aShape.get(0);
         int n = aShape.get(1);
-        double aspectRatio = Math.max(m, n) / Math.min(m, n);
+        double aspectRatio = (double) Math.max(m, n) / Math.min(m, n);
 
         if(aspectRatio <= 4*ASPECT_THRESH) {
             // The matrix is approximately square.

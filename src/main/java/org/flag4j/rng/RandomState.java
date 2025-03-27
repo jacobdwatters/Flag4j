@@ -53,7 +53,7 @@ public final class RandomState {
      */
     public static void setGlobalSeed(long seed) {
         globalSeed.set(seed);
-        threadLocalRandom.set(new RandomComplex(seed)); // Reset the thread-local RNG.
+        threadLocalRandom.remove();
     }
 
 

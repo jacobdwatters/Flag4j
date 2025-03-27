@@ -167,7 +167,7 @@ public final class RandomArray {
     private int[] uniqueIndicesFromSet(int numIndices, int start, int end) {
         int size = end - start;
 
-        Random rand = new Random();
+        Random rand = RandomState.getDefaultRng();
         Set<Integer> uniqueIndices = new HashSet<>(numIndices);
         while (uniqueIndices.size() < numIndices) {
             int candidate = rand.nextInt(size) + start;
