@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.sparse.csr.ring_ops;
 
 
-import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.numbers.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCsrRingMatrix;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
@@ -38,7 +38,7 @@ import java.util.Objects;
 
 /**
  * This class contains methods to check properties of sparse CSR
- * {@link org.flag4j.algebraic_structures.Ring} matrices.
+ * {@link org.flag4j.numbers.Ring} matrices.
  */
 public final class CsrRingProperties {
 

@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.ops;
 
-import org.flag4j.algebraic_structures.Ring;
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.Ring;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringTensor;

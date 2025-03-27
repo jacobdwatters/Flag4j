@@ -24,12 +24,12 @@
 
 package org.flag4j.arrays.backend.smart_visitors;
 
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Ring;
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.dense.*;
 import org.flag4j.arrays.sparse.*;
+import org.flag4j.numbers.Field;
+import org.flag4j.numbers.Ring;
+import org.flag4j.numbers.Semiring;
 
 public class AddVisitor extends MatrixVisitor<MatrixMixin<?, ?, ?, ?>> {
 

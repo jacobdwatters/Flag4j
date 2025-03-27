@@ -51,7 +51,7 @@ public final class CooConversions {
         }
 
         for(int i=0, nnz=entries.length; i<nnz; i++)
-            dest[shape.unsafeGetFlatIndex(indices[i])] = entries[i];
+            dest[shape.unsafeGet1DIndex(indices[i])] = entries[i];
     }
 
 

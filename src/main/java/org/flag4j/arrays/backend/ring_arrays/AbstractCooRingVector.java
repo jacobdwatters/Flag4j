@@ -24,12 +24,12 @@
 
 package org.flag4j.arrays.backend.ring_arrays;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringVector;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingVectorOps;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 /**
@@ -87,9 +87,22 @@ public abstract class AbstractCooRingVector<
 
 
     /**
+     * Creates a tensor with the specified data and shape without performing <em>any</em> validation on the parameters.
+     *
+     * @param shape Shape of this tensor.
+     * @param data Non-zero entries of the tensor.
+     * @param indices Non-zero entries of the tensor.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant.
+     */
+    protected AbstractCooRingVector(Shape shape, Y[] data, int[] indices, Object dummy) {
+        super(shape, data, indices, dummy);
+    }
+
+
+    /**
      * <p>Computes the inner product between two vectors.
      *
-     * <p>Note: this method is distinct from {@link #dot(AbstractCooSemiringVector)}. The inner product is equivalent to the dot product
+     * <p>Note: this method is distinct from {@code dot(AbstractCooSemiringVector)}. The inner product is equivalent to the dot product
      * of this tensor with the conjugation of {@code b}.
      *
      * @param b Second vector in the inner product.
@@ -97,7 +110,6 @@ public abstract class AbstractCooRingVector<
      * @return The inner product between this vector and the vector {@code b}.
      *
      * @throws IllegalArgumentException If this vector and vector {@code b} do not have the same number of data.
-     * @see #dot(AbstractCooSemiringVector)
      */
     @Override
     public Y inner(T b) {

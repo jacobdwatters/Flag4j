@@ -24,13 +24,13 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -59,11 +59,11 @@ public final class RealComplexDenseCooOps {
         ArrayUtils.deepCopy2D(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.get1DIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = new Complex128(src1.data[index]).div(src2.data[i]);
         }
 
-        return new CooCTensor(src2.shape, destEntries, destIndices);
+        return CooCTensor.unsafeMake(src2.shape, destEntries, destIndices);
     }
 
 
@@ -85,7 +85,7 @@ public final class RealComplexDenseCooOps {
         ArrayConversions.toComplex128(src1, dest);
 
         for(int i=0, size=src2.length; i<size; i++) {
-            int idx = shape2.getFlatIndex(indices[i]);
+            int idx = shape2.get1DIndex(indices[i]);
             dest[idx] = src2[i].add(dest[idx]);
         }
     }
@@ -103,7 +103,7 @@ public final class RealComplexDenseCooOps {
         Complex128[] entries = ArrayConversions.toComplex128(src1.data, null);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src2.shape.getFlatIndex(src2.indices[i]);
+            int idx = src2.shape.get1DIndex(src2.indices[i]);
             entries[idx] = entries[idx].sub(src2.data[i]);
         }
 
@@ -127,10 +127,10 @@ public final class RealComplexDenseCooOps {
         ArrayUtils.deepCopy2D( src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            destEntries[i] = src1.data[src2.shape.getFlatIndex(src2.indices[i])].mult(src2.data[i]);
+            destEntries[i] = src1.data[src2.shape.get1DIndex(src2.indices[i])].mult(src2.data[i]);
         }
 
-        return new CooCTensor(src2.shape, destEntries, indices);
+        return CooCTensor.unsafeMake(src2.shape, destEntries, indices);
     }
 
 
@@ -149,9 +149,9 @@ public final class RealComplexDenseCooOps {
         ArrayUtils.deepCopy2D(src2.indices, indices);
 
         for(int i=0, size=destEntries.length; i<size; i++)
-            destEntries[i] = src2.data[i].mult(src1.data[src2.shape.getFlatIndex(src2.indices[i])]);
+            destEntries[i] = src2.data[i].mult(src1.data[src2.shape.get1DIndex(src2.indices[i])]);
 
-        return new CooCTensor(src2.shape, destEntries, indices);
+        return CooCTensor.unsafeMake(src2.shape, destEntries, indices);
     }
 
 
@@ -169,7 +169,7 @@ public final class RealComplexDenseCooOps {
                 RealOps.scalMult(src2.data, -1.0, null), null);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src1.indices[i]);
+            int idx = src1.shape.get1DIndex(src1.indices[i]);
             entries[idx] = src1.data[i].add(entries[idx].re);
         }
 
@@ -188,7 +188,7 @@ public final class RealComplexDenseCooOps {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src1.indices[i]);
+            int idx = src1.shape.get1DIndex(src1.indices[i]);
             sum.data[idx].add(src1.data[i]);
         }
 
@@ -207,7 +207,7 @@ public final class RealComplexDenseCooOps {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src1.indices[i]);
+            int idx = src1.shape.get1DIndex(src1.indices[i]);
             sum.data[idx].add(src1.data[i]);
         }
 
@@ -226,7 +226,7 @@ public final class RealComplexDenseCooOps {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src1.indices[i]);
+            int idx = src1.shape.get1DIndex(src1.indices[i]);
             sum.data[idx] = sum.data[idx].sub(src1.data[i]);
         }
 
@@ -245,7 +245,7 @@ public final class RealComplexDenseCooOps {
         CTensor sum = new CTensor(src1.shape, b);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src1.indices[i]);
+            int idx = src1.shape.get1DIndex(src1.indices[i]);
             sum.data[idx] = sum.data[idx].add(src1.data[i]);
         }
 

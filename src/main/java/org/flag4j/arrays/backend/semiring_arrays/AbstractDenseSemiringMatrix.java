@@ -25,7 +25,6 @@
 package org.flag4j.arrays.backend.semiring_arrays;
 
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
@@ -33,6 +32,7 @@ import org.flag4j.linalg.ops.TransposeDispatcher;
 import org.flag4j.linalg.ops.dense.DenseOps;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringConversions;
 import org.flag4j.linalg.ops.dense.semiring_ops.DenseSemiringMatMultDispatcher;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -306,8 +306,7 @@ public abstract class AbstractDenseSemiringMatrix<T extends AbstractDenseSemirin
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      */
     @Override
     public T mult(T b) {

@@ -129,7 +129,7 @@ public final class RealCooVectorOps {
             }
         }
 
-        return new CooVector(
+        return CooVector.unsafeMake(
                 src1.size,
                 values.stream().mapToDouble(Double::doubleValue).toArray(),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -186,7 +186,7 @@ public final class RealCooVectorOps {
             }
         }
 
-        return new CooVector(
+        return CooVector.unsafeMake(
                 src1.size,
                 values.stream().mapToDouble(Double::doubleValue).toArray(),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -226,7 +226,7 @@ public final class RealCooVectorOps {
             }
         }
 
-        return new CooVector(
+        return CooVector.unsafeMake(
                 src1.size,
                 values.stream().mapToDouble(Double::doubleValue).toArray(),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -333,7 +333,7 @@ public final class RealCooVectorOps {
             }
         }
 
-        return new CooMatrix(tiledShape, tiledEntries, tiledRows, tiledCols);
+        return CooMatrix.unsafeMake(tiledShape, tiledEntries, tiledRows, tiledCols);
     }
 
 
@@ -366,7 +366,7 @@ public final class RealCooVectorOps {
         // Copy indices from src2 vector to the column indices.
         System.arraycopy(src2.indices, 0, indices[1], src1.data.length, src2.data.length);
 
-        return new CooMatrix(new Shape(2, src1.size), entries, indices[0], indices[1]);
+        return CooMatrix.unsafeMake(new Shape(2, src1.size), entries, indices[0], indices[1]);
     }
 }
 

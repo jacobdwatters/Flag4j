@@ -23,7 +23,7 @@
  */
 
 /**
- * Implementations of operations between real array objects and {@link org.flag4j.algebraic_structures.Field Field} dense array
+ * Implementations of operations between real array objects and {@link org.flag4j.numbers.Field Field} dense array
  * objects.
  */
 package org.flag4j.linalg.ops.dense.real_field_ops;

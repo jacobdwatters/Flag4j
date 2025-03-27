@@ -24,12 +24,12 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
 import org.flag4j.linalg.ops.common.real.RealOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 
@@ -146,7 +146,7 @@ public final class RealComplexDenseSparseVectorOps {
         for(int i=0; i<src2.nnz; i++)
             entries[i] = src1.data[src2.indices[i]].mult(src2.data[i]);
 
-        return new CooCVector(src1.size, entries, src2.indices.clone());
+        return CooCVector.unsafeMake(src1.size, entries, src2.indices.clone());
     }
 
 
@@ -163,6 +163,6 @@ public final class RealComplexDenseSparseVectorOps {
         for(int i=0; i<src1.nnz; i++)
             dest[i] = new Complex128(src1.data[i]).div(src2.data[src1.indices[i]]);
 
-        return new CooCVector(src1.size, dest, src1.indices.clone());
+        return CooCVector.unsafeMake(src1.size, dest, src1.indices.clone());
     }
 }

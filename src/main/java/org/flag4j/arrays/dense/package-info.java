@@ -35,12 +35,12 @@
  * <p>The implementations support various numeric types and algebraic structures:
  * <ul>
  *   <li><b>Real Numbers:</b> Dense arrays of real numbers (double-precision floating-point).</li>
- *   <li><b>Complex Numbers:</b> Dense arrays of complex numbers ({@link org.flag4j.algebraic_structures.Complex64} or
- *   {@link org.flag4j.algebraic_structures.Complex128}).</li>
+ *   <li><b>Complex Numbers:</b> Dense arrays of complex numbers ({@link org.flag4j.numbers.Complex64} or
+ *   {@link org.flag4j.numbers.Complex128}).</li>
  *   <li><b>Generic Field Elements:</b> Dense arrays parameterized over a generic
- *   {@link org.flag4j.algebraic_structures.Field Field}.</li>
- *   <li><b>Ring and Semiring Elements:</b> Dense arrays parameterized over {@link org.flag4j.algebraic_structures.Ring Ring}
- *   and {@link org.flag4j.algebraic_structures.Semiring Semiring} elements.</li>
+ *   {@link org.flag4j.numbers.Field Field}.</li>
+ *   <li><b>Ring and Semiring Elements:</b> Dense arrays parameterized over {@link org.flag4j.numbers.Ring Ring}
+ *   and {@link org.flag4j.numbers.Semiring Semiring} elements.</li>
  * </ul>
  *
  * <p>The package provides optimized implementations for numerical computations, including basic arithmetic operations,
@@ -52,11 +52,11 @@
  *   <li>{@link org.flag4j.arrays.dense.Matrix Matrix} - Dense matrix of real numbers (backed by primitive {@code double} array).</li>
  *   <li>{@link org.flag4j.arrays.dense.Tensor Tensor} - Dense tensor of real numbers (backed by primitive {@code double} array).</li>
  *   <li>{@link org.flag4j.arrays.dense.CVector CVector} - Dense vector of complex numbers (backed by
- *   {@link org.flag4j.algebraic_structures.Complex128 Complex128} array).</li>
+ *   {@link org.flag4j.numbers.Complex128 Complex128} array).</li>
  *   <li>{@link org.flag4j.arrays.dense.CMatrix CMatrix} - Dense matrix of complex numbers (backed by
- *   {@link org.flag4j.algebraic_structures.Complex128 Complex128} array).</li>
+ *   {@link org.flag4j.numbers.Complex128 Complex128} array).</li>
  *   <li>{@link org.flag4j.arrays.dense.CTensor CTensor} - Dense tensor of complex numbers (backed by
- *   {@link org.flag4j.algebraic_structures.Complex128 Complex128} array).</li>
+ *   {@link org.flag4j.numbers.Complex128 Complex128} array).</li>
  *   <li>{@link org.flag4j.arrays.dense.FieldVector FieldVector&lt;T&gt;} - Dense vector parameterized over a field element
  *   {@code T extends Field<T>}.</li>
  *   <li>{@link org.flag4j.arrays.dense.FieldMatrix FieldMatrix&lt;T&gt;} - Dense matrix parameterized over a field element

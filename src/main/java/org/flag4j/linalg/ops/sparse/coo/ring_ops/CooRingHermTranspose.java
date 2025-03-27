@@ -24,9 +24,9 @@
 
 package org.flag4j.linalg.ops.sparse.coo.ring_ops;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 

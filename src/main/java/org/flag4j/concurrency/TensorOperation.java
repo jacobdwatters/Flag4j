@@ -26,15 +26,15 @@ package org.flag4j.concurrency;
 
 
 /**
- * Functional interface for general tensor operation.
+ * Functional interface for general tensor operation over a specified index range.
  */
 @FunctionalInterface
 public interface TensorOperation {
 
     /**
      * Applies a tensor operation over the specified index range.
-     * @param startIdx Staring index for operation.
-     * @param endIdx Ending index for operation.
+     * @param startIdx Staring index for operation (inclusive).
+     * @param endIdx Ending index for operation (exclusive).
      */
     void apply(int startIdx, int endIdx);
 }

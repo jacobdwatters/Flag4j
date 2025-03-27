@@ -1,6 +1,6 @@
 package org.flag4j.arrays.sparse.complex_csr_matrix;
 
-import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CsrCMatrix;
 import org.junit.jupiter.api.Test;

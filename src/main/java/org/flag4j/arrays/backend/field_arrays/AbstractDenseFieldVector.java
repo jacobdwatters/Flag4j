@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.backend.field_arrays;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingVector;
@@ -35,6 +34,7 @@ import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldElemDiv;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
+import org.flag4j.numbers.Field;
 import org.flag4j.util.ValidateParameters;
 
 

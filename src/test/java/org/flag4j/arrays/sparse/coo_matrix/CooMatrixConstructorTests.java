@@ -170,7 +170,7 @@ class CooMatrixConstructorTests {
         cols = 12;
         expShape = new Shape(rows, cols);
         expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 1, 2, 3, 4};
         A = new CooMatrix(rows, cols, expNonZero, expRowIndices, expColIndices);
 
@@ -217,7 +217,7 @@ class CooMatrixConstructorTests {
         cols = 12;
         expShape = new Shape(rows, cols);
         expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 1, 2, 3, 4};
         A = new CooMatrix(expShape, expNonZero, expRowIndices, expColIndices);
 
@@ -231,7 +231,7 @@ class CooMatrixConstructorTests {
         cols = 99123341;
         expShape = new Shape(rows, cols);
         expNonZero = new double[]{-1, 0.234345, 133.1, 24.5, -933.1};
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 0, 0, 1, 0};
         A = new CooMatrix(expShape, expNonZero, expRowIndices, expColIndices);
 
@@ -250,7 +250,7 @@ class CooMatrixConstructorTests {
         expShape = new Shape(rows, cols);
         expNonZeroI = new int[]{-1, 234345, 133, 24, -933};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 1, 2, 3, 4};
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
@@ -265,7 +265,7 @@ class CooMatrixConstructorTests {
         expShape = new Shape(rows, cols);
         expNonZeroI = new int[]{-1, 234345, 133, 24, -933};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 0, 0, 1, 0};
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
@@ -283,7 +283,7 @@ class CooMatrixConstructorTests {
         expShape = new Shape(rows, cols);
         expNonZeroI = new int[]{-1, 234345, 133, 24, -933};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 1, 2, 3, 4};
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
@@ -298,7 +298,7 @@ class CooMatrixConstructorTests {
         expShape = new Shape(rows, cols);
         expNonZeroI = new int[]{-1, 234345, 133, 24, -933};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 0, 0, 1, 0};
         A = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
 
@@ -317,7 +317,7 @@ class CooMatrixConstructorTests {
         expShape = new Shape(rows, cols);
         expNonZeroI = new int[]{-1, 234345, 133, 24, -933};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 1, 2, 3, 4};
         B = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
         A = new CooMatrix(B);
@@ -333,7 +333,7 @@ class CooMatrixConstructorTests {
         expShape = new Shape(rows, cols);
         expNonZeroI = new int[]{-1, 234345, 133, 24, -933};
         expNonZero = Arrays.stream(expNonZeroI).asDoubleStream().toArray();
-        expRowIndices = new int[]{0, 4, 5, 5, 10};
+        expRowIndices = new int[]{0, 4, 5, 5, 9};
         expColIndices = new int[]{0, 0, 0, 1, 0};
         B = new CooMatrix(expShape, expNonZeroI, expRowIndices, expColIndices);
         A = new CooMatrix(B);

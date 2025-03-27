@@ -25,7 +25,7 @@
 package org.flag4j.rng.distributions;
 
 
-import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.rng.RandomComplex;
 
 /**
@@ -71,7 +71,7 @@ public class Complex128UniformDisk extends Distribution<Complex128, RandomComple
     public final double min;
     /**
      * Outer radius, <span class="latex-replace">r<sub>outer</sub></span>
-     * !-- LATEX \(r_{\text{outer}}\) -->, of the annulus (exclusive).
+     * <!-- LATEX \(r_{\text{outer}}\) -->, of the annulus (exclusive).
      */
     public final double max;
     /**

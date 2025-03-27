@@ -25,11 +25,11 @@
 package org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops;
 
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldTensor;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.numbers.Field;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -58,7 +58,7 @@ public final class RealFieldDenseCooOps {
         ArrayUtils.deepCopy2D(src2.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.get1DIndex(src2.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src2.data[i].mult(src1.data[index]);
         }
 
@@ -84,7 +84,7 @@ public final class RealFieldDenseCooOps {
         ArrayUtils.deepCopy2D(src2.indices, destIndices); // Copy over indices.
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.getFlatIndex(src2.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.get1DIndex(src2.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.data[index].mult(src2.data[i]);
         }
     }
@@ -104,7 +104,7 @@ public final class RealFieldDenseCooOps {
         ArrayUtils.deepCopy2D(src1.indices, destIndices);
 
         for(int i=0, size=destEntries.length; i<size; i++) {
-            int index = src2.shape.getFlatIndex(src1.indices[i]); // Get index of non-zero entry.
+            int index = src2.shape.get1DIndex(src1.indices[i]); // Get index of non-zero entry.
             destEntries[i] = src1.data[index].div(src2.data[i]);
         }
 
@@ -124,7 +124,7 @@ public final class RealFieldDenseCooOps {
         T[] destEntries = src1.data.clone();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src2.indices[i]);
+            int idx = src1.shape.get1DIndex(src2.indices[i]);
             destEntries[idx] = destEntries[idx].add(src2.data[i]);
         }
 
@@ -143,7 +143,7 @@ public final class RealFieldDenseCooOps {
         T[] destEntries = src1.data.clone();
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src2.indices[i]);
+            int idx = src1.shape.get1DIndex(src2.indices[i]);
             destEntries[idx] = destEntries[idx].sub(src2.data[i]);
         }
 
@@ -161,7 +161,7 @@ public final class RealFieldDenseCooOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src2.shape.getFlatIndex(src2.indices[i]);
+            int idx = src2.shape.get1DIndex(src2.indices[i]);
             src1.data[idx] = src1.data[idx].add(src2.data[i]);
         }
     }
@@ -177,7 +177,7 @@ public final class RealFieldDenseCooOps {
         ValidateParameters.ensureEqualShape(src1.shape, src2.shape);
 
         for(int i=0, size=src2.nnz; i<size; i++) {
-            int idx = src2.shape.getFlatIndex(src2.indices[i]);
+            int idx = src2.shape.get1DIndex(src2.indices[i]);
             src1.data[idx] = src1.data[idx].sub(src2.data[i]);
         }
     }
@@ -195,7 +195,7 @@ public final class RealFieldDenseCooOps {
         AbstractDenseFieldTensor<?, T> dest = src2.mult(-1);
 
         for(int i=0, size=src1.nnz; i<size; i++) {
-            int idx = src1.shape.getFlatIndex(src1.indices[i]);
+            int idx = src1.shape.get1DIndex(src1.indices[i]);
             dest.data[idx] = dest.data[idx].add(src1.data[i]);
         }
 

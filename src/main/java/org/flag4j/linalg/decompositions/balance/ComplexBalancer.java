@@ -24,12 +24,12 @@
 
 package org.flag4j.linalg.decompositions.balance;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.DenseOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ValidateParameters;
 
 /**

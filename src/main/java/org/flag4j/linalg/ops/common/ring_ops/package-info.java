@@ -23,7 +23,7 @@
  */
 
 /**
- * Implementations of operations on two {@link org.flag4j.algebraic_structures.Ring Ring} array objects.
+ * Implementations of operations on two {@link org.flag4j.numbers.Ring Ring} array objects.
  * Operations are agnostic to sparsity/density.
  */
 package org.flag4j.linalg.ops.common.ring_ops;

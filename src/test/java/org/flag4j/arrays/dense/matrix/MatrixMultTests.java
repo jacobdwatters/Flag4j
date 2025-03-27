@@ -1,14 +1,13 @@
 package org.flag4j.arrays.dense.matrix;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.sparse.CooCMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixMultTranspose;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
@@ -281,32 +280,6 @@ class MatrixMultTests {
 
         Matrix finalB = B;
         assertThrows(IllegalArgumentException.class, ()->A.multTranspose(finalB));
-    }
-
-
-    @Test
-    void multTransposeComplexTestCase() {
-        Complex128[][] bEntries;
-        CMatrix B;
-
-        // ---------------------- sub-case 1 ----------------------
-        aEntries = new double[][]{{1.1234, 99.234, 0.000123},
-                {-932.45, 551.35, -0.92342},
-                {123.445, 0.00013, 0.0},
-                {78.234, 12.234, -9923.23}};
-        A = new Matrix(aEntries);
-        bEntries = new Complex128[][]{{new Complex128("1.666+1.0i"), new Complex128("11.5-9.123i")},
-                {new Complex128("-0.0-0.9345341i"), new Complex128("88.234")},
-                {new Complex128("0.0"), new Complex128("0.00002+85.23i")}};
-        B = new CMatrix(bEntries).T();
-
-        expC = A.mult(B.T());
-        CMatrix act = new CMatrix(
-                new Shape(A.numRows, B.numRows),
-                MatrixMultiplyDispatcher.dispatchTranspose(A, B)
-        );
-
-        assertEquals(expC, act);
     }
 
 

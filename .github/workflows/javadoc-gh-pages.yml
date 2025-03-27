@@ -43,7 +43,7 @@ jobs:
         with:
           path: target/reports/apidocs
 
-  # 2) Deploy the artifact to GitHub Pages
+  # --- 2) Deploy the artifact to GitHub Pages
   deploy-docs:
     needs: build-docs
     runs-on: ubuntu-latest

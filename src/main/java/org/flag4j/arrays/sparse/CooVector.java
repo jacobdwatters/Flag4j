@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.arrays.backend.VectorMixin;
@@ -46,6 +45,7 @@ import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.real.RealCooVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseEquals;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -109,16 +109,16 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero data of this vector.
+     * @param data The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooVector(Shape shape, double[] entries, int[] indices) {
-        super(shape, entries);
+    public CooVector(Shape shape, double[] data, int[] indices) {
+        super(shape, data);
         ValidateParameters.ensureRank(shape, 1);
-        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
         this.size = shape.get(0);
         this.indices = indices;
-        this.nnz = entries.length;
+        this.nnz = data.length;
+        SparseValidation.validateCoo(this.size, this.nnz, this.indices);
     }
 
 
@@ -132,10 +132,10 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public CooVector(Shape shape, List<Double> data, List<Integer> indices) {
         super(shape, ArrayConversions.fromDoubleList(data));
         ValidateParameters.ensureRank(shape, 1);
-        ValidateParameters.ensureArrayLengthsEq(this.data.length, indices.size());
         this.size = shape.get(0);
         this.indices = ArrayConversions.fromIntegerList(indices);
         this.nnz = this.data.length;
+        SparseValidation.validateCoo(this.size, this.nnz, this.indices);
     }
 
 
@@ -143,15 +143,16 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero data of this vector.
+     * @param data The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooVector(int size, double[] entries, int[] indices) {
-        super(new Shape(size), entries);
-        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
+    public CooVector(int size, double[] data, int[] indices) {
+        super(new Shape(size), data);
+        ValidateParameters.ensureArrayLengthsEq(data.length, indices.length);
         this.size = size;
         this.indices = indices;
-        this.nnz = entries.length;
+        this.nnz = data.length;
+        SparseValidation.validateCoo(this.size, this.nnz, this.indices);
     }
 
 
@@ -159,15 +160,16 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero data of this vector.
+     * @param data The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooVector(int size, List<Double> entries, List<Integer> indices) {
-        super(new Shape(size), ArrayConversions.fromDoubleList(entries));
-        ValidateParameters.ensureArrayLengthsEq(entries.size(), indices.size());
+    public CooVector(int size, List<Double> data, List<Integer> indices) {
+        super(new Shape(size), ArrayConversions.fromDoubleList(data));
+        ValidateParameters.ensureArrayLengthsEq(data.size(), indices.size());
         this.indices = ArrayConversions.fromIntegerList(indices);
         this.size = size;
         this.nnz = this.data.length;
+        SparseValidation.validateCoo(this.size, this.nnz, this.indices);
     }
 
 
@@ -186,15 +188,16 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Creates sparse COO vector with the specified {@code size}, non-zero data, and non-zero indices.
      *
      * @param size The size of this vector.
-     * @param entries The non-zero data of this vector.
+     * @param data The non-zero data of this vector.
      * @param indices The indices of the non-zero values.
      */
-    public CooVector(int size, int[] entries, int[] indices) {
-        super(new Shape(size), ArrayConversions.asDouble(entries, null));
-        ValidateParameters.ensureArrayLengthsEq(entries.length, indices.length);
+    public CooVector(int size, int[] data, int[] indices) {
+        super(new Shape(size), ArrayConversions.asDouble(data, null));
+        SparseValidation.validateCoo(size, data.length, indices);
         this.indices = indices;
         this.size = size;
-        nnz = entries.length;
+        nnz = data.length;
+        SparseValidation.validateCoo(this.size, this.nnz, this.indices);
     }
 
 
@@ -207,6 +210,53 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
         indices = b.indices.clone();
         nnz = b.nnz;
         size = b.size;
+        SparseValidation.validateCoo(this.size, this.nnz, this.indices);
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO vectors.
+     * @param shape Shape of the COO vector to construct.
+     * @param data The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooVector(Shape shape, double[] data, int[] indices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO vector in this manner is unsafe.
+        super(shape, data);
+        this.size = shape.get(0);
+        this.indices = indices;
+        this.nnz = data.length;
+    }
+
+
+    /**
+     * <p>Factory to construct a COO vector which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param size The full size of the COO vector.
+     * @param data The non-zero entries of the COO vector.
+     * @param indices The non-zero indices of the COO vector.
+     * @return A COO vector constructed from the provided parameters.
+     */
+    public static CooVector unsafeMake(int size, double[] data, int[] indices) {
+        return new CooVector(new Shape(size), data, indices, null);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO vector which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param Shape Full shape of the COO vector. Assumed to be rank 1 (this is <em>not</em> enforced).
+     * @param data The non-zero entries of the COO vector.
+     * @param indices The non-zero indices of the COO vector.
+     * @return A COO vector constructed from the provided parameters.
+     */
+    public static CooVector unsafeMake(Shape shape, double[] data, int[] indices) {
+        return new CooVector(shape, data, indices, null);
     }
 
 
@@ -228,7 +278,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
             }
         }
 
-        return new CooVector(
+        return CooVector.unsafeMake(
                 src.size,
                 ArrayConversions.fromDoubleList(nonZeroEntries),
                 ArrayConversions.fromIntegerList(indices)
@@ -240,13 +290,13 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Constructs a tensor of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entries of the tensor to construct.
+     * @param data Entries of the tensor to construct.
      *
      * @return A tensor of the same type as this tensor with the given the shape and data.
      */
     @Override
-    public CooVector makeLikeTensor(Shape shape, double[] entries) {
-        return new CooVector(shape, entries, indices.clone());
+    public CooVector makeLikeTensor(Shape shape, double[] data) {
+        return new CooVector(shape, data, indices.clone());
     }
 
 
@@ -254,13 +304,13 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * Constructs a vector of the same type as this tensor with the given the shape and data.
      *
      * @param shape Shape of the vector to construct.
-     * @param entries Non-zero data of the vector to construct.
+     * @param data Non-zero data of the vector to construct.
      * @param indices Indices of the non-zero values in this vector.
      *
      * @return A vector of the same type as this tensor with the given the shape and data.
      */
-    public CooVector makeLikeTensor(int size, double[] entries, int[] indices) {
-        return new CooVector(size, entries, indices);
+    public CooVector makeLikeTensor(int size, double[] data, int[] indices) {
+        return new CooVector(size, data, indices);
     }
 
 
@@ -561,11 +611,11 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return A dense tensor equivalent to this sparse tensor.
      */
     public Vector toDense() {
-        double[] entries = new double[size];
+        double[] denseData = new double[size];
         for(int i = 0; i<nnz; i++)
-            entries[indices[i]] = this.data[i];
+            denseData[indices[i]] = this.data[i];
 
-        return new Vector(entries);
+        return new Vector(denseData);
     }
 
 
@@ -630,7 +680,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
             System.arraycopy(data, idx, destEntries, idx+1, data.length-idx);
         }
 
-        return new CooVector(size, destEntries, destIndices);
+        return CooVector.unsafeMake(size, destEntries, destIndices);
     }
 
 
@@ -702,7 +752,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public CooCVector sub(Complex128 b) {
         Complex128[] dest = new Complex128[data.length];
         FieldOps.sub(data, b, dest);
-        return new CooCVector(shape, dest, indices.clone());
+        return CooCVector.unsafeMake(shape, dest, indices.clone());
     }
 
 
@@ -740,7 +790,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public CooCVector add(Complex128 b) {
         Complex128[] dest = new Complex128[data.length];
         FieldOps.add(data, b, dest);
-        return new CooCVector(shape, dest, indices.clone());
+        return CooCVector.unsafeMake(shape, dest, indices.clone());
     }
 
 
@@ -1154,13 +1204,13 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
             int[] rowIndices = indices.clone();
             int[] colIndices = new int[data.length];
 
-            return new CooMatrix(this.size, 1, data.clone(), rowIndices, colIndices);
+            return CooMatrix.unsafeMake(new Shape(this.size, 1), data.clone(), rowIndices, colIndices);
         } else {
             // Convert to row vector.
             int[] rowIndices = new int[data.length];
             int[] colIndices = indices.clone();
 
-            return new CooMatrix(1, this.size, data.clone(), rowIndices, colIndices);
+            return CooMatrix.unsafeMake(new Shape(1, this.size), data.clone(), rowIndices, colIndices);
         }
     }
 
@@ -1193,7 +1243,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
     public CooCVector mult(Complex128 factor) {
         Complex128[] dest = new Complex128[data.length];
         FieldOps.mult(data, factor, dest);
-        return new CooCVector(shape, dest, indices.clone());
+        return CooCVector.unsafeMake(shape, dest, indices.clone());
     }
 
 
@@ -1202,7 +1252,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return A tensor equivalent to this vector.
      */
     public CooTensor toTensor() {
-        return new CooTensor(
+        return CooTensor.unsafeMake(
                 this.shape,
                 this.data.clone(),
                 RealDenseTranspose.standardIntMatrix(new int[][]{this.indices})
@@ -1236,7 +1286,7 @@ public class CooVector extends AbstractDoubleTensor<CooVector>
      * @return The vector-scalar quotient of this vector and {@code divisor}.
      */
     public CooCVector div(Complex128 divisor) {
-        return new CooCVector(size, Complex128Ops.scalDiv(data, divisor), indices.clone());
+        return CooCVector.unsafeMake(size, Complex128Ops.scalDiv(data, divisor), indices.clone());
     }
 
 

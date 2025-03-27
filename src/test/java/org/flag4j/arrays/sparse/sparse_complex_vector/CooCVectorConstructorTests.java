@@ -1,8 +1,8 @@
 package org.flag4j.arrays.sparse.sparse_complex_vector;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.sparse.CooCVector;
+import org.flag4j.numbers.Complex128;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,7 +72,7 @@ class CooCVectorConstructorTests {
                 new Complex128(83.133, -334), new Complex128(-92.133, -9.4), new Complex128(0, 13.435)};
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IndexOutOfBoundsException.class, () -> new CooCVector(expSize, expEntries, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntries, expIndices));
     }
 
 
@@ -121,7 +121,7 @@ class CooCVectorConstructorTests {
         }
         expIndices = new int[]{0, 11, 10003, 20034};
 
-        assertThrows(IndexOutOfBoundsException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
+        assertThrows(IllegalArgumentException.class, () -> new CooCVector(expSize, expEntriesD, expIndices));
     }
 
 

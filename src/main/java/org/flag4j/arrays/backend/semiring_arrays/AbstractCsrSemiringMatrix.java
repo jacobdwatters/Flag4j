@@ -24,17 +24,18 @@
 
 package org.flag4j.arrays.backend.semiring_arrays;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
+import org.flag4j.arrays.sparse.SparseValidation;
 import org.flag4j.linalg.ops.sparse.csr.CsrConversions;
 import org.flag4j.linalg.ops.sparse.csr.CsrOps;
 import org.flag4j.linalg.ops.sparse.csr.CsrProperties;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrOps;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrProperties;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -43,6 +44,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BinaryOperator;
 
 import static org.flag4j.linalg.ops.sparse.SparseUtils.sortCsrMatrix;
 
@@ -136,8 +138,35 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      */
     protected AbstractCsrSemiringMatrix(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
         super(shape, entries);
-        ValidateParameters.ensureRank(shape, 2);
+        SparseValidation.validateCsr(shape, entries.length, rowPointers, colIndices);
 
+        this.rowPointers = rowPointers;
+        this.colIndices = colIndices;
+        this.nnz = entries.length;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
+
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
+
+        // Attempt to set the zero element for the semiring.
+        this.zeroElement = (entries.length > 0 && entries[0] != null) ? entries[0].getZero() : null;
+    }
+
+
+    /**
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
+     *
+     * @param shape Shape of this tensor.
+     * @param entries The non-zero data of this CSR matrix.
+     * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
+     * values in row {@code i}.
+     * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
+     * {@code data.length == colData.length}.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    protected AbstractCsrSemiringMatrix(Shape shape, W[] entries, int[] rowPointers, int[] colIndices, Object dummy) {
+        super(shape, entries);
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
@@ -601,8 +630,7 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      * @see #multToSparse(AbstractCsrSemiringMatrix)
      */
     @Override
@@ -1085,5 +1113,29 @@ public abstract class AbstractCsrSemiringMatrix<T extends AbstractCsrSemiringMat
     @Override
     public T div(T b) {
         throw new UnsupportedOperationException("Division not supported for matrix type: " + getClass().getName());
+    }
+
+
+    /**
+     * Coalesces this sparse CSR matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
+     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
+     * @return A new coalesced sparse CSR matrix which is equivalent to this CSR matrix.
+     * @see #coalesce(BinaryOperator)
+     */
+    public T coalesce() {
+        return (T) toCoo().coalesce().toCsr();
+    }
+
+
+    /**
+     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
+     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
+     * @param aggregator Custom aggregation function to combine multiple.
+     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
+     * @see #coalesce()
+     */
+    public T coalesce(BinaryOperator<W> aggregator) {
+        return (T) toCoo().coalesce(aggregator).toCsr();
     }
 }

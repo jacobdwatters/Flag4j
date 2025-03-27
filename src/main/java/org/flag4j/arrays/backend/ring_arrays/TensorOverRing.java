@@ -25,7 +25,7 @@
 package org.flag4j.arrays.backend.ring_arrays;
 
 
-import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.numbers.Ring;
 import org.flag4j.arrays.backend.semiring_arrays.TensorOverSemiring;
 
 

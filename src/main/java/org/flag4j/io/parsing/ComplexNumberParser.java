@@ -24,8 +24,8 @@
 
 package org.flag4j.io.parsing;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 
 /**
  * A parser for parsing complex numbers represented as a string.

@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.common.complex;
 
 
-import org.flag4j.algebraic_structures.Complex128;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ErrorMessages;
 
 /**
@@ -62,7 +62,7 @@ public final class Complex128Ops {
      */
     public static Complex128[] round(Complex128[] src, int precision) {
         if(precision<0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision, "precision"));
 
         Complex128[] dest = new Complex128[src.length];
         for(int i=0; i<dest.length; i++)
@@ -82,7 +82,7 @@ public final class Complex128Ops {
      */
     public static Complex128[] roundToZero(Complex128[] src, double threshold) {
         if(threshold<0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold, "threshold"));
 
         Complex128[] dest = new Complex128[src.length];
         for(int i=0; i<dest.length; i++)

@@ -24,9 +24,9 @@
 
 package org.flag4j.linalg.ops.dense_sparse.coo.field_ops;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.backend.field_arrays.*;
 import org.flag4j.linalg.ops.common.semiring_ops.SemiringProperties;
+import org.flag4j.numbers.Field;
 
 import java.util.Arrays;
 
@@ -140,7 +140,7 @@ public final class DenseCooFieldEquals {
 
         // Remove all nonZero data from the data of this matrix.
         for(int i=0; i<B.nnz; i++) {
-            entriesIndex = A.shape.getFlatIndex(B.indices[i]);
+            entriesIndex = A.shape.get1DIndex(B.indices[i]);
 
             if(!entriesCopy[entriesIndex].equals(B.data[i]))
                 return false;

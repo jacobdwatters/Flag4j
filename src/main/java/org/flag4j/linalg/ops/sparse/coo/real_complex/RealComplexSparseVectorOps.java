@@ -24,11 +24,11 @@
 
 package org.flag4j.linalg.ops.sparse.coo.real_complex;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.sparse.CooCVector;
 import org.flag4j.arrays.sparse.CooVector;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ValidateParameters;
 
@@ -151,7 +151,7 @@ public final class RealComplexSparseVectorOps {
             }
         }
 
-        return new CooCVector(
+        return CooCVector.unsafeMake(
                 src1.size,
                 values.toArray(new Complex128[0]),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -206,7 +206,7 @@ public final class RealComplexSparseVectorOps {
             }
         }
 
-        return new CooCVector(
+        return CooCVector.unsafeMake(
                 src1.size,
                 values.toArray(new Complex128[0]),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -261,7 +261,7 @@ public final class RealComplexSparseVectorOps {
             }
         }
 
-        return new CooCVector(
+        return CooCVector.unsafeMake(
                 src1.size,
                 values.toArray(new Complex128[0]),
                 indices.stream().mapToInt(Integer::intValue).toArray()
@@ -300,7 +300,7 @@ public final class RealComplexSparseVectorOps {
             }
         }
 
-        return new CooCVector(
+        return CooCVector.unsafeMake(
                 src1.size,
                 values.toArray(Complex128[]::new),
                 indices.stream().mapToInt(Integer::intValue).toArray()

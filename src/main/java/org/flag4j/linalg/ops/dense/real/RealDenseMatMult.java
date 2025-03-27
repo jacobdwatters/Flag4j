@@ -36,7 +36,6 @@ public final class RealDenseMatMult {
 
     private RealDenseMatMult() {
         // Hide default constructor.
-        
     }
 
 
@@ -55,7 +54,6 @@ public final class RealDenseMatMult {
 
         double[] dest = new double[rows1*cols2];
         int src1Index, src2Index, destIndex, src1IndexStart, destIndexStart, end;
-
 
         for(int i=0; i<rows1; i++) {
             src1IndexStart = i*rows2;
@@ -112,9 +110,9 @@ public final class RealDenseMatMult {
                 src2Index = k*cols2;
                 destIndex = destIndexStart;
                 end = src2Index + cols2;
-                src1Val = src1[src1Start+k];
+                src1Val = src1[src1Start + k];
 
-                while(src2Index<end) {
+                while(src2Index < end) {
                     dest[destIndex++] += src1Val*src2[src2Index++];
                 }
             }

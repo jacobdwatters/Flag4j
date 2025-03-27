@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingMatrix;
 import org.flag4j.arrays.dense.CMatrix;
@@ -40,8 +39,8 @@ import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;
 import org.flag4j.linalg.ops.sparse.coo.real.RealSparseNorms;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingNorms;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ValidateParameters;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 
 import java.util.function.Function;
 
@@ -179,7 +178,7 @@ public final class MatrixNorms {
      * @param p The p value in the "induced" p-norm. Must be one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
      * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
      * @return Norm of the matrix.
-     * @throws LinearAlgebraException If {@code p} is not one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
+     * @throws IllegalArgumentException If {@code p} is not one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
      * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
      */
     public static double inducedNorm(Matrix src, double p) {
@@ -196,7 +195,7 @@ public final class MatrixNorms {
         } else if(p == Double.NEGATIVE_INFINITY) {
             return rowBasedNorm(src.shape, src.data, RealProperties::min);
         } else {
-            throw new LinearAlgebraException("Unsupported norm type: p = " + p + ".\n"
+            throw new IllegalArgumentException("Unsupported norm type: p = " + p + ".\n"
                     + "Supported values are: 1, -1, 2, -2, Double.POSITIVE_INFINITY, and Double.NEGATIVE_INFINITY.");
         }
     }
@@ -225,7 +224,7 @@ public final class MatrixNorms {
      * @param p The p value in the "induced" p-norm. Must be one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
      * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
      * @return Norm of the matrix.
-     * @throws LinearAlgebraException If {@code p} is not one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
+     * @throws IllegalArgumentException If {@code p} is not one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
      * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
      */
     public static double inducedNorm(CMatrix src, double p) {
@@ -242,7 +241,7 @@ public final class MatrixNorms {
         } else if(p == Double.NEGATIVE_INFINITY) {
             return rowBasedNorm(src.shape, src.data, RealProperties::min);
         } else {
-            throw new LinearAlgebraException("Unsupported norm type: p = " + p + ".\n"
+            throw new IllegalArgumentException("Unsupported norm type: p = " + p + ".\n"
                     + "Supported values are: 1, -1, 2, -2, Double.POSITIVE_INFINITY, and Double.NEGATIVE_INFINITY.");
         }
     }
@@ -268,7 +267,8 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm of a real dense matrix.
+     * <p>Computes the Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm of a dense
+     * {@link org.flag4j.numbers.Ring} matrix.
      *
      * <p>The Frobenius norm is defined as the square root of the sum of absolute squares of all entries in the matrix.
      *
@@ -368,7 +368,7 @@ public final class MatrixNorms {
 
 
     /**
-     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a real dense matrix.
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of a dense {@link Ring} matrix.
      * <p>Some common special cases are:
      * <ul>
      *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
@@ -666,7 +666,7 @@ public final class MatrixNorms {
      */
     private static double matrixNormLpq(double[] src, Shape shape, double p, double q) {
         if(p == 0 || q == 0)
-            throw new LinearAlgebraException("p and q must be non-zero for norm but got p=" + p + " and q=" + q + ".");
+            throw new IllegalArgumentException("p and q must be non-zero for norm but got p=" + p + " and q=" + q + ".");
 
         double norm = 0;
         double colSum;

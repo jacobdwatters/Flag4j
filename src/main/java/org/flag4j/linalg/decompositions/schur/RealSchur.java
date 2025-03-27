@@ -24,7 +24,6 @@
 
 package org.flag4j.linalg.decompositions.schur;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
@@ -34,7 +33,9 @@ import org.flag4j.linalg.decompositions.hess.RealHess;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.transformations.Givens;
 import org.flag4j.linalg.transformations.Householder;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.rng.RandomComplex;
+import org.flag4j.rng.RandomState;
 
 import static org.flag4j.util.Flag4jConstants.EPS_F64;
 
@@ -107,7 +108,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * set the seed for the pseudo-random number generator using {@link #RealSchur(long)}
      */
     public RealSchur() {
-        super(true, new RandomComplex(), new RealHess(true, true), new RealBalancer());
+        super(true, RandomState.getDefaultRng(), new RealHess(true, true), new RealBalancer());
     }
 
 
@@ -127,7 +128,7 @@ public class RealSchur extends Schur<Matrix, double[]> {
      * <span class="latex-inline">U</span> will not be computed.
      */
     public RealSchur(boolean computeU) {
-        super(computeU, new RandomComplex(), new RealHess(computeU, true), new RealBalancer());
+        super(computeU, RandomState.getDefaultRng(), new RealHess(computeU, true), new RealBalancer());
     }
 
 

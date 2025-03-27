@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringMatrix;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringTensor;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringVector;
+import org.flag4j.numbers.Semiring;
 
 import java.util.Arrays;
 

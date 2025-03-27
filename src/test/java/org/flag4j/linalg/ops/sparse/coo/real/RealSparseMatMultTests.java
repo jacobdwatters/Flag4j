@@ -61,7 +61,7 @@ class RealSparseMatMultTests {
 
         bEntries = new double[]{1.34};
         indices = new int[]{1};
-        bVector = new CooVector(3, bEntries, indices);
+        bVector = CooVector.unsafeMake(3, bEntries, indices);
 
         expEntries = new double[][]{{0}, {0}, {12.6362}, {0}};
         exp = new Matrix(expEntries);

@@ -25,9 +25,9 @@
 package org.flag4j.linalg.decompositions.chol;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.dense.CMatrix;
 import org.flag4j.linalg.decompositions.Decomposition;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.Flag4jConstants;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;

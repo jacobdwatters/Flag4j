@@ -1,11 +1,11 @@
 package org.flag4j.arrays.dense.complex_tensor;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,9 +97,9 @@ class CTensorSubTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].sub(bEntries[0]);
-        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].sub(bEntries[1]);
-        expEntries[expShape.getFlatIndex(sparseIndices[2])] = expEntries[expShape.getFlatIndex(sparseIndices[2])].sub(bEntries[2]);
+        expEntries[expShape.get1DIndex(sparseIndices[0])] = expEntries[expShape.get1DIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.get1DIndex(sparseIndices[1])] = expEntries[expShape.get1DIndex(sparseIndices[1])].sub(bEntries[1]);
+        expEntries[expShape.get1DIndex(sparseIndices[2])] = expEntries[expShape.get1DIndex(sparseIndices[2])].sub(bEntries[2]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.sub(B));
@@ -175,8 +175,8 @@ class CTensorSubTests {
         B = new CooCTensor(bShape, bEntries, sparseIndices);
         expEntries = Arrays.copyOf(aEntries, aEntries.length);
         expShape = new Shape( 2, 3, 2);
-        expEntries[expShape.getFlatIndex(sparseIndices[0])] = expEntries[expShape.getFlatIndex(sparseIndices[0])].sub(bEntries[0]);
-        expEntries[expShape.getFlatIndex(sparseIndices[1])] = expEntries[expShape.getFlatIndex(sparseIndices[1])].sub(bEntries[1]);
+        expEntries[expShape.get1DIndex(sparseIndices[0])] = expEntries[expShape.get1DIndex(sparseIndices[0])].sub(bEntries[0]);
+        expEntries[expShape.get1DIndex(sparseIndices[1])] = expEntries[expShape.get1DIndex(sparseIndices[1])].sub(bEntries[1]);
         exp = new CTensor(expShape, expEntries);
 
         assertEquals(exp, A.sub(B));

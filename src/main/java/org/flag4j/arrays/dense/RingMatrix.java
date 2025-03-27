@@ -24,8 +24,8 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.numbers.Field;
+import org.flag4j.numbers.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
@@ -54,7 +54,7 @@ import java.util.Arrays;
  * </ul>
  *
  * <h2>Example Usage:</h2>
- * <p>Using {@link org.flag4j.algebraic_structures.RealInt32 32-bit real integers}:
+ * <p>Using {@link org.flag4j.numbers.RealInt32 32-bit real integers}:
  * <pre>{@code
  * // Constructing an integer matrix from a 2D array.
  * RealInt32[][] data = {
@@ -70,7 +70,7 @@ import java.util.Arrays;
  * RingMatrix<RealInt32> transpose = matrix.T();
  * }</pre>
  *
- * <p>Using {@link org.flag4j.algebraic_structures.Complex128 128-bit complex number}:
+ * <p>Using {@link org.flag4j.numbers.Complex128 128-bit complex number}:
  * <pre>{@code
  * // Constructing a complex matrix from a 2D array of complex numbers
  * Complex128[][] data = {

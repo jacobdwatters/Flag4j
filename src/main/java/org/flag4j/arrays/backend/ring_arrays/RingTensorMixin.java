@@ -24,7 +24,7 @@
 
 package org.flag4j.arrays.backend.ring_arrays;
 
-import org.flag4j.algebraic_structures.Ring;
+import org.flag4j.numbers.Ring;
 import org.flag4j.arrays.backend.semiring_arrays.SemiringTensorMixin;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.common.ring_ops.CompareRing;

@@ -66,7 +66,7 @@ public final class ErrorMessages {
     /**
      * Error message for a negative value when a non-negative was expected.
      */
-    private static final String NEG_VALUE_ERR = "Expecting value to be non-negative but got %s.";
+    private static final String NEG_VALUE_ERR = "Expecting %s to be non-negative but got %s.";
     /**
      * Error message for a non-positive value when a positive non-zero value is expected.
      */
@@ -195,10 +195,11 @@ public final class ErrorMessages {
     /**
      * Gets an error message for a negative value when a non-negative was expected.
      * @param value Negative value.
+     * @param name Name of the value which was negative.
      * @return An error message for a negative value.
      */
-    public static String getNegValueErr(double value) {
-        return String.format(NEG_VALUE_ERR, value);
+    public static String getNegValueErr(double value, String name) {
+        return String.format(NEG_VALUE_ERR, value, name);
     }
 
 

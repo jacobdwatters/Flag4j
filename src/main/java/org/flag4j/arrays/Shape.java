@@ -48,23 +48,25 @@ import java.util.StringJoiner;
  * <p>The {@code Shape} class is immutable with respect to its dimensions, ensuring thread safety and consistency. Strides
  * are computed lazily only when needed to minimize overhead.
  *
- * <p>This class is a fundamental building block for tensor ops, particularly in contexts where multidimensional
- * indexing and dimension manipulations are required.
- *
  * <h2>Example usage:</h2>
  *
  * <pre>{@code
- * Shape shape = new Shape(); // Creates a shape for a scalar value.
- * shape = new Shape(3, 4, 5); // Creates a shape for a 3x4x5 tensor.
- * int rank = shape.getRank(); // Gets the rank (number of dimensions).
- * int[] strides = shape.getStrides(); // Retrieves the strides for this shape.
- * int flatIndex = shape.entriesIndex(2, 1, 4); // Converts multidimensional indices to a flat index.
- * int[] multiDimIndex = shape.}
+ * Shape shape = new Shape();  // Creates a shape for a scalar value.
+ * shape = new Shape(3, 4, 5);  // Creates a shape for a 3x4x5 tensor.
+ * int rank = shape.getRank();  // Gets the rank (number of dimensions).
+ * int[] strides = shape.getStrides();  // Retrieves the strides for this shape.
+ * int flatIndex = getFlatIndex(2, 1, 4);  // Converts multidimensional indices to a flat index.
+ * int[] multiDimIndex = shape.getNdIndices(56);  // Flat index to nD index: {2, 3, 1}.
+ * }
  * </pre>
  */
 public class Shape implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The rank of a tensor with this shape.
+     */
+    private final int rank;
     /**
      * An array containing the size of each dimension of this shape.
      */
@@ -78,11 +80,11 @@ public class Shape implements Serializable {
      */
     private boolean hasStrides;
     /**
-     * Total data of this shape. This is only computed on demand by {@link #totalEntries()}.
+     * Total number of entries of this shape. This is only computed on demand by {@link #totalEntries()}.
      */
     private BigInteger totalEntries = null;
     /**
-     * Stores the total number of data as exact integer if possible. This is only computed on demand by
+     * Stores the total number of entries in this shape as exact integer if possible. This is only computed on demand by
      * {@link #totalEntriesIntValueExact()}.
      */
     private int totalEntriesIntExact = -1;
@@ -99,6 +101,7 @@ public class Shape implements Serializable {
         this.dims = dims;
         strides = new int[dims.length];  // Initialize. Will be filled lazily.
         hasStrides = false; // Indicate strides have not been computed.
+        rank = dims.length;
     }
 
 
@@ -116,7 +119,7 @@ public class Shape implements Serializable {
      * @return Shape of a tensor as an integer array.
      */
     public int[] getDims() {
-        return dims.clone();
+        return dims;
     }
 
 
@@ -127,7 +130,7 @@ public class Shape implements Serializable {
      */
     public int[] getStrides() {
         makeStrides();
-        return strides.clone();
+        return strides;
     }
 
 
@@ -205,21 +208,21 @@ public class Shape implements Serializable {
 
     /**
      * Computes the index of the 1D data array for a dense tensor from nD indices for a tensor with this shape.
-     * @param indices Indices of tensor with this shape.
-     * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
+     * @param nDIndex nD index within a tensor with this shape.
+     * @return The 1D index of the element at the specified nD index in the 1D data array of a dense tensor.
      * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
      * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
-     * @see #unsafeGetFlatIndex(int...)
+     * @see #unsafeGet1DIndex(int...)
      */
-    public int getFlatIndex(int... indices) {
-        if(indices.length != dims.length)
-            throw new IllegalArgumentException("Indices rank " + indices.length + " does not match tensor rank " + dims.length);
+    public int get1DIndex(int... nDIndex) {
+        if(nDIndex.length != dims.length)
+            throw new IllegalArgumentException("Indices rank " + nDIndex.length + " does not match tensor rank " + dims.length);
 
         makeStrides(); // Computes strides if not previously computed.
 
         int index = 0;
-        for(int i=0, stop=indices.length; i<stop; i++) {
-            int idx = indices[i];
+        for(int i=0, stop=nDIndex.length; i<stop; i++) {
+            int idx = nDIndex[i];
             if(idx < 0 || idx >= dims[i]) {
                 throw new IndexOutOfBoundsException("Index " + idx + " out of bounds for axis " + i +
                         " of tensor with shape " + this);
@@ -234,39 +237,64 @@ public class Shape implements Serializable {
 
     /**
      * <p>Computes the index of the 1D data array for a dense tensor from nD indices for a tensor with this shape.
-     * <p>Warning: Unlike {@link #getFlatIndex(int...)}, this method does not perform bounds checking on indices. This can lead
+     * <p>Warning: Unlike {@link #get1DIndex(int...)}, this method does not perform bounds checking on indices. This can lead
      * to exceptions being thrown or possibly no exception but incorrect results if {@code indices} are not valid indices.
-     * @param indices Indices of tensor with this shape.
+     * @param nDIndex Indices of tensor with this shape.
      * @return The index of the element at the specified indices in the 1D data array of a dense tensor.
      * @throws IllegalArgumentException If the number of indices does not match the rank of this shape.
      * @throws IndexOutOfBoundsException If any index does not fit within a tensor with this shape.
-     * @see #getFlatIndex(int...)
+     * @see #get1DIndex(int...)
      */
-    public int unsafeGetFlatIndex(int... indices) {
+    public int unsafeGet1DIndex(int... nDIndex) {
         makeStrides(); // Computes strides if not previously computed.
 
         int index = 0;
-        for(int i=0, stop=indices.length; i<stop; i++)
-            index += indices[i]*strides[i];
+        for(int i = 0, stop = nDIndex.length; i < stop; i++)
+            index += nDIndex[i]*strides[i];
 
         return index;
     }
 
 
     /**
-     * Efficiently computes the nD tensor indices based on an index from the internal 1D data array.
+     * Efficiently computes the nD tensor index based on a 1D index from the internal 1D data array.
      * @param index Index of internal 1D data array.
      * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
      * with length equal to the {@link #getRank() rank} of this shape.
+     * @see #getNdIndices(int...)
+     * @see #get1DIndex(int...)
      */
     public int[] getNdIndices(int index) {
         makeStrides(); // Ensure strides are initialized if not already.
-        int[] indices = new int[getRank()];
+        int[] indices = new int[rank];
 
         for (int i = 0; i < strides.length; i++)
             indices[i] = (index / strides[i]) % dims[i];
 
         return indices;
+    }
+
+
+    /**
+     * Efficiently computes the nD tensor indices from multiple 1D indices from the internal 1D data array.
+     * @param indices Array of 1D indices.
+     * @return The multidimensional indices corresponding to the 1D data array index. This will be an array of integers
+     * with length equal to the {@link #getRank() rank} of this shape.
+     * @see #getNdIndices(int)
+     * @see #get1DIndex(int...)
+     */
+    public int[][] getNdIndices(int... indices) {
+        makeStrides(); // Ensure strides are initialized if not already.
+        int[][] nDIndices = new int[indices.length][rank];
+
+        for(int i=0; i<indices.length; i++) {
+            int index = indices[i];
+
+            for (int j = 0; j < strides.length; j++)
+                nDIndices[i][j] = (index / strides[j]) % dims[j];
+        }
+
+        return nDIndices;
     }
 
 
@@ -338,6 +366,8 @@ public class Shape implements Serializable {
     /**
      * Gets the total number of data for a tensor with this shape.
      * @return The total number of data for a tensor with this shape.
+     * @see #totalEntriesIntValueExact()
+     * @see #totalEntriesLongValueExact()
      */
     public BigInteger totalEntries() {
         // Check if totalEntries has already been computed for this shape.
@@ -355,26 +385,103 @@ public class Shape implements Serializable {
 
     /**
      * <p>Gets the total number of data for a tensor with this shape.
-     * If the total number of data exceeds Integer.MAX_VALUE, an exception is thrown.
+     * If the total number of data exceeds {@link Integer#MAX_VALUE}, an exception is thrown.
      *
      * <p>This method is likely to be more efficient than {@link #totalEntries()} if a primitive int value is desired.
      *
      * @return The total number of data for a tensor with this shape.
      * @throws ArithmeticException If the total number of data overflows a primitive int.
+     * @see #totalEntries()
+     * @see #totalEntriesLongValueExact()
      */
     public int totalEntriesIntValueExact() {
         if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed.
+        long product = 1;
         totalEntriesIntExact = 1;
 
         for (int dim : dims) {
-            // Check for overflow before multiplying.
-            if (dim > 0 && totalEntriesIntExact > Integer.MAX_VALUE / dim)
-                throw new ArithmeticException("Integer overflow while computing total data in the shape.");
+            product *= dim;
 
-            totalEntriesIntExact *= dim;
+            // If product > Long.MAX_VALUE, then product*value would overflow since all dims are positive.
+            if (product > Integer.MAX_VALUE)
+                throw new ArithmeticException("Integer overflow while computing total data in shape: " + this);
         }
 
+        totalEntriesIntExact = (int) product;
+
         return totalEntriesIntExact;
+    }
+
+
+    /**
+     * <p>Gets the total number of data for a tensor with this shape as a {@code long}.
+     * If the total number of data exceeds {@link Long#MAX_VALUE}, an exception is thrown.
+     *
+     * @return The total number of data for a tensor with this shape.
+     * @throws ArithmeticException If the total number of data overflows a primitive int.
+     * @see #totalEntriesIntValueExact()
+     * @see #totalEntries()
+     */
+    public long totalEntriesLongValueExact() {
+        if(totalEntriesIntExact >= 0) return totalEntriesIntExact; // Value has already been computed as an integer.
+
+        long product = 1;
+        for (long value : dims) {
+            if (value == 0 || product == 0) {
+                product = 0;
+                continue;
+            }
+
+            // If product > Long.MAX_VALUE / value, then product*value would overflow since all dims are positive.
+            if (product > Long.MAX_VALUE / value)
+                throw new ArithmeticException("Long overflow while computing total data in the shape.");
+
+            product *= value;
+        }
+
+        // If we can safely cast to an integer, update the cached integer value.
+        if (product < Integer.MAX_VALUE)
+            totalEntriesIntExact = (int) product;
+
+        return product;
+    }
+
+
+    /**
+     * Checks if the total number of elements represented by this shape can be represented as a 32-bit integer without overflowing.
+     * @return {@code true} if the total number of elements represented by this shape can be represented as a
+     * 32-bit integer without overflowing; {@code false} if it would overflow.
+     */
+    public boolean isIntSized() {
+        if(totalEntriesIntExact >= 0) return true; // Value is already known to be computable as an integer.
+        long product = 1;
+
+        for (int value : dims) {
+            product *= value;
+
+            if (product > Integer.MAX_VALUE)
+                return false;  // Integer overflow detected.
+        }
+
+        // Update cached value since we already computed it.
+        totalEntriesIntExact = (int) product;  // This cast is safe since it will only execute if product <= Integer.MAX_VALUE.
+
+        return true;
+    }
+
+
+    /**
+     * Checks if this shape is square. That is, if <em>all</em> dimensions of this shape are equal.
+     * @return {@code true} if all dimensions of this shape are equal; {@code false} otherwise.
+     */
+    public boolean isSquare() {
+        if(dims.length <= 1) return true;
+        int refDim = dims[0];
+
+        for(int i=1; i<rank; i++)
+            if(dims[i] != refDim) return false;
+
+        return true;
     }
 
 

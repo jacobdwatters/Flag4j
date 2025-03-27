@@ -142,14 +142,14 @@ public class RealDenseSparseEquals {
 
             // Remove all nonZero data from the data of this matrix.
             for(int i=0; i<B.nnz; i++) {
-                entriesIndex = A.shape.getFlatIndex(B.indices[i]);
+                entriesIndex = A.shape.get1DIndex(B.indices[i]);
 
                 if(entriesCopy[entriesIndex] != B.data[i]) {
                     equal = false;
                     break;
                 }
 
-                entriesCopy[A.shape.getFlatIndex(B.indices[i])] = 0;
+                entriesCopy[A.shape.get1DIndex(B.indices[i])] = 0;
             }
 
             if(equal) {

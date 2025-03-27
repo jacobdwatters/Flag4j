@@ -24,23 +24,24 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.primitive_arrays.AbstractDoubleTensor;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.dense.CMatrix;
+import org.flag4j.arrays.dense.CVector;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.arrays.dense.Vector;
 import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.real.RealProperties;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
-import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.real.*;
 import org.flag4j.linalg.ops.sparse.csr.real_complex.RealComplexCsrMatMult;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -163,7 +164,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero data of this CSR matrix.
+     * @param data The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
@@ -171,13 +172,13 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * {@code data.length == colData.length}.
      * @throws TensorShapeException If {@code shape.getRank() != 2}.
      */
-    public CsrMatrix(Shape shape, double[] entries, int[] rowPointers, int[] colIndices) {
-        super(shape, entries);
-        ValidateParameters.ensureRank(shape, 2);
+    public CsrMatrix(Shape shape, double[] data, int[] rowPointers, int[] colIndices) {
+        super(shape, data);
+        SparseValidation.validateCsr(shape, data.length, rowPointers, colIndices);
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        this.nnz = entries.length;
+        this.nnz = data.length;
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -188,19 +189,20 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *
      * @param numRows The number of rows in this matrix.
      * @param numCols The number of columns in this matrix.
-     * @param entries The non-zero data of this CSR matrix.
+     * @param data The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    public CsrMatrix(int numRows, int numCols, double[] entries, int[] rowPointers, int[] colIndices) {
-        super(new Shape(numRows, numCols), entries);
+    public CsrMatrix(int numRows, int numCols, double[] data, int[] rowPointers, int[] colIndices) {
+        super(new Shape(numRows, numCols), data);
+        SparseValidation.validateCsr(shape, data.length, rowPointers, colIndices);
 
         this.rowPointers = rowPointers;
         this.colIndices = colIndices;
-        this.nnz = entries.length;
+        this.nnz = data.length;
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
     }
@@ -214,7 +216,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
     public CsrMatrix(int numRows, int numCols) {
         super(new Shape(numRows, numCols), new double[0]);
 
-        this.rowPointers = new int[0];
+        this.rowPointers = new int[numRows + 1];
         this.colIndices = new int[0];
         this.nnz = 0;
         this.numRows = numRows;
@@ -236,6 +238,41 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         this.nnz = 0;
         this.numRows = shape.get(0);
         this.numCols = shape.get(1);
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing CSR matrices.
+     * @param shape The shape of the matrix to construct.
+     * @param data The non-zero data of this COO matrix.
+     * @param rowPointers The non-zero row pointers of the CSR matrix.
+     * @param colIndices The non-zero column indices of the CSR matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CsrMatrix(Shape shape, double[] data, int[] rowPointers, int[] colIndices, Object dummy) {
+        super(shape, data);
+
+        this.rowPointers = new int[0];
+        this.colIndices = new int[0];
+        this.nnz = 0;
+        this.numRows = shape.get(0);
+        this.numCols = shape.get(1);
+    }
+
+
+    /**
+     * <p>Factory to construct a CSR matrix which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowPointers The non-zero row pointers of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A COO matrix constructed from the provided parameters.
+     */
+    public static CsrMatrix unsafeMake(Shape shape, double[] data, int[] rowPointers, int[] colIndices) {
+        return new CsrMatrix(shape, data, rowPointers, colIndices, null);
     }
 
 
@@ -524,7 +561,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
                 destRowIdx[j] = i;
         }
 
-        return new CooMatrix(shape, data.clone(), destRowIdx, colIndices.clone());
+        return CooMatrix.unsafeMake(shape, data.clone(), destRowIdx, colIndices.clone());
     }
 
 
@@ -705,8 +742,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      */
     @Override
     public Matrix mult(CsrMatrix b) {
@@ -751,8 +787,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *
      * @return The result of matrix multiplying this matrix with matrix {@code b}.
      *
-     * @throws LinearAlgebraException If the number of columns in this matrix do not equal the number
-     *                                of rows in matrix {@code b}.
+     * @throws LinearAlgebraException If {@code this.numCols() != b.numRows()}.
      */
     public CMatrix mult(CsrCMatrix b) {
         return RealComplexCsrMatMult.standard(this, b);
@@ -1118,12 +1153,33 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      *
      * @return The result of matrix multiplying this matrix with vector {@code b}.
      *
-     * @throws IllegalArgumentException If the number of columns in this matrix do not equal the
-     *                                  number of data in the vector {@code b}.
+     * @throws IllegalArgumentException If {@code this.numCols != b.size}.
      */
     @Override
     public Vector mult(CooVector b) {
         return RealCsrMatMult.standardVector(this, b);
+    }
+
+
+    /**
+     * Multiplies this sparse CSR matrix with a real dense vector.
+     * @param b The real dense matrix in the matrix-vector product.
+     * @return Computes the matrix-vector product of this matrix and {@code b}.
+     * @throws IllegalArgumentException If {@code this.numCols != b.size}.
+     */
+    public Vector mult(Vector b) {
+        return RealCsrDenseMatMult.standardVector(this, b);
+    }
+
+
+    /**
+     * Multiplies this sparse CSR matrix with a complex dense vector.
+     * @param b The real dense matrix in the matrix-vector product.
+     * @return Computes the matrix-vector product of this matrix and {@code b}.
+     * @throws IllegalArgumentException If {@code this.numCols != b.size}.
+     */
+    public CVector mult(CVector b) {
+        return (CVector) RealFieldDenseCsrMatMult.standardVector(this, b);
     }
 
 
@@ -1161,7 +1217,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
             }
         }
 
-        return new CooVector(shape.totalEntries().intValueExact(), data.clone(), indices);
+        return CooVector.unsafeMake(shape.totalEntries().intValueExact(), data.clone(), indices);
     }
 
 
@@ -1194,7 +1250,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
         System.arraycopy(data, start, destEntries, 0, destEntries.length);
         System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
 
-        return new CooVector(this.numCols, destEntries, destIndices);
+        return CooVector.unsafeMake(this.numCols, destEntries, destIndices);
     }
 
 
@@ -1440,7 +1496,7 @@ public class CsrMatrix extends AbstractDoubleTensor<CsrMatrix>
      * @throws IllegalArgumentException If {@code this.numCols != b.numRows}.
      */
     public Matrix mult(Matrix b) {
-        return RealCsrDenseMatrixMultiplication.standard(this, b);
+        return RealCsrDenseMatMult.standard(this, b);
     }
 
 

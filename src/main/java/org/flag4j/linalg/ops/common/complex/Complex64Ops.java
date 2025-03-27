@@ -25,7 +25,7 @@
 package org.flag4j.linalg.ops.common.complex;
 
 
-import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.numbers.Complex64;
 import org.flag4j.util.ErrorMessages;
 
 
@@ -49,7 +49,7 @@ public final class Complex64Ops {
      */
     public static Complex64[] round(Complex64[] src, int precision) {
         if(precision<0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(precision, "precision"));
 
         Complex64[] dest = new Complex64[src.length];
         for(int i=0; i<dest.length; i++)
@@ -69,7 +69,7 @@ public final class Complex64Ops {
      */
     public static Complex64[] roundToZero(Complex64[] src, float threshold) {
         if(threshold<0)
-            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold));
+            throw new IllegalArgumentException(ErrorMessages.getNegValueErr(threshold, "threshold"));
 
         Complex64[] dest = new Complex64[src.length];
         for(int i=0; i<dest.length; i++)

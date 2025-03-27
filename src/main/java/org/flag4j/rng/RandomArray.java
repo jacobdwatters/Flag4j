@@ -24,31 +24,34 @@
 
 package org.flag4j.rng;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 import org.flag4j.rng.distributions.Distribution;
 import org.flag4j.util.ArrayBuilder;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public final class RandomArray {
 
     /**
+     * Ratio used as the threshold to determine what method of generating unique integers is likely better.
+     */
+    private static final double UNIQUE_INDICES_RATIO = 0.3;
+
+    /**
      * Random number generator to use when creating random arrays.
      */
-    private final RandomComplex rng;
+    private final RandomComplex RNG;
 
 
     /**
      * Creates a RandomArray object to generate arrays filled with random values using a default random number generator.
+     * The seed of the random number generator will be set to {@link RandomState#getGlobalSeed()}
      */
     public RandomArray() {
-        this.rng = new RandomComplex();
+        this.RNG = new RandomComplex(RandomState.getGlobalSeed());
     }
 
 
@@ -58,7 +61,7 @@ public final class RandomArray {
      * @param rng The complex random number generator to use when creating random arrays.
      */
     public RandomArray(RandomComplex rng) {
-        this.rng = rng;
+        this.RNG = rng;
     }
 
 
@@ -107,25 +110,73 @@ public final class RandomArray {
 
 
     /**
-     * Creates unique indices in [start, end).
-     * @param numIndices Number of random unique indices to get.
+     * Generates an array of unique integers in range [start, end).
+     * @param numIntegers Number of random unique integers to get.
      * @param start Staring index (inclusive).
      * @param end Ending index (exclusive).
-     * @return An array of length {@code numIndices} containing random unique indices in [start, end). The array will be
+     * @return An array of length {@code numIntegers} containing random unique integers in [start, end). The array will be
      * sorted.
      * @see #randomUniqueIndices2D(int, int, int, int, int)
      * @throws IllegalArgumentException If {@code start} is not in {@code [0, end)}
      */
-    public int[] randomUniqueIndices(int numIndices, int start, int end) {
-        ValidateParameters.validateArrayIndices(end, start);
+    public int[] randomUniqueIntegers(int numIntegers, int start, int end) {
+        ValidateParameters.ensureNonNegative(numIntegers);
+        if(end < start) {
+            throw new IllegalArgumentException("Bounds must satisfy start <= end but got start="
+                    + start + "and end=" + end + ".");
+        }
+
+        // Compute what ratio of the range [start, end) numIntegers represents.
+        double ratio = (double) numIntegers / (end - start);
+
+        return (ratio < 0.3)
+                ? uniqueIndicesFromSet(numIntegers, start, end)
+                : uniqueIndicesFromRange(numIntegers, start, end);
+
+    }
+
+
+    /**
+     * Generates an array of random unique indices over the specified range [start, end) by filling an array with all values within
+     * the range, shuffling then returning the first {@code numIndices} values of the shuffled array.
+     * @param numIndices The number of unique indices to get.
+     * @param start The starting value of the range of indices (inclusive).
+     * @param end The ending value of the range of indices (exclusive).
+     * @return An array of length {@code numIndices} filled with random unique value within the range [start, end).
+     */
+    private int[] uniqueIndicesFromRange(int numIndices, int start, int end) {
+        int size = end - start;
 
         int[] indices = ArrayBuilder.intRange(start, end);
         shuffle(indices); // Shuffle indices.
 
         indices = Arrays.copyOfRange(indices, 0, numIndices); // Extract first 'numIndices' data.
         Arrays.sort(indices); // Sort indices.
-
         return indices;
+    }
+
+
+    /**
+     * Generates an array of random unique indices over the specified range [start, end) by generating random integers and inserting
+     * into a set until the set has size {@code numIndices}.
+     * @param numIndices The number of unique indices to get.
+     * @param start The starting value of the range of indices (inclusive).
+     * @param end The ending value of the range of indices (exclusive).
+     * @return An array of length {@code numIndices} filled with random unique value within the range [start, end).
+     */
+    private int[] uniqueIndicesFromSet(int numIndices, int start, int end) {
+        int size = end - start;
+
+        Random rand = new Random();
+        Set<Integer> uniqueIndices = new HashSet<>(numIndices);
+        while (uniqueIndices.size() < numIndices) {
+            int candidate = rand.nextInt(size) + start;
+            uniqueIndices.add(candidate);
+        }
+
+        int[] result = uniqueIndices.stream().mapToInt(Integer::intValue).toArray();
+        Arrays.sort(result); // Sort indices.
+        return result;
     }
 
 
@@ -138,7 +189,7 @@ public final class RandomArray {
      * @param colEnd Ending column index (exclusive).
      * @return A two-dimensional array of shape {@code 2&times;numIndices} containing unique two-dimensional indices.
      * The first row contains row indices, the second, column indices. The indices will be sorted by rows then columns.
-     * @see #randomUniqueIndices(int, int, int)
+     * @see #randomUniqueIntegers(int, int, int)
      */
     public int[][] randomUniqueIndices2D(int numIndices, int rowStart, int rowEnd, int colStart, int colEnd) {
         ValidateParameters.ensureGreaterEq(0, numIndices);
@@ -154,7 +205,7 @@ public final class RandomArray {
             int[] startEnd = ArrayUtils.findFirstLast(rowIndices, rowIndices[idx]);
 
             // Generate unique row indices for the specified row and copy into .
-            int[] uniqueCols = randomUniqueIndices(startEnd[1]-startEnd[0], colStart, colEnd);
+            int[] uniqueCols = randomUniqueIntegers(startEnd[1]-startEnd[0], colStart, colEnd);
             System.arraycopy(uniqueCols, 0, colIndices, startEnd[0], uniqueCols.length);
 
             idx = startEnd[1]; // Update the index.
@@ -181,7 +232,7 @@ public final class RandomArray {
         Map<Integer, Integer> map = new HashMap<>(maxMinDiff); // Key=index, value=number of occurrences
 
         while(validCount < numIndices) {
-            int value = rng.nextInt(maxMinDiff) + rowStart; // Generate index in the specified bounds.
+            int value = RNG.nextInt(maxMinDiff) + rowStart; // Generate index in the specified bounds.
             int occurrences = map.getOrDefault(value, 0);
 
             // Ensure the value has not already been generated more than the maximum number of allowed times.
@@ -205,7 +256,7 @@ public final class RandomArray {
     public void shuffle(int[] arr) {
         for (int i = arr.length-1; i>0; i--) {
             // Pick a random index from 0 to i
-            int j = rng.nextInt(i+1);
+            int j = RNG.nextInt(i+1);
             // Swap arr[i] with the element at random index.
             ArrayUtils.swap(arr, i, j);
         }
@@ -220,7 +271,7 @@ public final class RandomArray {
     public void shuffle(double[] arr) {
         for (int i = arr.length-1; i>0; i--) {
             // Pick a random index from 0 to i.
-            int j = rng.nextInt(i+1);
+            int j = RNG.nextInt(i+1);
             // Swap arr[i] with the element at random index.
             ArrayUtils.swap(arr, i, j);
         }
@@ -235,7 +286,7 @@ public final class RandomArray {
     public void shuffle(Object[] arr) {
         for (int i = arr.length-1; i>0; i--) {
             // Pick a random index from 0 to i.
-            int j = rng.nextInt(i+1);
+            int j = RNG.nextInt(i+1);
             // Swap arr[i] with the element at random index.
             ArrayUtils.swap(arr, i, j);
         }

@@ -25,11 +25,9 @@
 package org.flag4j.rng;
 
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
-import org.flag4j.arrays.sparse.CooCMatrix;
-import org.flag4j.arrays.sparse.CooMatrix;
-import org.flag4j.arrays.sparse.CsrMatrix;
+import org.flag4j.arrays.sparse.*;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.rng.distributions.Complex128UniformDisk;
 import org.flag4j.rng.distributions.RealUniform;
 import org.flag4j.util.ArrayJoiner;
@@ -61,7 +59,6 @@ import java.math.RoundingMode;
  */
 public class RandomSparseTensor {
 
-
     /**
      * Complex pseudorandom number generator.
      */
@@ -73,11 +70,10 @@ public class RandomSparseTensor {
 
 
     /**
-     * Constructs a new pseudorandom tensor generator with a seed which is unlikely to be the same as other
-     * from any other invocation of this constructor.
+     * Constructs a new pseudorandom tensor generator with seed set to {@link RandomState#getGlobalSeed()}.
      */
     public RandomSparseTensor() {
-        COMPLEX_RNG = new RandomComplex();
+        COMPLEX_RNG = RandomState.getDefaultRng();
         RAND_ARRAY = new RandomArray(COMPLEX_RNG);
     }
 
@@ -89,6 +85,105 @@ public class RandomSparseTensor {
     public RandomSparseTensor(long seed) {
         COMPLEX_RNG = new RandomComplex(seed);
         RAND_ARRAY = new RandomArray(COMPLEX_RNG);
+    }
+
+
+    /**
+     * Computes the total number of non-zero entries required for a sparse vector to have the specified sparsity.
+     * @param totalSize Total size of the vector.
+     * @param sparsity The desired sparsity. Assumed to be between 0 and 1 (both inclusive).
+     * @return The number of non-zero entries required for a vector of the specified {@code size}
+     * to have the desired {@code sparsity}.
+     */
+    private static int nnzFromSparsity(int totalSize, double sparsity) {
+        if(sparsity < 0.0 || sparsity > 1.0)
+            throw new IllegalArgumentException("sparsity must be between 0.0 and 1.0 but got " + sparsity + ".");
+        return new BigDecimal(totalSize*(1.0-sparsity)).setScale(0, RoundingMode.HALF_UP).intValueExact();
+    }
+
+
+    /**
+     * Computes the total number of non-zero entries required for a sparse tensor to have the specified sparsity.
+     * @param shape Full shape of the tensor.
+     * @param sparsity The desired sparsity. Assumed to be between 0 and 1 (both inclusive).
+     * @return The number of non-zero entries required for a vector of the specified {@code size}
+     * to have the desired {@code sparsity}.
+     */
+    private static int nnzFromSparsity(Shape shape, double sparsity) {
+        if(sparsity < 0.0 || sparsity > 1.0)
+            throw new IllegalArgumentException("sparsity must be between 0.0 and 1.0 but got " + sparsity + ".");
+        return new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
+                .setScale(0, RoundingMode.HALF_UP).intValueExact();
+    }
+
+
+    /**
+     * Constructs a COO vector with the specified sparsity filled with pseudo-random values from a uniform
+     * distribution in [min, max).
+     * @param size Full size of the COO vector.
+     * @param min Minimum value of the uniform distribution to sample from (inclusive).
+     * @param max Maximum value of the uniform distribution to sample from (exclusive).
+     * @param sparsity The sparsity of the COO vector.
+     * @return A sparse COO vector whose entries are uniformly distributed in [min, max).
+     */
+    public CooVector randomCooVector(int size, double min, double max, double sparsity) {
+        return randomCooVector(size, min, max, nnzFromSparsity(size, sparsity));
+    }
+
+
+    /**
+     * Constructs a COO vector with the specified number of non-zero entries filled with pseudo-random values from a uniform
+     * distribution in [min, max).
+     * @param size Full size of the COO vector.
+     * @param min Minimum value of the uniform distribution to sample from (inclusive).
+     * @param max Maximum value of the uniform distribution to sample from (exclusive).
+     * @param nnz The number of non-zero value to include in the vector.
+     * @return A sparse COO vector whose entries are uniformly distributed in [min, max).
+     */
+    public CooVector randomCooVector(int size, double min, double max, int nnz) {
+        ValidateParameters.ensureGreaterEq(0, nnz);
+        ValidateParameters.ensureLessEq(size, nnz, "nnz");
+
+        double[] data = new double[nnz];
+        RandomArray.randomFill(data, new RealUniform(COMPLEX_RNG, min, max));
+        int[] indices = RAND_ARRAY.randomUniqueIntegers(nnz, 0, size);
+
+        return CooVector.unsafeMake(size, data, indices);
+    }
+
+
+    /**
+     * Constructs a COO vector with the specified sparsity entries filled with pseudo-random values uniformly distributed in
+     * an annulus centered on the complex plane.
+     * @param size Full size of the COO vector.
+     * @param min Inner radius of the annulus (inclusive).
+     * @param max Outer radius of the annulus (exclusive).
+     * @param sparsity The sparsity of the COO vector.
+     * @return A sparse COO vector whose entries are uniformly distributed in [min, max).
+     */
+    public CooCVector randomCooCVector(int size, double min, double max, double sparsity) {
+        return randomCooCVector(size, min, max, nnzFromSparsity(size, sparsity));
+    }
+
+
+    /**
+     * Constructs a COO vector with the specified number of non-zero entries filled with pseudo-random values uniformly distributed in
+     * an annulus centered on the complex plane.
+     * @param size Full size of the COO vector.
+     * @param min Inner radius of the annulus (inclusive).
+     * @param max Outer radius of the annulus (exclusive).
+     * @param nnz The number of non-zero value to include in the vector.
+     * @return A sparse COO vector whose entries are uniformly distributed in [min, max).
+     */
+    public CooCVector randomCooCVector(int size, double min, double max, int nnz) {
+        ValidateParameters.ensureGreaterEq(0, nnz);
+        ValidateParameters.ensureLessEq(size, nnz, "nnz");
+
+        Complex128[] data = new Complex128[nnz];
+        RandomArray.randomFill(data, new Complex128UniformDisk(COMPLEX_RNG, min, max));
+        int[] indices = RAND_ARRAY.randomUniqueIntegers(nnz, 0, size);
+
+        return CooCVector.unsafeMake(size, data, indices);
     }
 
 
@@ -121,12 +216,7 @@ public class RandomSparseTensor {
      * distributed in {@code [min, max)}.
      */
     public CooMatrix randomCooMatrix(Shape shape, double min, double max, double sparsity) {
-        ValidateParameters.ensureRank(shape, 2);
-
-        int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
-                .setScale(0, RoundingMode.HALF_UP).intValueExact();
-
-        return randomCooMatrix(shape, min, max, numEntries);
+        return randomCooMatrix(shape, min, max, nnzFromSparsity(shape, sparsity));
     }
 
 
@@ -137,12 +227,12 @@ public class RandomSparseTensor {
      * @param cols Number of columns in the random sparse matrix.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @param nnz Desired number of non-zero data int the random sparse matrix.
      * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooMatrix randomCooMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
-        return randomCooMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
+    public CooMatrix randomCooMatrix(int rows, int cols, double min, double max, int nnz) {
+        return randomCooMatrix(new Shape(rows, cols), min, max, nnz);
     }
 
 
@@ -152,17 +242,18 @@ public class RandomSparseTensor {
      * @param shape Shape of the sparse matrix to generate.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @param nnz Desired number of non-zero data int the random sparse matrix.
      * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
-    public CooMatrix randomCooMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ValidateParameters.ensureGreaterEq(0, numNonZeroEntries);
-        ValidateParameters.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
+    public CooMatrix randomCooMatrix(Shape shape, double min, double max, int nnz) {
+        ValidateParameters.ensureGreaterEq(0, nnz);
+        ValidateParameters.ensureRank(shape, 2);
+        ValidateParameters.ensureLessEq(shape.totalEntries(), nnz, "nnz");
 
-        double[] data = new double[numNonZeroEntries];
+        double[] data = new double[nnz];
         RandomArray.randomFill(data, new RealUniform(COMPLEX_RNG, min, max));
-        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(nnz, 0, shape.get(0), 0, shape.get(1));
 
         return new CooMatrix(shape, data, indices[0], indices[1]);
     }
@@ -198,11 +289,7 @@ public class RandomSparseTensor {
      */
     public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, double sparsity) {
         ValidateParameters.ensureRank(shape, 2);
-
-        int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
-                .setScale(0, RoundingMode.HALF_UP).intValueExact();
-
-        return randomCooMatrix(shape, min, max, numEntries).toCsr();
+        return randomCooMatrix(shape, min, max, sparsity).toCsr();
     }
 
 
@@ -213,12 +300,12 @@ public class RandomSparseTensor {
      * @param cols Number of columns in the random sparse matrix.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @param nnz Desired number of non-zero data int the random sparse matrix.
      * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
-    public CsrMatrix randomCsrMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
-        return randomCooMatrix(new Shape(rows, cols), min, max, numNonZeroEntries).toCsr();
+    public CsrMatrix randomCsrMatrix(int rows, int cols, double min, double max, int nnz) {
+        return randomCooMatrix(new Shape(rows, cols), min, max, nnz).toCsr();
     }
 
 
@@ -228,17 +315,17 @@ public class RandomSparseTensor {
      * @param shape Shape of the sparse matrix to generate.
      * @param min Minimum value for random non-zero values in the sparse matrix.
      * @param max Maximum value for random non-zero values
-     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @param nnz Desired number of non-zero data int the random sparse matrix.
      * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in {@code [min, max)}.
      */
-    public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ValidateParameters.ensureGreaterEq(0, numNonZeroEntries);
-        ValidateParameters.ensureLessEq(shape.totalEntries(), numNonZeroEntries, "numNonZeroEntries");
+    public CsrMatrix randomCsrMatrix(Shape shape, double min, double max, int nnz) {
+        ValidateParameters.ensureGreaterEq(0, nnz);
+        ValidateParameters.ensureLessEq(shape.totalEntries(), nnz, "nnz");
 
-        double[] data = new double[numNonZeroEntries];
+        double[] data = new double[nnz];
         RandomArray.randomFill(data, new RealUniform(COMPLEX_RNG, min, max));
-        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(nnz, 0, shape.get(0), 0, shape.get(1));
 
         return new CooMatrix(shape, data, indices[0], indices[1]).toCsr();
     }
@@ -258,8 +345,7 @@ public class RandomSparseTensor {
         ValidateParameters.ensureInRange(sparsity, 0, 1, "sparsity");
         Shape shape = new Shape(size, size);
 
-        int numEntries = new BigDecimal(size).pow(2).multiply(BigDecimal.valueOf(1.0-sparsity))
-                .setScale(0, RoundingMode.HALF_UP).intValueExact();
+        int numEntries = nnzFromSparsity(shape, sparsity);
         numEntries /= 2;
 
         // Generate half of the random data.
@@ -284,8 +370,8 @@ public class RandomSparseTensor {
     /**
      * Generates a symmetric {@link CsrMatrix CSR matrix} filled with pseudorandom values uniformly distributed in {@code [min, max)}.
      * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
-     * @param min Minimum value in uniform distribution.
-     * @param max Maximum value in uniform distribution.
+     * @param min Minimum value in uniform distribution (inclusive).
+     * @param max Maximum value in uniform distribution (exclusive).
      * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
      * a value in {@code [0.0, 1.0]}. The true sparsity may slightly differ to ensure the matrix is symmetric.
      * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
@@ -309,8 +395,8 @@ public class RandomSparseTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in an annulus.
      */
-    public CooCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, double sparsity) {
-        return randomSparseCMatrix(new Shape(rows, cols), min, max, sparsity);
+    public CooCMatrix randomCooCMatrix(int rows, int cols, double min, double max, double sparsity) {
+        return randomCooCMatrix(new Shape(rows, cols), min, max, sparsity);
     }
 
 
@@ -326,12 +412,9 @@ public class RandomSparseTensor {
      * @return A sparse matrix with sparsity approximately equal to {@code sparsity} filled with random values uniformly
      * distributed in an annulus.
      */
-    public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, double sparsity) {
+    public CooCMatrix randomCooCMatrix(Shape shape, double min, double max, double sparsity) {
         ValidateParameters.ensureInRange(sparsity, 0, 1, "sparsity");
-        int numEntries = new BigDecimal(shape.totalEntries()).multiply(BigDecimal.valueOf(1.0-sparsity))
-                .setScale(0, RoundingMode.HALF_UP).intValueExact();
-
-        return randomSparseCMatrix(shape, min, max, numEntries);
+        return randomCooCMatrix(shape, min, max, nnzFromSparsity(shape, sparsity));
     }
 
 
@@ -343,12 +426,12 @@ public class RandomSparseTensor {
      * @param cols Number of columns in the random sparse matrix.
      * @param min Inner radius of the annular distribution (inclusive).
      * @param max Outer radius of the annular distribution (exclusive).
-     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @param nnz Desired number of non-zero data int the random sparse matrix.
      * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in an annulus.
      */
-    public CooCMatrix randomSparseCMatrix(int rows, int cols, double min, double max, int numNonZeroEntries) {
-        return randomSparseCMatrix(new Shape(rows, cols), min, max, numNonZeroEntries);
+    public CooCMatrix randomCooCMatrix(int rows, int cols, double min, double max, int nnz) {
+        return randomCooCMatrix(new Shape(rows, cols), min, max, nnz);
     }
 
 
@@ -359,17 +442,140 @@ public class RandomSparseTensor {
      * @param shape Shape of the sparse matrix to generate.
      * @param min Inner radius of the annular distribution (inclusive).
      * @param max Outer radius of the annular distribution (exclusive).
-     * @param numNonZeroEntries Desired number of non-zero data int the random sparse matrix.
+     * @param nnz Desired number of non-zero data int the random sparse matrix.
      * @return A sparse matrix filled with the specified number of non-zero data uniformly
      * distributed in an annulus.
      */
-    public CooCMatrix randomSparseCMatrix(Shape shape, double min, double max, int numNonZeroEntries) {
-        ValidateParameters.ensureGreaterEq(0, numNonZeroEntries);
+    public CooCMatrix randomCooCMatrix(Shape shape, double min, double max, int nnz) {
+        ValidateParameters.ensureGreaterEq(0, nnz);
 
-        Complex128[] entries = new Complex128[numNonZeroEntries];
+        Complex128[] entries = new Complex128[nnz];
         RandomArray.randomFill(entries, new Complex128UniformDisk(COMPLEX_RNG, min, max));
-        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numNonZeroEntries, 0, shape.get(0), 0, shape.get(1));
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(nnz, 0, shape.get(0), 0, shape.get(1));
+
+        return CooCMatrix.unsafeMake(shape, entries, indices[0], indices[1]);
+    }
+
+
+    /**
+     * Generates a Hermitian {@link CooCMatrix complex COO matrix} filled with pseudorandom values uniformly distributed in an annulus
+     * centered on the complex plane.
+     * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
+     * @param min Inner radius of the annulus (inclusive).
+     * @param max Outer radius of the annulus (exclusive).
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     * a value in {@code [0.0, 1.0]}. The true sparsity may slightly differ to ensure the matrix is symmetric.
+     * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code sparsity} is not in the range {@code [0.0, 1.0]}.
+     */
+    public CooCMatrix randomHermitianCooMatrix(int size, int min, int max, double sparsity) {
+        ValidateParameters.ensureInRange(sparsity, 0, 1, "sparsity");
+        Shape shape = new Shape(size, size);
+
+        int numEntries = nnzFromSparsity(shape, sparsity);
+        numEntries /= 2;
+
+        // Generate half of the random data.
+        Complex128[] entries = new Complex128[numEntries];
+        RandomArray.randomFill(entries, new Complex128UniformDisk(COMPLEX_RNG, min, max));
+        int[][] indices = RAND_ARRAY.randomUniqueIndices2D(numEntries, 0, shape.get(0), 0, shape.get(1));
+
+        // Mirror data across diagonal.
+        entries = ArrayJoiner.join(entries, entries);
+        indices = new int[][]{
+                ArrayJoiner.join(indices[0], indices[1]),
+                ArrayJoiner.join(indices[1], indices[0])
+        };
+
+        CooCMatrix randMat = new CooCMatrix(shape, entries, indices[0], indices[1]);
+        randMat.sortIndices();
 
         return new CooCMatrix(shape, entries, indices[0], indices[1]);
+    }
+
+
+    /**
+     * Generates a Hermitian {@link CsrCMatrix complex CSR matrix} filled with pseudorandom values uniformly distributed in an annulus
+     * centered on the complex plane.
+     * @param size Number of rows and columns in the resulting matrix (the result will be a square matrix).
+     * @param min Inner radius of the annulus (inclusive).
+     * @param max Outer radius of the annulus (exclusive).
+     * @param sparsity Desired sparsity of the resulting matrix. i.e. the percent of values which are zero. Must be
+     * a value in {@code [0.0, 1.0]}. The true sparsity may slightly differ to ensure the matrix is symmetric.
+     * @return A symmetric matrix filled with pseudorandom values uniformly distributed in {@code [min, max)}.
+     * @throws IllegalArgumentException If {@code sparsity} is not in the range {@code [0.0, 1.0]}.
+     */
+    public CsrCMatrix randomHermitianCsrMatrix(int size, int min, int max, double sparsity) {
+        return randomHermitianCooMatrix(size, min, max, sparsity).toCsr();
+    }
+
+
+    /**
+     * Constructs a COO tensor with the specified shape and sparsity filled with pseudo-random values from a uniform
+     * distribution in [min, max).
+     * @param shape Full shape of the COO tensor.
+     * @param min Minimum value of the uniform distribution to sample from (inclusive).
+     * @param max Maximum value of the uniform distribution to sample from (exclusive).
+     * @param sparsity The sparsity of the COO tensor.
+     * @return A sparse COO tensor whose entries are uniformly distributed in [min, max).
+     */
+    public CooTensor randomCooTensor(Shape shape, double min, double max, double sparsity) {
+        return randomCooTensor(shape, min, max, nnzFromSparsity(shape.totalEntriesIntValueExact(), sparsity));
+    }
+
+
+    /**
+     * Constructs a COO tensor with the specified shape and number of non-zero entries filled with pseudo-random values from a uniform
+     * distribution in [min, max).
+     * @param shape Full shape of the COO tensor.
+     * @param min Minimum value of the uniform distribution to sample from (inclusive).
+     * @param max Maximum value of the uniform distribution to sample from (exclusive).
+     * @param nnz The number of non-zero entries in the COO tensor.
+     * @return A sparse COO tensor whose entries are uniformly distributed in [min, max).
+     */
+    public CooTensor randomCooTensor(Shape shape, double min, double max, int nnz) {
+        ValidateParameters.ensureGreaterEq(0, nnz,"nnz");
+
+        double[] data = new double[nnz];
+        RandomArray.randomFill(data, new RealUniform(COMPLEX_RNG, min, max));
+        int[] indices = RAND_ARRAY.randomUniqueIntegers(nnz, 0, shape.totalEntriesIntValueExact());
+        int[][] nDIndices = shape.getNdIndices(indices);
+
+        return new CooTensor(shape, data, nDIndices);
+    }
+
+
+    /**
+     * Constructs a complex COO tensor with the specified shape and sparsity filled with pseudo-random values uniformly distributed
+     * in an annulus centered on the origin of the complex plane.
+     * @param shape Full shape of the COO tensor.
+     * @param min Minimum radius of the annulus (inclusive).
+     * @param max Maximum radius of the annulus (exclusive).
+     * @param sparsity The sparsity of the COO tensor.
+     * @return A sparse COO tensor whose entries are uniformly distributed in [min, max).
+     */
+    public CooCTensor randomCooCTensor(Shape shape, double min, double max, double sparsity) {
+        return randomCooCTensor(shape, min, max, nnzFromSparsity(shape.totalEntriesIntValueExact(), sparsity));
+    }
+
+
+    /**
+     * Constructs a complex COO tensor with the specified shape and number of non-zero entries filled with
+     * pseudo-random values uniformly distributed in an annulus centered on the origin of the complex plane.
+     * @param shape Full shape of the COO tensor.
+     * @param min Minimum radius of the annulus (inclusive).
+     * @param max Maximum radius of the annulus (exclusive).
+     * @param nnz The number of non-zero entries in the COO tensor.
+     * @return A sparse COO tensor whose entries are uniformly distributed in [min, max).
+     */
+    public CooCTensor randomCooCTensor(Shape shape, double min, double max, int nnz) {
+        ValidateParameters.ensureGreaterEq(0, nnz,"nnz");
+
+        Complex128[] data = new Complex128[nnz];
+        RandomArray.randomFill(data, new Complex128UniformDisk(COMPLEX_RNG, min, max));
+        int[] indices = RAND_ARRAY.randomUniqueIntegers(nnz, 0, shape.totalEntriesIntValueExact());
+        int[][] nDIndices = shape.getNdIndices(indices);
+
+        return new CooCTensor(shape, data, nDIndices);
     }
 }

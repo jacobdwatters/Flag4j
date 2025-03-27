@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg.ops.dense.ring_ops;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.Configurations;
 import org.flag4j.concurrency.ThreadManager;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ArrayUtils;
 
 /**
@@ -62,7 +62,7 @@ public final class DenseRingHermitianTranspose {
         for(int i=0, size=src.length; i<size; i++) {
             int[] destIndices = shape.getNdIndices(i);
             ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
-            dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+            dest[destShape.get1DIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
         }
     }
 
@@ -89,7 +89,7 @@ public final class DenseRingHermitianTranspose {
         for(int i=0, size=src.length; i<size; i++) {
             destIndices = shape.getNdIndices(i);
             ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-            dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
+            dest[destShape.get1DIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
         }
     }
 
@@ -116,7 +116,7 @@ public final class DenseRingHermitianTranspose {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.swap(destIndices, axis1, axis2); // Compute destination indices.
-                dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
+                dest[destShape.get1DIndex(destIndices)] = src[i].conj(); // Apply transpose for the element
             }
         });
     }
@@ -146,7 +146,7 @@ public final class DenseRingHermitianTranspose {
             for(int i=startIdx; i<endIdx; i++) {
                 int[] destIndices = shape.getNdIndices(i);
                 ArrayUtils.permuteUnsafe(destIndices, axes); // Compute destination indices.
-                dest[destShape.getFlatIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
+                dest[destShape.get1DIndex(destIndices)] = src[i].conj(); // Apply conjugate transpose for the element
             }
         });
     }

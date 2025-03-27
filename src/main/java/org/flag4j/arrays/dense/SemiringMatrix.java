@@ -24,9 +24,9 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.BoolSemiring;
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.BoolSemiring;
+import org.flag4j.numbers.Field;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringMatrix;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
@@ -76,7 +76,7 @@ import java.util.Arrays;
  * SemiringMatrix<BoolSemiring> transpose = matrix.T();
  * }</pre>
  *
- * <p>Using {@link org.flag4j.algebraic_structures.Complex128 128-bit complex numbers}:
+ * <p>Using {@link org.flag4j.numbers.Complex128 128-bit complex numbers}:
  * <pre>{@code
  * // Constructing a complex matrix from a 2D array of complex numbers
  * Complex128[][] complexData = {

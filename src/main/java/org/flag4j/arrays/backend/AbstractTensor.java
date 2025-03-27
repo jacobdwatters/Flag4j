@@ -139,6 +139,13 @@ public abstract class AbstractTensor<T extends AbstractTensor<T, U, V>, U, V>
 
 
     /**
+     * Gets the size of the 1D data array backing this tensor.
+     * @return The size of the 1D data array backing this tensor.
+     */
+    public abstract int dataLength();
+
+
+    /**
      * Gets the total number of data in this tensor.
      * @return The total number of data in this tensor.
      */

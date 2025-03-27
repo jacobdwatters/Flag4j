@@ -57,6 +57,9 @@ public final class SparseElementSearch {
      *         and only if the key is found.
      */
     public static int matrixBinarySearch(int[] rowIndices, int[] colIndices, int rowKey, int colKey) {
+        if(rowKey < 0 || colKey < 0)
+            throw new IllegalArgumentException("rowKey and colKey must be non-negative but got " + rowKey + " and " + colKey + ".");
+
         int[] rowStartEnd = matrixFindRowStartEnd(rowIndices, rowKey);
         int rowStart = rowStartEnd[0];
         int rowEnd = rowStartEnd[1];

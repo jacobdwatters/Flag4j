@@ -24,10 +24,10 @@
 
 package org.flag4j.util;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
-import org.flag4j.algebraic_structures.RealFloat32;
-import org.flag4j.algebraic_structures.RealFloat64;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
+import org.flag4j.numbers.RealFloat32;
+import org.flag4j.numbers.RealFloat64;
 
 /**
  * A class which provides simple utility methods for {@link String strings}.

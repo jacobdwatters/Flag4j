@@ -24,18 +24,18 @@
 
 package org.flag4j.arrays.backend.semiring_arrays;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseTensorData;
 import org.flag4j.arrays.backend.AbstractTensor;
+import org.flag4j.arrays.sparse.SparseValidation;
 import org.flag4j.linalg.ops.common.semiring_ops.CompareSemiring;
 import org.flag4j.linalg.ops.sparse.SparseElementSearch;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.*;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringTensorOps;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 import java.math.BigDecimal;
@@ -65,7 +65,7 @@ import java.util.function.BinaryOperator;
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
- *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
+ *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the nD
  *     index of {@code data[i]}.
  *     </li>
  * </ul>
@@ -110,20 +110,43 @@ public abstract class AbstractCooSemiringTensor<T extends AbstractCooSemiringTen
      */
     protected AbstractCooSemiringTensor(Shape shape, V[] data, int[][] indices) {
         super(shape, data);
-        if(indices.length != 0 && shape.getRank() != indices[0].length) {
-            throw new LinearAlgebraException(
-                    "Invalid indices array: expecting array shape [nnz]["
-                            + shape.getRank() + "] but got [nnz][" + indices[0].length + "].");
-        }
+        SparseValidation.validateCoo(shape, data.length, indices);
 
-        ValidateParameters.ensureArrayLengthsEq(data.length, indices.length);
-        ValidateParameters.validateTensorIndices(shape, indices);
         this.indices = indices;
         this.nnz = data.length;
         sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
 
         // Attempt to set the zero element for the semiring.
         this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO tensors.
+     * @param shape The shape of the tensor to construct.
+     * @param data The non-zero data of this tensor.
+     * @param indices The indices of the non-zero data.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    protected AbstractCooSemiringTensor(Shape shape, V[] data, int[][] indices, Object dummy) {
+        super(shape, data);
+
+        this.indices = indices;
+        this.nnz = data.length;
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
+
+        // Attempt to set the zero element for the semiring.
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+    }
+
+    /**
+     * Gets the size of the 1D data array backing this tensor.
+     *
+     * @return The size of the 1D data array backing this tensor.
+     */
+    @Override
+    public int dataLength() {
+        return data.length;
     }
 
 

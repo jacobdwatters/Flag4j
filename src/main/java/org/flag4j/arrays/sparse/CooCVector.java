@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractCooFieldVector;
 import org.flag4j.arrays.dense.CMatrix;
@@ -35,9 +34,9 @@ import org.flag4j.linalg.ops.common.complex.Complex128Ops;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.real_complex.RealComplexSparseVectorOps;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
-import org.flag4j.util.ValidateParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +68,6 @@ import java.util.List;
  * <p>If indices need to be sorted for any reason, call {@link #sortIndices()}.
  */
 public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooCMatrix, CMatrix, Complex128> {
-
 
     /**
      * Creates a tensor with the specified data and shape.
@@ -153,6 +151,49 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
     }
 
 
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO vectors.
+     * @param shape Shape of the COO vector to construct.
+     * @param data The non-zero data of this vector.
+     * @param indices The indices of the non-zero values.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooCVector(Shape shape, Complex128[] data, int[] indices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO vector in this manner is unsafe.
+        super(shape, data, indices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO vector which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param size The full size of the COO vector.
+     * @param data The non-zero entries of the COO vector.
+     * @param indices The non-zero indices of the COO vector.
+     * @return A COO vector constructed from the provided parameters.
+     */
+    public static CooCVector unsafeMake(int size, Complex128[] data, int[] indices) {
+        return new CooCVector(new Shape(size), data, indices, null);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO vector which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param Shape Full shape of the COO vector. Assumed to be rank 1 (this is <em>not</em> enforced).
+     * @param data The non-zero entries of the COO vector.
+     * @param indices The non-zero indices of the COO vector.
+     * @return A COO vector constructed from the provided parameters.
+     */
+    public static CooCVector unsafeMake(Shape shape, Complex128[] data, int[] indices) {
+        return new CooCVector(shape, data, indices, null);
+    }
+
+
     @Override
     public Complex128[] makeEmptyDataArray(int length) {
         return new Complex128[length];
@@ -184,8 +225,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      */
     @Override
     public CVector makeLikeDenseTensor(Shape shape, Complex128... entries) {
-        ValidateParameters.ensureRank(shape, 1);
-        return new CVector(entries);
+        return new CVector(shape, entries);
     }
 
 
@@ -259,7 +299,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
     @Override
     public CooCTensor toTensor() {
         int[][] tIndices = RealDenseTranspose.standardIntMatrix(new int[][]{indices.clone()});
-        return new CooCTensor(shape, data.clone(), tIndices);
+        return CooCTensor.unsafeMake(shape, data.clone(), tIndices);
     }
 
 
@@ -282,7 +322,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * ignored.
      */
     public CooVector toReal() {
-        return new CooVector(size, Complex128Ops.toReal(data), indices.clone());
+        return CooVector.unsafeMake(size, Complex128Ops.toReal(data), indices.clone());
     }
 
 
@@ -310,7 +350,7 @@ public class CooCVector extends AbstractCooFieldVector<CooCVector, CVector, CooC
      * @return A new vector containing the data of this vector rounded to the specified precision.
      */
     public CooCVector round(int precision) {
-        return new CooCVector(shape, Complex128Ops.round(data, precision), indices.clone());
+        return unsafeMake(shape, Complex128Ops.round(data, precision), indices.clone());
     }
 
 

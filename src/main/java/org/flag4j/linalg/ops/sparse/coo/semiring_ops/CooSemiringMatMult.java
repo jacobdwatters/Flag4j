@@ -24,10 +24,10 @@
 
 package org.flag4j.linalg.ops.sparse.coo.semiring_ops;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.concurrency.ThreadManager;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
+import org.flag4j.numbers.Semiring;
 
 import java.util.Arrays;
 import java.util.List;

@@ -24,8 +24,8 @@
 
 package org.flag4j.linalg.ops.dense_sparse.csr.semiring_ops;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCsrSemiringMatrix;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringMatrix;

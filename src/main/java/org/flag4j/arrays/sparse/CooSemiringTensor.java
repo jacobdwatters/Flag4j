@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringTensor;
 import org.flag4j.arrays.dense.SemiringTensor;
@@ -33,6 +32,7 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -154,6 +154,34 @@ public class CooSemiringTensor<T extends Semiring<T>> extends AbstractCooSemirin
      */
     public CooSemiringTensor(Shape shape, List<T> data, List<int[]> indices) {
         super(shape, (T[]) data.toArray(), indices.toArray(new int[0][]));
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing COO tensors.
+     * @param shape The shape of the tensor to construct.
+     * @param data The non-zero data of this tensor.
+     * @param indices The indices of the non-zero data.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooSemiringTensor(Shape shape, T[] data, int[][] indices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO tensor in this manner is unsafe.
+        super(shape, data, indices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO tensor which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO tensor.
+     * @param data The non-zero data of the COO tensor.
+     * @param indices The non-zero indices of the COO tensor.
+     * @return A COO tensor constructed from the provided parameters.
+     */
+    public static <T extends Semiring<T>> CooSemiringTensor<T> unsafeMake(Shape shape, T[] data, int[][] indices) {
+        return new CooSemiringTensor(shape, data, indices, null);
     }
 
 

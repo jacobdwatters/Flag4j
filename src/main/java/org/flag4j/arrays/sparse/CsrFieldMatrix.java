@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.AbstractTensor;
@@ -36,6 +35,8 @@ import org.flag4j.io.PrettyPrint;
 import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Field;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -124,15 +125,15 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero data of this CSR matrix.
+     * @param data The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    public CsrFieldMatrix(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
-        super(shape, entries, rowPointers, colIndices);
+    public CsrFieldMatrix(Shape shape, T[] data, int[] rowPointers, int[] colIndices) {
+        super(shape, data, rowPointers, colIndices);
     }
 
 
@@ -140,15 +141,15 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero data of this CSR matrix.
+     * @param data The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    public CsrFieldMatrix(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
-        super(shape, (T[]) entries.toArray(new Field[entries.size()]),
+    public CsrFieldMatrix(Shape shape, List<T> data, List<Integer> rowPointers, List<Integer> colIndices) {
+        super(shape, (T[]) data.toArray(new Field[data.size()]),
                 ArrayConversions.fromIntegerList(rowPointers),
                 ArrayConversions.fromIntegerList(colIndices));
     }
@@ -166,18 +167,48 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
 
     /**
+     * Constructor useful for avoiding parameter validation while constructing CSR matrices.
+     * @param shape The shape of the matrix to construct.
+     * @param data The non-zero data of this COO matrix.
+     * @param rowPointers The non-zero row pointers of the CSR matrix.
+     * @param colIndices The non-zero column indices of the CSR matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CsrFieldMatrix(Shape shape, T[] data, int[] rowPointers, int[] colIndices, Object dummy) {
+        super(shape, data, rowPointers, colIndices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a CSR matrix which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowPointers The non-zero row pointers of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A COO matrix constructed from the provided parameters.
+     */
+    public static <T extends Field<T>> CsrFieldMatrix<T> unsafeMake(
+            Shape shape, Complex128[] data, int[] rowPointers, int[] colIndices) {
+        return new CsrFieldMatrix(shape, data, rowPointers, colIndices, null);
+    }
+
+
+    /**
      * Constructs a sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      *
      * @param shape Shape of the matrix.
-     * @param entries Non-zero data of the CSR matrix.
+     * @param data Non-zero data of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
      * @return A sparse CSR tensor of the same type as this tensor with the specified non-zero data and indices.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries, int[] rowPointers, int[] colIndices) {
-        return new CsrFieldMatrix<>(shape, entries, rowPointers, colIndices);
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] data, int[] rowPointers, int[] colIndices) {
+        return new CsrFieldMatrix<>(shape, data, rowPointers, colIndices);
     }
 
 
@@ -185,15 +216,15 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * Constructs a CSR matrix with the specified shape, non-zero data, and non-zero indices.
      *
      * @param shape Shape of the matrix.
-     * @param entries Non-zero values of the CSR matrix.
+     * @param data Non-zero values of the CSR matrix.
      * @param rowPointers Row pointers for the non-zero values in the CSR matrix.
      * @param colIndices Non-zero column indices of the CSR matrix.
      *
      * @return A CSR matrix with the specified shape, non-zero data, and non-zero indices.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, List<T> entries, List<Integer> rowPointers, List<Integer> colIndices) {
-        return new CsrFieldMatrix<T>(shape, (List<T>) entries, rowPointers, colIndices);
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, List<T> data, List<Integer> rowPointers, List<Integer> colIndices) {
+        return new CsrFieldMatrix<T>(shape, (List<T>) data, rowPointers, colIndices);
     }
 
 
@@ -201,14 +232,14 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * Constructs a dense matrix which is of a similar type to this sparse CSR matrix.
      *
      * @param shape Shape of the dense matrix.
-     * @param entries Entries of the dense matrix.
+     * @param data Entries of the dense matrix.
      *
      * @return A dense matrix which is of a similar type to this sparse CSR matrix with the specified {@code shape}
      * and {@code data}.
      */
     @Override
-    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, T[] entries) {
-        return new FieldMatrix<>(shape, entries);
+    public FieldMatrix<T> makeLikeDenseTensor(Shape shape, T[] data) {
+        return new FieldMatrix<>(shape, data);
     }
 
 
@@ -218,15 +249,15 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * to a CSR matrix. To convert this matrix to a sparse COO matrix use {@link #toCoo()}.
      *
      * @param shape Shape of the COO matrix.
-     * @param entries Non-zero data of the COO matrix.
+     * @param data Non-zero data of the COO matrix.
      * @param rowIndices Non-zero row indices of the sparse COO matrix.
      * @param colIndices Non-zero column indices of the Sparse COO matrix.
      *
      * @return A sparse COO matrix of a similar type to this sparse CSR matrix.
      */
     @Override
-    public CooFieldMatrix<T> makeLikeCooMatrix(Shape shape, T[] entries, int[] rowIndices, int[] colIndices) {
-        return new CooFieldMatrix<>(shape, entries, rowIndices, colIndices);
+    public CooFieldMatrix<T> makeLikeCooMatrix(Shape shape, T[] data, int[] rowIndices, int[] colIndices) {
+        return new CooFieldMatrix<>(shape, data, rowIndices, colIndices);
     }
 
 
@@ -236,14 +267,14 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * the same non-zero indices as this tensor.
      *
      * @param shape Shape of the tensor to construct.
-     * @param entries Entries of the tensor to construct.
+     * @param data Entries of the tensor to construct.
      *
      * @return A tensor of the same type and with the same non-zero indices as this tensor with the given the {@code shape} and
      * {@code data}.
      */
     @Override
-    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] entries) {
-        return new CsrFieldMatrix<>(shape, entries, rowPointers.clone(), colIndices.clone());
+    public CsrFieldMatrix<T> makeLikeTensor(Shape shape, T[] data) {
+        return new CsrFieldMatrix<>(shape, data, rowPointers.clone(), colIndices.clone());
     }
 
 
@@ -401,13 +432,13 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
     public CooFieldVector<T> getRow(int rowIdx) {
         ValidateParameters.validateArrayIndices(numRows, rowIdx);
         int start = rowPointers[rowIdx];
-        T[] destEntries = (T[]) new Field[rowPointers[rowIdx + 1]-start];
-        int[] destIndices = new int[destEntries.length];
+        T[] destData = (T[]) new Field[rowPointers[rowIdx + 1]-start];
+        int[] destIndices = new int[destData.length];
 
-        System.arraycopy(data, start, destEntries, 0, destEntries.length);
-        System.arraycopy(colIndices, start, destIndices, 0, destEntries.length);
+        System.arraycopy(data, start, destData, 0, destData.length);
+        System.arraycopy(colIndices, start, destIndices, 0, destData.length);
 
-        return new CooFieldVector<T>(numCols, destEntries, destIndices);
+        return new CooFieldVector<T>(numCols, destData, destIndices);
     }
 
 
@@ -482,7 +513,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
         ValidateParameters.validateArrayIndices(numCols, colIdx);
         ValidateParameters.validateArrayIndices(numRows, rowStart, rowEnd-1);
 
-        List<T> destEntries = new ArrayList<>();
+        List<T> destData = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
 
         for(int i=rowStart; i<rowEnd; i++) {
@@ -491,14 +522,14 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
 
             for(int j=start; j<stop; j++) {
                 if(colIndices[j]==colIdx) {
-                    destEntries.add(data[j]);
+                    destData.add(data[j]);
                     destIndices.add(i);
                     break; // Should only be a single entry with this row and column index.
                 }
             }
         }
 
-        return new CooFieldVector<T>(numRows, destEntries, destIndices);
+        return new CooFieldVector<T>(numRows, destData, destIndices);
     }
 
 
@@ -508,7 +539,7 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
      * @return A vector containing the diagonal data of this matrix.
      */
     public CooFieldVector<T> getDiag() {
-        List<T> destEntries = new ArrayList<>();
+        List<T> destData = new ArrayList<>();
         List<Integer> destIndices = new ArrayList<>();
 
         for(int i=0; i<numRows; i++) {
@@ -517,12 +548,12 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
             int loc = Arrays.binarySearch(colIndices, start, stop, i); // Search for matching column index within row.
 
             if(loc >= 0) {
-                destEntries.add(data[loc]);
+                destData.add(data[loc]);
                 destIndices.add(i);
             }
         }
 
-        return new CooFieldVector<T>(Math.min(numRows, numCols), destEntries, destIndices);
+        return new CooFieldVector<T>(Math.min(numRows, numCols), destData, destIndices);
     }
 
 
@@ -591,30 +622,6 @@ public class CsrFieldMatrix<T extends Field<T>> extends AbstractCsrFieldMatrix<C
     public CsrFieldMatrix<T> dropZeros() {
         SparseMatrixData<T> dest = SparseUtils.dropZerosCsr(shape, data, rowPointers, colIndices);
         return new CooFieldMatrix<>(dest.shape(), dest.data(), dest.rowData(), dest.colData()).toCsr();
-    }
-
-
-    /**
-     * Coalesces this sparse CSR matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
-     * @return A new coalesced sparse CSR matrix which is equivalent to this CSR matrix.
-     * @see #coalesce(BinaryOperator)
-     */
-    public CsrFieldMatrix<T> coalesce() {
-        return toCoo().coalesce().toCsr();
-    }
-
-
-    /**
-     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
-     * @param aggregator Custom aggregation function to combine multiple.
-     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
-     * @see #coalesce()
-     */
-    public CsrFieldMatrix<T> coalesce(BinaryOperator<T> aggregator) {
-        return toCoo().coalesce(aggregator).toCsr();
     }
 
 

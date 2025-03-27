@@ -23,6 +23,6 @@
  */
 
 /**
- * Implementations of operations on {@link org.flag4j.algebraic_structures.Field Field} dense array objects.
+ * Implementations of operations on {@link org.flag4j.numbers.Field Field} dense array objects.
  */
 package org.flag4j.linalg.ops.dense.field_ops;

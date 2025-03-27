@@ -117,7 +117,7 @@ public final class DenseConcat {
      * 
      *
      * @param src1 Entries of the first vector. Must be the same size as {@code src2}.
-     * @param src2 Entries of teh second vector. Must be the same size as {@code src1}.
+     * @param src2 Entries of the second vector. Must be the same size as {@code src1}.
      * @param axis Axis along which to stack vectors. Must be 1 or 0.
      * <ul>
      *     <li>If {@code axis=0}, then vectors are stacked as if they are row vectors. </li>

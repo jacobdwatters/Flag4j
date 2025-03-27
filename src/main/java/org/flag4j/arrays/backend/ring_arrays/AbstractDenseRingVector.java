@@ -24,12 +24,12 @@
 
 package org.flag4j.arrays.backend.ring_arrays;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.VectorMixin;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractDenseSemiringVector;
 import org.flag4j.linalg.VectorNorms;
 import org.flag4j.linalg.ops.dense.ring_ops.DenseRingTensorOps;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.TensorShapeException;
 

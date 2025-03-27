@@ -23,7 +23,7 @@
  */
 
 /**
- * Implementations of operations on two {@link org.flag4j.algebraic_structures.Field Field} array objects. Operations are agnostic to
+ * Implementations of operations on two {@link org.flag4j.numbers.Field Field} array objects. Operations are agnostic to
  * sparsity/density.
  */
 package org.flag4j.linalg.ops.common.field_ops;

@@ -25,17 +25,18 @@
 package org.flag4j.arrays.backend.semiring_arrays;
 
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseVectorData;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.VectorMixin;
+import org.flag4j.arrays.sparse.SparseValidation;
 import org.flag4j.linalg.ops.common.semiring_ops.AggregateSemiring;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.coo.CooConcat;
 import org.flag4j.linalg.ops.sparse.coo.CooDataSorter;
 import org.flag4j.linalg.ops.sparse.coo.CooGetSet;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringVectorOps;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.flag4j.util.exceptions.TensorShapeException;
@@ -113,30 +114,53 @@ public abstract class AbstractCooSemiringVector<
      * Creates a sparse COO semiring vector with the specified data and shape.
      *
      * @param shape Shape of this vector. Must be rank-1.
-     * @param entries Non-zero entries of this COO vector.
+     * @param data Non-zero data of this COO vector.
      * @param indices Non-zero indices of this COO vector.
      */
-    protected AbstractCooSemiringVector(Shape shape, Y[] entries, int[] indices) {
-        super(shape, entries);
+    protected AbstractCooSemiringVector(Shape shape, Y[] data, int[] indices) {
+        super(shape, data);
         ValidateParameters.ensureRank(shape, 1);
-        ValidateParameters.validateArrayIndices(shape.get(0), indices);
-        if(entries.length != indices.length) {
-            throw new IllegalArgumentException("data and indices arrays of a COO vector must have the same length but got " +
-                    "lengths" + entries.length + " and " + indices.length + ".");
-        }
-
-        this.size = shape.totalEntriesIntValueExact();
-        if(entries.length > size) {
-            throw new IllegalArgumentException("The number of data cannot be greater than the size of the vector but but got " +
-                    "data.length=" + entries.length + " and size=" + size + ".");
-        }
+        this.size = shape.get(0);
+        SparseValidation.validateCoo(size, data.length, indices);
 
         this.indices = indices;
-        this.nnz = entries.length;
+        this.nnz = data.length;
         sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
 
         // Attempt to set the zero element for the semiring.
-        this.zeroElement = (entries.length > 0 && entries[0] != null) ? entries[0].getZero() : null;
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+    }
+
+
+    /**
+     * Creates a tensor with the specified data and shape without performing <em>any</em> validation on the parameters.
+     *
+     * @param shape Shape of this tensor.
+     * @param data Non-zero entries of the tensor.
+     * @param indices Non-zero entries of the tensor.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant.
+     */
+    protected AbstractCooSemiringVector(Shape shape, Y[] data, int[] indices, Object dummy) {
+        super(shape, data);
+
+        this.size = shape.get(0);
+        this.indices = indices;
+        this.nnz = data.length;
+        sparsity = BigDecimal.valueOf(nnz).divide(new BigDecimal(shape.totalEntries()), RoundingMode.HALF_UP).doubleValue();
+
+        // Attempt to set the zero element for the semiring.
+        this.zeroElement = (data.length > 0 && data[0] != null) ? data[0].getZero() : null;
+    }
+
+
+    /**
+     * Gets the size of the 1D data array backing this tensor.
+     *
+     * @return The size of the 1D data array backing this tensor.
+     */
+    @Override
+    public int dataLength() {
+        return data.length;
     }
 
 

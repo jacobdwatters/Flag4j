@@ -25,13 +25,13 @@
 package org.flag4j.arrays.backend.ring_arrays;
 
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCsrSemiringMatrix;
 import org.flag4j.linalg.ops.sparse.csr.CsrOps;
 import org.flag4j.linalg.ops.sparse.csr.ring_ops.CsrRingProperties;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.exceptions.TensorShapeException;
 
 
@@ -77,15 +77,32 @@ public abstract class AbstractCsrRingMatrix<T extends AbstractCsrRingMatrix<T, U
      * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
      *
      * @param shape Shape of this tensor.
-     * @param entries The non-zero data of this CSR matrix.
+     * @param data The non-zero data of this CSR matrix.
      * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
      * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
      * values in row {@code i}.
      * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
      * {@code data.length == colData.length}.
      */
-    protected AbstractCsrRingMatrix(Shape shape, W[] entries, int[] rowPointers, int[] colIndices) {
-        super(shape, entries, rowPointers, colIndices);
+    protected AbstractCsrRingMatrix(Shape shape, W[] data, int[] rowPointers, int[] colIndices) {
+        super(shape, data, rowPointers, colIndices);
+    }
+
+
+    /**
+     * Creates a sparse CSR matrix with the specified {@code shape}, non-zero data, row pointers, and non-zero column indices.
+     *
+     * @param shape Shape of this tensor.
+     * @param data The non-zero data of this CSR matrix.
+     * @param rowPointers The row pointers for the non-zero values in the sparse CSR matrix.
+     * <p>{@code rowPointers[i]} indicates the starting index within {@code data} and {@code colData} of all
+     * values in row {@code i}.
+     * @param colIndices Column indices for each non-zero value in this sparse CSR matrix. Must satisfy
+     * {@code data.length == colData.length}.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    protected AbstractCsrRingMatrix(Shape shape, W[] data, int[] rowPointers, int[] colIndices, Object dummy) {
+        super(shape, data, rowPointers, colIndices, dummy);
     }
 
 

@@ -24,9 +24,9 @@
 
 package org.flag4j.arrays;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Semiring;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Field;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.smart_visitors.*;
 import org.flag4j.arrays.dense.CMatrix;

@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.backend.field_arrays;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingTensor;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCooSemiringTensor;
@@ -32,6 +31,7 @@ import org.flag4j.arrays.sparse.CooTensor;
 import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.sparse.coo.ring_ops.CooRingHermTranspose;
+import org.flag4j.numbers.Field;
 import org.flag4j.util.ArrayUtils;
 
 
@@ -56,7 +56,7 @@ import org.flag4j.util.ArrayUtils;
  *     row-major format (i.e. last index increased fastest) but often this is not explicitly verified.
  *
  *     <p>The {@link #indices} array has shape {@code (nnz, rank)} where {@link #nnz} is the number of non-zero data in this
- *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the ND
+ *     sparse tensor and {@code rank} is the {@link #getRank() tensor rank} of the tensor. This means {@code indices[i]} is the nD
  *     index of {@code data[i]}.
  *     </li>
  * </ul>
@@ -84,6 +84,19 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
 
 
     /**
+     * Constructor useful for avoiding parameter validation while constructing COO tensors.
+     * @param shape The shape of the tensor to construct.
+     * @param data The non-zero data of this tensor.
+     * @param indices The indices of the non-zero data.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    protected AbstractCooFieldTensor(Shape shape, V[] data, int[][] indices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO tensor in this manner is unsafe.
+        super(shape, data, indices, dummy);
+    }
+
+
+    /**
      * Computes the element-wise absolute value of this tensor.
      *
      * @return The element-wise absolute value of this tensor.
@@ -92,7 +105,7 @@ public abstract class AbstractCooFieldTensor<T extends AbstractCooFieldTensor<T,
     public CooTensor abs() {
         double[] abs = new double[data.length];
         RingOps.abs(data, abs);
-        return new CooTensor(getShape(), abs, ArrayUtils.deepCopy2D(indices, null));
+        return CooTensor.unsafeMake(getShape(), abs, ArrayUtils.deepCopy2D(indices, null));
     }
 
 

@@ -58,6 +58,17 @@ public abstract class AbstractDoubleTensor<T extends AbstractDoubleTensor<T>>
 
 
     /**
+     * Gets the size of the 1D data array backing this tensor.
+     *
+     * @return The size of the 1D data array backing this tensor.
+     */
+    @Override
+    public int dataLength() {
+        return data.length;
+    }
+
+
+    /**
      * Rounds each entry of this tensor to the nearest whole number.
      *
      * @return A copy of this tensor with each entry rounded to the nearest whole number.

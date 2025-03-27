@@ -24,8 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Field;
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCsrRingMatrix;
@@ -38,6 +36,9 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.sparse.SparseUtils;
 import org.flag4j.linalg.ops.sparse.csr.semiring_ops.SemiringCsrMatMult;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Field;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ValidateParameters;
 import org.flag4j.util.exceptions.LinearAlgebraException;
@@ -45,7 +46,6 @@ import org.flag4j.util.exceptions.LinearAlgebraException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BinaryOperator;
 
 public class CsrRingMatrix<T extends Ring<T>> extends AbstractCsrRingMatrix<
         CsrRingMatrix<T>, RingMatrix<T>, CooRingVector<T>, T> {
@@ -95,6 +95,36 @@ public class CsrRingMatrix<T extends Ring<T>> extends AbstractCsrRingMatrix<
     public CsrRingMatrix(Shape shape, T ringElement) {
         super(shape, (T[]) new Field[0], new int[0], new int[0]);
         setZeroElement(ringElement.getZero());
+    }
+
+
+    /**
+     * Constructor useful for avoiding parameter validation while constructing CSR matrices.
+     * @param shape The shape of the matrix to construct.
+     * @param data The non-zero data of this COO matrix.
+     * @param rowPointers The non-zero row pointers of the CSR matrix.
+     * @param colIndices The non-zero column indices of the CSR matrix.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CsrRingMatrix(Shape shape, T[] data, int[] rowPointers, int[] colIndices, Object dummy) {
+        super(shape, data, rowPointers, colIndices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a CSR matrix which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO matrix.
+     * @param data The non-zero data of the COO matrix.
+     * @param rowPointers The non-zero row pointers of the COO matrix.
+     * @param colIndices The non-zero column indices of the COO matrix.
+     * @return A COO matrix constructed from the provided parameters.
+     */
+    public static <T extends Ring<T>> CsrRingMatrix<T> unsafeMake(
+            Shape shape, Complex128[] data, int[] rowPointers, int[] colIndices) {
+        return new CsrRingMatrix(shape, data, rowPointers, colIndices, null);
     }
 
 
@@ -406,30 +436,6 @@ public class CsrRingMatrix<T extends Ring<T>> extends AbstractCsrRingMatrix<
     public CsrRingMatrix<T> dropZeros() {
         SparseMatrixData<T> dest = SparseUtils.dropZerosCsr(shape, data, rowPointers, colIndices);
         return new CooRingMatrix<>(dest.shape(), dest.data(), dest.rowData(), dest.colData()).toCsr();
-    }
-
-
-    /**
-     * Coalesces this sparse CSR matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by summing duplicated data. If another form of aggregation other
-     * than summing is desired, use {@link #coalesce(BinaryOperator)}.
-     * @return A new coalesced sparse CSR matrix which is equivalent to this CSR matrix.
-     * @see #coalesce(BinaryOperator)
-     */
-    public CsrRingMatrix<T> coalesce() {
-        return toCoo().coalesce().toCsr();
-    }
-
-
-    /**
-     * Coalesces this sparse COO matrix. An uncoalesced matrix is a sparse matrix with multiple data for a single index. This
-     * method will ensure that each index only has one non-zero value by aggregating duplicated data using {@code aggregator}.
-     * @param aggregator Custom aggregation function to combine multiple.
-     * @return A new coalesced sparse COO matrix which is equivalent to this COO matrix.
-     * @see #coalesce()
-     */
-    public CsrRingMatrix<T> coalesce(BinaryOperator<T> aggregator) {
-        return toCoo().coalesce(aggregator).toCsr();
     }
 
 

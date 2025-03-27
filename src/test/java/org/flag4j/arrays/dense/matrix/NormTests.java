@@ -4,7 +4,6 @@ import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.Matrix;
 import org.flag4j.linalg.MatrixNorms;
 import org.flag4j.util.Flag4jConstants;
-import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -269,7 +268,7 @@ class NormTests {
         assertEquals(0, MatrixNorms.inducedNorm(a, Double.NEGATIVE_INFINITY), 1e-16);
 
         // ---------------- sub-case 8 ----------------
-        assertThrows(LinearAlgebraException.class, () -> MatrixNorms.inducedNorm(a, 2.2));
-        assertThrows(LinearAlgebraException.class, () -> MatrixNorms.inducedNorm(a, 15.332));
+        assertThrows(IllegalArgumentException.class, () -> MatrixNorms.inducedNorm(a, 2.2));
+        assertThrows(IllegalArgumentException.class, () -> MatrixNorms.inducedNorm(a, 15.332));
     }
 }

@@ -24,13 +24,13 @@
 
 package org.flag4j.linalg.ops.sparse;
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.*;
 import org.flag4j.arrays.backend.semiring_arrays.AbstractCsrSemiringMatrix;
 import org.flag4j.arrays.sparse.CooMatrix;
 import org.flag4j.arrays.sparse.CsrFieldMatrix;
 import org.flag4j.arrays.sparse.CsrMatrix;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.*;
@@ -61,7 +61,7 @@ public final class SparseUtils {
         int[][] destIndices = new int[indices.length][1];
 
         for(int i=0, size=indices.length; i<size; i++)
-            destIndices[i][0] = shape.getFlatIndex(indices[i]);
+            destIndices[i][0] = shape.get1DIndex(indices[i]);
 
         return destIndices;
     }
@@ -80,7 +80,7 @@ public final class SparseUtils {
         int[][] destIndices = new int[indices.length][indices[0].length];
 
         for(int i=0, size=indices.length; i<size; i++)
-            destIndices[i][axis] = shape.getFlatIndex(indices[i]);
+            destIndices[i][axis] = shape.get1DIndex(indices[i]);
 
         return destIndices;
     }

@@ -24,8 +24,6 @@
 
 package org.flag4j.rng.distributions;
 
-import org.flag4j.rng.RandomComplex;
-
 import java.util.Random;
 
 
@@ -66,7 +64,7 @@ public class RealUniform extends Distribution<Double, Random> {
      * @param min Lower bound of the uniform distribution (inclusive).
      * @param max Upper bound of the uniform distribution (exclusive).
      */
-    public RealUniform(RandomComplex rng, double min, double max) {
+    public RealUniform(Random rng, double min, double max) {
         super(rng);
 
         this.min = min;

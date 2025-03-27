@@ -24,7 +24,7 @@
 
 package org.flag4j.linalg.ops.sparse.csr;
 
-import org.flag4j.algebraic_structures.Field;
+import org.flag4j.numbers.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.SparseMatrixData;
 import org.flag4j.linalg.ops.sparse.SparseUtils;

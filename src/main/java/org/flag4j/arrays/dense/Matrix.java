@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.AbstractTensor;
 import org.flag4j.arrays.backend.MatrixMixin;
@@ -32,6 +31,7 @@ import org.flag4j.arrays.backend.primitive_arrays.AbstractDenseDoubleTensor;
 import org.flag4j.arrays.backend.smart_visitors.MatrixVisitor;
 import org.flag4j.arrays.sparse.*;
 import org.flag4j.io.PrettyPrint;
+import org.flag4j.linalg.MatrixNorms;
 import org.flag4j.linalg.decompositions.svd.RealSVD;
 import org.flag4j.linalg.ops.MatrixMultiplyDispatcher;
 import org.flag4j.linalg.ops.RealDenseMatrixMultiplyDispatcher;
@@ -44,17 +44,19 @@ import org.flag4j.linalg.ops.dense.real.RealDenseProperties;
 import org.flag4j.linalg.ops.dense.real.RealDenseSetOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemDiv;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseElemMult;
-import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseMatMult;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.real.RealDenseSparseMatrixOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_complex.RealComplexDenseCooMatOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatMult;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooMatrixOps;
-import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatrixMultiplication;
+import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseMatMult;
 import org.flag4j.linalg.ops.dense_sparse.csr.real.RealCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_complex.RealComplexCsrDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.csr.real_field_ops.RealFieldDenseCsrMatMult;
+import org.flag4j.linalg.ops.dispatch.ReDeMatMultDispatcher;
+import org.flag4j.linalg.ops.dispatch.ReDeMatVecMultDispatcher;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
@@ -634,10 +636,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Matrix mult(Matrix b) {
-        double[] entries = RealDenseMatrixMultiplyDispatcher.dispatch(this, b);
-        Shape shape = new Shape(this.numRows, b.numCols);
-
-        return new Matrix(shape, entries);
+        return ReDeMatMultDispatcher.dispatch(this, b);
     }
 
 
@@ -1405,9 +1404,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      */
     @Override
     public Vector mult(Vector b) {
-        ValidateParameters.ensureMatMultShapes(this.shape, new Shape(b.size, 1));
-        double[] entries = MatrixMultiplyDispatcher.dispatch(this, b);
-        return new Vector(entries);
+        return ReDeMatVecMultDispatcher.dispatch(this, b);
     }
 
 
@@ -1807,7 +1804,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @throws org.flag4j.util.exceptions.TensorShapeException If {@code this.numCols != b.numRows}.
      */
     public Matrix mult(CsrMatrix b) {
-        return RealCsrDenseMatrixMultiplication.standard(this, b);
+        return RealCsrDenseMatMult.standard(this, b);
     }
 
 
@@ -1852,11 +1849,7 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
      * @return The matrix-vector product of this matrix and the vector {@code b}.
      */
     public CVector mult(CVector b) {
-        ValidateParameters.ensureMatMultShapes(shape, new Shape(b.size, 1));
-        Complex128[] dest = new Complex128[numRows];
-        RealFieldDenseMatMult.standardVector(data, shape, b.data, b.shape, dest);
-
-        return new CVector(dest);
+        return new CVector(MatrixMultiplyDispatcher.dispatch(this, b));
     }
 
 
@@ -2005,6 +1998,80 @@ public class Matrix extends AbstractDenseDoubleTensor<Matrix>
     @Override
     public Matrix H() {
         return T();
+    }
+
+
+    /**
+     * <p>Computes the Frobenius (or <span class="latex-inline">L<sub>2, 2</sub></span>) norm of this matrix.
+     *
+     * <p>The Frobenius norm is defined as the square root of the sum of absolute squares of all entries in the matrix.
+     *
+     * @return the Frobenius of this tensor.
+     */
+    public double norm() {
+        return MatrixNorms.norm(this);
+    }
+
+
+    /**
+     * <p>Computes the matrix operator norm of this matrix "induced" by the vector p-norm.
+     * Specifically, this method computes the operator norm of the matrix as:
+     * <span class="latex-replace"><pre>
+     *     ||A||<sub>p</sub> = sup<sub>x&ne;0</sub>(||Ax||<sub>p</sub> / ||x||<sub>p</sub>).</pre></span>
+     *
+     * <!-- LATEX: \[ ||A||_p = \sup_{x \ne 0} \cfrac{||Ax||_p}{||x||_p} \] -->
+     *
+     * <p>This method supports a limited set of {@code p} values which yield simple formulas. When {@code p < 1}, the result this method
+     * returns is not a true mathematical norm. However, these values may still be useful for numerical purposes.
+     * <ul>
+     *     <li>{@code p=1}: The maximum absolute column sum.</li>
+     *     <li>{@code p=-1}: The minimum absolute column sum.</li>
+     *     <li>{@code p=2}: The spectral norm. Equivalent to the largest singular value of the matrix.</li>
+     *     <li>{@code p=-2}: The smallest singular value of the matrix.</li>
+     *     <li>{@code p=Double.POSITIVE_INFINITY}: The maximum absolute row sum.</li>
+     *     <li>{@code p=Double.NEGATIVE_INFINITY}: The minimum absolute row sum.</li>
+     * </ul>
+     *
+     * @param p The p value in the "induced" p-norm. Must be one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
+     * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
+     * @return Norm of the matrix.
+     * @throws IllegalArgumentException If {@code p} is not one of the following: {@code 1}, {@code -1}, {@code 2}, {@code -2},
+     * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY}.
+     */
+    public double norm(double p) {
+        return MatrixNorms.inducedNorm(this, p);
+    }
+
+
+    /**
+     * <p>Computes the <span class="latex-inline">L<sub>p,q</sub></span> norm of this matrix.
+     * <p>Some common special cases are:
+     * <ul>
+     *     <li>{@code p=2}, {@code q=1}: The sum of Euclidean norms of the column vectors of the matrix.</li>
+     *     <li>{@code p=2}, {@code q=2}: The Frobenius norm. Equivalent to the Euclidean norm of the vector of singular values of
+     *     the matrix.</li>
+     * </ul>
+     *
+     * <p>The <span class="latex-inline">L<sub>p,q</sub></span> norm is computed as if by:
+     * <pre>{@code
+     *      double norm = 0;
+     *      for(int j=0; j<src.numCols; j++) {
+     *          double sum = 0;
+     *          for(int i=0; i<src.numRows; i++)
+     *              sum += Math.pow(Math.abs(src.get(i, j)), p);
+     *
+     *          norm += Math.pow(sum, q / p);
+     *      }
+     *
+     *      return Math.pow(norm, 1.0 / q);
+     * }</pre>
+     *
+     * @param p p value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @param q q value in the <span class="latex-inline">L<sub>p,q</sub></span> norm.
+     * @return The <span class="latex-inline">L<sub>p,q</sub></span> norm of {@code src}.
+     */
+    public double norm(double p, double q) {
+        return MatrixNorms.norm(this, p, q);
     }
 
 

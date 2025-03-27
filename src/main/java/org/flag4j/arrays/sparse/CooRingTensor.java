@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.sparse;
 
-import org.flag4j.algebraic_structures.Ring;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.ring_arrays.AbstractCooRingTensor;
 import org.flag4j.arrays.dense.RingTensor;
@@ -34,6 +33,7 @@ import org.flag4j.io.PrintOptions;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.dense.real.RealDenseTranspose;
 import org.flag4j.linalg.ops.sparse.coo.semiring_ops.CooSemiringEquals;
+import org.flag4j.numbers.Ring;
 import org.flag4j.util.ArrayUtils;
 import org.flag4j.util.ValidateParameters;
 
@@ -158,6 +158,34 @@ public class CooRingTensor<T extends Ring<T>> extends AbstractCooRingTensor<CooR
 
 
     /**
+     * Constructor useful for avoiding parameter validation while constructing COO tensors.
+     * @param shape The shape of the tensor to construct.
+     * @param data The non-zero data of this tensor.
+     * @param indices The indices of the non-zero data.
+     * @param dummy Dummy object to distinguish this constructor from the safe variant. It is completely ignored in this constructor.
+     */
+    private CooRingTensor(Shape shape, T[] data, int[][] indices, Object dummy) {
+        // This constructor is hidden and called by unsafeMake to emphasize that creating a COO tensor in this manner is unsafe.
+        super(shape, data, indices, dummy);
+    }
+
+
+    /**
+     * <p>Factory to construct a COO tensor which bypasses any validation checks on the data and indices.
+     * <p><strong>Warning:</strong> This method should be used with extreme caution. It primarily exists for internal use. Only use
+     * this factory if you are 100% certain the parameters are valid as some methods may
+     * throw exceptions or exhibit undefined behavior.
+     * @param shape The full size of the COO tensor.
+     * @param data The non-zero data of the COO tensor.
+     * @param indices The non-zero indices of the COO tensor.
+     * @return A COO tensor constructed from the provided parameters.
+     */
+    public static <T extends Ring<T>> CooRingTensor<T> unsafeMake(Shape shape, T[] data, int[][] indices) {
+        return new CooRingTensor(shape, data, indices, null);
+    }
+
+
+    /**
      * Constructs a tensor of the same type as this tensor with the specified shape and non-zero data.
      *
      * @param shape Shape of the tensor to construct.
@@ -274,7 +302,7 @@ public class CooRingTensor<T extends Ring<T>> extends AbstractCooRingTensor<CooR
     public CooTensor abs() {
         double[] dest = new double[data.length];
         RingOps.abs(data, dest);
-        return new CooTensor(shape, dest, ArrayUtils.deepCopy2D(indices, null));
+        return CooTensor.unsafeMake(shape, dest, ArrayUtils.deepCopy2D(indices, null));
     }
 
 

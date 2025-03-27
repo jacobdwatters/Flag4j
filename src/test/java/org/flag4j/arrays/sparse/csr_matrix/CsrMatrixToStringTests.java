@@ -26,13 +26,13 @@ class CsrMatrixToStringTests {
         aShape = new Shape(150, 2256);
         nnz = new double[]{1, 14.235, 239034, -882334.348, 15.235, 1.5342};
         rowIndices = new int[]{0, 0, 1, 121, 141, 149};
-        colIndices = new int[]{150, 2500, 14, 15, 892, 156};
+        colIndices = new int[]{150, 2200, 14, 15, 892, 156};
         exp = """
                 shape: (150, 2256)
                 nnz: 6
                 Non-zero data: [ 1  14.235  239034  -882334.348  15.235  1.5342 ]
                 Row Pointers: [ 0  2  3  3  3  3  3  3  3  ...  6 ]
-                Col Indices: [ 150  2500  14  15  892  156 ]""";
+                Col Indices: [ 150  2200  14  15  892  156 ]""";
         build();
 
         assertEquals(exp, A.toString());

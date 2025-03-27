@@ -24,8 +24,6 @@
 
 package org.flag4j.arrays.dense;
 
-import org.flag4j.algebraic_structures.Complex128;
-import org.flag4j.algebraic_structures.Complex64;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.field_arrays.AbstractDenseFieldVector;
 import org.flag4j.arrays.sparse.CooCVector;
@@ -36,6 +34,8 @@ import org.flag4j.linalg.ops.dense.field_ops.DenseFieldVectorOps;
 import org.flag4j.linalg.ops.dense.real_field_ops.RealFieldDenseOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.field_ops.DenseCooFieldVectorOps;
 import org.flag4j.linalg.ops.dense_sparse.coo.real_field_ops.RealFieldDenseCooVectorOps;
+import org.flag4j.numbers.Complex128;
+import org.flag4j.numbers.Complex64;
 import org.flag4j.util.ArrayConversions;
 import org.flag4j.util.StringUtils;
 import org.flag4j.util.ValidateParameters;
@@ -368,7 +368,7 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
      */
     public CooCVector elemMult(CooVector b) {
         Complex128[] dest = RealFieldDenseCooVectorOps.elemMult(this, b);
-        return new CooCVector(shape, dest, b.indices.clone());
+        return CooCVector.unsafeMake(shape, dest, b.indices.clone());
     }
 
 
@@ -437,8 +437,8 @@ public class CVector extends AbstractDenseFieldVector<CVector, CMatrix, Complex1
     protected CooCVector makeLikeCooTensor(Shape shape, Complex128[] entries, int[][] indices) {
         // Check for case when vector contains no non-zero data.
         return (indices.length == 0)
-                ? new CooCVector(shape, entries, new int[0])
-                : new CooCVector(shape, entries, indices[0]);
+                ? CooCVector.unsafeMake(shape, entries, new int[0])
+                : CooCVector.unsafeMake(shape, entries, indices[0]);
     }
 
 

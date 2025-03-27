@@ -23,6 +23,6 @@
  */
 
 /**
- * Implementations of operations on {@link org.flag4j.algebraic_structures.Ring Ring} sparse COO (coordinate) array objects.
+ * Implementations of operations on {@link org.flag4j.numbers.Ring Ring} sparse COO (coordinate) array objects.
  */
 package org.flag4j.linalg.ops.sparse.coo.ring_ops;

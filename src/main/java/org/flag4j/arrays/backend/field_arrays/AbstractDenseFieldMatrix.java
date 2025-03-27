@@ -24,7 +24,6 @@
 
 package org.flag4j.arrays.backend.field_arrays;
 
-import org.flag4j.algebraic_structures.Field;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.backend.MatrixMixin;
 import org.flag4j.arrays.backend.ring_arrays.AbstractDenseRingMatrix;
@@ -34,6 +33,7 @@ import org.flag4j.linalg.ops.common.field_ops.FieldOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingOps;
 import org.flag4j.linalg.ops.common.ring_ops.RingProperties;
 import org.flag4j.linalg.ops.dense.field_ops.DenseFieldElemDiv;
+import org.flag4j.numbers.Field;
 
 // TODO: Javadoc.
 public abstract class AbstractDenseFieldMatrix<T extends AbstractDenseFieldMatrix<T, U, V>,

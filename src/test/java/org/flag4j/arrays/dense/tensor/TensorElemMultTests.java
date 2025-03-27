@@ -1,11 +1,11 @@
 package org.flag4j.arrays.dense.tensor;
 
-import org.flag4j.algebraic_structures.Complex128;
 import org.flag4j.arrays.Shape;
 import org.flag4j.arrays.dense.CTensor;
 import org.flag4j.arrays.dense.Tensor;
 import org.flag4j.arrays.sparse.CooCTensor;
 import org.flag4j.arrays.sparse.CooTensor;
+import org.flag4j.numbers.Complex128;
 import org.flag4j.util.exceptions.LinearAlgebraException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -94,9 +94,9 @@ class TensorElemMultTests {
         B = new CooTensor(bShape, bEntries, sparseIndices);
         expEntries = new double[aEntries.length];
         expShape = new Shape(2, 3, 2);
-        expEntries[expShape.getFlatIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.getFlatIndex(sparseIndices[0])];
-        expEntries[expShape.getFlatIndex(sparseIndices[1])] = bEntries[1]*aEntries[expShape.getFlatIndex(sparseIndices[1])];
-        expEntries[expShape.getFlatIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.getFlatIndex(sparseIndices[2])];
+        expEntries[expShape.get1DIndex(sparseIndices[0])] = bEntries[0]*aEntries[expShape.get1DIndex(sparseIndices[0])];
+        expEntries[expShape.get1DIndex(sparseIndices[1])] = bEntries[1]*aEntries[expShape.get1DIndex(sparseIndices[1])];
+        expEntries[expShape.get1DIndex(sparseIndices[2])] = bEntries[2]*aEntries[expShape.get1DIndex(sparseIndices[2])];
         exp = new Tensor(expShape, expEntries);
 
         assertEquals(exp.toCoo(), A.elemMult(B));
@@ -176,8 +176,8 @@ class TensorElemMultTests {
                 Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO, Complex128.ZERO
         };
         expShape = new Shape( 2, 3, 2);
-        expEntries[expShape.getFlatIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.getFlatIndex(sparseIndices[0])]);
-        expEntries[expShape.getFlatIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.getFlatIndex(sparseIndices[1])]);
+        expEntries[expShape.get1DIndex(sparseIndices[0])] = bEntries[0].mult(aEntries[expShape.get1DIndex(sparseIndices[0])]);
+        expEntries[expShape.get1DIndex(sparseIndices[1])] = bEntries[1].mult(aEntries[expShape.get1DIndex(sparseIndices[1])]);
         exp = new CTensor(expShape, expEntries).toCoo();
 
         assertEquals(exp, A.elemMult(B));

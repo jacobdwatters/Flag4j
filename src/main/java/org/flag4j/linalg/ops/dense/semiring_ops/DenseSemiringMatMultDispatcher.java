@@ -28,9 +28,8 @@ package org.flag4j.linalg.ops.dense.semiring_ops;
 // TODO: Investigate the performance of utilizing a selection cache which caches the implementation to be used for recent matrix sizes.
 //  Should probably be implemented as a LRU cache (or similar) by extending LinkedHashMap
 
-import org.flag4j.algebraic_structures.Semiring;
 import org.flag4j.arrays.Shape;
-import org.flag4j.concurrency.DenseSemiringTensorBinaryOperation;
+import org.flag4j.numbers.Semiring;
 import org.flag4j.util.ValidateParameters;
 
 import java.util.HashMap;
@@ -306,5 +305,22 @@ public final class DenseSemiringMatMultDispatcher {
         CONCURRENT_STANDARD, CONCURRENT_REORDERED, CONCURRENT_BLOCKED, CONCURRENT_BLOCKED_REORDERED,
         STANDARD_VECTOR, BLOCKED_VECTOR, CONCURRENT_STANDARD_VECTOR, CONCURRENT_BLOCKED_VECTOR, MULT_T, MULT_T_BLOCKED,
         MULT_T_CONCURRENT, MULT_T_BLOCKED_CONCURRENT
+    }
+
+
+    /**
+     * Specifies a binary operation on two dense {@link Semiring} tensors.
+     */
+    interface DenseSemiringTensorBinaryOperation {
+
+        /**
+         * Applies the specified binary operation on the two dense tensors.
+         * @param src1 Entries of the first tensor.
+         * @param shape1 Shape of the first tensor.
+         * @param src2 Entries of the second tensor.
+         * @param shape2 Shape of the second tensor.
+         * @param dest Array to store the result of the binary operation of the two tensors in.
+         */
+        public <T extends Semiring<T>> void apply(T[] src1, Shape shape1, T[] src2, Shape shape2, T[] dest);
     }
 }
