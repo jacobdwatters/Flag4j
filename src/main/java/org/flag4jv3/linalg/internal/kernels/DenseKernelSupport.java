@@ -27,8 +27,10 @@ package org.flag4jv3.linalg.internal.kernels;
 import org.flag4jv3.ndarrays.Layout;
 import org.flag4jv3.ndarrays.Shape;
 import org.flag4jv3.ndarrays.dense.DenseData;
+import org.flag4jv3.ndarrays.dense.DenseDataF64;
 import org.flag4jv3.ndarrays.dense.DenseDoubleData;
-import org.flag4jv3.util.arrays.ArrayBuilder;
+import org.flag4jv3.util.NewValidateParameters;
+import org.flag4jv3.util.tuples.IntPair;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -103,37 +105,22 @@ public final class DenseKernelSupport {
     }
 
 
-    public static DenseDoubleData resolveOut(Shape resultShape, int itemSize, DenseDoubleData outData) {
+    public static DenseDataF64 resolveOut(Shape resultShape, DenseDataF64 out) {
         Objects.requireNonNull(resultShape, "resultShape must not be null.");
-        if (outData == null) {
-            var layout = Layout.contiguous(resultShape, itemSize);
-            return new DenseDoubleData(layout, new double[layout.bufferSizeIntValueExact()]);
+
+        if (out == null) {
+            Layout layout = Layout.contiguous(resultShape);
+            return new DenseDataF64(layout, new double[bufferLen(layout, 1)]);
         }
 
-        requireItemSize(outData.layout().itemSize(), itemSize);
-
-        return outData;
+        requireSameShape(out.layout().shape(), resultShape);
+        requireWritable(out.layout());
+        return out;
     }
 
 
-    public static <T> DenseData<T> resolveOut(T[] template, Shape outShape, int itemSize, DenseData<T> outData) {
-        Objects.requireNonNull(outShape, "outShape must not be null.");
-        if (outData == null) {
-            Layout layout = Layout.contiguous(outShape, itemSize);
-            return new DenseData<>(layout, ArrayBuilder.newArrayLike(template, layout.bufferSizeIntValueExact()));
-        }
-
-        requireItemSize(outData.layout().itemSize(), itemSize);
-
-        return outData;
-    }
-
-
-    // TODO NOW: Move this to layout class.
-    public static void requireItemSize(int size1, int size2) {
-        if (size1 != size2) {
-            throw new IllegalArgumentException("Expecting item sizes to match but got " + size1 + " and " + size2 + ".");
-        }
+    static int bufferLen(Layout layout, int componentsPerSlot) {
+        return Math.multiplyExact(layout.shape().numelIntValueExact(), componentsPerSlot);
     }
 
 
@@ -142,30 +129,17 @@ public final class DenseKernelSupport {
     /// @param bufferLength The length of the buffer of interest.
     /// @param layout The layout to be stored.
     /// @throws IllegalArgumentException If a buffer with length `bufferLength` cannot store the specified `layout`
-    public static void requireCapacity(int bufferLength, Layout layout) {
-        int itemSize = layout.itemSize();
+    public static void requireCapacity(int bufferLength, Layout layout, int componentsPerSlot) {
+        NewValidateParameters.ensureSign(componentsPerSlot, NewValidateParameters.Sign.POSITIVE, "componentsPerSlot must be positive.");
+        if (layout.shape().hasZeroAxis()) return;
 
-        int rank = layout.rank();
-        for (int ax = 0; ax < rank; ax++) {
-            if (layout.getSize(ax) == 0) return;
-        }
+        IntPair mm = layout.minMaxIndex();   // element units, inclusive
+        long lo = (long) mm.first()*componentsPerSlot;
+        long hi = ((long) mm.second() + 1)*componentsPerSlot;   // exclusive
 
-        int lo = layout.offset();
-        int hi = layout.offset();
-        for (int ax = 0; ax < rank; ax++) {
-            int term = (layout.getSize(ax) - 1)*layout.stride(ax);
-            if (term < 0) {
-                lo += term; // neg strides reach below offset
-            } else {
-                hi += term;
-            }
-        }
-
-        hi = (hi + 1)*layout.itemSize();
         if (lo < 0 || hi > bufferLength) {
-            throw new IllegalArgumentException(
-                    "buffer length of " + bufferLength + " cannot hold layout reaching slots [" + lo + ", " + hi + ")."
-            );
+            throw new IllegalArgumentException("buffer length " + bufferLength + " cannot hold layout reaching ["
+                    + lo + ", " + hi + ") in buffer units (componentsPerSlot=" + componentsPerSlot + ").");
         }
     }
 
@@ -193,8 +167,18 @@ public final class DenseKernelSupport {
     /// @param b The second layout to compare.
     /// @throws IllegalArgumentException If `a` and `b` do not have matching shapes.
     public static void requireSameShape(Layout a, Layout b) {
-        if (!a.shape().equals(b.shape())) {
-            throw new IllegalArgumentException("Expecting layout shapes to match but got " + a.shape() + " and " + b.shape());
+        requireSameShape(a.shape(), b.shape());
+    }
+
+
+    /// Ensures that two shapes are [equal][Shape#equals(java.lang.Object)].
+    ///
+    /// @param a The first shape to compare.
+    /// @param b The second shape to compare.
+    /// @throws IllegalArgumentException If `a` and `b` are not [equal][Shape#equals(java.lang.Object)].
+    public static void requireSameShape(Shape a, Shape b) {
+        if (!a.equals(b)) {
+            throw new IllegalArgumentException("Expecting shapes to match but got " + a + " and " + b);
         }
     }
 

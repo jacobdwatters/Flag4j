@@ -25,7 +25,6 @@
 package org.flag4jv3.util.arrays;
 
 import org.flag4jv3.algebra.elements.Complex128;
-import org.flag4jv3.algebra.elements.Complex64;
 import org.flag4jv3.util.ValidateParameters;
 
 import java.util.ArrayList;
@@ -160,26 +159,6 @@ public final class ArrayConversions {
 
 
     /**
-     * Converts an array of {@link Complex64}s to an array of {@link Complex128}s.
-     *
-     * @param src Array to convert.
-     * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @return A reference to the {@code dest} array.
-     *
-     * @throws IllegalArgumentException If source and destination ndarrays do not have the same length.
-     */
-    public static Complex128[] toComplex128(Complex64[] src, Complex128[] dest) {
-        dest = ArrayBuilder.getOrCreateArray(dest, () -> new Complex128[src.length]);
-        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-
-        for (int i = 0, size = dest.length; i < size; i++)
-            dest[i] = new Complex128(src[i]);
-
-        return dest;
-    }
-
-
-    /**
      * Converts an array of {@link String}s to one of {@link Complex128}s.
      *
      * @param src Array to convert.
@@ -196,108 +175,6 @@ public final class ArrayConversions {
 
         for (int i = 0, size = dest.length; i < size; i++)
             dest[i] = new Complex128(src[i]);
-
-        return dest;
-    }
-
-
-    /**
-     * Converts an array of {@code int}s to one of {@link Complex64}s.
-     *
-     * @param src Array to convert.
-     * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @return A reference to the {@code dest} array.
-     *
-     * @throws IllegalArgumentException If source and destination ndarrays do not have the same length.
-     */
-    public static Complex64[] toComplex64(int[] src, Complex64[] dest) {
-        dest = ArrayBuilder.getOrCreateArray(dest, () -> new Complex64[src.length]);
-        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-
-        for (int i = 0, size = dest.length; i < size; i++)
-            dest[i] = new Complex64(src[i]);
-
-        return dest;
-    }
-
-
-    /**
-     * Converts an array of {@code float}s to one of {@link Complex64}s.
-     *
-     * @param src Array to convert.
-     * @param dest Destination array. If the destination array is {@code null}, a new array will be created.
-     * @return A reference to the {@code dest} array.
-     *
-     * @throws IllegalArgumentException If source and destination ndarrays do not have the same length.
-     */
-    public static Complex64[] toComplex64(float[] src, Complex64[] dest) {
-        dest = ArrayBuilder.getOrCreateArray(dest, () -> new Complex64[src.length]);
-        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-
-        for (int i = 0, size = dest.length; i < size; i++)
-            dest[i] = new Complex64(src[i]);
-
-        return dest;
-    }
-
-
-    /**
-     * Converts an array of {@link src} to one of {@link Complex64}s.
-     *
-     * @param src Array to convert.
-     * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @return A reference to the {@code dest} array.
-     *
-     * @throws IllegalArgumentException If source and destination ndarrays do not have the same length.
-     */
-    public static Complex64[] toComplex64(Integer[] src, Complex64[] dest) {
-        dest = ArrayBuilder.getOrCreateArray(dest, () -> new Complex64[src.length]);
-        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-
-        for (int i = 0, size = dest.length; i < size; i++)
-            dest[i] = new Complex64(src[i]);
-
-        return dest;
-    }
-
-
-    /**
-     * Converts an array of {@link Float}s to one of {@link Complex64}s.
-     *
-     * @param src Array to convert.
-     * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @return A reference to the {@code dest} array.
-     *
-     * @throws IllegalArgumentException If source and destination ndarrays do not have the same length.
-     */
-    public static Complex64[] toComplex64(Float[] src, Complex64[] dest) {
-        dest = ArrayBuilder.getOrCreateArray(dest, () -> new Complex64[src.length]);
-        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-
-        for (int i = 0, size = dest.length; i < size; i++)
-            dest[i] = new Complex64(src[i]);
-
-        return dest;
-    }
-
-
-    /**
-     * Converts an array of {@link String}s to one of {@link Complex64}s.
-     *
-     * @param src Array to convert.
-     * @param dest Destination array. If the destination array is null, a new array will be created.
-     * @return A reference to the {@code dest} array.
-     *
-     * @throws IllegalArgumentException If source and destination ndarrays do not have the same length.
-     */
-    public static Complex64[] toComplex64(String[] src, Complex64[] dest) {
-        if (dest == null) {
-            dest = new Complex64[src.length];
-        }
-        ValidateParameters.ensureArrayLengthsEq(src.length, dest.length);
-
-        for (int i = 0, size = dest.length; i < size; i++)
-            dest[i] = new Complex64(src[i]);
 
         return dest;
     }

@@ -25,7 +25,6 @@
 package org.flag4jv3.ndarrays;
 
 import org.flag4jv3.algebra.elements.Complex128;
-import org.flag4jv3.algebra.elements.Complex64;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -71,7 +70,6 @@ public sealed interface ElemType permits ElemType.Builtin, ElemType.Generic {
         INT64(Algebra.RING, Long.class),
         FLT32(Algebra.FIELD, Float.class),
         FLT64(Algebra.FIELD, Double.class),
-        CPLX64(Algebra.FIELD, Complex64.class),
         CPLX128(Algebra.FIELD, Complex128.class);
         // todo now: Implement other fields, rings, semirings, etc.
 
@@ -121,18 +119,18 @@ public sealed interface ElemType permits ElemType.Builtin, ElemType.Generic {
             def(INT64, FLT32, FLT64);
             def(INT32, FLT64, FLT64);
             def(INT64, FLT64, FLT64);
-            def(INT32, CPLX64, CPLX128);
-            def(INT64, CPLX64, CPLX128);
+//            def(INT32, CPLX64, CPLX128);
+//            def(INT64, CPLX64, CPLX128);
             def(INT32, CPLX128, CPLX128);
             def(INT64, CPLX128, CPLX128);
 
             def(FLT32, FLT64, FLT64);
-            def(FLT32, CPLX64, CPLX64);
+//            def(FLT32, CPLX64, CPLX64);
             def(FLT32, CPLX128, CPLX128);
 
-            def(FLT64, CPLX64, CPLX128); // 64-bit real parts need 128-bit complex
+//            def(FLT64, CPLX64, CPLX128); // 64-bit real parts need 128-bit complex
             def(FLT64, CPLX128, CPLX128);
-            def(CPLX64, CPLX128, CPLX128);
+//            def(CPLX64, CPLX128, CPLX128);
 
             // Deliberately absent: BOOL with anything. It could be a ring, field, or mask.
         }

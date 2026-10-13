@@ -29,6 +29,8 @@ import org.flag4jv3.ndarrays.Layout;
 
 import java.util.Objects;
 
+// TODO NOW: Kill in favor of NewDenseData
+
 /// Represents the data of a [dense nD-array][DenseNDArrayBase] whose buffer is an array of type [T].
 ///
 /// <blockquote style="color: #b0bbd9; background-color: #1e3a5f; border-left: 5px solid #4b82bd; padding: 10px;">

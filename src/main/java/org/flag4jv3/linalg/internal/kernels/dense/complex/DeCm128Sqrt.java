@@ -25,7 +25,6 @@
 package org.flag4jv3.linalg.internal.kernels.dense.complex;
 
 import org.flag4jv3.algebra.elements.Complex128;
-import org.flag4jv3.linalg.internal.kernels.DenseKernelSupport;
 import org.flag4jv3.ndarrays.Layout;
 import org.flag4jv3.ndarrays.Shape;
 import org.flag4jv3.ndarrays.dense.DenseDoubleData;
@@ -70,6 +69,7 @@ public final class DeCm128Sqrt {
     enum Cm128SqrtLoop implements Cm128UnaryLoop {
         INSTANCE;
 
+
         @Override
         public void apply(double[] src, int srcSlot, int srcStep,
                           double[] dest, int destSlot, int destStep,
@@ -84,6 +84,16 @@ public final class DeCm128Sqrt {
 
 
     // -------------------------------- nD-arrays --------------------------------
+
+
+    /// Computes the element-wise principal square roots of a complex nD-array.
+    ///
+    /// <blockquote style="color: #d4aeae; background-color: #571f1f; border-left: 5px solid #f44336; padding: 10px;">
+    ///     <strong>Warning:</strong> Limited
+    /// </blockquote>
+    ///
+    /// @param src
+    /// @param out
     public static void csqrt(DenseDoubleData src, DenseDoubleData out) {
         DeCm128UOps.unary(src, out, Cm128SqrtLoop.INSTANCE);
     }
@@ -131,8 +141,6 @@ public final class DeCm128Sqrt {
 //            csqrtStrided(srcBuffer, srcLayout, outBuffer, outLayout, count);
 //        }
 //    }
-
-
     private static void csqrtContiguous(double[] src,
                                         int srcOffset,
                                         double[] dest,

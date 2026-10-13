@@ -27,7 +27,7 @@ package org.flag4jv3.ndarrays;
 /// Utility class for checking if a [layout][Layout] is injective.
 ///
 /// In this context, "injective" means that no two distinct nD indices point to the same element in the internal data buffer.
-/// This can fail to be true in views: for example a view with stride(s) of size `0` would be non-injective.
+/// This can fail to be true in views: for example, a view with stride(s) of size `0` would be non-injective.
 public final class StrideInjectivity {
 
     private StrideInjectivity() {
@@ -68,7 +68,7 @@ public final class StrideInjectivity {
     /// @return `true` if it can be guaranteed that the layout is injective; otherwise, `false`.
     ///
     /// @see #classifyInjectivity(Layout)
-    public static boolean mayBeInjective(Layout layout) {
+    public static boolean isProvablyInjective(Layout layout) {
         return classifyInjectivity(layout) == Result.INJECTIVE;
     }
 
@@ -101,8 +101,8 @@ public final class StrideInjectivity {
         long[] absStride = new long[rank];
 
         for (int k = 0; k < rank; k++) {
-            if (dims[k] <= 1) continue;             // Cannot distinguish two indices.
-            if (layout.strides[k] == 0) return Result.NON_INJECTIVE;   // All indices alias.
+            if (dims[k] <= 1) continue; // Cannot distinguish two indices.
+            if (layout.strides[k] == 0) return Result.NON_INJECTIVE; // All indices alias.
 
             maxDelta[n] = dims[k] - 1;
             absStride[n] = Math.abs((long) layout.strides[k]);
@@ -112,8 +112,8 @@ public final class StrideInjectivity {
         sortAxesByAbsStrideAsc(absStride, maxDelta, n);
 
         /*
-         * Loop invariant: on entry to iteration i, `span` is the maximum displacement
-         * magnitude reachable using only axes[0...i), which — by the ascending sort —
+         * On entry to iteration i, `span` is the maximum displacement
+         * magnitude reachable using only axes[0...i), which, by the ascending sort,
          * are exactly the axes with |stride| no greater than this one's.
          */
         long span = 0;
@@ -122,34 +122,25 @@ public final class StrideInjectivity {
         for (int i = 0; i < n; i++) {
             long stride = absStride[i];
 
-            // Witness: delta_i = 1, delta_j = -maxDelta[j] for all j < i. Sums to zero.
             if (stride == span) return Result.NON_INJECTIVE;
-
-            // Cancellation reduces to subset-sum over the preceding axes; don't solve it.
             if (stride < span) uncertain = true;
 
-            span += (long) maxDelta[i]*stride;
+            try {
+                span = Math.addExact(span, Math.multiplyExact((long) maxDelta[i], stride));
+            } catch (ArithmeticException e) {
+                return uncertain ? Result.UNKNOWN : Result.INJECTIVE;
+            }
         }
 
         return uncertain ? Result.UNKNOWN : Result.INJECTIVE;
     }
 
 
-    /// Computes absolute value on an integer without overflowing on [Integer#MIN_VALUE].
+    /// Sorts the axes by ascending absolute stride.
     ///
-    /// Note that if `value` is [Integer#MIN_VALUE], then [Integer#MAX_VALUE] will be returned.
-    ///
-    /// @param a The argument to compute the absolute value of.
-    /// @return The absolute value of `a`.
-    private static int absWithMinSupport(int a) {
-        return (a == Integer.MIN_VALUE) ? Integer.MAX_VALUE : Math.abs(a);
-    }
-
-
-    /// Sorts a
-    /// @param absStride
-    /// @param maxDelta
-    /// @param n
+    /// @param absStride The absolute value of the strides to use for sorting.
+    /// @param maxDelta The maximum delta value to use for sorting.
+    /// @param n The number of axes to sort.
     private static void sortAxesByAbsStrideAsc(long[] absStride, int[] maxDelta, int n) {
         for (int i = 1; i < n; i++) {
             long key = absStride[i];

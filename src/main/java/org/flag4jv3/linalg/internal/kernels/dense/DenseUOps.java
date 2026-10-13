@@ -157,7 +157,7 @@ public final class DenseUOps {
     public static DenseDoubleData applyUOp(
             DenseDoubleData src,
             DenseDoubleData out,
-            StridedDoubleUnaryLoop loop
+            StridedUnaryLoop<double[]> loop
     ) {
         Objects.requireNonNull(src, "src must not be null");
         Objects.requireNonNull(loop, "loop must not be null");
@@ -216,7 +216,7 @@ public final class DenseUOps {
     /// @param cursor The cursor defining runs to apply `loop` to.
     private static void runSequential(
             double[] srcBuf, double[] outBuf,
-            StridedDoubleUnaryLoop loop, StridedRunCursor2 cursor
+            StridedUnaryLoop<double[]> loop, StridedRunCursor2 cursor
     ) {
         if (cursor.isEmpty()) return; // Nothing to do.
 

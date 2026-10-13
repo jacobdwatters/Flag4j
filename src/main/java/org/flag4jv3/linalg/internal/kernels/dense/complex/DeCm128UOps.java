@@ -33,7 +33,6 @@ public final class DeCm128UOps {
 
 
     public static void unary(DenseDoubleData src, DenseDoubleData out, Cm128UnaryLoop loop) {
-        DenseUOps.dispatch(src.buffer(), src.layout(),
-                out.buffer(), out.layout(), loop);
+        DenseUOps.applyUOp(src, out, loop);
     }
 }

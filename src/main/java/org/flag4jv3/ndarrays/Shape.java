@@ -302,17 +302,53 @@ public class Shape implements Serializable {
     }
 
 
-    /**
-     * Gets the total number of elements for an nD-array with this shape.
-     *
-     * @return The total number of elements for an nD-array with this shape.
-     *
-     * @see #numelIntValueExact()
-     * @see #numelLongValueExact()
-     */
+    /// Checks if this shape has any zero axes.
+    ///
+    /// @return `true` if this shape has any zero axes, `false` otherwise.
+    public boolean hasZeroAxis() {
+        // Check if we have already computed the number of elements and it is zero.
+        if (numElementsIntExact >= 0) {
+            return numElementsIntExact == 0;
+        }
+
+        if (numElements != null) {
+            return numElements.signum() == 0;
+        }
+
+        // Otherwise, directly check if any of the dimensions are zero.
+        for (int dim : dims)
+            if (dim == 0) {
+                // Then this shape must have zero elements.
+                numElementsIntExact = 0;
+                numElements = BigInteger.ZERO;
+                return true;
+            }
+        return false;
+    }
+
+
+    /// Gets the total number of elements of an nD-array with this shape.
+    ///  <blockquote style="color: #a9cfc7; background-color: #10362d; border-left: 5px solid #20a88b; padding: 10px;">
+    ///     <strong>Tip:</strong> If a primitive `int` or `long` value is desired,
+    ///     {@link #numelIntValueExact()} or {@link #numelLongValueExact()} should be prefered over this method.
+    ///
+    ///     To check if a shape has zero elements or has at least one zero-sized axis,
+    ///     {@link #hasZeroAxis()} should be prefered over this method.
+    /// </blockquote>
+    ///
+    /// @return The total number of elements for an nD-array with this shape.
+    ///
+    /// @see #numelIntValueExact()
+    /// @see #numelLongValueExact()
     public BigInteger numel() {
         // Check if total elements have already been computed for this shape.
-        if (numElements != null) return numElements;
+        if (numElements != null) {
+            return numElements;
+        }
+
+        if (numElementsIntExact >= 0) {
+            return numElements = BigInteger.valueOf(numElementsIntExact);
+        }
 
         // Otherwise, it needs to be computed.
         BigInteger product = BigInteger.ONE;  // We can start at one because scalar tensors have a single entry.
@@ -324,21 +360,29 @@ public class Shape implements Serializable {
     }
 
 
-    /**
-     * <p>Gets the total number of elements for an nD-array with this shape.
-     * If the total number of elements exceeds {@link Integer#MAX_VALUE}, an exception is thrown.
-     *
-     * <p>This method is likely to be more efficient than {@link #numel()} if a primitive int value is desired.
-     *
-     * @return The total number of items for an nD-array with this shape.
-     *
-     * @throws ArithmeticException If the total number of items overflows a primitive int.
-     * @see #numel()
-     * @see #numelLongValueExact()
-     */
+    /// Gets the total number of elements of an nD-array with this shape a primitive `int`.
+    /// If the total number of elements exceeds [Integer#MAX_VALUE], an exception is thrown.
+    ///
+    /// <blockquote style="color: #a9cfc7; background-color: #10362d; border-left: 5px solid #20a88b; padding: 10px;">
+    ///     <strong>Tip:</strong> This method is likely to be more efficient than {@link #numel()}
+    ///     if a primitive {@code int} value is desired.
+    ///
+    ///     To check if a shape has zero elements or has at least one zero-sized axis,
+    ///     {@link #hasZeroAxis()} should be prefered over this method.
+    /// </blockquote>
+    ///
+    /// @return The total number of items of an nD-array with this shape.
+    ///
+    /// @throws ArithmeticException If the total number of items overflows a primitive `int`.
+    /// @see #numelLongValueExact()
+    /// @see #numel()
     public int numelIntValueExact() {
         if (numElementsIntExact >= 0) {
-            return numElementsIntExact; // Already computed.
+            return numElementsIntExact;
+        }
+
+        if (numElements != null) {
+            return numElementsIntExact = numElements.intValueExact();
         }
 
         int product = 1; // Rank-0 scalar has one element.
@@ -352,19 +396,29 @@ public class Shape implements Serializable {
     }
 
 
-    /**
-     * <p>Gets the total number of elements for an nD-array with this shape as a {@code long}.
-     * If the total number of elements exceeds {@link Long#MAX_VALUE}, an exception is thrown.
-     *
-     * @return The total number of elements for an nD-array with this shape.
-     *
-     * @throws ArithmeticException If the total number of items overflows a primitive int.
-     * @see #numelIntValueExact()
-     * @see #numel()
-     */
+    /// Gets the total number of elements of an nD-array with this shape as a primitive `long`.
+    /// If the total number of elements exceeds [Long#MAX_VALUE], an exception is thrown.
+    ///
+    /// <blockquote style="color: #a9cfc7; background-color: #10362d; border-left: 5px solid #20a88b; padding: 10px;">
+    ///     <strong>Tip:</strong> This method is likely to be more efficient than {@link #numel()}
+    ///     if a primitive {@code long} value is desired.
+    ///
+    ///     To check if a shape has zero elements or has at least one zero-sized axis,
+    ///     {@link #hasZeroAxis()} should be prefered over this method.
+    /// </blockquote>
+    ///
+    /// @return The total number of elements of an nD-array with this shape.
+    ///
+    /// @throws ArithmeticException If the total number of items overflows a primitive `long`.
+    /// @see #numelIntValueExact()
+    /// @see #numel()
     public long numelLongValueExact() {
         if (numElementsIntExact >= 0) {
-            return numElementsIntExact; // Already computed.
+            return numElementsIntExact;
+        }
+
+        if (numElements != null) {
+            return numElements.longValueExact();
         }
 
         long product = 1; // Rank-0 scalar has one element.

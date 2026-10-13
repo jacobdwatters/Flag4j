@@ -25,7 +25,6 @@
 package org.flag4jv3.util.arrays;
 
 import org.flag4jv3.algebra.elements.Complex128;
-import org.flag4jv3.algebra.elements.Complex64;
 import org.flag4jv3.algebra.elements.FieldElement;
 import org.flag4jv3.algebra.elements.SemiringElement;
 import org.flag4jv3.util.NewValidateParameters;
@@ -280,23 +279,6 @@ public final class ArrayUtils {
     public static void arraycopy(double[] src, int srcPos, Complex128[] dest, int destPos, int length) {
         for (int i = 0; i < length; i++)
             dest[i + destPos] = new Complex128(src[i + srcPos]);
-    }
-
-
-    /**
-     * Performs an array copy similar to {@link System#arraycopy(Object, int, Object, int, int)} but wraps floats as complex elements.
-     *
-     * @param src The source array.
-     * @param srcPos The starting position from which to copy elements of the source array.
-     * @param dest The destination array for the copy.
-     * @param destPos Starting slice to place copied elements in the destination array.
-     * @param length The number of array elements to be copied.
-     * @throws ArrayIndexOutOfBoundsException If the destPos parameter plus the length parameter exceeds the length of the
-     *                                        source array length or the destination array length.
-     */
-    public static void arraycopy(float[] src, int srcPos, Complex64[] dest, int destPos, int length) {
-        for (int i = 0; i < length; i++)
-            dest[i + destPos] = new Complex64(src[i + srcPos]);
     }
 
 

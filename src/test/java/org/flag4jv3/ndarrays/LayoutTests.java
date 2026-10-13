@@ -547,7 +547,7 @@ class LayoutTests {
             Layout layout = new Layout(new Shape(3, 4), 0, new int[]{0, 1}, 1);
 
             assertFalse(layout.isWritable());
-            assertFalse(layout.mayBeInjective());
+            assertFalse(layout.isProvablyInjective());
         }
 
 

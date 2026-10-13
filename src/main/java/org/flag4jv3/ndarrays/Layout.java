@@ -31,7 +31,6 @@ import org.flag4jv3.util.tuples.Pair;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -40,27 +39,28 @@ import static org.flag4jv3.util.NewValidateParameters.Sign;
 
 
 /// Describes the memory layout of a [dense nD-array][org.flag4jv3.ndarrays.dense.DenseNDArrayBase].
-/// Specifically, how the logical elements of a [dense nD-array][org.flag4jv3.ndarrays.dense.DenseNDArrayBase] map onto
-/// positions in its 1D backing data buffer.
+/// Specifically, how the elements of a [dense nD-array][org.flag4jv3.ndarrays.dense.DenseNDArrayBase] map onto
+/// logical indices in its 1D backing data buffer.
+///
+/// <blockquote style="color: #b0bbd9; background-color: #1e3a5f; border-left: 5px solid #4b82bd; padding: 10px;">
+///     <strong>Note:</strong> "logical indices" are invariant to data type. This means that
+///     a "logical" index does not describe the true physical index of the element in the data buffer. To map a logical index
+///     to a true physical index of a known data type, use
+///     [NewDenseData.toBufferIndex(int,int...)][org.flag4jv3.ndarrays.dense.NewDenseData#toBufferIndex(int, int...)].
+/// </blockquote>
 ///
 /// A layout is defined by:
 /// - [shape][#shape()]: the size of the array along each axis.
 /// - [strides][#strides()]: the step, per axis, between consecutive logical elements.
 /// - [offset][#offset()]: the logical-element slice of the first element.
-/// - [itemSize][#itemSize()]: the number of buffer positions a single logical element occupies.
 ///
 /// ## Element units vs. buffer positions
 /// Both `strides` and `offset` are expressed in **logical elements**, *not* raw buffer positions. This keeps the layout
-/// independent of how an element is stored: a real, complex, or quaternion array with the same shape shares identical
-/// strides and differs only in [itemSize][#itemSize()] (`1`, `2`, and `4` respectively). The `itemSize` factor is
-/// applied only when resolving a buffer position via [#toBufferIndex(int, int...)]; the logical-element slice alone is
-/// given by [#toLinearElementIndex(int...)].
-///
-/// For example, a complex array stores each element as interleaved real/imaginary doubles ({@code itemSize == 2}), so
-/// logical element `i` occupies buffer positions `2i` (real) and `2i + 1` (imaginary).
+/// independent of how an element is stored: a real, complex, or quaternion array with the same shape and logical-strides will have
+/// the equal layouts.
 ///
 /// ## Views
-/// A layout need not solely own its buffer or represent the full buffer. A non-zero [offset][#offset()], non-canonical
+/// A layout need not solely own a data buffer or represent a full data buffer. A non-zero [offset][#offset()], non-canonical
 /// [strides][#strides()] (e.g., zero strides, negative strides, etc.) let a layout describe a *view* into a larger or shared buffer.
 /// Use [#contiguousOrder()] to test for a dense, canonically strided layout.
 ///
@@ -70,7 +70,7 @@ import static org.flag4jv3.util.NewValidateParameters.Sign;
 /// the associated axis point to the same slice in the buffer (may happen when extending, repeating, or broadcasting an nD-array).
 /// Thus, attempting to write the outputs of an operation into such a layout would result in values clobbering past results.
 ///
-/// The [#isWritable()] property of a layout is determined at construction time using [#mayBeInjective()] to conservatively test
+/// The [#isWritable()] property of a layout is determined at construction time using [#isProvablyInjective()] to conservatively test
 /// whether distinct logical elements may alias the same buffer slice.
 ///
 /// Instances of [Layout] are immutable and thread-safe.
@@ -82,58 +82,43 @@ public class Layout implements Serializable {
     final Shape shape;
 
     /// The initial offset of this layout. This is in terms of logical elements
-    /// (i.e., individual elements of [itemSize]) and *not* in terms of buffer indices.
     final int offset;
 
     /// The strides of this layout. This is in terms of logical elements
-    /// (i.e., individual elements of [itemSize]) and *not* in terms of buffer indices.
     final int[] strides;
 
     /// Flag indicating if this layout is contiguous in memory (`true`) or not (`false`).
     final ContiguousOrder contiguousOrder;
 
-    // TODO NOW: The item size will also matter for sparse arrays. `Layout`s are only intended for dense arrays.
-    //  It is needed here, but it should also be in the base nD-array object (similar to shape).
-    /// The size of an individual item of this layout. That is, the number of buffer positions needed to store a single element.
-    /// E.g., a complex number with real/imaginay components stored interleaved in a `double[]` buffer would have `itemSize = 2`.
-    final int itemSize;
-
 
     /// Flag indicating if this layout is writable or not. A layout is writable when it can be verified that it is injective.
     /// This means all indices map to distinct elements within the buffer. This makes it safe to write values to the nD-array.
     ///
-    /// This is a "soft" property derived from [StrideInjectivity#mayBeInjective(org.flag4jv3.ndarrays.Layout)]. It may be
+    /// This is a "soft" property derived from [StrideInjectivity#isProvablyInjective(org.flag4jv3.ndarrays.Layout)]. It may be
     /// `false` even if the layout *is* injective in reality. However, checking if an arbitrary layout is injective is worst-case
-    /// exponential so an exhaustive check is not performed. However, this will *never* be erroneously be `true`. If this
+    /// exponential, so an exhaustive check is not performed. However, this will *never* be erroneously be `true`. If this
     /// is `true`, the layout is provably injective and thus safe to write to.
     final boolean isWritable;
 
 
     /// Creates a [Layout] of an nD-array.
     ///
-    /// To create a contiguous layout, use [#contiguous(Shape, int)].
+    /// To create a contiguous layout, use [#contiguous(Shape)].
     ///
     /// @param shape The shape of the layout. If `shape.numel()` *must* fit in a primitive `int` (see [Shape#numelIntValueExact()]).
     /// @param offset The initial offset of the first item in the layout. Must be non-negative.
-    /// @param strides The strides of the layout. That is, the number of buffer positions needed to store a single element.
-    /// E.g., a complex number with real/imaginay components stored interleaved in a `double[]` buffer would have `itemSize = 2`.
-    /// Must be positive.
-    /// @param itemSize The size of an individual item of this layout.
+    /// @param strides The strides of the layout.
     /// @return A [Layout] of an nD-array with the specified properties.
     ///
-    /// @throws NullPointerException     If `shape` or `strides` is `null`.
-    /// @throws IllegalArgumentException If `offset` is negative or if `itemSize` is *not* positive.
-    /// @throws ArithmeticException      If `shape.numel()` is *not* int sized.
-    /// @see #contiguous(Shape, int)
-    public Layout(Shape shape, int offset, int[] strides, int itemSize) {
+    /// @throws NullPointerException If `shape` or `strides` is `null`.
+    /// @throws ArithmeticException  If `shape.numel()` is *not* int sized.
+    /// @see #contiguous(Shape)
+    public Layout(Shape shape, int offset, int[] strides) {
         // TODO NOW: Should we also verify strides/offset against shape? We could also have a
         //  makeLayoutUnsafe that bypasses that for internal use...
         Objects.requireNonNull(shape, "shape must not be null");
         Objects.requireNonNull(strides, "strides cannot be null.");
         NewValidateParameters.ensureSign(offset, Sign.NON_NEGATIVE, "offset cannot be negative.");
-        NewValidateParameters.ensureSign(itemSize, Sign.POSITIVE,
-                "item size must be positive but got " + itemSize + "."
-        );
         NewValidateParameters.ensureEqual(strides.length, shape.rank, "Stride rank must match shape rank.");
 
         // Layouts require that all elements must fit inside a standard array.
@@ -142,12 +127,11 @@ public class Layout implements Serializable {
         this.shape = shape;
         this.offset = offset;
         this.strides = strides.clone();
-        this.itemSize = itemSize;
 
         contiguousOrder = getContiguousOrder(this.shape, this.strides);
 
         // This will miss some cases, but we accept that for safety.
-        isWritable = StrideInjectivity.mayBeInjective(this);
+        isWritable = StrideInjectivity.isProvablyInjective(this);
     }
 
 
@@ -162,15 +146,12 @@ public class Layout implements Serializable {
     /// @param shape The shape of the layout.
     /// @param offset The initial offset of the first item in the layout. Must be non-negative.
     /// @param strides The strides of the layout. That is, the number of buffer positions needed to store a single element.
-    /// @param itemSize The size of an individual item of this layout (in terms of buffer indices).
-    /// For example, a complex number with real/imaginay components stored interleaved in a `double[]` buffer would have `itemSize = 2`.
-    /// Must be positive.
     /// @param knownContiguous Indicates if the layout is already known to be contiguous and what its contiguous ordering is.
     /// `null` indicates the contiguous ordering is not known and so it will be computed.
     /// @param isWritable Flag indicating if the layout [is writable][#isWritable()] or not.
     /// @return A [Layout] of an [nD-array][org.flag4jv3.ndarrays.dense.DenseNDArrayBase] with the specified attributes
     /// and properties.
-    private Layout(Shape shape, int offset, int[] strides, int itemSize, ContiguousOrder knownContiguous, boolean isWritable) {
+    private Layout(Shape shape, int offset, int[] strides, ContiguousOrder knownContiguous, boolean isWritable) {
         if (strides.length != shape.rank) {
             throw new IllegalArgumentException(
                     "Stride rank must match shape rank.");
@@ -179,7 +160,6 @@ public class Layout implements Serializable {
         this.shape = shape;
         this.offset = offset;
         this.strides = strides;
-        this.itemSize = itemSize;
         this.contiguousOrder = (knownContiguous != null) ? knownContiguous : getContiguousOrder(shape, strides);
         this.isWritable = isWritable;
     }
@@ -187,37 +167,31 @@ public class Layout implements Serializable {
 
     /// Factory for constructing a [Layout] of a [C-contiguous][ContiguousOrder#C] nD-array with the specified [shape][Shape].
     ///
-    /// To construct a contiguous array with [F-ordering][ContiguousOrder#F], use [#contiguous(Shape, int, ContiguousOrder)]
+    /// To construct a contiguous array with [F-ordering][ContiguousOrder#F], use [#contiguous(Shape, ContiguousOrder)]
     ///
     /// @param shape The [shape][Shape] of the nD-array to get contiguous [Layout] for.
-    /// @param itemSize The item size of the [Layout]. This is the number of positions in the buffer that an individual item
-    /// takes up. E.g., for a complex number whose real/imaginary components are stored interleaved in a `double[]` buffer, this
-    /// would be `2`.
-    /// @return A layout that is contiguous with the specified `shape` and `itemSize`.
+    /// @return A layout that is contiguous with the specified `shape`.
     ///
-    /// @see #contiguous(Shape, int, ContiguousOrder)
-    public static Layout contiguous(Shape shape, int itemSize) {
-        return contiguous(shape, itemSize, ContiguousOrder.C);
+    /// @see #contiguous(Shape, ContiguousOrder)
+    public static Layout contiguous(Shape shape) {
+        return contiguous(shape, ContiguousOrder.C);
     }
 
 
     /// Factory for constructing a [Layout] of a contiguous nD-array with the specified [shape][Shape].
     ///
     /// @param shape The [shape][Shape] of the nD-array to get contiguous [Layout] for.
-    /// @param itemSize The item size of the [Layout]. This is the number of positions in the buffer that an individual item
-    /// takes up. E.g., for a complex number whose real/imaginary components are stored interleaved in a `double[]` buffer, this
-    /// would be `2`.
     /// @param order The ordering of the contiguous array. Must be either [ContiguousOrder#C] or [ContiguousOrder#F]
-    /// @see #contiguous(Shape, int)
-    public static Layout contiguous(Shape shape, int itemSize, ContiguousOrder order) {
+    /// @see #contiguous(Shape)
+    public static Layout contiguous(Shape shape, ContiguousOrder order) {
         ContiguousOrder.ensureCorFExact(order);
 
         // Despite an order being specified, we still want to check if it is BOTH so pass `null` for `knownContiguous`
-        return new Layout(shape, 0, shape.getContiguousStrides(order), itemSize, null, true);
+        return new Layout(shape, 0, shape.getContiguousStrides(order), null, true);
     }
 
 
-    /// Gets a C-contiguous [Layout] which has the same [shape][#shape()] and [item size][#itemSize()] as `this` [Layout].
+    /// Gets a C-contiguous [Layout] which has the same [shape][#shape()] as `this` [Layout].
     ///
     /// To specify an F-contiguous layout, use [#asContiguous()].
     ///
@@ -225,39 +199,18 @@ public class Layout implements Serializable {
     ///
     /// @see #asContiguous(ContiguousOrder)
     public Layout asContiguous() {
-        return contiguous(shape, itemSize);
+        return contiguous(shape);
     }
 
 
     /// Gets a contiguous [Layout] with the specified `order` and which has the same
-    ///  [shape][#shape()] and [item size][#itemSize()] as `this` [Layout].
+    ///  [shape][#shape()] as `this` [Layout].
     ///
     /// @return A contiguous [Layout] with the specified `order` that is equivalent to `this` [Layout].
     ///
     /// @see #asContiguous()
     public Layout asContiguous(ContiguousOrder order) {
-        return contiguous(shape, itemSize, order);
-    }
-
-
-    /// Gets the full buffer size required to store all elements of an nD-array with `this` layout.
-    ///
-    /// @return The full buffer size required to store all elements of an nD-array with `this` layout.
-    ///
-    /// @see #bufferSizeIntValueExact()
-    public BigInteger bufferSize() {
-        return shape.numel().multiply(BigInteger.valueOf(itemSize));
-    }
-
-
-    /// Gets the full buffer size (as an `int`) required to store all elements of an nD-array with `this` layout.
-    ///
-    /// @return The full buffer size (as an `int`) required to store all elements of an nD-array with `this` layout.
-    ///
-    /// @throws ArithmeticException If the number of an nD-array with `this` layout does not exactly fit in an `int`.
-    /// @see #bufferSize()
-    public int bufferSizeIntValueExact() {
-        return Math.multiplyExact(shape.numel().intValueExact(), itemSize);
+        return contiguous(shape, order);
     }
 
 
@@ -289,7 +242,7 @@ public class Layout implements Serializable {
             }
         }
 
-        return new Layout(new Shape(newDims), offset, newStrides, itemSize, null, isWritable);
+        return new Layout(new Shape(newDims), offset, newStrides, null, isWritable);
     }
 
 
@@ -320,7 +273,7 @@ public class Layout implements Serializable {
             }
         }
 
-        return new Layout(new Shape(newDims), offset, newStrides, itemSize, null, isWritable);
+        return new Layout(new Shape(newDims), offset, newStrides, null, isWritable);
     }
 
 
@@ -365,7 +318,7 @@ public class Layout implements Serializable {
             }
         }
 
-        return new Layout(new Shape(newDims), offset, newStrides, itemSize, null, isWritable);
+        return new Layout(new Shape(newDims), offset, newStrides, null, isWritable);
     }
 
 
@@ -427,13 +380,6 @@ public class Layout implements Serializable {
     /// @return The shape of this [Layout].
     public final Shape shape() {
         return shape;
-    }
-
-
-    /// The size of an individual item of this [Layout].
-    /// That is, the number of buffer positions needed to store a single element.
-    public final int itemSize() {
-        return itemSize;
     }
 
 
@@ -575,47 +521,29 @@ public class Layout implements Serializable {
     }
 
 
-    /// Checks if this layout possibly represents overlapping locations in memory (e.g, zero strides).
+    /// Checks if this layout provably represents overlapping locations in memory (e.g, zero strides).
     ///
     /// <blockquote style="color: #b0bbd9; background-color: #1e3a5f; border-left: 5px solid #4b82bd; padding: 10px;">
     ///     <strong>Note:</strong> This method does not exhaustive check for all possible overlaps as that would have worst-case
-    ///     exponential time. As such, this method <em>may</em> erroneously return {@code true} even if there is no overlap.
-    ///     However, it will <em>never</em> mistakenly return {@code false}.
+    ///     exponential time. As such, this method <em>may</em> erroneously return {@code false} even if there is no overlap.
+    ///     However, it will <em>never</em> mistakenly return {@code true}.
     /// </blockquote>
     ///
-    /// @return `false` if it can be determined that *absolutely no* elements overlap in memory; otherwise, `true`.
-    public boolean mayBeInjective() {
-        return StrideInjectivity.mayBeInjective(this);
+    /// @return `true` if it can be determined that *absolutely no* elements overlap in memory; otherwise, `false`.
+    public boolean isProvablyInjective() {
+        return StrideInjectivity.isProvablyInjective(this);
     }
 
 
-    /// Converts an nD slice and a component slice to a position in the raw data buffer of an nD-array with `this` layout.
+    /// Converts an nD index to a flat logical-element index.
     ///
-    /// A single logical element occupies [itemSize()][#itemSize()] consecutive buffer positions. The `componentIdx`
-    /// selects one of them: `toBufferIndex(0, idxND)` is the first position of the element at `idxND`, and
-    /// `toBufferIndex(itemSize() - 1, idxND)` is its last. For example, a complex element stored as interleaved
-    /// real/imaginary doubles (`itemSize == 2`) has its real part at component slice `0` and imaginary part at
-    /// component slice `1`.
+    /// <blockquote style="color: #a9cfc7; background-color: #10362d; border-left: 5px solid #20a88b; padding: 10px;">
+    ///     <strong>Tip:</strong> To get the physical buffer index of individual components of a logical-element,
+    ///     use {@link org.flag4jv3.ndarrays.dense.NewDenseData#toBufferIndex(int, int...) NewDenseData.toBufferIndex(int, int...)}.
+    /// </blockquote>
     ///
-    /// @param componentIdx The component within the logical element. Must be in range `[0, itemSize())`.
-    /// @param idxND The nD slice of the logical element.
-    /// @return The buffer position of the specified component of the element at `idxND`.
-    ///
-    /// @see #toLinearElementIndex(int...)
-    public int toBufferIndex(int componentIdx, int... idxND) {
-        Objects.checkIndex(componentIdx, itemSize);
-        return itemSize*toLinearElementIndex(idxND) + componentIdx;
-    }
-
-
-    /// Converts an nD slice to a flat logical-element slice (in element units, ignoring [itemSize()][#itemSize()]).
-    ///
-    /// This is the element position; use [#toBufferIndex(int, int...)] to get a position within the raw data buffer.
-    ///
-    /// @param idxND The nD slice of the logical element.
-    /// @return The flat logical-element slice of the element at `idxND`.
-    ///
-    /// @see #toBufferIndex(int, int...)
+    /// @param idxND The nD index of the logical element.
+    /// @return The logical-element index corresponding to `idxND` for `this` layout.
     public int toLinearElementIndex(int... idxND) {
         if (idxND.length != shape.rank) {
             throw new IllegalArgumentException("idxND must have equal length to the rank of the layouts shape but got:" +
@@ -689,16 +617,15 @@ public class Layout implements Serializable {
         Shape broadcastShape = new Shape(broadcastDims);
 
         return new Pair<>(
-                new Layout(broadcastShape, left.offset, newLeftStrides, left.itemSize()),
-                new Layout(broadcastShape, right.offset, newRightStrides, right.itemSize())
+                new Layout(broadcastShape, left.offset, newLeftStrides),
+                new Layout(broadcastShape, right.offset, newRightStrides)
         );
     }
 
 
-    /// Computes the minimum and maximum reachable indices in a data buffer with this layout.
+    /// Computes the minimum and maximum reachable logical indices with this layout.
     ///
-    /// @return A [pair][IntPair] containing, in order, the minimum and maximum reachable indices in a data buffer with
-    /// this layout.
+    /// @return A [pair][IntPair] containing, in order, the minimum and maximum reachable logical indices with this layout.
     public IntPair minMaxIndex() {
         int min = offset;
         int max = min;
@@ -713,30 +640,27 @@ public class Layout implements Serializable {
             }
         }
 
-        // itemSize*max will be starting position of final item; itemSize*(max + 1) will be one after last slice, hence
-        // itemSize*(max + 1) - 1 will be the final slice in the buffer.
-        return new IntPair(min*itemSize, itemSize*(max + 1) - 1);
+        return new IntPair(min, (max + 1) - 1);
     }
 
 
-    /// Checks if this layout is equal to another object. A layout is equal to another object if *all* the following are true:
-    /// - The object is an instance of the [Layout] class (referred to as "other layout").
-    /// - The other layout has the same [shape][#shape()].
-    /// - The other layout has the same [offset][#offset()].
-    /// - The other layout has the same [strides][#strides()].
-    /// - The other layout has the same [item size][#itemSize()].
+    /// Checks if this layout is equal to another object. A layout is equal to another object if and only if *all*
+    /// the following are true:
+    /// - `other` is an instance of the [Layout] class.
+    /// - `other` has the same [shape][#shape()].
+    /// - `other` has the same [offset][#offset()].
+    /// - `other` has the same [strides][#strides()].
     ///
-    /// @param object The reference object with which to compare.
-    /// @return `true` if `object` is equal to this layout as defined above; otherwise `false`.
+    /// @param other The reference object with which to compare.
+    /// @return `true` if `other` is equal to this layout as defined above; otherwise `false`.
     @Override
-    public boolean equals(Object object) {
-        if (object == this) return true;
+    public boolean equals(Object other) {
+        if (other == this) return true;
 
-        return object instanceof Layout other
-                && itemSize == other.itemSize
-                && shape.equals(other.shape)
-                && offset == other.offset
-                && Arrays.equals(strides, other.strides);
+        return other instanceof Layout otherLayout
+                && shape.equals(otherLayout.shape)
+                && offset == otherLayout.offset
+                && Arrays.equals(strides, otherLayout.strides);
     }
 
 
@@ -749,7 +673,6 @@ public class Layout implements Serializable {
     public int hashCode() {
         int hash = 31*Integer.hashCode(offset) + Arrays.hashCode(strides);
         hash = 31*hash + shape.hashCode();
-        hash = 31*hash + Integer.hashCode(itemSize);
         return hash;
     }
 
@@ -767,20 +690,6 @@ public class Layout implements Serializable {
         joiner.add("offset: " + offset);
 
         return joiner.toString();
-    }
-
-
-    /// Ensures that `this` layout is [non-overlapping][Layout#mayBeInjective()].
-    ///
-    /// @return A reference to `this` layout.
-    ///
-    /// @throws IllegalArgumentException If it could not be determined that `this` layout is non-overlapping.
-    public Layout requireNonOverlapping() {
-        if (mayBeInjective()) {
-            throw new IllegalArgumentException("layout may have overlap in memory. Try making layout contiguous first.");
-        }
-
-        return this;
     }
 
 
@@ -879,6 +788,6 @@ public class Layout implements Serializable {
             outAx++;
         }
 
-        return new Layout(new Shape(outDims), outOffset, outStrides, itemSize(), null, isWritable);
+        return new Layout(new Shape(outDims), outOffset, outStrides, null, isWritable);
     }
 }
